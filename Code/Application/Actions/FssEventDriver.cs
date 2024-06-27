@@ -124,7 +124,7 @@ public class FssEventDriver
             Console.WriteLine("CreateTileEle: Invalid tilecodeStr length: >{tilecodeStr}<");
             return;
         }
-        FssMapTileCode newTileCode = new FssMapTileCode(tilecodeStr);
+        //FssMapTileCode newTileCode = new FssMapTileCode(tilecodeStr);
 
         //string tileEleFilename = System.IO.Path.Combine(MapData.RootDir, "Ele", "Level0_45x40Degs", tilecodeStr + ".bin");
     }

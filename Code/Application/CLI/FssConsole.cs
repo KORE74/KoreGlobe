@@ -276,8 +276,8 @@ public class FssConsole
 
                     string tilecodeStr = args[2];
 
-                    FssMapTileCode tileCode = new FssMapTileCode(tilecodeStr);
-                    Console.WriteLine($"TileCodeStr: {tileCode.TileCodeStr}");
+                    // FssMapTileCode tileCode = new FssMapTileCode(tilecodeStr);
+                    // Console.WriteLine($"TileCodeStr: {tileCode.TileCodeStr}");
                 }
                 break;
             default:

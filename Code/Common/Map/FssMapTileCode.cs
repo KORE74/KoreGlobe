@@ -1,19 +1,20 @@
 using System;
+using System.Collections.Generic;
 
-// FssTileCode: A tile code class, dealing solely with the definition of a hierachical grid format.
+// FssMapTileCode: A tile code class, dealing solely with the definition of a hierachical grid format.
 
-public struct FssLevelCode
+public struct FssLevelCodeElement
 {
     public int LatIndex;
-    public int LonLondex;
+    public int LonIndex;
 
     public string CodeString()
     {
-        return $"{FssTileCode.LetterLookup[LatIndex]}{FssTileCode.LetterLookup[LonLondex]}";
+        return $"{FssMapTileCode.LetterLookup[LatIndex]}{FssMapTileCode.LetterLookup[LonIndex]}";
     }
 }
   
-public class FssTileCode
+public class FssMapTileCode
 {
     // --------------------------------------------------------------------------------------------
     // Constants
@@ -34,30 +35,32 @@ public class FssTileCode
     // Attributes
     // --------------------------------------------------------------------------------------------
     
-    public List<FssLevelCode> CodeList { get; private set; }
+    public List<FssLevelCodeElement> CodeList { get; private set; }
+
+    public int MapLvl => CodeList.Count;
 
     // --------------------------------------------------------------------------------------------
     // Constructor
     // --------------------------------------------------------------------------------------------
     
-    public FssTileCode()
+    public FssMapTileCode()
     {
-        CodeList = new List<FssLevelCode>();
+        CodeList = new List<FssLevelCodeElement>();
     }
     
-    public FssTileCode(int x, int y) : this()
+    public FssMapTileCode(int x, int y) : this()
     {
         AddLevelCode(x, y, 0);
     }
 
-    public FssTileCode(FssTileCode parentCode)
+    public FssMapTileCode(FssMapTileCode parentCode)
     {
-        CodeList = new List<FssLevelCode>(parentCode.Code);
+        CodeList = new List<FssLevelCodeElement>(parentCode.CodeList);
     }
 
-    public FssTileCode ChildCode(int x, int y)
+    public FssMapTileCode ChildCode(int x, int y)
     {
-        FssTileCode newCode = new FssTileCode(this);
+        FssMapTileCode newCode = new FssMapTileCode(this);
 
         int newLvl = newCode.CodeList.Count;
 
@@ -66,6 +69,11 @@ public class FssTileCode
         newCode.AddLevelCode(x, y, newLvl);
 
         return newCode;
+    }
+
+    public static FssMapTileCode UndefinedTileCode()
+    {
+        return new FssMapTileCode();
     }
 
     // --------------------------------------------------------------------------------------------
@@ -79,7 +87,7 @@ public class FssTileCode
         if (x >= NumTilesHorizPerLvl[level]) x = NumTilesHorizPerLvl[level] - 1;
         if (y >= NumTilesVertPerLvl[level]) y = NumTilesVertPerLvl[level] - 1;
 
-        FssLevelCode l = new FssLevelCode() { LatIndex = y, LonLondex = x };
+        FssLevelCodeElement l = new FssLevelCodeElement() { LatIndex = y, LonIndex = x };
         CodeList.Add(l);
     }
 

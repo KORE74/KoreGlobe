@@ -2,7 +2,7 @@ using System;
 
 #nullable enable
 
-public Interface IFssMapDisplayAssets
+public interface IFssMapDisplayAssets
 {
 }
 

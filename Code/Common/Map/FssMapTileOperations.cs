@@ -1,13 +1,13 @@
 public static class FssMapTileOperations
 {
-    public static FssMapTileArray CreatChildTiles(FssMapTile parentTile)
-    {
+    // public static FssMapTileArray CreatChildTiles(FssMapTile parentTile)
+    // {
         
-    }
+    // }
     
     public static readonly double[] TileSizeDegsPerLvl  = { 30.0, 5.0, 1.0, 0.2};
     
-    public static FssLLBox LLBoxForTileCode(FssTileCode tileCode)
+    public static FssLLBox LLBoxForTileCode(FssMapTileCode tileCode)
     {
         double currTopLeftLatDegs = 90;
         double currTopLeftLonDegs = -180;
@@ -15,8 +15,8 @@ public static class FssMapTileOperations
         int currLvl = 0;    
         foreach (var currCode in tileCode.CodeList)
         {
-            currTopLeftLatDegs -= currCode.Y * TileSizeDegsPerLvl[currLvl];
-            currTopLeftLonDegs += currCode.X * TileSizeDegsPerLvl[currLvl];
+            currTopLeftLatDegs -= currCode.LatIndex* TileSizeDegsPerLvl[currLvl];
+            currTopLeftLonDegs += currCode.LonIndex * TileSizeDegsPerLvl[currLvl];
         }
 
         double bottomRightLatDegs = currTopLeftLatDegs - TileSizeDegsPerLvl[currLvl];
