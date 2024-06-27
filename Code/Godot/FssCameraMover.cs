@@ -4,10 +4,12 @@ using System;
 public partial class FssCameraMover : Node3D
 {
     [Export]
-    public float Speed = 0.200f; // Speed of the player
+    public float MoveSpeed   = 0.6f; 
+    public float RotateSpeed = 1.0f;
 
     [Export]
     Vector3 direction = new Vector3();
+    Vector3 rotation  = new Vector3();
 
     public override void _Ready()
     {
@@ -16,6 +18,7 @@ public partial class FssCameraMover : Node3D
 
     public override void _Process(double delta)
     {
+        UpdateDirection();
 
         if (direction.Length() > 0)
         {
@@ -23,59 +26,57 @@ public partial class FssCameraMover : Node3D
             direction = direction.Normalized();
 
             // Move the object
-            Position += direction * Speed * (float)(delta);
+            Position += direction * MoveSpeed * (float)(delta);
+
+
+            // Apply the movement to the basis of the object - moving relative to the object's current rotation
+            // Basis = GlobalTransform.Basis;
+            // Basis = Basis.Rotated(Vector3.Up, Mathf.DegToRad(rotation.Y));
+            // Basis = Basis.Rotated(Vector3.Right, Mathf.DegToRad(rotation.X));
+            // Basis = Basis.Rotated(Vector3.Forward, Mathf.DegToRad(rotation.Z));
+            // Position += Basis.Xform(direction) * MoveSpeed * (float)delta;
+
+
+            // Transform3D t = GlobalTransform;
+            // t.origin += t.basis.Xform(direction) * MoveSpeed * (float)delta;
+
+            // Apply the movement to the object's global transform - moving relative to the world's axes
+
+
+
+            //Vector3 movement = (GlobalTransform.Basis.Xform(direction)) * MoveSpeed * (float)delta;
+            //Position += movement;
+
+        }
+        if (rotation.Length() > 0) 
+        {
+            Rotation += rotation * RotateSpeed * (float)(delta);
         }
     }
 
-
-    public override void _Input(InputEvent @event)
+    private void UpdateDirection()
     {
-        direction.Z = 0;
-        direction.X = 0;
-        direction.Y = 0;
+        direction = Vector3.Zero;
+        rotation  = Vector3.Zero;
 
-        if (@event is InputEventKey keyEvent && keyEvent.Pressed)
+        if (Input.IsActionPressed("ui_shift"))
         {
-            // if the shift key is pressed:
-            if (keyEvent.ShiftPressed)
-            {
-                GD.Print("Shift key is pressed");
-                Speed = 0.400f;
-            }
-            else
-            {
-                Speed = 0.200f;
-            }
-
-
-            switch (keyEvent.Keycode)
-            {
-                case Key.W:
-                    GD.Print(keyEvent.ShiftPressed ? "Shift+W was pressed" : "W was pressed");
-                    direction.Z -= 1;
-                    break;
-                case Key.S:
-                    GD.Print(keyEvent.ShiftPressed ? "Shift+S was pressed" : "S was pressed");
-                    direction.Z += 1;
-                    break;
-                case Key.A:
-                    GD.Print(keyEvent.ShiftPressed ? "Shift+A was pressed" : "A was pressed");
-                    direction.X -= 1;
-                    break;
-                case Key.D:
-                    GD.Print(keyEvent.ShiftPressed ? "Shift+D was pressed" : "D was pressed");
-                    direction.X += 1;
-                    break;
-                case Key.R: // Y up
-                    GD.Print(keyEvent.ShiftPressed ? "Shift+R was pressed" : "R was pressed");
-                    direction.Y += 1;
-                    break;
-                case Key.F: // Y down
-                    GD.Print(keyEvent.ShiftPressed ? "Shift+F was pressed" : "F was pressed");
-                    direction.Y -= 1;
-                    break;
-
-            }
+            if (Input.IsActionPressed("ui_up"))    direction.Z -= 1;
+            if (Input.IsActionPressed("ui_down") ) direction.Z += 1;
+        }
+        if (Input.IsActionPressed("ui_alt"))
+        {
+            if (Input.IsActionPressed("ui_up"))    rotation.X += 2f;
+            if (Input.IsActionPressed("ui_down"))  rotation.X -= 2f;
+            if (Input.IsActionPressed("ui_left"))  rotation.Y += 2f;
+            if (Input.IsActionPressed("ui_right")) rotation.Y -= 2f;
+        }
+        else 
+        {
+            if (Input.IsActionPressed("ui_left"))  direction.X -= 1;
+            if (Input.IsActionPressed("ui_right")) direction.X += 1;
+            if (Input.IsActionPressed("ui_up"))    direction.Y += 1;
+            if (Input.IsActionPressed("ui_down"))  direction.Y -= 1;
         }
     }
 
