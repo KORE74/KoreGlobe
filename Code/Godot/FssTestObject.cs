@@ -12,8 +12,13 @@ public partial class FssTestObject : Node3D
         // Add a standard primitive to the scene
         var sphereMesh = new SphereMesh();
         sphereMesh.Radius = 1.0f;
+        sphereMesh.Height = 2.0f;
         var testSphereInstance = new MeshInstance3D();
+        testSphereInstance.Name = "TestSphere";
         testSphereInstance.Mesh = sphereMesh;
+        testSphereInstance.MaterialOverride = FssMaterialFactory.SimpleColoredMaterial(new Color(1.0f, 0.5f, 0.5f, 1.0f));
+        testSphereInstance.Position = new Vector3(0.0f, 1.0f, 0.0f);
+        testSphereInstance.Scale = new Vector3(1f, 1f, 1f);
         AddChild(testSphereInstance);
     }
 
