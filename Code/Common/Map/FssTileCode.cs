@@ -1,6 +1,6 @@
 using System;
 
-// FssTileCode2: A tile code class, dealing solely with the definition of a hierachical grid format.
+// FssTileCode: A tile code class, dealing solely with the definition of a hierachical grid format.
 
 public struct FssLevelCode
 {
