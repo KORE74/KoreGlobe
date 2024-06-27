@@ -35,6 +35,7 @@ public struct FssLLBox
     // Top Left, Top Right, Bottom Left, Bottom Right properties
     public FssLLPoint TopLeft     => new FssLLPoint() { LatRads = MaxLatRads, LonRads = MinLonRads };
     public FssLLPoint TopRight    => new FssLLPoint() { LatRads = MaxLatRads, LonRads = MaxLonRads };
+    public FssLLPoint Center      => new FssLLPoint() { LatRads = MidLatRads, LonRads = MidLonRads };
     public FssLLPoint BottomLeft  => new FssLLPoint() { LatRads = MinLatRads, LonRads = MinLonRads };
     public FssLLPoint BottomRight => new FssLLPoint() { LatRads = MinLatRads, LonRads = MaxLonRads };
 
