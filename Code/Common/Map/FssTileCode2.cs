@@ -34,7 +34,7 @@ public class FssTileCode2
     // Attributes
     // --------------------------------------------------------------------------------------------
     
-    public List<FssLevelCode> Code { get; private set; }
+    public List<FssLevelCode> CodeList { get; private set; }
 
     // --------------------------------------------------------------------------------------------
     // Constructor
@@ -42,7 +42,7 @@ public class FssTileCode2
     
     public FssTileCode2()
     {
-        Code = new List<FssLevelCode>();
+        CodeList = new List<FssLevelCode>();
     }
     
     public FssTileCode2(int x, int y) : this()
@@ -52,14 +52,14 @@ public class FssTileCode2
 
     public FssTileCode2(FssTileCode2 parentCode)
     {
-        Code = new List<FssLevelCode>(parentCode.Code);
+        CodeList = new List<FssLevelCode>(parentCode.Code);
     }
 
     public FssTileCode2 ChildCode(int x, int y)
     {
         FssTileCode2 newCode = new FssTileCode2(this);
 
-        int newLvl = newCode.Code.Count;
+        int newLvl = newCode.CodeList.Count;
 
         if (newLvl >= MaxMapLvl) throw new InvalidOperationException("Maximum map level exceeded");
 
@@ -80,11 +80,11 @@ public class FssTileCode2
         if (y >= NumTilesVertPerLvl[level]) y = NumTilesVertPerLvl[level] - 1;
 
         FssLevelCode l = new FssLevelCode() { LatIndex = y, LonLondex = x };
-        Code.Add(l);
+        CodeList.Add(l);
     }
 
     public override string ToString()
     {
-        return string.Join(CodeSeparator.ToString(), Code.ConvertAll(c => c.CodeString()));
+        return string.Join(CodeSeparator.ToString(), CodeList.ConvertAll(c => c.CodeString()));
     }
 }
