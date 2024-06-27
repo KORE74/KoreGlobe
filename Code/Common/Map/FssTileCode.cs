@@ -9,11 +9,11 @@ public struct FssLevelCode
 
     public string CodeString()
     {
-        return $"{FssTileCode2.LetterLookup[LatIndex]}{FssTileCode2.LetterLookup[LonLondex]}";
+        return $"{FssTileCode.LetterLookup[LatIndex]}{FssTileCode.LetterLookup[LonLondex]}";
     }
 }
   
-public class FssTileCode2
+public class FssTileCode
 {
     // --------------------------------------------------------------------------------------------
     // Constants
@@ -40,24 +40,24 @@ public class FssTileCode2
     // Constructor
     // --------------------------------------------------------------------------------------------
     
-    public FssTileCode2()
+    public FssTileCode()
     {
         CodeList = new List<FssLevelCode>();
     }
     
-    public FssTileCode2(int x, int y) : this()
+    public FssTileCode(int x, int y) : this()
     {
         AddLevelCode(x, y, 0);
     }
 
-    public FssTileCode2(FssTileCode2 parentCode)
+    public FssTileCode(FssTileCode parentCode)
     {
         CodeList = new List<FssLevelCode>(parentCode.Code);
     }
 
-    public FssTileCode2 ChildCode(int x, int y)
+    public FssTileCode ChildCode(int x, int y)
     {
-        FssTileCode2 newCode = new FssTileCode2(this);
+        FssTileCode newCode = new FssTileCode(this);
 
         int newLvl = newCode.CodeList.Count;
 
