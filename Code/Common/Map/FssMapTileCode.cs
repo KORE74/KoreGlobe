@@ -31,10 +31,15 @@ public class FssMapTileCode
     // Attributes with defaults
     public bool   IsValid     { get; private set;} = false;
     public int    MapLvl      { get; private set;} = -1;
-    public double LatDegs     { get; private set;} = -1.0; // Map lat/lon for the top-left corner of the tile
-    public double LonDegs     { get; private set;} = -1.0;
+
+    public FssLLPoint TopLeftPos { get; private set;}
+    public double WidthDegs  => ((MapLvl >= 0) && (MapLvl <= MaxMapLvl)) ? TileSizeDegsPerLvl[MapLvl] : 0;
+    public double HeightDegs => ((MapLvl >= 0) && (MapLvl <= MaxMapLvl)) ? TileSizeDegsPerLvl[MapLvl] : 0;
+  
     public string TileCodeStr { get; private set;} = "<undefined>";
 
+  
+  
     // --------------------------------------------------------------------------------------------
     // Tile Code Constants
     // --------------------------------------------------------------------------------------------
@@ -62,21 +67,18 @@ public class FssMapTileCode
     // Constructor
     // --------------------------------------------------------------------------------------------
 
-    // Noting that we are starting with a lat/lon that counts from the TL corner, setup the tile code.
+    // Given any lat/lon and a tile level, get the tile for that location.
 
     public FssMapTileCode(int lvl, double latDegs, double lonDegs)
     {
-        // Check the level is valid
-        IsValid = ValidateInput(lvl, latDegs, lonDegs);
-        if (!IsValid) return;
+        // Find the top-left 
+        TopLeftPos = MapTileTopLeft(lvl, latDegs, lonDegs);
 
         // Set the level and lat/lon
-        MapLvl     = lvl;
-        LatDegs = latDegs;
-        LonDegs = lonDegs;
+        MapLvl  = lvl;
 
         // Set the tile code string
-        TileCodeStr = GetFullTileCodeStr(lvl, LatDegs, LonDegs);
+        TileCodeStr = GetFullTileCodeStr(lvl, TopLeftPos.LatDegs, TopLeftPos.LonDegs);
 
         // Set the valid flag
         IsValid = true;
@@ -111,7 +113,7 @@ public class FssMapTileCode
 
     // Return the top left lat/lon for the given level and lat/lon
 
-    public (double mapLat, double mapLon) MapTileTopLeft(int lvl, double inputLatDegs, double inputLonDegs)
+    public FssLLPoint MapTileTopLeft(int lvl, double inputLatDegs, double inputLonDegs)
     {
         // Ensure level is within specified range.
         if (lvl < 0 || lvl >= MaxMapLvl) throw new ArgumentOutOfRangeException(nameof(lvl), "Level is out of range.");
@@ -127,7 +129,8 @@ public class FssMapTileCode
         double mapLat = tileRow * tileSizeDegs;
         double mapLon = tileCol * tileSizeDegs;
 
-        return (mapLat, mapLon);
+        FssLLPoint retPos = new FssLLPoint() { LatDegs = mapLat, LonDegs = mapLon };
+        return retPos;
     }
 
     // --------------------------------------------------------------------------------------------
