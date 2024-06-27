@@ -11,11 +11,12 @@ public static class FssMaterialFactory
     }
 
     // Function to create a transparent colored material
+    // Color Alpha value sets the extent of transparency
     public static StandardMaterial3D TransparentColoredMaterial(Color color)
     {
         StandardMaterial3D material = new StandardMaterial3D();
-        material.AlbedoColor      = color; // alphas sets extent of transparency
-        material.Transparency = BaseMaterial3D.TransparencyEnum.Alpha;
+        material.AlbedoColor        = color;
+        material.Transparency       = BaseMaterial3D.TransparencyEnum.Alpha;
         return material;
     }    
 }
