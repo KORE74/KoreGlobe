@@ -1,5 +1,10 @@
 public static class FssMapTileOperations
 {
+    public static FssMapTileArray CreatChildTiles(FssMapTile parentTile)
+    {
+        
+    }
+    
     // Load a tile from a set path, returning null on fail
     // public static FssMapTile? LoadTile(string filepath)
     // {
