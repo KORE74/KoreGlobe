@@ -14,18 +14,22 @@ public struct FssLLBox
 
     // Derived properties
     public readonly double MinLatRads => TLLatRads - LatHeightRads;
+    public readonly double MidLatRads => MinLatRads - (LatHeightRads / 2);
     public readonly double MaxLatRads => TLLatRads;
     public readonly double MinLonRads => TLLonRads;
+    public readonly double MidLonRads => MinLonRads + (LonWidthRads  / 2);
     public readonly double MaxLonRads => TLLonRads + LonWidthRads;
 
     public readonly double MinLatDegs => MinLatRads * (180.0 / Math.PI);
+    public readonly double MidLatDegs => MidLatRads * (180.0 / Math.PI);
     public readonly double MaxLatDegs => MaxLatRads * (180.0 / Math.PI);
     public readonly double MinLonDegs => MinLonRads * (180.0 / Math.PI);
+    public readonly double MidLonDegs => MidLonRads * (180.0 / Math.PI);
     public readonly double MaxLonDegs => MaxLonRads * (180.0 / Math.PI);
 
     public readonly double DeltaLatDegs => LatHeightRads * (180.0 / Math.PI);
     public readonly double DeltaLonDegs => LonWidthRads * (180.0 / Math.PI);
-
+    
     // ------------------------------------------------------------------------
 
     // Top Left, Top Right, Bottom Left, Bottom Right properties
