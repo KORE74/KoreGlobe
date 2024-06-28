@@ -172,12 +172,16 @@ public partial class FssMeshBuilder
         int firstI1 = i1;
         int firstI2 = i2;
 
+        // Loop to one short of the list, as we add an artificial +1 in looking ahead to the next point.
         for (int i = 0; i < pntList1.Count - 1; i++)
         {
             int i3 = AddVertex(pntList2[i + 1]);
             int i4 = AddVertex(pntList1[i + 1]);
             AddTriangle(i1, i2, i3);
             AddTriangle(i1, i3, i4);
+            
+            i1 = i4; // Update i1 and i2 for the next iteration
+            i2 = i3;
         }
 
         if (wrapAround)
