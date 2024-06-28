@@ -9,6 +9,9 @@ public partial class FssWedgeBuilder : Node3D
     {
         FssCentralLog.AddStartupEntry("WedgeBuilder // _Ready");
 
+        // Fix the position to line up with the sphere
+        Position = new Vector3(0f, 1f, 0f);
+
         FssMeshBuilder meshBuilder = new ();
 
         meshBuilder.AddTriangle(new Vector3(0, 0, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0));
@@ -24,8 +27,9 @@ public partial class FssWedgeBuilder : Node3D
         // Add the mesh to the current Node3D
         MeshInstance3D meshInstance = new();
         meshInstance.Mesh = meshData;
-        AddChild(meshInstance);
+        meshInstance.MaterialOverride = FssMaterialFactory.SimpleColoredMaterial(new Color(0.5f, 1.0f, 0.5f, 1.0f));
 
+        AddChild(meshInstance);
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.

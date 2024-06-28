@@ -55,14 +55,14 @@ public partial class FssMeshBuilder
         }
 
         // Add the inside and outside surfaces
-        AddSurface(resolutionAz, resolutionEl, insideSurfacePoints, true);
-        AddSurface(resolutionAz, resolutionEl, outsideSurfacePoints);
+        AddSurface(resolutionAz, resolutionEl, insideSurfacePoints);
+        AddSurface(resolutionAz, resolutionEl, outsideSurfacePoints, true);
 
         // Add ribbons for the edges
-        AddRibbon(topOutsideEdge, topInsideEdge);
-        AddRibbon(bottomInsideEdge, bottomOutsideEdge);
-        AddRibbon(leftInsideEdge, leftOutsideEdge);
-        AddRibbon(rightOutsideEdge, rightInsideEdge);
+        AddRibbon(topInsideEdge, topOutsideEdge);
+        //AddRibbon(bottomOutsideEdge, bottomInsideEdge);
+        //AddRibbon(leftOutsideEdge, leftInsideEdge);
+        //AddRibbon(rightInsideEdge, rightOutsideEdge);
     }
 
     // ----------------------------------------------------------------------------------
