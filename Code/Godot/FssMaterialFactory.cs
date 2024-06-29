@@ -18,18 +18,18 @@ public static class FssMaterialFactory
         material.AlbedoColor        = color;
         material.Transparency       = BaseMaterial3D.TransparencyEnum.Alpha;
         return material;
-    }    
+    }
 
     // Apply a wireframe shader, to see each triangle in a mesh.
     // Usage:
     //   meshInstance.MaterialOverride = FssMaterialFactory.WireframeShaderMaterial();
-    public static ShaderMaterial WireframeShaderMaterial()
+    public static ShaderMaterial WireframeShaderMaterial(Color color)
     {
         // Load the wireframe shader
-        Shader shader = (Shader)GD.Load("res://Shaders/wireframe.shader");
-        wireframeMaterial = new ShaderMaterial();
+        Shader shader = (Shader)GD.Load("res://Shaders/wireframe.gdshader");
+        ShaderMaterial wireframeMaterial = new ShaderMaterial();
+       // wireframeMaterial.AlbedoColor = color;
         wireframeMaterial.Shader = shader;
-
         return wireframeMaterial;
     }
 }

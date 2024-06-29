@@ -17,6 +17,10 @@ public partial class FssMeshBuilder
         List<Vector3> insideSurfacePoints  = new List<Vector3>();
         List<Vector3> outsideSurfacePoints = new List<Vector3>();
 
+        Vector3[,] insidePoints  = new Vector3[resolutionAz + 1, resolutionEl + 1];
+        Vector3[,] outsidePoints = new Vector3[resolutionAz + 1, resolutionEl + 1];
+
+
         // Lists to hold the points for the ribbons (edges)
         List<Vector3> topInsideEdge     = new List<Vector3>();
         List<Vector3> bottomInsideEdge  = new List<Vector3>();
@@ -38,8 +42,11 @@ public partial class FssMeshBuilder
                 Vector3 insidePoint  = FssGeoConvOperations.RealWorldToGodot(distanceMin, azimuth, elevation);
                 Vector3 outsidePoint = FssGeoConvOperations.RealWorldToGodot(distanceMax, azimuth, elevation);
 
-                insideSurfacePoints.Add(insidePoint);
-                outsideSurfacePoints.Add(outsidePoint);
+                insidePoints[x, y]  = insidePoint;
+                outsidePoints[x, y] = outsidePoint;
+
+                // insideSurfacePoints.Add(insidePoint);
+                // outsideSurfacePoints.Add(outsidePoint);
 
                 // Add points to the edge lists
                 if (y == 0)            topInsideEdge.Add(insidePoint);
@@ -55,11 +62,14 @@ public partial class FssMeshBuilder
         }
 
         // Add the inside and outside surfaces
-        AddSurface(resolutionAz, resolutionEl, insideSurfacePoints);
-        AddSurface(resolutionAz, resolutionEl, outsideSurfacePoints, true);
+        //AddSurface(resolutionAz, resolutionEl, insideSurfacePoints);
+        //AddSurface(resolutionAz, resolutionEl, outsideSurfacePoints, true);
+
+        AddSurface(insidePoints, false);
+        AddSurface(outsidePoints, true);
 
         // Add ribbons for the edges
-        AddRibbon(topInsideEdge, topOutsideEdge);
+        //AddRibbon(topInsideEdge, topOutsideEdge);
         //AddRibbon(bottomOutsideEdge, bottomInsideEdge);
         //AddRibbon(leftOutsideEdge, leftInsideEdge);
         //AddRibbon(rightInsideEdge, rightOutsideEdge);

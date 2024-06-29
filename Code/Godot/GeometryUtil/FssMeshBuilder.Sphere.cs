@@ -23,14 +23,23 @@ public partial class FssMeshBuilder
             float y = radius * Mathf.Sin(angle1);
             float r = radius * Mathf.Cos(angle1);
 
+            float uvYFraction = (float)i / (float)vertSegments;
+
             for (int j = 0; j < numSegments; j++)
             {
+                float uvXFraction = (float)j / (float)numSegments;
+
                 float angle2 = Mathf.DegToRad(horizAngInc * j);
                 float x = r * Mathf.Cos(angle2);
                 float z = r * Mathf.Sin(angle2);
 
                 Vector3 v = new Vector3(x, y, z) + center;
                 int index = AddVertex(v);
+
+                Vector3 n = new Vector3(x, y, z);
+                AddNormal(n);
+                AddUV(new Vector2(uvXFraction, uvYFraction));
+                
                 sphereVertexIndices.Add(index);
             }
         }
@@ -48,8 +57,8 @@ public partial class FssMeshBuilder
                 int index3 = sphereVertexIndices[nextRowStart + i];
                 int index4 = sphereVertexIndices[nextRowStart + (i + 1) % numSegments];
 
-                AddTriangle(index1, index2, index4);
-                AddTriangle(index1, index4, index3);
+                AddTriangle(index1, index4, index2);
+                AddTriangle(index1, index3, index4);
             }
         }
     }

@@ -14,20 +14,23 @@ public partial class FssWedgeBuilder : Node3D
 
         FssMeshBuilder meshBuilder = new ();
 
-        meshBuilder.AddTriangle(new Vector3(0, 0, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0));
+        float az = 340;
 
-        meshBuilder.AddShellSegment (
-            0, 10, //  azimuthMin,  azimuthMax,
-            0, 10, //  elevationMin,  elevationMax,
-            1, 2, //  distanceMin,  distanceMax,
-            5, 5 ); // resolutionAz,  resolutionEl)
-
+        meshBuilder.AddSphere (
+            new Vector3(2, 1.5f, 0), 0.6f, 36
+        );
+        // meshBuilder.AddShellSegment (
+        //     0, 40, //  azimuthMin,  azimuthMax,
+        //     0, 40, //  elevationMin,  elevationMax,
+        //     1.5f, 2f, //  distanceMin,  distanceMax,
+        //     3, 4 ); // resolutionAz,  resolutionEl)
         ArrayMesh meshData = meshBuilder.Build("Wedge", true);
 
         // Add the mesh to the current Node3D
         MeshInstance3D meshInstance = new();
         meshInstance.Mesh = meshData;
-        meshInstance.MaterialOverride = FssMaterialFactory.SimpleColoredMaterial(new Color(0.5f, 1.0f, 0.5f, 1.0f));
+        meshInstance.MaterialOverride = FssMaterialFactory.WireframeShaderMaterial(new Color(0.5f, 1.0f, 0.5f, 1.0f));
+        //meshInstance.MaterialOverride = FssMaterialFactory.SimpleColoredMaterial(new Color(0.5f, 1.0f, 0.5f, 1.0f));
 
         AddChild(meshInstance);
     }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 using Godot;
 
@@ -42,7 +43,7 @@ public partial class FssMeshBuilder
             surfaceTool.GenerateNormals();
         }
 
-        var arrays   = new Godot.Collections.Array();
+        var arrays = new Godot.Collections.Array();
 
         arrays.Resize((int)Mesh.ArrayType.Max);
         arrays[(int)Mesh.ArrayType.Vertex] = meshData.Vertices.ToArray();
@@ -50,6 +51,9 @@ public partial class FssMeshBuilder
         arrays[(int)Mesh.ArrayType.Index] = meshData.Triangles.ToArray();
 
         newMesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, arrays);
+
+surfaceTool.GenerateNormals();
+surfaceTool.GenerateTangents();
 
         newMesh = surfaceTool.Commit();
         //newMesh.Name = name;
@@ -73,23 +77,29 @@ public partial class FssMeshBuilder
 
     public string MeshReport()
     {
-        string output = "Vertices:\n";
-        foreach (var vertex in meshData.Vertices)
-        {
-            output += vertex.ToString() + "\n";
-        }
+        StringBuilder sb = new StringBuilder();
 
-        output += "\nTriangles:\n";
+        sb.Append("Vertices:\n");
+        foreach (var vertex in meshData.Vertices)
+            sb.AppendLine($"{vertex}");
+
+        sb.Append("\nTriangles:\n");
         for (int i = 0; i < meshData.Triangles.Count; i += 3)
-        {
-            output += $"{meshData.Triangles[i]} {meshData.Triangles[i + 1]} {meshData.Triangles[i + 2]}\n";
-        }
+            sb.AppendLine($"{meshData.Triangles[i]} {meshData.Triangles[i + 1]} {meshData.Triangles[i + 2]}\n");
+
+        sb.Append("\nUVs:\n");
+        foreach (var normal in meshData.Normals)
+            sb.AppendLine($"{normal}");
 
         // If the number of triangles isn't a multiple of 3, add a warning
         if (meshData.Triangles.Count % 3 != 0)
-            output += "Warning: Number of triangles is not a multiple of 3\n";
+            sb.AppendLine("Warning: Number of triangles is not a multiple of 3");
+        if (meshData.Vertices.Count != meshData.Normals.Count && meshData.Normals.Count > 0)
+            sb.AppendLine("Warning: Number of vertices does not match number of normals");
+        if (meshData.Vertices.Count != meshData.UVs.Count && meshData.UVs.Count > 0)
+            sb.AppendLine("Warning: Number of vertices does not match number of UVs");
 
-        return output;
+        return sb.ToString();
     }
 
     // -----------------------------------------------------------------------------------------------
@@ -130,6 +140,18 @@ public partial class FssMeshBuilder
         AddTriangle(i1, i2, i3);
         AddTriangle(i3, i4, i1);
     }
+
+    // -----------------------------------------------------------------------------------------------
+
+    public void AddNormal(Vector3 normal)
+    {
+        meshData.Normals.Add(normal);
+    }
+
+    public void AddUV(Vector2 uv)
+    {
+        meshData.UVs.Add(uv);
+    } 
 
     // -----------------------------------------------------------------------------------------------
     // #MARK: Next Level Primitives
@@ -211,6 +233,45 @@ public partial class FssMeshBuilder
                 Vector3 p2 = points[y * (resolutionX + 1) + x + 1];
                 Vector3 p3 = points[(y + 1) * (resolutionX + 1) + x];
                 Vector3 p4 = points[(y + 1) * (resolutionX + 1) + x + 1];
+
+                // Add points to MeshData.Vertices list and record the index of each point
+                int i1 = AddVertex(p1);
+                int i2 = AddVertex(p2);
+                int i3 = AddVertex(p3);
+                int i4 = AddVertex(p4);
+
+                // Create two MeshData.Triangles using the four MeshData.Vertices just added
+                if (flipTriangles)
+                {
+                    AddTriangle(i3, i2, i1);
+                    AddTriangle(i3, i4, i2);
+                }
+                else
+                {
+                    AddTriangle(i1, i2, i3);
+                    AddTriangle(i2, i4, i3);
+                }
+            }
+        }
+    }
+
+    // ----------------------------------------------------------------------------------
+
+    // Add surface, from an input 2d array of Vector3 points
+    public void AddSurface(Vector3[,] points, bool flipTriangles = false)
+    {
+        int resolutionX = points.GetLength(0);
+        int resolutionY = points.GetLength(1);
+
+        for (int y = 0; y < resolutionY - 1; y++)
+        {
+            for (int x = 0; x < resolutionX - 1; x++)
+            {
+                // Get the MeshData.Vertices for the current quad
+                Vector3 p1 = points[x, y];
+                Vector3 p2 = points[x + 1, y];
+                Vector3 p3 = points[x, y + 1];
+                Vector3 p4 = points[x + 1, y + 1];
 
                 // Add points to MeshData.Vertices list and record the index of each point
                 int i1 = AddVertex(p1);
