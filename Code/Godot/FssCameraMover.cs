@@ -3,7 +3,7 @@ using System;
 
 public partial class FssCameraMover : Node3D
 {
-    public float MoveSpeed   = 1.0f; // Tunable speed parameters
+    public float MoveSpeed   = 1.5f; // Tunable speed parameters
     public float RotateSpeed = 1.0f;
     Vector3 direction = new Vector3();
     Vector3 rotation  = new Vector3();

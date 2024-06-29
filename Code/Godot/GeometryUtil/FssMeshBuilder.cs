@@ -137,8 +137,8 @@ surfaceTool.GenerateTangents();
         int i3 = AddVertex(p3);
         int i4 = AddVertex(p4);
 
-        AddTriangle(i1, i2, i3);
-        AddTriangle(i3, i4, i1);
+        AddTriangle(i1, i3, i2);
+        AddTriangle(i3, i1, i4);
     }
 
     // -----------------------------------------------------------------------------------------------
@@ -151,7 +151,7 @@ surfaceTool.GenerateTangents();
     public void AddUV(Vector2 uv)
     {
         meshData.UVs.Add(uv);
-    } 
+    }
 
     // -----------------------------------------------------------------------------------------------
     // #MARK: Next Level Primitives
@@ -201,7 +201,7 @@ surfaceTool.GenerateTangents();
             int i4 = AddVertex(pntList1[i + 1]);
             AddTriangle(i1, i2, i3);
             AddTriangle(i1, i3, i4);
-            
+
             i1 = i4; // Update i1 and i2 for the next iteration
             i2 = i3;
         }

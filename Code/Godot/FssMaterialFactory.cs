@@ -26,7 +26,7 @@ public static class FssMaterialFactory
     public static ShaderMaterial WireframeShaderMaterial(Color color)
     {
         // Load the wireframe shader
-        Shader shader = (Shader)GD.Load("res://Shaders/wireframe.gdshader");
+        Shader shader = (Shader)GD.Load("res://Shaders/wireframe_test.gdshader");
         ShaderMaterial wireframeMaterial = new ShaderMaterial();
        // wireframeMaterial.AlbedoColor = color;
         wireframeMaterial.Shader = shader;
