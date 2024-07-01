@@ -1,10 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://bkhif7hl6psi5"]
+[gd_scene load_steps=9 format=3 uid="uid://bkhif7hl6psi5"]
 
 [ext_resource type="Script" path="res://Code/Godot/FssTestObject.cs" id="1_255lt"]
 [ext_resource type="Script" path="res://Code/Godot/FssCameraMover.cs" id="1_ducrd"]
 [ext_resource type="Shader" path="res://Shaders/wireframe.gdshader" id="3_8u8q8"]
 [ext_resource type="Script" path="res://Code/Godot/FssWedgeBuilder.cs" id="3_i52xv"]
-[ext_resource type="Script" path="res://Scenes/TestShape.cs" id="5_8a267"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_tmkwh"]
 
@@ -56,4 +55,3 @@ script = ExtResource("3_i52xv")
 
 [node name="TestShape" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 1.5)
-script = ExtResource("5_8a267")

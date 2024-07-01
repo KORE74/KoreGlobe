@@ -2,6 +2,11 @@ using Godot;
 
 public static class FssMaterialFactory
 {
+    // --------------------------------------------------------------------------------------------
+    // #MARK: Mature / fixed functions
+    // --------------------------------------------------------------------------------------------
+
+
     // Function to create a simple colored material
     public static StandardMaterial3D SimpleColoredMaterial(Color color)
     {
@@ -19,6 +24,23 @@ public static class FssMaterialFactory
         material.Transparency       = BaseMaterial3D.TransparencyEnum.Alpha;
         return material;
     }
+
+    // Apply a wireframe shader, to see each triangle in a mesh.
+    // Usage:
+    //   meshInstance.MaterialOverride = FssMaterialFactory.WireframeWhiteMaterial();
+    public static ShaderMaterial WireframeWhiteMaterial()
+    {
+        // Load the wireframe shader
+        Shader shader = (Shader)GD.Load("res://Shaders/wireframe_white_v001.gdshader");
+        ShaderMaterial wireframeMaterial = new ShaderMaterial();
+       // wireframeMaterial.AlbedoColor = color;
+        wireframeMaterial.Shader = shader;
+        return wireframeMaterial;
+    }
+
+    // --------------------------------------------------------------------------------------------
+    // #MARK: Experimental / new functions
+    // --------------------------------------------------------------------------------------------
 
     // Apply a wireframe shader, to see each triangle in a mesh.
     // Usage:

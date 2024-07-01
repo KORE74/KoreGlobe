@@ -52,8 +52,8 @@ public partial class FssMeshBuilder
 
         newMesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, arrays);
 
-surfaceTool.GenerateNormals();
-surfaceTool.GenerateTangents();
+        surfaceTool.GenerateNormals();
+        surfaceTool.GenerateTangents();
 
         newMesh = surfaceTool.Commit();
         //newMesh.Name = name;

@@ -16,7 +16,6 @@ void vertex() {
 	POSITION = clip_position;
 }
 
-
 void fragment() {
 	ALBEDO = albedo.rgb;
 }

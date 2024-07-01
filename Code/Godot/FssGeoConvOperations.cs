@@ -20,8 +20,8 @@ public static class FssGeoConvOperations
         float elRad = Mathf.DegToRad(elevation);
 
         float x = radius * Mathf.Cos(elRad) * Mathf.Cos(azRad);
-        float y = radius * Mathf.Cos(elRad) * Mathf.Sin(azRad);
-        float z = radius * Mathf.Sin(elRad);
+        float z = radius * Mathf.Cos(elRad) * Mathf.Sin(azRad);
+        float y = radius * Mathf.Sin(elRad);
 
         return new Vector3(x, y, z);
     }

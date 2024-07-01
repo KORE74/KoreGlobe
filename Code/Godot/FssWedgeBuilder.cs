@@ -14,25 +14,43 @@ public partial class FssWedgeBuilder : Node3D
 
         FssMeshBuilder meshBuilder = new ();
 
-        float az = 340;
 
-        meshBuilder.AddSphere (
-            new Vector3(2, 1.5f, 0), 0.6f, 36
-        );
-        // meshBuilder.AddShellSegment (
-        //     0, 40, //  azimuthMin,  azimuthMax,
-        //     0, 40, //  elevationMin,  elevationMax,
-        //     1.5f, 2f, //  distanceMin,  distanceMax,
-        //     3, 4 ); // resolutionAz,  resolutionEl)
-        ArrayMesh meshData = meshBuilder.Build("Wedge", true);
+        float az = 30;
 
-        // Add the mesh to the current Node3D
-        MeshInstance3D meshInstance = new();
-        meshInstance.Mesh = meshData;
-        meshInstance.MaterialOverride = FssMaterialFactory.WireframeShaderMaterial(new Color(0.5f, 1.0f, 0.5f, 1.0f));
-        //meshInstance.MaterialOverride = FssMaterialFactory.SimpleColoredMaterial(new Color(0.5f, 1.0f, 0.5f, 1.0f));
+        float left  = 0;
+        float right = left + az;
 
-        AddChild(meshInstance);
+        var matTrans = FssMaterialFactory.TransparentColoredMaterial(new Color(0.5f, 1.0f, 0.5f, 0.7f));
+        var matWire = FssMaterialFactory.WireframeWhiteMaterial();
+
+        for (int i = 0; i < 5; i++)
+        {
+            meshBuilder.AddShellSegment (
+                left, right, //  azimuthMin,  azimuthMax,
+                0, 30, //  elevationMin,  elevationMax,
+                1.5f, 2f, //  distanceMin,  distanceMax,
+                5, 5 ); // resolutionAz,  resolutionEl)
+
+
+            ArrayMesh meshData = meshBuilder.Build("Wedge", true);
+
+            // Add the mesh to the current Node3D
+            MeshInstance3D meshInstance = new();
+            meshInstance.Mesh = meshData;
+            meshInstance.MaterialOverride = matTrans;
+
+            // Add the mesh to the current Node3D
+            MeshInstance3D meshInstanceW = new();
+            meshInstanceW.Mesh = meshData;
+            meshInstanceW.MaterialOverride = matWire;
+
+            AddChild(meshInstance);
+            AddChild(meshInstanceW);
+
+            meshBuilder.Init();
+            left = right + 5;
+            right = left + az;
+        }
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.

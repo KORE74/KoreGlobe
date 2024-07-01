@@ -14,12 +14,8 @@ public partial class FssMeshBuilder
         int resolutionAz, int resolutionEl)
     {
         // Lists to hold the points for the inside and outside surfaces
-        List<Vector3> insideSurfacePoints  = new List<Vector3>();
-        List<Vector3> outsideSurfacePoints = new List<Vector3>();
-
         Vector3[,] insidePoints  = new Vector3[resolutionAz + 1, resolutionEl + 1];
         Vector3[,] outsidePoints = new Vector3[resolutionAz + 1, resolutionEl + 1];
-
 
         // Lists to hold the points for the ribbons (edges)
         List<Vector3> topInsideEdge     = new List<Vector3>();
@@ -45,9 +41,6 @@ public partial class FssMeshBuilder
                 insidePoints[x, y]  = insidePoint;
                 outsidePoints[x, y] = outsidePoint;
 
-                // insideSurfacePoints.Add(insidePoint);
-                // outsideSurfacePoints.Add(outsidePoint);
-
                 // Add points to the edge lists
                 if (y == 0)            topInsideEdge.Add(insidePoint);
                 if (y == resolutionEl) bottomInsideEdge.Add(insidePoint);
@@ -62,17 +55,14 @@ public partial class FssMeshBuilder
         }
 
         // Add the inside and outside surfaces
-        //AddSurface(resolutionAz, resolutionEl, insideSurfacePoints);
-        //AddSurface(resolutionAz, resolutionEl, outsideSurfacePoints, true);
-
         AddSurface(insidePoints, false);
         AddSurface(outsidePoints, true);
 
         // Add ribbons for the edges
-        //AddRibbon(topInsideEdge, topOutsideEdge);
-        //AddRibbon(bottomOutsideEdge, bottomInsideEdge);
-        //AddRibbon(leftOutsideEdge, leftInsideEdge);
-        //AddRibbon(rightInsideEdge, rightOutsideEdge);
+        AddRibbon(topInsideEdge, topOutsideEdge);
+        AddRibbon(bottomOutsideEdge, bottomInsideEdge);
+        AddRibbon(leftOutsideEdge, leftInsideEdge);
+        AddRibbon(rightInsideEdge, rightOutsideEdge);
     }
 
     // ----------------------------------------------------------------------------------
