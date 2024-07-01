@@ -26,6 +26,7 @@ script = ExtResource("1_255lt")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="TestNode"]
 transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, -0.01, 0)
+visible = false
 mesh = SubResource("PlaneMesh_tmkwh")
 
 [node name="Camera3D" type="Camera3D" parent="TestNode"]
@@ -47,6 +48,7 @@ light_energy = 0.25
 
 [node name="TestCube" type="MeshInstance3D" parent="TestNode"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.23427, 0.632016, 0)
+visible = false
 mesh = SubResource("BoxMesh_rs2vt")
 surface_material_override/0 = SubResource("ShaderMaterial_70g2c")
 

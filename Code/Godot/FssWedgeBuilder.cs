@@ -13,43 +13,67 @@ public partial class FssWedgeBuilder : Node3D
         Position = new Vector3(0f, 1f, 0f);
 
         FssMeshBuilder meshBuilder = new ();
+        FssMeshBuilder meshBuilder2 = new ();
 
+        var matGround    = FssMaterialFactory.SimpleColoredMaterial(new Color(0.5f, 1.0f, 0.5f, 0.7f));
 
-        float az = 30;
+        var matTrans     = FssMaterialFactory.TransparentColoredMaterial(new Color(0.5f, 1.0f, 0.5f, 0.7f));
+        var matTransBlue = FssMaterialFactory.TransparentColoredMaterial(new Color(0.2f, 0.2f, 0.7f, 0.4f));
+        var matWire      = FssMaterialFactory.WireframeWhiteMaterial();
 
-        float left  = 0;
-        float right = left + az;
-
-        var matTrans = FssMaterialFactory.TransparentColoredMaterial(new Color(0.5f, 1.0f, 0.5f, 0.7f));
-        var matWire = FssMaterialFactory.WireframeWhiteMaterial();
-
-        for (int i = 0; i < 5; i++)
+		for (float currAz = -180f; currAz < 180f; currAz += 30f)
         {
-            meshBuilder.AddShellSegment (
-                left, right, //  azimuthMin,  azimuthMax,
-                0, 30, //  elevationMin,  elevationMax,
-                1.5f, 2f, //  distanceMin,  distanceMax,
-                5, 5 ); // resolutionAz,  resolutionEl)
+			for (float currEl = -90; currEl < 90; currEl += 30f)
+			{
+				meshBuilder.AddShellSegment (
+					currAz, currAz + 25, //  azimuthMin,  azimuthMax,
+					currEl, currEl + 25, //  elevationMin,  elevationMax,
+					1.2f, 1.22f, //  distanceMin,  distanceMax,
+					6, 6 ); // resolutionAz,  resolutionEl)
 
+				ArrayMesh meshData = meshBuilder.Build("Wedge", true);
 
-            ArrayMesh meshData = meshBuilder.Build("Wedge", true);
+				// Add the mesh to the current Node3D
+				MeshInstance3D meshInstance = new();
+				meshInstance.Mesh = meshData;
+				meshInstance.MaterialOverride = matGround;
 
-            // Add the mesh to the current Node3D
-            MeshInstance3D meshInstance = new();
-            meshInstance.Mesh = meshData;
-            meshInstance.MaterialOverride = matTrans;
+				// Add the mesh to the current Node3D
+				MeshInstance3D meshInstanceW = new();
+				meshInstanceW.Mesh = meshData;
+				meshInstanceW.MaterialOverride = matWire;
 
-            // Add the mesh to the current Node3D
-            MeshInstance3D meshInstanceW = new();
-            meshInstanceW.Mesh = meshData;
-            meshInstanceW.MaterialOverride = matWire;
+				AddChild(meshInstance);
+				AddChild(meshInstanceW);
 
-            AddChild(meshInstance);
-            AddChild(meshInstanceW);
+				meshBuilder.Init();
 
-            meshBuilder.Init();
-            left = right + 5;
-            right = left + az;
+				// ---------------
+
+				meshBuilder2.AddShellSegment (
+					currAz, currAz + 25, //  azimuthMin,  azimuthMax,
+					currEl, currEl + 25, //  elevationMin,  elevationMax,
+					1.22f, 1.26f, //  distanceMin,  distanceMax,
+					6, 6 ); // resolutionAz,  resolutionEl)
+
+				ArrayMesh meshData2 = meshBuilder2.Build("Wedge", true);
+
+				// Add the mesh to the current Node3D
+				MeshInstance3D meshInstance2 = new();
+				meshInstance2.Mesh = meshData2;
+				meshInstance2.MaterialOverride = matTransBlue;
+
+				// Add the mesh to the current Node3D
+				MeshInstance3D meshInstanceW2 = new();
+				meshInstanceW2.Mesh = meshData2;
+				meshInstanceW2.MaterialOverride = matWire;
+
+				AddChild(meshInstance2);
+				AddChild(meshInstanceW2);
+
+				meshBuilder2.Init();
+
+			}
         }
     }
 

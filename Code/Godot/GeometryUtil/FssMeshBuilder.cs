@@ -19,7 +19,7 @@ public partial class FssMeshBuilder
     }
 
     // --------------------------------------------------------------------------------------------
-    // Mesh Building
+    // #MARK: Mesh Building
     // --------------------------------------------------------------------------------------------
 
     public ArrayMesh Build(string name, bool recalcNormals = false)
@@ -49,10 +49,10 @@ public partial class FssMeshBuilder
         arrays[(int)Mesh.ArrayType.Vertex] = meshData.Vertices.ToArray();
         arrays[(int)Mesh.ArrayType.TexUV] = meshData.UVs.ToArray();
         arrays[(int)Mesh.ArrayType.Index] = meshData.Triangles.ToArray();
+        arrays[(int)Mesh.ArrayType.Normal] = meshData.Normals.ToArray();
 
         newMesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, arrays);
 
-        surfaceTool.GenerateNormals();
         surfaceTool.GenerateTangents();
 
         newMesh = surfaceTool.Commit();
@@ -190,7 +190,11 @@ public partial class FssMeshBuilder
         }
 
         int i1 = AddVertex(pntList1[0]);
+        AddNormal(pntList1[0].Normalized());
+
         int i2 = AddVertex(pntList2[0]);
+        AddNormal(pntList2[0].Normalized());
+
         int firstI1 = i1;
         int firstI2 = i2;
 
@@ -198,9 +202,13 @@ public partial class FssMeshBuilder
         for (int i = 0; i < pntList1.Count - 1; i++)
         {
             int i3 = AddVertex(pntList2[i + 1]);
+            AddNormal(pntList2[i + 1].Normalized());
+
             int i4 = AddVertex(pntList1[i + 1]);
-            AddTriangle(i1, i2, i3);
-            AddTriangle(i1, i3, i4);
+            AddNormal(pntList1[i + 1].Normalized());
+
+            AddTriangle(i1, i3, i2);
+            AddTriangle(i1, i4, i3);
 
             i1 = i4; // Update i1 and i2 for the next iteration
             i2 = i3;
@@ -208,8 +216,8 @@ public partial class FssMeshBuilder
 
         if (wrapAround)
         {
-            AddTriangle(i1, i2, firstI2);
-            AddTriangle(i1, firstI2, firstI1);
+            AddTriangle(i1, firstI2, i2);
+            AddTriangle(i1, firstI1, firstI2);
         }
     }
 
@@ -236,20 +244,27 @@ public partial class FssMeshBuilder
 
                 // Add points to MeshData.Vertices list and record the index of each point
                 int i1 = AddVertex(p1);
+                AddNormal(p1.Normalized());
+
                 int i2 = AddVertex(p2);
+                AddNormal(p2.Normalized());
+
                 int i3 = AddVertex(p3);
+                AddNormal(p3.Normalized());
+
                 int i4 = AddVertex(p4);
+                AddNormal(p4.Normalized());
 
                 // Create two MeshData.Triangles using the four MeshData.Vertices just added
                 if (flipTriangles)
                 {
-                    AddTriangle(i3, i2, i1);
-                    AddTriangle(i3, i4, i2);
+                    AddTriangle(i3, i1, i2);
+                    AddTriangle(i3, i2, i4);
                 }
                 else
                 {
-                    AddTriangle(i1, i2, i3);
-                    AddTriangle(i2, i4, i3);
+                    AddTriangle(i1, i3, i2);
+                    AddTriangle(i2, i3, i4);
                 }
             }
         }
@@ -282,13 +297,13 @@ public partial class FssMeshBuilder
                 // Create two MeshData.Triangles using the four MeshData.Vertices just added
                 if (flipTriangles)
                 {
-                    AddTriangle(i3, i2, i1);
-                    AddTriangle(i3, i4, i2);
+                    AddTriangle(i3, i1, i2);
+                    AddTriangle(i3, i2, i4);
                 }
                 else
                 {
-                    AddTriangle(i1, i2, i3);
-                    AddTriangle(i2, i4, i3);
+                    AddTriangle(i1, i3, i2);
+                    AddTriangle(i2, i3, i4);
                 }
             }
         }

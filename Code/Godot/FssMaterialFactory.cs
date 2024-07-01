@@ -35,6 +35,7 @@ public static class FssMaterialFactory
         ShaderMaterial wireframeMaterial = new ShaderMaterial();
        // wireframeMaterial.AlbedoColor = color;
         wireframeMaterial.Shader = shader;
+
         return wireframeMaterial;
     }
 
