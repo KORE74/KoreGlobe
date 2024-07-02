@@ -22,7 +22,7 @@ void fragment() {
 
     // Apply the wireframe color only to front-facing triangles
     if (FRONT_FACING) {
-        ALBEDO = mix(wirecolor, vec3(0.0), factor);
+        ALBEDO = wirecolor;
     } else {
         discard; // Discard the fragment for back-facing triangles
     }

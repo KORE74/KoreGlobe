@@ -38,6 +38,16 @@ script = ExtResource("2_3c077")
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 1, 0)
 mesh = SubResource("SphereMesh_7jnt0")
 
+[node name="Label3D" type="Label3D" parent="TestNode/MeshInstance3D2"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0.568037, 0, 0)
+pixel_size = 0.0003
+text = "Lat 0
+Lon 355"
+
+[node name="TestLabel" type="Node3D" parent="TestNode/MeshInstance3D2"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+script = ExtResource("5_5jdg7")
+
 [node name="SpotLight3D" type="SpotLight3D" parent="TestNode"]
 transform = Transform3D(0.804137, -0.0127291, 0.594308, -0.594444, -0.0172194, 0.803953, 0, -0.999771, -0.0214135, 2.56978, 4.5275, 0)
 shadow_enabled = true
@@ -58,6 +68,3 @@ script = ExtResource("3_i52xv")
 
 [node name="TestShape" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 1.5)
-
-[node name="TestLabel" type="Node3D" parent="."]
-script = ExtResource("5_5jdg7")

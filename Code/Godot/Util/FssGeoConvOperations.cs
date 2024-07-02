@@ -12,33 +12,17 @@ public static class FssGeoConvOperations
     // This offset allows the currently presented elements to vbe closer to the origin, and within the finer resolutino of a 32-bit float.
     public static Vector3 EarthCenterOffset = new Vector3(0, 0, 0);
 
-
-
-    public static Vector3 RealWorldToGodot(float radius, float azimuth, float elevation)
+    public static Vector3 RealWorldToGodot(float radius, float latitude, float longitude)
     {
-        float azRad = Mathf.DegToRad(azimuth);
-        float elRad = Mathf.DegToRad(elevation);
+        float latRad = Mathf.DegToRad(latitude);
+        float lonRad = Mathf.DegToRad(longitude);
 
-        float x = radius * Mathf.Cos(elRad) * Mathf.Cos(azRad);
-        float z = radius * Mathf.Cos(elRad) * Mathf.Sin(azRad);
-        float y = radius * Mathf.Sin(elRad);
+        float x = radius * Mathf.Cos(latRad) * Mathf.Cos(lonRad);
+        float z = radius * Mathf.Cos(latRad) * Mathf.Sin(lonRad);
+        float y = radius * Mathf.Sin(latRad);
 
         return new Vector3(x, y, z);
     }
 
-    public static Vector3 RealWorldToGodot(FssLLAPoint llap)
-    {
-        // convert to XYZ
-        FssXYZPoint xyz = llap.ToXYZ();
 
-        // scale M to Km
-        float x = (float)(xyz.X / 1000);
-        float y = (float)(xyz.Y / 1000);
-        float z = (float)(xyz.Z / 1000);
-
-        // invert Z
-        z = -z;
-
-        return new Vector3(x, y, z);
-    }
 }

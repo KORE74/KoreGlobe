@@ -50,28 +50,28 @@ public partial class FssWedgeBuilder : Node3D
 
                 // ---------------
 
-                meshBuilder2.AddShellSegment (
-                    currAz, currAz + 25, //  azimuthMin,  azimuthMax,
-                    currEl, currEl + 25, //  elevationMin,  elevationMax,
-                    1.22f, 1.26f, //  distanceMin,  distanceMax,
-                    6, 6 ); // resolutionAz,  resolutionEl)
+                // meshBuilder2.AddShellSegment (
+                //     currAz, currAz + 25, //  azimuthMin,  azimuthMax,
+                //     currEl, currEl + 25, //  elevationMin,  elevationMax,
+                //     1.22f, 1.26f, //  distanceMin,  distanceMax,
+                //     6, 6 ); // resolutionAz,  resolutionEl)
 
-                ArrayMesh meshData2 = meshBuilder2.Build("Wedge", true);
+                // ArrayMesh meshData2 = meshBuilder2.Build("Wedge", true);
 
-                // Add the mesh to the current Node3D
-                MeshInstance3D meshInstance2 = new();
-                meshInstance2.Mesh = meshData2;
-                meshInstance2.MaterialOverride = matTransBlue;
+                // // Add the mesh to the current Node3D
+                // MeshInstance3D meshInstance2 = new();
+                // meshInstance2.Mesh = meshData2;
+                // meshInstance2.MaterialOverride = matTransBlue;
 
-                // Add the mesh to the current Node3D
-                MeshInstance3D meshInstanceW2 = new();
-                meshInstanceW2.Mesh = meshData2;
-                meshInstanceW2.MaterialOverride = matWire;
+                // // Add the mesh to the current Node3D
+                // MeshInstance3D meshInstanceW2 = new();
+                // meshInstanceW2.Mesh = meshData2;
+                // meshInstanceW2.MaterialOverride = matWire;
 
-                AddChild(meshInstance2);
-                AddChild(meshInstanceW2);
+                // AddChild(meshInstance2);
+                // AddChild(meshInstanceW2);
 
-                meshBuilder2.Init();
+                // meshBuilder2.Init();
 
             }
         }
