@@ -21,17 +21,17 @@ public partial class FssWedgeBuilder : Node3D
         var matTransBlue = FssMaterialFactory.TransparentColoredMaterial(new Color(0.2f, 0.2f, 0.7f, 0.4f));
         var matWire      = FssMaterialFactory.WireframeWhiteMaterial();
 
-        for (float currAz = -180f; currAz < 180f; currAz += 30f)
+        for (float currLon = -180f; currLon < (180f - 10f); currLon += 30f)
         {
-            for (float currEl = -90; currEl < 90; currEl += 30f)
+            for (float currLat = -90; currLat < 90; currLat += 30f)
             {
                 meshBuilder.AddShellSegment (
-                    currAz, currAz + 25, //  azimuthMin,  azimuthMax,
-                    currEl, currEl + 25, //  elevationMin,  elevationMax,
+                    currLat, currLat + 25, //  elevationMin,  elevationMax,
+                    currLon, currLon + 25, //  azimuthMin,  azimuthMax,
                     1.2f, 1.22f, //  distanceMin,  distanceMax,
                     6, 6 ); // resolutionAz,  resolutionEl)
 
-                ArrayMesh meshData = meshBuilder.Build("Wedge", true);
+                ArrayMesh meshData = meshBuilder.Build("Wedge", false);
 
                 // Add the mesh to the current Node3D
                 MeshInstance3D meshInstance = new();
@@ -51,8 +51,8 @@ public partial class FssWedgeBuilder : Node3D
                 // ---------------
 
                 // meshBuilder2.AddShellSegment (
-                //     currAz, currAz + 25, //  azimuthMin,  azimuthMax,
-                //     currEl, currEl + 25, //  elevationMin,  elevationMax,
+                //     currLon, currLon + 25, //  azimuthMin,  azimuthMax,
+                //     currLat, currLat + 25, //  elevationMin,  elevationMax,
                 //     1.22f, 1.26f, //  distanceMin,  distanceMax,
                 //     6, 6 ); // resolutionAz,  resolutionEl)
 

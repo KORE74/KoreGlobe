@@ -207,8 +207,8 @@ public partial class FssMeshBuilder
             int i4 = AddVertex(pntList1[i + 1]);
             AddNormal(pntList1[i + 1].Normalized());
 
-            AddTriangle(i1, i3, i2);
-            AddTriangle(i1, i4, i3);
+            AddTriangle(i1, i2, i3);
+            AddTriangle(i1, i3, i4);
 
             i1 = i4; // Update i1 and i2 for the next iteration
             i2 = i3;
@@ -216,8 +216,8 @@ public partial class FssMeshBuilder
 
         if (wrapAround)
         {
-            AddTriangle(i1, firstI2, i2);
-            AddTriangle(i1, firstI1, firstI2);
+            AddTriangle(i1, i2, firstI2);
+            AddTriangle(i1, firstI2, firstI1);
         }
     }
 
@@ -258,13 +258,13 @@ public partial class FssMeshBuilder
                 // Create two MeshData.Triangles using the four MeshData.Vertices just added
                 if (flipTriangles)
                 {
-                    AddTriangle(i3, i1, i2);
-                    AddTriangle(i3, i2, i4);
+                    AddTriangle(i3, i2, i1);
+                    AddTriangle(i3, i4, i2);
                 }
                 else
                 {
-                    AddTriangle(i1, i3, i2);
-                    AddTriangle(i2, i3, i4);
+                    AddTriangle(i1, i2, i3);
+                    AddTriangle(i2, i4, i3);
                 }
             }
         }
@@ -297,13 +297,13 @@ public partial class FssMeshBuilder
                 // Create two MeshData.Triangles using the four MeshData.Vertices just added
                 if (flipTriangles)
                 {
-                    AddTriangle(i3, i1, i2);
-                    AddTriangle(i3, i2, i4);
+                    AddTriangle(i3, i2, i1);
+                    AddTriangle(i3, i4, i2);
                 }
                 else
                 {
-                    AddTriangle(i1, i3, i2);
-                    AddTriangle(i2, i3, i4);
+                    AddTriangle(i1, i2, i3);
+                    AddTriangle(i2, i4, i3);
                 }
             }
         }
