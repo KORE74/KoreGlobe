@@ -8,21 +8,15 @@ using Godot;
 
 public static class FssGeoConvOperations
 {
-    // Offset to the center of the Earth in Godot coordinates
-    // This offset allows the currently presented elements to vbe closer to the origin, and within the finer resolutino of a 32-bit float.
-    public static Vector3 EarthCenterOffset = new Vector3(0, 0, 0);
-
-    public static Vector3 RealWorldToGodot(float radius, float latitude, float longitude)
+    public static Vector3 RealWorldToGodot(float radius, float latDegs, float lonDegs)
     {
-        float latRad = Mathf.DegToRad(latitude);
-        float lonRad = Mathf.DegToRad(longitude);
+        float latRad = Mathf.DegToRad(latDegs);
+        float lonRad = Mathf.DegToRad(lonDegs);
 
         float x = radius * Mathf.Cos(latRad) * Mathf.Cos(lonRad);
-        float z = radius * Mathf.Cos(latRad) * Mathf.Sin(lonRad);
         float y = radius * Mathf.Sin(latRad);
+        float z = radius * Mathf.Cos(latRad) * Mathf.Sin(lonRad);
 
         return new Vector3(x, y, z);
     }
-
-
 }
