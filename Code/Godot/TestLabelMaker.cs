@@ -1,5 +1,7 @@
-using Godot;
+using System;
 using System.Collections.Generic;
+
+using Godot;
 
 public partial class TestLabelMaker : Node3D
 {
@@ -14,7 +16,11 @@ public partial class TestLabelMaker : Node3D
         // Loop through lat and long ranges, at 10 degree intervals, and create a Label3D at each point to display on our globe
         for (int lat = 80; lat >= -80; lat -= 10)
         {
-            for (int lon = -180; lon < (180 - 5); lon += 10)
+            int lonInc = 10;
+            if (Math.Abs(lat) > 65) lonInc = 15;
+            if (Math.Abs(lat) > 75) lonInc = 30;
+
+            for (int lon = -180; lon < (180 - 5); lon += lonInc)
             {
                 // Define the position and associated up direction for the label
                 Vector3 position      = FssGeoConvOperations.RealWorldToGodot(distance, lat, lon);

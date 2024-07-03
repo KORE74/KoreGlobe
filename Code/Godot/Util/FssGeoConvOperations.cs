@@ -19,4 +19,10 @@ public static class FssGeoConvOperations
 
         return new Vector3(x, y, z);
     }
+
+
+    public static Vector3 RealWorldToGodot(FssLLAPoint llap)
+    {
+        return RealWorldToGodot((float)llap.AltMslM, (float)llap.LatDegs, (float)llap.LonDegs);
+    }
 }
