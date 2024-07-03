@@ -15,7 +15,7 @@ public static class FssGeoConvOperations
 
         float x = radius * Mathf.Cos(latRad) * Mathf.Cos(lonRad);
         float y = radius * Mathf.Sin(latRad);
-        float z = radius * Mathf.Cos(latRad) * Mathf.Sin(lonRad);
+        float z = radius * Mathf.Cos(latRad) * Mathf.Sin(lonRad) * -1.0f;
 
         return new Vector3(x, y, z);
     }

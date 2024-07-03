@@ -207,8 +207,10 @@ public partial class FssMeshBuilder
             int i4 = AddVertex(pntList1[i + 1]);
             AddNormal(pntList1[i + 1].Normalized());
 
-            AddTriangle(i1, i2, i3);
-            AddTriangle(i1, i3, i4);
+            // AddTriangle(i1, i2, i3);
+            // AddTriangle(i1, i3, i4);
+            AddTriangle(i1, i3, i2);
+            AddTriangle(i1, i4, i3);
 
             i1 = i4; // Update i1 and i2 for the next iteration
             i2 = i3;
@@ -216,8 +218,11 @@ public partial class FssMeshBuilder
 
         if (wrapAround)
         {
-            AddTriangle(i1, i2, firstI2);
-            AddTriangle(i1, firstI2, firstI1);
+            // AddTriangle(i1, i2, firstI2);
+            // AddTriangle(i1, firstI2, firstI1);
+
+            AddTriangle(i1, firstI2, i2);
+            AddTriangle(i1, firstI1, firstI2);
         }
     }
 
