@@ -22,6 +22,7 @@ public static class FssMaterialFactory
         StandardMaterial3D material = new StandardMaterial3D();
         material.AlbedoColor        = color;
         material.Transparency       = BaseMaterial3D.TransparencyEnum.Alpha;
+        
         return material;
     }
 

@@ -24,7 +24,7 @@ public partial class TestModel : Node3D
             FssLLAPoint posAbove = pos;
             posAbove.AltMslM += 0.01f;
             FssLLAPoint posAhead = pos;
-            posAhead.LonDegs += 0.01f;
+            posAhead.LonDegs += 0.25f;
 
             Vector3 posDebug = FssGeoConvOperations.RealWorldToGodot(distance, 40, 0);
 
@@ -52,12 +52,13 @@ public partial class TestModel : Node3D
             model3D.Scale = new Vector3(0.1f, 0.1f, 0.1f);
 
 
-            model3D.AddChild( FssPrimitiveFactory.CreateSphere(Vector3.Zero, 0.1f,  new Color(0.7f, 0.1f, 0.1f, 1f)) ); // dark red
-            model3D.AddChild( FssPrimitiveFactory.CreateSphere(vecAbove,     0.02f, new Color(0.1f, 0.1f, 0.8f, 1f)) ); // above = blue
-            model3D.AddChild( FssPrimitiveFactory.CreateSphere(vecAhead,     0.02f, new Color(0.1f, 0.8f, 0.1f, 1f)) ); // ahead = green
+            // model3D.AddChild( FssPrimitiveFactory.CreateSphere(Vector3.Zero, 0.1f,  new Color(0.7f, 0.1f, 0.1f, 1f)) ); // dark red
+            // model3D.AddChild( FssPrimitiveFactory.CreateSphere(vecAbove,     0.02f, new Color(0.1f, 0.1f, 0.8f, 1f)) ); // above = blue
+            // model3D.AddChild( FssPrimitiveFactory.CreateSphere(vecAhead,     0.02f, new Color(0.1f, 0.8f, 0.1f, 1f)) ); // ahead = green
 
-            AddChild( FssPrimitiveFactory.CreateSphere(posDebug, 0.1f, new Color(0.7f, 0.7f, 0.1f, 1f)) ); // Yellow
-
+            AddChild( FssPrimitiveFactory.CreateSphere(vecPos,   0.005f, new Color(0.7f, 0.7f, 0.1f, 1f)) ); // Yellow
+            AddChild( FssPrimitiveFactory.CreateSphere(vecAbove, 0.005f, new Color(0.7f, 0.0f, 0.7f, 1f)) ); // Yellow
+            AddChild( FssPrimitiveFactory.CreateSphere(vecAhead, 0.005f, new Color(0.0f, 0.7f, 0.7f, 1f)) ); // Yellow
         }
         else
         {
