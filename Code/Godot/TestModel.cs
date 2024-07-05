@@ -6,12 +6,20 @@ public partial class TestModel : Node3D
     [Export]
     public string ModelPath = "res://Resources/Plane_Paper/PaperPlanes_v002.glb";
 
-    FssLLAPoint pos = new FssLLAPoint() { LatDegs = 40, LonDegs = 10, AltMslM = 1.4f };
-    private FssCourse Course = new FssCourse() { HeadingDegs = 0, SpeedKph = 100 };
+    // Define the position and course
+    private FssLLAPoint pos   = new FssLLAPoint() { LatDegs = 40, LonDegs = 10, AltMslM = 1.4f };
+    private FssCourse Course  = new FssCourse()   { HeadingDegs = 0, SpeedKph = 100 };
+
+    // Define the model node hierarchy
+    // Parent
+    // |- ModelNode
+    //    |- ModelResourceNode
+    //    |- NodeMarkerZero
+    //    |- NodeMarkerAbove
+    //    |- NodeMarkerAhead
 
     Node3D ModelNode = null;
     Node3D ModelResourceNode = null;
-
     Node3D NodeMarkerZero = null;
     Node3D NodeMarkerAbove = null;
     Node3D NodeMarkerAhead = null;
@@ -21,7 +29,6 @@ public partial class TestModel : Node3D
     public override void _Ready()
     {
         PackedScene importedModel = (PackedScene)ResourceLoader.Load(ModelPath);
-
 
         if (importedModel != null)
         {
@@ -35,24 +42,17 @@ public partial class TestModel : Node3D
             ModelNode.AddChild(ModelResourceNode);
             ModelResourceNode.Scale = new Vector3(0.05f, 0.05f, 0.05f); // Set the model scale
 
-
-            NodeMarkerZero  = FssPrimitiveFactory.CreateSphere(Vector3.Zero,  0.005f, new Color(0.7f, 0.1f, 0.1f, 1f)); // dark red
+            // Create and assign the markers
+            NodeMarkerZero  = FssPrimitiveFactory.CreateSphere(Vector3.Zero,  0.005f, new Color(0.7f, 0.1f, 0.1f, 1f)); // zero  = red
             NodeMarkerAbove = FssPrimitiveFactory.CreateSphere(Vector3.Zero,  0.005f, new Color(0.1f, 0.1f, 0.8f, 1f)); // above = blue
             NodeMarkerAhead = FssPrimitiveFactory.CreateSphere(Vector3.Zero,  0.005f, new Color(0.1f, 0.8f, 0.1f, 1f)); // ahead = green
+            // ModelNode.AddChild(NodeMarkerZero);
+            // ModelNode.AddChild(NodeMarkerAbove);
+            // ModelNode.AddChild(NodeMarkerAhead);
 
-            ModelNode.AddChild(NodeMarkerZero);
-            ModelNode.AddChild(NodeMarkerAbove);
-            ModelNode.AddChild(NodeMarkerAhead);
-
-
-
-            // ModelNode.AddChild( FssPrimitiveFactory.CreateSphere(Vector3.Zero,  0.005f, new Color(0.7f, 0.1f, 0.1f, 1f)) ); // dark red
-            // ModelNode.AddChild( FssPrimitiveFactory.CreateSphere(diffAbove,     0.005f, new Color(0.1f, 0.1f, 0.8f, 1f)) ); // above = blue
-            // ModelNode.AddChild( FssPrimitiveFactory.CreateSphere(diffAhead,     0.005f, new Color(0.1f, 0.8f, 0.1f, 1f)) ); // ahead = green
-
-            // AddChild( FssPrimitiveFactory.CreateSphere(vecPos,   0.005f, new Color(0.7f, 0.7f, 0.1f, 1f)) ); // Yellow
-            // AddChild( FssPrimitiveFactory.CreateSphere(vecAbove, 0.005f, new Color(0.7f, 0.0f, 0.7f, 1f)) ); // Yellow
-            // AddChild( FssPrimitiveFactory.CreateSphere(vecAhead, 0.005f, new Color(0.0f, 0.7f, 0.7f, 1f)) ); // Yellow
+            AddChild(NodeMarkerZero);
+            AddChild(NodeMarkerAbove);
+            AddChild(NodeMarkerAhead);
 
             UpdateModelPosition();
         }
@@ -92,7 +92,7 @@ public partial class TestModel : Node3D
 
         // Define the position and associated up direction for the label
         FssLLAPoint posAbove = pos;
-        posAbove.AltMslM += 0.01f;
+        posAbove.AltMslM += 0.04f;
 
         // Get the position 5 seconds ahead, or just north if stationary
         FssLLAPoint posAhead = FssLLAPoint.Zero;
@@ -122,14 +122,21 @@ public partial class TestModel : Node3D
         Vector3 fixedVecRight = new Vector3(mag, 0f, 0f);
         Vector3 fixedVecAbove = new Vector3(0f, mag, 0f);
         Vector3 fixedVecAhead = new Vector3(0f, 0f, mag);
+        Vector3 markerAhead = unitVecAhead * mag;
+        Vector3 markerAbove = unitVecAbove * mag;
 
         // --- Update node -----------------------
         ModelNode.LookAt(unitVecAhead, unitVecAbove);
         ModelNode.Position = vecPos;
 
-        NodeMarkerZero.Position  = Vector3.Zero;
-        NodeMarkerAbove.Position = fixedVecAbove; //diffAbove;
-        NodeMarkerAhead.Position = fixedVecAhead; //diffAhead;
-}
+        // NodeMarkerZero.Position  = Vector3.Zero;
+        // NodeMarkerAbove.Position = markerAbove; //diffAbove;
+        // NodeMarkerAhead.Position = markerAhead; //diffAhead;
+
+
+        NodeMarkerZero.Position  = vecPos;
+        NodeMarkerAbove.Position = vecAbove; //diffAbove;
+        NodeMarkerAhead.Position = Vector3.Zero; //diffAhead;
+    }
 
 }
