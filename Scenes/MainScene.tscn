@@ -6,7 +6,7 @@
 [ext_resource type="Script" path="res://Code/Godot/FssTestGlobeCore.cs" id="5_molmv"]
 [ext_resource type="Theme" uid="uid://djwxcxhu87cro" path="res://Themes/Theme_v001.tres" id="6_jbwbd"]
 [ext_resource type="Script" path="res://Code/Godot/TestModel.cs" id="7_f5p1r"]
-[ext_resource type="Material" path="res://Resources/MenuTransparency.tres" id="7_msck2"]
+[ext_resource type="Material" uid="uid://b57vud2deylof" path="res://Resources/MenuTransparency.tres" id="7_msck2"]
 [ext_resource type="Script" path="res://Code/Godot/UI/FssWindowHandler.cs" id="7_padcc"]
 
 [node name="Node3D" type="Node3D"]

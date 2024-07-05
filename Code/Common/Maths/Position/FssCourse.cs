@@ -29,6 +29,13 @@ public struct FssCourse
 
     // ------------------------------------------------------------------------
 
+    public bool IsStationary()
+    {
+        return (SpeedMps < 0.001);
+    }
+
+    // ------------------------------------------------------------------------
+
     public FssRangeBearing OffsetForTime(double elapsedSeconds)
     {
         return new FssRangeBearing(SpeedMps * elapsedSeconds, HeadingRads);
@@ -63,6 +70,6 @@ public struct FssCourse
 
     public override string ToString()
     {
-        return $"Speed: {SpeedKph} Kph, Heading: {HeadingDegs} Degs";
+        return $"Speed: {SpeedKph:F2} Kph, Heading: {HeadingDegs:F2} Degs";
     }
 }
