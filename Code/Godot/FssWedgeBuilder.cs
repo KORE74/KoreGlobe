@@ -35,7 +35,7 @@ public partial class FssWedgeBuilder : Node3D
                 // Add the mesh to the current Node3D
                 MeshInstance3D meshInstance   = new();
                 meshInstance.Mesh             = meshData;
-                meshInstance.MaterialOverride = matTransBlue;
+                meshInstance.MaterialOverride = matGround; //matTransBlue;
 
                 // Add the mesh to the current Node3D
                 MeshInstance3D meshInstanceW   = new();

@@ -9,7 +9,7 @@ public partial class TestModel : Node3D
 
     // Define the position and course
     private FssLLAPoint pos   = new FssLLAPoint() { LatDegs = 40, LonDegs = -70, AltMslM = 1.4f };
-    private FssCourse Course  = new FssCourse()   { HeadingDegs = 0, SpeedKph = 100 };
+    private FssCourse Course  = new FssCourse()   { HeadingDegs = 0, SpeedKph = 250000 };
 
     // Define the model node hierarchy
     // Parent
@@ -19,12 +19,15 @@ public partial class TestModel : Node3D
     //    |- NodeMarkerAbove
     //    |- NodeMarkerAhead
 
-    Node3D ModelNode = null;
+    Node3D ModelNode         = null;
     Node3D ModelResourceNode = null;
-    Node3D NodeMarkerZero = null;
-    Node3D NodeMarkerAbove = null;
-    Node3D NodeMarkerAhead = null;
+    Node3D NodeMarkerZero    = null;
+    Node3D NodeMarkerAbove   = null;
+    Node3D NodeMarkerAhead   = null;
 
+    float Timer1Hz = 0f;
+
+    // --------------------------------------------------------------------------------------------
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -34,28 +37,34 @@ public partial class TestModel : Node3D
         if (importedModel != null)
         {
             // Root of the model and orientation
-            ModelNode = new Node3D();
+            ModelNode = new Node3D() { Name = "ModelNode" };
+            ModelNode.LookAt(Vector3.Forward, Vector3.Up);
             AddChild(ModelNode);
 
             // Instance the model
-            Node modelInstance = importedModel.Instantiate();
-            ModelResourceNode = modelInstance as Node3D;
+            Node modelInstance     = importedModel.Instantiate();
+            ModelResourceNode      = modelInstance as Node3D;
+            ModelResourceNode.Name = "ModelResourceNode";
+            ModelResourceNode.LookAt(Vector3.Forward, Vector3.Up);
+
             ModelNode.AddChild(ModelResourceNode);
-            ModelResourceNode.Scale = new Vector3(0.05f, 0.05f, 0.05f); // Set the model scale
-            //ModelResourceNode.RotateX(MathF.(90)); // Rotate the model to align with the Godot axis system
+            ModelResourceNode.Scale    = new Vector3(0.05f, 0.05f, 0.05f); // Set the model scale
             ModelResourceNode.Position = new Vector3(0f, 0f, 0f); // Set the model position
 
             // Create and assign the markers
             NodeMarkerZero  = FssPrimitiveFactory.CreateSphere(Vector3.Zero,  0.005f, new Color(0.7f, 0.1f, 0.1f, 1f)); // zero  = red
             NodeMarkerAbove = FssPrimitiveFactory.CreateSphere(Vector3.Zero,  0.005f, new Color(0.1f, 0.1f, 0.8f, 1f)); // above = blue
             NodeMarkerAhead = FssPrimitiveFactory.CreateSphere(Vector3.Zero,  0.005f, new Color(0.1f, 0.8f, 0.1f, 1f)); // ahead = green
-            // ModelNode.AddChild(NodeMarkerZero);
-            // ModelNode.AddChild(NodeMarkerAbove);
-            // ModelNode.AddChild(NodeMarkerAhead);
 
-            AddChild(NodeMarkerZero);
-            AddChild(NodeMarkerAbove);
-            AddChild(NodeMarkerAhead);
+            NodeMarkerZero.Name  = "NodeMarkerZero - Red";
+            NodeMarkerAbove.Name = "NodeMarkerAbove - Blue";
+            NodeMarkerAhead.Name = "NodeMarkerAhead - Green";
+            // AddChild(NodeMarkerZero);
+            // AddChild(NodeMarkerAbove);
+            // AddChild(NodeMarkerAhead);
+            ModelNode.AddChild(NodeMarkerZero);
+            ModelNode.AddChild(NodeMarkerAbove);
+            ModelNode.AddChild(NodeMarkerAhead);
 
             UpdateModelPosition();
         }
@@ -65,7 +74,7 @@ public partial class TestModel : Node3D
         }
     }
 
-
+    // --------------------------------------------------------------------------------------------
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
@@ -73,16 +82,22 @@ public partial class TestModel : Node3D
         // Figure out the change in position
         double headingChangePerSec = 5;
         Course.HeadingDegs += headingChangePerSec * delta;
-        Course.SpeedKph = 20000;
         FssPolarOffset offset = Course.ToPolarOffset(delta);
 
-        // Update the position
+        // Update the position with the new offset
         pos = pos.PlusPolarOffset(offset);
 
-        GD.Print($"Course: {Course} Offset: {offset} Position: {pos}");
+        // Debug print the new position values once a second
+        if (Timer1Hz < FssCoreTime.RuntimeSecs)
+        {
+            Timer1Hz += 1f;
+            GD.Print($"RuntimeSecs: {Timer1Hz:F1} Course: {Course} Offset: {offset} Position: {pos}");
+        }
 
         UpdateModelPosition();
     }
+
+    // --------------------------------------------------------------------------------------------
 
     public void UpdateModelPosition()
     {
@@ -117,25 +132,25 @@ public partial class TestModel : Node3D
         Vector3 unitVecAbove = diffAbove;//.Normalized();
 
         float mag = 0.025f;
-        Vector3 fixedVecRight = new Vector3(mag, 0f, 0f);
-        Vector3 fixedVecAbove = new Vector3(0f, mag, 0f);
-        Vector3 fixedVecAhead = new Vector3(0f, 0f, mag);
+        Vector3 fixedVecPlusX = new Vector3(mag, 0f, 0f);
+        Vector3 fixedVecPlusY = new Vector3(0f, mag, 0f);
+        Vector3 fixedVecPlusZ = new Vector3(0f, 0f, mag);
         Vector3 markerAhead = unitVecAhead * mag;
         Vector3 markerAbove = unitVecAbove * mag;
 
         // --- Update node -----------------------
-        ModelNode.LookAt(diffAhead, diffAbove);
+        //ModelNode.LookAt(vecAhead, vecAbove);
         ModelNode.Position = vecPos;
+        ModelNode.LookAt(vecAhead, vecAbove);
 
-        ModelResourceNode.LookAt(Vector3.Forward, Vector3.Up);
+        //ModelResourceNode.LookAt(Vector3.Forward, Vector3.Up);
 
-        // NodeMarkerZero.Position  = Vector3.Zero;
-        // NodeMarkerAbove.Position = markerAbove; //diffAbove;
-        // NodeMarkerAhead.Position = markerAhead; //diffAhead;
+        NodeMarkerZero.Position  = Vector3.Zero;
+        NodeMarkerAbove.Position = fixedVecPlusY; //diffAbove;
+        NodeMarkerAhead.Position = fixedVecPlusZ; //diffAhead;
 
-        NodeMarkerZero.Position  = vecPos;
-        NodeMarkerAbove.Position = vecAbove; //diffAbove;
-        NodeMarkerAhead.Position = vecAhead; //diffAhead;
+        // NodeMarkerZero.Position  = vecPos;
+        // NodeMarkerAbove.Position = vecAbove; //diffAbove;
+        // NodeMarkerAhead.Position = vecAhead; //diffAhead;
     }
-
 }
