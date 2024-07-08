@@ -1,5 +1,6 @@
-using Godot;
 using System;
+
+using Godot;
 
 public partial class TestModel : Node3D
 {
@@ -7,7 +8,7 @@ public partial class TestModel : Node3D
     public string ModelPath = "res://Resources/Plane_Paper/PaperPlanes_v002.glb";
 
     // Define the position and course
-    private FssLLAPoint pos   = new FssLLAPoint() { LatDegs = 40, LonDegs = 10, AltMslM = 1.4f };
+    private FssLLAPoint pos   = new FssLLAPoint() { LatDegs = 40, LonDegs = -70, AltMslM = 1.4f };
     private FssCourse Course  = new FssCourse()   { HeadingDegs = 0, SpeedKph = 100 };
 
     // Define the model node hierarchy
@@ -41,6 +42,8 @@ public partial class TestModel : Node3D
             ModelResourceNode = modelInstance as Node3D;
             ModelNode.AddChild(ModelResourceNode);
             ModelResourceNode.Scale = new Vector3(0.05f, 0.05f, 0.05f); // Set the model scale
+            //ModelResourceNode.RotateX(MathF.(90)); // Rotate the model to align with the Godot axis system
+            ModelResourceNode.Position = new Vector3(0f, 0f, 0f); // Set the model position
 
             // Create and assign the markers
             NodeMarkerZero  = FssPrimitiveFactory.CreateSphere(Vector3.Zero,  0.005f, new Color(0.7f, 0.1f, 0.1f, 1f)); // zero  = red
@@ -67,24 +70,19 @@ public partial class TestModel : Node3D
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
+        // Figure out the change in position
         double headingChangePerSec = 5;
-
         Course.HeadingDegs += headingChangePerSec * delta;
         Course.SpeedKph = 20000;
-
         FssPolarOffset offset = Course.ToPolarOffset(delta);
-
 
         // Update the position
         pos = pos.PlusPolarOffset(offset);
-
-       //pos.LonDegs += 5f * delta;
 
         GD.Print($"Course: {Course} Offset: {offset} Position: {pos}");
 
         UpdateModelPosition();
     }
-
 
     public void UpdateModelPosition()
     {
@@ -113,10 +111,10 @@ public partial class TestModel : Node3D
         Vector3 vecAbove = FssGeoConvOperations.RealWorldToGodot(posAbove);
         Vector3 vecAhead = FssGeoConvOperations.RealWorldToGodot(posAhead);
 
-        Vector3 diffAbove    = (vecAbove - vecPos);//.Normalized();
-        Vector3 diffAhead    = (vecAhead - vecPos);//.Normalized();
-        Vector3 unitVecAhead = diffAhead.Normalized();
-        Vector3 unitVecAbove = diffAbove.Normalized();
+        Vector3 diffAbove    = vecPos.DirectionTo(vecAbove);//.Normalized();
+        Vector3 diffAhead    = vecPos.DirectionTo(vecAhead);//.Normalized();
+        Vector3 unitVecAhead = diffAhead;//.Normalized();
+        Vector3 unitVecAbove = diffAbove;//.Normalized();
 
         float mag = 0.025f;
         Vector3 fixedVecRight = new Vector3(mag, 0f, 0f);
@@ -126,17 +124,18 @@ public partial class TestModel : Node3D
         Vector3 markerAbove = unitVecAbove * mag;
 
         // --- Update node -----------------------
-        ModelNode.LookAt(unitVecAhead, unitVecAbove);
+        ModelNode.LookAt(diffAhead, diffAbove);
         ModelNode.Position = vecPos;
+
+        ModelResourceNode.LookAt(Vector3.Forward, Vector3.Up);
 
         // NodeMarkerZero.Position  = Vector3.Zero;
         // NodeMarkerAbove.Position = markerAbove; //diffAbove;
         // NodeMarkerAhead.Position = markerAhead; //diffAhead;
 
-
         NodeMarkerZero.Position  = vecPos;
         NodeMarkerAbove.Position = vecAbove; //diffAbove;
-        NodeMarkerAhead.Position = Vector3.Zero; //diffAhead;
+        NodeMarkerAhead.Position = vecAhead; //diffAhead;
     }
 
 }

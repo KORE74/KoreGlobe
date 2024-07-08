@@ -16,7 +16,7 @@ public struct FssCourse
     public double HeadingDegs
     {
         get { return HeadingRads * FssConsts.RadsToDegsMultiplier; }
-        set { HeadingRads = value * FssConsts.DegsToRadsMultiplier; }
+        set { HeadingRads = (value % 360.0) * FssConsts.DegsToRadsMultiplier; }
     }
 
     // ------------------------------------------------------------------------
