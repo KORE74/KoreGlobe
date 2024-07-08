@@ -11,9 +11,7 @@ using System.Threading;
 
 public static class FssCentralLog
 {
-    // FssCentralLog.timestampString
-    public static string timestampString { get; } = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
-    private static string runtimeFilename { get; } = timestampString + ".log";
+    private static string runtimeFilename { get; } = $"{FssCoreTime.TimestampLocal}.log";
     private static List<string> logEntries = new List<string>();
     private static readonly object lockObject = new object();
 
@@ -33,8 +31,7 @@ public static class FssCentralLog
         {
             try
             {
-                string timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                logEntries.Add($"{timestamp} : {entry}");
+                logEntries.Add($"{FssCoreTime.TimestampLocal} : {entry}");
 
                 if (logEntries.Count > 100)
                     logEntries.RemoveAt(0);
