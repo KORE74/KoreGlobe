@@ -4,6 +4,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 
+// FssCentralLog: 
+// - A logfile capability available regardless of the Unity / Godot / Dotnet environment the code is ultimately used in.
+// - A static class allows us to log messages from within internal functions.
+// - Has some basic file and thread protection.
+
 public static class FssCentralLog
 {
     // FssCentralLog.timestampString
