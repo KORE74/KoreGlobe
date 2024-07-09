@@ -32,6 +32,10 @@ public struct FssPolarOffset
         get { return Math.Sin(ElRads) * RangeM; }
     }
 
+    // --------------------------------------------------------------------------------------------
+    // #MARK: Constructors
+    // --------------------------------------------------------------------------------------------
+
     // Constructor accepts radians
     public FssPolarOffset(double rangeM, double azRads, double elRads)
     {
@@ -40,11 +44,30 @@ public struct FssPolarOffset
         this.ElRads = elRads;
     }
 
+    public FssPolarOffset(double heightM, double widthM, double depthM, double orientationDeg)
+    {
+        // Calculate azimuth from orientation and width/depth ratio
+        double angleRad = Math.Atan2(widthM, depthM) + orientationDeg * FssConsts.DegsToRadsMultiplier;
+
+        // Wrap angle between 0 and 2*Pi
+        AzRads = (angleRad + 2 * Math.PI) % (2 * Math.PI);
+
+        // Calculate range (distance from origin) using Pythagorean theorem in 3D
+        RangeM = Math.Sqrt(Math.Pow(heightM, 2) + Math.Pow(widthM, 2) + Math.Pow(depthM, 2));
+
+        // Calculate elevation angle from height and range
+        ElRads = Math.Asin(heightM / RangeM);
+    }
+
     // Static property for a zero offset
     public static FssPolarOffset Zero
     {
         get { return new FssPolarOffset { RangeM = 0.0, AzRads = 0.0, ElRads = 0.0 }; }
     }
+
+    // --------------------------------------------------------------------------------------------
+    // #MARK: Functions
+    // --------------------------------------------------------------------------------------------
 
     public FssPolarOffset Scale(double scaleFactor)
     {
@@ -79,19 +102,13 @@ public struct FssPolarOffset
         return newOffset;
     }
 
-    public FssPolarOffset(double heightM, double widthM, double depthM, double orientationDeg)
+    public FssXYZPoint ToXYZ()
     {
-        // Calculate azimuth from orientation and width/depth ratio
-        double angleRad = Math.Atan2(widthM, depthM) + orientationDeg * FssConsts.DegsToRadsMultiplier;
+        double x = RangeM * Math.Cos(ElRads) * Math.Sin(AzRads);
+        double y = RangeM * Math.Sin(ElRads);
+        double z = RangeM * Math.Cos(ElRads) * Math.Cos(AzRads);
 
-        // Wrap angle between 0 and 2*Pi
-        AzRads = (angleRad + 2 * Math.PI) % (2 * Math.PI);
-
-        // Calculate range (distance from origin) using Pythagorean theorem in 3D
-        RangeM = Math.Sqrt(Math.Pow(heightM, 2) + Math.Pow(widthM, 2) + Math.Pow(depthM, 2));
-
-        // Calculate elevation angle from height and range
-        ElRads = Math.Asin(heightM / RangeM);
+        return new FssXYZPoint(x, y, z);
     }
 
     public override string ToString()

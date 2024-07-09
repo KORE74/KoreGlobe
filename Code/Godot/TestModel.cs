@@ -11,6 +11,8 @@ public partial class TestModel : Node3D
     private FssLLAPoint pos   = new FssLLAPoint() { LatDegs = 0, LonDegs = -70, AltMslM = 1.4f };
     private FssCourse Course  = new FssCourse()   { HeadingDegs = 0, SpeedKph = 1200000 };
 
+    private FssPolarOffset CameraOffset = new FssPolarOffset() { RangeM = -0.7f, AzDegs = 45, ElDegs = 45 };
+
     // Define the model node hierarchy
     // Parent
     // |- ModelNode
@@ -83,12 +85,17 @@ public partial class TestModel : Node3D
             ModelCamera.Name = "ModelCamera";
             //ModelCamera.FovDegrees = 40;
             ModelNode.AddChild(ModelCamera);
-            ModelCamera.Position = new Vector3(0.44f, 0.46f, -0.7f);
+
+            // FssXYZPoint camOffsetXYZ = CameraOffset.ToXYZ();
+            // ModelCamera.Position = new Vector3((float)camOffsetXYZ.X, (float)camOffsetXYZ.Y, (float)camOffsetXYZ.Z);
+
+
             ModelCamera.Fov = 35;
+
+            ModelCamera.Position = new Vector3(0.44f, 0.46f, -0.7f);
             ModelCamera.LookAt(Vector3.Zero, Vector3.Up);
 
             ModelCamera.Current = true;
-
 
             UpdateModelPosition();
 
@@ -110,6 +117,8 @@ public partial class TestModel : Node3D
         double headingChangePerSec = 5;
         Course.HeadingDegs += headingChangePerSec * delta;
         FssPolarOffset offset = Course.ToPolarOffset(delta);
+
+        CameraOffset.AzDegs += headingChangePerSec * delta;
 
         // Update the position with the new offset
         pos = pos.PlusPolarOffset(offset);
@@ -179,5 +188,11 @@ public partial class TestModel : Node3D
         // NodeMarkerZero.Position  = vecPos;
         // NodeMarkerAbove.Position = vecAbove; //diffAbove;
         // NodeMarkerAhead.Position = vecAhead; //diffAhead;
+
+        FssXYZPoint camOffsetXYZ = CameraOffset.ToXYZ();
+        ModelCamera.Position = new Vector3((float)camOffsetXYZ.X, (float)camOffsetXYZ.Y, (float)camOffsetXYZ.Z);
+
+        //ModelCamera.Position = new Vector3(0.44f, 0.46f, -0.7f);
+        //ModelCamera.LookAt(Vector3.Zero, Vector3.Up);
     }
 }
