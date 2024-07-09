@@ -24,6 +24,11 @@ public static partial class FssValueUtils
         return (val < rangemin) ? rangemin : ((val > rangemax) ? rangemax : val);
     }
 
+    public static double ClampD(double val, double rangemin, double rangemax)
+    {
+        return LimitToRange(val, rangemin, rangemax);
+    }
+
     public static double WrapToRange(double val, double rangemin, double rangemax)
     {
         double diff = rangemax - rangemin;

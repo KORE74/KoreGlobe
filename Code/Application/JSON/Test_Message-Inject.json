@@ -1,0 +1,16 @@
+
+
+
+{"PlatAdd":{"PlatName":"Type26-INJECT","PlatCategory":"surface","ThreatType":"friendly","Display":true,"PlatClass":"Type26","PlatDisplaySymb":"<platDispSymb>","LatDegs":50.766,"LongDegs":-1.2,"AltitudeMtrs":0.0,"RollDegs":0.0,"PitchDegs":0.0,"HeadingDegs":0.0}}
+{"BeamLoad":{"PlatName":"Type26-INJECT","EmitName":"GeneralRadar","ELNOT":"","BeamName":"StandardSweep","Signal":"pulsed","ScanType":"helical","Channel":"1","ERPdBW":"90.000000","FreqMinHz":"5000000000.000000","FreqMaxHz":"5000000000.000000","AzMinDegs":"-180.000000","AzMaxDegs":"180.000000","ElMinDegs":"0.000000","ElMaxDegs":"0.000000","Targeted":"false","DetectionRangeMtrs":"60000","AntennaPattern":"SinX","HasHW":"true"}}
+{"BeamEnable":{"PlatName":"Type26-INJECT","EmitName":"GeneralRadar","BeamName":"StandardSweep"}}
+{"BeamDisable":{"PlatName":"Type26-INJECT","EmitName":"GeneralRadar","BeamName":"StandardSweep"}}
+{"BeamDelete":{"PlatName":"Type26-INJECT","EmitName":"GeneralRadar","BeamName":"StandardSweep"}}
+
+
+{"PlatAdd":{"PlatName":"MQ9-INJECT","PlatCategory":"airborne","ThreatType":"friendly","Display":true,"PlatClass":"MQ9Reaper","PlatDisplaySymb":"<platDispSymb>","LatDegs":50.35,"LongDegs":-1.2,"AltitudeMtrs":3500.0,"RollDegs":0.0,"PitchDegs":0.0,"HeadingDegs":190.0}}
+{"BeamLoad":{"PlatName":"MQ9-INJECT","EmitName":"NavRadar","ELNOT":"","BeamName":"StandardSweep","Signal":"pulsed","ScanType":"raster","Channel":"1","ERPdBW":"90.000000","FreqMinHz":"5000000000.000000","FreqMaxHz":"5000000000.000000","AzMinDegs":"-18.0","AzMaxDegs":"18.0","ElMinDegs":"-5.0","ElMaxDegs":"5.0","Targeted":"false","DetectionRangeMtrs":"60000","AntennaPattern":"SinX","HasHW":"true"}}
+{"BeamEnable":{"PlatName":"MQ9-INJECT","EmitName":"NavRadar","BeamName":"StandardSweep"}}
+{"BeamDisable":{"PlatName":"MQ9-INJECT","EmitName":"NavRadar","BeamName":"StandardSweep"}}
+{"BeamDelete":{"PlatName":"MQ9-INJECT","EmitName":"NavRadar","BeamName":"StandardSweep"}}
+

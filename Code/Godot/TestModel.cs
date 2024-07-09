@@ -8,6 +8,7 @@ public partial class TestModel : Node3D
 {
     [Export]
     public string ModelPath = "res://Resources/Plane_Paper/PaperPlanes_v002.glb";
+    //public string ModelPath = "res://Resources/FA-18F_v02.glb";
 
     // Define the position and course
     private FssLLAPoint pos   = new FssLLAPoint() { LatDegs = 0, LonDegs = -70, AltMslM = 1.4f };
@@ -55,6 +56,7 @@ public partial class TestModel : Node3D
 
             ModelNode.AddChild(ModelResourceNode);
             ModelResourceNode.Scale    = new Vector3(0.05f, 0.05f, 0.05f); // Set the model scale
+            //ModelResourceNode.Scale    = new Vector3(0.005f, 0.005f, 0.005f); // Set the model scale
             ModelResourceNode.Position = new Vector3(0f, 0f, 0f); // Set the model position
 
             // Create and assign the markers

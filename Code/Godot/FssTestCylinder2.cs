@@ -8,8 +8,6 @@ public partial class FssTestCylinder2 : Node3D
     {
         FssCentralLog.AddEntry("TestCylinder2 // _Ready");
 
-
-
         // Distance of each label from the origin
         float distance = 2f;
 
@@ -79,13 +77,11 @@ public partial class FssTestCylinder2 : Node3D
             Rings = 3
         };
         cylinder.Mesh = cylinderMesh;
-        cylinder.MaterialOverride = FssMaterialFactory.SimpleColoredMaterial(new Color(1.0f, 0.5f, 0.5f, 1.0f));
+        cylinder.MaterialOverride = FssMaterialFactory.SimpleColoredMaterial(new Color(0.0f, 0.5f, 1.0f, 1.0f));
 
         AddChild(cylinder);
         cylinder.Position = midPoint;
 
         cylinder.LookAt(aboveMidPoint, end);
-
     }
-
 }
