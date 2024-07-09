@@ -1,37 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-
-namespace GlobeJSON
+namespace FssJSON
 {
     public class ScenLoad : JSONMessage
     {
-        [JsonProperty("ScenName")]
+        [JsonPropertyName("ScenName")]
         public string ScenName { get; set; }
 
-        [JsonProperty("Lat")]
+        [JsonPropertyName("Lat")]
         public double Lat { get; set; }
 
-        [JsonProperty("Long")]
+        [JsonPropertyName("Long")]
         public double Long { get; set; }
 
-        [JsonProperty("EarthModel")]
+        [JsonPropertyName("EarthModel")]
         public string EarthModel { get; set; }
 
-        [JsonProperty("RxName")]
+        [JsonPropertyName("RxName")]
         public string RxName { get; set; }
 
-        [JsonProperty("DFModel")]
+        [JsonPropertyName("DFModel")]
         public string DFModel { get; set; }
 
         // ------------------------------------------------------------------------
 
-        public GlobeLLA ScenPos { get { return new GlobeLLA() { LatDegs = Lat, LonDegs = Long }; } }
+        public FssLLAPoint ScenPos { get { return new FssLLAPoint() { LatDegs = Lat, LonDegs = Long }; } }
 
         // ------------------------------------------------------------------------
 
@@ -39,23 +34,17 @@ namespace GlobeJSON
         {
             try
             {
-                JObject messageObj = JObject.Parse(json);
-                JToken JsonContent = messageObj.GetValue("ScenLoad");
-                if (JsonContent != null)
+                using (JsonDocument doc = JsonDocument.Parse(json))
                 {
-                    ScenLoad newMsg     = new ScenLoad();
-                    string readScenTime = (string)JsonContent["ScenName"];
-                    double Lat          = (double)JsonContent["LatDegs"];
-                    double Long         = (double)JsonContent["LongDegs"];
-                    string EarthModel   = (string)JsonContent["EarthModel"];
-                    string RxName       = (string)JsonContent["RxName"];
-                    string DFModel      = (string)JsonContent["DFModel"];
-
-                    return newMsg;
-                }
-                else
-                {
-                    return null;
+                    if (doc.RootElement.TryGetProperty("ScenLoad", out JsonElement jsonContent))
+                    {
+                        ScenLoad newMsg = JsonSerializer.Deserialize<ScenLoad>(jsonContent.GetRawText());
+                        return newMsg;
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
             }
             catch (Exception)
@@ -63,8 +52,5 @@ namespace GlobeJSON
                 return null;
             }
         }
-
     } // end class
 } // end namespace
-
-

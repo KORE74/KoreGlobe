@@ -1,32 +1,32 @@
 using System;
 
-// GlobeModelPlatformKinetics: Class for the physical position and representation of a platform.
+// FssModelPlatformKinetics: Class for the physical position and representation of a platform.
 // Design Decisions:
 // - Immutable: New objects are created on the fly and highly likely to be copied around the rest of
 //   the system, so readonly to avoid confusion.
 
-public class GlobePlatformKinetics
+public class FssPlatformKinetics
 {
-    public GlobeLLA StartPosition { set; get; } = GlobeLLA.Zero;
-    public GlobeAttitude StartAttitude { set; get; } = GlobeAttitude.Zero;
+    public FssLLAPoint StartPosition { set; get; } = FssLLAPoint.Zero;
+    public FssAttitude StartAttitude { set; get; } = FssAttitude.Zero;
 
     // --------------------------------------------------------------------------------------------
 
     // Current position and orentation
-    public GlobeLLA CurrPosition { set; get; } = GlobeLLA.Zero;
-    public GlobeAttitude CurrAttitude { set; get; } = GlobeAttitude.Zero;
+    public FssLLAPoint CurrPosition { set; get; } = FssLLAPoint.Zero;
+    public FssAttitude CurrAttitude { set; get; } = FssAttitude.Zero;
 
     // Changes being applied
-    public GlobeAttitudeDelta CurrAttitudeDelta { set; get; } = GlobeAttitudeDelta.Zero;
-    public GlobeCourse CurrCourse { set; get; } = GlobeCourse.Zero;
-    public GlobeCourseDelta CurrCourseDelta { set; get; } = GlobeCourseDelta.Zero;
+    public FssAttitudeDelta CurrAttitudeDelta { set; get; } = FssAttitudeDelta.Zero;
+    public FssCourse CurrCourse { set; get; } = FssCourse.Zero;
+    public FssCourseDelta CurrCourseDelta { set; get; } = FssCourseDelta.Zero;
 
     // Outline of the platform (judging intersections and extremities)
-    public GlobeBox BoundingBox { set; get; } = GlobeBox.One;
+    public FssBox BoundingBox { set; get; } = FssBox.One;
 
     // --------------------------------------------------------------------------------------------
 
-    public GlobePlatformKinetics()
+    public FssPlatformKinetics()
     {
     }
 
@@ -53,14 +53,14 @@ public class GlobePlatformKinetics
 
     // Output a roll value in Rads.
 
-    public static double PlatformRollFromCourseDelta(GlobeCourse course, GlobeCourseDelta delta, float scaleFactor = 1f)
+    public static double PlatformRollFromCourseDelta(FssCourse course, FssCourseDelta delta, float scaleFactor = 1f)
     {
         // This function provides a basic roll angle value to apply to an aircraft in a turn.
         // - We want to exract the angle change per second from the source delta.
         // - We need the aircraft speed to factor in the energy in the turn.
         // - We have a scale factor to amplify or reduce the effect anecdotally.
         // - We need to output a roll value of 0 to 90 degrees, with a sign matching to the clockwise/anticlockwise orientation. The likely
-        //   destination GlobeAttitude attribute is "RollClockwiseRads".
+        //   destination FssAttitude attribute is "RollClockwiseRads".
 
         // Extract the rate of heading change in degrees per second, as provided by the delta.
         double headingChangeRateDegsSec = delta.HeadingChangeClockwiseDegsSec;

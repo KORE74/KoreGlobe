@@ -1,27 +1,24 @@
 ﻿using System;
+using System.Text.Json;
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-
-namespace GlobeJSON
+namespace FssJSON
 {
     public class NullMsg : JSONMessage
     {
-
         public static NullMsg ParseJSON(string json)
         {
             try
             {
-                JObject messageObj = JObject.Parse(json);
-                JToken JsonContent = messageObj.GetValue("NullMsg");
-                if (JsonContent != null)
+                using (JsonDocument doc = JsonDocument.Parse(json))
                 {
-                    NullMsg newMsg = new NullMsg();
-                    return newMsg;
-                }
-                else
-                {
-                    return null;
+                    if (doc.RootElement.TryGetProperty("NullMsg", out JsonElement jsonContent))
+                    {
+                        return new NullMsg();
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
             }
             catch (Exception)
@@ -30,11 +27,4 @@ namespace GlobeJSON
             }
         }
     } // end class
-
 } // end namespace
-
-
-
-
-
-

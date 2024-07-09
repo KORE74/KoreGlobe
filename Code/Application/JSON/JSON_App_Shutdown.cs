@@ -1,20 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-
-namespace GlobeJSON
+namespace FssJSON
 {
     public class AppShutdown : JSONMessage
     {
-
         public AppShutdown()
         {
-
         }
 
         // -----------------------
@@ -23,17 +16,17 @@ namespace GlobeJSON
         {
             try
             {
-                JObject messageObj = JObject.Parse(json);
-                JToken JsonToken = messageObj.GetValue("AppShutdown");
-                if (JsonToken != null)
+                using (JsonDocument doc = JsonDocument.Parse(json))
                 {
-                    AppShutdown newMsg = new AppShutdown();
-
-                    return newMsg;
-                }
-                else
-                {
-                    return null;
+                    if (doc.RootElement.TryGetProperty("AppShutdown", out JsonElement jsonToken))
+                    {
+                        AppShutdown newMsg = new AppShutdown();
+                        return newMsg;
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
             }
             catch (Exception)
@@ -41,12 +34,5 @@ namespace GlobeJSON
                 return null;
             }
         }
-
     } // end class
 } // end namespace
-
-
-
-
-
-

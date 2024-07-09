@@ -1,14 +1,9 @@
-﻿using System;
+﻿
+
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-
-using UnityEngine;
-
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 //  {"PlatWayPoints":{"PlatName":"Red Leader","Count":4,
     // "Legs":[
@@ -18,51 +13,50 @@ using UnityEngine;
     //     {"LatDegs":51.276886,"LongDegs":-1.384932,"AltitudeMtrs":3500.0,"GrndSpeedMtrsSec":277.8,"WPType":"linear"}]}}
 
 
-// FssNetworkingManager:FixedUpdate () (at Assets/Code/Unity/FssNetworkingManager.cs:86)
-
-
-namespace GlobeJSON
+namespace FssJSON
 {
     public class WayPoint
     {
-        [JsonProperty("LatDegs")]
+        [JsonPropertyName("LatDegs")]
         public double LatDegs { get; set; }
 
-        [JsonProperty("LongDegs")]
+        [JsonPropertyName("LongDegs")]
         public double LongDegs { get; set; }
 
-        [JsonProperty("AltitudeMtrs")]
+        [JsonPropertyName("AltitudeMtrs")]
         public double AltitudeMtrs { get; set; }
 
-        [JsonProperty("GrndSpeedMtrsSec")]
+        [JsonPropertyName("GrndSpeedMtrsSec")]
         public double GrndSpeedMtrsSec { get; set; }
 
-        [JsonProperty("WPType")]
+        [JsonPropertyName("WPType")]
         public string WPType { get; set; }
     }
 
     public class PlatWayPoints : JSONMessage
     {
-        [JsonProperty("PlatName")]
+        [JsonPropertyName("PlatName")]
         public string PlatName { get; set; }
 
-        [JsonProperty("Count")]
+        [JsonPropertyName("Count")]
         public int Count { get; set; }
 
-        [JsonProperty("Legs")]
+        [JsonPropertyName("Legs")]
         public List<WayPoint> Legs { get; set; }
 
-        public GlobeLLA GetPoint(int pntIndex)
+        public FssLLAPoint GetPoint(int pntIndex)
         {
-            if (pntIndex < 0)              return new GlobeLLA();
-            if (pntIndex > Legs.Count - 1) return new GlobeLLA();
+            if (pntIndex < 0) return new FssLLAPoint();
+            if (pntIndex > Legs.Count - 1) return new FssLLAPoint();
 
             WayPoint currleg = Legs[pntIndex];
 
-            GlobeLLA currPos = new GlobeLLA() {
+            FssLLAPoint currPos = new FssLLAPoint
+            {
                 LatDegs = currleg.LatDegs,
                 LonDegs = currleg.LongDegs,
-                AltMslM = currleg.AltitudeMtrs};
+                AltMslM = currleg.AltitudeMtrs
+            };
 
             return currPos;
         }
@@ -71,38 +65,26 @@ namespace GlobeJSON
         {
             try
             {
-                JObject messageObj = JObject.Parse(json);
-                JToken JsonContent = messageObj.GetValue("PlatWayPoints");
-
-                Debug.Log("PlatWayPoints -> JsonContent OK");
-
-                if (JsonContent != null)
+                using (JsonDocument doc = JsonDocument.Parse(json))
                 {
-                    string readPlatName  = (string)JsonContent["PlatName"];
-                    int    readCount     = (int)JsonContent["Count"];
-                    var    legs          = JsonContent["Legs"].ToObject<List<WayPoint>>();
-
-                    Debug.Log($"PlatWayPoints -> PlatName = {readPlatName}");
-                    Debug.Log($"PlatWayPoints -> Count = {readCount}");
-
-
-
-                    PlatWayPoints newMsg = new PlatWayPoints
+                    if (doc.RootElement.TryGetProperty("PlatWayPoints", out JsonElement jsonContent))
                     {
-                        PlatName = readPlatName,
-                        Count = readCount,
-                        Legs = legs
-                    };
+                        PlatWayPoints newMsg = JsonSerializer.Deserialize<PlatWayPoints>(jsonContent.GetRawText());
 
-                    // quick validation that the message data lines up
-                    if (newMsg != null && newMsg.Legs != null && newMsg.Count == newMsg.Legs.Count)
-                        return newMsg;
+                        Debug.Log("PlatWayPoints -> JsonContent OK");
+                        Debug.Log($"PlatWayPoints -> PlatName = {newMsg.PlatName}");
+                        Debug.Log($"PlatWayPoints -> Count = {newMsg.Count}");
 
-                    return null;
-                }
-                else
-                {
-                    return null;
+                        // quick validation that the message data lines up
+                        if (newMsg != null && newMsg.Legs != null && newMsg.Count == newMsg.Legs.Count)
+                            return newMsg;
+
+                        return null;
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
             }
             catch (Exception)
@@ -113,9 +95,3 @@ namespace GlobeJSON
     } // end class
 
 } // end namespace
-
-
-
-
-
-

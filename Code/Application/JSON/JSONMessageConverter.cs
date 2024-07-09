@@ -1,114 +1,69 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-
-namespace GlobeJSON
+namespace FssJSON
 {
-
-    public class GlobeLLAConverter : JsonConverter
+    public class FssLLAConverter : JsonConverter<FssLLAPoint>
     {
-        public override bool CanConvert(Type objectType)
+        public override FssLLAPoint Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            return objectType == typeof(GlobeLLA);
+            var jsonObject = JsonDocument.ParseValue(ref reader).RootElement;
+
+            return new FssLLAPoint
+            {
+                LatDegs = jsonObject.GetProperty("LatDegs").GetDouble(),
+                LonDegs = jsonObject.GetProperty("LonDegs").GetDouble(),
+                AltMslM = jsonObject.GetProperty("AltMslM").GetDouble()
+            };
         }
 
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        public override void Write(Utf8JsonWriter writer, FssLLAPoint value, JsonSerializerOptions options)
         {
-            var globeLLA = (GlobeLLA)value;
-
-            var jsonObject = new JObject
-            {
-                {"LatDegs", globeLLA.LatDegs.ToString("0.####")},
-                {"LonDegs", globeLLA.LonDegs.ToString("0.####")},
-                {"AltMslM", globeLLA.AltMslM.ToString("0.####")}
-            };
-
-            jsonObject.WriteTo(writer);
-        }
-
-
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            var jsonObject = JObject.Load(reader);
-            var globeLLA = new GlobeLLA
-            {
-                LatDegs = (double)jsonObject["LatDegs"],
-                LonDegs = (double)jsonObject["LonDegs"],
-                AltMslM = (double)jsonObject["AltMslM"]
-            };
-            return globeLLA;
+            writer.WriteStartObject();
+            writer.WriteString("LatDegs", value.LatDegs.ToString("0.####"));
+            writer.WriteString("LonDegs", value.LonDegs.ToString("0.####"));
+            writer.WriteString("AltMslM", value.AltMslM.ToString("0.####"));
+            writer.WriteEndObject();
         }
     }
 
     // --------------------------------------------------------------------------------------------
 
-    public class GlobeCourseConverter : JsonConverter
+    public class FssCourseConverter : JsonConverter<FssCourse>
     {
-        public override bool CanConvert(Type objectType)
+        public override FssCourse Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            return objectType == typeof(GlobeCourse);
+            var jsonObject = JsonDocument.ParseValue(ref reader).RootElement;
+
+            return new FssCourse
+            {
+                HeadingDegs = jsonObject.GetProperty("HeadingDegs").GetDouble(),
+                SpeedKph = jsonObject.GetProperty("SpeedKph").GetDouble()
+            };
         }
 
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        public override void Write(Utf8JsonWriter writer, FssCourse value, JsonSerializerOptions options)
         {
-            var globeCourse = (GlobeCourse)value;
-
-            var jsonObject = new JObject
-            {
-                {"HeadingDegs", globeCourse.HeadingDegs},
-                {"SpeedKph",    globeCourse.SpeedKph}
-            };
-
-            jsonObject.WriteTo(writer);
-        }
-
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            var jsonObject = JObject.Load(reader);
-            var globeCourse = new GlobeCourse
-            {
-                HeadingDegs = (double)jsonObject["HeadingDegs"],
-                SpeedKph    = (double)jsonObject["SpeedKph"]
-            };
-            return globeCourse;
+            writer.WriteStartObject();
+            writer.WriteNumber("HeadingDegs", value.HeadingDegs);
+            writer.WriteNumber("SpeedKph", value.SpeedKph);
+            writer.WriteEndObject();
         }
     }
 
     // --------------------------------------------------------------------------------------------
 
-    public class CustomDoubleConverter : JsonConverter
+    public class CustomDoubleConverter : JsonConverter<double>
     {
-        public override bool CanConvert(Type objectType)
+        public override double Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            return objectType == typeof(double);
+            return Math.Round(reader.GetDouble(), 3);
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public override void Write(Utf8JsonWriter writer, double value, JsonSerializerOptions options)
         {
-            if (reader.TokenType == JsonToken.Float || reader.TokenType == JsonToken.Integer)
-            {
-                var value = JToken.Load(reader);
-                return Math.Round(value.Value<double>(), 3);
-            }
-            return 0.0;
-        }
-
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-        {
-            writer.WriteValue(Math.Round((double)value, 3));
+            writer.WriteNumberValue(Math.Round(value, 3));
         }
     }
-
-
 } // end namespace
-
-
-
-
-
-

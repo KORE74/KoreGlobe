@@ -2,7 +2,7 @@
 
 public enum ScanPatternShape { Undefined, Cone, Wedge, Dome };
 
-public class GlobePlatformElementScanPattern : GlobePlatformElement
+public class FssPlatformElementScanPattern : FssPlatformElement
 {
     // Incoming Data
 
@@ -14,6 +14,6 @@ public class GlobePlatformElementScanPattern : GlobePlatformElement
     public double EmitterRangeKms { set; get; } = 0;
     public double DetectionRangeKms { set; get; } = 0;
 
-    public GlobeAzElBox AzElBox{ set; get; } = GlobeAzElBox.Zero;
+    public FssAzElBox AzElBox{ set; get; } = FssAzElBox.Zero;
 
 }

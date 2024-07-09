@@ -1,16 +1,12 @@
 ﻿using System;
+using System.Text.Json;
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-
-namespace GlobeJSON
+namespace FssJSON
 {
     public class ScenStop : JSONMessage
     {
-
         public ScenStop()
         {
-
         }
 
         // -----------------------
@@ -19,17 +15,17 @@ namespace GlobeJSON
         {
             try
             {
-                JObject messageObj = JObject.Parse(json);
-                JToken JsonToken = messageObj.GetValue("ScenStop");
-                if (JsonToken != null)
+                using (JsonDocument doc = JsonDocument.Parse(json))
                 {
-                    ScenStop newMsg = new ScenStop();
-
-                    return newMsg;
-                }
-                else
-                {
-                    return null;
+                    if (doc.RootElement.TryGetProperty("ScenStop", out JsonElement jsonToken))
+                    {
+                        ScenStop newMsg = JsonSerializer.Deserialize<ScenStop>(jsonToken.GetRawText());
+                        return newMsg;
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
             }
             catch (Exception)
@@ -37,12 +33,5 @@ namespace GlobeJSON
                 return null;
             }
         }
-
     } // end class
 } // end namespace
-
-
-
-
-
-

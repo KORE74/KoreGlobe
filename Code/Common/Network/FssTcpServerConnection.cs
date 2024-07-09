@@ -123,14 +123,14 @@ namespace FssNetworking
                 {
                     // Accept a new client connection.
                     // BLOCKING. Will throw on listener.Stop() call when stopping thread
-                    Console.WriteLine("Waiting for connections...");
+                    FssCentralLog.AddEntry("Server Thread: Waiting for connections...");
                     newClient = listener.AcceptTcpClient();
                     StatusString = "AcceptTcpClient";
                 }
                 catch (SocketException ex)
                 {
                     if (ex.SocketErrorCode == SocketError.Interrupted)
-                        Console.WriteLine("EXCEPTION: SocketError.Interrupted // TcpClientConnection.receiveThreadFunc");
+                        FssCentralLog.AddEntry("EXCEPTION: SocketError.Interrupted // TcpClientConnection.receiveThreadFunc");
 
                     StatusString = "EXCEPTION: SocketError.Interrupted";
 
@@ -142,7 +142,7 @@ namespace FssNetworking
                 StatusString = "New connection";
 
                 // Create the new connection object and add it to the collection.
-                Console.WriteLine("New connection...");
+                FssCentralLog.AddEntry("FssTcpServerConnection New connection...");
                 FssTcpServerClientConnection newClientConnection = new FssTcpServerClientConnection()
                 {
                     Name = Name + "_client",

@@ -1,9 +1,9 @@
 using System;
 
-public class GlobePlatformElementRadarWedge : GlobePlatformElement
+public enum FssRadarElementShape { Unknown, Dome, Wedge };
+
+public class FssPlatformElementRadarDome : FssPlatformElement
 {
     public double DetectionRange { get; set; } = 0.0;
     public double EmitterDetectionRange { get; set; } = 0.0;
-    public GlobeAzElBox emitterBox = GlobeAzElBox.Zero;
-
 }

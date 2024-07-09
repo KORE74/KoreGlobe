@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 
-// Static class wrapper for a single/central instance of a GlobeConfig.
+// Static class wrapper for a single/central instance of a FssConfig.
 
-public class GlobeLanguageStrings
+public class FssLanguageStrings
 {
-    private static GlobeConfig configData;
+    private static FssConfig configData;
 
     private static string JSONFilename = "language_strings.json";
     private static string ActiveLanguageKey = "ActiveLanguage";
@@ -27,9 +27,9 @@ public class GlobeLanguageStrings
 
     // --------------------------------------------------------------------------------------------
 
-    static GlobeLanguageStrings()
+    static FssLanguageStrings()
     {
-        configData = new GlobeConfig();
+        configData = new FssConfig();
         configData.LoadOrCreateJSONConfig(JSONFilename);
 
         if (configData.HasParam(ActiveLanguageKey))

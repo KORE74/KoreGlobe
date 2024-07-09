@@ -1,99 +1,68 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-
-namespace GlobeJSON
+namespace FssJSON
 {
     public class PlatPosition : JSONMessage
     {
-        [JsonProperty("PlatName")]
+        [JsonPropertyName("PlatName")]
         public string PlatName { get; set; }
 
-
-        [JsonProperty("LatDegs")]
+        [JsonPropertyName("LatDegs")]
         public double LatDegs { get; set; }
 
-        [JsonProperty("LongDegs")]
+        [JsonPropertyName("LongDegs")]
         public double LongDegs { get; set; }
 
-        [JsonProperty("AltitudeMtrs")]
+        [JsonPropertyName("AltitudeMtrs")]
         public double AltitudeMtrs { get; set; }
 
-
-
-        [JsonProperty("RollDegs")]
+        [JsonPropertyName("RollDegs")]
         public double RollDegs { get; set; }
 
-        [JsonProperty("PitchDegs")]
+        [JsonPropertyName("PitchDegs")]
         public double PitchDegs { get; set; }
 
-        [JsonProperty("YawDegs")]
+        [JsonPropertyName("YawDegs")]
         public double YawDegs { get; set; }
 
-
         [JsonIgnore]
-        public GlobeLLA Pos
+        public FssLLAPoint Pos
         {
-            get { return new GlobeLLA() { LatDegs = LatDegs, LonDegs = LongDegs, AltMslM = AltitudeMtrs }; }
+            get { return new FssLLAPoint() { LatDegs = LatDegs, LonDegs = LongDegs, AltMslM = AltitudeMtrs }; }
             set { LatDegs = value.LatDegs; LongDegs = value.LonDegs; AltitudeMtrs = value.AltMslM; }
         }
 
         [JsonIgnore]
-        public GlobeAttitude Attitude
+        public FssAttitude Attitude
         {
-            get { return new GlobeAttitude() { RollClockwiseDegs = RollDegs, PitchUpDegs = PitchDegs, YawClockwiseDegs = 0.0 }; }
-            set { RollDegs = value.RollClockwiseDegs; PitchDegs = value.PitchUpDegs;  YawDegs = value.YawClockwiseDegs; }
+            get { return new FssAttitude() { RollClockwiseDegs = RollDegs, PitchUpDegs = PitchDegs, YawClockwiseDegs = YawDegs }; }
+            set { RollDegs = value.RollClockwiseDegs; PitchDegs = value.PitchUpDegs; YawDegs = value.YawClockwiseDegs; }
         }
 
         [JsonIgnore]
-        public GlobeCourse Course
+        public FssCourse Course
         {
-            get { return new GlobeCourse() { HeadingDegs = YawDegs, SpeedMps = 0}; }
+            get { return new FssCourse() { HeadingDegs = YawDegs, SpeedMps = 0 }; }
             set { YawDegs = value.HeadingDegs; }
         }
-
-
 
         public static PlatPosition ParseJSON(string json)
         {
             try
             {
-                JObject messageObj = JObject.Parse(json);
-                JToken JsonContent = messageObj.GetValue("PlatPosition");
-                if (JsonContent != null)
+                using (JsonDocument doc = JsonDocument.Parse(json))
                 {
-                    string readPlatName          = (string)JsonContent["PlatName"];
-
-                    double readLatDegs           = (double)JsonContent["LatDegs"];
-                    double readLongDegs          = (double)JsonContent["LongDegs"];
-                    double readAltitudeMtrs      = (double)JsonContent["AltitudeMtrs"];
-
-                    double readRollDegs          = (double)JsonContent["RollDegs"];
-                    double readPitchDegs         = (double)JsonContent["PitchDegs"];
-                    double readYawDegs           = (double)JsonContent["YawDegs"];
-
-                    PlatPosition newMsg = new PlatPosition() {
-                        PlatName          = readPlatName,
-
-                        LatDegs           = readLatDegs,
-                        LongDegs          = readLongDegs,
-                        AltitudeMtrs      = readAltitudeMtrs,
-
-                        RollDegs         = readRollDegs,
-                        PitchDegs        = readPitchDegs,
-                        YawDegs          = readYawDegs
-                    };
-
-                    return newMsg;
-                }
-                else
-                {
-                    return null;
+                    if (doc.RootElement.TryGetProperty("PlatPosition", out JsonElement jsonContent))
+                    {
+                        PlatPosition newMsg = JsonSerializer.Deserialize<PlatPosition>(jsonContent.GetRawText());
+                        return newMsg;
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
             }
             catch (Exception)
@@ -102,11 +71,4 @@ namespace GlobeJSON
             }
         }
     } // end class
-
 } // end namespace
-
-
-
-
-
-

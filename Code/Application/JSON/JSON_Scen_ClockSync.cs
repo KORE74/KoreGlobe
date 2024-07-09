@@ -1,22 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-
-namespace GlobeJSON
+namespace FssJSON
 {
     public class ClockSync : JSONMessage
     {
-        [JsonProperty("ScenTimeHMS")]
+        [JsonPropertyName("ScenTimeHMS")]
         public string ScenTimeHMS { get; set; }
 
         public ClockSync()
         {
-
         }
 
         // -----------------------
@@ -32,19 +26,17 @@ namespace GlobeJSON
         {
             try
             {
-                JObject messageObj = JObject.Parse(json);
-                JToken JsonContent = messageObj.GetValue("ClockSync");
-                if (JsonContent != null)
+                using (JsonDocument doc = JsonDocument.Parse(json))
                 {
-                    string readScenTime = (string)JsonContent["ScenTimeHMS"];
-
-                    ClockSync newMsg = new ClockSync();
-                    newMsg.ScenTimeHMS = readScenTime;
-                    return newMsg;
-                }
-                else
-                {
-                    return null;
+                    if (doc.RootElement.TryGetProperty("ClockSync", out JsonElement jsonContent))
+                    {
+                        ClockSync newMsg = JsonSerializer.Deserialize<ClockSync>(jsonContent.GetRawText());
+                        return newMsg;
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
             }
             catch (Exception)
@@ -52,12 +44,5 @@ namespace GlobeJSON
                 return null;
             }
         }
-
     } // end class
 } // end namespace
-
-
-
-
-
-

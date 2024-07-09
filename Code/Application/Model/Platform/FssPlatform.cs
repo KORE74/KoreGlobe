@@ -4,58 +4,58 @@ using System.Text;
 
 #nullable enable
 
-public class GlobePlatform
+public class FssPlatform
 {
     public string Name { get; set; } = "Unknown-Name";
     public string Type { get; set; } = "Unknown-Type";
 
     // Kinetics object defines the initial and current position of the platform. Has to exist in all cases.
-    public GlobePlatformKinetics Kinetics { get; set; } = new GlobePlatformKinetics();
+    public FssPlatformKinetics Kinetics { get; set; } = new FssPlatformKinetics();
 
-    //private GlobePlatformRoute? Route { get; set; } = null;
+    //private FssPlatformRoute? Route { get; set; } = null;
 
-    private List<GlobePlatformElement>? Elements { get; set; } = null;
+    private List<FssPlatformElement>? Elements { get; set; } = null;
 
     // --------------------------------------------------------------------------------------------
 
     // Accessors consructors
 
-    // public GlobePlatformRoute RouteObject
+    // public FssPlatformRoute RouteObject
     // {
-    //     get { Route ??= new GlobePlatformRoute(); return Route; }
+    //     get { Route ??= new FssPlatformRoute(); return Route; }
     // }
 
-    public List<GlobePlatformElement> ElementsList
+    public List<FssPlatformElement> ElementsList
     {
-        get { Elements ??= new List<GlobePlatformElement>(); return Elements; }
+        get { Elements ??= new List<FssPlatformElement>(); return Elements; }
     }
 
     // --------------------------------------------------------------------------------------------
     // #MARK: Basic Element Management
     // --------------------------------------------------------------------------------------------
 
-    public void AddElement(GlobePlatformElement element)
+    public void AddElement(FssPlatformElement element)
     {
         ElementsList.Add(element);
     }
 
-    public void DeleteElement(GlobePlatformElement element)
+    public void DeleteElement(FssPlatformElement element)
     {
         ElementsList.Remove(element);
     }
 
     public void DeleteElement(string name)
     {
-        foreach (GlobePlatformElement element in ElementsList)
+        foreach (FssPlatformElement element in ElementsList)
         {
             if (element.Name == name)
                 ElementsList.Remove(element);
         }
     }
 
-    public GlobePlatformElement? ElementForName(string name)
+    public FssPlatformElement? ElementForName(string name)
     {
-        foreach (GlobePlatformElement element in ElementsList)
+        foreach (FssPlatformElement element in ElementsList)
         {
             if (element.Name == name)
                 return element;
@@ -65,7 +65,7 @@ public class GlobePlatform
 
     public bool DoesElementExist(string name)
     {
-        foreach (GlobePlatformElement element in ElementsList)
+        foreach (FssPlatformElement element in ElementsList)
         {
             if (element.Name == name)
                 return true;

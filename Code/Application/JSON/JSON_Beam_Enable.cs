@@ -1,41 +1,35 @@
 ﻿using System;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-
-namespace GlobeJSON
+namespace FssJSON
 {
     public class BeamEnable : JSONMessage
     {
-        [JsonProperty("PlatName")]
+        [JsonPropertyName("PlatName")]
         public string PlatName { get; set; } = "UnknownPlatName";
 
-        [JsonProperty("EmitName")]
+        [JsonPropertyName("EmitName")]
         public string EmitName { get; set; } = "UnknownEmitName";
 
-        [JsonProperty("BeamName")]
+        [JsonPropertyName("BeamName")]
         public string BeamName { get; set; } = "UnknownBeamName";
 
         public static BeamEnable ParseJSON(string json)
         {
             try
             {
-                JObject messageObj = JObject.Parse(json);
-                JToken jsonContent = messageObj.GetValue("BeamEnable");
-                if (jsonContent != null)
+                using (JsonDocument doc = JsonDocument.Parse(json))
                 {
-                    BeamEnable newMsg = new BeamEnable()
+                    if (doc.RootElement.TryGetProperty("BeamEnable", out JsonElement jsonContent))
                     {
-                        PlatName = jsonContent["PlatName"]?.Value<string>() ?? "UnknownPlatName",
-                        EmitName = jsonContent["EmitName"]?.Value<string>() ?? "UnknownEmitName",
-                        BeamName = jsonContent["BeamName"]?.Value<string>() ?? "UnknownBeamName"
-                    };
-
-                    return newMsg;
-                }
-                else
-                {
-                    return null;
+                        BeamEnable newMsg = JsonSerializer.Deserialize<BeamEnable>(jsonContent.GetRawText());
+                        return newMsg;
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
             }
             catch (Exception)

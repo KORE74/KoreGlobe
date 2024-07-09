@@ -2,37 +2,36 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-
-namespace GlobeJSON
+namespace FssJSON
 {
     public class AppCameraControl : JSONMessage
     {
-        [JsonProperty("DisplayAction1")]
+        [JsonPropertyName("DisplayAction1")]
         public string DisplayAction1 { get; set; }
 
-        [JsonProperty("DisplayAction2")]
+        [JsonPropertyName("DisplayAction2")]
         public string DisplayAction2 { get; set; }
 
-        [JsonProperty("PlatformName1")]
+        [JsonPropertyName("PlatformName1")]
         public string PlatformName1 { get; set; }
 
-        [JsonProperty("PlatformName2")]
+        [JsonPropertyName("PlatformName2")]
         public string PlatformName2 { get; set; }
 
-        [JsonProperty("DistKm")]
+        [JsonPropertyName("DistKm")]
         public double DistKm { get; set; }
 
-        [JsonProperty("AzAngDegs")]
+        [JsonPropertyName("AzAngDegs")]
         public double AzAngDegs { get; set; }
 
-        [JsonProperty("AltOffsetKm")]
+        [JsonPropertyName("AltOffsetKm")]
         public double AltOffsetKm { get; set; }
 
-        [JsonProperty("DurationSecs")]
+        [JsonPropertyName("DurationSecs")]
         public double DurationSecs { get; set; }
 
         public AppCameraControl()
@@ -106,26 +105,20 @@ namespace GlobeJSON
         {
             try
             {
-                JObject messageObj = JObject.Parse(json);
-                JToken JsonToken = messageObj.GetValue("AppCameraControl");
-                if (JsonToken != null)
+                using (JsonDocument doc = JsonDocument.Parse(json))
                 {
-                    AppCameraControl newMsg = new AppCameraControl();
+                    JsonElement root = doc.RootElement;
 
-                    newMsg.DisplayAction1 = (string)JsonToken["DisplayAction1"];
-                    newMsg.DisplayAction2 = (string)JsonToken["DisplayAction2"];
-                    newMsg.PlatformName1  = (string)JsonToken["PlatformName1"];
-                    newMsg.PlatformName2  = (string)JsonToken["PlatformName2"];
-                    newMsg.DistKm         = (double)JsonToken["DistKm"];
-                    newMsg.AzAngDegs      = (double)JsonToken["AzAngDegs"];
-                    newMsg.AltOffsetKm    = (double)JsonToken["AltOffsetKm"];
-                    newMsg.DurationSecs   = (double)JsonToken["DurationSecs"];
+                    if (root.TryGetProperty("AppCameraControl", out JsonElement jsonToken))
+                    {
+                        AppCameraControl newMsg = JsonSerializer.Deserialize<AppCameraControl>(jsonToken.GetRawText());
 
-                    return newMsg;
-                }
-                else
-                {
-                    return null;
+                        return newMsg;
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
             }
             catch (Exception)
@@ -133,12 +126,5 @@ namespace GlobeJSON
                 return null;
             }
         }
-
     } // end class
 } // end namespace
-
-
-
-
-
-

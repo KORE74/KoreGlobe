@@ -4,9 +4,9 @@ using System;
 using FssNetworking;
 
 // Design Decisions:
-// - The GlobeEventDriver is the top level class that manages data. Commands and Tasks interact with the business logic through this point.
+// - The FssEventDriver is the top level class that manages data. Commands and Tasks interact with the business logic through this point.
 
-public partial class GlobeEventDriver
+public partial class FssEventDriver
 {
     public void SetRootDir(string rootDir)
     {
@@ -14,27 +14,27 @@ public partial class GlobeEventDriver
         if (string.IsNullOrEmpty(rootDir)) return;
         if (!System.IO.Directory.Exists(rootDir)) return;
 
-        GlobeAppFactory.Instance.MapIOManager.SetRootDir(rootDir);
+        FssAppFactory.Instance.MapIOManager.SetRootDir(rootDir);
 
-        GlobeCentralLog.AddEntry($"SetRootDir: {rootDir}");
+        FssCentralLog.AddEntry($"SetRootDir: {rootDir}");
     }
 
     public string ReportRootDir()
     {
-        return GlobeAppFactory.Instance.MapIOManager.ReportRootDir();
+        return FssAppFactory.Instance.MapIOManager.ReportRootDir();
     }
 
     // ---------------------------------------------------------------------------------------------
 
     public void CreateBaseDirectories()
     {
-        string rootDir = GlobeAppFactory.Instance.MapIOManager.ReportRootDir();
+        string rootDir = FssAppFactory.Instance.MapIOManager.ReportRootDir();
 
         // Validity Checks - Map, RootDir, RootDir Exists
         if (string.IsNullOrEmpty(rootDir)) return;
         if (!System.IO.Directory.Exists(rootDir)) return;
 
-        GlobeMapOperations.CreateBaseDirectories(rootDir);
+        FssMapOperations.CreateBaseDirectories(rootDir);
     }
 
 }

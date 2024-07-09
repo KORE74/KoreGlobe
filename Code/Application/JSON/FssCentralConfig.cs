@@ -2,20 +2,20 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-// Static class wrapper for a single/central instance of a GlobeConfig.
+// Static class wrapper for a single/central instance of a FssConfig.
 
-public static class GlobeCentralConfig
+public static class FssCentralConfig
 {
-    private static GlobeConfig configData;
+    private static FssConfig configData;
 
-    static GlobeCentralConfig()
+    static FssCentralConfig()
     {
-        configData = new GlobeConfig();
+        configData = new FssConfig();
         configData.LoadOrCreateJSONConfig("CentralConfig.json");
 
         // Setup default configs if not present
-        if (!GlobeCentralConfig.HasParam("MapRootDir")) GlobeCentralConfig.SetParam("MapRootDir", "C:/Util/GlobeLibrary/Maps/", false);
-        if (!GlobeCentralConfig.HasParam("CaptureDir")) GlobeCentralConfig.SetParam("CaptureDir", "C:/Util/GlobeCapture/", false);
+        if (!FssCentralConfig.HasParam("MapRootDir")) FssCentralConfig.SetParam("MapRootDir", "C:/Util/FssLibrary/Maps/", false);
+        if (!FssCentralConfig.HasParam("CaptureDir")) FssCentralConfig.SetParam("CaptureDir", "C:/Util/FssCapture/", false);
     }
 
     public static void SetParam(string name, string value, bool WriteOnAssign = true)

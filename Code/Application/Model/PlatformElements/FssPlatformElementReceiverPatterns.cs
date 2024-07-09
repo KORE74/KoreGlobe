@@ -1,23 +1,23 @@
 using System;
 using System.Collections.Generic;
 
-public class GlobeRecieverPattern
+public class FssRecieverPattern
 {
     public string Name { get; set; } = "";
-    public GlobeFloat2DArray SphereMagPattern = new GlobeFloat2DArray();
+    public FssFloat2DArray SphereMagPattern = new FssFloat2DArray();
 }
 
-public class GlobePlatformElementRecieverPatterns : GlobePlatformElement
+public class FssPlatformElementRecieverPatterns : FssPlatformElement
 {
     // List of receivers
-    public List<GlobeRecieverPattern> RecieverPatterns = new List<GlobeRecieverPattern>();
+    public List<FssRecieverPattern> RecieverPatterns = new List<FssRecieverPattern>();
 
     // --------------------------------------------------------------------------------------------
 
     public List<string> GetRecieverPatternNames()
     {
         List<string> names = new();
-        foreach (GlobeRecieverPattern reciever in RecieverPatterns)
+        foreach (FssRecieverPattern reciever in RecieverPatterns)
             names.Add(reciever.Name);
         return names;
     }
@@ -26,9 +26,9 @@ public class GlobePlatformElementRecieverPatterns : GlobePlatformElement
     // #MARK Basic pattern mamangement
     // --------------------------------------------------------------------------------------------
 
-    public GlobeRecieverPattern? GetRecieverPattern(string name)
+    public FssRecieverPattern? GetRecieverPattern(string name)
     {
-        foreach (GlobeRecieverPattern reciever in RecieverPatterns)
+        foreach (FssRecieverPattern reciever in RecieverPatterns)
         {
             if (reciever.Name == name)
                 return reciever;
@@ -36,19 +36,19 @@ public class GlobePlatformElementRecieverPatterns : GlobePlatformElement
         return null;
     }
 
-    public void AddRecieverPattern(GlobeRecieverPattern reciever)
+    public void AddRecieverPattern(FssRecieverPattern reciever)
     {
         RecieverPatterns.Add(reciever);
     }
 
-    public void RemoveRecieverPattern(GlobeRecieverPattern reciever)
+    public void RemoveRecieverPattern(FssRecieverPattern reciever)
     {
         RecieverPatterns.Remove(reciever);
     }
 
     public void RemoveRecieverPattern(string name)
     {
-        GlobeRecieverPattern? reciever = GetRecieverPattern(name);
+        FssRecieverPattern? reciever = GetRecieverPattern(name);
         if (reciever != null)
             RecieverPatterns.Remove(reciever);
     }

@@ -1,14 +1,14 @@
 using System;
 
-// GlobePlatformElementOperations: Utility class to factor out all of the element searching and management operations, and avoid cluttering the platform class
+// FssPlatformElementOperations: Utility class to factor out all of the element searching and management operations, and avoid cluttering the platform class
 
-public static class GlobePlatformElementOperations
+public static class FssPlatformElementOperations
 {
-    public static GlobePlatformElement? CreatePlatformElement(string platName, string elemName, string platElemType)
+    public static FssPlatformElement? CreatePlatformElement(string platName, string elemName, string platElemType)
     {
-        GlobePlatformElement? newElem = null;
+        FssPlatformElement? newElem = null;
 
-        GlobePlatform? platform = GlobeAppFactory.Instance.PlatformManager.PlatForName(platName);
+        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
         if (platform == null)
             return newElem;
 
@@ -18,13 +18,13 @@ public static class GlobePlatformElementOperations
         switch(platElemType)
         {
             case "Dome":
-                newElem = new GlobePlatformElementRadarDome();
+                newElem = new FssPlatformElementRadarDome();
                 break;
             case "Wedge":
-                newElem = new GlobePlatformElementRadarWedge();
+                newElem = new FssPlatformElementRadarWedge();
                 break;
             case "RecieverPatterns":
-                newElem = new GlobePlatformElementRecieverPatterns();
+                newElem = new FssPlatformElementRecieverPatterns();
                 break;
             default:
                 break;
@@ -32,13 +32,13 @@ public static class GlobePlatformElementOperations
 
         if (newElem != null)
             platform.AddElement(newElem);
-        
+
         return newElem;
     }
 
 }
 
-//     public static GlobePlatformElement? ElementForName(GlobePlatform platform, string elemname)
+//     public static FssPlatformElement? ElementForName(FssPlatform platform, string elemname)
 //     {
 //         foreach (var element in platform.Elements)
 //         {
@@ -48,7 +48,7 @@ public static class GlobePlatformElementOperations
 //         return null;
 //     }
 
-//     public static bool DoesElementExist(GlobePlatform platform, string elemname)
+//     public static bool DoesElementExist(FssPlatform platform, string elemname)
 //     {
 //         foreach (var element in platform.Elements)
 //         {

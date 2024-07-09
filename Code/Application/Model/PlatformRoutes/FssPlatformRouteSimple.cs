@@ -1,20 +1,20 @@
 using System;
 
-// GlobePlatformRouteSimple: Two points, and a speed to traverse between them. Straight line, no attitude changes.
+// FssPlatformRouteSimple: Two points, and a speed to traverse between them. Straight line, no attitude changes.
 
-public class GlobePlatformRouteSimple : GlobePlatformRoute
+public class FssPlatformRouteSimple : FssPlatformRoute
 {
-    public GlobeLLA StartPoint { set; get; } = GlobeLLA.Zero;
-    public GlobeLLA EndPoint { set; get; } = GlobeLLA.Zero;
+    public FssLLAPoint StartPoint { set; get; } = FssLLAPoint.Zero;
+    public FssLLAPoint EndPoint { set; get; } = FssLLAPoint.Zero;
     public double SpeedMPS { set; get; } = 0;
 
-    public override GlobeLLA PositionForTime(float simulationTimeSecs)
+    public override FssLLAPoint PositionForTime(float simulationTimeSecs)
     {
         // Get the total route distance
         double distRoute = StartPoint.CurvedDistanceToM(EndPoint);
 
         // Return a default value if route is too short.
-        if (distRoute < GlobeConsts.ArbitraryMinValue)
+        if (distRoute < FssConsts.ArbitraryMinValue)
             return StartPoint;
 
         // Find the required distance for the time
@@ -26,7 +26,7 @@ public class GlobePlatformRouteSimple : GlobePlatformRoute
 
         // Calc the mid-route point
         double distFraction = distForTime / distRoute;
-        GlobeLLA routeLLA = StartPoint.RhumbLineLerp(EndPoint, distFraction);
+        FssLLAPoint routeLLA = StartPoint.RhumbLineLerp(EndPoint, distFraction);
 
         return routeLLA;
     }

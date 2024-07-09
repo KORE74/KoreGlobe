@@ -1,18 +1,18 @@
 using System;
 using System.Collections.Generic;
 
-using GlobeJSON;
+using FssJSON;
 
 #nullable enable
 
 // Class to provide the top level management of platforms in the system.
-public class GlobeMessageManagerPlatform
+public class FssMessageManagerPlatform
 {
     // Pool of incoming messages to queue up for processing
     private JSONThreadsafeMessageFIFO PendingMessageList = new();
 
     // Platform manager, top level of the platform data structure to apply messages to.
-    //public GlobePlatformManager PlatformManager { get; set; }
+    //public FssPlatformManager PlatformManager { get; set; }
 
     // --------------------------------------------------------------------------------------------
 
@@ -27,7 +27,7 @@ public class GlobeMessageManagerPlatform
 
         //foreach (JSONMessage currMsg in PendingMessageList)
         {
-            if (currMsg != null) 
+            if (currMsg != null)
             {
                 // Get the message type and cast it
                 if      (currMsg is PlatAdd addMsg)           { ProcessMessage_PlatAdd(addMsg); }
@@ -45,11 +45,11 @@ public class GlobeMessageManagerPlatform
     private void ProcessMessage_PlatAdd(PlatAdd msg)
     {
         // Get the access to the platform objects
-        GlobePlatformManager? platMgr = PlatMgr();
+        FssPlatformManager? platMgr = PlatMgr();
         if (platMgr == null) return;
 
         // Add the new platform. If the function returns a non-null value, assign the other message fields.
-        GlobePlatform? newPlat = platMgr.Add(msg.PlatName);
+        FssPlatform? newPlat = platMgr.Add(msg.PlatName);
 
         if (newPlat != null)
         {
@@ -63,7 +63,7 @@ public class GlobeMessageManagerPlatform
     private void ProcessMessage_PlatDelete(PlatDelete msg)
     {
         // Get the access to the platform objects
-        GlobePlatformManager? platMgr = PlatMgr();
+        FssPlatformManager? platMgr = PlatMgr();
         if (platMgr == null) return;
 
         // Debug.Log($"ProcessMessage_PlatDelete");
@@ -74,17 +74,17 @@ public class GlobeMessageManagerPlatform
     {
         //Debug.Log($"Received PlatUpdate: PlatName = {msg.PlatName}, course = {msg.GetCourse().HeadingDegs}, speed = {msgUpdate.GetCourse().SpeedKph}kph, lat = {msgUpdate.LatDegs}, lon = {msgUpdate.LonDegs}, alt = {msgUpdate.AltMslKm}, roll = {msgUpdate.RollClockwiseDegs}, pitch = {msgUpdate.PitchUpDegs}, yaw = {msgUpdate.YawClockwiseDegs}");
         // Get the access to the platform objects
-        GlobePlatformManager? platMgr = PlatMgr();
+        FssPlatformManager? platMgr = PlatMgr();
         if (platMgr == null) return;
 
         // Get the new platform. If the function returns a non-null value, assign the other message fields.
-        GlobePlatform? currPlat = platMgr.PlatForName(msg.PlatName);
+        FssPlatform? currPlat = platMgr.PlatForName(msg.PlatName);
         if (currPlat != null)
         {
             currPlat.Kinetics.CurrPosition    = msg.Pos;
             currPlat.Kinetics.CurrAttitude    = msg.Attitude;
             currPlat.Kinetics.CurrCourse      = msg.Course;
-            currPlat.Kinetics.CurrCourseDelta = new GlobeCourseDelta() { HeadingChangeClockwiseDegsSec = msg.TurnRateDegsSec * -1 };
+            currPlat.Kinetics.CurrCourseDelta = new FssCourseDelta() { HeadingChangeClockwiseDegsSec = msg.TurnRateDegsSec * -1 };
         }
     }
 
@@ -92,11 +92,11 @@ public class GlobeMessageManagerPlatform
     {
         // Debug.Log($"ProcessMessage_PlatPosition");
         // Get the access to the platform objects
-        GlobePlatformManager? platMgr = PlatMgr();
+        FssPlatformManager? platMgr = PlatMgr();
         if (platMgr == null) return;
 
         // Get the new platform. If the function returns a non-null value, assign the other message fields.
-        GlobePlatform? currPlat = platMgr.PlatForName(msg.PlatName);
+        FssPlatform? currPlat = platMgr.PlatForName(msg.PlatName);
         if (currPlat != null)
         {
             currPlat.Kinetics.CurrPosition    = msg.Pos;
@@ -110,14 +110,14 @@ public class GlobeMessageManagerPlatform
     // ========================================================================================
 
     // Isolate the external architectural access to the platform manager in a utility function.
-    private GlobePlatform? PlatformForName(string name)
+    private FssPlatform? PlatformForName(string name)
     {
-        return GlobeAppFactory.Instance.PlatformManager.PlatForName(name);
+        return FssAppFactory.Instance.PlatformManager.PlatForName(name);
     }
 
-    private GlobePlatformManager? PlatMgr()
+    private FssPlatformManager? PlatMgr()
     {
-        return GlobeAppFactory.Instance.PlatformManager;
+        return FssAppFactory.Instance.PlatformManager;
     }
 }
 

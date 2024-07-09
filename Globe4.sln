@@ -1,6 +1,6 @@
 ﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Globe4", "Globe4.csproj", "{EB30A5D5-3A11-4155-ABF0-E2C55BC6F1FF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fss4", "Fss4.csproj", "{EB30A5D5-3A11-4155-ABF0-E2C55BC6F1FF}"
 EndProject
 Global
     GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,18 +1,18 @@
 using System;
 using System.Collections.Generic;
 
-using GlobeJSON;
+using FssJSON;
 
 #nullable enable
 
 // Class to provide the top level management of platforms in the system.
-public class GlobePlatformManager
+public class FssPlatformManager
 {
-    private List<GlobePlatform> PlatfomList = new();
+    private List<FssPlatform> PlatfomList = new();
 
     // --------------------------------------------------------------------------------------------
 
-    public GlobePlatformManager()
+    public FssPlatformManager()
     {
     }
 
@@ -34,12 +34,12 @@ public class GlobePlatformManager
 
     // --------------------------------------------------------------------------------------------
 
-    public GlobePlatform? Add(string platname)
+    public FssPlatform? Add(string platname)
     {
         // Check if platform exists
         if (PlatForName(platname) == null)
         {
-            GlobePlatform newPlat = new GlobePlatform() { Name = platname };
+            FssPlatform newPlat = new FssPlatform() { Name = platname };
             PlatfomList.Add(newPlat);
         }
         return null;
@@ -47,7 +47,7 @@ public class GlobePlatformManager
 
     public void Delete(string platname)
     {
-        foreach (GlobePlatform currPlat in PlatfomList)
+        foreach (FssPlatform currPlat in PlatfomList)
         {
             if (currPlat.Name == platname)
                 PlatfomList.Remove(currPlat);
@@ -56,9 +56,9 @@ public class GlobePlatformManager
 
     // --------------------------------------------------------------------------------------------
 
-    public GlobePlatform? PlatForName(string platname)
+    public FssPlatform? PlatForName(string platname)
     {
-        foreach (GlobePlatform currPlat in PlatfomList)
+        foreach (FssPlatform currPlat in PlatfomList)
         {
             if (currPlat.Name == platname)
                 return currPlat;
@@ -66,7 +66,7 @@ public class GlobePlatformManager
         return null;
     }
 
-    public GlobePlatform? PlatForIndex(int index)
+    public FssPlatform? PlatForIndex(int index)
     {
         if (index < 0 || index >= PlatfomList.Count)
             return null;
@@ -122,7 +122,7 @@ public class GlobePlatformManager
 
     public int PlatIdNext(int currPlatId)
     {
-        int numPlats = GlobeAppFactory.Instance.PlatformManager.NumPlatforms();
+        int numPlats = FssAppFactory.Instance.PlatformManager.NumPlatforms();
         int minId    = (numPlats > 0) ? 1 : 0;
         int maxId    = (numPlats > 0) ? numPlats: 0;
 
@@ -134,7 +134,7 @@ public class GlobePlatformManager
 
     public int PlatIdPrev(int currPlatId)
     {
-        int numPlats = GlobeAppFactory.Instance.PlatformManager.NumPlatforms();
+        int numPlats = FssAppFactory.Instance.PlatformManager.NumPlatforms();
         int minId    = (numPlats > 0) ? 1 : 0;
         int maxId    = (numPlats > 0) ? numPlats: 0;
 
@@ -150,17 +150,17 @@ public class GlobePlatformManager
 
     public bool DoesElementExist(string platname, string elemname)
     {
-        GlobePlatform? plat = PlatForName(platname);
+        FssPlatform? plat = PlatForName(platname);
         if (plat == null)
             return false;
 
         return plat.DoesElementExist(elemname);
     }
 
-    public bool AddElement(string platname, GlobePlatformElement newElem)
+    public bool AddElement(string platname, FssPlatformElement newElem)
     {
         // Return false if we don't find the platform
-        GlobePlatform? plat = PlatForName(platname);
+        FssPlatform? plat = PlatForName(platname);
         if (plat == null)
             return false;
 
@@ -170,16 +170,16 @@ public class GlobePlatformManager
 
     public void DeleteElement(string platname, string elemname)
     {
-        GlobePlatform? plat = PlatForName(platname);
+        FssPlatform? plat = PlatForName(platname);
         if (plat == null)
             return;
 
         plat.DeleteElement(elemname);
     }
 
-    public GlobePlatformElement? ElementForName(string platname, string elemname)
+    public FssPlatformElement? ElementForName(string platname, string elemname)
     {
-        GlobePlatform? plat = PlatForName(platname);
+        FssPlatform? plat = PlatForName(platname);
         if (plat == null)
             return null;
 
@@ -192,10 +192,10 @@ public class GlobePlatformManager
 
     public void UpdateKinetics()
     {
-        double elapsedSeconds = GlobeAppFactory.Instance.SimClock.ElapsedTimeSinceMark();
-        GlobeAppFactory.Instance.SimClock.MarkTime();
+        double elapsedSeconds = FssAppFactory.Instance.SimClock.ElapsedTimeSinceMark();
+        FssAppFactory.Instance.SimClock.MarkTime();
 
-        foreach (GlobePlatform currPlat in PlatfomList)
+        foreach (FssPlatform currPlat in PlatfomList)
         {
             if (currPlat.Kinetics != null)
                 currPlat.Kinetics.UpdateForDuration((float)elapsedSeconds);

@@ -1,44 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-
-namespace GlobeJSON
+namespace FssJSON
 {
     public class PlatFocus : JSONMessage
     {
-        [JsonProperty("PlatName")]
+        [JsonPropertyName("PlatName")]
         public string PlatName { get; set; }
-
-
-
-
-
 
         public static PlatFocus ParseJSON(string json)
         {
             try
             {
-                JObject messageObj = JObject.Parse(json);
-                JToken JsonContent = messageObj.GetValue("PlatFocus");
-                if (JsonContent != null)
+                using (JsonDocument doc = JsonDocument.Parse(json))
                 {
-                    string readPlatName          = (string)JsonContent["PlatName"];
-
-
-                    PlatFocus newMsg = new PlatFocus() {
-                        PlatName          = readPlatName
-                    };
-
-                    return newMsg;
-                }
-                else
-                {
-                    return null;
+                    if (doc.RootElement.TryGetProperty("PlatFocus", out JsonElement jsonContent))
+                    {
+                        PlatFocus newMsg = JsonSerializer.Deserialize<PlatFocus>(jsonContent.GetRawText());
+                        return newMsg;
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
             }
             catch (Exception)
@@ -47,11 +32,4 @@ namespace GlobeJSON
             }
         }
     } // end class
-
 } // end namespace
-
-
-
-
-
-

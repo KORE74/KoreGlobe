@@ -131,7 +131,7 @@ namespace FssNetworking
 
                     if (client == null || !client.Connected)
                     {
-                        Console.WriteLine("Connection failed: " + ipAddrStr + ":" + port);
+                        FssCentralLog.AddEntry("Network: Connection failed: " + ipAddrStr + ":" + port);
                         connected = false;
                         StatusString = "Connection failed";
                         return;
@@ -140,7 +140,8 @@ namespace FssNetworking
                     stream = client.GetStream();
                     connected = true;
 
-                    Console.WriteLine("Socket connected to {0}", client.Client.RemoteEndPoint.ToString());
+
+                    FssCentralLog.AddEntry("Network: Connection success: " + ipAddrStr + ":" + port);
                     StatusString = "Connected successfully";
 
                     sendThread = new Thread(new ThreadStart(sendThreadFunc));
@@ -150,21 +151,22 @@ namespace FssNetworking
                 }
                 else
                 {
-                    Console.WriteLine("Server connection broken on creation:" + ipAddrStr + ":" + port);
+
+                    FssCentralLog.AddEntry("Network: Server connection broken on creation: " + ipAddrStr + ":" + port);
                     connected = false;
                     StatusString = "Server connection broken on creation";
                 }
             }
             catch (SocketException ex)
             {
-                Console.WriteLine("Socket Exception: {0}", ex.Message);
+                FssCentralLog.AddEntry("Network: Socket Exception: " + ex.Message);
                 connected = false;
                 client?.Close();
                 StatusString = "Socket Error: " + ex.Message;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("General Exception: {0}", ex.Message);
+                FssCentralLog.AddEntry("Network: General Exception: " + ex.Message);
                 connected = false;
                 client?.Close();
                 StatusString = "Error: " + ex.Message;
@@ -175,7 +177,7 @@ namespace FssNetworking
 
         private void sendThreadFunc()
         {
-            Console.WriteLine("THREAD FUNC START: TcpClientConnection.sendThreadFunc() : " + Name);
+            FssCentralLog.AddEntry("Network: THREAD FUNC START: TcpClientConnection.sendThreadFunc() : " + Name);
 
             // Enter an infinite loop to process client connections.
             while (connected)
@@ -194,7 +196,7 @@ namespace FssNetworking
                 catch (SocketException ex)
                 {
                     if (ex.SocketErrorCode == SocketError.Interrupted)
-                        Console.WriteLine("EXCEPTION: SocketError.Interrupted // TcpClientConnection.receiveThreadFunc");
+                        FssCentralLog.AddEntry("EXCEPTION: SocketError.Interrupted // TcpClientConnection.sendThreadFunc");
 
                     // listener was closed or broken, exit loop
                     connected = false;
@@ -208,7 +210,7 @@ namespace FssNetworking
 
         private void receiveThreadFunc()
         {
-            Console.WriteLine("THREAD FUNC START: TcpClientConnection.receiveThreadFunc() : " + Name);
+            FssCentralLog.AddEntry("Network: THREAD FUNC START: TcpClientConnection.receiveThreadFunc() : " + Name);
 
             // Get the client and stream from the parameter.
             while (connected)
@@ -228,7 +230,7 @@ namespace FssNetworking
                     // BLOCKING: Read data from the client stream.
                     byte[] buffer = new byte[1024];
                     int bytesRead = 0;
-                    if (stream != null) bytesRead = stream.Read(buffer, 0, buffer.Length);  
+                    if (stream != null) bytesRead = stream.Read(buffer, 0, buffer.Length);
 
                     if (bytesRead == 0)
                     {

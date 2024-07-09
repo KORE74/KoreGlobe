@@ -1,80 +1,54 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-
-namespace GlobeJSON
+namespace FssJSON
 {
     public class RxAntenna : JSONMessage
     {
-        [JsonProperty("PlatName")]
-        public string PlatName { get; set; }
-        [JsonProperty("PortName")]
-        public string PortName { get; set; }
+        [JsonPropertyName("PlatName")]
+        public string PlatName { get; set; } = "UnknownPlatName";
 
-        [JsonProperty("AzOffsetDegs")]
-        public double AzOffsetDegs { get; set; }
-        [JsonProperty("ElOffsetDegs")]
-        public double ElOffsetDegs { get; set; }
-        [JsonProperty("AzMinDegs")]
-        public double AzMinDegs { get; set; }
-        [JsonProperty("ElMinDegs")]
-        public double ElMinDegs { get; set; }
-        [JsonProperty("AzSpanDegs")]
-        public double AzSpanDegs { get; set; }
-        [JsonProperty("ElSpanDegs")]
-        public double ElSpanDegs { get; set; }
-        [JsonProperty("AzPointsCount")]
-        public int AzPointsCount { get; set; }
-        [JsonProperty("ElPointsCount")]
-        public int ElPointsCount { get; set; }
+        [JsonPropertyName("PortName")]
+        public string PortName { get; set; } = "UnknownPortName";
 
-        [JsonProperty("Pattern")]
-        public double Pattern { get; set; }
+        [JsonPropertyName("AzOffsetDegs")]
+        public double AzOffsetDegs { get; set; } = 0.0;
+
+        [JsonPropertyName("ElOffsetDegs")]
+        public double ElOffsetDegs { get; set; } = 0.0;
+
+        [JsonPropertyName("AzMinDegs")]
+        public double AzMinDegs { get; set; } = 0.0;
+
+        [JsonPropertyName("ElMinDegs")]
+        public double ElMinDegs { get; set; } = 0.0;
+
+        [JsonPropertyName("AzSpanDegs")]
+        public double AzSpanDegs { get; set; } = 0.0;
+
+        [JsonPropertyName("ElSpanDegs")]
+        public double ElSpanDegs { get; set; } = 0.0;
+
+        [JsonPropertyName("AzPointsCount")]
+        public int AzPointsCount { get; set; } = 0;
+
+        [JsonPropertyName("ElPointsCount")]
+        public int ElPointsCount { get; set; } = 0;
+
+        [JsonPropertyName("Pattern")]
+        public double Pattern { get; set; } = 0.0;
 
         public static RxAntenna ParseJSON(string json)
         {
-            try
+            var options = new JsonSerializerOptions
             {
-                JObject messageObj = JObject.Parse(json);
-                JToken jsonContent = messageObj.GetValue("RxAntenna");
-                if (jsonContent != null)
-                {
-                    RxAntenna newMsg = new RxAntenna()
-                    {
-                        PlatName      = jsonContent["PlatName"]?.Value<string>() ?? "UnknownPlatName",
-                        PortName      = jsonContent["PortName"]?.Value<string>() ?? "UnknownPlatName",
-                        AzOffsetDegs  = jsonContent["AzOffsetDegs"]?.Value<double>() ?? 0.0,
-                        ElOffsetDegs  = jsonContent["ElOffsetDegs"]?.Value<double>() ?? 0.0,
-                        AzMinDegs     = jsonContent["AzMinDegs"]?.Value<double>() ?? 0.0,
-                        ElMinDegs     = jsonContent["ElMinDegs"]?.Value<double>() ?? 0.0,
-                        AzSpanDegs    = jsonContent["AzSpanDegs"]?.Value<double>() ?? 0.0,
-                        ElSpanDegs    = jsonContent["ElSpanDegs"]?.Value<double>() ?? 0.0,
-                        AzPointsCount = jsonContent["AzPointsCount"]?.Value<int>() ?? 0,
-                        ElPointsCount = jsonContent["ElPointsCount"]?.Value<int>() ?? 0,
-                        Pattern       = jsonContent["Pattern"]?.Value<double>() ?? 0.0
-                    };
-                    return newMsg;
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+                PropertyNameCaseInsensitive = true,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                AllowTrailingCommas = true
+            };
+
+            return JsonSerializer.Deserialize<RxAntenna>(json, options) ?? new RxAntenna();
         }
     } // end class
 } // end namespace
-
-
-
-
-
-

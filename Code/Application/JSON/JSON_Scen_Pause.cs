@@ -1,23 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-
-namespace GlobeJSON
+namespace FssJSON
 {
     public class ScenPause : JSONMessage
     {
-
-        [JsonProperty("ScenTime")]
+        [JsonPropertyName("ScenTime")]
         public string ScenTime { get; set; }
 
         public ScenPause()
         {
-
         }
 
         // -----------------------
@@ -33,20 +26,17 @@ namespace GlobeJSON
         {
             try
             {
-                JObject messageObj = JObject.Parse(json);
-                JToken JsonContent = messageObj.GetValue("ScenPause");
-                if (JsonContent != null)
+                using (JsonDocument doc = JsonDocument.Parse(json))
                 {
-
-                    string readScenTime = (string)JsonContent["ScenTime"];
-
-                    ScenPause newMsg = new ScenPause();
-                    newMsg.ScenTime = readScenTime;
-                    return newMsg;
-                }
-                else
-                {
-                    return null;
+                    if (doc.RootElement.TryGetProperty("ScenPause", out JsonElement jsonContent))
+                    {
+                        ScenPause newMsg = JsonSerializer.Deserialize<ScenPause>(jsonContent.GetRawText());
+                        return newMsg;
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
             }
             catch (Exception)
@@ -54,12 +44,5 @@ namespace GlobeJSON
                 return null;
             }
         }
-
     } // end class
 } // end namespace
-
-
-
-
-
-

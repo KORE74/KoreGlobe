@@ -4,9 +4,9 @@ using System;
 using FssNetworking;
 
 // Design Decisions:
-// - The GlobeEventDriver is the top level class that manages data. Commands and Tasks interact with the business logic through this point.
+// - The FssEventDriver is the top level class that manages data. Commands and Tasks interact with the business logic through this point.
 
-public partial class GlobeEventDriver
+public partial class FssEventDriver
 {
     // ---------------------------------------------------------------------------------------------
     // Command Execution
@@ -15,14 +15,14 @@ public partial class GlobeEventDriver
     public void AddPlatformElement(string platName, string elemName, string platElemType)
     {
         // Create a new platform
-        GlobePlatformElementOperations.CreatePlatformElement(platName, elemName, platElemType);
+        FssPlatformElementOperations.CreatePlatformElement(platName, elemName, platElemType);
     }
 
 
     public void PlatformAddSizerBox(string platName, string platType)
     {
         // Get the platform
-        GlobePlatform? platform = GlobeAppFactory.Instance.PlatformManager.PlatForName(platName);
+        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
 
         if (platform == null)
             return;
@@ -31,7 +31,7 @@ public partial class GlobeEventDriver
         string elemName = "SizerBox";
 
         // Get the element
-        GlobePlatformElement? element = platform.ElementForName(elemName);
+        FssPlatformElement? element = platform.ElementForName(elemName);
 
         if (element == null)
             return;
@@ -50,7 +50,7 @@ public partial class GlobeEventDriver
     }
 
 
-    public void PlatformAddScanWedge(string platName, string elemName, double DetectionRangeKms, double DetectionRangeRxMtrs, GlobeAzElBox azElBox)
+    public void PlatformAddScanWedge(string platName, string elemName, double DetectionRangeKms, double DetectionRangeRxMtrs, FssAzElBox azElBox)
     {
 
     }
@@ -63,10 +63,10 @@ public partial class GlobeEventDriver
 
 
 
-    // public void SetPlatformStartLLA(string platName, GlobeLLALocation loc)
+    // public void SetPlatformStartLLA(string platName, FssLLALocation loc)
     // {
     //     // Get the platform
-    //     GlobePlatform? platform = GlobeAppFactory.Instance.PlatformManager.GetPlatformForName(platName);
+    //     FssPlatform? platform = FssAppFactory.Instance.PlatformManager.GetPlatformForName(platName);
 
     //     if (platform == null)
     //         return;

@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 
-using GlobeJSON;
+using FssJSON;
 
 #nullable enable
 
 // Class to provide the top level management of platforms in the system.
-public class GlobeMessageManagerElement
+public class FssMessageManagerElement
 {
     // Pool of incoming messages to queue up for processing
     private JSONThreadsafeMessageFIFO PendingMessageList = new();
@@ -46,7 +46,7 @@ public class GlobeMessageManagerElement
     private void ProcessMessage_BeamLoad(BeamLoad msg)
     {
         // Get the access to the platform objects
-        GlobePlatformManager? platMgr = PlatMgr();
+        FssPlatformManager? platMgr = PlatMgr();
         if (platMgr == null) return;
 
         // Derive the names to look everything up.
@@ -57,12 +57,12 @@ public class GlobeMessageManagerElement
         platMgr.DeleteElement(platName, elemName);
 
         // Create and add the new emitter
-        GlobePlatformElementScanPattern newEmitter = new GlobePlatformElementScanPattern();
+        FssPlatformElementScanPattern newEmitter = new FssPlatformElementScanPattern();
         newEmitter.ScanShape         = ScanPatternShape.Wedge;
         newEmitter.EmitterRangeKms   = msg.DetectionRangeKms;
         newEmitter.DetectionRangeKms = msg.DetectionRangeRxMtrs;
 
-        newEmitter.AzElBox = new GlobeAzElBox() {
+        newEmitter.AzElBox = new FssAzElBox() {
             MinAzDegs = msg.AzMinDegs,
             MaxAzDegs = msg.AzMaxDegs,
             MinElDegs = msg.ElMinDegs,
@@ -78,7 +78,7 @@ public class GlobeMessageManagerElement
     private void ProcessMessage_BeamDelete(BeamDelete msg)
     {
         // Get the access to the platform objects
-        GlobePlatformManager? platMgr = PlatMgr();
+        FssPlatformManager? platMgr = PlatMgr();
         if (platMgr == null) return;
 
         // Derive the names to look everything up.
@@ -86,16 +86,16 @@ public class GlobeMessageManagerElement
         string elemName = BeamElementName(msg.PlatName, msg.EmitName, msg.BeamName);
 
         // Get the element (or null if not found).
-        GlobePlatformElement? element = platMgr.ElementForName(platName, elemName);
+        FssPlatformElement? element = platMgr.ElementForName(platName, elemName);
 
         if (element == null)
         {
             //element.SetVisibility(true);
-            GlobeCentralLog.AddEntry($"BeamEnable: Beam Enabled: platName:{platName} elemName:{elemName}");
+            FssCentralLog.AddEntry($"BeamEnable: Beam Enabled: platName:{platName} elemName:{elemName}");
         }
         else
         {
-            GlobeCentralLog.AddEntry($"BeamEnable: Entity not found: platName:{platName}");
+            FssCentralLog.AddEntry($"BeamEnable: Entity not found: platName:{platName}");
         }
     }
 
@@ -106,7 +106,7 @@ public class GlobeMessageManagerElement
     private void ProcessMessage_BeamEnable(BeamEnable msg)
     {
         // Get the access to the platform objects
-        GlobePlatformManager? platMgr = PlatMgr();
+        FssPlatformManager? platMgr = PlatMgr();
         if (platMgr == null) return;
 
         // Derive the names to look everything up.
@@ -114,23 +114,23 @@ public class GlobeMessageManagerElement
         string elemName = BeamElementName(msg.PlatName, msg.EmitName, msg.BeamName);
 
         // Get the element (or null if not found).
-        GlobePlatformElement? element = platMgr.ElementForName(platName, elemName);
+        FssPlatformElement? element = platMgr.ElementForName(platName, elemName);
 
         if (element == null)
         {
             //element.SetVisibility(true);
-            GlobeCentralLog.AddEntry($"BeamEnable: Beam Enabled: platName:{platName} elemName:{elemName}");
+            FssCentralLog.AddEntry($"BeamEnable: Beam Enabled: platName:{platName} elemName:{elemName}");
         }
         else
         {
-            GlobeCentralLog.AddEntry($"BeamEnable: Entity not found: platName:{platName}");
+            FssCentralLog.AddEntry($"BeamEnable: Entity not found: platName:{platName}");
         }
     }
 
     private void ProcessMessage_BeamDisable(BeamDisable msg)
     {
         // Get the access to the platform objects
-        GlobePlatformManager? platMgr = PlatMgr();
+        FssPlatformManager? platMgr = PlatMgr();
         if (platMgr == null) return;
 
         // Derive the names to look everything up.
@@ -138,16 +138,16 @@ public class GlobeMessageManagerElement
         string elemName = BeamElementName(msg.PlatName, msg.EmitName, msg.BeamName);
 
         // Get the element (or null if not found).
-        GlobePlatformElement? element = platMgr.ElementForName(platName, elemName);
+        FssPlatformElement? element = platMgr.ElementForName(platName, elemName);
 
         if (element == null)
         {
             //element.SetVisibility(false);
-            GlobeCentralLog.AddEntry($"BeamEnable: Beam Enabled: platName:{platName} elemName:{elemName}");
+            FssCentralLog.AddEntry($"BeamEnable: Beam Enabled: platName:{platName} elemName:{elemName}");
         }
         else
         {
-            GlobeCentralLog.AddEntry($"BeamEnable: Entity not found: platName:{platName}");
+            FssCentralLog.AddEntry($"BeamEnable: Entity not found: platName:{platName}");
         }
     }
 
@@ -157,16 +157,16 @@ public class GlobeMessageManagerElement
     {
         // string platName  = msg.PlatName;
         // string portName = msg.PortName;
-        // GlobeCentralLog.AddEntry($"ProcessMessage_RxAntenna: Entity not found: platName:{platName} portName:{portName}");
+        // FssCentralLog.AddEntry($"ProcessMessage_RxAntenna: Entity not found: platName:{platName} portName:{portName}");
 
-        // GlobeEntity ent = EntityManager.GetEntityByName(platName);
+        // FssEntity ent = EntityManager.GetEntityByName(platName);
         // if (ent != null)
         // {
 
         // }
         // else
         // {
-        //     GlobeCentralLog.AddEntry($"RxAntenna: Entity not found: platName:{platName}");
+        //     FssCentralLog.AddEntry($"RxAntenna: Entity not found: platName:{platName}");
         // }
     }
 
@@ -175,14 +175,14 @@ public class GlobeMessageManagerElement
     // ========================================================================================
 
     // Isolate the external architectural access to the platform manager in a utility function.
-    private GlobePlatform? PlatformForName(string name)
+    private FssPlatform? PlatformForName(string name)
     {
-        return GlobeAppFactory.Instance.PlatformManager.PlatForName(name);
+        return FssAppFactory.Instance.PlatformManager.PlatForName(name);
     }
 
-    private GlobePlatformManager? PlatMgr()
+    private FssPlatformManager? PlatMgr()
     {
-        return GlobeAppFactory.Instance.PlatformManager;
+        return FssAppFactory.Instance.PlatformManager;
     }
 
     // ========================================================================================

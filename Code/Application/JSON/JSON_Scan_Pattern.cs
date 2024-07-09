@@ -1,197 +1,107 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-
-namespace GlobeJSON
+namespace FssJSON
 {
     public class ScanPattern : JSONMessage
     {
-        [JsonProperty("PlatName")]
-        public string PlatName { get; set; }
+        [JsonPropertyName("PlatName")]
+        public string PlatName { get; set; } = "UnknownPlatName";
 
-        [JsonProperty("EmitName")]
-        public string EmitName { get; set; }
+        [JsonPropertyName("EmitName")]
+        public string EmitName { get; set; } = "UnknownEmitName";
 
-        [JsonProperty("BeamName")]
-        public string BeamName { get; set; }
+        [JsonPropertyName("BeamName")]
+        public string BeamName { get; set; } = "UnknownBeamName";
 
-        [JsonProperty("ScanType")]
-        public string ScanType { get; set; }
+        [JsonPropertyName("ScanType")]
+        public string ScanType { get; set; } = "UnknownScanType";
 
-        [JsonProperty("PeriodSecs")]
-        public double PeriodSecs { get; set; }
+        [JsonPropertyName("PeriodSecs")]
+        public double PeriodSecs { get; set; } = 0.0;
 
-        [JsonProperty("SegmentCount")]
-        public int SegmentCount { get; set; }
+        [JsonPropertyName("SegmentCount")]
+        public int SegmentCount { get; set; } = 0;
 
-        [JsonProperty("AzMinDegs")]
-        public double AzMinDegs { get; set; }
+        [JsonPropertyName("AzMinDegs")]
+        public double AzMinDegs { get; set; } = 0.0;
 
-        [JsonProperty("AzMaxDegs")]
-        public double AzMaxDegs { get; set; }
+        [JsonPropertyName("AzMaxDegs")]
+        public double AzMaxDegs { get; set; } = 0.0;
 
-        [JsonProperty("ElMinDegs")]
-        public double ElMinDegs { get; set; }
+        [JsonPropertyName("ElMinDegs")]
+        public double ElMinDegs { get; set; } = 0.0;
 
-        [JsonProperty("ElMaxDegs")]
-        public double ElMaxDegs { get; set; }
+        [JsonPropertyName("ElMaxDegs")]
+        public double ElMaxDegs { get; set; } = 0.0;
 
-        [JsonProperty("AzTrackOffsetDegs")]
-        public double AzTrackOffsetDegs { get; set; }
+        [JsonPropertyName("AzTrackOffsetDegs")]
+        public double AzTrackOffsetDegs { get; set; } = 0.0;
 
-        [JsonProperty("ElTrackOffsetDegs")]
-        public double ElTrackOffsetDegs { get; set; }
+        [JsonPropertyName("ElTrackOffsetDegs")]
+        public double ElTrackOffsetDegs { get; set; } = 0.0;
 
-        [JsonProperty("Clockwise")]
-        public bool Clockwise { get; set; }
+        [JsonPropertyName("Clockwise")]
+        public bool Clockwise { get; set; } = false;
 
-        [JsonProperty("Up")]
-        public bool Up { get; set; }
+        [JsonPropertyName("Up")]
+        public bool Up { get; set; } = false;
 
-        [JsonProperty("UniDir")]
-        public bool UniDir { get; set; }
+        [JsonPropertyName("UniDir")]
+        public bool UniDir { get; set; } = false;
 
-        [JsonProperty("Reversed")]
-        public bool Reversed { get; set; }
+        [JsonPropertyName("Reversed")]
+        public bool Reversed { get; set; } = false;
 
-        [JsonProperty("MinorScanType")]
-        public string MinorScanType { get; set; }
+        [JsonPropertyName("MinorScanType")]
+        public string MinorScanType { get; set; } = "UnknownMinorScanType";
 
-        [JsonProperty("MinorScanPeriodSecs")]
-        public double MinorScanPeriodSecs { get; set; }
+        [JsonPropertyName("MinorScanPeriodSecs")]
+        public double MinorScanPeriodSecs { get; set; } = 0.0;
 
-        [JsonProperty("MinorScanUniDir")]
-        public bool MinorScanUniDir { get; set; }
+        [JsonPropertyName("MinorScanUniDir")]
+        public bool MinorScanUniDir { get; set; } = false;
 
-        [JsonProperty("MinorScanUp")]
-        public bool MinorScanUp { get; set; }
-
-        // ============================================================================================
-        // Attribute Helper Routines
-        // ============================================================================================
-
-        /*
-        public double DetectionRangeKms
-        {
-            get { return (DetectionRangeMtrs * GlobeConsts.MetresToKmMultiplier); }
-            set { DetectionRangeMtrs = (value * GlobeConsts.KmToMetresMultiplier); }
-        }
-
-        public double DetectionRangeRxKms
-        {
-            get { return (DetectionRangeRxMtrs * GlobeConsts.MetresToKmMultiplier); }
-            set { DetectionRangeRxMtrs = (value * GlobeConsts.KmToMetresMultiplier); }
-        }
-
-        public GlobeAzElBox AzElBox()
-        {
-            GlobeAzElBox azElBox = new GlobeAzElBox() { MinAzDegs = AzMinDegs, MaxAzDegs = AzMaxDegs, MinElDegs = ElMinDegs, MaxElDegs = ElMaxDegs };
-            return azElBox;
-        }
-
-        public void SetAzElBox(GlobeAzElBox azElBox)
-        {
-            AzMinDegs = azElBox.MinAzDegs;
-            AzMaxDegs = azElBox.MaxAzDegs;
-            ElMinDegs = azElBox.MinElDegs;
-            ElMaxDegs = azElBox.MaxElDegs;
-        }
-        */
-        // ============================================================================================
-        // Message Data Analysis
-        // ============================================================================================
-
-        public bool IsScanShapeHemisphere()
-        {
-            if (ScanType?.IndexOf("Helical", StringComparison.OrdinalIgnoreCase) >= 0) return true;
-            return false;
-        }
-
-        public bool IsScanShapeWedge()
-        {
-            if (ScanType?.IndexOf("Raster", StringComparison.OrdinalIgnoreCase) >= 0) return true;
-            return false;
-        }
-
-        public bool IsScanShapeConical()
-        {
-            if (ScanType?.IndexOf("Conical", StringComparison.OrdinalIgnoreCase) >= 0) return true;
-            return false;
-        }
-
-        /*
-        public GlobeCourse GetCourse()
-        {
-            GlobeCourse cor = new GlobeCourse();
-            cor.HeadingDegs = HeadingDegs;
-            cor.SpeedKph    = SpeedKph;
-
-            return cor;
-        }
-
-        public GlobeAttitude GetAttitude()
-        {
-            GlobeAttitude att = new GlobeAttitude();
-            att.RollClockwiseDegs = RollClockwiseDegs;
-            att.PitchUpDegs       = PitchUpDegs;
-            att.YawClockwiseDegs  = YawClockwiseDegs;
-
-            return att;
-        }
-        */
+        [JsonPropertyName("MinorScanUp")]
+        public bool MinorScanUp { get; set; } = false;
 
         public static ScanPattern ParseJSON(string json)
         {
             try
             {
-                JObject messageObj = JObject.Parse(json);
-                JToken jsonContent = messageObj.GetValue("ScanPattern");
-                if (jsonContent != null)
+                var options = new JsonSerializerOptions
                 {
-                    ScanPattern newMsg = new ScanPattern()
-                    {
-                        PlatName             = jsonContent["PlatName"]?.Value<string>() ?? "UnknownPlatName",
-                        EmitName             = jsonContent["EmitName"]?.Value<string>() ?? "UnknownEmitName",
-                        BeamName             = jsonContent["BeamName"]?.Value<string>() ?? "UnknownBeamName",
-                        ScanType             = jsonContent["ScanType"]?.Value<string>() ?? "UnknownScanType",
-                        PeriodSecs           = jsonContent["PeriodSecs"]?.Value<double>() ?? 0.0,
-                        AzMinDegs            = jsonContent["AzMinDegs"]?.Value<double>() ?? 0.0,
-                        AzMaxDegs            = jsonContent["AzMaxDegs"]?.Value<double>() ?? 0.0,
-                        ElMinDegs            = jsonContent["ElMinDegs"]?.Value<double>() ?? 0.0,
-                        ElMaxDegs            = jsonContent["ElMaxDegs"]?.Value<double>() ?? 0.0,
-                        AzTrackOffsetDegs    = jsonContent["AzTrackOffsetDegs"]?.Value<double>() ?? 0.0,
-                        ElTrackOffsetDegs    = jsonContent["ElTrackOffsetDegs"]?.Value<double>() ?? 0.0,
-                        Clockwise            = jsonContent["Clockwise"]?.Value<bool>() ?? false,
-                        Up                   = jsonContent["Up"]?.Value<bool>() ?? false,
-                        UniDir               = jsonContent["UniDir"]?.Value<bool>() ?? false,
-                        Reversed             = jsonContent["Reversed"]?.Value<bool>() ?? false,
-                        MinorScanType        = jsonContent["MinorScanType"]?.Value<string>() ?? "UnknownMinorScanType",
-                        MinorScanPeriodSecs  = jsonContent["MinorScanPeriodSecs"]?.Value<double>() ?? 0.0,
-                        MinorScanUniDir      = jsonContent["MinorScanUniDir"]?.Value<bool>() ?? false,
-                        MinorScanUp          = jsonContent["MinorScanUp"]?.Value<bool>() ?? false
-                    };
-                    return newMsg;
-                }
-                else
-                {
-                    return null;
-                }
+                    PropertyNameCaseInsensitive = true,
+                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                    AllowTrailingCommas = true,
+                };
+
+                return JsonSerializer.Deserialize<ScanPattern>(json, options) ?? new ScanPattern();
             }
             catch (Exception)
             {
                 return null;
             }
         }
+
+        // ============================================================================================
+        // Message Data Analysis
+        // ============================================================================================
+
+        public bool IsScanShapeHemisphere()
+        {
+            return ScanType?.IndexOf("Helical", StringComparison.OrdinalIgnoreCase) >= 0;
+        }
+
+        public bool IsScanShapeWedge()
+        {
+            return ScanType?.IndexOf("Raster", StringComparison.OrdinalIgnoreCase) >= 0;
+        }
+
+        public bool IsScanShapeConical()
+        {
+            return ScanType?.IndexOf("Conical", StringComparison.OrdinalIgnoreCase) >= 0;
+        }
     } // end class
 } // end namespace
-
-
-
-
-
-

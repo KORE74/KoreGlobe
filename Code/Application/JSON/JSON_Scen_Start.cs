@@ -1,20 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json;
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-
-namespace GlobeJSON
+namespace FssJSON
 {
     public class ScenStart : JSONMessage
     {
-
         public ScenStart()
         {
-
         }
 
         // -----------------------
@@ -23,17 +15,17 @@ namespace GlobeJSON
         {
             try
             {
-                JObject messageObj = JObject.Parse(json);
-                JToken JsonToken = messageObj.GetValue("ScenStart");
-                if (JsonToken != null)
+                using (JsonDocument doc = JsonDocument.Parse(json))
                 {
-                    ScenStart newMsg = new ScenStart();
-
-                    return newMsg;
-                }
-                else
-                {
-                    return null;
+                    if (doc.RootElement.TryGetProperty("ScenStart", out JsonElement jsonToken))
+                    {
+                        ScenStart newMsg = JsonSerializer.Deserialize<ScenStart>(jsonToken.GetRawText());
+                        return newMsg;
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
             }
             catch (Exception)
@@ -41,12 +33,5 @@ namespace GlobeJSON
                 return null;
             }
         }
-
     } // end class
 } // end namespace
-
-
-
-
-
-

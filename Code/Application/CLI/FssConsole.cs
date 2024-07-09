@@ -47,9 +47,9 @@ public class FssConsole
 
     public void WaitForExit()
     {
-        Console.WriteLine("Waiting on Join()...");
+        FssCentralLog.AddEntry("Network: Waiting on Join()...");
         consoleThread?.Join(); // This will block until consoleThread finishes execution
-        Console.WriteLine("Join() returned.");
+        FssCentralLog.AddEntry("Network: Join() returned.");
     }
 
     // ---------------------------------------------------------------------------------------------

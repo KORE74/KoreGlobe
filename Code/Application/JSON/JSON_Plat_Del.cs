@@ -1,40 +1,29 @@
 ﻿using System;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-
-namespace GlobeJSON
+namespace FssJSON
 {
     public class PlatDelete : JSONMessage
     {
-        [JsonProperty("PlatName")]
+        [JsonPropertyName("PlatName")]
         public string PlatName { get; set; }
-
-        /*
-        public JSONPlatDel(string n)
-        {
-            PlatName = n;
-        }
-        */
 
         public static PlatDelete ParseJSON(string json)
         {
             try
             {
-                JObject messageObj = JObject.Parse(json);
-                JToken JsonContent = messageObj.GetValue("PlatDelete");
-                if (JsonContent != null)
+                using (JsonDocument doc = JsonDocument.Parse(json))
                 {
-                    string readPlatName = (string)JsonContent["PlatName"];
-
-                    PlatDelete newMsg = new PlatDelete() {
-                        PlatName = readPlatName
-                    };
-                    return newMsg;
-                }
-                else
-                {
-                    return null;
+                    if (doc.RootElement.TryGetProperty("PlatDelete", out JsonElement jsonContent))
+                    {
+                        PlatDelete newMsg = JsonSerializer.Deserialize<PlatDelete>(jsonContent.GetRawText());
+                        return newMsg;
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
             }
             catch (Exception)
@@ -43,11 +32,4 @@ namespace GlobeJSON
             }
         }
     } // end class
-
 } // end namespace
-
-
-
-
-
-

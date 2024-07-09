@@ -1,25 +1,29 @@
+using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
-
-using Newtonsoft.Json;
+using System.Text.Json;
 
 // A JSON wrapper class for a quick/dirty way to write parameters out to a file.
 
-public class GlobeConfig
+public class FssConfig
 {
     private string jsonFilePath;
 
     private Dictionary<string, string> configData;
 
-    public Formatting FormattingType { get; set; } = Formatting.Indented;
+    private JsonSerializerOptions jsonOptions;
 
     // --------------------------------------------------------------------------------------------
 
-    public GlobeConfig()
+    public FssConfig()
     {
         jsonFilePath = "";
         configData = new Dictionary<string, string>();
+        jsonOptions = new JsonSerializerOptions
+        {
+            WriteIndented = true // Equivalent to Formatting.Indented in Newtonsoft.Json
+        };
     }
 
     // -------------------------------------------------------------------------------------------
@@ -33,7 +37,7 @@ public class GlobeConfig
             try
             {
                 string jsonString = File.ReadAllText(jsonFilePath);
-                configData = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonString);
+                configData = JsonSerializer.Deserialize<Dictionary<string, string>>(jsonString, jsonOptions);
             }
             catch (System.Exception)
             {
@@ -54,7 +58,7 @@ public class GlobeConfig
     {
         try
         {
-            string jsonString = JsonConvert.SerializeObject(configData, FormattingType);
+            string jsonString = JsonSerializer.Serialize(configData, jsonOptions);
             File.WriteAllText(jsonFilePath, jsonString);
         }
         catch (System.Exception)
@@ -72,7 +76,7 @@ public class GlobeConfig
             var sortedConfigData = configData.OrderBy(pair => pair.Key)
                                             .ToDictionary(pair => pair.Key, pair => pair.Value);
 
-            string jsonString = JsonConvert.SerializeObject(sortedConfigData, FormattingType);
+            string jsonString = JsonSerializer.Serialize(sortedConfigData, jsonOptions);
             File.WriteAllText(jsonFilePath, jsonString);
         }
         catch (System.Exception)
@@ -112,5 +116,4 @@ public class GlobeConfig
 
         return configData[name];
     }
-
 }
