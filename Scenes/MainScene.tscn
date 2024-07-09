@@ -11,13 +11,13 @@
 
 [node name="Node3D" type="Node3D"]
 
-[node name="TestNode" type="Node3D" parent="."]
-
-[node name="Camera3D" type="Camera3D" parent="TestNode"]
+[node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
 fov = 35.0
 near = 0.001
 script = ExtResource("2_3c077")
+
+[node name="TestNode" type="Node3D" parent="."]
 
 [node name="SpotLight3D" type="SpotLight3D" parent="TestNode"]
 transform = Transform3D(0.804137, -0.0127291, 0.594308, -0.594444, -0.0172194, 0.803953, 0, -0.999771, -0.0214135, 2.56978, 4.5275, 0)

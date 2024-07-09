@@ -18,12 +18,14 @@ public partial class TestModel : Node3D
     //    |- NodeMarkerZero
     //    |- NodeMarkerAbove
     //    |- NodeMarkerAhead
+    //    |- ModelCamera
 
     Node3D ModelNode         = null;
     Node3D ModelResourceNode = null;
     Node3D NodeMarkerZero    = null;
     Node3D NodeMarkerAbove   = null;
     Node3D NodeMarkerAhead   = null;
+    Camera3D ModelCamera     = null;
 
     float Timer1Hz = 0f;
 
@@ -66,7 +68,32 @@ public partial class TestModel : Node3D
             ModelNode.AddChild(NodeMarkerAbove);
             ModelNode.AddChild(NodeMarkerAhead);
 
+            float mag = 0.025f;
+            Vector3 fixedVecPlusX = new Vector3(mag, 0f, 0f);
+            Vector3 fixedVecPlusY = new Vector3(0f, mag, 0f);
+            Vector3 fixedVecPlusZ = new Vector3(0f, 0f, mag);
+            Vector3 fixedVecPlus0 = new Vector3(0f, 0f, 0f);
+
+            NodeMarkerZero.Position  = Vector3.Zero;
+            NodeMarkerAbove.Position = fixedVecPlusY; //diffAbove;
+            NodeMarkerAhead.Position = fixedVecPlusZ; //diffAhead;
+
+
+            ModelCamera = new Camera3D();
+            ModelCamera.Name = "ModelCamera";
+            //ModelCamera.FovDegrees = 40;
+            ModelNode.AddChild(ModelCamera);
+            ModelCamera.Position = new Vector3(0.44f, 0.46f, -0.7f);
+            ModelCamera.Fov = 35;
+            ModelCamera.LookAt(Vector3.Zero, Vector3.Up);
+
+            ModelCamera.Current = true;
+
+
             UpdateModelPosition();
+
+
+
         }
         else
         {
@@ -116,7 +143,7 @@ public partial class TestModel : Node3D
         }
         else
         {
-            posAhead = pos.PlusPolarOffset(Course.ToPolarOffset(5));
+            posAhead = pos.PlusPolarOffset(Course.ToPolarOffset(-5));
         }
 
         // --- Define vectors -----------------------
@@ -143,12 +170,11 @@ public partial class TestModel : Node3D
         //ModelNode.LookAt(vecAhead, vecAbove);
         ModelNode.Position = vecPos;
         //ModelResourceNode.LookAt(Vector3.Forward, Vector3.Up);
-        ModelNode.LookAt(vecAhead, fixedVecPlus0);
+        ModelNode.LookAt(vecAhead, vecAbove);
 
-
-        NodeMarkerZero.Position  = Vector3.Zero;
-        NodeMarkerAbove.Position = fixedVecPlusY; //diffAbove;
-        NodeMarkerAhead.Position = fixedVecPlusZ; //diffAhead;
+        // NodeMarkerZero.Position  = Vector3.Zero;
+        // NodeMarkerAbove.Position = fixedVecPlusY; //diffAbove;
+        // NodeMarkerAhead.Position = fixedVecPlusZ; //diffAhead;
 
         // NodeMarkerZero.Position  = vecPos;
         // NodeMarkerAbove.Position = vecAbove; //diffAbove;
