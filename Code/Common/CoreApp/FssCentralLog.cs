@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 
-// FssCentralLog: 
+// FssCentralLog:
 // - A logfile capability available regardless of the Unity / Godot / Dotnet environment the code is ultimately used in.
 // - A static class allows us to log messages from within internal functions.
 // - Has some basic file and thread protection.
@@ -16,7 +16,7 @@ public static class FssCentralLog
     private static readonly object lockObject = new object();
 
     static FssCentralLog()
-    {        
+    {
     }
 
     public static void AddStartupEntry(string versionStr)
@@ -31,7 +31,8 @@ public static class FssCentralLog
         {
             try
             {
-                logEntries.Add($"{FssCoreTime.TimestampLocal} : {entry}");
+                string timestamp = FssCoreTime.TimestampLocal;
+                logEntries.Add($"{timestamp} : {entry}");
 
                 if (logEntries.Count > 100)
                     logEntries.RemoveAt(0);

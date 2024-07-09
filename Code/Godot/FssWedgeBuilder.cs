@@ -28,7 +28,7 @@ public partial class FssWedgeBuilder : Node3D
                     currLat, currLat + 25, // elevationMin, elevationMax,
                     currLon, currLon + 25, // azimuthMin, azimuthMax,
                     1.2f, 1.22f,           // distanceMin, distanceMax,
-                    6, 6 );                // resolutionAz, resolutionEl)
+                    4, 4 );                // resolutionAz, resolutionEl)
 
                 ArrayMesh meshData = meshBuilder.Build("Wedge", false);
 

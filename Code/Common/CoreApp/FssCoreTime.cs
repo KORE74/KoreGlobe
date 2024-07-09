@@ -15,6 +15,7 @@ public static class FssCoreTime
 
     // Property to get the elapsed time in seconds since the application started
     public static float RuntimeSecs           => (float)stopwatch.Elapsed.TotalSeconds;
+    public static int   RuntimeIntSecs        => (int)stopwatch.Elapsed.TotalSeconds;
 
     // UTC Time and Data
     public static string TimeOfDayHHMMSSUTC   => DateTime.UtcNow.ToString("HHmmss");

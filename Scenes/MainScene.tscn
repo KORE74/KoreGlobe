@@ -14,7 +14,7 @@
 [node name="TestNode" type="Node3D" parent="."]
 
 [node name="Camera3D" type="Camera3D" parent="TestNode"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
 fov = 35.0
 near = 0.001
 script = ExtResource("2_3c077")
@@ -29,7 +29,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 3)
 light_energy = 0.25
 
 [node name="GlobeRoot" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 
 [node name="TestLabel" type="Node3D" parent="GlobeRoot"]
 script = ExtResource("5_5jdg7")

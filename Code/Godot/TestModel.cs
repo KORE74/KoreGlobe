@@ -8,8 +8,8 @@ public partial class TestModel : Node3D
     public string ModelPath = "res://Resources/Plane_Paper/PaperPlanes_v002.glb";
 
     // Define the position and course
-    private FssLLAPoint pos   = new FssLLAPoint() { LatDegs = 40, LonDegs = -70, AltMslM = 1.4f };
-    private FssCourse Course  = new FssCourse()   { HeadingDegs = 0, SpeedKph = 250000 };
+    private FssLLAPoint pos   = new FssLLAPoint() { LatDegs = 0, LonDegs = -70, AltMslM = 1.4f };
+    private FssCourse Course  = new FssCourse()   { HeadingDegs = 0, SpeedKph = 1200000 };
 
     // Define the model node hierarchy
     // Parent
@@ -90,7 +90,7 @@ public partial class TestModel : Node3D
         // Debug print the new position values once a second
         if (Timer1Hz < FssCoreTime.RuntimeSecs)
         {
-            Timer1Hz += 1f;
+            Timer1Hz = (float)(FssCoreTime.RuntimeIntSecs + 1); // Update the timer to the next whole second
             GD.Print($"RuntimeSecs: {Timer1Hz:F1} Course: {Course} Offset: {offset} Position: {pos}");
         }
 
@@ -135,15 +135,16 @@ public partial class TestModel : Node3D
         Vector3 fixedVecPlusX = new Vector3(mag, 0f, 0f);
         Vector3 fixedVecPlusY = new Vector3(0f, mag, 0f);
         Vector3 fixedVecPlusZ = new Vector3(0f, 0f, mag);
+        Vector3 fixedVecPlus0 = new Vector3(0f, 0f, 0f);
         Vector3 markerAhead = unitVecAhead * mag;
         Vector3 markerAbove = unitVecAbove * mag;
 
         // --- Update node -----------------------
         //ModelNode.LookAt(vecAhead, vecAbove);
         ModelNode.Position = vecPos;
-        ModelNode.LookAt(vecAhead, vecAbove);
-
         //ModelResourceNode.LookAt(Vector3.Forward, Vector3.Up);
+        ModelNode.LookAt(vecAhead, fixedVecPlus0);
+
 
         NodeMarkerZero.Position  = Vector3.Zero;
         NodeMarkerAbove.Position = fixedVecPlusY; //diffAbove;
