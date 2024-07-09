@@ -39,17 +39,6 @@ public partial class TestLabelMaker : Node3D
                 // Position and orient the label to face away from the center and use the up direction
                 label.Position = position;
                 label.LookAt(GlobalTransform.Origin, upDirection);
-
-
-                // Create a small sphere at the north position for visual verification
-                //CreateSphere(northPosition, 0.0025f);
-                //CreateSphere(position, 0.0025f);
-                // CreateCylinder(position, eastPosition, 0.0025f);
-
-                //if (lat > -80) // Avoid creating a cylinder at the poles where we don't have a point to connect to
-                //{
-                //    CreateCylinder(position, southPosition, 0.0025f);
-                //}
             }
         }
     }

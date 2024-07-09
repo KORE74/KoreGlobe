@@ -1,6 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://bkhif7hl6psi5"]
+[gd_scene load_steps=10 format=3 uid="uid://bkhif7hl6psi5"]
 
 [ext_resource type="Script" path="res://Code/Godot/Util/FssCameraMover.cs" id="2_3c077"]
+[ext_resource type="Script" path="res://Code/Godot/FssTestCylinder2.cs" id="2_xyvg4"]
 [ext_resource type="Script" path="res://Code/Godot/FssWedgeBuilder.cs" id="3_i52xv"]
 [ext_resource type="Script" path="res://Code/Godot/TestLabelMaker.cs" id="5_5jdg7"]
 [ext_resource type="Script" path="res://Code/Godot/FssTestGlobeCore.cs" id="5_molmv"]
@@ -29,6 +30,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 3)
 light_energy = 0.25
 
 [node name="GlobeRoot" type="Node3D" parent="."]
+
+[node name="TestCylinder" type="Node3D" parent="GlobeRoot"]
+script = ExtResource("2_xyvg4")
 
 [node name="TestLabel" type="Node3D" parent="GlobeRoot"]
 script = ExtResource("5_5jdg7")

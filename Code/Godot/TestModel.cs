@@ -2,6 +2,8 @@ using System;
 
 using Godot;
 
+// TestModel: Class to test the 3D movement of a platform and camera.
+
 public partial class TestModel : Node3D
 {
     [Export]
@@ -63,9 +65,6 @@ public partial class TestModel : Node3D
             NodeMarkerZero.Name  = "NodeMarkerZero - Red";
             NodeMarkerAbove.Name = "NodeMarkerAbove - Blue";
             NodeMarkerAhead.Name = "NodeMarkerAhead - Green";
-            // AddChild(NodeMarkerZero);
-            // AddChild(NodeMarkerAbove);
-            // AddChild(NodeMarkerAhead);
             ModelNode.AddChild(NodeMarkerZero);
             ModelNode.AddChild(NodeMarkerAbove);
             ModelNode.AddChild(NodeMarkerAhead);
@@ -74,33 +73,18 @@ public partial class TestModel : Node3D
             Vector3 fixedVecPlusX = new Vector3(mag, 0f, 0f);
             Vector3 fixedVecPlusY = new Vector3(0f, mag, 0f);
             Vector3 fixedVecPlusZ = new Vector3(0f, 0f, mag);
-            Vector3 fixedVecPlus0 = new Vector3(0f, 0f, 0f);
 
             NodeMarkerZero.Position  = Vector3.Zero;
             NodeMarkerAbove.Position = fixedVecPlusY; //diffAbove;
             NodeMarkerAhead.Position = fixedVecPlusZ; //diffAhead;
 
-
-            ModelCamera = new Camera3D();
-            ModelCamera.Name = "ModelCamera";
-            //ModelCamera.FovDegrees = 40;
-            ModelNode.AddChild(ModelCamera);
-
-            // FssXYZPoint camOffsetXYZ = CameraOffset.ToXYZ();
-            // ModelCamera.Position = new Vector3((float)camOffsetXYZ.X, (float)camOffsetXYZ.Y, (float)camOffsetXYZ.Z);
-
-
+            // Create the chase-camera
+            ModelCamera = new Camera3D() { Name = "ModelCamera" };
             ModelCamera.Fov = 35;
-
-            ModelCamera.Position = new Vector3(0.44f, 0.46f, -0.7f);
-            ModelCamera.LookAt(Vector3.Zero, Vector3.Up);
-
+            ModelNode.AddChild(ModelCamera);
             ModelCamera.Current = true;
 
             UpdateModelPosition();
-
-
-
         }
         else
         {
@@ -114,11 +98,11 @@ public partial class TestModel : Node3D
     public override void _Process(double delta)
     {
         // Figure out the change in position
-        double headingChangePerSec = 5;
-        Course.HeadingDegs += headingChangePerSec * delta;
+        Course.HeadingDegs += 5 * delta;
         FssPolarOffset offset = Course.ToPolarOffset(delta);
 
-        CameraOffset.AzDegs += headingChangePerSec * delta;
+        // Pan the camera
+        CameraOffset.AzDegs += 10 * delta;
 
         // Update the position with the new offset
         pos = pos.PlusPolarOffset(offset);
@@ -130,6 +114,7 @@ public partial class TestModel : Node3D
             GD.Print($"RuntimeSecs: {Timer1Hz:F1} Course: {Course} Offset: {offset} Position: {pos}");
         }
 
+        // Update the node positions and orientations
         UpdateModelPosition();
     }
 
@@ -162,37 +147,13 @@ public partial class TestModel : Node3D
         Vector3 vecAbove = FssGeoConvOperations.RealWorldToGodot(posAbove);
         Vector3 vecAhead = FssGeoConvOperations.RealWorldToGodot(posAhead);
 
-        Vector3 diffAbove    = vecPos.DirectionTo(vecAbove);//.Normalized();
-        Vector3 diffAhead    = vecPos.DirectionTo(vecAhead);//.Normalized();
-        Vector3 unitVecAhead = diffAhead;//.Normalized();
-        Vector3 unitVecAbove = diffAbove;//.Normalized();
-
-        float mag = 0.025f;
-        Vector3 fixedVecPlusX = new Vector3(mag, 0f, 0f);
-        Vector3 fixedVecPlusY = new Vector3(0f, mag, 0f);
-        Vector3 fixedVecPlusZ = new Vector3(0f, 0f, mag);
-        Vector3 fixedVecPlus0 = new Vector3(0f, 0f, 0f);
-        Vector3 markerAhead = unitVecAhead * mag;
-        Vector3 markerAbove = unitVecAbove * mag;
-
-        // --- Update node -----------------------
-        //ModelNode.LookAt(vecAhead, vecAbove);
+        // Update node position and orientation
         ModelNode.Position = vecPos;
-        //ModelResourceNode.LookAt(Vector3.Forward, Vector3.Up);
         ModelNode.LookAt(vecAhead, vecAbove);
 
-        // NodeMarkerZero.Position  = Vector3.Zero;
-        // NodeMarkerAbove.Position = fixedVecPlusY; //diffAbove;
-        // NodeMarkerAhead.Position = fixedVecPlusZ; //diffAhead;
-
-        // NodeMarkerZero.Position  = vecPos;
-        // NodeMarkerAbove.Position = vecAbove; //diffAbove;
-        // NodeMarkerAhead.Position = vecAhead; //diffAhead;
-
+        // Update camera position and orientation
         FssXYZPoint camOffsetXYZ = CameraOffset.ToXYZ();
-        ModelCamera.Position = new Vector3((float)camOffsetXYZ.X, (float)camOffsetXYZ.Y, (float)camOffsetXYZ.Z);
-
-        //ModelCamera.Position = new Vector3(0.44f, 0.46f, -0.7f);
-        //ModelCamera.LookAt(Vector3.Zero, Vector3.Up);
+        ModelCamera.Position = new Vector3((float)camOffsetXYZ.X, -(float)camOffsetXYZ.Y, -(float)camOffsetXYZ.Z);
+        ModelCamera.LookAt(vecPos, vecAbove);
     }
 }
