@@ -28,7 +28,8 @@ public partial class FssWindowHandler : Window
         LabelUpdateTimer.Elapsed += OnUpdateTimerElapsed;
         LabelUpdateTimer.Start();
 
-        UpdateLabel("Welcome to the FSS Command Line Interface!");
+        CallDeferred(nameof(ClearLabel));
+        OnCommandSubmitted("version");
     }
 
     // Function to handle the close_requested signal
@@ -48,13 +49,34 @@ public partial class FssWindowHandler : Window
         FssCentralLog.AddEntry($"CLIWindow OnCommandSubmitted: {newText}");
 
 
-        // Process the command
-        FssAppFactory.Instance.ConsoleInterface.AddInput(newText);
-
+        if (newText == "clear" || newText == "cls")
+        {
+            CallDeferred(nameof(ClearLabel));
+        }
+        else
+        {
+            // Process the command
+            //FssAppFactory.Instance.ConsoleInterface.Start();
+            FssAppFactory.Instance.ConsoleInterface.AddInput(newText);
+        }
 
         // Clear the CommandEntryEdit
-        CommandEntryEdit.Clear();
+        CallDeferred(nameof(ClearCommandEdit));
+    }
+
+    // --------------------------------------------------------------------------------------------
+
+    // Functions perform actions on the labels. Have to be done on the main thread, which is what the CallDeferred function does.
+
+    public void ClearCommandEdit()
+    {
         CommandEntryEdit.Text = "";
+    }
+
+    public void ClearLabel()
+    {
+        CommandResponseLabel.Text = "";
+        ScrollToBottom();
     }
 
     // Function to programmatically update the label
@@ -68,6 +90,16 @@ public partial class FssWindowHandler : Window
         // ScrollToBottom();
     }
 
+    public void UpdateLabelFromConsole()
+    {
+        while (FssAppFactory.Instance.ConsoleInterface.HasOutput())
+        {
+            string newContent = FssAppFactory.Instance.ConsoleInterface.GetOutput();
+            GD.Print($"CLIWindow UpdateLabelFromConsole: {newContent}");
+            UpdateLabel(newContent);
+        }
+    }
+
     private void ScrollToBottom()
     {
         ScrollContainer.ScrollVertical = (int)(ScrollContainer.GetVScrollBar().MaxValue);
@@ -76,12 +108,7 @@ public partial class FssWindowHandler : Window
     // Function to update the label periodically
     private void OnUpdateTimerElapsed(object sender, ElapsedEventArgs e)
     {
-        while (FssAppFactory.Instance.ConsoleInterface.HasOutput())
-        {
-            string newContent = FssAppFactory.Instance.ConsoleInterface.GetOutput();
-            GD.Print($"CLIWindow OnUpdateTimerElapsed: {newContent}");
-            UpdateLabel(newContent);
-        }
+        CallDeferred(nameof(UpdateLabelFromConsole));
     }
 
 

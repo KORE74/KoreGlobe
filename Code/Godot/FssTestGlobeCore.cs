@@ -6,6 +6,10 @@ public partial class FssTestGlobeCore : Node3D
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
+
+        var x = FssAppFactory.Instance;
+
+
         // Output a message to the internal logging system
         FssCentralLog.AddEntry($"FssTestFssCore // _Ready");
 

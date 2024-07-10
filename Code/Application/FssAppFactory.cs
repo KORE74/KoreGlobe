@@ -2,6 +2,8 @@ using System;
 
 using FssNetworking;
 
+using Godot;
+
 // Class to construct the main classes in the application and link them together, in lieu
 // of a globals file that would publicly expose the main classes.
 
@@ -37,6 +39,7 @@ public class FssAppFactory
     {
         get
         {
+            //GD.Print("FssAppFactory.Instance");
             lock (lockObject)  // Note: This locks per-thread, so can recursively call within the same thread.
             {
                 if (IsInitializing)
@@ -70,6 +73,8 @@ public class FssAppFactory
     {
         // Create the objects
         FssCentralLog.AddEntry("Creating FssAppFactory objects");
+        GD.Print("FssAppFactory");
+
         ConsoleInterface = new FssConsole();
         EventDriver      = new FssEventDriver();
         PlatformManager  = new FssPlatformManager();
@@ -83,7 +88,7 @@ public class FssAppFactory
         //EventDriver.ConsoleInterface = ConsoleInterface;
 
         //EventDriver.SetupTestPlatforms();
-    }
 
-    private FssAppFactory _I = FssAppFactory.Instance;
+        ConsoleInterface.Start();
+    }
 }

@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Linq;
 
+using Godot;
+
 #nullable enable
 
 // Class to run a thread for command line input.
@@ -34,12 +36,11 @@ public class FssConsole
 
     public FssConsole()
     {
+        GD.Print("FssConsole: Constructor");
         running = false;
 
         // Register command handlers
         InitializeCommands();
-
-        Start();
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -48,6 +49,8 @@ public class FssConsole
 
     public void Start()
     {
+        GD.Print("Starting console thread...");
+        FssCentralLog.AddEntry($"Starting console thread... ({commandHandlers.Count} Commands.)");
         running = true;
         consoleThread = new Thread(ConsoleLoop);
         consoleThread?.Start();
@@ -100,7 +103,9 @@ public class FssConsole
     private void ConsoleLoop()
     {
         FssCentralLog.AddEntry("Console thread starting...");
-        OutputQueue.AddString("FSS Console");
+
+        GD.Print("Console thread starting...");
+
         while (running)
         {
             // Wait for input trigger
