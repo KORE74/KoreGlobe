@@ -1,13 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://bkhif7hl6psi5"]
+[gd_scene load_steps=8 format=3 uid="uid://bkhif7hl6psi5"]
 
 [ext_resource type="Script" path="res://Code/Godot/Util/FssCameraMover.cs" id="2_3c077"]
 [ext_resource type="Script" path="res://Code/Godot/FssTestCylinder2.cs" id="2_xyvg4"]
 [ext_resource type="Script" path="res://Code/Godot/FssWedgeBuilder.cs" id="3_i52xv"]
 [ext_resource type="Script" path="res://Code/Godot/TestLabelMaker.cs" id="5_5jdg7"]
 [ext_resource type="Script" path="res://Code/Godot/FssTestGlobeCore.cs" id="5_molmv"]
-[ext_resource type="Theme" uid="uid://djwxcxhu87cro" path="res://Themes/Theme_v001.tres" id="6_jbwbd"]
 [ext_resource type="Script" path="res://Code/Godot/TestModel.cs" id="7_f5p1r"]
-[ext_resource type="Material" uid="uid://b57vud2deylof" path="res://Resources/MenuTransparency.tres" id="7_msck2"]
 [ext_resource type="Script" path="res://Code/Godot/UI/FssWindowHandler.cs" id="7_padcc"]
 
 [node name="Node3D" type="Node3D"]
@@ -46,55 +44,47 @@ script = ExtResource("3_i52xv")
 [node name="GlobeCore" type="Node3D" parent="GlobeRoot"]
 script = ExtResource("5_molmv")
 
-[node name="MenuBar" type="MenuBar" parent="."]
-layout_direction = 2
-offset_left = 52.0
-offset_top = 11.0
-offset_right = 240.0
-offset_bottom = 45.0
-
-[node name="MenuButton" type="MenuButton" parent="MenuBar"]
-auto_translate_mode = 1
-layout_mode = 0
-offset_left = 23.0
-offset_top = 53.0
-offset_right = 76.0
-offset_bottom = 84.0
-theme = ExtResource("6_jbwbd")
-text = "Menu"
-
-[node name="MenuBar" type="MenuBar" parent="MenuBar/MenuButton"]
-layout_mode = 0
-offset_left = 25.0
-offset_top = 27.0
-offset_right = 65.0
-offset_bottom = 67.0
-
-[node name="MenuButton2" type="MenuButton" parent="MenuBar/MenuButton/MenuBar"]
-layout_mode = 0
-offset_right = 35.0
-offset_bottom = 31.0
-text = "File"
-switch_on_hover = true
-
-[node name="PopupMenu" type="PopupMenu" parent="MenuBar/MenuButton"]
-
-[node name="Window" type="Window" parent="."]
+[node name="CLIWindow" type="Window" parent="."]
 positional_shadow_atlas_16_bits = false
+title = "Command Line"
 initial_position = 2
-size = Vector2i(350, 200)
+size = Vector2i(400, 250)
 script = ExtResource("7_padcc")
 
-[node name="CheckButton" type="CheckButton" parent="Window"]
+[node name="CLIWindowLayout" type="VBoxContainer" parent="CLIWindow"]
 clip_contents = true
-offset_left = 20.0
-offset_top = 20.0
-offset_right = 153.0
-offset_bottom = 51.0
-text = "Enable XYZ"
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-material = ExtResource("7_msck2")
+[node name="ScrollContainer" type="ScrollContainer" parent="CLIWindow/CLIWindowLayout"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="CommandResponseLabel" type="Label" parent="CLIWindow/CLIWindowLayout/ScrollContainer"]
 clip_contents = true
-offset_right = 788.0
-offset_bottom = 40.0
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "afasfsdfasf sdf asdf das fadsf das das fdas ffas f faf 
+asdf sadf sd fasf s
+sdf sda fdsf dsa fff asdf safda 
+sadf asfd asfd asd fasdf adsf af
+asdf as fadf asdf asdf asfa s fa
+
+fafd asfd af asf
+as fsdaf asdf sdf adsf 
+as dfdasf asf adsf as fas fasf 
+sadf as fasdf sadf sad as
+asfasd asd fads asf adsf ads "
+clip_text = true
+text_overrun_behavior = 1
+
+[node name="CommandEntryEdit" type="LineEdit" parent="CLIWindow/CLIWindowLayout"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
