@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 
+#nullable enable
+
 public class FssRecieverPattern
 {
     public string Name { get; set; } = "";

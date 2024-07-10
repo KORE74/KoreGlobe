@@ -1,5 +1,7 @@
 using System;
 
+#nullable enable
+
 // FssPlatformElementOperations: Utility class to factor out all of the element searching and management operations, and avoid cluttering the platform class
 
 public static class FssPlatformElementOperations

@@ -5,6 +5,8 @@ using FssNetworking;
 // Class to construct the main classes in the application and link them together, in lieu
 // of a globals file that would publicly expose the main classes.
 
+#nullable enable
+
 public class FssAppFactory
 {
     // --------------------------------------------------------------------------------------------

@@ -325,7 +325,7 @@ public class FssConsole
                 string tilecodeStr = args[2];
                 int horizRes = int.Parse(args[3]);
 
-                EventDriver?.CreateTileEle(tilecodeStr, horizRes);
+                // EventDriver?.CreateTileEle(tilecodeStr, horizRes);
                 break;
             }
             // case "map":

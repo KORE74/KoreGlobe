@@ -72,9 +72,9 @@ public struct FssLLALocation
         this.HeightM = 0;
     }
 
-    public static FssLLAPoint Zero
+    public static FssLLALocation Zero
     {
-        get { return new FssLLAPoint { LatRads = 0.0, LonRads = 0.0, HeightM = 0.0 }; }
+        get { return new FssLLALocation { LatRads = 0.0, LonRads = 0.0, HeightM = 0.0 }; }
     }
 
     // Function to return an LLA position on the ground, either using the default MSL value, or an optional elevation above MSL in metres.

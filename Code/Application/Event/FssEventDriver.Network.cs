@@ -3,6 +3,8 @@ using System;
 
 using FssNetworking;
 
+#nullable enable
+
 // Design Decisions:
 // - The FssEventDriver is the top level class that manages data. Commands and Tasks interact with the business logic through this point.
 

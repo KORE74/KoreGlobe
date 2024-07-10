@@ -42,7 +42,7 @@ public class FssXYZPoint : FssXYZ
 
     // Return a zero point as a default value
     // Example: FssXYZPoint newPos = FssXYZPoint.Zero();
-    public static FssXYZPoint Zero() => new FssXYZPoint(0, 0, 0);
+    public static FssXYZPoint Zero => new FssXYZPoint(0, 0, 0);
 
     // --------------------------------------------------------------------------------------------
     // Basic operations
@@ -100,7 +100,7 @@ public class FssXYZPoint : FssXYZ
     // - operator overload for subtracting points
     public static FssXYZPoint operator -(FssXYZPoint a, FssXYZPoint b)         { return new FssXYZPoint(a.X - b.X, a.Y - b.Y, a.Z - b.Z); }
 
-    // * operator overload for scaling a  
+    // * operator overload for scaling a
     public static FssXYZPoint operator *(FssXYZPoint a, double scaleFactor)    { return new FssXYZPoint(a.X * scaleFactor, a.Y * scaleFactor, a.Z * scaleFactor); }
     public static FssXYZPoint operator *(double scaleFactor, FssXYZPoint a)    { return new FssXYZPoint(a.X * scaleFactor, a.Y * scaleFactor, a.Z * scaleFactor); }
 

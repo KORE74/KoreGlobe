@@ -10,25 +10,27 @@ public class FssPlatformRouteSimple : FssPlatformRoute
 
     public override FssLLAPoint PositionForTime(float simulationTimeSecs)
     {
-        // Get the total route distance
-        double distRoute = StartPoint.CurvedDistanceToM(EndPoint);
+        // // Get the total route distance
+        // double distRoute = StartPoint.CurvedDistanceToM(EndPoint);
 
-        // Return a default value if route is too short.
-        if (distRoute < FssConsts.ArbitraryMinValue)
-            return StartPoint;
+        // // Return a default value if route is too short.
+        // if (distRoute < FssConsts.ArbitraryMinValue)
+        //     return StartPoint;
 
-        // Find the required distance for the time
-        double distForTime = SpeedMPS * simulationTimeSecs;
+        // // Find the required distance for the time
+        // double distForTime = SpeedMPS * simulationTimeSecs;
 
-        // Return the end point if the route is complete
-        if (distForTime > distRoute)
-            return EndPoint;
+        // // Return the end point if the route is complete
+        // if (distForTime > distRoute)
+        //     return EndPoint;
 
-        // Calc the mid-route point
-        double distFraction = distForTime / distRoute;
-        FssLLAPoint routeLLA = StartPoint.RhumbLineLerp(EndPoint, distFraction);
+        // // Calc the mid-route point
+        // double distFraction = distForTime / distRoute;
+        // FssLLAPoint routeLLA = StartPoint.RhumbLineLerp(EndPoint, distFraction);
 
-        return routeLLA;
+        // return routeLLA;
+
+        return FssLLAPoint.Zero;
     }
 
 

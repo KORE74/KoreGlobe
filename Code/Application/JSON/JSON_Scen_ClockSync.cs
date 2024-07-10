@@ -17,7 +17,8 @@ namespace FssJSON
 
         public float ScenTimeSecs
         {
-            get { TimeSpan ts = TimeFunctions.ParseTimeString(ScenTimeHMS); return (float)ts.TotalSeconds; }
+            // get { TimeSpan ts = TimeFunctions.ParseTimeString(ScenTimeHMS); return (float)ts.TotalSeconds; }
+            get { return 0; }
         }
 
         // -----------------------

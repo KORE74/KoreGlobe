@@ -87,14 +87,14 @@ namespace FssJSON
 
         public double DetectionRangeKms
         {
-            get { return (DetectionRangeMtrs * FssConsts.MetresToKmMultiplier); }
-            set { DetectionRangeMtrs = (value * FssConsts.KmToMetresMultiplier); }
+            get { return (DetectionRangeMtrs * FssPosConsts.MetresToKmMultiplier); }
+            set { DetectionRangeMtrs = (value * FssPosConsts.KmToMetresMultiplier); }
         }
 
         public double DetectionRangeRxKms
         {
-            get { return (DetectionRangeRxMtrs * FssConsts.MetresToKmMultiplier); }
-            set { DetectionRangeRxMtrs = (value * FssConsts.KmToMetresMultiplier); }
+            get { return (DetectionRangeRxMtrs * FssPosConsts.MetresToKmMultiplier); }
+            set { DetectionRangeRxMtrs = (value * FssPosConsts.KmToMetresMultiplier); }
         }
 
         public FssAzElBox AzElBox()

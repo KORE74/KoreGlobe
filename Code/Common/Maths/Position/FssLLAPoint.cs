@@ -307,6 +307,15 @@ public struct FssLLAPoint
     }
 
     // ------------------------------------------------------------------------
+
+    public FssLLAPoint PlusDeltaForTime(FssCourse course, double timeSecs)
+    {
+        double distM = course.SpeedMps * timeSecs;
+        FssRangeBearing rb = new FssRangeBearing() { RangeM = distM, BearingRads = course.HeadingRads };
+        return this.PlusRangeBearing(rb);
+    }
+
+    // ------------------------------------------------------------------------
     // #MARK: Polar Offset
     // ------------------------------------------------------------------------
 

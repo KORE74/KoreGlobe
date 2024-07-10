@@ -17,29 +17,29 @@ public partial class FssEventDriver
     public void AddPlatform(string platName, string platType)
     {
         // Create a new platform
-        if (FssAppFactory.Instance.PlatformManager == null)
-            FssCentralLog.AddEntry("E00002: ERROR ERROR ERROR: Platform Manager not found in FssAppFactory.Instance");
+        // if (FssAppFactory.Instance.PlatformManager == null)
+        //     FssCentralLog.AddEntry("E00002: ERROR ERROR ERROR: Platform Manager not found in FssAppFactory.Instance");
 
-        FssPlatform? newPlat = FssAppFactory.Instance.PlatformManager.Add(platName);
-        if (newPlat == null)
-        {
-            FssCentralLog.AddEntry($"E00001: Platform {platName} not created, already exists.");
-        }
-            return;
+        // FssPlatform? newPlat = FssAppFactory.Instance.PlatformManager.Add(platName);
+        // if (newPlat == null)
+        // {
+        //     FssCentralLog.AddEntry($"E00001: Platform {platName} not created, already exists.");
+        // }
+        // return;
 
-        newPlat.Type = platType;
+        // newPlat.Type = platType;
     }
 
     public void SetPlatformStartLLA(string platName, FssLLALocation loc)
     {
-        // Get the platform
-        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
+        // // Get the platform
+        // FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
 
-        if (platform == null)
-            return;
+        // if (platform == null)
+        //     return;
 
-        // Set the platform's start location
-        platform.Kinetics.StartPosition = loc.ToLLA();
+        // // Set the platform's start location
+        // platform.Kinetics.StartPosition = loc.ToLLA();
     }
 
     public FssLLAPoint PlatformCurrLLA(string platName)
