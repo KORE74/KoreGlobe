@@ -9,6 +9,10 @@ using FssNetworking;
 
 public class FssAppFactory
 {
+
+
+    // FssAppFactory.Instance.ConsoleInterface.
+
     // --------------------------------------------------------------------------------------------
 
     public FssConsole         ConsoleInterface { get; private set; }
@@ -66,7 +70,7 @@ public class FssAppFactory
     {
         // Create the objects
         FssCentralLog.AddEntry("Creating FssAppFactory objects");
-        //ConsoleInterface = new FssConsole();
+        ConsoleInterface = new FssConsole();
         EventDriver      = new FssEventDriver();
         PlatformManager  = new FssPlatformManager();
         NetworkCommsHub  = new FssNetworkCommsHub();
@@ -80,4 +84,6 @@ public class FssAppFactory
 
         //EventDriver.SetupTestPlatforms();
     }
+
+    private FssAppFactory _I = FssAppFactory.Instance;
 }

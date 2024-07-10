@@ -1,126 +1,123 @@
-using System;
-using System.Threading;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Linq;
+// using System;
+// using System.Threading;
+// using System.Collections.Generic;
+// using System.Linq.Expressions;
 
-#nullable enable
+// #nullable enable
 
-// Class to run a thread for command line input.
-// This class can't do anything, it must delgate all actual processing to the FssEventDriver class.
-public class FssConsole2
-{
-    // Thread control
-    private Thread? consoleThread = null;
-    private bool running;
+// // Class to run a thread for command line input.
+// // This class can't do anything, it must delgate all actual processing to the FssEventDriver class.
+// public class FssConsole
+// {
+//     // Thread control
+//     private Thread? consoleThread = null;
+//     private bool running;
+//     private Dictionary<string, Action<string[]>> commandHandlers;
 
-    private readonly List<FssCommand> commandHandlers = new List<FssCommand>();
+//     public FssEventDriver? EventDriver;
 
-    public FssEventDriver? EventDriver;
+//     // ---------------------------------------------------------------------------------------------
+//     // Constructor
+//     // ---------------------------------------------------------------------------------------------
 
-    // ---------------------------------------------------------------------------------------------
-    // Constructor
-    // ---------------------------------------------------------------------------------------------
+//     public FssConsole()
+//     {
+//         running = false;
 
-    public FssConsole2()
-    {
-        running = false;
+//         commandHandlers = new Dictionary<string, Action<string[]>>();
+//         InitializeCommands();
+//     }
 
-        // Register command handlers
-        InitializeCommands();
-    }
+//     // ---------------------------------------------------------------------------------------------
+//     // Thread control
+//     // ---------------------------------------------------------------------------------------------
 
-    // ---------------------------------------------------------------------------------------------
-    // Thread control
-    // ---------------------------------------------------------------------------------------------
+//     public void Start()
+//     {
+//         running = true;
+//         consoleThread = new Thread(ConsoleLoop);
+//         consoleThread?.Start();
+//     }
 
-    public void Start()
-    {
-        running = true;
-        consoleThread = new Thread(ConsoleLoop);
-        consoleThread?.Start();
-    }
+//     public void Stop()
+//     {
+//         running = false;
+//         consoleThread = null;
+//     }
 
-    public void Stop()
-    {
-        running = false;
-        consoleThread = null;
-    }
+//     public void WaitForExit()
+//     {
+//         FssCentralLog.AddEntry("Network: Waiting on Join()...");
+//         consoleThread?.Join(); // This will block until consoleThread finishes execution
+//         FssCentralLog.AddEntry("Network: Join() returned.");
+//     }
 
-    public void WaitForExit()
-    {
-        Console.WriteLine("Waiting on Join()...");
-        consoleThread?.Join(); // This will block until consoleThread finishes execution
-        Console.WriteLine("Join() returned.");
-    }
+//     // ---------------------------------------------------------------------------------------------
+//     // Console commands setup and run
+//     // ---------------------------------------------------------------------------------------------
 
-    // ---------------------------------------------------------------------------------------------
-    // Console commands setup and run
-    // ---------------------------------------------------------------------------------------------
+//     private void InitializeCommands()
+//     {
+//         // Register commands and their handlers here
 
-    private void InitializeCommands()
-    {
-        // Register commands and their handlers here
+//         // General app control commands
+//         commandHandlers.Add("help", CmdHelp);
+//         commandHandlers.Add("version", CmdVersion);
+//         commandHandlers.Add("#", CmdComment);
+//         commandHandlers.Add("quit", CmdQuit);
+//         commandHandlers.Add("exit", CmdQuit);
+//         commandHandlers.Add("runfile", CmdRunFile);
 
-        // General app control commands
-        commandHandlers.Add(new FssCommandVersion());
+//         // MapUtils
+//         commandHandlers.Add("tilecode", CmdTileCode);
 
-        // commandHandlers.Add("help", CmdHelp);
-        // commandHandlers.Add("version", CmdVersion);
-        // commandHandlers.Add("#", CmdComment);
-        // commandHandlers.Add("quit", CmdQuit);
-        // commandHandlers.Add("exit", CmdQuit);
-        // commandHandlers.Add("runfile", CmdRunFile);
+//         // Map handlers
+//         commandHandlers.Add("setroot", CmdSetRoot);
+//         commandHandlers.Add("getroot", CmdGetRoot);
+//         commandHandlers.Add("create", CmdCreate);
 
-        // // MapUtils
-        // commandHandlers.Add("tilecode", CmdTileCode);
+//         // Networking
+//         commandHandlers.Add("network", CmdNetwork);
+//     }
 
-        // // Map handlers
-        // commandHandlers.Add("setroot", CmdSetRoot);
-        // commandHandlers.Add("getroot", CmdGetRoot);
-        // commandHandlers.Add("create", CmdCreate);
+//     private void ConsoleLoop()
+//     {
+//         FssCentralLog.AddEntry("Console: thread started.");
+//         while (running)
+//         {
+//             string? input = Console.ReadLine();
+//             ProcessCommand(input ?? string.Empty);
+//         }
+//         FssCentralLog.AddEntry("Console: thread ended.");
+//     }
 
-        // // Networking
-        // commandHandlers.Add("network", CmdNetwork);
-    }
+//     private void ProcessCommand(string input)
+//     {
+//         // Split the input into tokens
+//         string[] tokens = input.Split(' ');
+//         string command = tokens[0].ToLower().Trim();
 
-    private void ConsoleLoop()
-    {
-        while (running)
-        {
-            Console.Write("> ");
-            string? input = Console.ReadLine();
-            ProcessCommand(input ?? string.Empty);
-        }
-        Console.WriteLine("Console thread exiting...");
-    }
+//         // ignore run attempt if the string is plainly invalid
+//         if (string.IsNullOrEmpty(command))
+//             return;
 
-    private void ProcessCommand(string input)
-    {
-        // ignore run attempt if the string is plainly invalid
-        if (string.IsNullOrEmpty(input))
-            return;
+//         // echo the command
+//         // Console.WriteLine($">> Running >> {input}");
 
-        // Split the input into tokens
-        var inputParts = input.Trim().Split(' ').ToList();
+//         if (commandHandlers.TryGetValue(command, out Action<string[]>? handler))
+//         {
+//             handler?.Invoke(tokens);
+//         }
+//         else
+//         {
+//             Console.WriteLine("Unknown command. Type 'help' for a list of commands.");
+//         }
+//     }
 
-        foreach (var currCmd in commandHandlers)
-        {
-            if (currCmd.Matches(inputParts))
-            {
-                // Pass remaining parts as parameters to the command
-                currCmd.Execute(inputParts.Skip(currCmd.SignatureCount).ToList()); 
-                return;
-            }
-        }
-
-        Console.WriteLine("Unknown command. Type 'help' for a list of commands.");
-    }
-
-    // ---------------------------------------------------------------------------------------------
-    // Command functions:
-    // ---------------------------------------------------------------------------------------------
-    // - private void Cmd<Name>(string[] args)
+//     // ---------------------------------------------------------------------------------------------
+//     // Command functions:
+//     // ---------------------------------------------------------------------------------------------
+//     // - private void Cmd<Name>(string[] args)
 
 //     private void CmdHelp(string[] args)
 //     {
@@ -225,50 +222,50 @@ public class FssConsole2
 
 //         switch (commandtype)
 //         {
-//             case "frompos":
-//                 {
-//                     if (args.Length != 5)
-//                     {
-//                         Console.WriteLine("Usage: tilecode frompos <lvl> <latDegs> <lonDegs>");
-//                         return;
-//                     }
+//             // case "frompos":
+//             //     {
+//             //         if (args.Length != 5)
+//             //         {
+//             //             Console.WriteLine("Usage: tilecode frompos <lvl> <latDegs> <lonDegs>");
+//             //             return;
+//             //         }
 
-//                     int   lvl     = int.Parse(args[2]);
-//                     float latDegs = float.Parse(args[3]);
-//                     float lonDegs = float.Parse(args[4]);
+//             //         int   lvl     = int.Parse(args[2]);
+//             //         float latDegs = float.Parse(args[3]);
+//             //         float lonDegs = float.Parse(args[4]);
 
-//                     // Convert the user-input geo lat/lon to a map (0,0 top left) lat/lon for the tile operations
-//                     float mapLatDegs = (float)FssMapTileCode.GeoLatToMapLat(latDegs);
-//                     float mapLonDegs = (float)FssMapTileCode.GeoLonToMapLon(lonDegs);
-//                     Console.WriteLine($"GeoLatDegs to MapLatDegs: {latDegs:F2} -> {mapLatDegs:F2}");
-//                     Console.WriteLine($"GeoLonDegs to MapLonDegs: {lonDegs:F2} -> {mapLonDegs:F2}");
+//             //         // Convert the user-input geo lat/lon to a map (0,0 top left) lat/lon for the tile operations
+//             //         float mapLatDegs = (float)FssMapTileCode.GeoLatToMapLat(latDegs);
+//             //         float mapLonDegs = (float)FssMapTileCode.GeoLonToMapLon(lonDegs);
+//             //         Console.WriteLine($"GeoLatDegs to MapLatDegs: {latDegs:F2} -> {mapLatDegs:F2}");
+//             //         Console.WriteLine($"GeoLonDegs to MapLonDegs: {lonDegs:F2} -> {mapLonDegs:F2}");
 
-//                     FssMapTileCode tileCode = new FssMapTileCode(lvl, mapLatDegs, mapLonDegs);
-//                     Console.WriteLine($"TileCodeStr: {tileCode.TileCodeStr}");
-//                 }
-//                 break;
-//             case "fromlvlpos":
-//                 {
-//                     if (args.Length != 5)
-//                     {
-//                         Console.WriteLine("Usage: tilecode fromlvlpos <lvl> <latDegs> <lonDegs>");
-//                         return;
-//                     }
+//             //         FssMapTileCode tileCode = new FssMapTileCode(lvl, mapLatDegs, mapLonDegs);
+//             //         Console.WriteLine($"TileCodeStr: {tileCode.TileCodeStr}");
+//             //     }
+//             //     break;
+//             // case "fromlvlpos":
+//             //     {
+//             //         if (args.Length != 5)
+//             //         {
+//             //             Console.WriteLine("Usage: tilecode fromlvlpos <lvl> <latDegs> <lonDegs>");
+//             //             return;
+//             //         }
 
-//                     int   lvl     = int.Parse(args[2]);
-//                     float latDegs = float.Parse(args[3]);
-//                     float lonDegs = float.Parse(args[4]);
+//             //         int   lvl     = int.Parse(args[2]);
+//             //         float latDegs = float.Parse(args[3]);
+//             //         float lonDegs = float.Parse(args[4]);
 
-//                     // Convert the user-input geo lat/lon to a map (0,0 top left) lat/lon for the tile operations
-//                     float mapLatDegs = (float)FssMapTileCode.GeoLatToMapLat(latDegs);
-//                     float mapLonDegs = (float)FssMapTileCode.GeoLonToMapLon(lonDegs);
-//                     Console.WriteLine($"GeoLatDegs to MapLatDegs: {latDegs:F2} -> {mapLatDegs:F2}");
-//                     Console.WriteLine($"GeoLonDegs to MapLonDegs: {lonDegs:F2} -> {mapLonDegs:F2}");
+//             //         // Convert the user-input geo lat/lon to a map (0,0 top left) lat/lon for the tile operations
+//             //         float mapLatDegs = (float)FssMapTileCode.GeoLatToMapLat(latDegs);
+//             //         float mapLonDegs = (float)FssMapTileCode.GeoLonToMapLon(lonDegs);
+//             //         Console.WriteLine($"GeoLatDegs to MapLatDegs: {latDegs:F2} -> {mapLatDegs:F2}");
+//             //         Console.WriteLine($"GeoLonDegs to MapLonDegs: {lonDegs:F2} -> {mapLonDegs:F2}");
 
-//                     string tileCode = FssMapTileCode.GetTileCodeStr(lvl, (double)mapLatDegs, (double)mapLonDegs);
-//                     Console.WriteLine($"TileCodeStr: {tileCode}");
-//                 }
-//                 break;
+//             //         string tileCode = FssMapTileCode.GetTileCodeStr(lvl, (double)mapLatDegs, (double)mapLonDegs);
+//             //         Console.WriteLine($"TileCodeStr: {tileCode}");
+//             //     }
+//             //     break;
 //             case "fromstr":
 //                 {
 //                     if (args.Length != 3)
@@ -279,8 +276,8 @@ public class FssConsole2
 
 //                     string tilecodeStr = args[2];
 
-//                     FssMapTileCode tileCode = new FssMapTileCode(tilecodeStr);
-//                     Console.WriteLine($"TileCodeStr: {tileCode.TileCodeStr}");
+//                     // FssMapTileCode tileCode = new FssMapTileCode(tilecodeStr);
+//                     // Console.WriteLine($"TileCodeStr: {tileCode.TileCodeStr}");
 //                 }
 //                 break;
 //             default:
@@ -328,7 +325,7 @@ public class FssConsole2
 //                 string tilecodeStr = args[2];
 //                 int horizRes = int.Parse(args[3]);
 
-//                 EventDriver?.CreateTileEle(tilecodeStr, horizRes);
+//                 // EventDriver?.CreateTileEle(tilecodeStr, horizRes);
 //                 break;
 //             }
 //             // case "map":
@@ -408,5 +405,4 @@ public class FssConsole2
 //                 break;
 //         }
 //     }
-}
-
+// }

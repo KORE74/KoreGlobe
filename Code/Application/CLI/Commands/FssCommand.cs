@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 
 // FssCommand: The console can execute commands. This base class defines a signature for each one with some functionality
-// around that, and then a main execute command. Child classes may also need to access additional resouces in order 
+// around that, and then a main execute command. Child classes may also need to access additional resouces in order
 // to perform their tasks, these will be added to their specific constructor when they are added to the command list.
 
 public abstract class FssCommand
@@ -11,8 +11,8 @@ public abstract class FssCommand
 
     // Public property to expose the count of signature parameters
     public int SignatureCount => Signature.Count;
-    
-    public abstract void Execute(List<string> parameters);
+
+    public abstract string Execute(List<string> parameters);
 
     // Look through the signature and check it matches the leading terms of the input line.
     public bool Matches(List<string> inputParts)

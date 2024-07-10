@@ -1,7 +1,9 @@
 using System;
+using System.Text;
 using System.Threading;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Linq;
 
 #nullable enable
 
@@ -12,24 +14,36 @@ public class FssConsole
     // Thread control
     private Thread? consoleThread = null;
     private bool running;
-    private Dictionary<string, Action<string[]>> commandHandlers;
 
+    // List of command handlers (with a signature) we can select and exeute.
+    private readonly List<FssCommand> commandHandlers = new List<FssCommand>();
+
+    // Link to the EventDriver, an entity with an interface to action changes within the application.
     public FssEventDriver? EventDriver;
 
+    // Two lists to hold input and output strings for the console.
+    private FssThreadsafeStringList InputQueue  = new FssThreadsafeStringList();
+    private FssThreadsafeStringList OutputQueue = new FssThreadsafeStringList();
+
+    // Event to set on new input, to unblock the console thread to process new commands.
+    private AutoResetEvent InputEvent = new AutoResetEvent(false);
+
     // ---------------------------------------------------------------------------------------------
-    // Constructor
+    // #MARK: Constructor
     // ---------------------------------------------------------------------------------------------
 
     public FssConsole()
     {
         running = false;
 
-        commandHandlers = new Dictionary<string, Action<string[]>>();
+        // Register command handlers
         InitializeCommands();
+
+        Start();
     }
 
     // ---------------------------------------------------------------------------------------------
-    // Thread control
+    // #MARK: Thread control
     // ---------------------------------------------------------------------------------------------
 
     public void Start()
@@ -47,71 +61,105 @@ public class FssConsole
 
     public void WaitForExit()
     {
-        FssCentralLog.AddEntry("Network: Waiting on Join()...");
+        FssCentralLog.AddEntry("Waiting on Join()...");
         consoleThread?.Join(); // This will block until consoleThread finishes execution
-        FssCentralLog.AddEntry("Network: Join() returned.");
+        FssCentralLog.AddEntry("Join() returned.");
     }
 
     // ---------------------------------------------------------------------------------------------
-    // Console commands setup and run
+    // #MARK: InitializeCommands
     // ---------------------------------------------------------------------------------------------
 
     private void InitializeCommands()
     {
         // Register commands and their handlers here
+        FssCentralLog.AddEntry("FssConsole: Initializing commands...");
 
         // General app control commands
-        commandHandlers.Add("help", CmdHelp);
-        commandHandlers.Add("version", CmdVersion);
-        commandHandlers.Add("#", CmdComment);
-        commandHandlers.Add("quit", CmdQuit);
-        commandHandlers.Add("exit", CmdQuit);
-        commandHandlers.Add("runfile", CmdRunFile);
+        commandHandlers.Add(new FssCommandVersion());
+        commandHandlers.Add(new FssCommandExit());
 
-        // MapUtils
-        commandHandlers.Add("tilecode", CmdTileCode);
 
-        // Map handlers
-        commandHandlers.Add("setroot", CmdSetRoot);
-        commandHandlers.Add("getroot", CmdGetRoot);
-        commandHandlers.Add("create", CmdCreate);
+        // commandHandlers.Add("help", CmdHelp);
+        // commandHandlers.Add("version", CmdVersion);
+        // commandHandlers.Add("#", CmdComment);
+        // commandHandlers.Add("runfile", CmdRunFile);
 
-        // Networking
-        commandHandlers.Add("network", CmdNetwork);
+        // // MapUtils
+        // commandHandlers.Add("tilecode", CmdTileCode);
+
+        // // Map handlers
+        // commandHandlers.Add("setroot", CmdSetRoot);
+        // commandHandlers.Add("getroot", CmdGetRoot);
+        // commandHandlers.Add("create", CmdCreate);
+
+        // // Networking
+        // commandHandlers.Add("network", CmdNetwork);
     }
 
     private void ConsoleLoop()
     {
+        FssCentralLog.AddEntry("Console thread starting...");
+        OutputQueue.AddString("FSS Console");
         while (running)
         {
-            Console.Write("> ");
-            string? input = Console.ReadLine();
-            ProcessCommand(input ?? string.Empty);
+            // Wait for input trigger
+            InputEvent.WaitOne();
+            ProcessCommand();
         }
-        Console.WriteLine("Console thread exiting...");
+        FssCentralLog.AddEntry("Console thread exiting...");
     }
 
-    private void ProcessCommand(string input)
+    private void ProcessCommand()
     {
-        // Split the input into tokens
-        string[] tokens = input.Split(' ');
-        string command = tokens[0].ToLower().Trim();
-
-        // ignore run attempt if the string is plainly invalid
-        if (string.IsNullOrEmpty(command))
-            return;
-
-        // echo the command
-        // Console.WriteLine($">> Running >> {input}");
-
-        if (commandHandlers.TryGetValue(command, out Action<string[]>? handler))
+        // Loop while we have commands to process
+        while (!InputQueue.IsEmpty())
         {
-            handler?.Invoke(tokens);
+            // Get the string a space-delimit the parts
+            string inputLine = InputQueue.RetrieveString();
+            var inputParts = inputLine.Trim().Split(' ').ToList();
+
+            // Go through each of the registered command handlers looking for a match
+            foreach (var currCmd in commandHandlers)
+            {
+                if (currCmd.Matches(inputParts))
+                {
+                    // Pass remaining parts as parameters to the command
+                    string responseStr = currCmd.Execute(inputParts.Skip(currCmd.SignatureCount).ToList());
+                    OutputQueue.AddString(responseStr);
+                    break; // leave the current command loop - move back out to the next input line
+                }
+            }
         }
-        else
-        {
-            Console.WriteLine("Unknown command. Type 'help' for a list of commands.");
-        }
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    // #MARK: Input
+    // ---------------------------------------------------------------------------------------------
+
+    public void AddInput(string input)
+    {
+        InputQueue.AddString(input);
+        InputEvent.Set();
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    // #MARK: Output
+    // ---------------------------------------------------------------------------------------------
+
+    public bool HasOutput()
+    {
+        return !OutputQueue.IsEmpty();
+    }
+
+    public string GetOutput()
+    {
+        StringBuilder output = new StringBuilder();
+
+        while (!OutputQueue.IsEmpty())
+            output.AppendLine(OutputQueue.RetrieveString());
+
+        return output.ToString();
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -119,290 +167,291 @@ public class FssConsole
     // ---------------------------------------------------------------------------------------------
     // - private void Cmd<Name>(string[] args)
 
-    private void CmdHelp(string[] args)
-    {
-        Console.WriteLine("Available commands:");
-        foreach (var cmd in commandHandlers.Keys)
-        {
-            Console.WriteLine($"- {cmd}");
-        }
-    }
+//     private void CmdHelp(string[] args)
+//     {
+//         Console.WriteLine("Available commands:");
+//         foreach (var cmd in commandHandlers.Keys)
+//         {
+//             Console.WriteLine($"- {cmd}");
+//         }
+//     }
 
-    private void CmdVersion(string[] args)
-    {
-        Console.WriteLine($"Version: {FssGlobals.VersionString}");
-    }
+//     private void CmdVersion(string[] args)
+//     {
+//         Console.WriteLine($"Version: {FssGlobals.VersionString}");
+//     }
 
-    // ---------------------------------------------------------------------------------------------
+//     // ---------------------------------------------------------------------------------------------
 
-    // Command to run a file of commands - blocking on each one.
+//     // Command to run a file of commands - blocking on each one.
 
-    private void CmdRunFile(string[] args)
-    {
-        if (args.Length < 2)
-        {
-            Console.WriteLine("Usage: run <filename>");
-            return;
-        }
+//     private void CmdRunFile(string[] args)
+//     {
+//         if (args.Length < 2)
+//         {
+//             Console.WriteLine("Usage: run <filename>");
+//             return;
+//         }
 
-        string filename = args[1];
+//         string filename = args[1];
 
-        if (!System.IO.File.Exists(filename))
-        {
-            Console.WriteLine($"File does not exist: {filename}");
-            return;
-        }
+//         if (!System.IO.File.Exists(filename))
+//         {
+//             Console.WriteLine($"File does not exist: {filename}");
+//             return;
+//         }
 
-        Console.WriteLine($"Running file: {filename}");
+//         Console.WriteLine($"Running file: {filename}");
 
-        string[] lines = System.IO.File.ReadAllLines(filename);
+//         string[] lines = System.IO.File.ReadAllLines(filename);
 
-        foreach (string line in lines)
-        {
-            Console.WriteLine($"FILE>> {line}");
-            ProcessCommand(line);
-        }
-    }
+//         foreach (string line in lines)
+//         {
+//             Console.WriteLine($"FILE>> {line}");
+//             ProcessCommand(line);
+//         }
+//     }
 
-    // ---------------------------------------------------------------------------------------------
+//     // ---------------------------------------------------------------------------------------------
 
-    private void CmdComment(string[] args)
-    {
-    }
+//     private void CmdComment(string[] args)
+//     {
+//     }
 
-    private void CmdQuit(string[] args)
-    {
-        EventDriver?.ExitApplication();
-    }
+//     private void CmdQuit(string[] args)
+//     {
+//         EventDriver?.ExitApplication();
+//     }
 
-    // ---------------------------------------------------------------------------------------------
+//     // ---------------------------------------------------------------------------------------------
 
-    private void CmdSetRoot(string[] args)
-    {
-        if (args.Length < 2)
-        {
-            Console.WriteLine("Usage: setroot <path>");
-            return;
-        }
+//     private void CmdSetRoot(string[] args)
+//     {
+//         if (args.Length < 2)
+//         {
+//             Console.WriteLine("Usage: setroot <path>");
+//             return;
+//         }
 
-        string rootPath = args[1];
+//         string rootPath = args[1];
 
-        Console.WriteLine($"Setting root to: {rootPath}");
+//         Console.WriteLine($"Setting root to: {rootPath}");
 
-        EventDriver?.SetRootDir(rootPath);
+//         EventDriver?.SetRootDir(rootPath);
 
-        string? feedbackStr = EventDriver?.ReportRootDir();
-        Console.WriteLine($"Root dir: {feedbackStr}");
-    }
+//         string? feedbackStr = EventDriver?.ReportRootDir();
+//         Console.WriteLine($"Root dir: {feedbackStr}");
+//     }
 
-    private void CmdGetRoot(string[] args)
-    {
-        if (args.Length != 1)
-        {
-            Console.WriteLine("Usage: getroot");
-            return;
-        }
+//     private void CmdGetRoot(string[] args)
+//     {
+//         if (args.Length != 1)
+//         {
+//             Console.WriteLine("Usage: getroot");
+//             return;
+//         }
 
-        string? feedbackStr = EventDriver?.ReportRootDir();
-        Console.WriteLine($"Root dir: {feedbackStr}");
-    }
+//         string? feedbackStr = EventDriver?.ReportRootDir();
+//         Console.WriteLine($"Root dir: {feedbackStr}");
+//     }
 
-    // ---------------------------------------------------------------------------------------------
+//     // ---------------------------------------------------------------------------------------------
 
-    private void CmdTileCode(string[] args)
-    {
-        if (args.Length < 3)
-        {
-            Console.WriteLine("Usage: tilecode frompos <lvl> <latDegs> <lonDegs>");
-            Console.WriteLine("Usage: tilecode fromstr <tilecodestr>");
-            return;
-        }
+//     private void CmdTileCode(string[] args)
+//     {
+//         if (args.Length < 3)
+//         {
+//             Console.WriteLine("Usage: tilecode frompos <lvl> <latDegs> <lonDegs>");
+//             Console.WriteLine("Usage: tilecode fromstr <tilecodestr>");
+//             return;
+//         }
 
-        string commandtype = args[1];
+//         string commandtype = args[1];
 
-        switch (commandtype)
-        {
-            // case "frompos":
-            //     {
-            //         if (args.Length != 5)
-            //         {
-            //             Console.WriteLine("Usage: tilecode frompos <lvl> <latDegs> <lonDegs>");
-            //             return;
-            //         }
+//         switch (commandtype)
+//         {
+//             case "frompos":
+//                 {
+//                     if (args.Length != 5)
+//                     {
+//                         Console.WriteLine("Usage: tilecode frompos <lvl> <latDegs> <lonDegs>");
+//                         return;
+//                     }
 
-            //         int   lvl     = int.Parse(args[2]);
-            //         float latDegs = float.Parse(args[3]);
-            //         float lonDegs = float.Parse(args[4]);
+//                     int   lvl     = int.Parse(args[2]);
+//                     float latDegs = float.Parse(args[3]);
+//                     float lonDegs = float.Parse(args[4]);
 
-            //         // Convert the user-input geo lat/lon to a map (0,0 top left) lat/lon for the tile operations
-            //         float mapLatDegs = (float)FssMapTileCode.GeoLatToMapLat(latDegs);
-            //         float mapLonDegs = (float)FssMapTileCode.GeoLonToMapLon(lonDegs);
-            //         Console.WriteLine($"GeoLatDegs to MapLatDegs: {latDegs:F2} -> {mapLatDegs:F2}");
-            //         Console.WriteLine($"GeoLonDegs to MapLonDegs: {lonDegs:F2} -> {mapLonDegs:F2}");
+//                     // Convert the user-input geo lat/lon to a map (0,0 top left) lat/lon for the tile operations
+//                     float mapLatDegs = (float)FssMapTileCode.GeoLatToMapLat(latDegs);
+//                     float mapLonDegs = (float)FssMapTileCode.GeoLonToMapLon(lonDegs);
+//                     Console.WriteLine($"GeoLatDegs to MapLatDegs: {latDegs:F2} -> {mapLatDegs:F2}");
+//                     Console.WriteLine($"GeoLonDegs to MapLonDegs: {lonDegs:F2} -> {mapLonDegs:F2}");
 
-            //         FssMapTileCode tileCode = new FssMapTileCode(lvl, mapLatDegs, mapLonDegs);
-            //         Console.WriteLine($"TileCodeStr: {tileCode.TileCodeStr}");
-            //     }
-            //     break;
-            // case "fromlvlpos":
-            //     {
-            //         if (args.Length != 5)
-            //         {
-            //             Console.WriteLine("Usage: tilecode fromlvlpos <lvl> <latDegs> <lonDegs>");
-            //             return;
-            //         }
+//                     FssMapTileCode tileCode = new FssMapTileCode(lvl, mapLatDegs, mapLonDegs);
+//                     Console.WriteLine($"TileCodeStr: {tileCode.TileCodeStr}");
+//                 }
+//                 break;
+//             case "fromlvlpos":
+//                 {
+//                     if (args.Length != 5)
+//                     {
+//                         Console.WriteLine("Usage: tilecode fromlvlpos <lvl> <latDegs> <lonDegs>");
+//                         return;
+//                     }
 
-            //         int   lvl     = int.Parse(args[2]);
-            //         float latDegs = float.Parse(args[3]);
-            //         float lonDegs = float.Parse(args[4]);
+//                     int   lvl     = int.Parse(args[2]);
+//                     float latDegs = float.Parse(args[3]);
+//                     float lonDegs = float.Parse(args[4]);
 
-            //         // Convert the user-input geo lat/lon to a map (0,0 top left) lat/lon for the tile operations
-            //         float mapLatDegs = (float)FssMapTileCode.GeoLatToMapLat(latDegs);
-            //         float mapLonDegs = (float)FssMapTileCode.GeoLonToMapLon(lonDegs);
-            //         Console.WriteLine($"GeoLatDegs to MapLatDegs: {latDegs:F2} -> {mapLatDegs:F2}");
-            //         Console.WriteLine($"GeoLonDegs to MapLonDegs: {lonDegs:F2} -> {mapLonDegs:F2}");
+//                     // Convert the user-input geo lat/lon to a map (0,0 top left) lat/lon for the tile operations
+//                     float mapLatDegs = (float)FssMapTileCode.GeoLatToMapLat(latDegs);
+//                     float mapLonDegs = (float)FssMapTileCode.GeoLonToMapLon(lonDegs);
+//                     Console.WriteLine($"GeoLatDegs to MapLatDegs: {latDegs:F2} -> {mapLatDegs:F2}");
+//                     Console.WriteLine($"GeoLonDegs to MapLonDegs: {lonDegs:F2} -> {mapLonDegs:F2}");
 
-            //         string tileCode = FssMapTileCode.GetTileCodeStr(lvl, (double)mapLatDegs, (double)mapLonDegs);
-            //         Console.WriteLine($"TileCodeStr: {tileCode}");
-            //     }
-            //     break;
-            case "fromstr":
-                {
-                    if (args.Length != 3)
-                    {
-                        Console.WriteLine("Usage: tilecode fromstr <tilecodestr>");
-                        return;
-                    }
+//                     string tileCode = FssMapTileCode.GetTileCodeStr(lvl, (double)mapLatDegs, (double)mapLonDegs);
+//                     Console.WriteLine($"TileCodeStr: {tileCode}");
+//                 }
+//                 break;
+//             case "fromstr":
+//                 {
+//                     if (args.Length != 3)
+//                     {
+//                         Console.WriteLine("Usage: tilecode fromstr <tilecodestr>");
+//                         return;
+//                     }
 
-                    string tilecodeStr = args[2];
+//                     string tilecodeStr = args[2];
 
-                    // FssMapTileCode tileCode = new FssMapTileCode(tilecodeStr);
-                    // Console.WriteLine($"TileCodeStr: {tileCode.TileCodeStr}");
-                }
-                break;
-            default:
-                Console.WriteLine("Unknown command type: " + commandtype);
-                break;
-        }
+//                     FssMapTileCode tileCode = new FssMapTileCode(tilecodeStr);
+//                     Console.WriteLine($"TileCodeStr: {tileCode.TileCodeStr}");
+//                 }
+//                 break;
+//             default:
+//                 Console.WriteLine("Unknown command type: " + commandtype);
+//                 break;
+//         }
 
 
-    }
+//     }
 
-    // ---------------------------------------------------------------------------------------------
+//     // ---------------------------------------------------------------------------------------------
 
-    private void CmdCreate(string[] args)
-    {
-        if (args.Length < 2)
-        {
-            Console.WriteLine("Usage: create dirs // Create the basic directory structure for a previously defined root directory");
-            //Console.WriteLine("Usage: create tile <TileCode> <LonRes> // LatRes is autocalculated to keep the tile square");
-            return;
-        }
+//     private void CmdCreate(string[] args)
+//     {
+//         if (args.Length < 2)
+//         {
+//             Console.WriteLine("Usage: create dirs // Create the basic directory structure for a previously defined root directory");
+//             //Console.WriteLine("Usage: create tile <TileCode> <LonRes> // LatRes is autocalculated to keep the tile square");
+//             return;
+//         }
 
-        string type = args[1];
+//         string type = args[1];
 
-        switch (type)
-        {
-            case "dirs":
-            {
-                if (args.Length != 2)
-                {
-                    Console.WriteLine("Usage: create base // Create the basic directory structure for a previously defined root directory");
-                    return;
-                }
-                Console.WriteLine("Creating base directories...");
-                EventDriver?.CreateBaseDirectories();
-                break;
-            }
+//         switch (type)
+//         {
+//             case "dirs":
+//             {
+//                 if (args.Length != 2)
+//                 {
+//                     Console.WriteLine("Usage: create base // Create the basic directory structure for a previously defined root directory");
+//                     return;
+//                 }
+//                 Console.WriteLine("Creating base directories...");
+//                 EventDriver?.CreateBaseDirectories();
+//                 break;
+//             }
 
-            case "tileele":
-            {
-                if (args.Length < 4)
-                {
-                    Console.WriteLine("Usage: create tileele <TileCode> <horizres>)> // VertRes is autocalculated to keep the grid points square");
-                    return;
-                }
-                string tilecodeStr = args[2];
-                int horizRes = int.Parse(args[3]);
+//             case "tileele":
+//             {
+//                 if (args.Length < 4)
+//                 {
+//                     Console.WriteLine("Usage: create tileele <TileCode> <horizres>)> // VertRes is autocalculated to keep the grid points square");
+//                     return;
+//                 }
+//                 string tilecodeStr = args[2];
+//                 int horizRes = int.Parse(args[3]);
 
-                // EventDriver?.CreateTileEle(tilecodeStr, horizRes);
-                break;
-            }
-            // case "map":
-            //     //CreateMap(name);
-            //     break;
-            default:
-                Console.WriteLine("Unknown type: " + type);
-                break;
-        }
-    }
+//                 EventDriver?.CreateTileEle(tilecodeStr, horizRes);
+//                 break;
+//             }
+//             // case "map":
+//             //     //CreateMap(name);
+//             //     break;
+//             default:
+//                 Console.WriteLine("Unknown type: " + type);
+//                 break;
+//         }
+//     }
 
-    // ---------------------------------------------------------------------------------------------
+//     // ---------------------------------------------------------------------------------------------
 
-    private void CmdNetwork(string[] args)
-    {
-        if (args.Length < 2)
-        {
-            Console.WriteLine("Usage: network start      // Start the network comms hub");
-            Console.WriteLine("Usage: network [end|stop] // End the network comms hub");
-            Console.WriteLine("Usage: network stats      // Show network stats");
-            //Console.WriteLine("Usage: create tile <TileCode> <LonRes> // LatRes is autocalculated to keep the tile square");
-            return;
-        }
+//     private void CmdNetwork(string[] args)
+//     {
+//         if (args.Length < 2)
+//         {
+//             Console.WriteLine("Usage: network start      // Start the network comms hub");
+//             Console.WriteLine("Usage: network [end|stop] // End the network comms hub");
+//             Console.WriteLine("Usage: network stats      // Show network stats");
+//             //Console.WriteLine("Usage: create tile <TileCode> <LonRes> // LatRes is autocalculated to keep the tile square");
+//             return;
+//         }
 
-        string type = args[1];
+//         string type = args[1];
 
-        switch (type)
-        {
-            case "start":
-            {
-                if (args.Length != 2)
-                {
-                    Console.WriteLine("Usage: network start // Start the network comms hub");
-                    return;
-                }
-                EventDriver?.StartNetworking();
-                break;
-            }
-            case "stop":
-            case "end":
-            {
-                if (args.Length != 2)
-                {
-                    Console.WriteLine("Usage: network end // End the network comms hub");
-                    return;
-                }
-                EventDriver?.StopNetworking();
-                break;
-            }
+//         switch (type)
+//         {
+//             case "start":
+//             {
+//                 if (args.Length != 2)
+//                 {
+//                     Console.WriteLine("Usage: network start // Start the network comms hub");
+//                     return;
+//                 }
+//                 EventDriver?.StartNetworking();
+//                 break;
+//             }
+//             case "stop":
+//             case "end":
+//             {
+//                 if (args.Length != 2)
+//                 {
+//                     Console.WriteLine("Usage: network end // End the network comms hub");
+//                     return;
+//                 }
+//                 EventDriver?.StopNetworking();
+//                 break;
+//             }
 
-            case "localip":
-            {
-                if (args.Length != 2)
-                {
-                    Console.WriteLine("Usage: network localip // Show local IP address");
-                    return;
-                }
-                string reportStr = EventDriver?.ReportLocalIP() ?? "Unknown IP";
-                Console.WriteLine($"Local IP: {reportStr}");
-                break;
-            }
+//             case "localip":
+//             {
+//                 if (args.Length != 2)
+//                 {
+//                     Console.WriteLine("Usage: network localip // Show local IP address");
+//                     return;
+//                 }
+//                 string reportStr = EventDriver?.ReportLocalIP() ?? "Unknown IP";
+//                 Console.WriteLine($"Local IP: {reportStr}");
+//                 break;
+//             }
 
-            case "stats":
-            {
-                if (args.Length != 2)
-                {
-                    Console.WriteLine("Usage: network stats // Show network stats");
-                    return;
-                }
-                string reportStr = EventDriver?.ReportNetworkingStatus() ?? "No Network Comms Hub";
-                Console.WriteLine($"{reportStr}");
-                break;
-            }
+//             case "stats":
+//             {
+//                 if (args.Length != 2)
+//                 {
+//                     Console.WriteLine("Usage: network stats // Show network stats");
+//                     return;
+//                 }
+//                 string reportStr = EventDriver?.ReportNetworkingStatus() ?? "No Network Comms Hub";
+//                 Console.WriteLine($"{reportStr}");
+//                 break;
+//             }
 
-            default:
-                Console.WriteLine("Unknown type: " + type);
-                break;
-        }
-    }
+//             default:
+//                 Console.WriteLine("Unknown type: " + type);
+//                 break;
+//         }
+//     }
 }
+

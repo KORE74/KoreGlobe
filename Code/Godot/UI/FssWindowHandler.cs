@@ -1,11 +1,14 @@
 using Godot;
 using System;
+using System.Timers;
 
 public partial class FssWindowHandler : Window
 {
     private Label           CommandResponseLabel;
     private LineEdit        CommandEntryEdit;
     private ScrollContainer ScrollContainer;
+
+    private System.Timers.Timer LabelUpdateTimer;
 
     public override void _Ready()
     {
@@ -19,6 +22,11 @@ public partial class FssWindowHandler : Window
 
         // Connect the text_submitted signal of the LineEdit to the OnCommandSubmitted function
         CommandEntryEdit.Connect("text_submitted", new Callable(this, "OnCommandSubmitted"));
+
+        // Initialize and start the update timer
+        LabelUpdateTimer = new System.Timers.Timer(1000); // 1 second interval
+        LabelUpdateTimer.Elapsed += OnUpdateTimerElapsed;
+        LabelUpdateTimer.Start();
 
         UpdateLabel("Welcome to the FSS Command Line Interface!");
     }
@@ -36,7 +44,13 @@ public partial class FssWindowHandler : Window
         // Append the new text to the CommandResponseLabel
         UpdateLabel(newText);
 
+        GD.Print($"CLIWindow OnCommandSubmitted: {newText}");
         FssCentralLog.AddEntry($"CLIWindow OnCommandSubmitted: {newText}");
+
+
+        // Process the command
+        FssAppFactory.Instance.ConsoleInterface.AddInput(newText);
+
 
         // Clear the CommandEntryEdit
         CommandEntryEdit.Clear();
@@ -58,4 +72,17 @@ public partial class FssWindowHandler : Window
     {
         ScrollContainer.ScrollVertical = (int)(ScrollContainer.GetVScrollBar().MaxValue);
     }
+
+    // Function to update the label periodically
+    private void OnUpdateTimerElapsed(object sender, ElapsedEventArgs e)
+    {
+        while (FssAppFactory.Instance.ConsoleInterface.HasOutput())
+        {
+            string newContent = FssAppFactory.Instance.ConsoleInterface.GetOutput();
+            GD.Print($"CLIWindow OnUpdateTimerElapsed: {newContent}");
+            UpdateLabel(newContent);
+        }
+    }
+
+
 }

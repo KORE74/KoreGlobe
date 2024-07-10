@@ -9,9 +9,10 @@ public class FssCommandVersion : FssCommand
         Signature.Add("version");
     }
 
-    public override void Execute(List<string> parameters)
+    public override string Execute(List<string> parameters)
     {
-        System.Console.WriteLine("FSS Version 1.0");
+        FssCentralLog.AddEntry("FssCommandVersion.Execute: " + FssGlobals.VersionString);
+        return FssGlobals.VersionString;
     }
 
 }
