@@ -13,8 +13,8 @@ public class FssAppFactory
     public FssEventDriver     EventDriver      { get; private set; }
     public FssPlatformManager PlatformManager  { get; private set; }
     public FssNetworkCommsHub NetworkCommsHub  { get; private set; }
-    public FssMapIOManager    MapIOManager     { get; private set; }
-    public FssEleManager      EleManager       { get; private set; }
+    //public FssMapIOManager    MapIOManager     { get; private set; }
+    //public FssEleManager      EleManager       { get; private set; }
     public FssSimTime         SimClock         { get; private set; }
 
     // --------------------------------------------------------------------------------------------
@@ -68,8 +68,8 @@ public class FssAppFactory
         EventDriver      = new FssEventDriver();
         PlatformManager  = new FssPlatformManager();
         NetworkCommsHub  = new FssNetworkCommsHub();
-        MapIOManager     = new FssMapIOManager();
-        EleManager       = new FssEleManager();
+        //MapIOManager     = new FssMapIOManager();
+        //EleManager       = new FssEleManager();
         SimClock         = new FssSimTime();
 
         // Link the objects

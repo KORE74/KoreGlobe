@@ -13,7 +13,7 @@ public partial class FssMeshBuilder
         float azMinDegs, float azMaxDegs,
         float elMinDegs, float elMaxDegs,
         float radiusMin, float radiusMax,
-        Float2DArray outerSurfaceDelta)
+        FssFloat2DArray outerSurfaceDelta)
     {
         // Lists to hold the points for the inside and outside surfaces
         List<Vector3> insideSurfacePoints  = new List<Vector3>();
@@ -43,7 +43,7 @@ public partial class FssMeshBuilder
 
                 Vector3 insidePoint  = FssGeoConvOperations.RealWorldToGodot(radiusMin, currAzDegs, currElDegs);
                 Vector3 outsidePoint = FssGeoConvOperations.RealWorldToGodot(radiusMax + outsidePointDelta, currAzDegs, currElDegs);
-              
+
                 insideSurfacePoints.Add(insidePoint);
                 outsideSurfacePoints.Add(outsidePoint);
 

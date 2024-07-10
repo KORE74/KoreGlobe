@@ -18,11 +18,11 @@ public class FssPlatformKinetics
 
     // Changes being applied
     public FssAttitudeDelta CurrAttitudeDelta { set; get; } = FssAttitudeDelta.Zero;
-    public FssCourse CurrCourse { set; get; } = FssCourse.Zero;
-    public FssCourseDelta CurrCourseDelta { set; get; } = FssCourseDelta.Zero;
+    public FssCourse        CurrCourse        { set; get; } = FssCourse.Zero;
+    public FssCourseDelta   CurrCourseDelta   { set; get; } = FssCourseDelta.Zero;
 
     // Outline of the platform (judging intersections and extremities)
-    public FssBox BoundingBox { set; get; } = FssBox.One;
+    public FssXYZBox BoundingBox { set; get; } = FssXYZBox.One;
 
     // --------------------------------------------------------------------------------------------
 

@@ -3,8 +3,8 @@ using System;
 public struct FssAttitudeDelta
 {
     public double RollRateClockwiseRadsPerSec { get; set; } // +/- rads clockwise from straight ahead
-    public double PitchRateUpRadsPerSec { get; set; }       // +/- rads up from straight ahead
-    public double YawRateClockwiseRadsPerSec { get; set; }  // +/- rads clockwise from straight ahead
+    public double PitchRateUpRadsPerSec       { get; set; }       // +/- rads up from straight ahead
+    public double YawRateClockwiseRadsPerSec  { get; set; }  // +/- rads clockwise from straight ahead
 
     public double RollRateClockwiseDegsPerSec // +/- degs clockwise from straight ahead
     {
@@ -29,5 +29,10 @@ public struct FssAttitudeDelta
         this.RollRateClockwiseRadsPerSec = r;
         this.PitchRateUpRadsPerSec       = p;
         this.YawRateClockwiseRadsPerSec  = y;
+    }
+
+    public static FssAttitudeDelta Zero
+    {
+        get { return new FssAttitudeDelta { RollRateClockwiseRadsPerSec = 0.0, PitchRateUpRadsPerSec = 0.0, YawRateClockwiseRadsPerSec = 0.0 }; }
     }
 }

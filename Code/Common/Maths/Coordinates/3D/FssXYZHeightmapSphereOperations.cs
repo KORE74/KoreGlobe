@@ -7,7 +7,7 @@ public static class FssXYZHeightmapSphereOperations
 
     public static FssXYZHeightmapSphere CreateSimpleHeightmapSphere(FssXYZPoint center, double radius)
     {
-        Float2DArray hm = new (360, 180);
+        FssFloat2DArray hm = new (360, 180);
         hm.SetAllVals((float)radius);
         return new FssXYZHeightmapSphere(center, hm);
     }
@@ -16,7 +16,7 @@ public static class FssXYZHeightmapSphereOperations
 
     public static FssXYZHeightmapSphere CreateLobeHeightmapSphere(FssXYZPoint center, double radius, double lobeHeight, double lobeWidth)
     {
-        Float2DArray hm = new (360, 180);
+        FssFloat2DArray hm = new (360, 180);
 
         float core = 1f;
         float mainlobe = 10f;

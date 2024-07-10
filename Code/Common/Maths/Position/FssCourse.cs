@@ -27,6 +27,11 @@ public struct FssCourse
         HeadingRads = FssValueUtils.NormalizeAngle2Pi(inHeadingDegs * FssConsts.DegsToRadsMultiplier);
     }
 
+    public static FssCourse Zero
+    {
+        get { return new FssCourse { SpeedMps = 0.0, HeadingRads = 0.0 }; }
+    }
+
     // ------------------------------------------------------------------------
 
     public bool IsStationary()

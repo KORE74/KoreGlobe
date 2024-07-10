@@ -18,7 +18,7 @@ public partial class FssEventDriver
     {
         // Create a new platform
         if (FssAppFactory.Instance.PlatformManager == null)
-            Debug.LogError("E00002: ERROR ERROR ERROR: Platform Manager not found in FssAppFactory.Instance");
+            FssCentralLog.AddEntry("E00002: ERROR ERROR ERROR: Platform Manager not found in FssAppFactory.Instance");
 
         FssPlatform? newPlat = FssAppFactory.Instance.PlatformManager.Add(platName);
         if (newPlat == null)

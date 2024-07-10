@@ -71,9 +71,9 @@ namespace FssJSON
                     {
                         PlatWayPoints newMsg = JsonSerializer.Deserialize<PlatWayPoints>(jsonContent.GetRawText());
 
-                        Debug.Log("PlatWayPoints -> JsonContent OK");
-                        Debug.Log($"PlatWayPoints -> PlatName = {newMsg.PlatName}");
-                        Debug.Log($"PlatWayPoints -> Count = {newMsg.Count}");
+                        FssCentralLog.AddEntry("PlatWayPoints -> JsonContent OK");
+                        FssCentralLog.AddEntry($"PlatWayPoints -> PlatName = {newMsg.PlatName}");
+                        FssCentralLog.AddEntry($"PlatWayPoints -> Count = {newMsg.Count}");
 
                         // quick validation that the message data lines up
                         if (newMsg != null && newMsg.Legs != null && newMsg.Count == newMsg.Legs.Count)

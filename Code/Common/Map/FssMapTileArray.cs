@@ -9,7 +9,7 @@ public class FssMapTileArray
     // Constructors
     // --------------------------------------------------------------------------------------------
 
-    public FssMapTileArray(FssLLBox llbox, int newMapLvl, Float2DArray eleData)
+    public FssMapTileArray(FssLLBox llbox, int newMapLvl, FssFloat2DArray eleData)
     {
         // Simple copy the LLBox
         LLBox = llbox;
@@ -20,7 +20,7 @@ public class FssMapTileArray
         TileArray = new FssMapTile[numTilesHoriz, numTilesVert];
 
         int tileRes       = 200;
-        Float2DArray[,] childEleData = eleData.GetInterpolatedSubGridCellWithOverlap(numTilesHoriz, numTilesVert, tileRes, tileRes);
+        FssFloat2DArray[,] childEleData = eleData.GetInterpolatedSubGridCellWithOverlap(numTilesHoriz, numTilesVert, tileRes, tileRes);
     }
 
     // --------------------------------------------------------------------------------------------

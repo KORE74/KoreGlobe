@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 // Design Decisions:
 // - The code uses a struct rather than an immutable class, as the constructor options with flexible units
-//   are simply too useful. We rely on the struct's pass by value to avoid issues with mutability. 
+//   are simply too useful. We rely on the struct's pass by value to avoid issues with mutability.
 
 public struct FssLLAPoint
 {
@@ -54,7 +54,7 @@ public struct FssLLAPoint
     }
 
     // ------------------------------------------------------------------------
-    // Constructors - different options and units
+    // #MARK: Constructors - different options and units
     // ------------------------------------------------------------------------
 
     // Note that fields can be set:
@@ -101,7 +101,7 @@ public struct FssLLAPoint
     }
 
     // ------------------------------------------------------------------------
-    // Conversion
+    // #MARK: Conversion
     // ------------------------------------------------------------------------
 
     public FssXYZPoint ToXYZ()
@@ -122,7 +122,7 @@ public struct FssLLAPoint
     }
 
     // ------------------------------------------------------------------------
-    // Operations on Distance
+    // #MARK: Distance
     // ------------------------------------------------------------------------
 
     // Nullable default parameter allows it to assume the altitude for the calculation
@@ -170,7 +170,7 @@ public struct FssLLAPoint
     }
 
     // ------------------------------------------------------------------------
-    // Elevation
+    // #MARK: Elevation
     // ------------------------------------------------------------------------
 
     // I'm at an altitude above the ground, what angle down is the horizon?
@@ -225,7 +225,7 @@ public struct FssLLAPoint
     }
 
     // ------------------------------------------------------------------------
-    // Azimuth
+    // #MARK: Azimuth
     // ------------------------------------------------------------------------
 
     public double BearingToRads(FssLLAPoint destPos)
@@ -251,7 +251,7 @@ public struct FssLLAPoint
     }
 
     // ------------------------------------------------------------------------
-    // Range Bearing
+    // #MARK: Range Bearing
     // ------------------------------------------------------------------------
 
     public FssRangeBearing RangeBearingTo(FssLLAPoint destPos)
@@ -307,7 +307,7 @@ public struct FssLLAPoint
     }
 
     // ------------------------------------------------------------------------
-    // Polar Offset
+    // #MARK: Polar Offset
     // ------------------------------------------------------------------------
 
     public FssPolarOffset StraightLinePolarOffsetTo(FssLLAPoint destPos)

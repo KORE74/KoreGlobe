@@ -7,7 +7,7 @@ public static class FssFloat2DArrayIO
     // Format the numbers using "InvariantCulture" that ensures localisation formating
     // around thousand separators and decimal points is NOT applied.
 
-    public static string ToCSVString(Float2DArray array, int decimalPlaces)
+    public static string ToCSVString(FssFloat2DArray array, int decimalPlaces)
     {
         StringBuilder csvBuilder = new StringBuilder();
         string format = "F" + decimalPlaces; // Format string to specify decimal places
@@ -25,12 +25,12 @@ public static class FssFloat2DArrayIO
         return csvBuilder.ToString();
     }
 
-    public static Float2DArray FromCSVString(string csvString)
+    public static FssFloat2DArray FromCSVString(string csvString)
     {
         string[] lines = csvString.Trim().Split('\n');
         int rows = lines.Length;
         int cols = lines[0].Split(',').Length;
-        Float2DArray array = new Float2DArray(rows, cols);
+        FssFloat2DArray array = new FssFloat2DArray(rows, cols);
 
         for (int i = 0; i < rows; i++)
         {
@@ -46,13 +46,13 @@ public static class FssFloat2DArrayIO
 
     // --------------------------------------------------------------------------------------------
 
-    public static void SaveToCSVFile(Float2DArray array, string filePath, int decimalPlaces)
+    public static void SaveToCSVFile(FssFloat2DArray array, string filePath, int decimalPlaces)
     {
         string csvString = ToCSVString(array, decimalPlaces);
         File.WriteAllText(filePath, csvString);
     }
 
-    public static Float2DArray LoadFromCSVFile(string filePath)
+    public static FssFloat2DArray LoadFromCSVFile(string filePath)
     {
         string csvString = File.ReadAllText(filePath);
         return FromCSVString(csvString);
@@ -60,7 +60,7 @@ public static class FssFloat2DArrayIO
 
     // --------------------------------------------------------------------------------------------
 
-    public static void SaveToBinaryFile(Float2DArray array, string filePath)
+    public static void SaveToBinaryFile(FssFloat2DArray array, string filePath)
     {
         using (BinaryWriter writer = new BinaryWriter(File.Open(filePath, FileMode.Create)))
         {
@@ -77,13 +77,13 @@ public static class FssFloat2DArrayIO
         }
     }
 
-    public static Float2DArray LoadFromBinaryFile(string filePath)
+    public static FssFloat2DArray LoadFromBinaryFile(string filePath)
     {
         using (BinaryReader reader = new BinaryReader(File.Open(filePath, FileMode.Open)))
         {
             int width  = reader.ReadInt32();
             int height = reader.ReadInt32();
-            Float2DArray array = new Float2DArray(width, height);
+            FssFloat2DArray array = new FssFloat2DArray(width, height);
 
             for (int j = 0; j < height; j++)
             {
@@ -110,7 +110,7 @@ public static class FssFloat2DArrayIO
         <space separated data>
     */
 
-    public static Float2DArray LoadFromArcASIIGridFile(string filePath)
+    public static FssFloat2DArray LoadFromArcASIIGridFile(string filePath)
     {
         string[] lines = File.ReadAllLines(filePath);
 
@@ -122,7 +122,7 @@ public static class FssFloat2DArrayIO
         float cellsize    = float.Parse(lines[4].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[1]);
         float nodataValue = float.Parse(lines[5].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[1]);
 
-        Float2DArray grid = new Float2DArray(inwidth, inheight);
+        FssFloat2DArray grid = new FssFloat2DArray(inwidth, inheight);
 
         // Start reading data from line 6 (after the header)
         for (int i = 6; i < lines.Length; i++)

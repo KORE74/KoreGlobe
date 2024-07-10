@@ -53,6 +53,13 @@ public struct FssAzElBox
 
     // ------------------------------------------------------------------------
 
+    public static FssAzElBox Zero
+    {
+        get { return new FssAzElBox { MinAzRads = 0.0, MaxAzRads = 0.0, MinElRads = 0.0, MaxElRads = 0.0 }; }
+    }
+
+    // ------------------------------------------------------------------------
+
     public bool IsOffsetInBox(FssPolarOffset offset)
     {
         bool inAz    = (offset.AzRads >= MinAzRads && offset.AzRads <= MaxAzRads);
@@ -139,7 +146,6 @@ public struct FssAzElBox
             MinElRads = (MinElRads < MaxElRads) ? MinElRads : MaxElRads,
             MaxElRads = (MinElRads < MaxElRads) ? MaxElRads : MinElRads
         };
-
     }
 
 }

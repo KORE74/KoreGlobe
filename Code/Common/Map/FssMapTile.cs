@@ -11,16 +11,16 @@ public class FssMapTile
     // Essential tile data
     public FssMapTileCode TileCode;
     public FssLLBox LLBox;
-    
+
     // Tile Data
-    public Float2DArray EleData = new Float2DArray(1,1);
+    public FssFloat2DArray EleData = new FssFloat2DArray(1,1);
 
     // Child Tile Data - can legitimately be null for tiles with no child details.
     public FssMapTileArray? ChildTileArray;
 
     // Display assets that can be attached to the map tile for output, or removed for memory management.
     public IFssMapDisplayAssets? DisplayAssets;
-    
+
     // --------------------------------------------------------------------------------------------
     // Constructors
     // --------------------------------------------------------------------------------------------
@@ -36,7 +36,7 @@ public class FssMapTile
         LLBox = mapBox;
         TileCode = tileCode;
 
-        EleData = new Float2DArray();
+        EleData = new FssFloat2DArray();
     }
 
     public void SetTileResolution(int tileResLong, int tileResLat)

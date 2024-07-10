@@ -4,28 +4,54 @@ public class FssXYZBox : FssXYZ
 {
     public FssXYZPoint Centre { get; set; }
 
-    public double Width { get; set; }
+    public double Width  { get; set; }
     public double Height { get; set; }
-    public double Depth { get; set; }
+    public double Depth  { get; set; }
 
-    public FssXYZVector Up { get; set; }
-    public FssXYZVector Right { get; set; }
+    public FssXYZVector Up      { get; set; }
+    public FssXYZVector Right   { get; set; }
     public FssXYZVector Forward { get; set; }
 
-    public enum Face { Top, Bottom, Left, Right, Front, Back }
+    public enum Face   { Top, Bottom, Left, Right, Front, Back }
     public enum Corner { TopLeftFront, TopRightFront, BottomLeftFront, BottomRightFront, TopLeftBack, TopRightBack, BottomLeftBack, BottomRightBack }
-    public enum Edge { TopFront, TopBack, TopLeft, TopRight, BottomFront, BottomBack, BottomLeft, BottomRight, FrontLeft, FrontRight, BackLeft, BackRight }
+    public enum Edge   { TopFront, TopBack, TopLeft, TopRight, BottomFront, BottomBack, BottomLeft, BottomRight, FrontLeft, FrontRight, BackLeft, BackRight }
 
     public FssXYZBox(FssXYZPoint centre, double width, double height, double depth)
     {
         Centre = centre;
-        Width = width;
+        Width  = width;
         Height = height;
-        Depth = depth;
+        Depth  = depth;
 
-        Up = new FssXYZVector(0, 1, 0);
-        Right = new FssXYZVector(1, 0, 0);
+        Up      = new FssXYZVector(0, 1, 0);
+        Right   = new FssXYZVector(1, 0, 0);
         Forward = new FssXYZVector(0, 0, 1);
+    }
+
+    public FssXYZBox(FssXYZPoint centre, double width, double height, double depth, FssXYZVector up, FssXYZVector right, FssXYZVector forward)
+    {
+        Centre = centre;
+        Width  = width;
+        Height = height;
+        Depth  = depth;
+
+        Up      = up;
+        Right   = right;
+        Forward = forward;
+    }
+
+    // --------------------------------------------------------------------------------------------
+
+    // Constructors for common sizes
+
+    public static FssXYZBox Zero
+    {
+        get { return new FssXYZBox(FssXYZPoint.Zero, 0, 0, 0); }
+    }
+
+    public static FssXYZBox One
+    {
+        get { return new FssXYZBox(FssXYZPoint.Zero, 1, 1, 1); }
     }
 
     // --------------------------------------------------------------------------------------------

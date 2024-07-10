@@ -5,10 +5,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-// Float2DArray: A class to represent a 2D float array, and a number of involved actions we can perform on it.
+// FssFloat2DArray: A class to represent a 2D float array, and a number of involved actions we can perform on it.
 // Created predominantly to hold large lists of terrain elevation values, and subdivide that into subtiles.
 
-public class Float2DArray
+public class FssFloat2DArray
 {
     private float[,] Data;
     public int Width { get; }
@@ -25,7 +25,7 @@ public class Float2DArray
 
     // Gridsize = number of points on any size of the square grid, say 20.
     // Will be indexed by 0->19 as any normal array.
-    public Float2DArray(int inSizeX, int inSizeY)
+    public FssFloat2DArray(int inSizeX, int inSizeY)
     {
         Width = inSizeX;
         Height = inSizeY;
@@ -33,7 +33,7 @@ public class Float2DArray
         Populated = false;
     }
 
-    public Float2DArray(Float2DArray inArr)
+    public FssFloat2DArray(FssFloat2DArray inArr)
     {
         Width = inArr.Width;
         Height = inArr.Height;
@@ -49,7 +49,7 @@ public class Float2DArray
         }
     }
 
-    public Float2DArray()
+    public FssFloat2DArray()
     {
         Width = 10;
         Height = 10;
@@ -172,9 +172,9 @@ public class Float2DArray
     // Grid arrangement
     // --------------------------------------------------------------------------------------------
 
-    public static Float2DArray FlipYAxis(Float2DArray array)
+    public static FssFloat2DArray FlipYAxis(FssFloat2DArray array)
     {
-        Float2DArray flippedArray = new Float2DArray(array.Width, array.Height);
+        FssFloat2DArray flippedArray = new FssFloat2DArray(array.Width, array.Height);
 
         for (int i = 0; i < array.Width; i++)
         {
@@ -187,9 +187,9 @@ public class Float2DArray
         return flippedArray;
     }
 
-    public static Float2DArray FlipXAxis(Float2DArray array)
+    public static FssFloat2DArray FlipXAxis(FssFloat2DArray array)
     {
-        Float2DArray flippedArray = new Float2DArray(array.Width, array.Height);
+        FssFloat2DArray flippedArray = new FssFloat2DArray(array.Width, array.Height);
 
         for (int i = 0; i < array.Width; i++)
         {
@@ -238,7 +238,7 @@ public class Float2DArray
     // --------------------------------------------------------------------------------------------
 
     // Assign a new set of values into a larger parent, defining a bottom right starting pos.
-    public bool SetPatch(Float2DArray newPatch, int blX, int blY)
+    public bool SetPatch(FssFloat2DArray newPatch, int blX, int blY)
     {
         // Check the list will fit, or return false.
         int trX = blX + (newPatch.Width - 1);
@@ -260,10 +260,10 @@ public class Float2DArray
         return true;
     }
 
-    public bool GetPatch(int blX, int blY, int patchWidth, int patchHeight, out Float2DArray outPatch)
+    public bool GetPatch(int blX, int blY, int patchWidth, int patchHeight, out FssFloat2DArray outPatch)
     {
         // Create the required out value
-        outPatch = new Float2DArray(patchWidth, patchHeight);
+        outPatch = new FssFloat2DArray(patchWidth, patchHeight);
 
         // check the size will fit.
         int trX = blX + (patchWidth - 1);
@@ -401,9 +401,9 @@ public class Float2DArray
     // Create a subsampled grid, size defined by a skip counter. 1 = every other item.
     // To avoid confusion in any rounding, the function creates a list of indexes to then work with.
 
-    public Float2DArray GetInterpolatedGrid(int inNewSizeX, int inNewSizeY)
+    public FssFloat2DArray GetInterpolatedGrid(int inNewSizeX, int inNewSizeY)
     {
-        Float2DArray retGrid = new Float2DArray(inNewSizeX, inNewSizeY);
+        FssFloat2DArray retGrid = new FssFloat2DArray(inNewSizeX, inNewSizeY);
 
         if (Width <= 3 || Height <= 3)
             throw new Exception("Grid is too small to interpolate.");
@@ -438,7 +438,7 @@ public class Float2DArray
         return retGrid;
     }
 
-    public Float2DArray GetSubgrid(int startX, int startY, int subgridWidth, int subgridHeight)
+    public FssFloat2DArray GetSubgrid(int startX, int startY, int subgridWidth, int subgridHeight)
     {
         // Clamp the start values fit in the grid size
         startX = FssValueUtils.Clamp(startX, 0, Width - 1);
@@ -453,7 +453,7 @@ public class Float2DArray
         subgridHeight = endY - startY;
 
         // Create the return object
-        Float2DArray outGrid = new Float2DArray(subgridWidth, subgridHeight);
+        FssFloat2DArray outGrid = new FssFloat2DArray(subgridWidth, subgridHeight);
 
         for (int x = 0; x < subgridWidth; x++)
         {
@@ -468,14 +468,14 @@ public class Float2DArray
         return outGrid;
     }
 
-    public Float2DArray[,] GetInterpolatedSubGridCellWithOverlap(int inNumSubgridCols, int inNumSubgridRows, int inSubgridSizeX, int inSubgridSizeY)
+    public FssFloat2DArray[,] GetInterpolatedSubGridCellWithOverlap(int inNumSubgridCols, int inNumSubgridRows, int inSubgridSizeX, int inSubgridSizeY)
     {
         int totalSubgridWidth  = inNumSubgridCols * (inSubgridSizeX - 1) + 1 + 1;
         int totalSubgridHeight = inNumSubgridRows * (inSubgridSizeY - 1) + 1 + 1;
 
-        Float2DArray interpolatedGrid = GetInterpolatedGrid(totalSubgridWidth, totalSubgridHeight);
+        FssFloat2DArray interpolatedGrid = GetInterpolatedGrid(totalSubgridWidth, totalSubgridHeight);
 
-        Float2DArray[,] subGrid = new Float2DArray[inNumSubgridCols, inNumSubgridRows];
+        FssFloat2DArray[,] subGrid = new FssFloat2DArray[inNumSubgridCols, inNumSubgridRows];
 
         for (int i = 0; i < inNumSubgridCols; i++)
         {

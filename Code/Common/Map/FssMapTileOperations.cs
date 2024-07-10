@@ -2,17 +2,17 @@ public static class FssMapTileOperations
 {
     // public static FssMapTileArray CreatChildTiles(FssMapTile parentTile)
     // {
-        
+
     // }
-    
+
     public static readonly double[] TileSizeDegsPerLvl  = { 30.0, 5.0, 1.0, 0.2};
-    
+
     public static FssLLBox LLBoxForTileCode(FssMapTileCode tileCode)
     {
         double currTopLeftLatDegs = 90;
         double currTopLeftLonDegs = -180;
-    
-        int currLvl = 0;    
+
+        int currLvl = 0;
         foreach (var currCode in tileCode.CodeList)
         {
             currTopLeftLatDegs -= currCode.LatIndex* TileSizeDegsPerLvl[currLvl];
@@ -21,10 +21,10 @@ public static class FssMapTileOperations
 
         double bottomRightLatDegs = currTopLeftLatDegs - TileSizeDegsPerLvl[currLvl];
         double bottomRightLonDegs = currTopLeftLonDegs + TileSizeDegsPerLvl[currLvl];
-        
-        return new FssLLBox(currTopLeftLatDegs, currTopLeftLonDegs, bottomRightLatDegs, bottomRightLonDegs); 
+
+        return new FssLLBox(currTopLeftLatDegs, currTopLeftLonDegs, bottomRightLatDegs, bottomRightLonDegs);
     }
-    
+
     // Load a tile from a set path, returning null on fail
     // public static FssMapTile? LoadTile(string filepath)
     // {
@@ -37,7 +37,7 @@ public static class FssMapTileOperations
 
 
     //     // Read the 2D Array
-    //     Float2DArray? eleData = Float2DArrayIO.LoadFromBinaryFile(filepath)
+    //     FssFloat2DArray? eleData = Float2DArrayIO.LoadFromBinaryFile(filepath)
 
     //     if (eleData != null)
     //     {

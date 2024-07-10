@@ -19,7 +19,7 @@ public class FssMap
 
     public FssMap()
     {
-        MapTiles = new FssMapTileArray(FssLLBox.GlobalBox, 0, new Float2DArray(10, 10));
+        MapTiles = new FssMapTileArray(FssLLBox.GlobalBox, 0, new FssFloat2DArray(10, 10));
     }
 
     // --------------------------------------------------------------------------------------------

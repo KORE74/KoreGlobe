@@ -35,6 +35,11 @@ public struct FssAttitude
         this.YawClockwiseRads  = y;
     }
 
+    public static FssAttitude Zero
+    {
+        get { return new FssAttitude { RollClockwiseRads = 0.0, PitchUpRads = 0.0, YawClockwiseRads = 0.0 }; }
+    }
+
     // ------------------------------------------------------------------------
 
     public FssAttitude PlusDeltaForTime(FssAttitudeDelta delta, double elapsedSeconds)
