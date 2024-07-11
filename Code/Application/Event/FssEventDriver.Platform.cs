@@ -20,26 +20,29 @@ public partial class FssEventDriver
         // if (FssAppFactory.Instance.PlatformManager == null)
         //     FssCentralLog.AddEntry("E00002: ERROR ERROR ERROR: Platform Manager not found in FssAppFactory.Instance");
 
-        // FssPlatform? newPlat = FssAppFactory.Instance.PlatformManager.Add(platName);
-        // if (newPlat == null)
-        // {
-        //     FssCentralLog.AddEntry($"E00001: Platform {platName} not created, already exists.");
-        // }
-        // return;
+        FssPlatform? newPlat = FssAppFactory.Instance.PlatformManager.Add(platName);
+        if (newPlat == null)
+        {
+            FssCentralLog.AddEntry($"E00001: Platform {platName} not created, already exists.");
+        }
+        return;
 
-        // newPlat.Type = platType;
+        newPlat.Type = platType;
     }
 
     public void SetPlatformStartLLA(string platName, FssLLALocation loc)
     {
-        // // Get the platform
-        // FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
+        // Get the platform
+        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
 
-        // if (platform == null)
-        //     return;
+        if (platform == null)
+        {
+            FssCentralLog.AddEntry($"E00003: Platform {platName} not found.");
+            return;
+        }
 
-        // // Set the platform's start location
-        // platform.Kinetics.StartPosition = loc.ToLLA();
+        // Set the platform's start location
+        platform.Kinetics.StartPosition = loc.ToLLA();
     }
 
     public FssLLAPoint PlatformCurrLLA(string platName)
@@ -63,7 +66,31 @@ public partial class FssEventDriver
     public int NumPlatforms() => FssAppFactory.Instance.PlatformManager.NumPlatforms();
 
     // ---------------------------------------------------------------------------------------------
-    // Platform Names
+    // #MARK: Platform Report
+    // ---------------------------------------------------------------------------------------------
+
+    public string PlatformReport()
+    {
+        string report = "Platform Report\n";
+
+        // Loop through teh platforms by index
+        int totalPlatforms = NumPlatforms();
+        for (int i = 0; i < totalPlatforms; i++)
+        {
+            FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForIndex(i);
+            if (platform == null)
+                continue;
+
+            report += $"Platform{i}: {platform.Name}\n";
+            report += $"  Type: {platform.Type}\n";
+            report += $"  Start Position: {platform.Kinetics.StartPosition}\n";
+        }
+
+        return report;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    // #MARK: Platform Names
     // ---------------------------------------------------------------------------------------------
 
     public string PlatformNameForIndex(int index) => FssAppFactory.Instance.PlatformManager.PlatNameForIndex(index);

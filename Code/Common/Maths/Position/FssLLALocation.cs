@@ -79,4 +79,27 @@ public struct FssLLALocation
 
     // Function to return an LLA position on the ground, either using the default MSL value, or an optional elevation above MSL in metres.
 
+    public FssLLAPoint ToLLA()
+    {
+        double newRadiusM = 0;
+
+        switch(HeightTypeValue)
+        {
+            case HeightType.MSL:
+                newRadiusM = FssPosConsts.EarthRadiusM + HeightM;
+                break;
+            case HeightType.AGL:
+                newRadiusM = FssPosConsts.EarthRadiusM + HeightM;
+                break;
+            case HeightType.AGLMSL:
+                newRadiusM = FssPosConsts.EarthRadiusM + HeightM;
+                break;
+            default:
+                newRadiusM = FssPosConsts.EarthRadiusM + HeightM;
+                break;
+        }
+
+        return new FssLLAPoint(LatRads, LonRads) { RadiusM = newRadiusM };
+    }
+
 }
