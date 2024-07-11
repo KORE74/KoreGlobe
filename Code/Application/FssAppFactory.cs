@@ -11,8 +11,6 @@ using Godot;
 
 public class FssAppFactory
 {
-
-
     // FssAppFactory.Instance.ConsoleInterface.
 
     // --------------------------------------------------------------------------------------------

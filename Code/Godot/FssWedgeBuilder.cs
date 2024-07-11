@@ -12,7 +12,7 @@ public partial class FssWedgeBuilder : Node3D
         // Fix the position to line up with the sphere
         Position = new Vector3(0f, 0f, 0f);
 
-        FssMeshBuilder meshBuilder = new ();
+        FssMeshBuilder meshBuilder  = new ();
         FssMeshBuilder meshBuilder2 = new ();
 
         var matGround    = FssMaterialFactory.SimpleColoredMaterial(new Color(0.5f, 1.0f, 0.5f, 0.7f));
@@ -27,7 +27,7 @@ public partial class FssWedgeBuilder : Node3D
                 meshBuilder.AddShellSegment (
                     currLat, currLat + 25, // elevationMin, elevationMax,
                     currLon, currLon + 25, // azimuthMin, azimuthMax,
-                    1.2f, 1.22f,           // distanceMin, distanceMax,
+                    1.21f, 1.22f,          // distanceMin, distanceMax,
                     6, 6 );                // resolutionAz, resolutionEl)
 
                 ArrayMesh meshData = meshBuilder.Build("Wedge", false);

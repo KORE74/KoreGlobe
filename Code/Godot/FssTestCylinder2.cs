@@ -16,8 +16,8 @@ public partial class FssTestCylinder2 : Node3D
         {
             int latInc = 10;
             int lonInc = 10;
-            if (Math.Abs(lat) > 65) lonInc = 15;
-            if (Math.Abs(lat) > 75) lonInc = 30;
+            if (Math.Abs(lat) > 65) lonInc = 20;
+            if (Math.Abs(lat) > 75) lonInc = 40;
 
             for (int lon = -180; lon < (180 - 5); lon += lonInc)
             {

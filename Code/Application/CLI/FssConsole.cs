@@ -82,6 +82,7 @@ public class FssConsole
         commandHandlers.Add(new FssCommandVersion());
         commandHandlers.Add(new FssCommandExit());
 
+        commandHandlers.Add(new FssCommandPlatReport());
 
         // commandHandlers.Add("help", CmdHelp);
         // commandHandlers.Add("version", CmdVersion);
