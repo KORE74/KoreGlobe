@@ -26,6 +26,11 @@ public class FssPlatformKinetics
 
     // --------------------------------------------------------------------------------------------
 
+    // log of positions for the last 100 seconds
+    FssLimitedConcurrentQueue<FssLLAPoint> PositionLog = new FssLimitedConcurrentQueue<FssLLAPoint>(100);
+
+    // --------------------------------------------------------------------------------------------
+
     public FssPlatformKinetics()
     {
     }
@@ -47,6 +52,19 @@ public class FssPlatformKinetics
         CurrCourse   = CurrCourse.PlusDeltaForTime(CurrCourseDelta, elapsedSeconds);
         CurrAttitude = CurrAttitude.PlusDeltaForTime(CurrAttitudeDelta, elapsedSeconds);
         CurrPosition = CurrPosition.PlusDeltaForTime(CurrCourse, elapsedSeconds);
+
+        // Log the current position, if it has moved more than a nominal amount.
+        double minDistanceSeparationM = 10;
+
+        if (PositionLog.Count == 0)
+            PositionLog.Enqueue(CurrPosition);
+        else
+        {
+            FssLLAPoint lastPos = PositionLog.GetMostRecent();
+            if (CurrPosition.StraightLineDistanceToM(lastPos) > minDistanceSeparationM)
+                PositionLog.Enqueue(CurrPosition);
+        }
+
     }
 
     // --------------------------------------------------------------------------------------------

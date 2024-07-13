@@ -1,8 +1,6 @@
 
 using System;
 
-using FssNetworking;
-
 #nullable enable
 
 // Design Decisions:
@@ -11,7 +9,7 @@ using FssNetworking;
 public partial class FssEventDriver
 {
     // ---------------------------------------------------------------------------------------------
-    // Command Execution
+    // #MARK: Platform Position
     // ---------------------------------------------------------------------------------------------
 
     public void AddPlatform(string platName, string platType)
@@ -45,19 +43,51 @@ public partial class FssEventDriver
         platform.Kinetics.StartPosition = loc.ToLLA();
     }
 
-    public FssLLAPoint PlatformCurrLLA(string platName)
+    public FssLLAPoint? PlatformCurrLLA(string platName)
     {
         // Get the platform
         FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
 
         if (platform == null)
-            return new FssLLAPoint();
+            return null;
 
         return platform.Kinetics.StartPosition;
     }
 
 
+    // ---------------------------------------------------------------------------------------------
+    // #MARK: Platform Course
+    // ---------------------------------------------------------------------------------------------
 
+    public void SetPlatformCourse(string platName, FssCourse course)
+    {
+        // Get the platform
+        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
+
+        if (platform == null)
+        {
+            FssCentralLog.AddEntry($"E00004: Platform {platName} not found.");
+            return;
+        }
+
+        // Set the platform's course
+        platform.Kinetics.CurrCourse = course;
+    }
+
+    public FssCourse? PlatformCurrCourse(string platName)
+    {
+        // Get the platform
+        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
+
+        if (platform == null)
+            return null;
+
+        return platform.Kinetics.CurrCourse;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    // #MARK: Platform Management
+    // ---------------------------------------------------------------------------------------------
 
     public void DeletePlatform(string platName) => FssAppFactory.Instance.PlatformManager.Delete(platName);
 
@@ -104,21 +134,31 @@ public partial class FssEventDriver
     public int PlatformIdNext(int currPlatId) =>  FssAppFactory.Instance.PlatformManager.PlatIdNext(currPlatId);
     public int PlatformIdPrev(int currPlatId) =>  FssAppFactory.Instance.PlatformManager.PlatIdPrev(currPlatId);
 
-
     // ---------------------------------------------------------------------------------------------
 
     public void SetupTestPlatforms()
     {
         FssCentralLog.AddEntry("Creating FssAppFactory objects");
 
+        FssLLALocation loc1 = new FssLLALocation() { LatDegs = 52.8, LonDegs = -4.2, HeightM = 1000 };
+        FssLLALocation loc2 = new FssLLALocation() { LatDegs = 52.9, LonDegs = -4.3, HeightM = 2000 };
+        FssLLALocation loc3 = new FssLLALocation() { LatDegs = 52.7, LonDegs = -4.1, HeightM = 3000 };
+
+        FssCourse course1 = new FssCourse() { HeadingDegs = 90,  SpeedKph = 1000 };
+        FssCourse course2 = new FssCourse() { HeadingDegs = 180, SpeedKph = 2000 };
+        FssCourse course3 = new FssCourse() { HeadingDegs = 270, SpeedKph = 3000 };
+
         AddPlatform("TEST-001", "F16");
-        SetPlatformStartLLA("TEST-001", new FssLLALocation(52.8, -4.2, 1000));
+        SetPlatformStartLLA("TEST-001", loc1);
+        SetPlatformCourse("TEST-001", course1);
 
         AddPlatform("TEST-002", "F18");
-        SetPlatformStartLLA("TEST-002", new FssLLALocation(52.9, -4.3, 2000));
+        SetPlatformStartLLA("TEST-002", loc2);
+        SetPlatformCourse("TEST-002", course2);
 
         AddPlatform("TEST-003", "Tornado");
-        SetPlatformStartLLA("TEST-003", new FssLLALocation(52.7, -4.1, 3000));
+        SetPlatformStartLLA("TEST-003", loc3);
+        SetPlatformCourse("TEST-003", course3);
     }
 
     // ---------------------------------------------------------------------------------------------
