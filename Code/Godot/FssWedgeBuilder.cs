@@ -19,6 +19,8 @@ public partial class FssWedgeBuilder : Node3D
         var matTrans     = FssMaterialFactory.TransparentColoredMaterial(new Color(0.5f, 1.0f, 0.5f, 0.7f));
         var matTransBlue = FssMaterialFactory.TransparentColoredMaterial(new Color(0.2f, 0.2f, 0.7f, 0.4f));
         var matWire      = FssMaterialFactory.WireframeWhiteMaterial();
+        
+        var matTestWite   = FssMaterialFactory.WireframeShaderMaterial(new Color(0.2f, 0.2f, 0.7f, 0.4f));
 
         for (float currLon = -180f; currLon < (180f - 10f); currLon += 30f)
         {
@@ -27,8 +29,8 @@ public partial class FssWedgeBuilder : Node3D
                 meshBuilder.AddShellSegment (
                     currLat, currLat + 25, // elevationMin, elevationMax,
                     currLon, currLon + 25, // azimuthMin, azimuthMax,
-                    1.21f, 1.22f,          // distanceMin, distanceMax,
-                    6, 6 );                // resolutionAz, resolutionEl)
+                    1.20f, 1.22f,          // distanceMin, distanceMax,
+                    3, 3 );                // resolutionAz, resolutionEl)
 
                 ArrayMesh meshData = meshBuilder.Build("Wedge", false);
 
@@ -40,7 +42,7 @@ public partial class FssWedgeBuilder : Node3D
                 // Add the mesh to the current Node3D
                 MeshInstance3D meshInstanceW   = new();
                 meshInstanceW.Mesh             = meshData;
-                meshInstanceW.MaterialOverride = matWire;
+                meshInstanceW.MaterialOverride = matWire; // matTestWite; // 
 
                 AddChild(meshInstance);
                 AddChild(meshInstanceW);
