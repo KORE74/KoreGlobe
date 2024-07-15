@@ -9,23 +9,44 @@ public class FssModelRun
 
     public void Start()
     {
-        FssAppFactory.Instance.SimClock.Start();
-        FssAppFactory.Instance.SimClock.MarkTime();
-        FssAppFactory.Instance.PlatformManager.Reset();
+        bool running = FssAppFactory.Instance.SimClock.IsRunning;
 
-        // Start the model running thread
-        modelThread = new Thread(new ThreadStart(RunModel));
-        modelThread.Start();
+        if (!running)
+        {
+            FssAppFactory.Instance.PlatformManager.Reset();
+            FssAppFactory.Instance.SimClock.Start();
+            FssAppFactory.Instance.SimClock.MarkTime();
+
+            // Start the model running thread
+            modelThread = new Thread(new ThreadStart(RunModel));
+            modelThread.Start();
+        }
     }
 
     public void Pause()
     {
         FssAppFactory.Instance.SimClock.Stop();
+
+        // Stop the model running thread
+        if (modelThread != null && modelThread.IsAlive)
+        {
+            modelThread.Join();
+        }
     }
 
     public void Resume()
     {
-        FssAppFactory.Instance.SimClock.Start();
+        bool running = FssAppFactory.Instance.SimClock.IsRunning;
+
+        if (!running)
+        {
+            FssAppFactory.Instance.SimClock.Start();
+            FssAppFactory.Instance.SimClock.MarkTime();
+
+            // Start the model running thread
+            modelThread = new Thread(new ThreadStart(RunModel));
+            modelThread.Start();
+        }
     }
 
     public void Stop()

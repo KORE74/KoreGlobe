@@ -1,4 +1,5 @@
 version
-sim start
 plat test
 plat report
+sim start
+plat coursedelta TEST-003 0 2

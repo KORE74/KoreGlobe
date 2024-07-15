@@ -99,6 +99,7 @@ public class FssConsole
         // Platform details
         commandHandlers.Add(new FssCommandPlatPosition());
         commandHandlers.Add(new FssCommandPlatCourse());
+        commandHandlers.Add(new FssCommandPlatCourseDelta());
 
 
 
