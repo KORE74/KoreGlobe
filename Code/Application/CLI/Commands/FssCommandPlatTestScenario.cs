@@ -6,7 +6,8 @@ public class FssCommandPlatTestScenario : FssCommand
 {
     public FssCommandPlatTestScenario()
     {
-        Signature.Add("plattestscenario");
+        Signature.Add("plat");
+        Signature.Add("test");
     }
 
     public override string Execute(List<string> parameters)

@@ -27,9 +27,9 @@ public partial class TestModel : Node3D
 
     Node3D ModelNode         = null;
     Node3D ModelResourceNode = null;
-    Node3D NodeMarkerZero    = null;
-    Node3D NodeMarkerAbove   = null;
-    Node3D NodeMarkerAhead   = null;
+    // Node3D NodeMarkerZero    = null;
+    // Node3D NodeMarkerAbove   = null;
+    // Node3D NodeMarkerAhead   = null;
     Camera3D ModelCamera     = null;
 
     float Timer1Hz = 0f;
@@ -59,32 +59,35 @@ public partial class TestModel : Node3D
             //ModelResourceNode.Scale    = new Vector3(0.005f, 0.005f, 0.005f); // Set the model scale
             ModelResourceNode.Position = new Vector3(0f, 0f, 0f); // Set the model position
 
+            FssPrimitiveFactory.AddAxisMarkers(ModelNode, 0.02f, 0.005f);
+
+
             // Create and assign the markers
-            NodeMarkerZero  = FssPrimitiveFactory.CreateSphere(Vector3.Zero,  0.005f, new Color(0.7f, 0.1f, 0.1f, 1f)); // zero  = red
-            NodeMarkerAbove = FssPrimitiveFactory.CreateSphere(Vector3.Zero,  0.005f, new Color(0.1f, 0.1f, 0.8f, 1f)); // above = blue
-            NodeMarkerAhead = FssPrimitiveFactory.CreateSphere(Vector3.Zero,  0.005f, new Color(0.1f, 0.8f, 0.1f, 1f)); // ahead = green
+            // NodeMarkerZero  = FssPrimitiveFactory.CreateSphere(Vector3.Zero,  0.005f, new Color(0.7f, 0.1f, 0.1f, 1f)); // zero  = red
+            // NodeMarkerAbove = FssPrimitiveFactory.CreateSphere(Vector3.Zero,  0.005f, new Color(0.1f, 0.1f, 0.8f, 1f)); // above = blue
+            // NodeMarkerAhead = FssPrimitiveFactory.CreateSphere(Vector3.Zero,  0.005f, new Color(0.1f, 0.8f, 0.1f, 1f)); // ahead = green
 
-            NodeMarkerZero.Name  = "NodeMarkerZero - Red";
-            NodeMarkerAbove.Name = "NodeMarkerAbove - Blue";
-            NodeMarkerAhead.Name = "NodeMarkerAhead - Green";
-            ModelNode.AddChild(NodeMarkerZero);
-            ModelNode.AddChild(NodeMarkerAbove);
-            ModelNode.AddChild(NodeMarkerAhead);
+            // NodeMarkerZero.Name  = "NodeMarkerZero - Red";
+            // NodeMarkerAbove.Name = "NodeMarkerAbove - Blue";
+            // NodeMarkerAhead.Name = "NodeMarkerAhead - Green";
+            // ModelNode.AddChild(NodeMarkerZero);
+            // ModelNode.AddChild(NodeMarkerAbove);
+            // ModelNode.AddChild(NodeMarkerAhead);
 
-            float mag = 0.025f;
-            Vector3 fixedVecPlusX = new Vector3(mag, 0f, 0f);
-            Vector3 fixedVecPlusY = new Vector3(0f, mag, 0f);
-            Vector3 fixedVecPlusZ = new Vector3(0f, 0f, mag);
+            // float mag = 0.025f;
+            // Vector3 fixedVecPlusX = new Vector3(mag, 0f, 0f);
+            // Vector3 fixedVecPlusY = new Vector3(0f, mag, 0f);
+            // Vector3 fixedVecPlusZ = new Vector3(0f, 0f, mag);
 
-            NodeMarkerZero.Position  = Vector3.Zero;
-            NodeMarkerAbove.Position = fixedVecPlusY; //diffAbove;
-            NodeMarkerAhead.Position = fixedVecPlusZ; //diffAhead;
+            // NodeMarkerZero.Position  = Vector3.Zero;
+            // NodeMarkerAbove.Position = fixedVecPlusY; //diffAbove;
+            // NodeMarkerAhead.Position = fixedVecPlusZ; //diffAhead;
 
             // Create the chase-camera
             ModelCamera = new Camera3D() { Name = "ModelCamera" };
             ModelCamera.Fov = 35;
             ModelNode.AddChild(ModelCamera);
-            ModelCamera.Current = true;
+            // ModelCamera.Current = true;
 
             UpdateModelPosition();
         }
@@ -149,9 +152,14 @@ public partial class TestModel : Node3D
         Vector3 vecAbove = FssGeoConvOperations.RealWorldToGodot(posAbove);
         Vector3 vecAhead = FssGeoConvOperations.RealWorldToGodot(posAhead);
 
+
+        FssEntityV3 platVecs = FssGeoConvOperations.ReadWorldToStruct(pos, Course);
+
+
+
         // Update node position and orientation
-        ModelNode.Position = vecPos;
-        ModelNode.LookAt(vecAhead, vecAbove);
+        ModelNode.Position = platVecs.Position;// vecPos;
+        ModelNode.LookAt(platVecs.PosAhead, platVecs.PosAbove);
 
         // Update camera position and orientation
         FssXYZPoint camOffsetXYZ = CameraOffset.ToXYZ();

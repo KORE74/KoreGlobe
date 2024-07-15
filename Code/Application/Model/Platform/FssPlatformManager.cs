@@ -41,6 +41,7 @@ public class FssPlatformManager
         {
             FssPlatform newPlat = new FssPlatform() { Name = platname };
             PlatfomList.Add(newPlat);
+            return newPlat;
         }
         return null;
     }
@@ -144,6 +145,11 @@ public class FssPlatformManager
         return currPlatId - 1;                 // Move down one if mid-range
     }
 
+    public bool DoesPlatformExist(string platname)
+    {
+        return PlatForName(platname) != null;
+    }
+
     // --------------------------------------------------------------------------------------------
     // #MARK: Elements
     // --------------------------------------------------------------------------------------------
@@ -187,6 +193,22 @@ public class FssPlatformManager
     }
 
     // --------------------------------------------------------------------------------------------
+    // #MARK: Reset
+    // --------------------------------------------------------------------------------------------
+
+    // Reset (or set) all the current platform positions
+
+    public void Reset()
+    {
+        foreach (FssPlatform currPlat in PlatfomList)
+        {
+            if (currPlat.Kinetics != null)
+                currPlat.Kinetics.ResetPosition();
+        }
+    }
+
+
+    // --------------------------------------------------------------------------------------------
     // #MARK: Update
     // --------------------------------------------------------------------------------------------
 
@@ -199,6 +221,17 @@ public class FssPlatformManager
         {
             if (currPlat.Kinetics != null)
                 currPlat.Kinetics.UpdateForDuration((float)elapsedSeconds);
+        }
+
+        // Log the LLA of the first platform, to demonstrate some movement.
+        if (PlatfomList.Count > 0)
+        {
+            FssPlatform firstPlat = PlatfomList[0];
+            FssLLAPoint currPos = firstPlat.Kinetics.CurrPosition;
+
+            string LLAStr = $"Lat: {currPos.LatDegs:0.0000}, Lon: {currPos.LonDegs:0.0000}, Alt: {currPos.AltMslM:0.0000}";
+
+            FssCentralLog.AddEntry($"Platform: {firstPlat.Name} at {LLAStr}");
         }
     }
 

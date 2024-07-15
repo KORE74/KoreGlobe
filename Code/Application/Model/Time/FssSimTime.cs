@@ -39,6 +39,7 @@ public class FssSimTime
                 return AccumulatedTime.TotalSeconds;
             }
         }
+        private set { } // This is a read-only property
     }
 
     // --------------------------------------------------------------------------------------------

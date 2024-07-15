@@ -22,6 +22,7 @@ public class FssAppFactory
     //public FssMapIOManager    MapIOManager     { get; private set; }
     //public FssEleManager      EleManager       { get; private set; }
     public FssSimTime         SimClock         { get; private set; }
+    public FssModelRun        ModelRun         { get; private set; }
 
     // --------------------------------------------------------------------------------------------
 
@@ -80,6 +81,7 @@ public class FssAppFactory
         //MapIOManager     = new FssMapIOManager();
         //EleManager       = new FssEleManager();
         SimClock         = new FssSimTime();
+        ModelRun         = new FssModelRun();
 
         // Link the objects
         //ConsoleInterface.EventDriver = EventDriver;

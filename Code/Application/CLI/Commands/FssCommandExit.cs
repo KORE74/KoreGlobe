@@ -11,17 +11,17 @@ public class FssCommandExit : FssCommand
 
     public override string Execute(List<string> parameters)
     {
-        FssEventDriver eventDriver = FssAppFactory.Instance.EventDriver;
+        // Stopping the model run
+        if (FssAppFactory.Instance.SimClock.IsRunning)
+        {
+            FssCentralLog.AddEntry("Stopping model run");
+            FssAppFactory.Instance.ModelRun.Stop();
+        }
 
-        if (eventDriver != null)
-        {
-            eventDriver.ExitApplication();
-            return "Exiting...";
-        }
-        else
-        {
-            return "Error: Event driver not found.";
-        }
+        // Exiting the application
+        FssCentralLog.AddEntry("Exiting the application");
+        FssAppFactory.Instance.EventDriver.ExitApplication();
+
+        return "Exiting the application";
     }
-
 }

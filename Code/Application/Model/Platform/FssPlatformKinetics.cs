@@ -37,7 +37,7 @@ public class FssPlatformKinetics
 
     // --------------------------------------------------------------------------------------------
 
-    public void InitPositions()
+    public void ResetPosition()
     {
         CurrPosition = StartPosition;
         CurrAttitude = StartAttitude;
@@ -46,6 +46,8 @@ public class FssPlatformKinetics
     public void UpdateForDuration(float elapsedSeconds)
     {
         // Update from the highest derivative (acceleration) to the lowest (position)
+
+
 
         // AttitudeDelta
         // CourseDelta

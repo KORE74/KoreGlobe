@@ -75,6 +75,9 @@ public struct FssCourse
 
     public override string ToString()
     {
+        if (IsStationary())
+            return "Stationary";
+
         return $"Speed: {SpeedKph:F2} Kph, Heading: {HeadingDegs:F2} Degs";
     }
 }

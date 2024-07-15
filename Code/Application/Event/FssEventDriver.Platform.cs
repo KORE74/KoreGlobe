@@ -22,13 +22,12 @@ public partial class FssEventDriver
         if (newPlat == null)
         {
             FssCentralLog.AddEntry($"E00001: Platform {platName} not created, already exists.");
+            return;
         }
-        return;
-
         newPlat.Type = platType;
     }
 
-    public void SetPlatformStartLLA(string platName, FssLLALocation loc)
+    public void SetPlatformStartLLA(string platName, FssLLAPoint newpos)
     {
         // Get the platform
         FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
@@ -40,7 +39,7 @@ public partial class FssEventDriver
         }
 
         // Set the platform's start location
-        platform.Kinetics.StartPosition = loc.ToLLA();
+        platform.Kinetics.StartPosition = newpos;
     }
 
     public FssLLAPoint? PlatformCurrLLA(string platName)
@@ -86,6 +85,37 @@ public partial class FssEventDriver
     }
 
     // ---------------------------------------------------------------------------------------------
+    // #MARK: Platform Course Delta
+    // ---------------------------------------------------------------------------------------------
+
+    public void SetPlatformCourseDelta(string platName, FssCourseDelta courseDelta)
+    {
+        // Get the platform
+        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
+
+        if (platform == null)
+        {
+            FssCentralLog.AddEntry($"E00005: Platform {platName} not found.");
+            return;
+        }
+
+        // Set the platform's course delta
+        platform.Kinetics.CurrCourseDelta = courseDelta;
+    }
+
+    public FssCourseDelta? PlatformCurrCourseDelta(string platName)
+    {
+        // Get the platform
+        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
+
+        if (platform == null)
+            return null;
+
+        return platform.Kinetics.CurrCourseDelta;
+    }
+
+
+    // ---------------------------------------------------------------------------------------------
     // #MARK: Platform Management
     // ---------------------------------------------------------------------------------------------
 
@@ -114,6 +144,7 @@ public partial class FssEventDriver
             report += $"Platform{i}: {platform.Name}\n";
             report += $"  Type: {platform.Type}\n";
             report += $"  Start Position: {platform.Kinetics.StartPosition}\n";
+            report += $"  Course: {platform.Kinetics.CurrCourse}\n";
         }
 
         return report;
@@ -138,15 +169,15 @@ public partial class FssEventDriver
 
     public void SetupTestPlatforms()
     {
-        FssCentralLog.AddEntry("Creating FssAppFactory objects");
+        FssCentralLog.AddEntry("Creating Test Platform Entities");
 
-        FssLLALocation loc1 = new FssLLALocation() { LatDegs = 52.8, LonDegs = -4.2, HeightM = 1000 };
-        FssLLALocation loc2 = new FssLLALocation() { LatDegs = 52.9, LonDegs = -4.3, HeightM = 2000 };
-        FssLLALocation loc3 = new FssLLALocation() { LatDegs = 52.7, LonDegs = -4.1, HeightM = 3000 };
+        FssLLAPoint loc1 = new FssLLAPoint() { LatDegs = 52.8, LonDegs = -4.2, AltMslM = 1000 };
+        FssLLAPoint loc2 = new FssLLAPoint() { LatDegs = 52.9, LonDegs = -4.3, AltMslM = 2000 };
+        FssLLAPoint loc3 = new FssLLAPoint() { LatDegs = 52.7, LonDegs = -4.1, AltMslM = 3000 };
 
         FssCourse course1 = new FssCourse() { HeadingDegs = 90,  SpeedKph = 1000 };
         FssCourse course2 = new FssCourse() { HeadingDegs = 180, SpeedKph = 2000 };
-        FssCourse course3 = new FssCourse() { HeadingDegs = 270, SpeedKph = 3000 };
+        FssCourse course3 = new FssCourse() { HeadingDegs = 270, SpeedKph = 30000 };
 
         AddPlatform("TEST-001", "F16");
         SetPlatformStartLLA("TEST-001", loc1);
@@ -159,6 +190,7 @@ public partial class FssEventDriver
         AddPlatform("TEST-003", "Tornado");
         SetPlatformStartLLA("TEST-003", loc3);
         SetPlatformCourse("TEST-003", course3);
+        SetPlatformCourseDelta("TEST-003", new FssCourseDelta() { HeadingChangeClockwiseDegsSec = 10, SpeedChangeMpMps = 0 });
     }
 
     // ---------------------------------------------------------------------------------------------

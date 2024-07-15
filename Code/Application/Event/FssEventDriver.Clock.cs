@@ -8,12 +8,12 @@ public partial class FssEventDriver
 {
     public void ClockStart()
     {
-
+        FssAppFactory.Instance.ModelRun.Start();
     }
 
     public void ClockStop()
     {
-
+        FssAppFactory.Instance.ModelRun.Stop();
     }
 
     public void ClockReset()
@@ -28,19 +28,19 @@ public partial class FssEventDriver
 
     public int ClockSeconds()
     {
-        return 0;
+        return (int)FssAppFactory.Instance.SimClock.CurrentTime;
     }
 
     // ---------------------------------------------------------------------------------------------
 
     public void ClockSetRate(double rate)
     {
-
+        FssAppFactory.Instance.SimClock.SetSimRate(rate);
     }
 
     public double ClockRate()
     {
-        return 0.0;
+        return FssAppFactory.Instance.SimClock.SimRate;
     }
 
 

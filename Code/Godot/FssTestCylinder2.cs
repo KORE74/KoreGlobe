@@ -80,8 +80,8 @@ public partial class FssTestCylinder2 : Node3D
         cylinder.MaterialOverride = FssMaterialFactory.SimpleColoredMaterial(new Color(0.0f, 0.5f, 1.0f, 1.0f));
 
         AddChild(cylinder);
-        cylinder.Position = midPoint;
 
+        cylinder.Position = midPoint;
         cylinder.LookAt(aboveMidPoint, end);
     }
 }

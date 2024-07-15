@@ -82,6 +82,11 @@ public class FssConsole
         commandHandlers.Add(new FssCommandVersion());
         commandHandlers.Add(new FssCommandExit());
 
+        commandHandlers.Add(new FssCommandSimClock());
+        commandHandlers.Add(new FssCommandSimStart());
+        commandHandlers.Add(new FssCommandSimStop());
+        commandHandlers.Add(new FssCommandSimReset());
+
         commandHandlers.Add(new FssCommandPlatReport());
         commandHandlers.Add(new FssCommandPlatTestScenario());
 
@@ -127,6 +132,10 @@ public class FssConsole
             // Get the string a space-delimit the parts
             string inputLine = InputQueue.RetrieveString();
             var inputParts = inputLine.Trim().Split(' ').ToList();
+
+            // Check for internal commands - true if executed.
+            if (RunInternalCommand(inputParts))
+                continue;
 
             // Go through each of the registered command handlers looking for a match
             foreach (var currCmd in commandHandlers)
@@ -175,6 +184,34 @@ public class FssConsole
     // Command functions:
     // ---------------------------------------------------------------------------------------------
     // - private void Cmd<Name>(string[] args)
+
+    private bool RunInternalCommand(List<string> inputParts)
+    {
+        if (inputParts.Count == 0)
+            return false;
+
+        string command = inputParts[0];
+
+        switch (command)
+        {
+            case "help":
+                {
+                    StringBuilder helpStr = new StringBuilder();
+                    helpStr.AppendLine("Available commands:");
+                    foreach (var cmd in commandHandlers)
+                    {
+                        helpStr.AppendLine($"- {cmd.SignatureString}");
+                    }
+                    OutputQueue.AddString(helpStr.ToString());
+                    return true;
+                }
+
+            default:
+                return false;
+        }
+    }
+
+
 
 //     private void CmdHelp(string[] args)
 //     {
