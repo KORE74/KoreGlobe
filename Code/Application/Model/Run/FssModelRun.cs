@@ -18,6 +18,16 @@ public class FssModelRun
         modelThread.Start();
     }
 
+    public void Pause()
+    {
+        FssAppFactory.Instance.SimClock.Stop();
+    }
+
+    public void Resume()
+    {
+        FssAppFactory.Instance.SimClock.Start();
+    }
+
     public void Stop()
     {
         FssAppFactory.Instance.SimClock.Stop();

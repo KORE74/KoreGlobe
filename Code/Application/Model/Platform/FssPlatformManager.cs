@@ -46,12 +46,15 @@ public class FssPlatformManager
         return null;
     }
 
+    // Looping through the list using the index, and in reverse order to more safely delete a platform
     public void Delete(string platname)
     {
-        foreach (FssPlatform currPlat in PlatfomList)
+        for (int i = PlatfomList.Count - 1; i >= 0; i--)
         {
-            if (currPlat.Name == platname)
-                PlatfomList.Remove(currPlat);
+            if (PlatfomList[i].Name == platname)
+            {
+                PlatfomList.RemoveAt(i);
+            }
         }
     }
 

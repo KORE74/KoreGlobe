@@ -10,6 +10,9 @@ public abstract class FssCommand
     protected List<string> Signature { get; set; } = new List<string>();
     public string SignatureString { get => string.Join(" ", Signature); }
 
+    // Virtual property to provide help text - and the virtual keyword allows us room to add parameters.
+    public virtual string HelpString => SignatureString;
+
     // Public property to expose the count of signature parameters
     public int SignatureCount => Signature.Count;
 

@@ -7,6 +7,9 @@ public static class FssColorUtil
     // --------------------------------------------------------------------------------------------
 
     // Function to output a new color with a random noise factor on each RGB channel
+
+    // FssColorUtil.ColorWithRGBNoise(new Color(0.5f, 0.5f, 0.5f), 0.1f);
+
     public static Color ColorWithRGBNoise(Color color, float fractionNoise)
     {
         float r = Mathf.Clamp(color.R + (GD.Randf() - 0.5f) * fractionNoise, 0f, 1f);

@@ -12,6 +12,21 @@ public partial class FssEventDriver
     // #MARK: Platform Position
     // ---------------------------------------------------------------------------------------------
 
+    public void AddPlatform(string platName)
+    {
+        // Create a new platform
+        // if (FssAppFactory.Instance.PlatformManager == null)
+        //     FssCentralLog.AddEntry("E00002: ERROR ERROR ERROR: Platform Manager not found in FssAppFactory.Instance");
+
+        FssPlatform? newPlat = FssAppFactory.Instance.PlatformManager.Add(platName);
+        if (newPlat == null)
+        {
+            FssCentralLog.AddEntry($"E00001: Platform {platName} not created, already exists.");
+            return;
+        }
+        newPlat.Type = "Unknown";
+    }
+
     public void AddPlatform(string platName, string platType)
     {
         // Create a new platform
@@ -118,6 +133,8 @@ public partial class FssEventDriver
     // ---------------------------------------------------------------------------------------------
     // #MARK: Platform Management
     // ---------------------------------------------------------------------------------------------
+
+    public bool DoesPlatformExist(string platName) => FssAppFactory.Instance.PlatformManager.DoesPlatformExist(platName);
 
     public void DeletePlatform(string platName) => FssAppFactory.Instance.PlatformManager.Delete(platName);
 

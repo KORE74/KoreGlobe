@@ -1,0 +1,4 @@
+version
+sim start
+plat test
+plat report

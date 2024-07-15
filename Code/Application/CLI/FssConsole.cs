@@ -82,13 +82,26 @@ public class FssConsole
         commandHandlers.Add(new FssCommandVersion());
         commandHandlers.Add(new FssCommandExit());
 
+        // Sim control
         commandHandlers.Add(new FssCommandSimClock());
         commandHandlers.Add(new FssCommandSimStart());
         commandHandlers.Add(new FssCommandSimStop());
         commandHandlers.Add(new FssCommandSimReset());
+        commandHandlers.Add(new FssCommandSimPause());
+        commandHandlers.Add(new FssCommandSimResume());
 
+        // Platform control
         commandHandlers.Add(new FssCommandPlatReport());
         commandHandlers.Add(new FssCommandPlatTestScenario());
+        commandHandlers.Add(new FssCommandPlatAdd());
+        commandHandlers.Add(new FssCommandPlatDelete());
+
+        // Platform details
+        commandHandlers.Add(new FssCommandPlatPosition());
+        commandHandlers.Add(new FssCommandPlatCourse());
+
+
+
 
 
 
@@ -200,9 +213,37 @@ public class FssConsole
                     helpStr.AppendLine("Available commands:");
                     foreach (var cmd in commandHandlers)
                     {
-                        helpStr.AppendLine($"- {cmd.SignatureString}");
+                        helpStr.AppendLine($"- {cmd.HelpString}");
                     }
                     OutputQueue.AddString(helpStr.ToString());
+                    return true;
+                }
+
+            case "runfile":
+                {
+                    if (inputParts.Count < 2)
+                    {
+                        OutputQueue.AddString("Usage: runfile <filename>");
+                        return true;
+                    }
+
+                    string filename = inputParts[1];
+
+                    if (!System.IO.File.Exists(filename))
+                    {
+                        OutputQueue.AddString($"File does not exist: {filename}");
+                        return true;
+                    }
+
+                    OutputQueue.AddString($"Running file: {filename}");
+
+                    string[] lines = System.IO.File.ReadAllLines(filename);
+
+                    foreach (string line in lines)
+                    {
+                        OutputQueue.AddString($"FILE>> {line}");
+                        InputQueue.AddString(line);
+                    }
                     return true;
                 }
 
