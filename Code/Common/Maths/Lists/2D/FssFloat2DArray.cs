@@ -491,4 +491,25 @@ public class FssFloat2DArray
         return subGrid;
     }
 
+    // --------------------------------------------------------------------------------------------
+    // MARK: Test Patterns
+    // --------------------------------------------------------------------------------------------
+
+    // Create a test pattern of a sine wave - FssFloat2DArray.AntennaPattern_001(100, 100);
+
+    public static FssFloat2DArray AntennaPattern_001(int inSizeX, int inSizeY)
+    {
+        FssFloat2DArray retGrid = new FssFloat2DArray(inSizeX, inSizeY);
+
+        for (int y = 0; y < inSizeY; y++)
+        {
+            for (int x = 0; x < inSizeX; x++)
+            {
+                float val = (float)(Math.Sin(x * 0.1) * Math.Sin(y * 0.1) * 100);
+                retGrid[x, y] = val;
+            }
+        }
+        return retGrid;
+    }
+
 }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://bkhif7hl6psi5"]
+[gd_scene load_steps=12 format=3 uid="uid://bkhif7hl6psi5"]
 
 [ext_resource type="Script" path="res://Code/Application/Model/Run/FssAppNode.cs" id="1_3l252"]
 [ext_resource type="Script" path="res://Code/Godot/Util/FssCameraMover.cs" id="2_3c077"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://Code/Godot/TestModel.cs" id="7_f5p1r"]
 [ext_resource type="Script" path="res://Code/Godot/UI/FssWindowHandler.cs" id="7_padcc"]
 [ext_resource type="Script" path="res://Code/Godot/FssTestModelChildren.cs" id="8_abvv0"]
+[ext_resource type="Script" path="res://Code/Godot/TestMalleableSphere.cs" id="10_5oluh"]
 
 [node name="Node3D" type="Node3D"]
 script = ExtResource("1_3l252")
@@ -54,6 +55,9 @@ script = ExtResource("7_1ufct")
 [node name="TestModelChildren" type="Node3D" parent="GlobeRoot"]
 script = ExtResource("8_abvv0")
 
+[node name="TestMalleableSphere" type="Node3D" parent="GlobeRoot"]
+script = ExtResource("10_5oluh")
+
 [node name="CLIWindow" type="Window" parent="."]
 positional_shadow_atlas_16_bits = false
 title = "Command Line"
@@ -81,15 +85,15 @@ clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-text = "afasfsdfasf sdf asdf das fadsf das das fdas ffas f faf 
+text = "afasfsdfasf sdf asdf das fadsf das das fdas ffas f faf
 asdf sadf sd fasf s
-sdf sda fdsf dsa fff asdf safda 
+sdf sda fdsf dsa fff asdf safda
 sadf asfd asfd asd fasdf adsf af
 asdf as fadf asdf asdf asfa s fa
 
 fafd asfd af asf
-as fsdaf asdf sdf adsf 
-as dfdasf asf adsf as fas fasf 
+as fsdaf asdf sdf adsf
+as dfdasf asf adsf as fas fasf
 sadf as fasdf sadf sad as
 asfasd asd fads asf adsf ads "
 clip_text = true
