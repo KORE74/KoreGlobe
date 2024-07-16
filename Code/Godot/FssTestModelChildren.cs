@@ -13,10 +13,7 @@ public partial class FssTestModelChildren : Node3D
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-
         // Create a background thread to examine the model, and then defer a call to add/remove any platforms
-
-
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -52,7 +49,6 @@ public partial class FssTestModelChildren : Node3D
                 }
             }
         }
-
     }
 
     public void AddPlatform(string platformName)
@@ -93,7 +89,6 @@ public partial class FssTestModelChildren : Node3D
             {
                 myNode3D.SetModelName(platformName);
                 FssCentralLog.AddEntry($"FssTestModelChildren.AddPlatform: ModelName set for {platformName}");
-
             }
 
             // Add the node to the scene tree - calls _Ready()

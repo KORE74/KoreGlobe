@@ -1,5 +1,6 @@
-[gd_scene load_steps=10 format=3 uid="uid://bkhif7hl6psi5"]
+[gd_scene load_steps=11 format=3 uid="uid://bkhif7hl6psi5"]
 
+[ext_resource type="Script" path="res://Code/Application/Model/Run/FssAppNode.cs" id="1_3l252"]
 [ext_resource type="Script" path="res://Code/Godot/Util/FssCameraMover.cs" id="2_3c077"]
 [ext_resource type="Script" path="res://Code/Godot/FssTestCylinder2.cs" id="2_xyvg4"]
 [ext_resource type="Script" path="res://Code/Godot/FssWedgeBuilder.cs" id="3_i52xv"]
@@ -11,6 +12,7 @@
 [ext_resource type="Script" path="res://Code/Godot/FssTestModelChildren.cs" id="8_abvv0"]
 
 [node name="Node3D" type="Node3D"]
+script = ExtResource("1_3l252")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)

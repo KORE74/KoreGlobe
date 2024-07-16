@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 
+using Godot;
 // FssCommandVersion
 
 public class FssCommandExit : FssCommand
@@ -18,9 +19,12 @@ public class FssCommandExit : FssCommand
             FssAppFactory.Instance.ModelRun.Stop();
         }
 
-        // Exiting the application
+        // Exiting the application - ending the threads
         FssCentralLog.AddEntry("Exiting the application");
         FssAppFactory.Instance.EventDriver.ExitApplication();
+
+        // Call the Godot exit function -- Maybe not the right place?
+        FssAppNode.Instance.ExitApplication();
 
         return "Exiting the application";
     }

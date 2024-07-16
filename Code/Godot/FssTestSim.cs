@@ -8,6 +8,7 @@ public partial class FssTestSim : Node3D
 {
     public  string ModelName = "TEST-003";
     private bool   IsCreated = false;
+    private float lerpSpeed = 5.0f; // Adjust this value to control the lerp speed
 
     private Node3D ModelNode = null;
 
@@ -50,9 +51,14 @@ public partial class FssTestSim : Node3D
 
             // Create the Vector3 positions
             FssEntityV3 platformV3 = FssGeoConvOperations.ReadWorldToStruct(pos, course);
+            ModelNode.Position = ModelNode.Position.Lerp(platformV3.Position, (float)(lerpSpeed * delta));
 
-            ModelNode.LookAt(platformV3.PosAhead, platformV3.PosAbove);
-            ModelNode.Position = platformV3.Position;
+            // Find where we are currently looking, determine where we need to be looking, and lerp to that orientation
+            Transform3D currentTransform = ModelNode.Transform;
+            Transform3D targetTransform  = currentTransform.LookingAt(platformV3.PosAhead, platformV3.PosAbove);
+
+            ModelNode.Transform = currentTransform.InterpolateWith(targetTransform, (float)(lerpSpeed * delta));
+
         }
 
         // If the model is null, delete ourselves
