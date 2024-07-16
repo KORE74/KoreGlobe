@@ -148,9 +148,19 @@ public class FssPlatformManager
         return currPlatId - 1;                 // Move down one if mid-range
     }
 
-    public bool DoesPlatformExist(string platname)
+    public bool DoesPlatExist(string platname)
     {
         return PlatForName(platname) != null;
+    }
+
+    public List<string> PlatNameList()
+    {
+        List<string> platNames = new();
+        foreach (FssPlatform currPlat in PlatfomList)
+        {
+            platNames.Add(currPlat.Name);
+        }
+        return platNames;
     }
 
     // --------------------------------------------------------------------------------------------

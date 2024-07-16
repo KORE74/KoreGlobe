@@ -6,7 +6,7 @@ using Godot;
 
 public partial class FssTestSim : Node3D
 {
-    private string ModelName = "TEST-003";
+    public  string ModelName = "TEST-003";
     private bool   IsCreated = false;
 
     private Node3D ModelNode = null;
@@ -14,6 +14,12 @@ public partial class FssTestSim : Node3D
     public override void _Ready()
     {
         GD.Print("FssTestSim._Ready");
+    }
+
+    public void SetModelName(string modelName)
+    {
+        ModelName = modelName;
+        FssCentralLog.AddEntry($"FssTestSim: ModelName set to {ModelName}");
     }
 
     public override void _Process(double delta)
@@ -29,9 +35,11 @@ public partial class FssTestSim : Node3D
             AddChild(ModelNode);
             FssPrimitiveFactory.AddAxisMarkers(ModelNode, 0.02f, 0.005f);
             IsCreated = true;
+
+            FssCentralLog.AddEntry($"FssTestSim: Node3D {ModelName} created.");
         }
 
-        if (IsCreated)
+        if ((model != null) && (IsCreated))
         {
             // Get the model's start position
             FssLLAPoint pos    = model.Kinetics.CurrPosition;
@@ -45,6 +53,14 @@ public partial class FssTestSim : Node3D
 
             ModelNode.LookAt(platformV3.PosAhead, platformV3.PosAbove);
             ModelNode.Position = platformV3.Position;
+        }
+
+        // If the model is null, delete ourselves
+        if ((model == null) && (IsCreated))
+        {
+            ModelNode.QueueFree();
+            IsCreated = false;
+            FssCentralLog.AddEntry($"FssTestSim: Node3D {ModelName} deleted.");
         }
 
 

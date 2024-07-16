@@ -1,5 +1,6 @@
 
 using System;
+using System.Collections.Generic;
 
 #nullable enable
 
@@ -68,6 +69,27 @@ public partial class FssEventDriver
         return platform.Kinetics.StartPosition;
     }
 
+    // ---------------------------------------------------------------------------------------------
+    // #MARK: Platform Type
+    // ---------------------------------------------------------------------------------------------
+
+    public void SetPlatformType(string platName, string platType)
+    {
+        // Get the platform
+        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
+
+        if (platform == null)
+        {
+            FssCentralLog.AddEntry($"E00004: Platform {platName} not found.");
+            return;
+        }
+
+        // Set the platform's type
+        platform.Type = platType;
+    }
+
+    public string? PlatformType(string platName) =>
+        FssAppFactory.Instance.PlatformManager.PlatForName(platName)?.Type;
 
     // ---------------------------------------------------------------------------------------------
     // #MARK: Platform Course
@@ -88,16 +110,8 @@ public partial class FssEventDriver
         platform.Kinetics.CurrCourse = course;
     }
 
-    public FssCourse? PlatformCurrCourse(string platName)
-    {
-        // Get the platform
-        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
-
-        if (platform == null)
-            return null;
-
-        return platform.Kinetics.CurrCourse;
-    }
+    public FssCourse? PlatformCurrCourse(string platName) =>
+        FssAppFactory.Instance.PlatformManager.PlatForName(platName)?.Kinetics.CurrCourse;
 
     // ---------------------------------------------------------------------------------------------
     // #MARK: Platform Course Delta
@@ -134,7 +148,7 @@ public partial class FssEventDriver
     // #MARK: Platform Management
     // ---------------------------------------------------------------------------------------------
 
-    public bool DoesPlatformExist(string platName) => FssAppFactory.Instance.PlatformManager.DoesPlatformExist(platName);
+    public bool DoesPlatformExist(string platName) => FssAppFactory.Instance.PlatformManager.DoesPlatExist(platName);
 
     public void DeletePlatform(string platName) => FssAppFactory.Instance.PlatformManager.Delete(platName);
 
@@ -182,6 +196,8 @@ public partial class FssEventDriver
     public int PlatformIdNext(int currPlatId) =>  FssAppFactory.Instance.PlatformManager.PlatIdNext(currPlatId);
     public int PlatformIdPrev(int currPlatId) =>  FssAppFactory.Instance.PlatformManager.PlatIdPrev(currPlatId);
 
+    public List<string> PlatformNames() => FssAppFactory.Instance.PlatformManager.PlatNameList();
+
     // ---------------------------------------------------------------------------------------------
 
     public void SetupTestPlatforms()
@@ -189,20 +205,22 @@ public partial class FssEventDriver
         FssCentralLog.AddEntry("Creating Test Platform Entities");
 
         FssLLAPoint loc1 = new FssLLAPoint() { LatDegs = 52.8, LonDegs = -4.2, AltMslM = 1000 };
-        FssLLAPoint loc2 = new FssLLAPoint() { LatDegs = 52.9, LonDegs = -4.3, AltMslM = 2000 };
-        FssLLAPoint loc3 = new FssLLAPoint() { LatDegs = 52.7, LonDegs = -4.1, AltMslM = 3000 };
+        FssLLAPoint loc2 = new FssLLAPoint() { LatDegs = 52.9, LonDegs =  0.3, AltMslM = 2000 };
+        FssLLAPoint loc3 = new FssLLAPoint() { LatDegs = 52.7, LonDegs =  8.1, AltMslM = 3000 };
 
-        FssCourse course1 = new FssCourse() { HeadingDegs = 90,  SpeedKph = 1000 };
-        FssCourse course2 = new FssCourse() { HeadingDegs = 180, SpeedKph = 2000 };
-        FssCourse course3 = new FssCourse() { HeadingDegs = 270, SpeedKph = 30000 };
+        FssCourse course1 = new FssCourse() { HeadingDegs = 270, SpeedKph = 15000 };
+        FssCourse course2 = new FssCourse() { HeadingDegs = 180, SpeedKph = 20000 };
+        FssCourse course3 = new FssCourse() { HeadingDegs =  90, SpeedKph = 30000 };
 
         AddPlatform("TEST-001", "F16");
         SetPlatformStartLLA("TEST-001", loc1);
         SetPlatformCourse("TEST-001", course1);
+        SetPlatformCourseDelta("TEST-002", new FssCourseDelta() { HeadingChangeClockwiseDegsSec = 5, SpeedChangeMpMps = 0 });
 
         AddPlatform("TEST-002", "F18");
         SetPlatformStartLLA("TEST-002", loc2);
         SetPlatformCourse("TEST-002", course2);
+        SetPlatformCourseDelta("TEST-002", new FssCourseDelta() { HeadingChangeClockwiseDegsSec = 20, SpeedChangeMpMps = 0 });
 
         AddPlatform("TEST-003", "Tornado");
         SetPlatformStartLLA("TEST-003", loc3);
