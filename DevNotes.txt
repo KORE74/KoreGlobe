@@ -1,0 +1,20 @@
+
+Areas Needing Attention:
+========================
+- UI
+    - Add log tab to CLI window
+    - UI into loaded resource files
+    - Root UI elements
+- Relocatable Geometry
+    - Full Scale Earth
+- Terrain Tiles
+    - Loading textures
+- Platform Routes/Waypoints
+- Platform Position History
+- JSON Messaging
+    - Process file from CLI
+- Platform Attitude
+- Loading OutOfApp Models
+- Radar Domes and Wedges
+- Test great circle
+- Connect platfroms with cylinders
