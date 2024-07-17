@@ -2,20 +2,21 @@ using System.Collections.Generic;
 
 // FssCommandVersion
 
-public class FssCommandPlatReport : FssCommand
+public class FssCommandPlatReportPos : FssCommand
 {
-    public FssCommandPlatReport()
+    public FssCommandPlatReportPos()
     {
         Signature.Add("plat");
         Signature.Add("report");
+        Signature.Add("pos");
     }
 
     public override string Execute(List<string> parameters)
     {
         int num = FssAppFactory.Instance.EventDriver.NumPlatforms();
-        string rep = FssAppFactory.Instance.EventDriver.PlatformReport();
+        string rep = FssAppFactory.Instance.EventDriver.PlatformPositionsReport();
 
         FssCentralLog.AddEntry("FssCommandPlatReport.Execute: " + FssGlobals.VersionString);
-        return $"Platform Report:\n Number of Platforms: {num}\n{rep}";
+        return $"Platform Positions Report:\n{rep}";
     }
 }

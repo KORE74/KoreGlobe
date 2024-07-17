@@ -61,6 +61,29 @@ public partial class TestModel : Node3D
 
             FssPrimitiveFactory.AddAxisMarkers(ModelNode, 0.02f, 0.005f);
 
+            // ---------------------------------------
+
+            // Add a wedge in front
+            FssMeshBuilder frontWedge = new FssMeshBuilder();
+            frontWedge.AddPyramidByPoint(0.3f, 0.1f, 0.04f);
+
+            ArrayMesh meshData = frontWedge.Build("Sphere", false);
+
+            var matWire      = FssMaterialFactory.WireframeWhiteMaterial();
+            var matTransBlue = FssMaterialFactory.TransparentColoredMaterial(new Color(0.2f, 0.2f, 0.7f, 0.4f));
+
+            MeshInstance3D meshInstance    = new() { Name = "FrontWedge" };
+            meshInstance.Mesh              = meshData;
+            meshInstance.MaterialOverride  = matTransBlue;
+
+            MeshInstance3D meshInstanceW   = new() { Name = "FrontWedgeWire" };
+            meshInstanceW.Mesh             = meshData;
+            meshInstanceW.MaterialOverride = matWire;
+
+            ModelNode.AddChild(meshInstance);
+            ModelNode.AddChild(meshInstanceW);
+
+            // ---------------------------------------
 
             // Create and assign the markers
             // NodeMarkerZero  = FssPrimitiveFactory.CreateSphere(Vector3.Zero,  0.005f, new Color(0.7f, 0.1f, 0.1f, 1f)); // zero  = red

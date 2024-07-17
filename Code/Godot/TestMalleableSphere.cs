@@ -11,6 +11,8 @@ public partial class TestMalleableSphere : Node3D
         FssFloat2DArray radiusList = new FssFloat2DArray(32, 16);
         radiusList.SetRandomVals(1.01f, 1.05f);
 
+        radiusList = FssFloat2DArray.AntennaPattern_001(32, 16);
+
         FssMeshBuilder meshBuilder = new();
         meshBuilder.AddMalleableSphere(new Vector3(0, 0, 0), radiusList, colorRange);
 
@@ -20,15 +22,15 @@ public partial class TestMalleableSphere : Node3D
 
         ArrayMesh meshData = meshBuilder.Build("Sphere", false);
 
-        // Add the mesh to the current Node3D
+        // Colored - Add the mesh to the current Node3D
         MeshInstance3D meshInstance    = new();
         meshInstance.Mesh              = meshData;
-        meshInstance.MaterialOverride  = matVertexColor; // Vertex colors
+        meshInstance.MaterialOverride  = matVertexColor;
 
-        // Add the mesh to the current Node3D
+        // Wirefrme - Add the mesh to the current Node3D
         MeshInstance3D meshInstanceW   = new();
         meshInstanceW.Mesh             = meshData;
-        meshInstanceW.MaterialOverride = matWire; // Wireframe
+        meshInstanceW.MaterialOverride = matWire;
 
         AddChild(meshInstance);
         AddChild(meshInstanceW);

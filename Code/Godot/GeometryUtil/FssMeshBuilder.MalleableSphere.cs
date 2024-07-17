@@ -13,8 +13,8 @@ public partial class FssMeshBuilder
         int vertSegments  = radiusList.Height - 1;
         int horizSegments = radiusList.Width - 1;
 
-        float vertAngInc  = 180f / (float)radiusList.Height;
-        float horizAngInc = 360f / (float)radiusList.Width;
+        float vertAngInc  = 180f / (float)vertSegments;
+        float horizAngInc = 360f / (float)horizSegments;
 
         float maxRadius = radiusList.MaxVal();
         float minRadius = radiusList.MinVal();
@@ -24,7 +24,7 @@ public partial class FssMeshBuilder
         List<Color> sphereVertexColors = new List<Color>();
 
         // Define the points on the sphere surface
-        for (int i = 0; i < vertSegments; i++)
+        for (int i = 0; i < vertSegments+1; i++)
         {
             for (int j = 0; j < horizSegments; j++)
             {
@@ -66,7 +66,7 @@ public partial class FssMeshBuilder
         }
 
         // Define the MeshData.Triangles
-        for (int row = 0; row < (vertSegments-1); row++)
+        for (int row = 0; row < (vertSegments); row++)
         {
             int rowStart     = row       * horizSegments;
             int nextRowStart = (row + 1) * horizSegments;

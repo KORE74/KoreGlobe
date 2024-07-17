@@ -206,6 +206,43 @@ public class FssPlatformManager
     }
 
     // --------------------------------------------------------------------------------------------
+    // #MARK: Reports
+    // --------------------------------------------------------------------------------------------
+
+    public string PlatformPositionsReport()
+    {
+        string report = "Platform Positions Report\n";
+
+        foreach (FssPlatform currPlat in PlatfomList)
+        {
+            if (currPlat.Kinetics != null)
+            {
+                FssLLAPoint currPos = currPlat.Kinetics.CurrPosition;
+                report += $"Platform: {currPlat.Name} at Lat: {currPos.LatDegs:0.0000}, Lon: {currPos.LonDegs:0.0000}, Alt: {currPos.AltMslM:0.0000}\n";
+            }
+        }
+
+        return report;
+    }
+
+    public string PlatformElementsReport()
+    {
+        string report = "Platform Elements Report\n";
+
+        foreach (FssPlatform currPlat in PlatfomList)
+        {
+            report += $"Platform: {currPlat.Name}\n";
+
+            foreach (FssPlatformElement currElem in currPlat.ElementsList)
+            {
+                report += $"- Element: {currElem.Name} Type: {currElem.Type}\n";
+            }
+        }
+
+        return report;
+    }
+
+    // --------------------------------------------------------------------------------------------
     // #MARK: Reset
     // --------------------------------------------------------------------------------------------
 

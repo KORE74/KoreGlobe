@@ -499,16 +499,26 @@ public class FssFloat2DArray
 
     public static FssFloat2DArray AntennaPattern_001(int inSizeX, int inSizeY)
     {
-        FssFloat2DArray retGrid = new FssFloat2DArray(inSizeX, inSizeY);
+        FssFloat2DArray retGrid = new FssFloat2DArray(50, 50);
 
-        for (int y = 0; y < inSizeY; y++)
+        for (int y = 0; y < 15; y++)
         {
-            for (int x = 0; x < inSizeX; x++)
-            {
-                float val = (float)(Math.Sin(x * 0.1) * Math.Sin(y * 0.1) * 100);
-                retGrid[x, y] = val;
-            }
+            float val = FssValueUtils.Interpolate(0.2f, 0.21f, (float)(y/10f));
+            retGrid.SetRow(y, val);
         }
+        for (int y = 15; y < 30; y++)
+        {
+            float val = FssValueUtils.Interpolate(0.12f, 0.24f, (float)((y-15)/15f));
+            retGrid.SetRow(y, val);
+        }
+        for (int y = 30; y < 50; y++)
+        {
+            float val = FssValueUtils.Interpolate(0.12f, 0.26f, (float)((y-30)/20f));
+            retGrid.SetRow(y, val);
+        }
+
+        //retGrid = FssFloat2DArray.FlipYAxis(retGrid);
+
         return retGrid;
     }
 

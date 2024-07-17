@@ -11,6 +11,8 @@ public class FssRecieverPattern
 
 public class FssPlatformElementRecieverPatterns : FssPlatformElement
 {
+    public string Type {set; get; } = "RecieverPatterns";
+
     // List of receivers
     public List<FssRecieverPattern> RecieverPatterns = new List<FssRecieverPattern>();
 

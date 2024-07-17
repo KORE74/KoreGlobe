@@ -54,6 +54,22 @@ public partial class FssEventDriver
 
     public void PlatformAddScanWedge(string platName, string elemName, double DetectionRangeKms, double DetectionRangeRxMtrs, FssAzElBox azElBox)
     {
+        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
+
+        if (platform == null)
+        {
+            FssCentralLog.AddEntry($"E00003: PlatformAddScanWedge: Platform {platName} not found.");
+            return;
+        }
+
+        // Get the element
+        FssPlatformElement? element = platform.ElementForName(elemName);
+        if (element != null)
+            platform.DeleteElement(elemName);
+
+        // Create the element
+        FssPlatformElementOperations.CreatePlatformElement(platName, elemName, "ScanWedge");
+
 
     }
 

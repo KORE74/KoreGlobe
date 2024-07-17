@@ -6,6 +6,9 @@ public class FssPlatformElement
 {
     public string Name {set; get; } = "Unnamed";
 
+    // Overridable type for the element
+    public string Type {set; get; } = "Unknown";
+
     // Do we add the routes here?
 
 }

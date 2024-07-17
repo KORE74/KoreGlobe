@@ -4,6 +4,8 @@ public enum ScanPatternShape { Undefined, Cone, Wedge, Dome };
 
 public class FssPlatformElementScanPattern : FssPlatformElement
 {
+    public string Type {set; get; } = "ScanPattern";
+
     // Incoming Data
 
     // Internally Dervied values

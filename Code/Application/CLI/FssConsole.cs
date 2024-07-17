@@ -90,8 +90,11 @@ public class FssConsole
         commandHandlers.Add(new FssCommandSimPause());
         commandHandlers.Add(new FssCommandSimResume());
 
+        // Platform Rreport
+        commandHandlers.Add(new FssCommandPlatReportElem());
+        commandHandlers.Add(new FssCommandPlatReportPos());
+
         // Platform control
-        commandHandlers.Add(new FssCommandPlatReport());
         commandHandlers.Add(new FssCommandPlatTestScenario());
         commandHandlers.Add(new FssCommandPlatAdd());
         commandHandlers.Add(new FssCommandPlatDelete());

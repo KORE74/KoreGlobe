@@ -31,7 +31,7 @@ public partial class FssAppNode : Node
             SetProcessInput(true);
             SetProcessUnhandledInput(true);
             SetProcessUnhandledKeyInput(true);
-            CallDeferred(nameof(RegisterSingleton));
+            //CallDeferred(nameof(RegisterSingleton));
         }
         else
         {
@@ -42,8 +42,8 @@ public partial class FssAppNode : Node
     private void RegisterSingleton()
     {
         // Make the FssAppNode a singleton
-        GetTree().Root.AddChild(this);
-        GetTree().Root.SetMeta("FssAppNode", this);
+        //GetTree().Root.AddChild(this);
+        //GetTree().Root.SetMeta("FssAppNode", this);
     }
 
     public void ExitApplication()

@@ -88,4 +88,18 @@ public class FssPlatform
 
         return sb.ToString();
     }
+
+    public string ElementReport()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.AppendLine($"Platform: {Name} Type: {Type}");
+        sb.AppendLine($"- Elements: {ElementsList.Count}");
+
+        foreach (FssPlatformElement element in ElementsList)
+        {
+            sb.AppendLine($"- Element: {element.Name} Type: {element.Type}");
+        }
+
+        return sb.ToString();
+    }
 }

@@ -160,25 +160,14 @@ public partial class FssEventDriver
     // #MARK: Platform Report
     // ---------------------------------------------------------------------------------------------
 
-    public string PlatformReport()
+    public string PlatformPositionsReport()
     {
-        string report = "Platform Report\n";
+        return FssAppFactory.Instance.PlatformManager.PlatformPositionsReport();
+    }
 
-        // Loop through teh platforms by index
-        int totalPlatforms = NumPlatforms();
-        for (int i = 0; i < totalPlatforms; i++)
-        {
-            FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForIndex(i);
-            if (platform == null)
-                continue;
-
-            report += $"Platform{i}: {platform.Name}\n";
-            report += $"  Type: {platform.Type}\n";
-            report += $"  Start Position: {platform.Kinetics.StartPosition}\n";
-            report += $"  Course: {platform.Kinetics.CurrCourse}\n";
-        }
-
-        return report;
+    public string PlatformElementsReport()
+    {
+        return FssAppFactory.Instance.PlatformManager.PlatformElementsReport();
     }
 
     // ---------------------------------------------------------------------------------------------
