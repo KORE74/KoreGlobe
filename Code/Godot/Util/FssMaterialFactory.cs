@@ -22,7 +22,7 @@ public static class FssMaterialFactory
         StandardMaterial3D material = new StandardMaterial3D();
         material.AlbedoColor        = color;
         material.Transparency       = BaseMaterial3D.TransparencyEnum.Alpha;
-        
+
         return material;
     }
 
@@ -47,13 +47,37 @@ public static class FssMaterialFactory
     // Apply a wireframe shader, to see each triangle in a mesh.
     // Usage:
     //   meshInstance.MaterialOverride = FssMaterialFactory.WireframeShaderMaterial();
-    public static ShaderMaterial WireframeShaderMaterial(Color color)
+    // public static ShaderMaterial WireframeShaderMaterial(Color color)
+    // {
+    //     // Load the wireframe shader
+    //     Shader shader = (Shader)GD.Load("res://Shaders/wireframe_test_002.gdshader");
+    //     ShaderMaterial wireframeMaterial = new ShaderMaterial();
+    //    // wireframeMaterial.AlbedoColor = color;
+    //     wireframeMaterial.Shader = shader;
+    //     return wireframeMaterial;
+    // }
+
+    public static ShaderMaterial VertexColorMaterial()
     {
         // Load the wireframe shader
-        Shader shader = (Shader)GD.Load("res://Shaders/wireframe_test_002.gdshader");
-        ShaderMaterial wireframeMaterial = new ShaderMaterial();
+        Shader shader = (Shader)GD.Load("res://Shaders/VertexColor2.gdshader");
+        ShaderMaterial material = new ShaderMaterial();
        // wireframeMaterial.AlbedoColor = color;
-        wireframeMaterial.Shader = shader;
-        return wireframeMaterial;
+        material.Shader = shader;
+
+        return material;
     }
+
+
+    public static ShaderMaterial BubbleMaterial()
+    {
+        // Load the wireframe shader
+        Shader shader = (Shader)GD.Load("res://Shaders/bubble.gdshader");
+        ShaderMaterial material = new ShaderMaterial();
+       // wireframeMaterial.AlbedoColor = color;
+        material.Shader = shader;
+
+        return material;
+    }
+
 }

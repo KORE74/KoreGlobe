@@ -20,7 +20,7 @@ public partial class FssWedgeBuilder : Node3D
         var matTransBlue = FssMaterialFactory.TransparentColoredMaterial(new Color(0.2f, 0.2f, 0.7f, 0.4f));
         var matWire      = FssMaterialFactory.WireframeWhiteMaterial();
 
-        var matTestWite   = FssMaterialFactory.WireframeShaderMaterial(new Color(0.2f, 0.2f, 0.7f, 0.4f));
+        //var matTestWite   = FssMaterialFactory.WireframeShaderMaterial(new Color(0.2f, 0.2f, 0.7f, 0.4f));
 
         for (float currLon = -180f; currLon < (180f - 10f); currLon += 30f)
         {

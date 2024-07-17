@@ -49,10 +49,10 @@ public partial class TestShape : Node3D
         };
 
         // Create lists for surface data
-        List<Vector3> vertList = new List<Vector3>();
+        List<Vector3> vertList  = new List<Vector3>();
         List<Vector3> normalList = new List<Vector3>();
-        List<Vector2> uvList = new List<Vector2>();
-        List<int> indexList = new List<int>();
+        List<Vector2> uvList     = new List<Vector2>();
+        List<int> indexList      = new List<int>();
 
         // Populate surface lists with cube data
         for (int i = 0; i < vertices.Count; i++)
@@ -71,8 +71,8 @@ public partial class TestShape : Node3D
 
         surfaceArray[(int)Mesh.ArrayType.Vertex] = vertList.ToArray();
         surfaceArray[(int)Mesh.ArrayType.Normal] = normalList.ToArray();
-        surfaceArray[(int)Mesh.ArrayType.TexUV] = uvList.ToArray();
-        surfaceArray[(int)Mesh.ArrayType.Index] = indexList.ToArray();
+        surfaceArray[(int)Mesh.ArrayType.TexUV]  = uvList.ToArray();
+        surfaceArray[(int)Mesh.ArrayType.Index]  = indexList.ToArray();
 
         // Create the ArrayMesh and add the cube surface
         ArrayMesh cubeMesh = new ArrayMesh();
@@ -84,7 +84,7 @@ public partial class TestShape : Node3D
         meshInstance.Scale = new Vector3(0.5f, 0.5f, 0.5f);
 
         // Assign wireframe material
-        meshInstance.MaterialOverride = FssMaterialFactory.WireframeShaderMaterial(new Color(0.5f, 1.0f, 0.5f, 1.0f));
+        meshInstance.MaterialOverride = FssMaterialFactory.WireframeWhiteMaterial();
 
         // Add the MeshInstance3D to the scene
         AddChild(meshInstance);

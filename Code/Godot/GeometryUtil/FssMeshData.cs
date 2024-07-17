@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.IO;
-
 using Godot;
 
 public class FssMeshData
@@ -11,6 +9,7 @@ public class FssMeshData
     public List<int>     Triangles;
     public List<Vector3> Normals;
     public List<Vector2> UVs;
+    public List<Color>   Colors; // Add this line to include colors
 
     public FssMeshData()
     {
@@ -19,34 +18,37 @@ public class FssMeshData
         this.Triangles = new List<int>();
         this.Normals   = new List<Vector3>();
         this.UVs       = new List<Vector2>();
+        this.Colors    = new List<Color>(); // Initialize the colors list
     }
 
-    public FssMeshData(string inName, List<Vector3> vertices, List<int> triangles, List<Vector2> uvs)
+    public FssMeshData(string inName, List<Vector3> vertices, List<int> triangles, List<Vector2> uvs, List<Color> colors)
     {
         this.Name      = inName;
         this.Vertices  = vertices;
         this.Triangles = triangles;
         this.Normals   = new List<Vector3>();
         this.UVs       = uvs;
+        this.Colors    = colors; // Initialize the colors list
     }
-
 
     public ArrayMesh BuildMesh(bool recalcNormals = false)
     {
         var arrayMesh = new ArrayMesh();
-        var arrays = new Godot.Collections.Array();
+        var arrays    = new Godot.Collections.Array();
 
         arrays.Resize((int)ArrayMesh.ArrayType.Max);
 
         var verticesArray = new Godot.Collections.Array<Vector3>(Vertices);
-        var indicesArray = new Godot.Collections.Array<int>(Triangles);
-        var normalsArray = new Godot.Collections.Array<Vector3>(Normals);
-        var uvsArray = new Godot.Collections.Array<Vector2>(UVs);
+        var indicesArray  = new Godot.Collections.Array<int>(Triangles);
+        var normalsArray  = new Godot.Collections.Array<Vector3>(Normals);
+        var uvsArray      = new Godot.Collections.Array<Vector2>(UVs);
+        var colorsArray   = new Godot.Collections.Array<Color>(Colors);
 
         arrays[(int)ArrayMesh.ArrayType.Vertex] = verticesArray;
-        arrays[(int)ArrayMesh.ArrayType.Index] = indicesArray;
+        arrays[(int)ArrayMesh.ArrayType.Index]  = indicesArray;
         arrays[(int)ArrayMesh.ArrayType.Normal] = normalsArray;
-        // arrays[(int)ArrayMesh.ArrayType.TexUv] = uvsArray;
+        arrays[(int)ArrayMesh.ArrayType.Color]  = colorsArray;
+        arrays[(int)ArrayMesh.ArrayType.TexUV]  = uvsArray;
 
         arrayMesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, arrays);
 
@@ -78,6 +80,10 @@ public class FssMeshData
             UVs = new List<Vector2> {
                 new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1),
                 new Vector2(0, 1), new Vector2(1, 1), new Vector2(1, 0), new Vector2(0, 0),
+            },
+            Colors = new List<Color> { // Add default colors if needed
+                new Color(1, 0, 0), new Color(0, 1, 0), new Color(0, 0, 1), new Color(1, 1, 0),
+                new Color(1, 0, 1), new Color(0, 1, 1), new Color(1, 1, 1), new Color(0, 0, 0)
             }
         };
     }

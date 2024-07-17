@@ -58,7 +58,7 @@ public partial class FssMeshBuilder
 
                 // Calculate and add the color
                 float radiusFraction = (radius - minRadius) / (maxRadius - minRadius);
-                sphereVertexColors.Add(colorRange.GetColor(radiusFraction));
+                AddColor(colorRange.GetColor(radiusFraction));
 
                 // Add the index to the sphereVertexIndices - to calculate the triangles later
                 sphereVertexIndices.Add(index);

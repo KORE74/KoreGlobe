@@ -28,9 +28,21 @@ public partial class FssMeshBuilder
         var surfaceTool = new SurfaceTool();
         surfaceTool.Begin(Mesh.PrimitiveType.Triangles);
 
-        foreach (var vertex in meshData.Vertices)
+        // If the color array is the same length as the vertices, add the colors, otherwise don't.
+        if (meshData.Colors.Count == meshData.Vertices.Count)
         {
-            surfaceTool.AddVertex(vertex);
+            for (int i = 0; i < meshData.Vertices.Count; i++)
+            {
+                surfaceTool.SetColor(meshData.Colors[i]);
+                surfaceTool.AddVertex(meshData.Vertices[i]);
+            }
+        }
+        else
+        {
+            foreach (var vertex in meshData.Vertices)
+            {
+                surfaceTool.AddVertex(vertex);
+            }
         }
 
         foreach (var index in meshData.Triangles)
@@ -47,8 +59,8 @@ public partial class FssMeshBuilder
 
         arrays.Resize((int)Mesh.ArrayType.Max);
         arrays[(int)Mesh.ArrayType.Vertex] = meshData.Vertices.ToArray();
-        arrays[(int)Mesh.ArrayType.TexUV] = meshData.UVs.ToArray();
-        arrays[(int)Mesh.ArrayType.Index] = meshData.Triangles.ToArray();
+        arrays[(int)Mesh.ArrayType.TexUV]  = meshData.UVs.ToArray();
+        arrays[(int)Mesh.ArrayType.Index]  = meshData.Triangles.ToArray();
         arrays[(int)Mesh.ArrayType.Normal] = meshData.Normals.ToArray();
 
         newMesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, arrays);
@@ -151,6 +163,11 @@ public partial class FssMeshBuilder
     public void AddUV(Vector2 uv)
     {
         meshData.UVs.Add(uv);
+    }
+
+    public void AddColor(Color color)
+    {
+        meshData.Colors.Add(color);
     }
 
     // -----------------------------------------------------------------------------------------------
