@@ -66,12 +66,12 @@ public partial class FssMeshBuilder
         }
 
         // Define the MeshData.Triangles
-        for (int row = 0; row < 10; row++)
+        for (int row = 0; row < (vertSegments-1); row++)
         {
-            int rowStart = row * horizSegments;
+            int rowStart     = row       * horizSegments;
             int nextRowStart = (row + 1) * horizSegments;
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < (horizSegments); i++)
             {
                 int index1 = sphereVertexIndices[rowStart + i];
                 int index2 = sphereVertexIndices[rowStart + (i + 1) % horizSegments];
