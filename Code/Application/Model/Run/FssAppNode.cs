@@ -1,6 +1,8 @@
 using Godot;
 using System;
 
+#nullable enable
+
 // FssAppNode: Singleton class to manage the application (namely a clean exit)
 // - FssAppNode.Instance.ExitApplication();
 
@@ -49,5 +51,40 @@ public partial class FssAppNode : Node
     public void ExitApplication()
     {
         GetTree().Quit();
+    }
+
+    // --------------------------------------------------------------------------------------------
+    // #MARK: FindNode
+    // --------------------------------------------------------------------------------------------
+
+    // Function to find a node by its name in the scene tree
+    public Node? FindNode(string name)
+    {
+        return FindNodeByNameRecursive(this, name);
+    }
+
+    // Recursive helper function to search for the node
+    private Node? FindNodeByNameRecursive(Node parent, string name)
+    {
+        if (parent == null)
+        {
+            return null;
+        }
+
+        if (parent.Name == name)
+        {
+            return parent;
+        }
+
+        foreach (Node child in parent.GetChildren())
+        {
+            Node result = FindNodeByNameRecursive(child, name);
+            if (result != null)
+            {
+                return result;
+            }
+        }
+
+        return null;
     }
 }

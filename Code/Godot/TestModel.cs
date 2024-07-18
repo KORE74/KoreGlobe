@@ -10,6 +10,13 @@ public partial class TestModel : Node3D
     public string ModelPath = "res://Resources/Plane_Paper/PaperPlanes_v002.glb";
     //public string ModelPath = "res://Resources/FA-18F_v02.glb";
 
+
+    Node? CoreNode;
+    FssLLAPoint PrevPos = new FssLLAPoint() { LatDegs = 0, LonDegs = -70, AltMslM = 1.4f };
+
+    ShaderMaterial     matWire  = FssMaterialFactory.WireframeWhiteMaterial();
+    StandardMaterial3D matGrey  = FssMaterialFactory.SimpleColoredMaterial(new Color(0.5f, 0.5f, 0.5f, 1f));
+
     // Define the position and course
     private FssLLAPoint pos   = new FssLLAPoint() { LatDegs = 0, LonDegs = -70, AltMslM = 1.4f };
     private FssCourse Course  = new FssCourse()   { HeadingDegs = 0, SpeedKph = 1200000 };
@@ -32,6 +39,9 @@ public partial class TestModel : Node3D
     // Node3D NodeMarkerAhead   = null;
     Camera3D ModelCamera     = null;
 
+    FssCyclicIdGenerator IdGen = new FssCyclicIdGenerator(25);
+
+
     float Timer1Hz = 0f;
 
     // --------------------------------------------------------------------------------------------
@@ -39,6 +49,8 @@ public partial class TestModel : Node3D
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
+
+
         PackedScene importedModel = (PackedScene)ResourceLoader.Load(ModelPath);
 
         if (importedModel != null)
@@ -125,6 +137,8 @@ public partial class TestModel : Node3D
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
+        CoreNode = FssAppNode.Instance.FindNode("GlobeCore");
+
         // Figure out the change in position
         Course.HeadingDegs += 5 * delta;
         FssPolarOffset offset = Course.ToPolarOffset(delta);
@@ -138,8 +152,55 @@ public partial class TestModel : Node3D
         // Debug print the new position values once a second
         if (Timer1Hz < FssCoreTime.RuntimeSecs)
         {
+            // check the previous position markers at 1Hz.
             Timer1Hz = (float)(FssCoreTime.RuntimeIntSecs + 1); // Update the timer to the next whole second
             GD.Print($"RuntimeSecs: {Timer1Hz:F1} Course: {Course} Offset: {offset} Position: {pos}");
+
+            //CoreNode = null;
+
+            if (CoreNode != null)
+            {
+                // Create a new ID
+                string nextId = IdGen.NextId();
+
+                // If a child node with the ID exists, delete it.
+
+                CoreNode.GetNodeOrNull(nextId)?.QueueFree();
+                if (CoreNode.HasNode(nextId))
+                {
+                    Node childNode = CoreNode.GetNode(nextId);
+                    CoreNode.RemoveChild(childNode);
+                    childNode.QueueFree();
+                }
+
+                // Create a new sphere at the current position, and the ID
+                Node3D childSphere = FssPrimitiveFactory.CreateSphere(Vector3.Zero, 0.005f, new Color(0.9f, 0.9f, 0.9f, 1f));
+                childSphere.Name = nextId;
+                CoreNode.AddChild(childSphere);
+                childSphere.Name = nextId;
+
+                // get the current position to assign to the sphere
+                Vector3 vecPos   = FssGeoConvOperations.RealWorldToGodot(pos);
+                childSphere.Position = vecPos;
+
+                // Create a new cylinder at the current position, and the ID
+                Vector3 vecPrevPos   = FssGeoConvOperations.RealWorldToGodot(PrevPos);
+                Vector3 vecDiff = vecPrevPos - vecPos;
+
+                FssMeshBuilder meshBuilder = new FssMeshBuilder();
+                meshBuilder.AddCylinder(Vector3.Zero, vecDiff, 0.005f, 0.005f, 12, true);
+
+                ArrayMesh meshData = meshBuilder.Build("Wedge", false);
+                MeshInstance3D meshInstance = new();
+                meshInstance.Mesh = meshData;
+                meshInstance.MaterialOverride = matGrey;
+
+                childSphere.AddChild(meshInstance);
+                //meshInstance.Position = vecDiff / 2.0f;
+                //meshInstance.LookAt(vecDiff, Vector3.Up);
+
+                PrevPos = pos;
+            }
         }
 
         // Update the node positions and orientations
