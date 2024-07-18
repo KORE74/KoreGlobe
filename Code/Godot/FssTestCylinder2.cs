@@ -55,7 +55,7 @@ public partial class FssTestCylinder2 : Node3D
         AddChild(sphere);
     }
 
-    private void CreateCylinder(Vector3 start, Vector3 end, float radius)
+    public void CreateCylinder(Vector3 start, Vector3 end, float radius)
     {
         Vector3 direction = end - start;
         float length = direction.Length();

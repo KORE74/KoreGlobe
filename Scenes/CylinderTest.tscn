@@ -1,0 +1,50 @@
+[gd_scene load_steps=6 format=3 uid="uid://drlrmyey4b5ls"]
+
+[ext_resource type="Script" path="res://Code/Godot/Util/FssCameraMover.cs" id="1_sas3p"]
+[ext_resource type="Script" path="res://Code/Godot/TestMeshBuilder.cs" id="2_qdr00"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_jfu6m"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_khtfw"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_k2i26"]
+albedo_color = Color(0.318429, 0.373123, 0.362204, 1)
+subsurf_scatter_strength = 1.0
+
+[node name="CylinderTest" type="Node3D"]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5.49236)
+fov = 35.0
+near = 0.001
+script = ExtResource("1_sas3p")
+
+[node name="SceneLighting" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+
+[node name="SpotLight3D" type="SpotLight3D" parent="SceneLighting"]
+transform = Transform3D(0.80873, -0.012595, 0.588046, -0.588181, -0.0173177, 0.808544, -1.85615e-09, -0.999771, -0.0214135, 1.72392, 3.65414, -4.04764)
+light_energy = 2.0
+shadow_enabled = true
+spot_range = 6.17002
+spot_angle = 61.1429
+
+[node name="OmniLight3D" type="OmniLight3D" parent="SceneLighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -0.567626)
+light_energy = 3.0
+
+[node name="TestSubjects" type="Node3D" parent="."]
+
+[node name="Pill" type="MeshInstance3D" parent="TestSubjects"]
+visible = false
+mesh = SubResource("CapsuleMesh_jfu6m")
+skeleton = NodePath("../Test")
+
+[node name="Plane" type="MeshInstance3D" parent="TestSubjects"]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, -1, 0)
+mesh = SubResource("PlaneMesh_khtfw")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_k2i26")
+
+[node name="Test" type="Node3D" parent="TestSubjects"]
+script = ExtResource("2_qdr00")

@@ -501,19 +501,19 @@ public class FssFloat2DArray
     {
         FssFloat2DArray retGrid = new FssFloat2DArray(50, 50);
 
-        for (int y = 0; y < 15; y++)
+        for (int y = 0; y < 25; y++)
         {
-            float val = FssValueUtils.Interpolate(0.2f, 0.21f, (float)(y/10f));
+            float val = FssValueUtils.Interpolate(0.0f, 0.21f, (float)(y/25f));
             retGrid.SetRow(y, val);
         }
-        for (int y = 15; y < 30; y++)
+        for (int y = 25; y < 40; y++)
         {
-            float val = FssValueUtils.Interpolate(0.12f, 0.24f, (float)((y-15)/15f));
+            float val = FssValueUtils.Interpolate(0.12f, 0.24f, (float)((y-25)/15f));
             retGrid.SetRow(y, val);
         }
-        for (int y = 30; y < 50; y++)
+        for (int y = 40; y < 50; y++)
         {
-            float val = FssValueUtils.Interpolate(0.12f, 0.26f, (float)((y-30)/20f));
+            float val = FssValueUtils.Interpolate(0.12f, 0.26f, (float)((y-40)/10f));
             retGrid.SetRow(y, val);
         }
 
@@ -523,3 +523,4 @@ public class FssFloat2DArray
     }
 
 }
+

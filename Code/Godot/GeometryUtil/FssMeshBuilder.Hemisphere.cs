@@ -48,8 +48,8 @@ public partial class FssMeshBuilder
                 int index3 = hemisphereVertexIndices[nextRowStart + i];
                 int index4 = hemisphereVertexIndices[nextRowStart + (i + 1) % numSegments];
 
-                AddTriangle(index1, index2, index4);
-                AddTriangle(index1, index4, index3);
+                AddTriangle(index1, index4, index2);
+                AddTriangle(index1, index3, index4);
             }
         }
     }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bkhif7hl6psi5"]
+[gd_scene load_steps=16 format=3 uid="uid://bkhif7hl6psi5"]
 
 [ext_resource type="Script" path="res://Code/Application/Model/Run/FssAppNode.cs" id="1_3l252"]
 [ext_resource type="Script" path="res://Code/Godot/Util/FssCameraMover.cs" id="2_3c077"]
@@ -13,6 +13,7 @@
 [ext_resource type="Script" path="res://Code/Godot/TestMalleableSphere.cs" id="10_5oluh"]
 [ext_resource type="Script" path="res://Code/Godot/TesColoredCube.cs" id="11_tribo"]
 [ext_resource type="Script" path="res://Code/Godot/FssTestDome.cs" id="12_wwe4x"]
+[ext_resource type="Script" path="res://Code/Godot/FssTestRoute.cs" id="13_ligvu"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_l1siu"]
 
@@ -67,16 +68,21 @@ transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
 script = ExtResource("11_tribo")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="GlobeRoot/TesColoredCube"]
+visible = false
 mesh = SubResource("SphereMesh_l1siu")
 
 [node name="TestDome" type="Node3D" parent="GlobeRoot"]
 script = ExtResource("12_wwe4x")
+
+[node name="TestRoute" type="Node3D" parent="GlobeRoot"]
+script = ExtResource("13_ligvu")
 
 [node name="CLIWindow" type="Window" parent="."]
 positional_shadow_atlas_16_bits = false
 title = "Command Line"
 initial_position = 2
 size = Vector2i(400, 250)
+visible = false
 script = ExtResource("7_padcc")
 
 [node name="CLIWindowLayout" type="VBoxContainer" parent="CLIWindow"]

@@ -11,4 +11,3 @@ void fragment() {
     ALBEDO = COLOR.rgb;
     ALPHA = 1.0;
 }
-

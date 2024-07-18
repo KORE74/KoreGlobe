@@ -34,6 +34,7 @@ public partial class FssMeshBuilder
             for (int i = 0; i < meshData.Vertices.Count; i++)
             {
                 surfaceTool.SetColor(meshData.Colors[i]);
+                surfaceTool.SetUV(Vector2.Zero);
                 surfaceTool.AddVertex(meshData.Vertices[i]);
             }
         }
@@ -41,6 +42,7 @@ public partial class FssMeshBuilder
         {
             foreach (var vertex in meshData.Vertices)
             {
+                surfaceTool.SetUV(Vector2.Zero);
                 surfaceTool.AddVertex(vertex);
             }
         }
@@ -50,10 +52,8 @@ public partial class FssMeshBuilder
             surfaceTool.AddIndex(index);
         }
 
-        if (recalcNormals)
-        {
-            surfaceTool.GenerateNormals();
-        }
+        surfaceTool.GenerateNormals();
+        surfaceTool.GenerateTangents();
 
         var arrays = new Godot.Collections.Array();
 
@@ -65,7 +65,6 @@ public partial class FssMeshBuilder
 
         newMesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, arrays);
 
-        surfaceTool.GenerateTangents();
 
         newMesh = surfaceTool.Commit();
         //newMesh.Name = name;
@@ -183,6 +182,11 @@ public partial class FssMeshBuilder
             int i1 = AddVertex(edgePoints[i]);
             int i2 = AddVertex(edgePoints[i + 1]);
 
+            AddUV(Vector2.Zero);
+            AddUV(Vector2.Zero);
+            AddNormal(Vector3.Zero);
+            AddNormal(Vector3.Zero);
+
             // Create a triangle using the center point and two consecutive edge points
             AddTriangle(centerIndex, i1, i2);
         }
@@ -193,6 +197,11 @@ public partial class FssMeshBuilder
             int i1 = AddVertex(edgePoints[edgePoints.Count - 1]);
             int i2 = AddVertex(edgePoints[0]);
             AddTriangle(centerIndex, i1, i2);
+
+            AddUV(Vector2.Zero);
+            AddUV(Vector2.Zero);
+            AddNormal(Vector3.Zero);
+            AddNormal(Vector3.Zero);
         }
     }
 

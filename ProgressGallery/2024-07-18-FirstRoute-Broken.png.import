@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://blxkiokb8656w"
-path="res://.godot/imported/2024-07-03.png-833046c0cc63435ab8bd397fced2a2c0.ctex"
+uid="uid://b2rnbycgrdpm4"
+path="res://.godot/imported/2024-07-18-FirstRoute-Broken.png-dde7bc06a3e210f044c43809e41ad88a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://ProgressGallery/2024-07-03.png"
-dest_files=["res://.godot/imported/2024-07-03.png-833046c0cc63435ab8bd397fced2a2c0.ctex"]
+source_file="res://ProgressGallery/2024-07-18-FirstRoute-Broken.png"
+dest_files=["res://.godot/imported/2024-07-18-FirstRoute-Broken.png-dde7bc06a3e210f044c43809e41ad88a.ctex"]
 
 [params]
 

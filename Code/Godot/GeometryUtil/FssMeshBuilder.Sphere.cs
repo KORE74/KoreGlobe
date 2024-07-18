@@ -33,13 +33,13 @@ public partial class FssMeshBuilder
                 float x = r * Mathf.Cos(angle2);
                 float z = r * Mathf.Sin(angle2);
 
-                Vector3 v = new Vector3(x, y, z) + center;
-                int index = AddVertex(v);
-
                 Vector3 n = new Vector3(x, y, z);
                 AddNormal(n);
                 AddUV(new Vector2(uvXFraction, uvYFraction));
-                
+
+                Vector3 v = new Vector3(x, y, z) + center;
+                int index = AddVertex(v);
+
                 sphereVertexIndices.Add(index);
             }
         }

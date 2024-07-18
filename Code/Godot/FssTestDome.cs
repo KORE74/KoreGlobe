@@ -6,14 +6,14 @@ using Godot;
 
 public partial class FssTestDome : Node3D
 {
-    private FssLLAPoint pos   = new FssLLAPoint() { LatDegs = 35, LonDegs = 30, AltMslM = 0.4f };
+    private FssLLAPoint pos   = new FssLLAPoint() { LatDegs = 35, LonDegs = 30, AltMslM = 1.22f };
     Node3D ModelNode         = null;
 
     public override void _Ready()
     {
         GD.Print("FssTestSim._Ready");
 
-            ModelNode = new Node3D() { Name = "ModelNode" };
+            ModelNode = new Node3D() { Name = "TestDome" };
             ModelNode.LookAt(Vector3.Forward, Vector3.Up);
             AddChild(ModelNode);
 
@@ -21,7 +21,7 @@ public partial class FssTestDome : Node3D
 
             // Add a Dome
             FssMeshBuilder meshBuilder = new FssMeshBuilder();
-            meshBuilder.AddHemisphere(Vector3.Zero, 0.5f, 32);
+            meshBuilder.AddHemisphere(Vector3.Zero, 0.15f, 25);
 
             ArrayMesh meshData = meshBuilder.Build("Dome", false);
 
@@ -41,15 +41,12 @@ public partial class FssTestDome : Node3D
 
             // ---------------------------------------
 
-
     }
-
 
     public override void _Process(double delta)
     {
         UpdateModelPosition();
     }
-
 
     public void UpdateModelPosition()
     {
@@ -65,7 +62,6 @@ public partial class FssTestDome : Node3D
             posAhead = pos;
             posAhead.LatDegs += 0.001;
 
-
         // --- Define vectors -----------------------
 
         // Define the Vector3 Offsets
@@ -73,10 +69,7 @@ public partial class FssTestDome : Node3D
         Vector3 vecAbove = FssGeoConvOperations.RealWorldToGodot(posAbove);
         Vector3 vecAhead = FssGeoConvOperations.RealWorldToGodot(posAhead);
 
-
         FssEntityV3 platVecs = FssGeoConvOperations.ReadWorldToStruct(pos, FssCourse.Zero);
-
-
 
         // Update node position and orientation
         ModelNode.Position = platVecs.Position;// vecPos;
@@ -88,3 +81,4 @@ public partial class FssTestDome : Node3D
         // ModelCamera.LookAt(vecPos, vecAbove);
     }
 }
+

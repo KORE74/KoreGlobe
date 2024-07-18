@@ -24,35 +24,71 @@ public static class FssPrimitiveFactory
         return sphere;
     }
 
-    private static void CreateCylinder(Node3D node, Vector3 start, Vector3 end, float radius, Color color)
+    // Usage:
+    // - AddChild( FssPrimitiveFactory.CreateBox(new Vector3(0f, 1f, 0f), new Vector3(1.2f, 1.2f, 1.2f), new Color(0.5f, 1.0f, 0.5f, 0.7f)) );
+    public static MeshInstance3D CreateCylinder(Vector3 toPoint, float radius, Color color)
     {
-        Vector3 direction = end - start;
-        float length = direction.Length();
-        direction = direction.Normalized();
-
-        // Midpoint
-        Vector3 midPoint = (start + end) / 2.0f;
-
-        // above the midpoint
-        Vector3 aboveMidPoint = midPoint * 1.1f;
+        // Implementation is to create a cylinder from the current point (assumed 0,0,0) to the end point.
+        // The rotation of the cylinder is not considered.
 
         MeshInstance3D cylinder = new MeshInstance3D();
         CylinderMesh cylinderMesh = new CylinderMesh
         {
             TopRadius      = radius,
             BottomRadius   = radius,
-            Height         = length,
-            RadialSegments = 6,
+            Height         = toPoint.Length(),
+            RadialSegments = 12,
             Rings          = 3
         };
+
         cylinder.Mesh             = cylinderMesh;
         cylinder.MaterialOverride = FssMaterialFactory.SimpleColoredMaterial(color);
 
-        node.AddChild(cylinder);
+        // cylinder.Position = toPoint / 2.0f;
+        // cylinder.LookAt(toPoint, Vector3.Up);
 
-        cylinder.Position = midPoint;
-        cylinder.LookAtFromPosition(midPoint, end, Vector3.Up);
+        return cylinder;
     }
+
+
+
+
+
+
+
+
+
+
+        // Vector3 direction = end - start;
+        // float length = direction.Length();
+        // direction = direction.Normalized();
+
+        // // Midpoint
+        // Vector3 midPoint = (start + end) / 2.0f;
+
+        // // diff start to end
+        // Vector3 diff = end - start;
+
+        // // above the midpoint
+        // Vector3 aboveMidPoint = midPoint * 1.1f;
+
+        // MeshInstance3D cylinder = new MeshInstance3D();
+        // CylinderMesh cylinderMesh = new CylinderMesh
+        // {
+        //     TopRadius      = radius,
+        //     BottomRadius   = radius,
+        //     Height         = length,
+        //     RadialSegments = 12,
+        //     Rings          = 3
+        // };
+        // cylinder.Mesh             = cylinderMesh;
+        // cylinder.MaterialOverride = FssMaterialFactory.SimpleColoredMaterial(color);
+
+        // node.AddChild(cylinder);
+
+        // cylinder.Position = midPoint;
+        // cylinder.LookAt(end, Vector3.Up);
+    // }
 
     // FssPrimitiveFactory.AddAxisMarkers(ModelNode, 0.02f, 0.005f);
 
