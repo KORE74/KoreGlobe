@@ -19,3 +19,7 @@ Areas Needing Attention:
     - Radar Domes and Wedges
 - Test great circle
 - Connect platforms with cylinders
+
+
+UI Tutorial
+https://www.youtube.com/watch?v=i8ySmMGx--0
