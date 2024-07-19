@@ -1,3 +1,6 @@
-[gd_resource type="Theme" format=3 uid="uid://djwxcxhu87cro"]
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://djwxcxhu87cro"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p03td"]
 
 [resource]
+Button/styles/pressed = SubResource("StyleBoxFlat_p03td")

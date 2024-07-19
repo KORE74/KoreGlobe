@@ -31,7 +31,7 @@ public partial class FssTestCylinder2 : Node3D
                 // find the centre of this object
                 Vector3 centre = this.Position;
 
-                CreateSphere(position, 0.015f);
+                CreateSphere(position, 0.0035f);
                 CreateCylinder(position, eastPosition, 0.0025f);
                 CreateCylinder(position, southPosition, 0.0025f);
             }

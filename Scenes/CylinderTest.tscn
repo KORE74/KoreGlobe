@@ -1,7 +1,14 @@
-[gd_scene load_steps=6 format=3 uid="uid://drlrmyey4b5ls"]
+[gd_scene load_steps=12 format=3 uid="uid://drlrmyey4b5ls"]
 
+[ext_resource type="Texture2D" uid="uid://bex2j3wpwedsl" path="res://Resources/Icons/White_Connections2.png" id="1_p0cxm"]
 [ext_resource type="Script" path="res://Code/Godot/Util/FssCameraMover.cs" id="1_sas3p"]
+[ext_resource type="Texture2D" uid="uid://cb238hw6rw1bu" path="res://Resources/Icons/arrow_right.png" id="2_g1vwr"]
+[ext_resource type="Texture2D" uid="uid://b3kf65f7mmluh" path="res://Resources/Icons/Inject.png" id="2_kbosk"]
 [ext_resource type="Script" path="res://Code/Godot/TestMeshBuilder.cs" id="2_qdr00"]
+[ext_resource type="Texture2D" uid="uid://b1cyvndtq6fmm" path="res://Resources/Icons/Examine.png" id="3_idqhl"]
+[ext_resource type="Texture2D" uid="uid://ejokbwbboald" path="res://Resources/Icons/arrow_left.png" id="4_0dncw"]
+
+[sub_resource type="Shortcut" id="Shortcut_i6gam"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_jfu6m"]
 
@@ -23,7 +30,7 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="Control"]
+[node name="MarginContainer-ScreenInset" type="MarginContainer" parent="Control"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -35,34 +42,47 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer"]
+[node name="VBoxContainer-Screen" type="VBoxContainer" parent="Control/MarginContainer-ScreenInset"]
 layout_mode = 2
-size_flags_vertical = 0
+size_flags_horizontal = 3
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer"]
+[node name="HeaderContainer" type="PanelContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen"]
+layout_mode = 2
+
+[node name="MarginContainer-HeaderInset" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="HeaderContainer-LeftAlign" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset"]
+custom_minimum_size = Vector2(0, 45)
 layout_mode = 2
 theme_override_constants/separation = 5
 
-[node name="Button" type="Button" parent="Control/MarginContainer/VBoxContainer/HBoxContainer2"]
-custom_minimum_size = Vector2(80, 0)
+[node name="Network-IconToggleButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
+custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
-text = "CLI"
+focus_mode = 0
+theme_override_colors/icon_pressed_color = Color(0, 0.92549, 0, 1)
+toggle_mode = true
+icon = ExtResource("1_p0cxm")
+expand_icon = true
 
-[node name="Button2" type="Button" parent="Control/MarginContainer/VBoxContainer/HBoxContainer2"]
-custom_minimum_size = Vector2(80, 0)
+[node name="Settings-IconToggleButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
+custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
-text = "Network"
+focus_mode = 0
+icon = ExtResource("2_kbosk")
+icon_alignment = 1
+expand_icon = true
 
-[node name="Button3" type="Button" parent="Control/MarginContainer/VBoxContainer/HBoxContainer2"]
-custom_minimum_size = Vector2(80, 0)
-layout_mode = 2
-text = "Settings"
-
-[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="Label" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
 layout_mode = 2
 text = "Mode:"
 
-[node name="OptionButton" type="OptionButton" parent="Control/MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="OptionButton" type="OptionButton" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
 layout_mode = 2
 item_count = 4
 popup/item_0/text = "sadfsadfa"
@@ -73,21 +93,291 @@ popup/item_2/id = 2
 popup/item_3/text = "2323"
 popup/item_3/id = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="Button2" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
+custom_minimum_size = Vector2(80, 45)
+layout_mode = 2
+text = "Network"
+
+[node name="HeaderContainer-RightAlign" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
 layout_direction = 3
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/separation = 5
 
-[node name="Button" type="Button" parent="Control/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
-custom_minimum_size = Vector2(50, 0)
+[node name="Exit--IconButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign/HeaderContainer-RightAlign"]
+custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 text = "X"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer"]
+[node name="CLI-IconToggleButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign/HeaderContainer-RightAlign"]
+clip_contents = true
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+theme_override_constants/outline_size = 5
+icon = ExtResource("3_idqhl")
+icon_alignment = 1
+expand_icon = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Control-PlatPos" type="Control" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -119.0
+offset_top = -82.0
+offset_right = 119.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="PanelContainer-Pos2" type="PanelContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer"]
 layout_mode = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="Control/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2"]
 layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer-PanelRows" type="VBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2/MarginContainer/VBoxContainer-PanelRows"]
+layout_mode = 2
+text = "Near Platform"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2/MarginContainer/VBoxContainer-PanelRows"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Button2" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+icon = ExtResource("4_0dncw")
+icon_alignment = 1
+expand_icon = true
+
+[node name="Label" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+custom_minimum_size = Vector2(130, 45)
+layout_mode = 2
+text = "Platform 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+icon = ExtResource("2_g1vwr")
+expand_icon = true
+
+[node name="PanelContainer-Pos" type="PanelContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer-PanelRows" type="VBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos/MarginContainer/VBoxContainer-PanelRows"]
+layout_mode = 2
+text = "Far Platform"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos/MarginContainer/VBoxContainer-PanelRows"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Button2" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+icon = ExtResource("4_0dncw")
+icon_alignment = 1
+expand_icon = true
+
+[node name="Label" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+custom_minimum_size = Vector2(130, 45)
+layout_mode = 2
+text = "Platform 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/icon_pressed_color = Color(1, 0.397701, 0.329255, 1)
+theme_override_colors/icon_hover_color = Color(0.456283, 0.767747, 0.448169, 1)
+theme_override_colors/icon_disabled_color = Color(0.255659, 0.255659, 0.255659, 1)
+icon = ExtResource("2_g1vwr")
+icon_alignment = 1
+expand_icon = true
+
+[node name="FooterContainer" type="PanelContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="MarginContainer-FooterInset" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/FooterContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="FooterContainer-LeftAlign" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/FooterContainer/MarginContainer-FooterInset"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Button" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/FooterContainer/MarginContainer-FooterInset/FooterContainer-LeftAlign"]
+custom_minimum_size = Vector2(70, 40)
+layout_mode = 2
+size_flags_horizontal = 0
+tooltip_text = "ToolTip!"
+focus_mode = 0
+keep_pressed_outside = true
+shortcut = SubResource("Shortcut_i6gam")
+text = "Button"
+
+[node name="OptionButton" type="OptionButton" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/FooterContainer/MarginContainer-FooterInset/FooterContainer-LeftAlign"]
+layout_mode = 2
+focus_mode = 0
+item_count = 4
+popup/item_0/text = "sadfsadfa"
+popup/item_1/text = "sadfsadf"
+popup/item_1/id = 1
+popup/item_2/text = "sadfs"
+popup/item_2/id = 2
+popup/item_3/text = "2323"
+popup/item_3/id = 3
+
+[node name="FooterContainer-RightAlign" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/FooterContainer/MarginContainer-FooterInset/FooterContainer-LeftAlign"]
+layout_direction = 3
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 5
+
+[node name="Button" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/FooterContainer/MarginContainer-FooterInset/FooterContainer-LeftAlign/FooterContainer-RightAlign"]
+custom_minimum_size = Vector2(70, 40)
+layout_mode = 2
+size_flags_horizontal = 0
+tooltip_text = "ToolTip!"
+focus_mode = 0
+keep_pressed_outside = true
+shortcut = SubResource("Shortcut_i6gam")
+text = "Button"
+
+[node name="Control2" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="Control2"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -132.0
+offset_top = -44.0
+offset_right = 132.0
+offset_bottom = 44.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Control2/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control2/PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="Row1" type="HBoxContainer" parent="Control2/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control2/PanelContainer/MarginContainer/VBoxContainer/Row1"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Network Settings"
+
+[node name="HSeparator" type="HSeparator" parent="Control2/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Row2" type="HBoxContainer" parent="Control2/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Items" type="Label" parent="Control2/PanelContainer/MarginContainer/VBoxContainer/Row2"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Item1"
+
+[node name="CheckButton" type="CheckButton" parent="Control2/PanelContainer/MarginContainer/VBoxContainer/Row2"]
+custom_minimum_size = Vector2(50, 45)
+layout_mode = 2
+
+[node name="Row3" type="HBoxContainer" parent="Control2/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control2/PanelContainer/MarginContainer/VBoxContainer/Row3"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Item2"
+
+[node name="LineEdit" type="LineEdit" parent="Control2/PanelContainer/MarginContainer/VBoxContainer/Row3"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+
+[node name="HSeparator2" type="HSeparator" parent="Control2/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Row4" type="HBoxContainer" parent="Control2/PanelContainer/MarginContainer/VBoxContainer"]
+layout_direction = 3
+layout_mode = 2
+
+[node name="Button-Cancel" type="Button" parent="Control2/PanelContainer/MarginContainer/VBoxContainer/Row4"]
+custom_minimum_size = Vector2(100, 45)
+layout_mode = 2
+text = "CANCEL
+"
+
+[node name="Button-OK" type="Button" parent="Control2/PanelContainer/MarginContainer/VBoxContainer/Row4"]
+custom_minimum_size = Vector2(100, 45)
+layout_mode = 2
+text = "OK"
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5.49236)
