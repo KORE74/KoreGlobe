@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b4fx5q01el45u"
-path="res://.godot/imported/White_Location.png-baceebf7e29a28b6ba4320dea1e54218.ctex"
+uid="uid://de52c4t0371a2"
+path="res://.godot/imported/white_camera2.png-0278ef461c647143144f6a80c38b86dd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Resources/Icons/White_Location.png"
-dest_files=["res://.godot/imported/White_Location.png-baceebf7e29a28b6ba4320dea1e54218.ctex"]
+source_file="res://Resources/Icons/white_camera2.png"
+dest_files=["res://.godot/imported/white_camera2.png-0278ef461c647143144f6a80c38b86dd.ctex"]
 
 [params]
 

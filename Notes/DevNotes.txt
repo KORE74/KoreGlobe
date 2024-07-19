@@ -28,3 +28,28 @@ Icons
 https://game-icons.net/tags/gui.html
 
 
+
+Fix align cam
+
+Tracks 
+- foundation of point to point geometry
+    - leading onto DynamicMeshBuilder
+        - Maybe base it on GloebLLAPoints, and handle all the conversions?
+
+
+Terrain:
+- Load from Arc Files.
+    - Split Arc files from 5degree exported tiles, to current format grids.
+- Create variation between bedrock and surface tiles.
+
+Create a sample sea surface 
+- https://youtu.be/vTMEdHcKgM4?list=PLFt_AvWsXl0ehjAfLFsp1PGaatzAwo0uK&t=790
+
+- First Shader:
+    - https://www.youtube.com/watch?v=zCkC5e_Pkz4&list=PLX2vGYjWbI0RS_lkb68ApE2YPcZMC4Ohz&index=1
+
+
+Atmosphere:
+- https://youtu.be/DxfEbulyFcY?t=211
+
+

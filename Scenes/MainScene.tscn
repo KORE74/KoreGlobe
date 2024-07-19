@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://bkhif7hl6psi5"]
+[gd_scene load_steps=33 format=3 uid="uid://bkhif7hl6psi5"]
 
 [ext_resource type="Script" path="res://Code/Application/Model/Run/FssAppNode.cs" id="1_3l252"]
 [ext_resource type="Script" path="res://Code/Godot/Util/FssCameraMover.cs" id="2_3c077"]
@@ -14,8 +14,29 @@
 [ext_resource type="Script" path="res://Code/Godot/TesColoredCube.cs" id="11_tribo"]
 [ext_resource type="Script" path="res://Code/Godot/FssTestDome.cs" id="12_wwe4x"]
 [ext_resource type="Script" path="res://Code/Godot/FssTestRoute.cs" id="13_ligvu"]
+[ext_resource type="StyleBox" uid="uid://cg5jbxqki88ph" path="res://Themes/new_style_box_flat.tres" id="15_aynxe"]
+[ext_resource type="Texture2D" uid="uid://b5neqrik7nbhj" path="res://Resources/Icons/White_Connections2.png" id="16_rpbva"]
+[ext_resource type="Script" path="res://Code/Godot/UI/FssUIHeader.cs" id="16_yac5x"]
+[ext_resource type="Texture2D" uid="uid://c535aixjgoih0" path="res://Resources/Icons/White_Options.png" id="17_bbpjn"]
+[ext_resource type="Theme" uid="uid://d05fy831gbql8" path="res://Themes/Red_Button.tres" id="18_wc5rg"]
+[ext_resource type="Texture2D" uid="uid://bpjmofp0dir0d" path="res://Resources/Icons/White_Close.png" id="19_t7amt"]
+[ext_resource type="Texture2D" uid="uid://8km4gxg0fgok" path="res://Resources/Icons/White_Log.png" id="20_s4gy1"]
+[ext_resource type="Theme" uid="uid://b3c46j2ja5mrv" path="res://Themes/Yellow_Button.tres" id="21_u73ii"]
+[ext_resource type="Texture2D" uid="uid://dec5v78k63oif" path="res://Resources/Icons/White_Globe.png" id="22_wmu5k"]
+[ext_resource type="Texture2D" uid="uid://buqwf6wctolbe" path="res://Resources/Icons/Plane.png" id="23_rrka7"]
+[ext_resource type="Texture2D" uid="uid://dgq7if4l4dpys" path="res://Resources/Icons/Align.png" id="24_xd42u"]
+[ext_resource type="Texture2D" uid="uid://cvkgx537okkdr" path="res://Resources/Icons/arrow_left.png" id="25_niy3t"]
+[ext_resource type="Texture2D" uid="uid://msmhfxb7v8b" path="res://Resources/Icons/arrow_right.png" id="26_8huxx"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_l1siu"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_3y634"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_anppk"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_lkqfi"]
+
+[sub_resource type="Shortcut" id="Shortcut_2ktqs"]
 
 [node name="Node3D" type="Node3D"]
 script = ExtResource("1_3l252")
@@ -82,7 +103,6 @@ positional_shadow_atlas_16_bits = false
 title = "Command Line"
 initial_position = 2
 size = Vector2i(400, 250)
-visible = false
 script = ExtResource("7_padcc")
 
 [node name="CLIWindowLayout" type="VBoxContainer" parent="CLIWindow"]
@@ -112,3 +132,345 @@ text_overrun_behavior = 1
 [node name="CommandEntryEdit" type="LineEdit" parent="CLIWindow/CLIWindowLayout"]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="MarginContainer-ScreenInset" type="MarginContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer-Screen" type="VBoxContainer" parent="Control/MarginContainer-ScreenInset"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HeaderContainer" type="PanelContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen"]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("15_aynxe")
+script = ExtResource("16_yac5x")
+
+[node name="MarginContainer-HeaderInset" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="HeaderContainer-LeftAlign" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset"]
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Network-IconToggleButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/icon_pressed_color = Color(0, 0.92549, 0, 1)
+toggle_mode = true
+icon = ExtResource("16_rpbva")
+expand_icon = true
+
+[node name="Settings-IconToggleButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("17_bbpjn")
+icon_alignment = 1
+expand_icon = true
+
+[node name="Label" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
+layout_mode = 2
+text = "Mode:"
+
+[node name="OptionButton" type="OptionButton" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
+layout_mode = 2
+item_count = 4
+popup/item_0/text = "sadfsadfa"
+popup/item_1/text = "sadfsadf"
+popup/item_1/id = 1
+popup/item_2/text = "sadfs"
+popup/item_2/id = 2
+popup/item_3/text = "2323"
+popup/item_3/id = 3
+
+[node name="Button2" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
+custom_minimum_size = Vector2(80, 45)
+layout_mode = 2
+text = "Network"
+
+[node name="HeaderContainer-RightAlign" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
+layout_direction = 3
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 5
+
+[node name="Exit-IconButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign/HeaderContainer-RightAlign"]
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+theme = ExtResource("18_wc5rg")
+icon = ExtResource("19_t7amt")
+icon_alignment = 1
+expand_icon = true
+
+[node name="CLI-IconToggleButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign/HeaderContainer-RightAlign"]
+clip_contents = true
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+theme_override_constants/outline_size = 5
+icon = ExtResource("20_s4gy1")
+icon_alignment = 1
+expand_icon = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Control-PlatPos" type="Control" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -119.0
+offset_top = -82.0
+offset_right = 119.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="PanelContainer-CamMode" type="PanelContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("15_aynxe")
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer-PanelRows" type="VBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows"]
+layout_mode = 2
+text = "Camera Mode
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Button3" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+theme = ExtResource("21_u73ii")
+theme_override_constants/outline_size = 10
+toggle_mode = true
+action_mode = 0
+button_group = SubResource("ButtonGroup_3y634")
+icon = ExtResource("22_wmu5k")
+expand_icon = true
+
+[node name="Button2" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+theme = ExtResource("21_u73ii")
+toggle_mode = true
+action_mode = 0
+button_group = SubResource("ButtonGroup_anppk")
+icon = ExtResource("23_rrka7")
+icon_alignment = 1
+expand_icon = true
+
+[node name="Button" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+theme = ExtResource("21_u73ii")
+theme_override_constants/outline_size = 10
+disabled = true
+toggle_mode = true
+action_mode = 0
+button_group = SubResource("ButtonGroup_lkqfi")
+icon = ExtResource("24_xd42u")
+expand_icon = true
+
+[node name="PanelContainer-Pos2" type="PanelContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("15_aynxe")
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer-PanelRows" type="VBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2/MarginContainer/VBoxContainer-PanelRows"]
+layout_mode = 2
+text = "Near Platform"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2/MarginContainer/VBoxContainer-PanelRows"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Button2" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+theme = ExtResource("21_u73ii")
+icon = ExtResource("25_niy3t")
+icon_alignment = 1
+expand_icon = true
+
+[node name="Label" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+custom_minimum_size = Vector2(130, 45)
+layout_mode = 2
+text = "Platform 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+theme = ExtResource("21_u73ii")
+theme_override_constants/outline_size = 10
+icon = ExtResource("26_8huxx")
+expand_icon = true
+
+[node name="PanelContainer-Pos" type="PanelContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("15_aynxe")
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer-PanelRows" type="VBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos/MarginContainer/VBoxContainer-PanelRows"]
+layout_mode = 2
+text = "Far Platform"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos/MarginContainer/VBoxContainer-PanelRows"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Button2" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+theme = ExtResource("21_u73ii")
+icon = ExtResource("25_niy3t")
+icon_alignment = 1
+expand_icon = true
+
+[node name="Label" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+custom_minimum_size = Vector2(130, 45)
+layout_mode = 2
+text = "Platform 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("21_u73ii")
+theme_override_colors/icon_pressed_color = Color(1, 0.397701, 0.329255, 1)
+theme_override_colors/icon_hover_color = Color(0.456283, 0.767747, 0.448169, 1)
+theme_override_colors/icon_disabled_color = Color(0.255659, 0.255659, 0.255659, 1)
+icon = ExtResource("26_8huxx")
+icon_alignment = 1
+expand_icon = true
+
+[node name="FooterContainer" type="PanelContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="MarginContainer-FooterInset" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/FooterContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="FooterContainer-LeftAlign" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/FooterContainer/MarginContainer-FooterInset"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Button" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/FooterContainer/MarginContainer-FooterInset/FooterContainer-LeftAlign"]
+custom_minimum_size = Vector2(70, 40)
+layout_mode = 2
+size_flags_horizontal = 0
+tooltip_text = "ToolTip!"
+focus_mode = 0
+keep_pressed_outside = true
+shortcut = SubResource("Shortcut_2ktqs")
+text = "Button"
+
+[node name="OptionButton" type="OptionButton" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/FooterContainer/MarginContainer-FooterInset/FooterContainer-LeftAlign"]
+layout_mode = 2
+focus_mode = 0
+item_count = 4
+popup/item_0/text = "sadfsadfa"
+popup/item_1/text = "sadfsadf"
+popup/item_1/id = 1
+popup/item_2/text = "sadfs"
+popup/item_2/id = 2
+popup/item_3/text = "2323"
+popup/item_3/id = 3
+
+[node name="FooterContainer-RightAlign" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/FooterContainer/MarginContainer-FooterInset/FooterContainer-LeftAlign"]
+layout_direction = 3
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 5
+
+[node name="Button" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/FooterContainer/MarginContainer-FooterInset/FooterContainer-LeftAlign/FooterContainer-RightAlign"]
+custom_minimum_size = Vector2(70, 40)
+layout_mode = 2
+size_flags_horizontal = 0
+tooltip_text = "ToolTip!"
+focus_mode = 0
+keep_pressed_outside = true
+shortcut = SubResource("Shortcut_2ktqs")
+text = "Button"
