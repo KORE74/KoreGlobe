@@ -65,6 +65,7 @@ public partial class FssUIHeader : PanelContainer
     public void OnCLIToggleButtonPressed()
     {
         FssCentralLog.AddEntry("FssUIHeader.OnCLIToggleButtonPressed");
+        GD.Print("OnCLIToggleButtonPressed");
     //     if (CliWindowNode == null)
     //     {
     //         GD.Print("CLIWindow not found");
