@@ -34,6 +34,8 @@ public partial class FssAppNode : Node
             SetProcessUnhandledInput(true);
             SetProcessUnhandledKeyInput(true);
             //CallDeferred(nameof(RegisterSingleton));
+
+            CallDeferred( nameof(FssAppFactory.Instance.CallStart) );
         }
         else
         {

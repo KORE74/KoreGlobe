@@ -20,32 +20,32 @@ namespace FssJSON
             {
                 // System Control
                 case "AppShutdown": return AppShutdown.ParseJSON(msgText);
-                case "NullMsg": return NullMsg.ParseJSON(msgText);
+                case "NullMsg":     return NullMsg.ParseJSON(msgText);
 
                 // Camera Control
                 case "PlatFocus": return PlatFocus.ParseJSON(msgText);
 
                 // Platform
-                case "PlatUpdate": return PlatUpdate.ParseJSON(msgText);
-                case "PlatPosition": return PlatPosition.ParseJSON(msgText);
-                case "PlatAdd": return PlatAdd.ParseJSON(msgText);
-                case "PlatDelete": return PlatDelete.ParseJSON(msgText);
+                case "PlatUpdate":    return PlatUpdate.ParseJSON(msgText);
+                case "PlatPosition":  return PlatPosition.ParseJSON(msgText);
+                case "PlatAdd":       return PlatAdd.ParseJSON(msgText);
+                case "PlatDelete":    return PlatDelete.ParseJSON(msgText);
                 case "PlatWayPoints": return PlatWayPoints.ParseJSON(msgText);
 
                 // Scenario / Time Control
-                case "ScenLoad": return ScenLoad.ParseJSON(msgText);
+                case "ScenLoad":  return ScenLoad.ParseJSON(msgText);
                 case "ScenStart": return ScenStart.ParseJSON(msgText);
-                case "ScenStop": return ScenStop.ParseJSON(msgText);
+                case "ScenStop":  return ScenStop.ParseJSON(msgText);
                 case "ScenPause": return ScenPause.ParseJSON(msgText);
-                case "ScenCont": return ScenCont.ParseJSON(msgText);
+                case "ScenCont":  return ScenCont.ParseJSON(msgText);
                 case "ClockSync": return ClockSync.ParseJSON(msgText);
 
                 // Geometry - Emitter
-                case "BeamLoad": return BeamLoad.ParseJSON(msgText);
-                case "BeamDelete": return BeamDelete.ParseJSON(msgText);
-                case "BeamEnable": return BeamEnable.ParseJSON(msgText);
+                case "BeamLoad":    return BeamLoad.ParseJSON(msgText);
+                case "BeamDelete":  return BeamDelete.ParseJSON(msgText);
+                case "BeamEnable":  return BeamEnable.ParseJSON(msgText);
                 case "BeamDisable": return BeamDisable.ParseJSON(msgText);
-                case "RxAntenna": return RxAntenna.ParseJSON(msgText);
+                case "RxAntenna":   return RxAntenna.ParseJSON(msgText);
                 case "ScanPattern": return ScanPattern.ParseJSON(msgText);
 
                 // Desbug / Sample Messages

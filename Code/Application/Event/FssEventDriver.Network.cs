@@ -22,12 +22,20 @@ public partial class FssEventDriver
 
     public string ReportNetworkingStatus()
     {
-        return "pp"; // return FssAppFactory.Instance.NetworkCommsHub.debugDump();
+        return "pp"; // return FssAppFactory.Instance.NetworkHub.debugDump();
     }
 
     public string ReportLocalIP()
     {
-        return "pp"; // return FssAppFactory.Instance.NetworkCommsHub.localIPAddrStr();
+        return "pp"; // return FssAppFactory.Instance.NetworkHub.localIPAddrStr();
     }
+
+    public string NetworkReport() => FssAppFactory.Instance.NetworkHub.Report();
+
+    public void NetworkInjectIncoming(string message) => FssAppFactory.Instance.NetworkHub.InjectIncomingMessage(message);
+
+    public bool HasIncomingMessage() => FssAppFactory.Instance.NetworkHub.HasIncomingMessage();
+
+    public FssMessageText? GetIncomingMessage() => FssAppFactory.Instance.NetworkHub.GetIncomingMessage();
 
 }

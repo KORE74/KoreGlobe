@@ -10,7 +10,7 @@
 //     // Top level map object to act on
 //     FssMap MapData = new FssMap();
 
-//     FssNetworkCommsHub? NetHub;
+//     FssNetworkHub? NetHub;
 //     public FssConsole? ConsoleInterface;
 
 //     // Unit Testing
@@ -81,7 +81,7 @@
 //     {
 //         if (NetHub == null)
 //         {
-//             NetHub = new FssNetworkCommsHub();
+//             NetHub = new FssNetworkHub();
 //         }
 //     }
 

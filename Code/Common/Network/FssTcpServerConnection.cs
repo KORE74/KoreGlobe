@@ -16,7 +16,7 @@ namespace FssNetworking
         public bool running;
         public TcpListener? listener;
 
-        public FssNetworkCommsHub? commsHub;
+        public FssNetworkHub? commsHub;
 
         // A flag to indicate whether the server is running.
         private Thread? serverThread;
@@ -147,7 +147,7 @@ namespace FssNetworking
                 {
                     Name = Name + "_client",
                     IncomingQueue = IncomingQueue,
-                    IncomingMessageLog = new List<FssCommsMessage>() // Fix: Change the type to List<FssNetworking.CommsMessage>
+                    IncomingMessageLog = new List<FssMessageText>() // Fix: Change the type to List<FssNetworking.CommsMessage>
                 };
                 newClientConnection.stream = newClient.GetStream();
                 newClientConnection.client = newClient;

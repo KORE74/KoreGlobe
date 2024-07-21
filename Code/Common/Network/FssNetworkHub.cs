@@ -9,27 +9,27 @@ using System.Threading.Tasks;
 
 namespace FssNetworking
 {
-    public class FssNetworkCommsHub
+    public class FssNetworkHub
     {
         // List of all the connections (from a CommonConnection parent class).
         public List<FssCommonConnection> connections;
 
         // List of all incoming messages, containing the message data and a connection identifier.
-        public BlockingCollection<FssCommsMessage> IncomingQueue;
+        public BlockingCollection<FssMessageText> IncomingQueue;
 
         private CancellationTokenSource _cts;
         //bool ClientConnectWatchdog;
 
         private int WatchDogActivityCount; // Simple counter to show watchdog is running.
 
-        // ========================================================================================
-        // Constructor / Destructor
-        // ========================================================================================
+        // ----------------------------------------------------------------------------------------
+        // MARK: Constructor / Destructor
+        // ----------------------------------------------------------------------------------------
 
-        public FssNetworkCommsHub()
+        public FssNetworkHub()
         {
             connections = new List<FssCommonConnection>();
-            IncomingQueue = new BlockingCollection<FssCommsMessage>();
+            IncomingQueue = new BlockingCollection<FssMessageText>();
 
             //ClientConnectWatchdog = true;
             _cts = new CancellationTokenSource();
@@ -38,7 +38,7 @@ namespace FssNetworking
         }
 
         // Destructor stops each of the connections (with their threads and blocking calls) and clears down the connection collection.
-        ~FssNetworkCommsHub()
+        ~FssNetworkHub()
         {
             // Stop all threads
             foreach (FssCommonConnection connection in connections)
@@ -51,9 +51,9 @@ namespace FssNetworking
             //ClientConnectWatchdog = false;
         }
 
-        // ========================================================================================
-        // Connections
-        // ========================================================================================
+        // ----------------------------------------------------------------------------------------
+        // MARK: Connections
+        // ----------------------------------------------------------------------------------------
 
         public void createConnection(string connName, string connType, string ipAddrStr, int port)
         {
@@ -67,7 +67,7 @@ namespace FssNetworking
                 {
                     Name = connName,
                     IncomingQueue = IncomingQueue,
-                    IncomingMessageLog = new List<FssCommsMessage>() // Assuming IncomingMessageLog is a List<CommsMessage>.
+                    IncomingMessageLog = new List<FssMessageText>() // Assuming IncomingMessageLog is a List<CommsMessage>.
                 };
 
                 connections.Add(UdpSender);
@@ -81,7 +81,7 @@ namespace FssNetworking
                 {
                     Name = connName,
                     IncomingQueue = IncomingQueue,
-                    IncomingMessageLog = new List<FssCommsMessage>()
+                    IncomingMessageLog = new List<FssMessageText>()
                 };
 
                 connections.Add(UdpReceiver);
@@ -95,7 +95,7 @@ namespace FssNetworking
                 {
                     Name = connName,
                     IncomingQueue = IncomingQueue,
-                    IncomingMessageLog = new List<FssCommsMessage>()
+                    IncomingMessageLog = new List<FssMessageText>()
                 };
 
                 connections.Add(clientConnection);
@@ -109,7 +109,7 @@ namespace FssNetworking
                 {
                     Name = connName,
                     IncomingQueue = IncomingQueue,
-                    IncomingMessageLog = new List<FssCommsMessage>()
+                    IncomingMessageLog = new List<FssMessageText>()
                 };
 
                 serverConnection.commsHub = this;
@@ -147,9 +147,9 @@ namespace FssNetworking
             }
         }
 
-        // ========================================================================================
-        // Send/output messages
-        // ========================================================================================
+        // ----------------------------------------------------------------------------------------
+        // MARK: Send/output messages
+        // ----------------------------------------------------------------------------------------
 
         public void sendMessage(string connName, string msgData)
         {
@@ -169,25 +169,34 @@ namespace FssNetworking
             }
         }
 
-        // ========================================================================================
-        // Receive/Incoming messages
-        // ========================================================================================
+        // ----------------------------------------------------------------------------------------
+        // MARK: Receive/Incoming messages
+        // ----------------------------------------------------------------------------------------
 
-        public bool hasIncomingMessage()
+        public bool HasIncomingMessage()
         {
             return (IncomingQueue.Count > 0);
         }
 
         // -----------------------------------------------------------------------------------
 
-        public bool getIncomingMessage(out FssCommsMessage msg)
+        public bool GetIncomingMessage(out FssMessageText msg)
         {
             return IncomingQueue.TryTake(out msg, 100);
         }
 
-        // ========================================================================================
-        // Misc Functions
-        // ========================================================================================
+        public FssMessageText? GetIncomingMessage()
+        {
+            if (IncomingQueue.Count == 0)
+            {
+                return null;
+            }
+            return IncomingQueue.Take();
+        }
+
+        // ----------------------------------------------------------------------------------------
+        // MARK: Misc Functions
+        // ----------------------------------------------------------------------------------------
 
         public string localIPAddrStr()
         {
@@ -205,9 +214,9 @@ namespace FssNetworking
 
         // -----------------------------------------------------------------------------------
 
-        public string debugDump()
+        public string Report()
         {
-            string outTxt = "NetworkHub:\n";
+            string outTxt = "NetworkHub Report:\n";
 
             outTxt += $"- LocalIP {localIPAddrStr()}\n";
             outTxt += $"- WatchDogActivityCount {WatchDogActivityCount}\n";
@@ -254,8 +263,10 @@ namespace FssNetworking
 
         public void InjectIncomingMessage(string msgText)
         {
-            FssCommsMessage injectMsg = new FssCommsMessage() { connectionName = "INJECTED", msgData = msgText };
+            FssMessageText injectMsg = new FssMessageText() { connectionName = "INJECTED", msgData = msgText };
             IncomingQueue.Add(injectMsg);
+
+            FssCentralLog.AddEntry($"Network Comms Hub: Injected message: {msgText}");
         }
 
     }

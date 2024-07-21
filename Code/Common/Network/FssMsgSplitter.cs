@@ -23,14 +23,14 @@ namespace FssNetworking
     {
         private char sentinel;
         private Dictionary<string, StringBuilder> InBuffers = new Dictionary<string, StringBuilder>();
-        private List<FssCommsMessage> OutBuffers = new List<FssCommsMessage>();
+        private List<FssMessageText> OutBuffers = new List<FssMessageText>();
 
         public FssMsgSplitter(char sentinelCharacter)
         {
             sentinel = sentinelCharacter;
         }
 
-        public void AddRawMessage(FssCommsMessage inRawMsg)
+        public void AddRawMessage(FssMessageText inRawMsg)
         {
             string connName = inRawMsg.connectionName;
 
@@ -53,7 +53,7 @@ namespace FssNetworking
                 string? completeMsg = Buf?.ToString(0, sentinelIndex);
                 if (completeMsg != null)
                 {
-                    OutBuffers.Add(new FssCommsMessage() { connectionName = connName, msgData = completeMsg });
+                    OutBuffers.Add(new FssMessageText() { connectionName = connName, msgData = completeMsg });
                 }
 
                 // Remove the processed part from the buffer.
@@ -66,9 +66,9 @@ namespace FssNetworking
             return (OutBuffers.Count > 0);
         }
 
-        public FssCommsMessage NextMsg()
+        public FssMessageText NextMsg()
         {
-            FssCommsMessage n = OutBuffers[0];
+            FssMessageText n = OutBuffers[0];
             OutBuffers.RemoveAt(0); // Adding at last, reading and removing at first
             return n;
         }

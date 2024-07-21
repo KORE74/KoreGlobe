@@ -3,19 +3,6 @@ using System.Collections.Concurrent;
 
 namespace FssNetworking
 {
-    public struct FssCommsMessage
-    {
-        public string connectionName;
-        public string msgData;
-
-        public string msgDebug()
-        {
-            return $"<{connectionName} => {msgData}>";
-        }
-    }
-
-    // --------------------------------------------------------------------------------------------
-
     public abstract class FssCommonConnection
     {
         public string Name { set; get; }
@@ -32,19 +19,19 @@ namespace FssNetworking
         // Incoming message queue
         // ========================================================================================
 
-        public BlockingCollection<FssCommsMessage> IncomingQueue;
+        public BlockingCollection<FssMessageText> IncomingQueue;
 
-        public List<FssCommsMessage> IncomingMessageLog;
+        public List<FssMessageText> IncomingMessageLog;
 
-        public void setupIncomingQueue(BlockingCollection<FssCommsMessage> newIncomingQueue)
+        public void setupIncomingQueue(BlockingCollection<FssMessageText> newIncomingQueue)
         {
             IncomingQueue = newIncomingQueue;
-            IncomingMessageLog = new List<FssCommsMessage>();
+            IncomingMessageLog = new List<FssMessageText>();
         }
 
         public void QueueIncomingMessage(string msgData)
         {
-            FssCommsMessage newMsg = new FssCommsMessage();
+            FssMessageText newMsg = new FssMessageText();
 
             newMsg.connectionName = Name;
             newMsg.msgData = msgData;
@@ -53,7 +40,7 @@ namespace FssNetworking
             IncomingQueue.Add(newMsg);
         }
 
-        public void QueueIncomingMessage(FssCommsMessage newMsg)
+        public void QueueIncomingMessage(FssMessageText newMsg)
         {
             IncomingMessageLog.Add(newMsg);
             IncomingQueue.Add(newMsg);
@@ -64,7 +51,7 @@ namespace FssNetworking
             return IncomingQueue.Count > 0;
         }
 
-        public FssCommsMessage getNextIncomingMessage()
+        public FssMessageText getNextIncomingMessage()
         {
             return IncomingQueue.Take();
         }

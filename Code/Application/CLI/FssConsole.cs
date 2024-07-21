@@ -49,11 +49,14 @@ public class FssConsole
 
     public void Start()
     {
-        GD.Print("Starting console thread...");
-        FssCentralLog.AddEntry($"Starting console thread... ({commandHandlers.Count} Commands.)");
-        running = true;
-        consoleThread = new Thread(ConsoleLoop);
-        consoleThread?.Start();
+        if (running == false)
+        {
+            GD.Print("Starting console thread...");
+            FssCentralLog.AddEntry($"Starting console thread... ({commandHandlers.Count} Commands.)");
+            running = true;
+            consoleThread = new Thread(ConsoleLoop);
+            consoleThread?.Start();
+        }
     }
 
     public void Stop()
@@ -104,8 +107,9 @@ public class FssConsole
         commandHandlers.Add(new FssCommandPlatCourse());
         commandHandlers.Add(new FssCommandPlatCourseDelta());
 
-
-
+        // Network
+        commandHandlers.Add(new FssCommandNetworkReport());
+        commandHandlers.Add(new FssCommandNetworkInjectIncoming());
 
 
 

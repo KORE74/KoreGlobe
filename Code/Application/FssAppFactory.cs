@@ -18,11 +18,12 @@ public class FssAppFactory
     public FssConsole         ConsoleInterface { get; private set; }
     public FssEventDriver     EventDriver      { get; private set; }
     public FssPlatformManager PlatformManager  { get; private set; }
-    public FssNetworkCommsHub NetworkCommsHub  { get; private set; }
+    public FssNetworkHub      NetworkHub       { get; private set; }
     //public FssMapIOManager    MapIOManager     { get; private set; }
     //public FssEleManager      EleManager       { get; private set; }
     public FssSimTime         SimClock         { get; private set; }
     public FssModelRun        ModelRun         { get; private set; }
+    public FssMessageManager  MessageManager   { get; private set; }
 
     // --------------------------------------------------------------------------------------------
 
@@ -77,11 +78,12 @@ public class FssAppFactory
         ConsoleInterface = new FssConsole();
         EventDriver      = new FssEventDriver();
         PlatformManager  = new FssPlatformManager();
-        NetworkCommsHub  = new FssNetworkCommsHub();
+        NetworkHub       = new FssNetworkHub();
         //MapIOManager     = new FssMapIOManager();
         //EleManager       = new FssEleManager();
         SimClock         = new FssSimTime();
         ModelRun         = new FssModelRun();
+        MessageManager   = new FssMessageManager();
 
         // Link the objects
         //ConsoleInterface.EventDriver = EventDriver;
@@ -89,6 +91,14 @@ public class FssAppFactory
 
         //EventDriver.SetupTestPlatforms();
 
+        CallStart();
+
+    }
+
+    // point to start the services, called after the main constructors
+    public void CallStart()
+    {
         ConsoleInterface.Start();
+        MessageManager.Start();
     }
 }

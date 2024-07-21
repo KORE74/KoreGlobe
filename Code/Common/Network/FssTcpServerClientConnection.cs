@@ -177,7 +177,7 @@ namespace FssNetworking
                         {
                             // Read the raw incoming data
                             string data = Encoding.ASCII.GetString(buffer, 0, bytesRead);
-                            FssCommsMessage rawMsg = new FssCommsMessage() { connectionName = Name, msgData = data};
+                            FssMessageText rawMsg = new FssMessageText() { connectionName = Name, msgData = data};
 
                             // Add the incoming data to a raw buffer, outputting messages based on a splitter character
                             IncomingMsgSplitter.AddRawMessage(rawMsg);

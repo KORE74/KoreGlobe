@@ -15,8 +15,8 @@ public partial class FssEventDriver
     public void ExitApplication()
     {
         FssAppFactory.Instance.ConsoleInterface.Stop();
-        FssAppFactory.Instance.NetworkCommsHub.endAllConnections();
-        //FssAppFactory.Instance.NetworkCommsHub.EndAllThread();
+        FssAppFactory.Instance.NetworkHub.endAllConnections();
+        //FssAppFactory.Instance.NetworkHub.EndAllThread();
     }
 
 }
