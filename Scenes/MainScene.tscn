@@ -98,14 +98,22 @@ script = ExtResource("12_wwe4x")
 [node name="TestRoute" type="Node3D" parent="GlobeRoot"]
 script = ExtResource("13_ligvu")
 
-[node name="CLIWindow" type="Window" parent="."]
+[node name="UITop" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CLIWindow" type="Window" parent="UITop"]
 positional_shadow_atlas_16_bits = false
 title = "Command Line"
 initial_position = 2
 size = Vector2i(400, 250)
 script = ExtResource("7_padcc")
 
-[node name="CLIWindowLayout" type="VBoxContainer" parent="CLIWindow"]
+[node name="CLIWindowLayout" type="VBoxContainer" parent="UITop/CLIWindow"]
 clip_contents = true
 anchors_preset = 15
 anchor_right = 1.0
@@ -115,12 +123,12 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="CLIWindow/CLIWindowLayout"]
+[node name="ScrollContainer" type="ScrollContainer" parent="UITop/CLIWindow/CLIWindowLayout"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="CommandResponseLabel" type="Label" parent="CLIWindow/CLIWindowLayout/ScrollContainer"]
+[node name="CommandResponseLabel" type="Label" parent="UITop/CLIWindow/CLIWindowLayout/ScrollContainer"]
 clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -129,12 +137,12 @@ text = "af"
 clip_text = true
 text_overrun_behavior = 1
 
-[node name="CommandEntryEdit" type="LineEdit" parent="CLIWindow/CLIWindowLayout"]
+[node name="CommandEntryEdit" type="LineEdit" parent="UITop/CLIWindow/CLIWindowLayout"]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 
-[node name="Control" type="Control" parent="."]
-layout_mode = 3
+[node name="Control" type="Control" parent="UITop"]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -143,7 +151,7 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="MarginContainer-ScreenInset" type="MarginContainer" parent="Control"]
+[node name="MarginContainer-ScreenInset" type="MarginContainer" parent="UITop/Control"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -155,28 +163,28 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="VBoxContainer-Screen" type="VBoxContainer" parent="Control/MarginContainer-ScreenInset"]
+[node name="VBoxContainer-Screen" type="VBoxContainer" parent="UITop/Control/MarginContainer-ScreenInset"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="HeaderContainer" type="PanelContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen"]
+[node name="HeaderContainer" type="PanelContainer" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen"]
 layout_mode = 2
 theme_override_styles/panel = ExtResource("15_aynxe")
 script = ExtResource("16_yac5x")
 
-[node name="MarginContainer-HeaderInset" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer"]
+[node name="MarginContainer-HeaderInset" type="MarginContainer" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="HeaderContainer-LeftAlign" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset"]
+[node name="HeaderContainer-LeftAlign" type="HBoxContainer" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset"]
 custom_minimum_size = Vector2(0, 45)
 layout_mode = 2
 theme_override_constants/separation = 5
 
-[node name="Network-IconToggleButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
+[node name="Network-IconToggleButton" type="Button" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 focus_mode = 0
@@ -185,7 +193,7 @@ toggle_mode = true
 icon = ExtResource("16_rpbva")
 expand_icon = true
 
-[node name="Settings-IconToggleButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
+[node name="Settings-IconToggleButton" type="Button" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 focus_mode = 0
@@ -193,11 +201,11 @@ icon = ExtResource("17_bbpjn")
 icon_alignment = 1
 expand_icon = true
 
-[node name="Label" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
+[node name="Label" type="Label" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
 layout_mode = 2
 text = "Mode:"
 
-[node name="OptionButton" type="OptionButton" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
+[node name="OptionButton" type="OptionButton" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
 layout_mode = 2
 item_count = 4
 popup/item_0/text = "sadfsadfa"
@@ -208,18 +216,18 @@ popup/item_2/id = 2
 popup/item_3/text = "2323"
 popup/item_3/id = 3
 
-[node name="Button2" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
+[node name="Button2" type="Button" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
 custom_minimum_size = Vector2(80, 45)
 layout_mode = 2
 text = "Network"
 
-[node name="HeaderContainer-RightAlign" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
+[node name="HeaderContainer-RightAlign" type="HBoxContainer" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
 layout_direction = 3
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 5
 
-[node name="Exit-IconButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign/HeaderContainer-RightAlign"]
+[node name="Exit-IconButton" type="Button" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign/HeaderContainer-RightAlign"]
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 theme = ExtResource("18_wc5rg")
@@ -227,7 +235,7 @@ icon = ExtResource("19_t7amt")
 icon_alignment = 1
 expand_icon = true
 
-[node name="CLI-IconToggleButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign/HeaderContainer-RightAlign"]
+[node name="CLI-IconToggleButton" type="Button" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign/HeaderContainer-RightAlign"]
 clip_contents = true
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
@@ -236,16 +244,16 @@ icon = ExtResource("20_s4gy1")
 icon_alignment = 1
 expand_icon = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Control-PlatPos" type="Control" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer"]
+[node name="Control-PlatPos" type="Control" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 10
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos"]
+[node name="HBoxContainer" type="HBoxContainer" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -258,34 +266,34 @@ offset_right = 119.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="PanelContainer-CamMode" type="PanelContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer"]
+[node name="PanelContainer-CamMode" type="PanelContainer" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer"]
 layout_mode = 2
 theme_override_styles/panel = ExtResource("15_aynxe")
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode"]
+[node name="MarginContainer" type="MarginContainer" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode"]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="VBoxContainer-PanelRows" type="VBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode/MarginContainer"]
+[node name="VBoxContainer-PanelRows" type="VBoxContainer" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="Label" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows"]
+[node name="Label" type="Label" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows"]
 layout_mode = 2
 text = "Camera Mode
 "
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows"]
+[node name="HBoxContainer" type="HBoxContainer" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows"]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="Button3" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+[node name="Button3" type="Button" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 theme = ExtResource("21_u73ii")
@@ -296,7 +304,7 @@ button_group = SubResource("ButtonGroup_3y634")
 icon = ExtResource("22_wmu5k")
 expand_icon = true
 
-[node name="Button2" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+[node name="Button2" type="Button" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 theme = ExtResource("21_u73ii")
@@ -307,7 +315,7 @@ icon = ExtResource("23_rrka7")
 icon_alignment = 1
 expand_icon = true
 
-[node name="Button" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+[node name="Button" type="Button" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 theme = ExtResource("21_u73ii")
@@ -319,33 +327,33 @@ button_group = SubResource("ButtonGroup_lkqfi")
 icon = ExtResource("24_xd42u")
 expand_icon = true
 
-[node name="PanelContainer-Pos2" type="PanelContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer"]
+[node name="PanelContainer-Pos2" type="PanelContainer" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer"]
 layout_mode = 2
 theme_override_styles/panel = ExtResource("15_aynxe")
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2"]
+[node name="MarginContainer" type="MarginContainer" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2"]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="VBoxContainer-PanelRows" type="VBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2/MarginContainer"]
+[node name="VBoxContainer-PanelRows" type="VBoxContainer" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="Label" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2/MarginContainer/VBoxContainer-PanelRows"]
+[node name="Label" type="Label" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2/MarginContainer/VBoxContainer-PanelRows"]
 layout_mode = 2
 text = "Near Platform"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2/MarginContainer/VBoxContainer-PanelRows"]
+[node name="HBoxContainer" type="HBoxContainer" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2/MarginContainer/VBoxContainer-PanelRows"]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="Button2" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+[node name="Button2" type="Button" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 theme = ExtResource("21_u73ii")
@@ -353,14 +361,14 @@ icon = ExtResource("25_niy3t")
 icon_alignment = 1
 expand_icon = true
 
-[node name="Label" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+[node name="Label" type="Label" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
 custom_minimum_size = Vector2(130, 45)
 layout_mode = 2
 text = "Platform 1"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Button" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+[node name="Button" type="Button" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 theme = ExtResource("21_u73ii")
@@ -368,33 +376,33 @@ theme_override_constants/outline_size = 10
 icon = ExtResource("26_8huxx")
 expand_icon = true
 
-[node name="PanelContainer-Pos" type="PanelContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer"]
+[node name="PanelContainer-Pos" type="PanelContainer" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer"]
 layout_mode = 2
 theme_override_styles/panel = ExtResource("15_aynxe")
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos"]
+[node name="MarginContainer" type="MarginContainer" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos"]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="VBoxContainer-PanelRows" type="VBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos/MarginContainer"]
+[node name="VBoxContainer-PanelRows" type="VBoxContainer" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="Label" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos/MarginContainer/VBoxContainer-PanelRows"]
+[node name="Label" type="Label" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos/MarginContainer/VBoxContainer-PanelRows"]
 layout_mode = 2
 text = "Far Platform"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos/MarginContainer/VBoxContainer-PanelRows"]
+[node name="HBoxContainer" type="HBoxContainer" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos/MarginContainer/VBoxContainer-PanelRows"]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="Button2" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+[node name="Button2" type="Button" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 theme = ExtResource("21_u73ii")
@@ -402,14 +410,14 @@ icon = ExtResource("25_niy3t")
 icon_alignment = 1
 expand_icon = true
 
-[node name="Label" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+[node name="Label" type="Label" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
 custom_minimum_size = Vector2(130, 45)
 layout_mode = 2
 text = "Platform 1"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Button" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+[node name="Button" type="Button" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 focus_mode = 0
@@ -421,23 +429,23 @@ icon = ExtResource("26_8huxx")
 icon_alignment = 1
 expand_icon = true
 
-[node name="FooterContainer" type="PanelContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen"]
+[node name="FooterContainer" type="PanelContainer" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen"]
 visible = false
 layout_mode = 2
 size_flags_vertical = 8
 
-[node name="MarginContainer-FooterInset" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/FooterContainer"]
+[node name="MarginContainer-FooterInset" type="MarginContainer" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/FooterContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="FooterContainer-LeftAlign" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/FooterContainer/MarginContainer-FooterInset"]
+[node name="FooterContainer-LeftAlign" type="HBoxContainer" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/FooterContainer/MarginContainer-FooterInset"]
 layout_mode = 2
 theme_override_constants/separation = 5
 
-[node name="Button" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/FooterContainer/MarginContainer-FooterInset/FooterContainer-LeftAlign"]
+[node name="Button" type="Button" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/FooterContainer/MarginContainer-FooterInset/FooterContainer-LeftAlign"]
 custom_minimum_size = Vector2(70, 40)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -447,7 +455,7 @@ keep_pressed_outside = true
 shortcut = SubResource("Shortcut_2ktqs")
 text = "Button"
 
-[node name="OptionButton" type="OptionButton" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/FooterContainer/MarginContainer-FooterInset/FooterContainer-LeftAlign"]
+[node name="OptionButton" type="OptionButton" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/FooterContainer/MarginContainer-FooterInset/FooterContainer-LeftAlign"]
 layout_mode = 2
 focus_mode = 0
 item_count = 4
@@ -459,13 +467,13 @@ popup/item_2/id = 2
 popup/item_3/text = "2323"
 popup/item_3/id = 3
 
-[node name="FooterContainer-RightAlign" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/FooterContainer/MarginContainer-FooterInset/FooterContainer-LeftAlign"]
+[node name="FooterContainer-RightAlign" type="HBoxContainer" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/FooterContainer/MarginContainer-FooterInset/FooterContainer-LeftAlign"]
 layout_direction = 3
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 5
 
-[node name="Button" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/FooterContainer/MarginContainer-FooterInset/FooterContainer-LeftAlign/FooterContainer-RightAlign"]
+[node name="Button" type="Button" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/FooterContainer/MarginContainer-FooterInset/FooterContainer-LeftAlign/FooterContainer-RightAlign"]
 custom_minimum_size = Vector2(70, 40)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -474,3 +482,5 @@ focus_mode = 0
 keep_pressed_outside = true
 shortcut = SubResource("Shortcut_2ktqs")
 text = "Button"
+
+[connection signal="pressed" from="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos/MarginContainer/VBoxContainer-PanelRows/HBoxContainer/Button" to="UITop/CLIWindow" method="ToggleVisible"]

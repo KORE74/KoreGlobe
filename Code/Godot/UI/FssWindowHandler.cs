@@ -111,5 +111,9 @@ public partial class FssWindowHandler : Window
         CallDeferred(nameof(UpdateLabelFromConsole));
     }
 
-
+    public void ToggleVisible()
+    {
+        Visible = !Visible;
+        GD.Print("ToggleVisible");
+    }
 }
