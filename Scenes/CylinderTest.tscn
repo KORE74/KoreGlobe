@@ -10,7 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://8km4gxg0fgok" path="res://Resources/Icons/White_Log.png" id="4_eqwrj"]
 [ext_resource type="Texture2D" uid="uid://bpjmofp0dir0d" path="res://Resources/Icons/White_Close.png" id="4_m8dg4"]
 [ext_resource type="Theme" uid="uid://dygto0gp0wtwi" path="res://Themes/Red_Button.tres" id="4_sdeep"]
-[ext_resource type="Theme" uid="uid://bspkdc75j1n7k" path="res://Themes/Yellow_Button.tres" id="6_nj5tf"]
+[ext_resource type="Theme" uid="uid://bspkdc75j1n7k" path="res://Themes/GreenToggle.tres" id="6_nj5tf"]
 [ext_resource type="Texture2D" uid="uid://dec5v78k63oif" path="res://Resources/Icons/White_Globe.png" id="8_6jqs0"]
 [ext_resource type="Texture2D" uid="uid://buqwf6wctolbe" path="res://Resources/Icons/Plane.png" id="9_ocf5o"]
 [ext_resource type="Texture2D" uid="uid://dgq7if4l4dpys" path="res://Resources/Icons/Align.png" id="10_phl0f"]

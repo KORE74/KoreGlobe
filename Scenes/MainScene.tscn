@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://bkhif7hl6psi5"]
+[gd_scene load_steps=35 format=3 uid="uid://bkhif7hl6psi5"]
 
 [ext_resource type="Script" path="res://Code/Application/Model/Run/FssAppNode.cs" id="1_3l252"]
 [ext_resource type="Script" path="res://Code/Godot/Util/FssCameraMover.cs" id="2_3c077"]
@@ -21,8 +21,9 @@
 [ext_resource type="Theme" uid="uid://dygto0gp0wtwi" path="res://Themes/Red_Button.tres" id="18_wc5rg"]
 [ext_resource type="Texture2D" uid="uid://bpjmofp0dir0d" path="res://Resources/Icons/White_Close.png" id="19_t7amt"]
 [ext_resource type="Texture2D" uid="uid://8km4gxg0fgok" path="res://Resources/Icons/White_Log.png" id="20_s4gy1"]
-[ext_resource type="Theme" uid="uid://bspkdc75j1n7k" path="res://Themes/Yellow_Button.tres" id="21_u73ii"]
+[ext_resource type="Theme" uid="uid://bspkdc75j1n7k" path="res://Themes/GreenToggle.tres" id="21_u73ii"]
 [ext_resource type="Theme" uid="uid://trj4idfkkji6" path="res://Themes/Green_Button.tres" id="22_63uax"]
+[ext_resource type="Theme" uid="uid://cec4we5sx3j0b" path="res://Themes/YellowToggle.tres" id="22_cvbv5"]
 [ext_resource type="Texture2D" uid="uid://dec5v78k63oif" path="res://Resources/Icons/White_Globe.png" id="22_wmu5k"]
 [ext_resource type="Texture2D" uid="uid://buqwf6wctolbe" path="res://Resources/Icons/Plane.png" id="23_rrka7"]
 [ext_resource type="Texture2D" uid="uid://dgq7if4l4dpys" path="res://Resources/Icons/Align.png" id="24_xd42u"]
@@ -32,8 +33,10 @@
 [sub_resource type="SphereMesh" id="SphereMesh_l1siu"]
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_3y634"]
+allow_unpress = true
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_anppk"]
+allow_unpress = true
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_lkqfi"]
 
@@ -154,7 +157,7 @@ theme_override_constants/separation = 5
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 focus_mode = 0
-theme_override_colors/icon_pressed_color = Color(0, 0.92549, 0, 1)
+theme = ExtResource("21_u73ii")
 toggle_mode = true
 icon = ExtResource("16_rpbva")
 expand_icon = true
@@ -163,6 +166,8 @@ expand_icon = true
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 focus_mode = 0
+theme = ExtResource("21_u73ii")
+toggle_mode = true
 icon = ExtResource("17_bbpjn")
 icon_alignment = 1
 expand_icon = true
@@ -173,14 +178,16 @@ text = "Mode:"
 
 [node name="OptionButton" type="OptionButton" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
 layout_mode = 2
-item_count = 4
-popup/item_0/text = "sadfsadfa"
-popup/item_1/text = "sadfsadf"
+item_count = 5
+popup/item_0/text = "Real World"
+popup/item_1/text = "Logical"
 popup/item_1/id = 1
-popup/item_2/text = "sadfs"
+popup/item_2/text = "InfoGraphic"
 popup/item_2/id = 2
-popup/item_3/text = "2323"
+popup/item_3/text = "Transmitter"
 popup/item_3/id = 3
+popup/item_4/text = "Receiver"
+popup/item_4/id = 4
 
 [node name="Button2" type="Button" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
 custom_minimum_size = Vector2(80, 45)
@@ -264,9 +271,11 @@ size_flags_horizontal = 4
 [node name="Button3" type="Button" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
-theme = ExtResource("22_63uax")
+focus_mode = 0
+theme = ExtResource("22_cvbv5")
 theme_override_constants/outline_size = 10
 toggle_mode = true
+button_pressed = true
 action_mode = 0
 button_group = SubResource("ButtonGroup_3y634")
 icon = ExtResource("22_wmu5k")
@@ -275,7 +284,8 @@ expand_icon = true
 [node name="Button2" type="Button" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
-theme = ExtResource("22_63uax")
+focus_mode = 0
+theme = ExtResource("22_cvbv5")
 toggle_mode = true
 action_mode = 0
 button_group = SubResource("ButtonGroup_anppk")
@@ -286,6 +296,7 @@ expand_icon = true
 [node name="Button" type="Button" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
+focus_mode = 0
 theme = ExtResource("22_63uax")
 theme_override_constants/outline_size = 10
 disabled = true
@@ -324,6 +335,7 @@ size_flags_horizontal = 4
 [node name="Button2" type="Button" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
+focus_mode = 0
 theme = ExtResource("21_u73ii")
 icon = ExtResource("25_niy3t")
 icon_alignment = 1
@@ -339,6 +351,7 @@ vertical_alignment = 1
 [node name="Button" type="Button" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
+focus_mode = 0
 theme = ExtResource("21_u73ii")
 theme_override_constants/outline_size = 10
 icon = ExtResource("26_8huxx")
@@ -373,6 +386,7 @@ size_flags_horizontal = 4
 [node name="Button2" type="Button" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
+focus_mode = 0
 theme = ExtResource("21_u73ii")
 icon = ExtResource("25_niy3t")
 icon_alignment = 1
@@ -523,13 +537,19 @@ layout_mode = 2
 [node name="NetworkWindow" type="Window" parent="UITop"]
 title = "Network"
 initial_position = 2
-size = Vector2i(282, 200)
-content_scale_aspect = 4
+size = Vector2i(300, 247)
+exclusive = true
+popup_window = true
+min_size = Vector2i(300, 200)
+keep_title_visible = true
 
 [node name="MarginContainer" type="MarginContainer" parent="UITop/NetworkWindow"]
-offset_right = 40.0
-offset_bottom = 40.0
-size_flags_horizontal = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
 size_flags_vertical = 0
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
@@ -538,14 +558,13 @@ theme_override_constants/margin_bottom = 5
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UITop/NetworkWindow/MarginContainer"]
 layout_mode = 2
-size_flags_horizontal = 0
 size_flags_vertical = 0
 
 [node name="Row1" type="HBoxContainer" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
 [node name="Label" type="Label" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row1"]
-custom_minimum_size = Vector2(0, 30)
+custom_minimum_size = Vector2(80, 30)
 layout_mode = 2
 text = "Label1"
 vertical_alignment = 1
@@ -559,7 +578,7 @@ size_flags_horizontal = 3
 layout_mode = 2
 
 [node name="Label" type="Label" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row3"]
-custom_minimum_size = Vector2(0, 45)
+custom_minimum_size = Vector2(80, 45)
 layout_mode = 2
 text = "Label2"
 
@@ -571,16 +590,36 @@ size_flags_horizontal = 3
 layout_mode = 2
 
 [node name="Label" type="Label" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row2"]
-custom_minimum_size = Vector2(0, 45)
+custom_minimum_size = Vector2(80, 45)
 layout_mode = 2
 text = "Label3"
 
 [node name="CheckButton" type="CheckButton" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row2"]
 layout_mode = 2
 
-[node name="RowFinal" type="HBoxContainer" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer"]
-layout_direction = 3
+[node name="HSeparator2" type="HSeparator" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer"]
 layout_mode = 2
+
+[node name="Row-Status" type="HBoxContainer" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="LabelNetworkStatus" type="Label" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row-Status"]
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Label3"
+
+[node name="HSeparator" type="HSeparator" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="RowFinal" type="HBoxContainer" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 2
+
+[node name="ButtonCancel" type="Button" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/RowFinal"]
+custom_minimum_size = Vector2(70, 45)
+layout_mode = 2
+text = "Cancel"
 
 [node name="ButtonOK" type="Button" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/RowFinal"]
 custom_minimum_size = Vector2(70, 45)
