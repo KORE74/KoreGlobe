@@ -1,0 +1,48 @@
+[gd_scene format=3 uid="uid://jlhil21edkuh"]
+
+[node name="TestUi" type="Node3D"]
+
+[node name="Window" type="Window" parent="."]
+position = Vector2i(50, 50)
+size = Vector2i(200, 200)
+
+[node name="TextureRect-Frame" type="TextureRect" parent="Window"]
+clip_contents = true
+custom_minimum_size = Vector2(100, 100)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="TextureRect-Rotator" type="TextureRect" parent="Window/TextureRect-Frame"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect-Slider" type="TextureRect" parent="Window/TextureRect-Frame/TextureRect-Rotator"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2

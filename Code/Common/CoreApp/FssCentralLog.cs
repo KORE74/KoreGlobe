@@ -46,10 +46,26 @@ public static class FssCentralLog
         }
     }
 
-    public static string GetLatestLines(int numLines)
+    // --------------------------------------------------------------------------------------------------------------------------
+    // MARK: Internal Access of logged lines
+    // --------------------------------------------------------------------------------------------------------------------------
+
+    public static List<string> GetLatestLines()
     {
-        int startIndex = Math.Max(0, logEntries.Count - numLines);
-        return string.Join("\n", logEntries.GetRange(startIndex, logEntries.Count - startIndex));
+        List<string> result = new ();
+
+        lock (lockObject)
+        {
+
+            foreach (string line in logEntries)
+            {
+                result.Add(line);
+            }
+            logEntries.Clear();
+
+        }
+
+        return result;
     }
 
     // --------------------------------------------------------------------------------------------------------------------------

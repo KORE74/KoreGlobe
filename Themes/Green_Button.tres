@@ -1,24 +1,19 @@
-[gd_resource type="Theme" load_steps=6 format=3 uid="uid://bspkdc75j1n7k"]
+[gd_resource type="Theme" load_steps=6 format=3 uid="uid://trj4idfkkji6"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qtup1"]
-bg_color = Color(0.905081, 0.416111, 0.541158, 1)
-border_color = Color(0.616257, 0.896577, 0.339985, 1)
+bg_color = Color(0.2, 0.6, 0.3, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yle5i"]
-bg_color = Color(0.512222, 0.662747, 0.171172, 1)
-border_color = Color(0.616257, 0.896577, 0.339985, 1)
+bg_color = Color(0.2, 0.6, 0.3, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_62i4b"]
-bg_color = Color(0.905081, 0.416111, 0.541158, 1)
-border_color = Color(0.616257, 0.896577, 0.339985, 1)
+bg_color = Color(0.2, 0.6, 0.3, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_apjxs"]
-bg_color = Color(0.704156, 0.58819, 0.239029, 1)
-border_color = Color(0.616257, 0.896577, 0.339985, 1)
+bg_color = Color(0.2, 0.6, 0.3, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rimfn"]
-bg_color = Color(0.395611, 0.654612, 0.639513, 1)
-border_color = Color(0.616257, 0.896577, 0.339985, 1)
+bg_color = Color(0.2, 0.6, 0.3, 1)
 
 [resource]
 Button/colors/font_pressed_color = Color(1, 1, 1, 1)

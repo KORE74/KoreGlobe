@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://bkhif7hl6psi5"]
+[gd_scene load_steps=34 format=3 uid="uid://bkhif7hl6psi5"]
 
 [ext_resource type="Script" path="res://Code/Application/Model/Run/FssAppNode.cs" id="1_3l252"]
 [ext_resource type="Script" path="res://Code/Godot/Util/FssCameraMover.cs" id="2_3c077"]
@@ -14,7 +14,7 @@
 [ext_resource type="Script" path="res://Code/Godot/TesColoredCube.cs" id="11_tribo"]
 [ext_resource type="Script" path="res://Code/Godot/FssTestDome.cs" id="12_wwe4x"]
 [ext_resource type="Script" path="res://Code/Godot/FssTestRoute.cs" id="13_ligvu"]
-[ext_resource type="StyleBox" path="res://Themes/new_style_box_flat.tres" id="15_aynxe"]
+[ext_resource type="StyleBox" uid="uid://cg5jbxqki88ph" path="res://Themes/new_style_box_flat.tres" id="15_aynxe"]
 [ext_resource type="Texture2D" uid="uid://b5neqrik7nbhj" path="res://Resources/Icons/White_Connections2.png" id="16_rpbva"]
 [ext_resource type="Script" path="res://Code/Godot/UI/FssUIHeader.cs" id="16_yac5x"]
 [ext_resource type="Texture2D" uid="uid://c535aixjgoih0" path="res://Resources/Icons/White_Options.png" id="17_bbpjn"]
@@ -22,6 +22,7 @@
 [ext_resource type="Texture2D" uid="uid://bpjmofp0dir0d" path="res://Resources/Icons/White_Close.png" id="19_t7amt"]
 [ext_resource type="Texture2D" uid="uid://8km4gxg0fgok" path="res://Resources/Icons/White_Log.png" id="20_s4gy1"]
 [ext_resource type="Theme" uid="uid://bspkdc75j1n7k" path="res://Themes/Yellow_Button.tres" id="21_u73ii"]
+[ext_resource type="Theme" uid="uid://trj4idfkkji6" path="res://Themes/Green_Button.tres" id="22_63uax"]
 [ext_resource type="Texture2D" uid="uid://dec5v78k63oif" path="res://Resources/Icons/White_Globe.png" id="22_wmu5k"]
 [ext_resource type="Texture2D" uid="uid://buqwf6wctolbe" path="res://Resources/Icons/Plane.png" id="23_rrka7"]
 [ext_resource type="Texture2D" uid="uid://dgq7if4l4dpys" path="res://Resources/Icons/Align.png" id="24_xd42u"]
@@ -105,41 +106,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="CLIWindow" type="Window" parent="UITop"]
-positional_shadow_atlas_16_bits = false
-title = "Command Line"
-initial_position = 2
-size = Vector2i(400, 250)
-script = ExtResource("7_padcc")
-
-[node name="CLIWindowLayout" type="VBoxContainer" parent="UITop/CLIWindow"]
-clip_contents = true
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="ScrollContainer" type="ScrollContainer" parent="UITop/CLIWindow/CLIWindowLayout"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="CommandResponseLabel" type="Label" parent="UITop/CLIWindow/CLIWindowLayout/ScrollContainer"]
-clip_contents = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-text = "af"
-clip_text = true
-text_overrun_behavior = 1
-
-[node name="CommandEntryEdit" type="LineEdit" parent="UITop/CLIWindow/CLIWindowLayout"]
-custom_minimum_size = Vector2(0, 30)
-layout_mode = 2
 
 [node name="Control" type="Control" parent="UITop"]
 layout_mode = 1
@@ -239,7 +205,9 @@ expand_icon = true
 clip_contents = true
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
+theme = ExtResource("21_u73ii")
 theme_override_constants/outline_size = 5
+toggle_mode = true
 icon = ExtResource("20_s4gy1")
 icon_alignment = 1
 expand_icon = true
@@ -296,7 +264,7 @@ size_flags_horizontal = 4
 [node name="Button3" type="Button" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
-theme = ExtResource("21_u73ii")
+theme = ExtResource("22_63uax")
 theme_override_constants/outline_size = 10
 toggle_mode = true
 action_mode = 0
@@ -307,7 +275,7 @@ expand_icon = true
 [node name="Button2" type="Button" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
-theme = ExtResource("21_u73ii")
+theme = ExtResource("22_63uax")
 toggle_mode = true
 action_mode = 0
 button_group = SubResource("ButtonGroup_anppk")
@@ -318,7 +286,7 @@ expand_icon = true
 [node name="Button" type="Button" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
-theme = ExtResource("21_u73ii")
+theme = ExtResource("22_63uax")
 theme_override_constants/outline_size = 10
 disabled = true
 toggle_mode = true
@@ -483,4 +451,143 @@ keep_pressed_outside = true
 shortcut = SubResource("Shortcut_2ktqs")
 text = "Button"
 
-[connection signal="pressed" from="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos/MarginContainer/VBoxContainer-PanelRows/HBoxContainer/Button" to="UITop/CLIWindow" method="ToggleVisible"]
+[node name="CLIWindow" type="Window" parent="UITop"]
+title = "Internal CLI"
+position = Vector2i(100, 36)
+size = Vector2i(500, 300)
+visible = false
+script = ExtResource("7_padcc")
+
+[node name="TabContainer" type="TabContainer" parent="UITop/CLIWindow"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+current_tab = 0
+tab_focus_mode = 0
+
+[node name="Log" type="VBoxContainer" parent="UITop/CLIWindow/TabContainer"]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="LogScrollContainer" type="ScrollContainer" parent="UITop/CLIWindow/TabContainer/Log"]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="LogLabel" type="Label" parent="UITop/CLIWindow/TabContainer/Log/LogScrollContainer"]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 2
+text = "Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log 
+Log log Log log 
+Log log Log log 
+Log log Log log 
+Log log Log log Log log Log log 
+Log log 
+Log log Log log 
+"
+autowrap_mode = 1
+
+[node name="CLI" type="VBoxContainer" parent="UITop/CLIWindow/TabContainer"]
+visible = false
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="UITop/CLIWindow/TabContainer/CLI"]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="CommandResponseLabel" type="Label" parent="UITop/CLIWindow/TabContainer/CLI/ScrollContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "af"
+clip_text = true
+text_overrun_behavior = 1
+
+[node name="CommandEntryEdit" type="LineEdit" parent="UITop/CLIWindow/TabContainer/CLI"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="NetworkWindow" type="Window" parent="UITop"]
+title = "Network"
+initial_position = 2
+size = Vector2i(282, 200)
+content_scale_aspect = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="UITop/NetworkWindow"]
+offset_right = 40.0
+offset_bottom = 40.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UITop/NetworkWindow/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="Row1" type="HBoxContainer" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row1"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+text = "Label1"
+vertical_alignment = 1
+
+[node name="LineEdit" type="LineEdit" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row1"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Row3" type="HBoxContainer" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row3"]
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+text = "Label2"
+
+[node name="CheckBox" type="CheckBox" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row3"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Row2" type="HBoxContainer" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row2"]
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+text = "Label3"
+
+[node name="CheckButton" type="CheckButton" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row2"]
+layout_mode = 2
+
+[node name="RowFinal" type="HBoxContainer" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer"]
+layout_direction = 3
+layout_mode = 2
+
+[node name="ButtonOK" type="Button" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/RowFinal"]
+custom_minimum_size = Vector2(70, 45)
+layout_mode = 2
+text = "OK"
+
+[node name="SettingWindow" type="Window" parent="UITop"]
+title = "Settings"
+initial_position = 2
+visible = false

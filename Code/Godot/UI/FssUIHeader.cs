@@ -5,7 +5,7 @@ using System;
 
 public partial class FssUIHeader : PanelContainer
 {
-    private FssWindowHandler? CliWindowNode;
+    private Window CliWindowNode;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -14,6 +14,9 @@ public partial class FssUIHeader : PanelContainer
         // Get the child element called "Exit-IconButton" from the hierachy underneath the current node
 
         Button exitButton = (Button)FindChild("Exit-IconButton");
+        Button cliToggle =  (Button)FindChild("CLI-IconToggleButton");
+
+        CliWindowNode = GetNode<Window>("../../../../CLIWindow");
 
         if (exitButton == null)
         {
@@ -30,21 +33,7 @@ public partial class FssUIHeader : PanelContainer
         cliButton.Connect("pressed", new Callable(this, "OnCLIToggleButtonPressed"));
 
 
-        CliWindowNode = (FssWindowHandler)FssAppNode.Instance.FindNode("CLIWindow");
 
-        // Button exitButton = GetNode<Button>("Exit-IconButton");
-
-
-        // Connect the button's "pressed" signal to the current node's "OnExitButtonPressed" method
-        // CommandEntryEdit.Connect("text_submitted", new Callable(this, "OnCommandSubmitted"));
-
-        if (CliWindowNode == null)
-        {
-            GD.Print("CLI-IconToggleButton not found");
-        }
-
-
-        // cliButton.Visible = !cliButton.Visible;
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -52,6 +41,7 @@ public partial class FssUIHeader : PanelContainer
     {
     }
 
+    //
     // Called when the "Exit-IconButton" button is pressed
     public void OnExitButtonPressed()
     {
@@ -65,18 +55,8 @@ public partial class FssUIHeader : PanelContainer
     public void OnCLIToggleButtonPressed()
     {
         FssCentralLog.AddEntry("FssUIHeader.OnCLIToggleButtonPressed");
-        GD.Print("OnCLIToggleButtonPressed");
-    //     if (CliWindowNode == null)
-    //     {
-    //         GD.Print("CLIWindow not found");
-    //         return;
 
-        CliWindowNode!.ToggleVisibility();
+        CliWindowNode.Visible = !CliWindowNode.Visible;
     }
-
-
-
-
-    // }
 
 }

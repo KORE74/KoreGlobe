@@ -1,12 +1,17 @@
 using Godot;
 using System;
 using System.Timers;
+using System.Text;
+using System.Collections.Generic;
 
 public partial class FssWindowHandler : Window
 {
     private Label           CommandResponseLabel;
     private LineEdit        CommandEntryEdit;
     private ScrollContainer ScrollContainer;
+    private Label           LogLabel;
+
+    private StringBuilder LogSB;
 
     private System.Timers.Timer LabelUpdateTimer;
 
@@ -16,12 +21,15 @@ public partial class FssWindowHandler : Window
         Connect("close_requested", new Callable(this, "OnCloseRequested"));
 
         // Get references to the Label, LineEdit, and ScrollContainer
-        CommandResponseLabel = GetNode<Label>("CLIWindowLayout/ScrollContainer/CommandResponseLabel");
-        CommandEntryEdit     = GetNode<LineEdit>("CLIWindowLayout/CommandEntryEdit");
-        ScrollContainer      = GetNode<ScrollContainer>("CLIWindowLayout/ScrollContainer");
+        CommandResponseLabel = GetNode<Label>("TabContainer/CLI/ScrollContainer/CommandResponseLabel");
+        CommandEntryEdit     = GetNode<LineEdit>("TabContainer/CLI/CommandEntryEdit");
+        ScrollContainer      = GetNode<ScrollContainer>("TabContainer/CLI/ScrollContainer");
+        LogLabel             = GetNode<Label>("TabContainer/Log/LogScrollContainer/LogLabel");
 
         // Connect the text_submitted signal of the LineEdit to the OnCommandSubmitted function
         CommandEntryEdit.Connect("text_submitted", new Callable(this, "OnCommandSubmitted"));
+
+        LogSB = new StringBuilder();
 
         // Initialize and start the update timer
         LabelUpdateTimer = new System.Timers.Timer(1000); // 1 second interval
@@ -90,7 +98,7 @@ public partial class FssWindowHandler : Window
         // ScrollToBottom();
     }
 
-    public void UpdateLabelFromConsole()
+    public void UpdateConsoleLabel()
     {
         while (FssAppFactory.Instance.ConsoleInterface.HasOutput())
         {
@@ -100,6 +108,13 @@ public partial class FssWindowHandler : Window
         }
     }
 
+
+    private void UpdateLogLabel()
+    {
+        LogLabel.Text = LogSB.ToString();
+    }
+
+
     private void ScrollToBottom()
     {
         ScrollContainer.ScrollVertical = (int)(ScrollContainer.GetVScrollBar().MaxValue);
@@ -108,7 +123,16 @@ public partial class FssWindowHandler : Window
     // Function to update the label periodically
     private void OnUpdateTimerElapsed(object sender, ElapsedEventArgs e)
     {
-        CallDeferred(nameof(UpdateLabelFromConsole));
+
+        CallDeferred(nameof(UpdateConsoleLabel));
+
+        // Update the string builder in the timer, just to take anything off the main thread
+        List<string> lines = FssCentralLog.GetLatestLines();
+        foreach (string line in lines)
+            LogSB.AppendLine(line);
+
+        CallDeferred(nameof(UpdateLogLabel));
+
     }
 
     public void ToggleVisibility()
