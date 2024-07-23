@@ -5,43 +5,71 @@ using System;
 
 public partial class FssUIHeader : PanelContainer
 {
+    private Button CliButton;
+    private Button SettingButton;
+    private Button NetworkButton;
+    private Button ExitButton;
+
     private Window CliWindowNode;
+    private Window SettingWindowNode;
+    private Window NetworkWindowNode;
+
+    float UIPollTimer = 0f;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
         FssCentralLog.AddEntry("FssUIHeader._Ready");
-        // Get the child element called "Exit-IconButton" from the hierachy underneath the current node
 
-        Button exitButton = (Button)FindChild("Exit-IconButton");
-        Button cliToggle =  (Button)FindChild("CLI-IconToggleButton");
+        // Get the button objects
+        CliButton         = (Button)FindChild("CLI-IconButton");
+        SettingButton     = (Button)FindChild("Setting-IconButton");
+        NetworkButton     = (Button)FindChild("Network-IconButton");
+        ExitButton        = (Button)FindChild("Exit-IconButton");
 
-        CliWindowNode = GetNode<Window>("../../../../CLIWindow");
+        CliWindowNode     = GetNode<Window>("../../../../CLIWindow");
+        SettingWindowNode = GetNode<Window>("../../../../SettingWindow");
+        NetworkWindowNode = GetNode<Window>("../../../../NetworkWindow");
 
-        if (exitButton == null)
+        // Check if any of the read items are null
+        if (CliButton == null || SettingButton == null || NetworkButton == null || ExitButton == null)
         {
-            GD.Print("Exit-IconButton not found");
+            FssCentralLog.AddEntry("One or more buttons not found");
+            return;
+        }
+        if (CliWindowNode == null || SettingWindowNode == null || NetworkWindowNode == null)
+        {
+            FssCentralLog.AddEntry("One or more windows not found");
             return;
         }
 
-        exitButton.Connect("pressed", new Callable(this, "OnExitButtonPressed"));
-
         // -------------------
-
         // Find the button and window controls
-        Button cliButton  = (Button)FindChild("CLI-IconToggleButton");
-        cliButton.Connect("pressed", new Callable(this, "OnCLIToggleButtonPressed"));
 
-
-
+        CliButton.Connect("pressed", new Callable(this, "OnCLIButtonPressed"));
+        SettingButton.Connect("pressed", new Callable(this, "OnSettingButtonPressed"));
+        NetworkButton.Connect("pressed", new Callable(this, "OnNetworkButtonPressed"));
+        ExitButton.Connect("pressed", new Callable(this, "OnExitButtonPressed"));
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
+        if (UIPollTimer < FssCoreTime.RuntimeSecs)
+        {
+            UIPollTimer = FssCoreTime.RuntimeSecs + 0.2f; // Update the timer to the next whole second
+
+            // Update each window visibility to the button state - in case we have alternative ways to close the window
+            NetworkButton.ButtonPressed = NetworkWindowNode.Visible;
+            SettingButton.ButtonPressed = SettingWindowNode.Visible;
+            CliButton.ButtonPressed     = CliWindowNode.Visible;
+        }
     }
 
-    //
+    // --------------------------------------------------------------------------------------------
+    // MARK: UI Interactions
+    // --------------------------------------------------------------------------------------------
+
     // Called when the "Exit-IconButton" button is pressed
     public void OnExitButtonPressed()
     {
@@ -52,11 +80,22 @@ public partial class FssUIHeader : PanelContainer
         sceneTree.Quit();
     }
 
-    public void OnCLIToggleButtonPressed()
+    public void OnCLIButtonPressed()
     {
         FssCentralLog.AddEntry("FssUIHeader.OnCLIToggleButtonPressed");
+        CliWindowNode.Visible = CliButton.ButtonPressed;
+    }
 
-        CliWindowNode.Visible = !CliWindowNode.Visible;
+    public void OnSettingButtonPressed()
+    {
+        FssCentralLog.AddEntry("FssUIHeader.OnSettingButtonPressed");
+        SettingWindowNode.Visible = SettingButton.ButtonPressed;
+    }
+
+    public void OnNetworkButtonPressed()
+    {
+        FssCentralLog.AddEntry("FssUIHeader.OnNetworkButtonPressed");
+        NetworkWindowNode.Visible = NetworkButton.ButtonPressed;
     }
 
 }

@@ -4,7 +4,7 @@ using System.Timers;
 using System.Text;
 using System.Collections.Generic;
 
-public partial class FssWindowHandler : Window
+public partial class FssCliWindow : Window
 {
     private Label           CommandResponseLabel;
     private LineEdit        CommandEntryEdit;
@@ -17,9 +17,6 @@ public partial class FssWindowHandler : Window
 
     public override void _Ready()
     {
-        // Connect the close_requested signal to the OnCloseRequested function
-        Connect("close_requested", new Callable(this, "OnCloseRequested"));
-
         // Get references to the Label, LineEdit, and ScrollContainer
         CommandResponseLabel = GetNode<Label>("TabContainer/CLI/ScrollContainer/CommandResponseLabel");
         CommandEntryEdit     = GetNode<LineEdit>("TabContainer/CLI/CommandEntryEdit");
@@ -28,6 +25,9 @@ public partial class FssWindowHandler : Window
 
         // Connect the text_submitted signal of the LineEdit to the OnCommandSubmitted function
         CommandEntryEdit.Connect("text_submitted", new Callable(this, "OnCommandSubmitted"));
+
+        // Connect the close_requested signal to the OnCloseRequested function
+        Connect("close_requested", new Callable(this, "OnCloseRequested"));
 
         LogSB = new StringBuilder();
 

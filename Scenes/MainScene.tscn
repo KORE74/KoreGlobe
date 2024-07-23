@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://bkhif7hl6psi5"]
+[gd_scene load_steps=37 format=3 uid="uid://bkhif7hl6psi5"]
 
 [ext_resource type="Script" path="res://Code/Application/Model/Run/FssAppNode.cs" id="1_3l252"]
 [ext_resource type="Script" path="res://Code/Godot/Util/FssCameraMover.cs" id="2_3c077"]
@@ -8,7 +8,7 @@
 [ext_resource type="Script" path="res://Code/Godot/FssTestGlobeCore.cs" id="5_molmv"]
 [ext_resource type="Script" path="res://Code/Godot/FssTestSim.cs" id="7_1ufct"]
 [ext_resource type="Script" path="res://Code/Godot/TestModel.cs" id="7_f5p1r"]
-[ext_resource type="Script" path="res://Code/Godot/UI/FssWindowHandler.cs" id="7_padcc"]
+[ext_resource type="Script" path="res://Code/Godot/UI/FssCliWindow.cs" id="7_padcc"]
 [ext_resource type="Script" path="res://Code/Godot/FssTestModelChildren.cs" id="8_abvv0"]
 [ext_resource type="Script" path="res://Code/Godot/TestMalleableSphere.cs" id="10_5oluh"]
 [ext_resource type="Script" path="res://Code/Godot/TesColoredCube.cs" id="11_tribo"]
@@ -29,6 +29,8 @@
 [ext_resource type="Texture2D" uid="uid://dgq7if4l4dpys" path="res://Resources/Icons/Align.png" id="24_xd42u"]
 [ext_resource type="Texture2D" uid="uid://cvkgx537okkdr" path="res://Resources/Icons/arrow_left.png" id="25_niy3t"]
 [ext_resource type="Texture2D" uid="uid://msmhfxb7v8b" path="res://Resources/Icons/arrow_right.png" id="26_8huxx"]
+[ext_resource type="Script" path="res://Code/Godot/UI/FssNetworkWindow.cs" id="30_4svb6"]
+[ext_resource type="Script" path="res://Code/Godot/UI/FssSettingWindow.cs" id="31_hxs73"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_l1siu"]
 
@@ -153,7 +155,7 @@ custom_minimum_size = Vector2(0, 45)
 layout_mode = 2
 theme_override_constants/separation = 5
 
-[node name="Network-IconToggleButton" type="Button" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
+[node name="Network-IconButton" type="Button" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 focus_mode = 0
@@ -162,7 +164,7 @@ toggle_mode = true
 icon = ExtResource("16_rpbva")
 expand_icon = true
 
-[node name="Settings-IconToggleButton" type="Button" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
+[node name="Setting-IconButton" type="Button" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 focus_mode = 0
@@ -189,11 +191,6 @@ popup/item_3/id = 3
 popup/item_4/text = "Receiver"
 popup/item_4/id = 4
 
-[node name="Button2" type="Button" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
-custom_minimum_size = Vector2(80, 45)
-layout_mode = 2
-text = "Network"
-
 [node name="HeaderContainer-RightAlign" type="HBoxContainer" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
 layout_direction = 3
 layout_mode = 2
@@ -208,7 +205,7 @@ icon = ExtResource("19_t7amt")
 icon_alignment = 1
 expand_icon = true
 
-[node name="CLI-IconToggleButton" type="Button" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign/HeaderContainer-RightAlign"]
+[node name="CLI-IconButton" type="Button" parent="UITop/Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign/HeaderContainer-RightAlign"]
 clip_contents = true
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
@@ -467,7 +464,7 @@ text = "Button"
 
 [node name="CLIWindow" type="Window" parent="UITop"]
 title = "Internal CLI"
-position = Vector2i(100, 36)
+initial_position = 2
 size = Vector2i(500, 300)
 visible = false
 script = ExtResource("7_padcc")
@@ -498,14 +495,6 @@ custom_minimum_size = Vector2(200, 100)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 2
-text = "Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log Log log 
-Log log Log log 
-Log log Log log 
-Log log Log log 
-Log log Log log Log log Log log 
-Log log 
-Log log Log log 
-"
 autowrap_mode = 1
 
 [node name="CLI" type="VBoxContainer" parent="UITop/CLIWindow/TabContainer"]
@@ -537,11 +526,13 @@ layout_mode = 2
 [node name="NetworkWindow" type="Window" parent="UITop"]
 title = "Network"
 initial_position = 2
-size = Vector2i(300, 247)
-exclusive = true
+size = Vector2i(520, 425)
+visible = false
+unresizable = true
 popup_window = true
-min_size = Vector2i(300, 200)
+min_size = Vector2i(400, 300)
 keep_title_visible = true
+script = ExtResource("30_4svb6")
 
 [node name="MarginContainer" type="MarginContainer" parent="UITop/NetworkWindow"]
 anchors_preset = 15
@@ -549,65 +540,135 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 3
-size_flags_vertical = 0
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
+size_flags_horizontal = 2
+size_flags_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UITop/NetworkWindow/MarginContainer"]
 layout_mode = 2
+size_flags_horizontal = 0
 size_flags_vertical = 0
+theme_override_constants/separation = 10
 
-[node name="Row1" type="HBoxContainer" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer"]
+[node name="Row1-UDP" type="HBoxContainer" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_constants/separation = 10
 
-[node name="Label" type="Label" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row1"]
-custom_minimum_size = Vector2(80, 30)
+[node name="Label" type="Label" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row1-UDP"]
+custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
-text = "Label1"
+size_flags_horizontal = 0
+text = "UDP Receiver IP"
 vertical_alignment = 1
 
-[node name="LineEdit" type="LineEdit" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row1"]
-custom_minimum_size = Vector2(0, 30)
+[node name="LineEdit" type="LineEdit" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row1-UDP"]
+custom_minimum_size = Vector2(145, 0)
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 0
+text = "222.222.222.222"
 
-[node name="Row3" type="HBoxContainer" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer"]
+[node name="LabePortl" type="Label" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row1-UDP"]
+custom_minimum_size = Vector2(45, 0)
+layout_direction = 2
 layout_mode = 2
+size_flags_horizontal = 0
+text = "Port
+"
+horizontal_alignment = 2
+vertical_alignment = 1
 
-[node name="Label" type="Label" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row3"]
-custom_minimum_size = Vector2(80, 45)
+[node name="LineEdit2" type="LineEdit" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row1-UDP"]
+custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
-text = "Label2"
+size_flags_horizontal = 0
+text = "10000"
 
-[node name="CheckBox" type="CheckBox" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row3"]
+[node name="ConnectButton" type="Button" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row1-UDP"]
 layout_mode = 2
-size_flags_horizontal = 3
+text = "Connect"
 
-[node name="Row2" type="HBoxContainer" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer"]
+[node name="Row2-TCPServer" type="HBoxContainer" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_constants/separation = 10
 
-[node name="Label" type="Label" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row2"]
-custom_minimum_size = Vector2(80, 45)
+[node name="Label" type="Label" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row2-TCPServer"]
+custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
-text = "Label3"
+size_flags_horizontal = 0
+text = "TCP Server IP"
 
-[node name="CheckButton" type="CheckButton" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row2"]
+[node name="LineEdit2" type="LineEdit" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row2-TCPServer"]
+custom_minimum_size = Vector2(145, 0)
 layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="Label2" type="Label" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row2-TCPServer"]
+custom_minimum_size = Vector2(45, 0)
+layout_direction = 2
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Port"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="LineEdit" type="LineEdit" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row2-TCPServer"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="ConnectButton" type="Button" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row2-TCPServer"]
+layout_mode = 2
+text = "Connect"
+
+[node name="Row3-TCPClient" type="HBoxContainer" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row3-TCPClient"]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "TCP Server IP"
+
+[node name="LineEdit2" type="LineEdit" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row3-TCPClient"]
+custom_minimum_size = Vector2(145, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="Label2" type="Label" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row3-TCPClient"]
+custom_minimum_size = Vector2(45, 0)
+layout_direction = 2
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Port"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="LineEdit" type="LineEdit" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row3-TCPClient"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="ConnectButton" type="Button" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row3-TCPClient"]
+layout_mode = 2
+text = "Connect"
 
 [node name="HSeparator2" type="HSeparator" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
 [node name="Row-Status" type="HBoxContainer" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_constants/separation = 10
 
-[node name="LabelNetworkStatus" type="Label" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row-Status"]
-custom_minimum_size = Vector2(0, 45)
+[node name="TextEdit" type="TextEdit" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row-Status"]
+custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Label3"
+text = "Network Status label"
+editable = false
 
 [node name="HSeparator" type="HSeparator" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -615,13 +676,14 @@ layout_mode = 2
 [node name="RowFinal" type="HBoxContainer" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 2
+theme_override_constants/separation = 10
 
-[node name="ButtonCancel" type="Button" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/RowFinal"]
+[node name="CancelButton" type="Button" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/RowFinal"]
 custom_minimum_size = Vector2(70, 45)
 layout_mode = 2
 text = "Cancel"
 
-[node name="ButtonOK" type="Button" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/RowFinal"]
+[node name="OkButton" type="Button" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/RowFinal"]
 custom_minimum_size = Vector2(70, 45)
 layout_mode = 2
 text = "OK"
@@ -629,4 +691,94 @@ text = "OK"
 [node name="SettingWindow" type="Window" parent="UITop"]
 title = "Settings"
 initial_position = 2
+size = Vector2i(600, 215)
 visible = false
+script = ExtResource("31_hxs73")
+
+[node name="MarginContainer" type="MarginContainer" parent="UITop/SettingWindow"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 2
+size_flags_vertical = 0
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UITop/SettingWindow/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Row1-MapPath" type="HBoxContainer" parent="UITop/SettingWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MapPathLabel" type="Label" parent="UITop/SettingWindow/MarginContainer/VBoxContainer/Row1-MapPath"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Map Path"
+vertical_alignment = 1
+
+[node name="MapPathLineEdit" type="LineEdit" parent="UITop/SettingWindow/MarginContainer/VBoxContainer/Row1-MapPath"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "X:/BaseDirectory/Option/MapDirectory/"
+
+[node name="Row2-CapturePath" type="HBoxContainer" parent="UITop/SettingWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="CapturePathLabel" type="Label" parent="UITop/SettingWindow/MarginContainer/VBoxContainer/Row2-CapturePath"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Screenshot Path"
+vertical_alignment = 1
+
+[node name="CapturePathLineEdit" type="LineEdit" parent="UITop/SettingWindow/MarginContainer/VBoxContainer/Row2-CapturePath"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "X:/BaseDirectory/Option/MapDirectory/"
+
+[node name="HSeparator" type="HSeparator" parent="UITop/SettingWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Row2-CapturePath2" type="HBoxContainer" parent="UITop/SettingWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Language" type="Label" parent="UITop/SettingWindow/MarginContainer/VBoxContainer/Row2-CapturePath2"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Language"
+vertical_alignment = 1
+
+[node name="OptionButton" type="OptionButton" parent="UITop/SettingWindow/MarginContainer/VBoxContainer/Row2-CapturePath2"]
+layout_mode = 2
+size_flags_horizontal = 3
+item_count = 3
+popup/item_0/text = "English"
+popup/item_0/id = 1
+popup/item_1/text = "French"
+popup/item_1/id = 2
+popup/item_2/text = "German"
+popup/item_2/id = 3
+
+[node name="HSeparator2" type="HSeparator" parent="UITop/SettingWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="RowFinal" type="HBoxContainer" parent="UITop/SettingWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 2
+
+[node name="CancelButton" type="Button" parent="UITop/SettingWindow/MarginContainer/VBoxContainer/RowFinal"]
+custom_minimum_size = Vector2(70, 45)
+layout_mode = 2
+text = "Cancel"
+
+[node name="OkButton" type="Button" parent="UITop/SettingWindow/MarginContainer/VBoxContainer/RowFinal"]
+custom_minimum_size = Vector2(70, 45)
+layout_mode = 2
+text = "OK"

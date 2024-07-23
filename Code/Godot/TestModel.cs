@@ -39,10 +39,11 @@ public partial class TestModel : Node3D
     // Node3D NodeMarkerAhead   = null;
     Camera3D ModelCamera     = null;
 
-    FssCyclicIdGenerator IdGen = new FssCyclicIdGenerator(25);
+    FssCyclicIdGenerator IdGen = new FssCyclicIdGenerator(250);
 
 
     float Timer1Hz = 0f;
+    float Timer4Hz = 0f;
 
     // --------------------------------------------------------------------------------------------
 
@@ -52,8 +53,8 @@ public partial class TestModel : Node3D
 
 
         PackedScene importedModel = (PackedScene)ResourceLoader.Load(ModelPath);
-
         if (importedModel != null)
+
         {
             // Root of the model and orientation
             ModelNode = new Node3D() { Name = "ModelNode" };
@@ -156,7 +157,11 @@ public partial class TestModel : Node3D
             Timer1Hz = (float)(FssCoreTime.RuntimeIntSecs + 1); // Update the timer to the next whole second
             GD.Print($"RuntimeSecs: {Timer1Hz:F1} Course: {Course} Offset: {offset} Position: {pos}");
 
-            //CoreNode = null;
+        }
+
+        if (Timer4Hz < FssCoreTime.RuntimeSecs)
+        {
+            Timer4Hz = FssCoreTime.RuntimeSecs + 0.2f; // Update the timer to the next whole second
 
             if (CoreNode != null)
             {
@@ -201,7 +206,9 @@ public partial class TestModel : Node3D
 
                 PrevPos = pos;
             }
+
         }
+
 
         // Update the node positions and orientations
         UpdateModelPosition();
