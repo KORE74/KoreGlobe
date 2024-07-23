@@ -57,7 +57,7 @@ public partial class FssTestRoute : Node3D
 
 
 
-            ArrayMesh meshData = meshBuilder.Build("Wedge", false);
+            ArrayMesh meshData = meshBuilder.Build2("Wedge", false);
 
             // Add the mesh to the current Node3D
             MeshInstance3D meshInstance   = new();
@@ -115,4 +115,3 @@ public partial class FssTestRoute : Node3D
         // // ModelCamera.LookAt(vecPos, vecAbove);
     }
 }
-

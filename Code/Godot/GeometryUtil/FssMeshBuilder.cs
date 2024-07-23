@@ -52,8 +52,8 @@ public partial class FssMeshBuilder
             surfaceTool.AddIndex(index);
         }
 
-        surfaceTool.GenerateNormals();
-        surfaceTool.GenerateTangents();
+        //surfaceTool.GenerateNormals();
+        //surfaceTool.GenerateTangents();
 
         var arrays = new Godot.Collections.Array();
 
@@ -71,6 +71,41 @@ public partial class FssMeshBuilder
 
         return newMesh;
     }
+
+
+    public ArrayMesh Build2(string name, bool recalcNormals = false)
+    {
+        var newMesh = new ArrayMesh();
+        var surfaceTool = new SurfaceTool();
+        surfaceTool.Begin(Mesh.PrimitiveType.Triangles);
+
+        foreach (var vertex in meshData.Vertices)
+        {
+            surfaceTool.AddVertex(vertex);
+        }
+
+        foreach (var index in meshData.Triangles)
+        {
+            surfaceTool.AddIndex(index);
+        }
+
+        // surfaceTool.GenerateNormals();
+        // surfaceTool.GenerateTangents();
+
+        var arrays = new Godot.Collections.Array();
+
+        arrays.Resize((int)Mesh.ArrayType.Max);
+        arrays[(int)Mesh.ArrayType.Vertex] = meshData.Vertices.ToArray();
+        arrays[(int)Mesh.ArrayType.Index]  = meshData.Triangles.ToArray();
+
+        newMesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, arrays);
+
+        //newMesh = surfaceTool.Commit();
+        //newMesh.Name = name;
+
+        return newMesh;
+    }
+
 
     // -----------------------------------------------------------------------------------------------
     // #MARK: Simple Queries

@@ -54,7 +54,6 @@ public partial class TestModel : Node3D
 
         PackedScene importedModel = (PackedScene)ResourceLoader.Load(ModelPath);
         if (importedModel != null)
-
         {
             // Root of the model and orientation
             ModelNode = new Node3D() { Name = "ModelNode" };
@@ -80,7 +79,7 @@ public partial class TestModel : Node3D
             FssMeshBuilder frontWedge = new FssMeshBuilder();
             frontWedge.AddPyramidByPoint(0.3f, 0.1f, 0.04f);
 
-            ArrayMesh meshData = frontWedge.Build("Sphere", false);
+            ArrayMesh meshData = frontWedge.Build2("Sphere", false);
 
             var matWire      = FssMaterialFactory.WireframeWhiteMaterial();
             var matTransBlue = FssMaterialFactory.TransparentColoredMaterial(new Color(0.2f, 0.2f, 0.7f, 0.4f));
@@ -195,7 +194,7 @@ public partial class TestModel : Node3D
                 FssMeshBuilder meshBuilder = new FssMeshBuilder();
                 meshBuilder.AddCylinder(Vector3.Zero, vecDiff, 0.005f, 0.005f, 12, true);
 
-                ArrayMesh meshData = meshBuilder.Build("Wedge", false);
+                ArrayMesh meshData = meshBuilder.Build2("Wedge", false);
                 MeshInstance3D meshInstance = new();
                 meshInstance.Mesh = meshData;
                 meshInstance.MaterialOverride = matGrey;

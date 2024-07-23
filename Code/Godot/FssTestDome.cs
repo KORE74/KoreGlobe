@@ -23,7 +23,7 @@ public partial class FssTestDome : Node3D
             FssMeshBuilder meshBuilder = new FssMeshBuilder();
             meshBuilder.AddHemisphere(Vector3.Zero, 0.15f, 25);
 
-            ArrayMesh meshData = meshBuilder.Build("Dome", false);
+            ArrayMesh meshData = meshBuilder.Build2("Dome", false);
 
             var matWire      = FssMaterialFactory.WireframeWhiteMaterial();
             var matTransBlue = FssMaterialFactory.TransparentColoredMaterial(new Color(0.2f, 0.2f, 0.7f, 0.4f));
@@ -81,4 +81,3 @@ public partial class FssTestDome : Node3D
         // ModelCamera.LookAt(vecPos, vecAbove);
     }
 }
-

@@ -7,14 +7,34 @@ using Godot;
 
 public partial class FssMeshBuilder
 {
+
+    public void AddBox(Vector3 center, float height, float width, float depth)
+    {
+        float halfHeight = height / 2;
+        float halfWidth = width / 2;
+        float halfDepth = depth / 2;
+
+        Vector3 pTLF = new Vector3(center.X - halfWidth, center.Y + halfHeight, center.Z - halfDepth);
+        Vector3 pTRF = new Vector3(center.X + halfWidth, center.Y + halfHeight, center.Z - halfDepth);
+        Vector3 pTLB = new Vector3(center.X - halfWidth, center.Y + halfHeight, center.Z + halfDepth);
+        Vector3 pTRB = new Vector3(center.X + halfWidth, center.Y + halfHeight, center.Z + halfDepth);
+
+        Vector3 pBLF = new Vector3(center.X - halfWidth, center.Y - halfHeight, center.Z - halfDepth);
+        Vector3 pBRF = new Vector3(center.X + halfWidth, center.Y - halfHeight, center.Z - halfDepth);
+        Vector3 pBLB = new Vector3(center.X - halfWidth, center.Y - halfHeight, center.Z + halfDepth);
+        Vector3 pBRB = new Vector3(center.X + halfWidth, center.Y - halfHeight, center.Z + halfDepth);
+
+        AddBox(pTLF, pTRF, pTLB, pTRB, pBLF, pBRF, pBLB, pBRB);
+    }
+
     public void AddBox(Vector3 pTLF, Vector3 pTRF, Vector3 pTLB, Vector3 pTRB, Vector3 pBLF, Vector3 pBRF, Vector3 pBLB, Vector3 pBRB)
     {
-        AddSquare(pTLF, pTRF, pTRB, pTLB); // Top face
-        AddSquare(pBLF, pBLB, pBRB, pBRF); // Bottom face
-        AddSquare(pBLF, pBRF, pTRF, pTLF); // Front face
-        AddSquare(pBLB, pTLB, pTRB, pBRB); // Back face
-        AddSquare(pBLF, pTLF, pTLB, pBLB); // Left face
-        AddSquare(pBRF, pBRB, pTRB, pTRF); // Right face
+        AddSquare(pTRF, pTLF, pTLB, pTRB); // Top face
+        AddSquare(pBLB, pBLF, pBRF, pBRB); // Bottom face
+        AddSquare(pBRF, pBLF, pTLF, pTRF); // Front face
+        AddSquare(pTLB, pBLB, pBRB, pTRB); // Back face
+        AddSquare(pTLF, pBLF, pBLB, pTLB); // Left face
+        AddSquare(pBRB, pBRF, pTRF, pTRB); // Right face
     }
 
     // ----------------------------------------------------------------------------------

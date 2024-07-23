@@ -35,7 +35,7 @@ public partial class FssWedgeBuilder : Node3D
                     1.20f, 1.22f,          // distanceMin, distanceMax,
                     3, 3 );                // resolutionAz, resolutionEl)
 
-                ArrayMesh meshData = meshBuilder.Build("Wedge", false);
+                ArrayMesh meshData = meshBuilder.Build2("Wedge", false);
 
                 // Add the mesh to the current Node3D
                 MeshInstance3D meshInstance   = new();
