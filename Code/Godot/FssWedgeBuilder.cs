@@ -4,6 +4,8 @@ using Godot;
 
 public partial class FssWedgeBuilder : Node3D
 {
+    FssMapTileNode MapTileNode;
+
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
@@ -52,10 +54,31 @@ public partial class FssWedgeBuilder : Node3D
                 meshBuilder.Init();
             }
         }
+        CreateTestWedge();
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
     }
+
+    // -------------------------------------------------------------------------------------------- 
+
+    private void CreateTestWedge()
+    {
+        FssMeshBuilder meshBuilder  = new ();
+
+        meshBuilder.AddShellSegment (
+            30, 60, // elevationMin, elevationMax,
+            30, 60, // azimuthMin, azimuthMax,
+            1.10f, 1.12f,          // distanceMin, distanceMax,
+            3, 3 );                // resolutionAz, resolutionEl)
+
+        ArrayMesh meshData = meshBuilder.Build2("Wedge", false);
+
+        MapTileNode = new FssMapTileNode("./Resources/Misc/SatImg.png") { Name = "MapTileNode" };
+        AddChild(MapTileNode);
+    }
+
+
 }
