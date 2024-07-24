@@ -34,6 +34,7 @@ public partial class TestModel : Node3D
 
     Node3D ModelNode         = null;
     Node3D ModelResourceNode = null;
+    Node3D TrailNode         = null;
     // Node3D NodeMarkerZero    = null;
     // Node3D NodeMarkerAbove   = null;
     // Node3D NodeMarkerAhead   = null;
@@ -41,16 +42,22 @@ public partial class TestModel : Node3D
 
     FssCyclicIdGenerator IdGen = new FssCyclicIdGenerator(250);
 
+    private string randomString = FssRandomStringGenerator.GenerateRandomString(5);
 
     float Timer1Hz = 0f;
     float Timer4Hz = 0f;
+    private bool OneShotFlag = false;
 
     // --------------------------------------------------------------------------------------------
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-
+        // Define the position to start
+        double randLat = FssValueUtils.RandomInRange(-30, 30);
+        double randLon = FssValueUtils.RandomInRange(-150, 150);
+        double randAlt = FssValueUtils.RandomInRange(1.3, 1.5);
+        pos   = new FssLLAPoint() { LatDegs = randLat, LonDegs = randLon, AltMslM = randAlt };
 
         PackedScene importedModel = (PackedScene)ResourceLoader.Load(ModelPath);
         if (importedModel != null)
@@ -95,28 +102,21 @@ public partial class TestModel : Node3D
             ModelNode.AddChild(meshInstance);
             ModelNode.AddChild(meshInstanceW);
 
-            // ---------------------------------------
 
-            // Create and assign the markers
-            // NodeMarkerZero  = FssPrimitiveFactory.CreateSphere(Vector3.Zero,  0.005f, new Color(0.7f, 0.1f, 0.1f, 1f)); // zero  = red
-            // NodeMarkerAbove = FssPrimitiveFactory.CreateSphere(Vector3.Zero,  0.005f, new Color(0.1f, 0.1f, 0.8f, 1f)); // above = blue
-            // NodeMarkerAhead = FssPrimitiveFactory.CreateSphere(Vector3.Zero,  0.005f, new Color(0.1f, 0.8f, 0.1f, 1f)); // ahead = green
+            // Find a node in the global tree
+            Node GlobeRoot = GetParent();
 
-            // NodeMarkerZero.Name  = "NodeMarkerZero - Red";
-            // NodeMarkerAbove.Name = "NodeMarkerAbove - Blue";
-            // NodeMarkerAhead.Name = "NodeMarkerAhead - Green";
-            // ModelNode.AddChild(NodeMarkerZero);
-            // ModelNode.AddChild(NodeMarkerAbove);
-            // ModelNode.AddChild(NodeMarkerAhead);
+            if (GlobeRoot == null)
+            {
+                GD.PrintErr("Failed to find the GlobeRoot node");
+                return;
+            }
 
-            // float mag = 0.025f;
-            // Vector3 fixedVecPlusX = new Vector3(mag, 0f, 0f);
-            // Vector3 fixedVecPlusY = new Vector3(0f, mag, 0f);
-            // Vector3 fixedVecPlusZ = new Vector3(0f, 0f, mag);
+           // CoreNode = FssAppNode.Instance.FindNode("GlobeCore");
+            TrailNode = new Node3D() { Name = FssRandomStringGenerator.GenerateRandomString(5) };
+            GlobeRoot.AddChild(TrailNode);
 
-            // NodeMarkerZero.Position  = Vector3.Zero;
-            // NodeMarkerAbove.Position = fixedVecPlusY; //diffAbove;
-            // NodeMarkerAhead.Position = fixedVecPlusZ; //diffAhead;
+            // -----------
 
             // Create the chase-camera
             ModelCamera = new Camera3D() { Name = "ModelCamera" };
@@ -130,6 +130,9 @@ public partial class TestModel : Node3D
         {
             GD.PrintErr("Failed to load model: " + ModelPath);
         }
+
+
+
     }
 
     // --------------------------------------------------------------------------------------------
@@ -137,7 +140,14 @@ public partial class TestModel : Node3D
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
-        CoreNode = FssAppNode.Instance.FindNode("GlobeCore");
+
+        if (OneShotFlag == false)
+        {
+            CreateStruct();
+            OneShotFlag = true;
+        }
+
+        //CoreNode = FssAppNode.Instance.FindNode("GlobeCore");
 
         // Figure out the change in position
         Course.HeadingDegs += 5 * delta;
@@ -162,25 +172,25 @@ public partial class TestModel : Node3D
         {
             Timer4Hz = FssCoreTime.RuntimeSecs + 0.2f; // Update the timer to the next whole second
 
-            if (CoreNode != null)
+            if (TrailNode != null)
             {
                 // Create a new ID
                 string nextId = IdGen.NextId();
 
                 // If a child node with the ID exists, delete it.
 
-                CoreNode.GetNodeOrNull(nextId)?.QueueFree();
-                if (CoreNode.HasNode(nextId))
+                TrailNode.GetNodeOrNull(nextId)?.QueueFree();
+                if (TrailNode.HasNode(nextId))
                 {
-                    Node childNode = CoreNode.GetNode(nextId);
-                    CoreNode.RemoveChild(childNode);
+                    Node childNode = TrailNode.GetNode(nextId);
+                    TrailNode.RemoveChild(childNode);
                     childNode.QueueFree();
                 }
 
                 // Create a new sphere at the current position, and the ID
                 Node3D childSphere = FssPrimitiveFactory.CreateSphere(Vector3.Zero, 0.005f, new Color(0.9f, 0.9f, 0.9f, 1f));
-                childSphere.Name = nextId;
-                CoreNode.AddChild(childSphere);
+                childSphere.Name = $"{randomString}{nextId}";
+                TrailNode.AddChild(childSphere);
                 childSphere.Name = nextId;
 
                 // get the current position to assign to the sphere
@@ -214,6 +224,26 @@ public partial class TestModel : Node3D
     }
 
     // --------------------------------------------------------------------------------------------
+
+    // Adding nodes in the rest of the tree, from a call withing the _Ready() function is proving
+    // to be problematic. This is called as a one-off in Process.
+
+    public void CreateStruct()
+    {
+        Node p = GetParent();
+        if (p != null)
+        {
+            GD.Print($"Parent: {p.Name}");
+
+            string trailName = FssRandomStringGenerator.GenerateRandomString(5);
+            TrailNode = new Node3D() { Name = $"TrailNode-{trailName}" };
+            //TrailNode = new Node3D() { Name = "TrailNode" };
+            p.AddChild(TrailNode);
+
+            GD.Print($"TrailNode: {TrailNode.Name}");
+        }
+    }
+
 
     public void UpdateModelPosition()
     {
@@ -253,7 +283,7 @@ public partial class TestModel : Node3D
 
         // Update camera position and orientation
         FssXYZPoint camOffsetXYZ = CameraOffset.ToXYZ();
-        ModelCamera.Position = new Vector3((float)camOffsetXYZ.X, -(float)camOffsetXYZ.Y, -(float)camOffsetXYZ.Z);
+       ModelCamera.Position = new Vector3((float)camOffsetXYZ.X, -(float)camOffsetXYZ.Y, -(float)camOffsetXYZ.Z);
         ModelCamera.LookAt(vecPos, vecAbove);
     }
 }

@@ -20,16 +20,12 @@ public partial class FssEventDriver
 
     }
 
-    public string ReportNetworkingStatus()
-    {
-        return "pp"; // return FssAppFactory.Instance.NetworkHub.debugDump();
-    }
-
     public string ReportLocalIP()
     {
         return "pp"; // return FssAppFactory.Instance.NetworkHub.localIPAddrStr();
     }
 
+    // Usage: FssEventDriver.NetworkReport
     public string NetworkReport() => FssAppFactory.Instance.NetworkHub.Report();
 
     public void NetworkInjectIncoming(string message) => FssAppFactory.Instance.NetworkHub.InjectIncomingMessage(message);

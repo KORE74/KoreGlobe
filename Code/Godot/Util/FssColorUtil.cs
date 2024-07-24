@@ -15,7 +15,7 @@ public static class FssColorUtil
         float r = Mathf.Clamp(color.R + (GD.Randf() - 0.5f) * fractionNoise, 0f, 1f);
         float g = Mathf.Clamp(color.G + (GD.Randf() - 0.5f) * fractionNoise, 0f, 1f);
         float b = Mathf.Clamp(color.B + (GD.Randf() - 0.5f) * fractionNoise, 0f, 1f);
-        return new Color(r, g, b);
+        return new Color(r, g, b, color.A);
     }
 
     // Function to output a new color with a random noise factor on the overall brightness of th RGB.
@@ -28,7 +28,8 @@ public static class FssColorUtil
         return new Color(
             color.R * brightnessAdj,
             color.G * brightnessAdj,
-            color.B * brightnessAdj);
+            color.B * brightnessAdj,
+            color.A);
     }
 
 }

@@ -14,7 +14,7 @@
 [ext_resource type="Script" path="res://Code/Godot/TesColoredCube.cs" id="11_tribo"]
 [ext_resource type="Script" path="res://Code/Godot/FssTestDome.cs" id="12_wwe4x"]
 [ext_resource type="Script" path="res://Code/Godot/FssTestRoute.cs" id="13_ligvu"]
-[ext_resource type="StyleBox" path="res://Themes/new_style_box_flat.tres" id="15_aynxe"]
+[ext_resource type="StyleBox" uid="uid://cg5jbxqki88ph" path="res://Themes/new_style_box_flat.tres" id="15_aynxe"]
 [ext_resource type="Texture2D" uid="uid://b5neqrik7nbhj" path="res://Resources/Icons/White_Connections2.png" id="16_rpbva"]
 [ext_resource type="Script" path="res://Code/Godot/UI/FssUIHeader.cs" id="16_yac5x"]
 [ext_resource type="Texture2D" uid="uid://c535aixjgoih0" path="res://Resources/Icons/White_Options.png" id="17_bbpjn"]
@@ -71,6 +71,12 @@ script = ExtResource("2_xyvg4")
 
 [node name="TestLabel" type="Node3D" parent="GlobeRoot"]
 script = ExtResource("5_5jdg7")
+
+[node name="TestModel3" type="Node3D" parent="GlobeRoot"]
+script = ExtResource("7_f5p1r")
+
+[node name="TestModel2" type="Node3D" parent="GlobeRoot"]
+script = ExtResource("7_f5p1r")
 
 [node name="TestModel" type="Node3D" parent="GlobeRoot"]
 script = ExtResource("7_f5p1r")
@@ -527,6 +533,7 @@ layout_mode = 2
 title = "Network"
 initial_position = 2
 size = Vector2i(520, 425)
+visible = false
 unresizable = true
 popup_window = true
 min_size = Vector2i(400, 300)
@@ -781,3 +788,38 @@ text = "Cancel"
 custom_minimum_size = Vector2(70, 45)
 layout_mode = 2
 text = "OK"
+
+[node name="PlatformWindow" type="Window" parent="UITop"]
+initial_position = 2
+size = Vector2i(400, 300)
+visible = false
+
+[node name="MarginContainer" type="MarginContainer" parent="UITop/PlatformWindow"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Platform" type="VBoxContainer" parent="UITop/PlatformWindow/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="OptionButton" type="OptionButton" parent="UITop/PlatformWindow/MarginContainer/Platform"]
+layout_mode = 2
+focus_mode = 0
+item_count = 1
+popup/item_0/text = "plat1"
+
+[node name="TabContainer" type="TabContainer" parent="UITop/PlatformWindow/MarginContainer/Platform"]
+layout_mode = 2
+size_flags_vertical = 3
+current_tab = 0
+
+[node name="Platform" type="VBoxContainer" parent="UITop/PlatformWindow/MarginContainer/Platform/TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 0

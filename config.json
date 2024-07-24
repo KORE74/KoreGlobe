@@ -1,8 +1,8 @@
 {
-  "UdpIpAddr": "127.0.0.1",
+  "UdpIpAddr": "10.111.11.47",
   "UdpIpPort": 10001,
-  "TcpIpServerAddr": "127.0.0.1",
-  "TcpIpServerPort": 10002,
-  "TcpIpClientAddr": "127.0.0.1",
-  "TcpIpClientPort": 10003
+  "TcpIpServerAddr": "127.0.0.12",
+  "TcpIpServerPort": 10003,
+  "TcpIpClientAddr": "127.0.0.13",
+  "TcpIpClientPort": 10005
 }

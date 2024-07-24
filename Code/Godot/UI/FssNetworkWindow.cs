@@ -26,6 +26,8 @@ public partial class FssNetworkWindow : Window
     Button OkButton;
     Button CancelButton;
 
+    float UIPollTimer = 0f;
+
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
@@ -69,6 +71,12 @@ public partial class FssNetworkWindow : Window
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
+        if (UIPollTimer < FssCoreTime.RuntimeSecs)
+        {
+            UIPollTimer = FssCoreTime.RuntimeSecs + 2f; // Update the timer to the next whole second
+
+            NetworkStatusTextEdit.Text = FssAppFactory.Instance.EventDriver.NetworkReport();
+        }
     }
 
     // --------------------------------------------------------------------------------------------
@@ -87,7 +95,6 @@ public partial class FssNetworkWindow : Window
         TcpIpClientAddrEdit.Text = config.GetParameter<string>("TcpIpClientAddr", "127.0.0.1");
         TcpIpClientPortEdit.Text = config.GetParameter<int>("TcpIpClientPort", 10003).ToString();
 
-        NetworkStatusTextEdit.Text = "qq";
     }
 
     private void SaveControlValues()

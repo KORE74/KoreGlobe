@@ -149,11 +149,12 @@ public static partial class FssValueUtils
     // ------------------------------------------------------------------------
 
     // Generates a random float value between minVal and maxVal (inclusive)
+
+    // FssValueUtils.RandomInRange(1, 10) // Returns a random number between 1 and 10
+
     public static double RandomInRange(double minVal, double maxVal)
     {
-        double range = maxVal - minVal;
-        double sample = random.NextDouble();
-        double scaled = (sample * range) + minVal;
-        return scaled;
+        return ScaleVal(random.NextDouble(), 0, 1, minVal, maxVal);
     }
+
 }
