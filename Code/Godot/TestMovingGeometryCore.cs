@@ -194,4 +194,3 @@ public partial class TestMovingGeometryCore : Node3D
         FocusPointNode.Position = FssEarthCore.FocusPos;
     }
 }
-
