@@ -32,6 +32,20 @@ public static class FssGeoConvOperations
         return RealWorldToGodot((float)llap.AltMslM, (float)llap.LatDegs, (float)llap.LonDegs);
     }
 
+    public static Vector3 RealWorldToGodotFocusPoint(float radius, float latRads, float lonRads)
+    {
+        float x = radius * Mathf.Cos(latRads) * Mathf.Cos(lonRads);
+        float y = radius * Mathf.Sin(latRads);
+        float z = radius * Mathf.Cos(latRads) * Mathf.Sin(lonRads) * -1.0f;
+
+       // Vector3 RawPosition = new Vector3(x, y, z);
+
+      //  Vector3 AdjustedPosition = RawPosition - FssEarthCore.FocusPos;
+
+        return new Vector3(x, y, z);
+    }
+
+
     // FssEntityV3 platformV3 = FssGeoConvOperations.ReadWorldToStruct(pos, course);
 
     public static FssEntityV3 ReadWorldToStruct(FssLLAPoint pos, FssCourse course)

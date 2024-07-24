@@ -5,13 +5,13 @@ using Godot;
 
 public partial class TestLabelMaker : Node3D
 {
-    public const float KPixelSize = 0.0003f;
+    public const float KPixelSize = 0.0033f;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
         // Distance of each label from the origin
-        float distance = 1.221f;
+        float distance = (float)(FssEarthCore.EarthRadiusM) + 0.1f;
 
         // Loop through lat and long ranges, at 10 degree intervals, and create a Label3D at each point to display on our globe
         for (int lat = 80; lat >= -80; lat -= 10)
@@ -42,53 +42,4 @@ public partial class TestLabelMaker : Node3D
             }
         }
     }
-
-    private void CreateSphere(Vector3 position, float radius)
-    {
-        MeshInstance3D sphere = new MeshInstance3D();
-        sphere.Mesh = new SphereMesh
-        {
-            Radius = radius,
-            Height = radius * 2.0f
-        };
-        sphere.Position = position;
-        AddChild(sphere);
-    }
-
-    // private void CreateCylinder(Vector3 start, Vector3 end, float radius)
-    // {
-    //     Vector3 direction = end - start;
-    //     float length = direction.Length();
-    //     direction = direction.Normalized();
-
-    //     MeshInstance3D cylinder = new MeshInstance3D();
-    //     CylinderMesh cylinderMesh = new CylinderMesh
-    //     {
-    //         TopRadius = radius,
-    //         BottomRadius = radius,
-    //         Height = length,
-    //         RadialSegments = 6,
-    //         Rings = 3
-    //     };
-    //     cylinder.Mesh = cylinderMesh;
-    //     cylinder.MaterialOverride = FssMaterialFactory.SimpleColoredMaterial(new Color(1.0f, 0.5f, 0.5f, 1.0f));
-
-    //     Transform3D cylinderTransform = new Transform3D();
-    //     cylinderTransform.Origin = (start + end) / 2.0f;
-
-    //     // Create basis where the z-axis points from start to end
-    //     Vector3 zAxis = direction;
-    //     Vector3 xAxis = Vector3.Up.Cross(zAxis).Normalized();
-    //     if (xAxis == Vector3.Zero)
-    //     {
-    //         xAxis = Vector3.Right;
-    //     }
-    //     Vector3 yAxis = zAxis.Cross(xAxis).Normalized();
-
-    //     cylinderTransform.Basis = new Basis(Vector3.Right, Vector3.Up, direction);
-
-
-    //     cylinder.Transform = cylinderTransform;
-    //     AddChild(cylinder);
-    // }
 }

@@ -3,8 +3,6 @@ using System;
 
 public partial class TestMovingGeometryCore : Node3D
 {
-    float radius = 10f;
-
     public Vector3 CorePos  = new Vector3(-3, 0, 0);
     public Vector3 FocusPos = new Vector3 (3, 0, 0);
 
@@ -26,13 +24,16 @@ public partial class TestMovingGeometryCore : Node3D
 
     private float AnimAzDegs  = 0f;
     private float AnimElDegs  = 0f;
-    private float AnimAzDelta = 2.5f;
-    private float AnimElDelta = 2.5f;
+    private float AnimAzDelta = 1.55f;
+    private float AnimElDelta = 1.05f;
 
+    private float UIPollTimer = 0.0f;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
+        FssEarthCore.EarthRadiusM = 10;
+
         matColorRed    = FssMaterialFactory.SimpleColoredMaterial(new Color(0.9f, 0.3f, 0.3f, 1f));
         matColorBlue   = FssMaterialFactory.SimpleColoredMaterial(new Color(0.3f, 0.3f, 0.9f, 1f));
         matColorYellow = FssMaterialFactory.SimpleColoredMaterial(new Color(0.8f, 0.8f, 0.3f, 1f));
@@ -48,45 +49,30 @@ public partial class TestMovingGeometryCore : Node3D
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
+        if (UIPollTimer < FssCoreTime.RuntimeSecs)
+        {
+            UIPollTimer = FssCoreTime.RuntimeSecs + 1f; // Update the timer to the next whole second
+
+            GD.Print($"FocusPoint: Lat:{FssEarthCore.FocusPoint.LatDegs:0.00} Lon:{FssEarthCore.FocusPoint.LonDegs:0.00} RadiusM:{FssEarthCore.FocusPoint.RadiusM:0.00}");
+        }
+
         AnimAzDegs += AnimAzDelta * (float)delta;
         AnimElDegs += AnimElDelta * (float)delta;
 
-        if (AnimElDegs > 60f)  AnimElDelta = -2.5f;
-        if (AnimElDegs < -60f) AnimElDelta =  2.5f;
+        if (AnimElDegs >  25f) AnimElDelta = -1.05f;
+        if (AnimElDegs <   0f) AnimElDelta =  1.05f;
+        if (AnimAzDegs >  25f) AnimAzDelta = -1.55f;
+        if (AnimAzDegs <   0f) AnimAzDelta =  1.55f;
 
-        //float radius = 6f;
-        float backoffFraction = 0.2f;
+        FssEarthCore.FocusPoint = new FssLLAPoint() {
+            LatDegs = AnimElDegs,
+            LonDegs = AnimAzDegs,
+            RadiusM = FssEarthCore.EarthRadiusM };
 
-        float CoreDist  = radius - (radius * backoffFraction);
-        float FocusDist = (radius * backoffFraction);
+        FssEarthCore.UpdatePositions();
 
-        float azDegs = AnimAzDegs;
-        float elDegs = AnimElDegs;
-        float azRads = (float)FssValueUtils.DegsToRads(azDegs);
-        float elRads = (float)FssValueUtils.DegsToRads(elDegs);
-
-        Vector3 focusOffset = new Vector3(
-            FocusDist * Mathf.Cos(azRads) * Mathf.Cos(elRads),
-            FocusDist * Mathf.Sin(elRads),
-            FocusDist * Mathf.Sin(azRads) * Mathf.Cos(elRads)
-        );
-
-        FocusPos = focusOffset;
-
-
-        float backAzDegs = azDegs + 180f;
-        float backElDegs = elDegs * -1f;
-        float backAzRads = (float)FssValueUtils.DegsToRads(backAzDegs);
-        float backElRads = (float)FssValueUtils.DegsToRads(backElDegs);
-
-        Vector3 coreOffset = new Vector3(
-            CoreDist * Mathf.Cos(backAzRads) * Mathf.Cos(backElRads),
-            CoreDist * Mathf.Sin(backElRads),
-            CoreDist * Mathf.Sin(backAzRads) * Mathf.Cos(backElRads)
-        );
-
-        CorePos = coreOffset;
-
+        // FocusPos = FssEarthCore.FocusPos;
+        // CorePos  = FssEarthCore.CorePos;
 
         UpdatePositions();
         UpdateLinkCylinder();
@@ -105,19 +91,21 @@ public partial class TestMovingGeometryCore : Node3D
         meshBuilder.AddSphere(Vector3.Zero, MarkerSize, 16);
         ArrayMesh meshData = meshBuilder.Build2("Sphere", false);
 
-        MeshInstance3D meshInstance = new MeshInstance3D() { Name = "Color" };
-        meshInstance.Mesh = meshData;
-        meshInstance.MaterialOverride = matColorBlue;
+        MeshInstance3D meshInstance    = new MeshInstance3D() { Name = "Color" };
+        meshInstance.Mesh              = meshData;
+        meshInstance.MaterialOverride  = matColorBlue;
 
-        MeshInstance3D meshInstanceW = new MeshInstance3D() { Name = "Wire" };
-        meshInstanceW.Mesh = meshData;
+        MeshInstance3D meshInstanceW   = new MeshInstance3D() { Name = "Wire" };
+        meshInstanceW.Mesh             = meshData;
         meshInstanceW.MaterialOverride = matWire;
 
         CoreNode.AddChild(meshInstance);
         CoreNode.AddChild(meshInstanceW);
 
         // Attach the script to the core node
-        CoreNode.AddChild(new TestEarthCore(radius));
+        CoreNode.AddChild(new TestEarthCore((float)FssEarthCore.EarthRadiusM));
+
+        CoreNode.AddChild(new TestLabelMaker());
     }
 
     private void CreateFocusNode()
@@ -131,12 +119,12 @@ public partial class TestMovingGeometryCore : Node3D
         meshBuilder.AddSphere(Vector3.Zero, MarkerSize, 16);
         ArrayMesh meshData = meshBuilder.Build2("Sphere", false);
 
-        MeshInstance3D meshInstance = new MeshInstance3D() { Name = "Color" };
-        meshInstance.Mesh = meshData;
-        meshInstance.MaterialOverride = matColorYellow;
+        MeshInstance3D meshInstance    = new MeshInstance3D() { Name = "Color" };
+        meshInstance.Mesh              = meshData;
+        meshInstance.MaterialOverride  = matColorYellow;
 
-        MeshInstance3D meshInstanceW = new MeshInstance3D() { Name = "Wire" };
-        meshInstanceW.Mesh = meshData;
+        MeshInstance3D meshInstanceW   = new MeshInstance3D() { Name = "Wire" };
+        meshInstanceW.Mesh             = meshData;
         meshInstanceW.MaterialOverride = matWire;
 
         FocusPointNode.AddChild(meshInstance);
@@ -154,12 +142,12 @@ public partial class TestMovingGeometryCore : Node3D
         meshBuilder.AddSphere(Vector3.Zero, MarkerSize, 16);
         ArrayMesh meshData = meshBuilder.Build2("Sphere", false);
 
-        MeshInstance3D meshInstance = new MeshInstance3D() { Name = "Color" };
-        meshInstance.Mesh = meshData;
-        meshInstance.MaterialOverride = matColorRed;
+        MeshInstance3D meshInstance    = new MeshInstance3D() { Name = "Color" };
+        meshInstance.Mesh              = meshData;
+        meshInstance.MaterialOverride  = matColorRed;
 
-        MeshInstance3D meshInstanceW = new MeshInstance3D() { Name = "Wire" };
-        meshInstanceW.Mesh = meshData;
+        MeshInstance3D meshInstanceW   = new MeshInstance3D() { Name = "Wire" };
+        meshInstanceW.Mesh             = meshData;
         meshInstanceW.MaterialOverride = matWire;
 
         ZeroNode.AddChild(meshInstance);
@@ -172,19 +160,19 @@ public partial class TestMovingGeometryCore : Node3D
         LinkCylinderNode = new Node3D() { Name = "LinkCylinder" };
         AddChild(LinkCylinderNode);
 
-        LinkCylinderMesh = new MeshInstance3D() { Name = "Color" };
+        LinkCylinderMesh                  = new MeshInstance3D() { Name = "Color" };
         LinkCylinderMesh.MaterialOverride = matColorWhite;
         LinkCylinderNode.AddChild(LinkCylinderMesh);
 
-        LinkCylinderWire = new MeshInstance3D() { Name = "Wire" };
+        LinkCylinderWire                  = new MeshInstance3D() { Name = "Wire" };
         LinkCylinderWire.MaterialOverride = matWire;
         LinkCylinderNode.AddChild(LinkCylinderWire);
     }
 
     private void UpdateLinkCylinder()
     {
-        Vector3 frompoint = CorePos;
-        Vector3 topoint   = FocusPos;
+        Vector3 frompoint = FssEarthCore.CorePos;
+        Vector3 topoint   = FssEarthCore.FocusPos;
         Vector3 pointdiff = topoint - frompoint;
 
         float radius = MarkerSize * 0.5f;
@@ -202,8 +190,8 @@ public partial class TestMovingGeometryCore : Node3D
 
     private void UpdatePositions()
     {
-        CoreNode.Position       = CorePos;
-        FocusPointNode.Position = FocusPos;
+        CoreNode.Position       = FssEarthCore.CorePos;
+        FocusPointNode.Position = FssEarthCore.FocusPos;
     }
-
 }
+
