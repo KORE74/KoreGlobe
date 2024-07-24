@@ -1,0 +1,8 @@
+{
+  "UdpIpAddr": "127.0.0.1",
+  "UdpIpPort": 10001,
+  "TcpIpServerAddr": "127.0.0.1",
+  "TcpIpServerPort": 10002,
+  "TcpIpClientAddr": "127.0.0.1",
+  "TcpIpClientPort": 10003
+}

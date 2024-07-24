@@ -14,16 +14,16 @@
 [ext_resource type="Script" path="res://Code/Godot/TesColoredCube.cs" id="11_tribo"]
 [ext_resource type="Script" path="res://Code/Godot/FssTestDome.cs" id="12_wwe4x"]
 [ext_resource type="Script" path="res://Code/Godot/FssTestRoute.cs" id="13_ligvu"]
-[ext_resource type="StyleBox" uid="uid://cg5jbxqki88ph" path="res://Themes/new_style_box_flat.tres" id="15_aynxe"]
+[ext_resource type="StyleBox" path="res://Themes/new_style_box_flat.tres" id="15_aynxe"]
 [ext_resource type="Texture2D" uid="uid://b5neqrik7nbhj" path="res://Resources/Icons/White_Connections2.png" id="16_rpbva"]
 [ext_resource type="Script" path="res://Code/Godot/UI/FssUIHeader.cs" id="16_yac5x"]
 [ext_resource type="Texture2D" uid="uid://c535aixjgoih0" path="res://Resources/Icons/White_Options.png" id="17_bbpjn"]
 [ext_resource type="Theme" uid="uid://dygto0gp0wtwi" path="res://Themes/Red_Button.tres" id="18_wc5rg"]
 [ext_resource type="Texture2D" uid="uid://bpjmofp0dir0d" path="res://Resources/Icons/White_Close.png" id="19_t7amt"]
 [ext_resource type="Texture2D" uid="uid://8km4gxg0fgok" path="res://Resources/Icons/White_Log.png" id="20_s4gy1"]
-[ext_resource type="Theme" uid="uid://bspkdc75j1n7k" path="res://Themes/GreenToggle.tres" id="21_u73ii"]
-[ext_resource type="Theme" uid="uid://trj4idfkkji6" path="res://Themes/Green_Button.tres" id="22_63uax"]
-[ext_resource type="Theme" uid="uid://cec4we5sx3j0b" path="res://Themes/YellowToggle.tres" id="22_cvbv5"]
+[ext_resource type="Theme" uid="uid://p1asdjvj8ece" path="res://Themes/GreenToggle.tres" id="21_u73ii"]
+[ext_resource type="Theme" uid="uid://f7cusn8cepiu" path="res://Themes/Green_Button.tres" id="22_63uax"]
+[ext_resource type="Theme" uid="uid://b73ifjtcxnugj" path="res://Themes/YellowToggle.tres" id="22_cvbv5"]
 [ext_resource type="Texture2D" uid="uid://dec5v78k63oif" path="res://Resources/Icons/White_Globe.png" id="22_wmu5k"]
 [ext_resource type="Texture2D" uid="uid://buqwf6wctolbe" path="res://Resources/Icons/Plane.png" id="23_rrka7"]
 [ext_resource type="Texture2D" uid="uid://dgq7if4l4dpys" path="res://Resources/Icons/Align.png" id="24_xd42u"]
@@ -527,7 +527,6 @@ layout_mode = 2
 title = "Network"
 initial_position = 2
 size = Vector2i(520, 425)
-visible = false
 unresizable = true
 popup_window = true
 min_size = Vector2i(400, 300)
@@ -557,20 +556,20 @@ theme_override_constants/separation = 10
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Label" type="Label" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row1-UDP"]
+[node name="UdpIpAddrLabel" type="Label" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row1-UDP"]
 custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 text = "UDP Receiver IP"
 vertical_alignment = 1
 
-[node name="LineEdit" type="LineEdit" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row1-UDP"]
+[node name="UdpIpAddrEdit" type="LineEdit" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row1-UDP"]
 custom_minimum_size = Vector2(145, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 text = "222.222.222.222"
 
-[node name="LabePortl" type="Label" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row1-UDP"]
+[node name="UdpIpPortLabel" type="Label" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row1-UDP"]
 custom_minimum_size = Vector2(45, 0)
 layout_direction = 2
 layout_mode = 2
@@ -580,13 +579,13 @@ text = "Port
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="LineEdit2" type="LineEdit" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row1-UDP"]
+[node name="UdpIpPortEdit" type="LineEdit" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row1-UDP"]
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 text = "10000"
 
-[node name="ConnectButton" type="Button" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row1-UDP"]
+[node name="UdpIpConnectButton" type="Button" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row1-UDP"]
 layout_mode = 2
 text = "Connect"
 
@@ -594,18 +593,18 @@ text = "Connect"
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Label" type="Label" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row2-TCPServer"]
+[node name="TcpIpServerAddrLabel" type="Label" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row2-TCPServer"]
 custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 text = "TCP Server IP"
 
-[node name="LineEdit2" type="LineEdit" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row2-TCPServer"]
+[node name="TcpIpServerAddrEdit" type="LineEdit" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row2-TCPServer"]
 custom_minimum_size = Vector2(145, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 
-[node name="Label2" type="Label" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row2-TCPServer"]
+[node name="TcpIpServerPortLabel" type="Label" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row2-TCPServer"]
 custom_minimum_size = Vector2(45, 0)
 layout_direction = 2
 layout_mode = 2
@@ -614,12 +613,12 @@ text = "Port"
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="LineEdit" type="LineEdit" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row2-TCPServer"]
+[node name="TcpIpSerfverPortEdit" type="LineEdit" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row2-TCPServer"]
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 
-[node name="ConnectButton" type="Button" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row2-TCPServer"]
+[node name="TcpIpServerConnectButton" type="Button" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row2-TCPServer"]
 layout_mode = 2
 text = "Connect"
 
@@ -627,18 +626,18 @@ text = "Connect"
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Label" type="Label" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row3-TCPClient"]
+[node name="TcpIpClientAddrLabel" type="Label" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row3-TCPClient"]
 custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 text = "TCP Server IP"
 
-[node name="LineEdit2" type="LineEdit" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row3-TCPClient"]
+[node name="TcpIpClientAddrEdit" type="LineEdit" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row3-TCPClient"]
 custom_minimum_size = Vector2(145, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 
-[node name="Label2" type="Label" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row3-TCPClient"]
+[node name="TcpIpClientPortLabel" type="Label" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row3-TCPClient"]
 custom_minimum_size = Vector2(45, 0)
 layout_direction = 2
 layout_mode = 2
@@ -647,12 +646,12 @@ text = "Port"
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="LineEdit" type="LineEdit" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row3-TCPClient"]
+[node name="TcpIpClientPortEdit" type="LineEdit" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row3-TCPClient"]
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 
-[node name="ConnectButton" type="Button" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row3-TCPClient"]
+[node name="TcpIpClientConnectButton" type="Button" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row3-TCPClient"]
 layout_mode = 2
 text = "Connect"
 
@@ -663,7 +662,7 @@ layout_mode = 2
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="TextEdit" type="TextEdit" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row-Status"]
+[node name="NetworkStatusTextEdit" type="TextEdit" parent="UITop/NetworkWindow/MarginContainer/VBoxContainer/Row-Status"]
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
 size_flags_horizontal = 3

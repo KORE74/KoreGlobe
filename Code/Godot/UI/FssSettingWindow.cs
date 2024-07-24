@@ -16,7 +16,6 @@ public partial class FssSettingWindow : Window
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-
         MapPathLabel        = (Label)FindChild("MapPathLabel");
         MapPathLineEdit     = (LineEdit)FindChild("MapPathLineEdit");
         CapturePathLabel    = (Label)FindChild("CapturePathLabel");
