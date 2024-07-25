@@ -30,7 +30,7 @@ public partial class FssMeshBuilder
                 float currElDegs = Mathf.Lerp(elMinDegs, elMaxDegs, (float)y / resolutionEl);
                 float currRadius = surfaceRadius + (surfaceArray[x, y] * surfaceScale);
 
-                points[y, x] = FssGeoConvOperations.RealWorldToGodot(currRadius, currAzDegs, currElDegs);
+                points[x, y] = FssGeoConvOperations.RealWorldToGodot(currRadius, currAzDegs, currElDegs);
             }
         }
 
@@ -47,10 +47,10 @@ public partial class FssMeshBuilder
                 Vector3 p3 = points[y + 1, x];
                 Vector3 p4 = points[y + 1, x + 1];
 
-                Vector2 uv1 = new Vector2((float)y       / (resolutionEl - 1) * -1f, (float)x       / (resolutionAz - 1));
-                Vector2 uv2 = new Vector2((float)y       / (resolutionEl - 1) * -1f, (float)(x + 1) / (resolutionAz - 1));
-                Vector2 uv3 = new Vector2((float)(y + 1) / (resolutionEl - 1) * -1f, (float)x       / (resolutionAz - 1));
-                Vector2 uv4 = new Vector2((float)(y + 1) / (resolutionEl - 1) * -1f, (float)(x + 1) / (resolutionAz - 1));
+                Vector2 uv1 = new Vector2( (float)y       / (resolutionEl - 1) , (float)x       / (resolutionAz - 1) * -1f );
+                Vector2 uv2 = new Vector2( (float)y       / (resolutionEl - 1) , (float)(x + 1) / (resolutionAz - 1) * -1f );
+                Vector2 uv3 = new Vector2( (float)(y + 1) / (resolutionEl - 1) , (float)x       / (resolutionAz - 1) * -1f );
+                Vector2 uv4 = new Vector2( (float)(y + 1) / (resolutionEl - 1) , (float)(x + 1) / (resolutionAz - 1) * -1f );
 
                 // Add points to MeshData.Vertices list and record the index of each point
                 int i1 = AddVertex(p1);

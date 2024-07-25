@@ -75,13 +75,13 @@ public partial class TestEarthCore : MeshInstance3D
     {
         FssMeshBuilder meshBuilder  = new ();
 
-        FssFloat2DArray noiseSurface = new FssFloat2DArray(50, 50);
+        FssFloat2DArray noiseSurface = new FssFloat2DArray(30, 70);
         noiseSurface.SetRandomVals(-1f, 1f);
 
         meshBuilder.AddSurface(
-            30, 60, //float azMinDegs, float azMaxDegs,
+            0, 30, //float azMinDegs, float azMaxDegs,
             30, 60, //float elMinDegs, float elMaxDegs,
-            1.1f, 0.005f, //float surfaceRadius, float surfaceScale,
+            9.5f, 0.005f, //float surfaceRadius, float surfaceScale,
             noiseSurface //FssFloat2DArray surfaceArray,
         ); //bool flipTriangles = false)
 
