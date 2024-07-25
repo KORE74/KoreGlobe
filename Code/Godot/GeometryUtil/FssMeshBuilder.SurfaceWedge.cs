@@ -47,10 +47,10 @@ public partial class FssMeshBuilder
                 Vector3 p3 = points[y + 1, x];
                 Vector3 p4 = points[y + 1, x + 1];
 
-                Vector2 uv1 = new Vector2((float)x       / (resolutionAz - 1), (float)y       / (resolutionEl - 1));
-                Vector2 uv2 = new Vector2((float)(x + 1) / (resolutionAz - 1), (float)y       / (resolutionEl - 1));
-                Vector2 uv3 = new Vector2((float)x       / (resolutionAz - 1), (float)(y + 1) / (resolutionEl - 1));
-                Vector2 uv4 = new Vector2((float)(x + 1) / (resolutionAz - 1), (float)(y + 1) / (resolutionEl - 1));
+                Vector2 uv1 = new Vector2((float)y       / (resolutionEl - 1) * -1f, (float)x       / (resolutionAz - 1));
+                Vector2 uv2 = new Vector2((float)y       / (resolutionEl - 1) * -1f, (float)(x + 1) / (resolutionAz - 1));
+                Vector2 uv3 = new Vector2((float)(y + 1) / (resolutionEl - 1) * -1f, (float)x       / (resolutionAz - 1));
+                Vector2 uv4 = new Vector2((float)(y + 1) / (resolutionEl - 1) * -1f, (float)(x + 1) / (resolutionAz - 1));
 
                 // Add points to MeshData.Vertices list and record the index of each point
                 int i1 = AddVertex(p1);
