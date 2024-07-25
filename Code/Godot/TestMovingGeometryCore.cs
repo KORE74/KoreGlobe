@@ -28,6 +28,11 @@ public partial class TestMovingGeometryCore : Node3D
     private float AnimElDelta = 1.05f;
 
     private float UIPollTimer = 0.0f;
+    private float UIPollTimer2 = 0.0f;
+
+    private FssLLAPoint    PlatformPos;
+    private FssCourse      PlatformCourse;
+    private FssCourseDelta PlatformCourseDelta;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -44,6 +49,8 @@ public partial class TestMovingGeometryCore : Node3D
         CreateFocusNode();
         CreateZeroNode();
         CreateLinkCylinder();
+
+        CreatePlatform();
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -54,10 +61,15 @@ public partial class TestMovingGeometryCore : Node3D
             UIPollTimer = FssCoreTime.RuntimeSecs + 1f; // Update the timer to the next whole second
 
             GD.Print($"FocusPoint: Lat:{FssEarthCore.FocusPoint.LatDegs:0.00} Lon:{FssEarthCore.FocusPoint.LonDegs:0.00} RadiusM:{FssEarthCore.FocusPoint.RadiusM:0.00}");
+
+            GD.Print($"PlatPos: Lat:{PlatformPos.LatDegs:0.00} Lon:{PlatformPos.LonDegs:0.00} RadiusM:{PlatformPos.RadiusM:0.00}");
         }
 
-        AnimAzDegs += AnimAzDelta * (float)delta;
-        AnimElDegs += AnimElDelta * (float)delta;
+
+        float scale = 0.02f;
+
+        AnimAzDegs += AnimAzDelta * ((float)delta * scale);
+        AnimElDegs += AnimElDelta * ((float)delta * scale);
 
         if (AnimElDegs >  25f) AnimElDelta = -1.05f;
         if (AnimElDegs <   0f) AnimElDelta =  1.05f;
@@ -76,6 +88,8 @@ public partial class TestMovingGeometryCore : Node3D
 
         UpdatePositions();
         UpdateLinkCylinder();
+
+        UpdatePlatform(delta);
     }
 
     // --------------------------------------------------------------------------------------------
@@ -192,5 +206,33 @@ public partial class TestMovingGeometryCore : Node3D
     {
         CoreNode.Position       = FssEarthCore.CorePos;
         FocusPointNode.Position = FssEarthCore.FocusPos;
+    }
+
+    // --------------------------------------------------------------------------------------------
+
+    private void CreatePlatform()
+    {
+        PlatformPos = new FssLLAPoint() {
+            LatDegs = 10f,
+            LonDegs = 10f,
+            RadiusM = 10f };
+
+        PlatformCourse = new FssCourse() {
+            HeadingDegs = 0f,
+            SpeedMps    = 0.04f };
+
+        PlatformCourseDelta = new FssCourseDelta() {
+            HeadingChangeClockwiseDegsSec = 5f,
+            SpeedChangeMpMps              = 0f };
+    }
+
+    private void UpdatePlatform(double delta)
+    {
+        // Update real world position
+        PlatformCourse = PlatformCourse.PlusDeltaForTime(PlatformCourseDelta, delta);
+        PlatformPos    = PlatformPos.PlusDeltaForTime(PlatformCourse, delta);
+
+        // Create the visual position
+        FssEntityV3 platVecs = FssGeoConvOperations.ReadWorldToStruct(PlatformPos, PlatformCourse);
     }
 }

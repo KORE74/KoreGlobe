@@ -130,9 +130,6 @@ public partial class TestModel : Node3D
         {
             GD.PrintErr("Failed to load model: " + ModelPath);
         }
-
-
-
     }
 
     // --------------------------------------------------------------------------------------------
@@ -140,7 +137,6 @@ public partial class TestModel : Node3D
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
-
         if (OneShotFlag == false)
         {
             CreateStruct();
@@ -165,7 +161,6 @@ public partial class TestModel : Node3D
             // check the previous position markers at 1Hz.
             Timer1Hz = (float)(FssCoreTime.RuntimeIntSecs + 1); // Update the timer to the next whole second
             GD.Print($"RuntimeSecs: {Timer1Hz:F1} Course: {Course} Offset: {offset} Position: {pos}");
-
         }
 
         if (Timer4Hz < FssCoreTime.RuntimeSecs)
@@ -217,7 +212,6 @@ public partial class TestModel : Node3D
             }
 
         }
-
 
         // Update the node positions and orientations
         UpdateModelPosition();
@@ -276,14 +270,13 @@ public partial class TestModel : Node3D
         FssEntityV3 platVecs = FssGeoConvOperations.ReadWorldToStruct(pos, Course);
 
 
-
         // Update node position and orientation
         ModelNode.Position = platVecs.Position;// vecPos;
         ModelNode.LookAt(platVecs.PosAhead, platVecs.PosAbove);
 
         // Update camera position and orientation
         FssXYZPoint camOffsetXYZ = CameraOffset.ToXYZ();
-       ModelCamera.Position = new Vector3((float)camOffsetXYZ.X, -(float)camOffsetXYZ.Y, -(float)camOffsetXYZ.Z);
+        ModelCamera.Position = new Vector3((float)camOffsetXYZ.X, -(float)camOffsetXYZ.Y, -(float)camOffsetXYZ.Z);
         ModelCamera.LookAt(vecPos, vecAbove);
     }
 }

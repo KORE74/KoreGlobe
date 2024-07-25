@@ -81,6 +81,7 @@ public partial class FssMeshBuilder
 
         foreach (var vertex in meshData.Vertices)
         {
+
             surfaceTool.AddVertex(vertex);
         }
 
@@ -105,6 +106,37 @@ public partial class FssMeshBuilder
 
         return newMesh;
     }
+
+    public ArrayMesh BuildWithUV(string name)
+    {
+        var newMesh     = new ArrayMesh();
+        var surfaceTool = new SurfaceTool();
+        surfaceTool.Begin(Mesh.PrimitiveType.Triangles);
+
+        for (int i = 0; i < meshData.Vertices.Count; i++)
+        {
+            surfaceTool.SetUV(meshData.UVs[i]);
+            surfaceTool.AddVertex(meshData.Vertices[i]);
+        }
+
+        foreach (var index in meshData.Triangles)
+        {
+            surfaceTool.AddIndex(index);
+        }
+
+        var arrays = new Godot.Collections.Array();
+
+        arrays.Resize((int)Mesh.ArrayType.Max);
+        arrays[(int)Mesh.ArrayType.Vertex] = meshData.Vertices.ToArray();
+        arrays[(int)Mesh.ArrayType.TexUV]  = meshData.UVs.ToArray();
+        arrays[(int)Mesh.ArrayType.Index]  = meshData.Triangles.ToArray();
+
+        newMesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, arrays);
+
+        return newMesh;
+    }
+
+
 
 
     // -----------------------------------------------------------------------------------------------
@@ -308,18 +340,27 @@ public partial class FssMeshBuilder
                 Vector3 p3 = points[(y + 1) * (resolutionX + 1) + x];
                 Vector3 p4 = points[(y + 1) * (resolutionX + 1) + x + 1];
 
+                Vector2 uv1 = new Vector2((float)x / resolutionX, (float)y / resolutionY);
+                Vector2 uv2 = new Vector2((float)(x + 1) / resolutionX, (float)y / resolutionY);
+                Vector2 uv3 = new Vector2((float)x / resolutionX, (float)(y + 1) / resolutionY);
+                Vector2 uv4 = new Vector2((float)(x + 1) / resolutionX, (float)(y + 1) / resolutionY);
+
                 // Add points to MeshData.Vertices list and record the index of each point
                 int i1 = AddVertex(p1);
                 AddNormal(p1.Normalized());
+                AddUV(uv1);
 
                 int i2 = AddVertex(p2);
                 AddNormal(p2.Normalized());
+                AddUV(uv2);
 
                 int i3 = AddVertex(p3);
                 AddNormal(p3.Normalized());
+                AddUV(uv3);
 
                 int i4 = AddVertex(p4);
                 AddNormal(p4.Normalized());
+                AddUV(uv4);
 
                 // Create two MeshData.Triangles using the four MeshData.Vertices just added
                 if (flipTriangles)

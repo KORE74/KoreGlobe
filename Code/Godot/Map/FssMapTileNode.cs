@@ -7,9 +7,12 @@ public partial class FssMapTileNode : Node3D
     private string _imagePath;
     private bool _isDone;
     StandardMaterial3D _material;
+    public ArrayMesh meshData;
 
     // Property to check if the material loading is done
     public bool IsDone => _isDone;
+
+    private bool OneShotFlag = false;
 
     // Property to get the loaded texture
     public StandardMaterial3D LoadedMaterial => _material;
@@ -24,6 +27,35 @@ public partial class FssMapTileNode : Node3D
 
     // --------------------------------------------------------------------------------------------
 
+    public override void _Ready()
+    {
+    }
+
+    // Called every frame. 'delta' is the elapsed time since the previous frame.
+    public override void _Process(double delta)
+    {
+        if (IsDone && OneShotFlag == false)
+        {
+            AddChild( new MeshInstance3D() {
+                Name             = "MapTileMesh",
+                Mesh             = meshData,
+                MaterialOverride = _material
+            });
+
+            AddChild( new MeshInstance3D() {
+                Name             = "MapTileMeshW",
+                Mesh             = meshData,
+                MaterialOverride = FssMaterialFactory.WireframeWhiteMaterial()
+            });
+
+            OneShotFlag = true;
+
+            GD.Print("=========> MapTileMesh added to FssMapTileNode");
+        }
+    }
+
+    // --------------------------------------------------------------------------------------------
+
     // Async
 
     // Method to start the texture loading process
@@ -31,7 +63,7 @@ public partial class FssMapTileNode : Node3D
     {
         var image = await LoadImageAsync(_imagePath);
         CallDeferred(nameof(GetMaterial), image);
-        _isDone = true;
+
     }
 
     // Asynchronous method to load the image
@@ -54,6 +86,10 @@ public partial class FssMapTileNode : Node3D
     {
         _material = new StandardMaterial3D();
         _material.AlbedoTexture = ImageTexture.CreateFromImage(image);
+
+        // Only set the done flag AFTER the material is created
+        _isDone = true;
+
     }
 
 }

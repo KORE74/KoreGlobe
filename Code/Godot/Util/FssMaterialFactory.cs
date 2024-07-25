@@ -68,6 +68,16 @@ public static class FssMaterialFactory
         return material;
     }
 
+    public static ShaderMaterial TexMaterial()
+    {
+        // Load the wireframe shader
+        Shader shader = (Shader)GD.Load("res://Shaders/VertexColor2.gdshader");
+        ShaderMaterial material = new ShaderMaterial();
+       // wireframeMaterial.AlbedoColor = color;
+        material.Shader = shader;
+
+        return material;
+    }
 
     public static ShaderMaterial BubbleMaterial()
     {

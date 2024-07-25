@@ -4,6 +4,7 @@ using System;
 public partial class TestEarthCore : MeshInstance3D
 {
     float radius = 6f;
+    FssMapTileNode MapTileNode;
 
     public TestEarthCore()
     {
@@ -19,6 +20,7 @@ public partial class TestEarthCore : MeshInstance3D
     public override void _Ready()
     {
         CreateShell();
+        CreateTestWedge();
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -67,5 +69,62 @@ public partial class TestEarthCore : MeshInstance3D
                 meshBuilder.Init();
             }
         }
+    }
+
+    private void CreateTestWedge()
+    {
+        FssMeshBuilder meshBuilder  = new ();
+
+        FssFloat2DArray noiseSurface = new FssFloat2DArray(50, 50);
+        noiseSurface.SetRandomVals(-1f, 1f);
+
+
+        meshBuilder.AddSurface(
+            30, 60, //float azMinDegs, float azMaxDegs,
+            30, 60, //float elMinDegs, float elMaxDegs,
+            1.1f, 0.01f, //float surfaceRadius, float surfaceScale,
+            noiseSurface //FssFloat2DArray surfaceArray,
+        ); //bool flipTriangles = false)
+
+        // meshBuilder.AddShellSegment (
+        //     30, 60, // elevationMin, elevationMax,
+        //     30, 60, // azimuthMin, azimuthMax,
+        //     1.10f, 1.12f,          // distanceMin, distanceMax,
+        //     3, 3 );                // resolutionAz, resolutionEl)
+
+        ArrayMesh meshData = meshBuilder.BuildWithUV("Wedge");
+
+
+        var image = Image.LoadFromFile("res://Resources/Misc/SatImg.png");
+        var texture = ImageTexture.CreateFromImage(image);
+
+        //var _material = FssMaterialFactory.TexMaterial();
+
+
+        var _material = new StandardMaterial3D();
+        _material.AlbedoTexture = texture;
+        _material.ShadingMode = StandardMaterial3D.ShadingModeEnum.Unshaded;
+
+
+        // load an image into a material
+
+        // Add the mesh to the current Node3D
+        MeshInstance3D meshInstance   = new();
+        meshInstance.Mesh             = meshData;
+        meshInstance.MaterialOverride = _material;
+
+        AddChild(meshInstance);
+
+        var matWire = FssMaterialFactory.WireframeWhiteMaterial();
+        //matWire.Transparency = 0.85;
+
+        MeshInstance3D meshInstanceW   = new();
+        meshInstanceW.Mesh             = meshData;
+        meshInstanceW.MaterialOverride = matWire;
+        meshInstanceW.Transparency     = 0.9f;
+        //meshInstanceW.CastShadows      = false;
+
+        AddChild(meshInstanceW);
+
     }
 }
