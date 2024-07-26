@@ -9,6 +9,21 @@ using Godot;
 
 public partial class FssMeshBuilder
 {
+
+/*
+
+UVs are defined as follows:
+
+    (0,0)   (1,0)
+    +--------+
+    |        |
+    |        |
+    +--------+
+    (0,1)   (1,1)
+
+*/
+
+
     public void AddSurface(
         float azMinDegs, float azMaxDegs,
         float elMinDegs, float elMaxDegs,
@@ -21,53 +36,48 @@ public partial class FssMeshBuilder
 
         // Create a 2D array to hold the points for the surface
         Vector3[,] points = new Vector3[resolutionEl, resolutionAz];
+        int [,] indices   = new int[resolutionEl, resolutionAz];
+
+        // [0,0] is the top left corner of the surface, and [0,0]UV is the top left corner of the UV map
+        // We'll need to adjust the elevation and azimuth values to match this iteration across the 2D array.
+
+        float elIncrement = (elMaxDegs - elMinDegs) / (resolutionEl - 1);
+        float azIncrement = (azMaxDegs - azMinDegs) / (resolutionAz - 1);
 
         for (int y = 0; y < resolutionEl; y++)
         {
             for (int x = 0; x < resolutionAz; x++)
             {
-                float currAzDegs = Mathf.Lerp(azMinDegs, azMaxDegs, (float)x / resolutionAz);
-                float currElDegs = Mathf.Lerp(elMinDegs, elMaxDegs, (float)y / resolutionEl);
-                float currRadius = surfaceRadius + (surfaceArray[x, y] * surfaceScale);
+                float currElDegs = elMaxDegs - (float)y * elIncrement; // Note we go from top to bottom
+                float currAzDegs = azMinDegs + (float)x * azIncrement;
+                float currRadius = surfaceRadius + (surfaceArray[y, x] * surfaceScale);
 
-                points[x, y] = FssGeoConvOperations.RealWorldToGodot(currRadius, currAzDegs, currElDegs);
+                points[y, x] = FssGeoConvOperations.RealWorldToGodot(currRadius, currElDegs, currAzDegs);
+            }
+        }
+
+        for (int y = 0; y < resolutionEl; y++)
+        {
+            float yfrac = (float)y / (resolutionEl-1); // 0 y is the top row.
+
+            for (int x = 0; x < resolutionAz; x++)
+            {
+                float xfrac = (float)x / (resolutionAz-1);
+
+                indices[y, x] = AddVertex(points[y, x]);
+                AddNormal(points[y, x].Normalized());
+                AddUV(new Vector2(yfrac, xfrac));
             }
         }
 
         for (int y = 0; y < resolutionEl-1; y++)
         {
-            float yfrac = (float)y / (resolutionEl-1);
-
             for (int x = 0; x < resolutionAz-1; x++)
             {
-                float xfrac = (float)x / (resolutionAz-1);
-
-                Vector3 p1 = points[y,     x];
-                Vector3 p2 = points[y,     x + 1];
-                Vector3 p3 = points[y + 1, x];
-                Vector3 p4 = points[y + 1, x + 1];
-
-                Vector2 uv1 = new Vector2( (float)y       / (resolutionEl - 1) , (float)x       / (resolutionAz - 1) * -1f );
-                Vector2 uv2 = new Vector2( (float)y       / (resolutionEl - 1) , (float)(x + 1) / (resolutionAz - 1) * -1f );
-                Vector2 uv3 = new Vector2( (float)(y + 1) / (resolutionEl - 1) , (float)x       / (resolutionAz - 1) * -1f );
-                Vector2 uv4 = new Vector2( (float)(y + 1) / (resolutionEl - 1) , (float)(x + 1) / (resolutionAz - 1) * -1f );
-
-                // Add points to MeshData.Vertices list and record the index of each point
-                int i1 = AddVertex(p1);
-                AddNormal(p1.Normalized());
-                AddUV(uv1);
-
-                int i2 = AddVertex(p2);
-                AddNormal(p2.Normalized());
-                AddUV(uv2);
-
-                int i3 = AddVertex(p3);
-                AddNormal(p3.Normalized());
-                AddUV(uv3);
-
-                int i4 = AddVertex(p4);
-                AddNormal(p4.Normalized());
-                AddUV(uv4);
+                int i1 = indices[y,     x];
+                int i2 = indices[y,     x + 1];
+                int i3 = indices[y + 1, x];
+                int i4 = indices[y + 1, x + 1];
 
                 // Create two MeshData.Triangles using the four MeshData.Vertices just added
                 if (flipTriangles)

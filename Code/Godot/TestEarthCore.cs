@@ -78,6 +78,8 @@ public partial class TestEarthCore : MeshInstance3D
         FssFloat2DArray noiseSurface = new FssFloat2DArray(30, 70);
         noiseSurface.SetRandomVals(-1f, 1f);
 
+        noiseSurface[0,0] = 10f;
+
         meshBuilder.AddSurface(
             0, 30, //float azMinDegs, float azMaxDegs,
             30, 60, //float elMinDegs, float elMaxDegs,

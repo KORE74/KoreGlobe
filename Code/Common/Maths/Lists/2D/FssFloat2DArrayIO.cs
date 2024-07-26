@@ -7,14 +7,17 @@ public static class FssFloat2DArrayIO
     // Format the numbers using "InvariantCulture" that ensures localisation formating
     // around thousand separators and decimal points is NOT applied.
 
+    // In all the IO operations, and text presentations, [0,0] is the top-left corner of the array.
+    // When used as a heightmap, [0,0] is the top-left corner of the map.
+
     public static string ToCSVString(FssFloat2DArray array, int decimalPlaces)
     {
         StringBuilder csvBuilder = new StringBuilder();
         string format = "F" + decimalPlaces; // Format string to specify decimal places
 
-        for (int i = 0; i < array.Width; i++)
+        for (int i = 0; i < array.Height; i++)
         {
-            for (int j = 0; j < array.Height; j++)
+            for (int j = 0; j < array.Width; j++)
             {
                 csvBuilder.Append(array[i, j].ToString(format, System.Globalization.CultureInfo.InvariantCulture));
                 if (j < array.Height - 1)
