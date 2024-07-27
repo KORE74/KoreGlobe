@@ -20,24 +20,24 @@ public class FssFloat2DArray
     public bool Populated { get; set; }
 
     // --------------------------------------------------------------------------------------------
-    // Constructors
+    // MARKL Constructors
     // --------------------------------------------------------------------------------------------
 
     // Gridsize = number of points on any size of the square grid, say 20.
     // Will be indexed by 0->19 as any normal array.
     public FssFloat2DArray(int inSizeX, int inSizeY)
     {
-        Width = inSizeX;
-        Height = inSizeY;
-        Data = new float[Width, Height];
+        Width     = inSizeX;
+        Height    = inSizeY;
+        Data      = new float[Width, Height];
         Populated = false;
     }
 
     public FssFloat2DArray(FssFloat2DArray inArr)
     {
-        Width = inArr.Width;
-        Height = inArr.Height;
-        Data = new float[Width, Height];
+        Width     = inArr.Width;
+        Height    = inArr.Height;
+        Data      = new float[Width, Height];
         Populated = inArr.Populated;
 
         for (int i = 0; i < Width; i++)
@@ -51,9 +51,9 @@ public class FssFloat2DArray
 
     public FssFloat2DArray()
     {
-        Width = 10;
-        Height = 10;
-        Data = new float[Width, Height];
+        Width     = 10;
+        Height    = 10;
+        Data      = new float[Width, Height];
         Populated = false;
     }
 
@@ -93,7 +93,7 @@ public class FssFloat2DArray
     }
 
     // --------------------------------------------------------------------------------------------
-    // zero/init functions
+    // MARK: zero/init functions
     // --------------------------------------------------------------------------------------------
 
     public void InitZero()
@@ -117,7 +117,7 @@ public class FssFloat2DArray
     }
 
     // --------------------------------------------------------------------------------------------
-    // Range Operations
+    // MARK: Range Operations
     // --------------------------------------------------------------------------------------------
 
     public float MinVal()
@@ -153,7 +153,7 @@ public class FssFloat2DArray
 
 
     // --------------------------------------------------------------------------------------------
-    // Multi-assignment
+    // MARK: Multi-assignment
     // --------------------------------------------------------------------------------------------
 
     public void SetRow(int row, float value)
@@ -169,7 +169,7 @@ public class FssFloat2DArray
     }
 
     // --------------------------------------------------------------------------------------------
-    // Grid arrangement
+    // MARK: Grid arrangement
     // --------------------------------------------------------------------------------------------
 
     public static FssFloat2DArray FlipYAxis(FssFloat2DArray array)
@@ -204,7 +204,7 @@ public class FssFloat2DArray
 
 
     // --------------------------------------------------------------------------------------------
-    // Multi set/get functions
+    // MARK: Multi set/get functions
     // --------------------------------------------------------------------------------------------
 
     public void SetAllVals(float val)
@@ -234,7 +234,7 @@ public class FssFloat2DArray
     }
 
     // --------------------------------------------------------------------------------------------
-    // Patch functions
+    // MARK: Patch functions
     // --------------------------------------------------------------------------------------------
 
     // Assign a new set of values into a larger parent, defining a bottom right starting pos.
@@ -286,8 +286,10 @@ public class FssFloat2DArray
     public enum Edge {Undefined, Top, Bottom, Left, Right};
 
     // --------------------------------------------------------------------------------------------
-    // Edge functions
+    // MARK: Edge functions
     // --------------------------------------------------------------------------------------------
+
+    // array.GetEdge(FssFloat2DArray.Edge.Top) 
 
     public FssFloat1DArray GetEdge(Edge e)
     {
@@ -523,4 +525,3 @@ public class FssFloat2DArray
     }
 
 }
-

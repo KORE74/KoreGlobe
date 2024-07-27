@@ -11,8 +11,7 @@ public partial class FssMeshBuilder
 {
 
 /*
-
-UVs are defined as follows:
+    UVs are defined as follows:
 
     (0,0)   (1,0)
     +--------+
@@ -20,9 +19,9 @@ UVs are defined as follows:
     |        |
     +--------+
     (0,1)   (1,1)
-
 */
 
+    // Add a surface, that is just the top edge.
 
     public void AddSurface(
         float azMinDegs, float azMaxDegs,
@@ -35,8 +34,8 @@ UVs are defined as follows:
         int resolutionAz = surfaceArray.Width;
 
         // Create a 2D array to hold the points for the surface
-        Vector3[,] points = new Vector3[resolutionEl, resolutionAz];
-        int [,] indices   = new int[resolutionEl, resolutionAz];
+        Vector3[,] points = new Vector3[resolutionAz, resolutionEl];
+        int [,] indices   = new int[resolutionAz, resolutionEl];
 
         // [0,0] is the top left corner of the surface, and [0,0]UV is the top left corner of the UV map
         // We'll need to adjust the elevation and azimuth values to match this iteration across the 2D array.
@@ -50,23 +49,25 @@ UVs are defined as follows:
             {
                 float currElDegs = elMaxDegs - (float)y * elIncrement; // Note we go from top to bottom
                 float currAzDegs = azMinDegs + (float)x * azIncrement;
-                float currRadius = surfaceRadius + (surfaceArray[y, x] * surfaceScale);
+                float currRadius = surfaceRadius + (surfaceArray[x, y] * surfaceScale);
 
-                points[y, x] = FssGeoConvOperations.RealWorldToGodot(currRadius, currElDegs, currAzDegs);
+                points[x, y] = FssGeoConvOperations.RealWorldToGodot(currRadius, currElDegs, currAzDegs);
             }
         }
 
         for (int y = 0; y < resolutionEl; y++)
         {
             float yfrac = (float)y / (resolutionEl-1); // 0 y is the top row.
+            yfrac = FssValueUtils.ScaleVal(yfrac, 0f, 1f, 0.001f, 0.999f);
 
             for (int x = 0; x < resolutionAz; x++)
             {
                 float xfrac = (float)x / (resolutionAz-1);
+                xfrac = FssValueUtils.ScaleVal(xfrac, 0f, 1f, 0.001f, 0.999f);
 
-                indices[y, x] = AddVertex(points[y, x]);
-                AddNormal(points[y, x].Normalized());
-                AddUV(new Vector2(yfrac, xfrac));
+                indices[x, y] = AddVertex(points[x, y]);
+                AddNormal(points[x, y].Normalized());
+                AddUV(new Vector2(xfrac, yfrac));
             }
         }
 
@@ -74,12 +75,131 @@ UVs are defined as follows:
         {
             for (int x = 0; x < resolutionAz-1; x++)
             {
-                int i1 = indices[y,     x];
-                int i2 = indices[y,     x + 1];
-                int i3 = indices[y + 1, x];
-                int i4 = indices[y + 1, x + 1];
+                int i1 = indices[x,     y];
+                int i2 = indices[x,     y + 1];
+                int i3 = indices[x + 1, y];
+                int i4 = indices[x + 1, y + 1];
 
                 // Create two MeshData.Triangles using the four MeshData.Vertices just added
+                if (flipTriangles)
+                {
+                    AddTriangle(i1, i2, i3);
+                    AddTriangle(i2, i4, i3);
+                }
+                else
+                {
+                    AddTriangle(i3, i2, i1);
+                    AddTriangle(i3, i4, i2);
+                }
+            }
+        }
+    }
+
+
+    // Add the sides of a wedge shape, connecting the top and bottom surfaces
+    public void AddSurfaceWedgeSides(
+        float azMinDegs, float azMaxDegs,
+        float elMinDegs, float elMaxDegs,
+        float surfaceRadius, float surfaceScale, float innerRadius,
+        FssFloat2DArray surfaceArray,
+        bool flipTriangles = false)
+    {
+        int resolutionEl = surfaceArray.Height;
+        int resolutionAz = surfaceArray.Width;
+
+        // Create a 2D array to hold the points for the surface
+        Vector3[,] points = new Vector3[resolutionAz, resolutionEl];
+        int [,] indices   = new int[resolutionAz, resolutionEl];
+
+        // [0,0] is the top left corner of the surface, and [0,0]UV is the top left corner of the UV map
+        // We'll need to adjust the elevation and azimuth values to match this iteration across the 2D array.
+
+        FssFloat1DArray topEdge    = surfaceArray.GetEdge(FssFloat2DArray.Edge.Top);
+        FssFloat1DArray bottomEdge = surfaceArray.GetEdge(FssFloat2DArray.Edge.Bottom);
+        FssFloat1DArray leftEdge   = surfaceArray.GetEdge(FssFloat2DArray.Edge.Left);
+        FssFloat1DArray rightEdge  = surfaceArray.GetEdge(FssFloat2DArray.Edge.Right);
+
+        // Top
+        {
+            // Loop across the top edge, creating the surface and lower edge points, that we then add as a ribbon.
+            float uvX = 0.0f;
+            float uvY1 = 0.001f;
+            float uvY2 = 0.002f;
+
+            float azInc = (azMaxDegs - azMinDegs) / (resolutionAz - 1);
+
+            // Create lists for the top and bottom points
+            List<int> topIds    = new List<int>();
+            List<int> bottomIds = new List<int>();
+            for (int x = 0; x < resolutionAz; x++)
+            {
+                uvX = (float)x / (resolutionAz-1);
+
+                float currAzDegs    = azMinDegs + (float)x * azInc;
+                float topEdgeDelta  = topEdge[x] * surfaceScale;
+
+                topIds.Add( AddVertex(FssGeoConvOperations.RealWorldToGodot(surfaceRadius + topEdgeDelta, elMaxDegs, currAzDegs)) );
+                bottomIds.Add( AddVertex(FssGeoConvOperations.RealWorldToGodot(innerRadius, elMaxDegs, currAzDegs)) );
+
+                AddUV(new Vector2(uvX, uvY1));
+                AddUV(new Vector2(uvX, uvY2));
+            }
+
+            // Loop through the points to add the resulting triangles/squares
+            for (int i = 0; i < topIds.Count-1; i++)
+            {
+                int i1 = topIds[i];
+                int i2 = topIds[i + 1];
+                int i3 = bottomIds[i];
+                int i4 = bottomIds[i + 1];
+
+                if (flipTriangles)
+                {
+                    AddTriangle(i1, i2, i3);
+                    AddTriangle(i2, i4, i3);
+                }
+                else
+                {
+                    AddTriangle(i3, i2, i1);
+                    AddTriangle(i3, i4, i2);
+                }
+            }
+        }
+
+        // Bottom
+        {
+            // Loop across the top edge, creating the surface and lower edge points, that we then add as a ribbon.
+            float uvX = 0.0f;
+            float uvY1 = 0.998f;
+            float uvY2 = 0.999f;
+
+            float azInc = (azMaxDegs - azMinDegs) / (resolutionAz - 1);
+
+            // Create lists for the top and bottom points
+            List<int> topIds    = new List<int>();
+            List<int> bottomIds = new List<int>();
+            for (int x = 0; x < resolutionAz; x++)
+            {
+                uvX = (float)x / (resolutionAz-1);
+
+                float currAzDegs      = azMinDegs + (float)x * azInc;
+                float bottomEdgeDelta = bottomEdge[x] * surfaceScale;
+
+                topIds.Add( AddVertex(FssGeoConvOperations.RealWorldToGodot(surfaceRadius + bottomEdgeDelta, elMinDegs, currAzDegs)) );
+                bottomIds.Add( AddVertex(FssGeoConvOperations.RealWorldToGodot(innerRadius,                  elMinDegs, currAzDegs)) );
+
+                AddUV(new Vector2(uvX, uvY1));
+                AddUV(new Vector2(uvX, uvY2));
+            }
+
+            // Loop through the points to add the resulting triangles/squares
+            for (int i = 0; i < topIds.Count-1; i++)
+            {
+                int i1 = topIds[i];
+                int i2 = topIds[i + 1];
+                int i3 = bottomIds[i];
+                int i4 = bottomIds[i + 1];
+
                 if (flipTriangles)
                 {
                     AddTriangle(i3, i2, i1);
@@ -92,7 +212,102 @@ UVs are defined as follows:
                 }
             }
         }
+
+        // Left
+        {
+            float uvY = 0.0f;
+            float uvX1 = 0.002f;
+            float uvX2 = 0.001f;
+
+            float elInc = (elMaxDegs - elMinDegs) / (resolutionEl - 1);
+
+            // Create lists for the top and bottom points
+            List<int> topIds    = new List<int>();
+            List<int> bottomIds = new List<int>();
+            for (int y = 0; y < resolutionEl; y++)
+            {
+                uvY = (float)y / (resolutionEl-1);
+
+                float currElDegs = elMaxDegs - (float)y * elInc; // El max to min, to match UV min to max
+                float edgeDelta  = leftEdge[y] * surfaceScale;
+
+                topIds.Add( AddVertex(FssGeoConvOperations.RealWorldToGodot(surfaceRadius + edgeDelta, currElDegs, azMinDegs)) );
+                bottomIds.Add( AddVertex(FssGeoConvOperations.RealWorldToGodot(innerRadius,            currElDegs, azMinDegs)) );
+
+                AddUV(new Vector2(uvX1, uvY));
+                AddUV(new Vector2(uvX2, uvY));
+            }
+
+            // Loop through the points to add the resulting triangles/squares
+            for (int i = 0; i < topIds.Count-1; i++)
+            {
+                int i1 = topIds[i];
+                int i2 = topIds[i + 1];
+                int i3 = bottomIds[i];
+                int i4 = bottomIds[i + 1];
+
+                if (flipTriangles)
+                {
+                    AddTriangle(i3, i2, i1);
+                    AddTriangle(i3, i4, i2);
+                }
+                else
+                {
+                    AddTriangle(i1, i2, i3);
+                    AddTriangle(i2, i4, i3);
+                }
+            }
+        }
+
+        // Right
+        {
+            float uvY = 0.0f;
+            float uvX1 = 0.998f;
+            float uvX2 = 0.999f;
+
+            float elInc = (elMaxDegs - elMinDegs) / (resolutionEl - 1);
+
+            // Create lists for the top and bottom points
+            List<int> topIds    = new List<int>();
+            List<int> bottomIds = new List<int>();
+            for (int y = 0; y < resolutionEl; y++)
+            {
+                uvY = (float)y / (resolutionEl-1);
+
+                float currElDegs = elMaxDegs - (float)y * elInc; // El max to min, to match UV min to max
+                float edgeDelta  = rightEdge[y] * surfaceScale;
+
+                topIds.Add( AddVertex(FssGeoConvOperations.RealWorldToGodot(surfaceRadius + edgeDelta, currElDegs, azMaxDegs)) );
+                bottomIds.Add( AddVertex(FssGeoConvOperations.RealWorldToGodot(innerRadius,            currElDegs, azMaxDegs)) );
+
+                AddUV(new Vector2(uvX1, uvY));
+                AddUV(new Vector2(uvX2, uvY));
+            }
+
+            // Loop through the points to add the resulting triangles/squares
+            for (int i = 0; i < topIds.Count-1; i++)
+            {
+                int i1 = topIds[i];
+                int i2 = topIds[i + 1];
+                int i3 = bottomIds[i];
+                int i4 = bottomIds[i + 1];
+
+                if (flipTriangles)
+                {
+                    AddTriangle(i1, i2, i3);
+                    AddTriangle(i2, i4, i3);
+                }
+                else
+                {
+                    AddTriangle(i3, i2, i1);
+                    AddTriangle(i3, i4, i2);
+                }
+            }
+        }
+
     }
+
+    // --------------------------------------------------------------------------------------------
 
     public void AddSurfaceWedge(
         float azMinDegs, float azMaxDegs,

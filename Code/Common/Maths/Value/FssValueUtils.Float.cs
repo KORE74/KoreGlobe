@@ -73,6 +73,27 @@ public static partial class FssValueUtils
 
     // ------------------------------------------------------------------------
 
+    public static float ScaleVal(float inval, float inrangemin, float inrangemax, float outrangemin, float outrangemax)
+    {
+        // Check in the input value is in range
+        inval = LimitToRange(inval, inrangemin, inrangemax);
+
+        // determine the different ranges to multiply the values by
+        float indiff  = inrangemax  - inrangemin;
+        float outdiff = outrangemax - outrangemin;
+
+        // check in range and out range are not too small to function
+        if (Math.Abs(indiff)  < FssConsts.ArbitraryMinDouble) throw new ArgumentException("ScaleVal input range too small", nameof(indiff));
+        if (Math.Abs(outdiff) < FssConsts.ArbitraryMinDouble) throw new ArgumentException("ScaleVal output range too small", nameof(outdiff));
+
+        float diffratio = outdiff / indiff;
+
+        float outval = ((inval - inrangemin) * diffratio) + outrangemin;
+        return LimitToRange(outval, outrangemin, outrangemax);
+    }
+
+    // ------------------------------------------------------------------------
+
     // Take an input fraction (0..1) and return the index of the value in the range minval..maxval
     // that corresponds to that fraction.
 
