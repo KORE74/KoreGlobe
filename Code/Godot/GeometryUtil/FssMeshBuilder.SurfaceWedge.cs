@@ -134,6 +134,7 @@ public partial class FssMeshBuilder
             for (int x = 0; x < resolutionAz; x++)
             {
                 uvX = (float)x / (resolutionAz-1);
+                uvX = FssValueUtils.ScaleVal(uvX, 0f, 1f, 0.001f, 0.999f);
 
                 float currAzDegs    = azMinDegs + (float)x * azInc;
                 float topEdgeDelta  = topEdge[x] * surfaceScale;
@@ -181,6 +182,7 @@ public partial class FssMeshBuilder
             for (int x = 0; x < resolutionAz; x++)
             {
                 uvX = (float)x / (resolutionAz-1);
+                uvX = FssValueUtils.ScaleVal(uvX, 0f, 1f, 0.001f, 0.999f);
 
                 float currAzDegs      = azMinDegs + (float)x * azInc;
                 float bottomEdgeDelta = bottomEdge[x] * surfaceScale;
@@ -227,6 +229,7 @@ public partial class FssMeshBuilder
             for (int y = 0; y < resolutionEl; y++)
             {
                 uvY = (float)y / (resolutionEl-1);
+                uvY = FssValueUtils.ScaleVal(uvY, 0f, 1f, 0.001f, 0.999f);
 
                 float currElDegs = elMaxDegs - (float)y * elInc; // El max to min, to match UV min to max
                 float edgeDelta  = leftEdge[y] * surfaceScale;
@@ -273,6 +276,7 @@ public partial class FssMeshBuilder
             for (int y = 0; y < resolutionEl; y++)
             {
                 uvY = (float)y / (resolutionEl-1);
+                uvY = FssValueUtils.ScaleVal(uvY, 0f, 1f, 0.001f, 0.999f);
 
                 float currElDegs = elMaxDegs - (float)y * elInc; // El max to min, to match UV min to max
                 float edgeDelta  = rightEdge[y] * surfaceScale;
