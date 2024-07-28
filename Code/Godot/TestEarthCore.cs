@@ -75,6 +75,11 @@ public partial class TestEarthCore : MeshInstance3D
     {
         FssMeshBuilder meshBuilder  = new ();
 
+
+        string filePath = FssGodotFileUtil.GetActualPath("res://Resources/Map/Lvl0_30x30/Ele_BF.asc");
+
+        FssFloat2DArray asciiArcArry = FssFloat2DArrayIO.LoadFromArcASIIGridFile(filePath);
+
         FssFloat2DArray noiseSurface = new FssFloat2DArray(50, 50);
         noiseSurface.SetRandomVals(-1f, 1f);
 
@@ -83,15 +88,15 @@ public partial class TestEarthCore : MeshInstance3D
         meshBuilder.AddSurface(
             0, 30, //float azMinDegs, float azMaxDegs,
             30, 60, //float elMinDegs, float elMaxDegs,
-            3.5f, 0.005f, //float surfaceRadius, float surfaceScale,
-            noiseSurface //FssFloat2DArray surfaceArray,
+            3.5f, 0.000005f, //float surfaceRadius, float surfaceScale,
+            asciiArcArry //FssFloat2DArray surfaceArray,
         ); //bool flipTriangles = false)
 
         meshBuilder.AddSurfaceWedgeSides(
             0, 30, //float azMinDegs, float azMaxDegs,
             30, 60, //float elMinDegs, float elMaxDegs,
-            3.5f, 0.005f, 3.0f,
-            noiseSurface //FssFloat2DArray surfaceArray,
+            3.5f, 0.000005f, 3.0f,
+            asciiArcArry //FssFloat2DArray surfaceArray,
         ); //bool flipTriangles = false)
 
         // meshBuilder.AddShellSegment (
@@ -102,8 +107,7 @@ public partial class TestEarthCore : MeshInstance3D
 
         ArrayMesh meshData = meshBuilder.BuildWithUV("Wedge");
 
-        var image = Image.LoadFromFile("C:/Util/Data/FssLibrary/Map/Sat/Lvl0/30x30/Sat_BF.png");
-        //var image = Image.LoadFromFile("res://Resources/Misc/SatImg.png");
+        var image = Image.LoadFromFile("res://Resources/Map/Lvl0_30x30/Sat_BF.png");
         var texture = ImageTexture.CreateFromImage(image);
 
         //var _material = FssMaterialFactory.TexMaterial();

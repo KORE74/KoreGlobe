@@ -113,6 +113,8 @@ public static class FssFloat2DArrayIO
         <space separated data>
     */
 
+    // Usage: FssFloat2DArray asciiArcArry = FssFloat2DArrayIO.LoadFromArcASIIGridFile(<filename>);
+
     public static FssFloat2DArray LoadFromArcASIIGridFile(string filePath)
     {
         string[] lines = File.ReadAllLines(filePath);
