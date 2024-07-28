@@ -76,9 +76,12 @@ public partial class TestEarthCore : MeshInstance3D
         FssMeshBuilder meshBuilder  = new ();
 
 
-        string filePath = FssGodotFileUtil.GetActualPath("res://Resources/Map/Lvl0_30x30/Ele_BF.asc");
+        //string filePath = FssGodotFileUtil.GetActualPath("res://Resources/Map/Lvl0_30x30/Ele_BG_1km.asc");
+        string filePath = FssGodotFileUtil.GetActualPath("res://Resources/Map/Lvl0_30x30/Ele_BG.asc");
 
         FssFloat2DArray asciiArcArry = FssFloat2DArrayIO.LoadFromArcASIIGridFile(filePath);
+        FssFloat2DArray croppedArray = FssFloat2DArrayOperations.CropToRange(asciiArcArry, new FssFloatRange(0f, 10000f));
+        FssFloat2DArray croppedArraySubSample = croppedArray.GetInterpolatedGrid(50, 50);
 
         FssFloat2DArray noiseSurface = new FssFloat2DArray(50, 50);
         noiseSurface.SetRandomVals(-1f, 1f);
@@ -88,15 +91,15 @@ public partial class TestEarthCore : MeshInstance3D
         meshBuilder.AddSurface(
             0, 30, //float azMinDegs, float azMaxDegs,
             30, 60, //float elMinDegs, float elMaxDegs,
-            3.5f, 0.000005f, //float surfaceRadius, float surfaceScale,
-            asciiArcArry //FssFloat2DArray surfaceArray,
+            3.5f, 0.000002f, //float surfaceRadius, float surfaceScale,
+            croppedArraySubSample //FssFloat2DArray surfaceArray,
         ); //bool flipTriangles = false)
 
         meshBuilder.AddSurfaceWedgeSides(
             0, 30, //float azMinDegs, float azMaxDegs,
             30, 60, //float elMinDegs, float elMaxDegs,
-            3.5f, 0.000005f, 3.0f,
-            asciiArcArry //FssFloat2DArray surfaceArray,
+            3.5f, 0.000002f, 3.0f,
+            croppedArraySubSample //FssFloat2DArray surfaceArray,
         ); //bool flipTriangles = false)
 
         // meshBuilder.AddShellSegment (
@@ -107,7 +110,7 @@ public partial class TestEarthCore : MeshInstance3D
 
         ArrayMesh meshData = meshBuilder.BuildWithUV("Wedge");
 
-        var image = Image.LoadFromFile("res://Resources/Map/Lvl0_30x30/Sat_BF.png");
+        var image = Image.LoadFromFile("res://Resources/Map/Lvl0_30x30/Sat_BG.png");
         var texture = ImageTexture.CreateFromImage(image);
 
         //var _material = FssMaterialFactory.TexMaterial();

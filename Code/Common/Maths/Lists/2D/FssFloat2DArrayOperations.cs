@@ -82,6 +82,9 @@ public static class FssFloat2DArrayOperations
         return normalizedArray;
     }
 
+    // Any value outside the range is clamped to the min or max value.
+
+    // Usage: FssFloat2DArray croppedArray = FssFloat2DArrayOperations.CropToRange(array, new FssFloatRange(0f, 10000f));
     public static FssFloat2DArray CropToRange(FssFloat2DArray array, FssFloatRange newRange)
     {
         FssFloat2DArray croppedArray = new FssFloat2DArray(array.Width, array.Height);
