@@ -11,6 +11,8 @@ public partial class TestMovingGeometryCore : Node3D
     Node3D FocusPointNode;
     Node3D LinkCylinderNode;
 
+    Node3D PlaformBaseNode;
+
     MeshInstance3D LinkCylinderMesh;
     MeshInstance3D LinkCylinderWire;
 
@@ -33,6 +35,10 @@ public partial class TestMovingGeometryCore : Node3D
     private FssLLAPoint    PlatformPos;
     private FssCourse      PlatformCourse;
     private FssCourseDelta PlatformCourseDelta;
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Node _Ready and _Process
+    // --------------------------------------------------------------------------------------------
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -92,6 +98,8 @@ public partial class TestMovingGeometryCore : Node3D
         UpdatePlatform(delta);
     }
 
+    // --------------------------------------------------------------------------------------------
+    // MARK: Create Major moving geometry nodes.
     // --------------------------------------------------------------------------------------------
 
     private void CreateCoreNode()
@@ -209,6 +217,8 @@ public partial class TestMovingGeometryCore : Node3D
     }
 
     // --------------------------------------------------------------------------------------------
+    // MARK: Create and update moving platform
+    // --------------------------------------------------------------------------------------------
 
     private void CreatePlatform()
     {
@@ -226,6 +236,16 @@ public partial class TestMovingGeometryCore : Node3D
             SpeedChangeMpMps              = 0f };
     }
 
+    private void CreatePlatformNodes()
+    {
+        // Create the core for the platform, to place and orient
+        PlaformBaseNode = new Node3D() { Name = "PlaformBaseNode" };
+        FocusPointNode.AddChild(PlaformBaseNode);
+
+        FssPrimitiveFactory.AddAxisMarkers(PlaformBaseNode, 0.02f, 0.005f);
+    }
+
+
     private void UpdatePlatform(double delta)
     {
         // Update real world position
@@ -234,5 +254,10 @@ public partial class TestMovingGeometryCore : Node3D
 
         // Create the visual position
         FssEntityV3 platVecs = FssGeoConvOperations.ReadWorldToStruct(PlatformPos, PlatformCourse);
+    }
+
+    private void UpdatePlatformNodes()
+    {
+
     }
 }
