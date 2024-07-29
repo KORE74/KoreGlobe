@@ -12,6 +12,8 @@ public partial class TestMovingGeometryCore : Node3D
     Node3D LinkCylinderNode;
 
     Node3D PlaformBaseNode;
+    Node3D ModelResourceNode;
+    Node3D TrailNode;
 
     MeshInstance3D LinkCylinderMesh;
     MeshInstance3D LinkCylinderWire;
@@ -31,10 +33,14 @@ public partial class TestMovingGeometryCore : Node3D
 
     private float UIPollTimer = 0.0f;
     private float UIPollTimer2 = 0.0f;
+    private float PollTimerTrailNode = 0.0f;
 
     private FssLLAPoint    PlatformPos;
     private FssCourse      PlatformCourse;
     private FssCourseDelta PlatformCourseDelta;
+
+    private FssCyclicIdGenerator IdGen = new FssCyclicIdGenerator(250);
+    private string randomString = FssRandomStringGenerator.GenerateRandomString(5);
 
     // --------------------------------------------------------------------------------------------
     // MARK: Node _Ready and _Process
@@ -69,11 +75,11 @@ public partial class TestMovingGeometryCore : Node3D
 
             GD.Print($"FocusPoint: Lat:{FssEarthCore.FocusLLA.LatDegs:0.00} Lon:{FssEarthCore.FocusLLA.LonDegs:0.00} RadiusM:{FssEarthCore.FocusLLA.RadiusM:0.00}");
 
-            GD.Print($"PlatPos: Lat:{PlatformPos.LatDegs:0.00} Lon:{PlatformPos.LonDegs:0.00} RadiusM:{PlatformPos.RadiusM:0.00}");
+            GD.Print($"PlatPos: Lat:{PlatformPos.LatDegs:0.00} Lon:{PlatformPos.LonDegs:0.00} RadiusM:{PlatformPos.RadiusM:0.00} // Course: Heading:{PlatformCourse.HeadingDegs:0.00} Speed:{PlatformCourse.SpeedMps:0.00}");
         }
 
 
-        float scale = 0.02f;
+        float scale = 0.7f;
 
         AnimAzDegs += AnimAzDelta * ((float)delta * scale);
         AnimElDegs += AnimElDelta * ((float)delta * scale);
@@ -98,7 +104,7 @@ public partial class TestMovingGeometryCore : Node3D
         UpdateLinkCylinder();
 
         UpdatePlatform(delta);
-        UpdatePlatformNodes();
+        UpdatePlatformNodes(delta);
 
     }
 
@@ -246,9 +252,41 @@ public partial class TestMovingGeometryCore : Node3D
         PlaformBaseNode = new Node3D() { Name = "PlaformBaseNode" };
         FocusPointNode.AddChild(PlaformBaseNode);
 
-        FssPrimitiveFactory.AddAxisMarkers(PlaformBaseNode, 0.02f, 0.005f);
+        FssPrimitiveFactory.AddAxisMarkers(PlaformBaseNode, 0.2f, 0.05f);
+
+        string ModelPath = "res://Resources/Plane_Paper/PaperPlanes_v002.glb";
+
+        PackedScene importedModel = (PackedScene)ResourceLoader.Load(ModelPath);
+        if (importedModel != null)
+        {
+            // Instance the model
+            Node modelInstance     = importedModel.Instantiate();
+            ModelResourceNode      = modelInstance as Node3D;
+            ModelResourceNode.Name = "ModelResourceNode";
+            ModelResourceNode.LookAt(Vector3.Forward, Vector3.Up);
+
+            PlaformBaseNode.AddChild(ModelResourceNode);
+            ModelResourceNode.Scale    = new Vector3(0.25f, 0.25f, 0.25f); // Set the model scale
+            //ModelResourceNode.Scale    = new Vector3(0.005f, 0.005f, 0.005f); // Set the model scale
+            ModelResourceNode.Position = new Vector3(0f, 0f, 0f); // Set the model position
+        }
     }
 
+    private void CreateTrailNode()
+    {
+        // Find a node in the global tree
+        // Node GlobeRoot = GetParent();
+
+        // if (GlobeRoot == null)
+        // {
+        //     GD.PrintErr("Failed to find the GlobeRoot node");
+        //     return;
+        // }
+
+        // // CoreNode = FssAppNode.Instance.FindNode("GlobeCore");
+        // TrailNode = new Node3D() { Name = FssRandomStringGenerator.GenerateRandomString(5) };
+        // GlobeRoot.AddChild(TrailNode);
+    }
 
     private void UpdatePlatform(double delta)
     {
@@ -260,7 +298,8 @@ public partial class TestMovingGeometryCore : Node3D
         FssEntityV3 platVecs = FssGeoConvOperations.ReadWorldToStruct(PlatformPos, PlatformCourse);
     }
 
-    private void UpdatePlatformNodes()
+
+    private void UpdatePlatformNodes(double delta)
     {
         // Get the focus point XYZ
         FssXYZPoint focusXYZ = FssEarthCore.FocusLLA.ToXYZ();
@@ -276,5 +315,68 @@ public partial class TestMovingGeometryCore : Node3D
 
         // Update the position of the platform
         PlaformBaseNode.Position = relPos;
+
+        // Update the orientation of the platform
+        FssEntityV3 platformV3 = FssGeoConvOperations.ReadWorldToStruct(PlatformPos, PlatformCourse);
+
+        float lerpSpeed = 5.0f; // Adjust this value to control the lerp speed
+
+        // Find where we are currently looking, determine where we need to be looking, and lerp to that orientation
+        Transform3D currentTransform = PlaformBaseNode.Transform;
+        Transform3D targetTransform  = currentTransform.LookingAt(platformV3.PosAhead, platformV3.PosAbove);
+        PlaformBaseNode.Transform = currentTransform.InterpolateWith(targetTransform, (float)(lerpSpeed * delta));
+    }
+
+    private void UpdateTrailNode()
+    {
+        // if (PollTimerTrailNode < FssCoreTime.RuntimeSecs)
+        // {
+        //     PollTimerTrailNode = FssCoreTime.RuntimeSecs + 0.2f; // Update the timer to the next whole second
+
+        //     if (TrailNode != null)
+        //     {
+        //         // Create a new ID
+        //         string nextId = IdGen.NextId();
+
+        //         // If a child node with the ID exists, delete it.
+        //         TrailNode.GetNodeOrNull(nextId)?.QueueFree();
+        //         if (TrailNode.HasNode(nextId))
+        //         {
+        //             Node childNode = TrailNode.GetNode(nextId);
+        //             TrailNode.RemoveChild(childNode);
+        //             childNode.QueueFree();
+        //         }
+
+        //         // Create a new sphere at the current position, and the ID
+        //         Node3D childSphere = FssPrimitiveFactory.CreateSphere(Vector3.Zero, 0.005f, new Color(0.9f, 0.9f, 0.9f, 1f));
+        //         childSphere.Name = $"{randomString}{nextId}";
+        //         TrailNode.AddChild(childSphere);
+        //         childSphere.Name = nextId;
+
+        //         // get the current position to assign to the sphere
+        //         Vector3 vecPos   = FssGeoConvOperations.RealWorldToGodot(pos);
+        //         childSphere.Position = vecPos;
+
+        //         // Create a new cylinder at the current position, and the ID
+        //         Vector3 vecPrevPos   = FssGeoConvOperations.RealWorldToGodot(PrevPos);
+        //         Vector3 vecDiff = vecPrevPos - vecPos;
+
+        //         FssMeshBuilder meshBuilder = new FssMeshBuilder();
+        //         meshBuilder.AddCylinder(Vector3.Zero, vecDiff, 0.005f, 0.005f, 12, true);
+
+        //         ArrayMesh meshData = meshBuilder.Build2("Wedge", false);
+        //         MeshInstance3D meshInstance = new();
+        //         meshInstance.Mesh = meshData;
+        //         meshInstance.MaterialOverride = matGrey;
+
+        //         childSphere.AddChild(meshInstance);
+        //         //meshInstance.Position = vecDiff / 2.0f;
+        //         //meshInstance.LookAt(vecDiff, Vector3.Up);
+
+        //         PrevPos = pos;
+        //     }
+
+        // }
+
     }
 }
