@@ -135,7 +135,7 @@ public struct FssLLBox
 
     // ------------------------------------------------------------------------
 
-    public string BoxToString()
+    public override string ToString()
     {
         return $"[{MinLatDegs:F3}, {MinLonDegs:F3}, {MaxLatDegs:F3}, {MaxLonDegs:F3}]";
     }

@@ -1,7 +1,7 @@
 using Godot;
 using System;
 using System.IO;
-
+using System.Threading.Tasks;
 
 public struct FssTileInfo
 {
@@ -21,21 +21,31 @@ public partial class FssMapManager : Node3D
         var config = FssCentralConfig.Instance;
         MapRootPath = config.GetParameter<string>("MapRootPath", "c:/GlobeLib/Maps/");
 
-        CreateTestWedge();
+        for (int lonId = 0; lonId < 12; lonId++)
+        {
+            for (int latId = 0; latId < 6; latId++)
+            {
+                string tilecodestr   = FssMapTileCode.CodeForIndex(latId, lonId);
+                double minLatDegs = 60 - (latId * 30);
+                double minLonDegs = -180 + (lonId * 30);
 
+                FssLLBox llbox = new FssLLBox() {
+                    MinLatDegs   = minLatDegs,
+                    MinLonDegs   = minLonDegs,
+                    DeltaLatDegs = 30,
+                    DeltaLonDegs = 30,
+                };
 
-        FssTileInfo tileInfo = new FssTileInfo() {
-            TileCode = "CF",
-            TileLLBounds = new FssLLBox() {
-                MinLatDegs   =  0,
-                MinLonDegs   =  0,
-                DeltaLatDegs = 30,
-                DeltaLonDegs = 30,
+                GD.Print($"Tile: {tilecodestr}  LLBox: {llbox}");
+
+                FssTileInfo tileInfo = new FssTileInfo() {
+                    TileCode = tilecodestr,
+                    TileLLBounds = llbox
+                };
+
+                LoadTile2(tileInfo);
             }
-        };
-
-        LoadTile(tileInfo);
-
+        }
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -43,135 +53,76 @@ public partial class FssMapManager : Node3D
     {
     }
 
-    private void LoadTile(FssTileInfo tileInfo)
+    // --------------------------------------------------------------------------------------------
+    // MARK: Tile Prep Functions
+    // --------------------------------------------------------------------------------------------
+
+    private async void LoadTile2(FssTileInfo tileInfo)
     {
-        // Setup the filepaths
+        // Setup the file paths
         string rootDir = "res://Resources/Map/Lvl0_30x30";
-        string ImageFilePath = Path.Combine(rootDir, tileInfo.TileCode + ".png");
-        string EleFilePath   = Path.Combine(rootDir, tileInfo.TileCode + ".asc");
+        string imageFilePath = Path.Combine(rootDir, $"Sat_{tileInfo.TileCode}.png");
+        string eleFilePath = Path.Combine(rootDir, $"Ele_{tileInfo.TileCode}.asc");
+        eleFilePath = FssGodotFileUtil.GetActualPath(eleFilePath);
 
-        ImageFilePath = $"res://Resources/Map/Lvl0_30x30/Sat_{tileInfo.TileCode}.png";
-        EleFilePath   = $"res://Resources/Map/Lvl0_30x30/Ele_{tileInfo.TileCode}.asc";
+        // Run file loading and processing on a background thread
+        var meshData = await Task.Run(() =>
+        {
+            // Load the elevation data
+            var asciiArcArry = FssFloat2DArrayIO.LoadFromArcASIIGridFile(eleFilePath);
+            var croppedArray = FssFloat2DArrayOperations.CropToRange(asciiArcArry, new FssFloatRange(0f, 10000f));
+            var croppedArraySubSample = croppedArray.GetInterpolatedGrid(20, 20);
 
-        EleFilePath = FssGodotFileUtil.GetActualPath(EleFilePath);
+            // Create the mesh
+            var meshBuilder = new FssMeshBuilder();
+            meshBuilder.AddSurface(
+                (float)tileInfo.TileLLBounds.MinLonDegs, (float)tileInfo.TileLLBounds.MaxLonDegs,
+                (float)tileInfo.TileLLBounds.MinLatDegs, (float)tileInfo.TileLLBounds.MaxLatDegs,
+                5f, 0.000006f,
+                croppedArraySubSample
+            );
+            meshBuilder.AddSurfaceWedgeSides(
+                (float)tileInfo.TileLLBounds.MinLonDegs, (float)tileInfo.TileLLBounds.MaxLonDegs,
+                (float)tileInfo.TileLLBounds.MinLatDegs, (float)tileInfo.TileLLBounds.MaxLatDegs,
+                5f, 0.000006f, 4.5f,
+                croppedArraySubSample
+            ); //bool flipTriangles = false)
+            var meshData = meshBuilder.BuildWithUV(tileInfo.TileCode);
 
-        GD.Print("ImageFilePath: " + ImageFilePath);
-        GD.Print("EleFilePath: "   + EleFilePath);
+            return meshData;
+        });
 
-        // Load the image
-        var image = Image.LoadFromFile(ImageFilePath);
+        // Load the image and create the texture on the main thread
+        var image = new Image();
+        var err = image.Load(imageFilePath);
+        if (err != Error.Ok)
+        {
+            GD.PrintErr($"Failed to load image: {imageFilePath}");
+            return;
+        }
         var texture = ImageTexture.CreateFromImage(image);
-        var _material = new StandardMaterial3D();
-        _material.AlbedoTexture = texture;
-        _material.ShadingMode = StandardMaterial3D.ShadingModeEnum.Unshaded;
+        var material = new StandardMaterial3D
+        {
+            AlbedoTexture = texture,
+            ShadingMode = StandardMaterial3D.ShadingModeEnum.Unshaded
+        };
 
-        // Load the elevation data
-        FssFloat2DArray asciiArcArry = FssFloat2DArrayIO.LoadFromArcASIIGridFile(EleFilePath);
-        FssFloat2DArray croppedArray = FssFloat2DArrayOperations.CropToRange(asciiArcArry, new FssFloatRange(0f, 10000f));
-        FssFloat2DArray croppedArraySubSample = croppedArray.GetInterpolatedGrid(50, 50);
-
-        // Create the wedge
-        FssMeshBuilder meshBuilder  = new ();
-        meshBuilder.AddSurface(
-            (float)tileInfo.TileLLBounds.MinLatDegs, (float)tileInfo.TileLLBounds.MaxLatDegs, //float azMinDegs, float azMaxDegs,
-            (float)tileInfo.TileLLBounds.MinLonDegs, (float)tileInfo.TileLLBounds.MaxLonDegs, //float elMinDegs, float elMaxDegs,
-            2f, 0.000002f, //float surfaceRadius, float surfaceScale,
-            croppedArray //FssFloat2DArray surfaceArray,
-        ); //bool flipTriangles = false)
-        ArrayMesh meshData = meshBuilder.BuildWithUV(tileInfo.TileCode);
-
-
-        // Add the mesh to the current Node3D
-        MeshInstance3D meshInstanceW   = new();
-        meshInstanceW.Mesh             = meshData;
-        meshInstanceW.MaterialOverride = FssMaterialFactory.WireframeWhiteMaterial();;
+        // Add the mesh instances to the current Node3D
+        var meshInstanceW = new MeshInstance3D { Name = $"{tileInfo.TileCode} wire" };
+        meshInstanceW.Mesh = meshData;
+        meshInstanceW.MaterialOverride = FssMaterialFactory.WireframeWhiteMaterial();
         AddChild(meshInstanceW);
 
-        // Add the textured Mesh
-        MeshInstance3D meshInstance   = new();
-        meshInstance.Mesh             = meshData;
-        meshInstance.MaterialOverride = _material;
+        var meshInstance = new MeshInstance3D { Name = $"{tileInfo.TileCode} image" };
+        meshInstance.Mesh = meshData;
+        meshInstance.MaterialOverride = material;
         AddChild(meshInstance);
     }
-
-
-
 
     // --------------------------------------------------------------------------------------------
     // MARK: Debug Functions
     // --------------------------------------------------------------------------------------------
 
-    private void CreateTestWedge()
-    {
-        FssMeshBuilder meshBuilder  = new ();
-
-
-        //string filePath = FssGodotFileUtil.GetActualPath("res://Resources/Map/Lvl0_30x30/Ele_BG_1km.asc");
-        string filePath = FssGodotFileUtil.GetActualPath("res://Resources/Map/Lvl0_30x30/Ele_BG.asc");
-
-        FssFloat2DArray asciiArcArry = FssFloat2DArrayIO.LoadFromArcASIIGridFile(filePath);
-        FssFloat2DArray croppedArray = FssFloat2DArrayOperations.CropToRange(asciiArcArry, new FssFloatRange(0f, 10000f));
-        FssFloat2DArray croppedArraySubSample = croppedArray.GetInterpolatedGrid(50, 50);
-
-        FssFloat2DArray noiseSurface = new FssFloat2DArray(50, 50);
-        noiseSurface.SetRandomVals(-1f, 1f);
-
-        noiseSurface[0,0] = 10f;
-
-        meshBuilder.AddSurface(
-            0, 30, //float azMinDegs, float azMaxDegs,
-            30, 60, //float elMinDegs, float elMaxDegs,
-            2f, 0.000002f, //float surfaceRadius, float surfaceScale,
-            croppedArraySubSample //FssFloat2DArray surfaceArray,
-        ); //bool flipTriangles = false)
-
-        meshBuilder.AddSurfaceWedgeSides(
-            0, 30, //float azMinDegs, float azMaxDegs,
-            30, 60, //float elMinDegs, float elMaxDegs,
-            2f, 0.000002f, 1.95f,
-            croppedArraySubSample //FssFloat2DArray surfaceArray,
-        ); //bool flipTriangles = false)
-
-        // meshBuilder.AddShellSegment (
-        //     30, 60, // elevationMin, elevationMax,
-        //     30, 60, // azimuthMin, azimuthMax,
-        //     1.10f, 1.12f,          // distanceMin, distanceMax,
-        //     3, 3 );                // resolutionAz, resolutionEl)
-
-        ArrayMesh meshData = meshBuilder.BuildWithUV("Wedge");
-
-        var image = Image.LoadFromFile("res://Resources/Map/Lvl0_30x30/Sat_BG.png");
-        var texture = ImageTexture.CreateFromImage(image);
-
-        //var _material = FssMaterialFactory.TexMaterial();
-
-
-        var _material = new StandardMaterial3D();
-        _material.AlbedoTexture = texture;
-        _material.ShadingMode = StandardMaterial3D.ShadingModeEnum.Unshaded;
-
-
-        // load an image into a material
-
-        // Add the mesh to the current Node3D
-        MeshInstance3D meshInstance   = new();
-        meshInstance.Mesh             = meshData;
-        meshInstance.MaterialOverride = _material;
-
-        AddChild(meshInstance);
-
-        var matWire = FssMaterialFactory.WireframeWhiteMaterial();
-        //matWire.Transparency = 0.85;
-
-        MeshInstance3D meshInstanceW   = new();
-        meshInstanceW.Mesh             = meshData;
-        meshInstanceW.MaterialOverride = matWire;
-        meshInstanceW.Transparency     = 0.9f;
-        //meshInstanceW.CastShadows      = false;
-
-        AddChild(meshInstanceW);
-
-    }
 
 
 }

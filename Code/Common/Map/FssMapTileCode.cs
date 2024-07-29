@@ -13,15 +13,15 @@ public struct FssLevelCodeElement
         return $"{FssMapTileCode.LetterLookup[LatIndex]}{FssMapTileCode.LetterLookup[LonIndex]}";
     }
 }
-  
+
 public class FssMapTileCode
 {
     // --------------------------------------------------------------------------------------------
     // Constants
     // --------------------------------------------------------------------------------------------
-    
+
     public static readonly int MaxMapLvl = 4;
-    
+
     public static readonly int[] NumTilesVertPerLvl  = {  6, 6, 5, 5 };
     public static readonly int[] NumTilesHorizPerLvl = { 12, 6, 5, 5 };
 
@@ -34,7 +34,7 @@ public class FssMapTileCode
     // --------------------------------------------------------------------------------------------
     // Attributes
     // --------------------------------------------------------------------------------------------
-    
+
     public List<FssLevelCodeElement> CodeList { get; private set; }
 
     public int MapLvl => CodeList.Count;
@@ -42,12 +42,12 @@ public class FssMapTileCode
     // --------------------------------------------------------------------------------------------
     // Constructor
     // --------------------------------------------------------------------------------------------
-    
+
     public FssMapTileCode()
     {
         CodeList = new List<FssLevelCodeElement>();
     }
-    
+
     public FssMapTileCode(int x, int y) : this()
     {
         AddLevelCode(x, y, 0);
@@ -94,5 +94,12 @@ public class FssMapTileCode
     public override string ToString()
     {
         return string.Join(CodeSeparator.ToString(), CodeList.ConvertAll(c => c.CodeString()));
+    }
+
+    // FssMapTileCode.CodeForIndex(0, 0) => "AA"
+
+    public static string CodeForIndex(int y, int x)
+    {
+        return $"{LetterLookup[y]}{LetterLookup[x]}";
     }
 }
