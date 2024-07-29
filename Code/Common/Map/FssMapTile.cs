@@ -60,13 +60,13 @@ public class FssMapTile
 
     public void SetEleValue(FssLLPoint pos, float value)
     {
-        if (LLBox.Contains(pos))
-        {
-            float latFrac = (float)((pos.LatDegs - LLBox.MinLatDegs) / LLBox.DeltaLatDegs);
-            float lonFrac = (float)((pos.LonDegs - LLBox.MinLonDegs) / LLBox.DeltaLonDegs);
+        // if (LLBox.Contains(pos))
+        // {
+        //     float latFrac = (float)((pos.LatDegs - LLBox.MinLatDegs) / LLBox.DeltaLatDegs);
+        //     float lonFrac = (float)((pos.LonDegs - LLBox.MinLonDegs) / LLBox.DeltaLonDegs);
 
-            EleData.SetFractionalValue(lonFrac, latFrac, value);
-        }
+        //     EleData.SetFractionalValue(lonFrac, latFrac, value);
+        // }
     }
 
 }

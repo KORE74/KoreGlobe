@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://0wryw30pk65n"]
+
+[ext_resource type="Script" path="res://Code/Godot/Map/FssMapManager.cs" id="1_ohteg"]
+[ext_resource type="Script" path="res://Code/Godot/Util/FssCameraMover.cs" id="2_in7jt"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2ihub"]
+albedo_color = Color(0.796078, 0, 0, 1)
+albedo_texture_msdf = true
+metallic = 0.44
+roughness = 0.59
+
+[sub_resource type="SphereMesh" id="SphereMesh_qiwbo"]
+material = SubResource("StandardMaterial3D_2ihub")
+
+[node name="DynamicTerrain" type="Node3D"]
+script = ExtResource("1_ohteg")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-0.0770169, -0.22257, 0.97187, -0.0175827, 0.974917, 0.221874, -0.996875, -7.34311e-09, -0.0789984, 6.18083, 2.39519, -0.28144)
+fov = 40.0
+script = ExtResource("2_in7jt")
+
+[node name="ZeroPoint" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_qiwbo")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.720975, 0.692962, 0, -0.692962, 0.720975, 0, 9.90914, 8.97345)

@@ -1,54 +1,96 @@
 using System;
 
-// Class for a Map Tile Lat Long Box. Altitude/Radius will always be assumes to be MSL, or just not considered.
+// FssLLBox: Class to represent a 3D box, curving to a spherical surface. Deals with points
+
+// in the box based on simple angle and distance comparisons.
+// Can also be used to represent a box out from an entity, such as a radar wedge.
 
 public struct FssLLBox
 {
-    // Top left LL position
-    public double TLLatRads { get; set; }
-    public double TLLonRads { get; set; }
+    public double MinLatRads { get; set; }
+    public double MinLonRads { get; set; }
+    public double MaxLatRads { get; set; }
+    public double MaxLonRads { get; set; }
 
-    // Box size
-    public double LatHeightRads { get; set; }
-    public double LonWidthRads  { get; set; }
+    public double MinLatDegs
+    {
+        get { return MinLatRads * FssConsts.RadsToDegsMultiplier; }
+        set { MinLatRads = value * FssConsts.DegsToRadsMultiplier; }
+    }
+    public double MinLonDegs
+    {
+        get { return MinLonRads * FssConsts.RadsToDegsMultiplier; }
+        set { MinLonRads = value * FssConsts.DegsToRadsMultiplier; }
+    }
 
-    // Derived properties
-    public readonly double MinLatRads => TLLatRads - LatHeightRads;
-    public readonly double MidLatRads => MinLatRads - (LatHeightRads / 2);
-    public readonly double MaxLatRads => TLLatRads;
-    public readonly double MinLonRads => TLLonRads;
-    public readonly double MidLonRads => MinLonRads + (LonWidthRads  / 2);
-    public readonly double MaxLonRads => TLLonRads + LonWidthRads;
+    public double MaxLatDegs
+    {
+        get { return MaxLatRads * FssConsts.RadsToDegsMultiplier; }
+        set { MaxLatRads = value * FssConsts.DegsToRadsMultiplier; }
+    }
+    public double MaxLonDegs
+    {
+        get { return MaxLonRads * FssConsts.RadsToDegsMultiplier; }
+        set { MaxLonRads = value * FssConsts.DegsToRadsMultiplier; }
+    }
 
-    public readonly double MinLatDegs => MinLatRads * (180.0 / Math.PI);
-    public readonly double MidLatDegs => MidLatRads * (180.0 / Math.PI);
-    public readonly double MaxLatDegs => MaxLatRads * (180.0 / Math.PI);
-    public readonly double MinLonDegs => MinLonRads * (180.0 / Math.PI);
-    public readonly double MidLonDegs => MidLonRads * (180.0 / Math.PI);
-    public readonly double MaxLonDegs => MaxLonRads * (180.0 / Math.PI);
-
-    public readonly double DeltaLatDegs => LatHeightRads * (180.0 / Math.PI);
-    public readonly double DeltaLonDegs => LonWidthRads * (180.0 / Math.PI);
-    
     // ------------------------------------------------------------------------
 
-    // Top Left, Top Right, Bottom Left, Bottom Right properties
-    public FssLLPoint TopLeft     => new FssLLPoint() { LatRads = MaxLatRads, LonRads = MinLonRads };
-    public FssLLPoint TopRight    => new FssLLPoint() { LatRads = MaxLatRads, LonRads = MaxLonRads };
-    public FssLLPoint Center      => new FssLLPoint() { LatRads = MidLatRads, LonRads = MidLonRads };
-    public FssLLPoint BottomLeft  => new FssLLPoint() { LatRads = MinLatRads, LonRads = MinLonRads };
-    public FssLLPoint BottomRight => new FssLLPoint() { LatRads = MinLatRads, LonRads = MaxLonRads };
+    public double DeltaLatRads
+    {
+        get { return MaxLatRads - MinLatRads; }
+        set { MaxLatRads = MinLatRads + value; }
+    }
+    public double DeltaLonRads
+    {
+        get { return MaxLonRads - MinLonRads; }
+        set { MaxLonRads = MinLonRads + value; }
+    }
+    public double DeltaLatDegs
+    {
+        get { return MaxLatDegs - MinLatDegs; }
+        set { MaxLatDegs = MinLatDegs + value; }
+    }
+    public double DeltaLonDegs
+    {
+        get { return MaxLonDegs - MinLonDegs; }
+        set { MaxLonDegs = MinLonDegs + value; }
+    }
 
-    // --------------------------------------------------------------------------------------------
-    // #MARK: Constructors
-    // --------------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+
+    public FssLLAPoint PosTopLeft
+    {
+        get { return new FssLLAPoint() { LatRads = MaxLatRads, LonRads = MinLonRads }; }
+        set { MaxLatRads = value.LatRads; MinLonRads = value.LonRads; }
+    }
+
+    public FssLLAPoint PosTopRight
+    {
+        get { return new FssLLAPoint() { LatRads = MaxLatRads, LonRads = MaxLonRads }; }
+        set { MaxLatRads = value.LatRads; MaxLonRads = value.LonRads; }
+    }
+
+    public FssLLAPoint PosBottomLeft
+    {
+        get { return new FssLLAPoint() { LatRads = MinLatRads, LonRads = MinLonRads }; }
+        set { MinLatRads = value.LatRads; MinLonRads = value.LonRads; }
+    }
+
+    public FssLLAPoint PosBottomRight
+    {
+        get { return new FssLLAPoint() { LatRads = MinLatRads, LonRads = MaxLonRads }; }
+        set { MinLatRads = value.LatRads; MaxLonRads = value.LonRads; }
+    }
+
+    // ------------------------------------------------------------------------
 
     public FssLLBox(double tlLatRads, double tlLonRads, double latHeightRads, double lonWidthRads)
     {
-        TLLatRads     = tlLatRads;
-        TLLonRads     = tlLonRads;
-        LatHeightRads = latHeightRads;
-        LonWidthRads  = lonWidthRads;
+        MinLatRads     = tlLatRads;
+        MinLonRads     = tlLonRads;
+        MaxLatRads     = tlLatRads + latHeightRads;
+        MaxLonRads     = tlLonRads + lonWidthRads;
     }
 
     public static FssLLBox GlobalBox => new FssLLBox(-Math.PI / 2.0, -Math.PI, Math.PI, 2.0 * Math.PI);
@@ -57,46 +99,45 @@ public struct FssLLBox
 
     // ------------------------------------------------------------------------
 
-    public bool Contains(FssLLPoint posLL)
+    public bool LLAInBounds(FssLLAPoint InputLLA)
     {
-        if (posLL.LatDegs < MinLatDegs) return false;
-        if (posLL.LatDegs > MaxLatDegs) return false;
-        if (posLL.LonDegs < MinLonDegs) return false;
-        if (posLL.LonDegs > MaxLonDegs) return false;
+        if (InputLLA.LatDegs < MinLatDegs) return false;
+        if (InputLLA.LatDegs > MaxLatDegs) return false;
+        if (InputLLA.LonDegs < MinLonDegs) return false;
+        if (InputLLA.LonDegs > MaxLonDegs) return false;
 
         return true;
     }
 
     // ------------------------------------------------------------------------
 
-    // Returns the center point of the box
-    public FssLLPoint CenterPoint()
+    public FssLLAPoint CenterPoint()
     {
-        return new FssLLPoint()
+        return new FssLLAPoint()
         {
             LatDegs = (MinLatDegs + MaxLatDegs) / 2.0,
-            LonDegs = (MinLonDegs + MaxLonDegs) / 2.0
+            LonDegs = (MinLonDegs + MaxLonDegs) / 2.0,
         };
     }
 
     // ------------------------------------------------------------------------
 
-    // Shifts the box by given latitude and longitude adjustments
-    public FssLLBox ShiftBox(double adjustLatDegs, double adjustLonDegs)
+    public FssLLBox ShiftBox(double adjustLatDegs, double adjustLonDegs, double adjustAltM)
     {
         return new FssLLBox()
         {
-            TLLatRads     = this.TLLatRads + adjustLatDegs * (Math.PI / 180.0),
-            TLLonRads     = this.TLLonRads + adjustLonDegs * (Math.PI / 180.0),
-            LatHeightRads = this.LatHeightRads,
-            LonWidthRads  = this.LonWidthRads
+            MinLatDegs = this.MinLatDegs + adjustLatDegs,
+            MaxLatDegs = this.MaxLatDegs + adjustLatDegs,
+            MinLonDegs = this.MinLonDegs + adjustLonDegs,
+            MaxLonDegs = this.MaxLonDegs + adjustLonDegs,
         };
     }
 
     // ------------------------------------------------------------------------
 
-    public override string ToString()
+    public string BoxToString()
     {
-        return $"[MinLatDegs:{MinLatDegs:F3}, MinLonDegs:{MinLonDegs:F3}, MaxLatDegs:{MaxLatDegs:F3}, MaxLonDegs:{MaxLonDegs:F3}]";
+        return $"[{MinLatDegs:F3}, {MinLonDegs:F3}, {MaxLatDegs:F3}, {MaxLonDegs:F3}]";
     }
 }
+

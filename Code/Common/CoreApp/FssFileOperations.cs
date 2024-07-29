@@ -7,11 +7,13 @@ using System.Linq;
 public static class FssFileOperations
 {
     // Function to standardize a path, changing any backslash characters to a "/".
+
+    // Usage example: FssFileOperations.StandardizePath("C:\\Users\\User\\Documents\\file.txt");
     public static string StandardizePath(string inpath)
     {
         // First, replace all backslashes with forward slashes.
         string standardizedPath = inpath.Replace('\\', '/');
-        
+
         // Then, ensure we do not turn protocol separators like "http://" into "http:/" by only replacing double slashes if they are not following ":".
         int protocolSeparatorIndex = standardizedPath.IndexOf("://");
         if (protocolSeparatorIndex != -1)
@@ -35,7 +37,7 @@ public static class FssFileOperations
     {
         List<string> filenames = new List<string>();
         string normalizedStartPath = StandardizePath(startPath);
-        
+
         try
         {
             string[] files = Directory.GetFiles(normalizedStartPath, "*.*", SearchOption.AllDirectories);

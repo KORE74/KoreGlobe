@@ -46,6 +46,45 @@ public partial class FssSettingWindow : Window
     }
 
     // --------------------------------------------------------------------------------------------
+    // MARK: Data Read and Write
+    // --------------------------------------------------------------------------------------------
+
+    private void WriteControlValues()
+    {
+        // var config = FssCentralConfig.Instance;
+        // UdpIpAddrEdit.Text = config.GetParameter<string>("UdpIpAddr", "127.0.0.1");
+        // UdpIpPortEdit.Text = config.GetParameter<int>("UdpIpPort", 10001).ToString();
+
+        // TcpIpServerAddrEdit.Text = config.GetParameter<string>("TcpIpServerAddr", "127.0.0.1");
+        // TcpIpSerfverPortEdit.Text = config.GetParameter<int>("TcpIpServerPort", 10002).ToString();
+
+        // TcpIpClientAddrEdit.Text = config.GetParameter<string>("TcpIpClientAddr", "127.0.0.1");
+        // TcpIpClientPortEdit.Text = config.GetParameter<int>("TcpIpClientPort", 10003).ToString();
+    }
+
+    private void SaveControlValues()
+    {
+        // int udpIpPort = 0;
+        // int tcpIpServerPort = 0;
+        // int tcpIpClientPort = 0;
+
+        // int.TryParse(UdpIpPortEdit.Text, out int udpIpPort);
+        // int.TryParse(TcpIpSerfverPortEdit.Text, out int tcpIpServerPort);
+        // int.TryParse(TcpIpClientPortEdit.Text, out int tcpIpClientPort);
+
+
+        // var config = FssCentralConfig.Instance;
+        // config.SetParameter("UdpIpAddr", UdpIpAddrEdit.Text);
+        // config.SetParameter("UdpIpPort", udpIpPort);
+
+        // config.SetParameter("TcpIpServerAddr", TcpIpServerAddrEdit.Text);
+        // config.SetParameter("TcpIpServerPort", tcpIpServerPort);
+
+        // config.SetParameter("TcpIpClientAddr", TcpIpClientAddrEdit.Text);
+        // config.SetParameter("TcpIpClientPort", tcpIpClientPort);
+    }
+
+    // --------------------------------------------------------------------------------------------
     // MARK: Localisation
     // --------------------------------------------------------------------------------------------
 

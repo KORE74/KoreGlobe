@@ -13,6 +13,20 @@ public struct FssEntityV3
     public Vector3 PosAhead;
 }
 
+public struct FssRWPlatformPositions
+{
+    public FssLLAPoint PosLLA;
+    public FssLLAPoint PosAboveLLA;
+    public FssLLAPoint PosAheadLLA;
+    public FssXYZPoint PosXYZ;
+    public FssXYZPoint PosAboveXYZ;
+    public FssXYZPoint PosAheadXYZ;
+
+    public Vector3 vecPos;
+    public Vector3 vecUp;
+    public Vector3 vecForward;
+};
+
 public static class FssGeoConvOperations
 {
     public static Vector3 RealWorldToGodot(float radius, float latDegs, float lonDegs)
@@ -75,4 +89,58 @@ public static class FssGeoConvOperations
             PosAbove = v3Above,
             PosAhead = v3Ahead };
     }
+
+    public static FssRWPlatformPositions RealWorldStruct(FssLLAPoint pos, FssCourse course)
+    {
+        // Define the position and associated up direction for the label
+        FssLLAPoint posAbove = pos;
+        posAbove.AltMslM += 0.04f;
+
+        // Get the position 5 seconds ahead, or just north if stationary
+        FssLLAPoint posAhead = FssLLAPoint.Zero;
+        if (course.IsStationary())
+        {
+            posAhead = pos;
+            posAhead.LatDegs += 0.001;
+        }
+        else
+        {
+            posAhead = pos.PlusPolarOffset(course.ToPolarOffset(-5));
+        }
+
+        // Vector3 v3Pos   = RealWorldToGodot(pos);
+        // Vector3 v3Above = RealWorldToGodot(posAbove);
+        // Vector3 v3Ahead = RealWorldToGodot(posAhead);
+
+        FssXYZPoint posXYZ       = FssEarthCore.FocusOffsetForRWLLA(pos);
+        FssXYZPoint posAboveXYZ  = FssEarthCore.FocusOffsetForRWLLA(posAbove);
+        FssXYZPoint posAheadXYZ  = FssEarthCore.FocusOffsetForRWLLA(posAhead);
+
+        posXYZ.Z      *= -1;
+        posAboveXYZ.Z *= -1;
+        posAheadXYZ.Z *= -1;
+
+        FssXYZPoint xyzLookAhead = posXYZ.XYZTo(posAheadXYZ);
+        FssXYZPoint xyzLookUp    = posXYZ.XYZTo(posAboveXYZ);
+
+        Vector3 v3Pos       = new Vector3((float)posXYZ.X,       (float)posXYZ.Y,       (float)posXYZ.Z);
+        Vector3 v3PosAhead  = new Vector3((float)posAheadXYZ.X,  (float)posAheadXYZ.Y,  (float)posAheadXYZ.Z);
+        Vector3 v3LookAhead = new Vector3((float)xyzLookAhead.X, (float)xyzLookAhead.Y, (float)xyzLookAhead.Z);
+        Vector3 v3LookUp    = new Vector3((float)xyzLookUp.X,    (float)xyzLookUp.Y,    (float)xyzLookUp.Z);
+
+        return new FssRWPlatformPositions {
+            PosLLA      = pos,
+            PosAboveLLA = posAbove,
+            PosAheadLLA = posAhead,
+            PosXYZ      = posXYZ,
+            PosAboveXYZ = posAboveXYZ,
+            PosAheadXYZ = posAheadXYZ,
+            vecPos      = v3Pos,
+            vecUp       = v3LookUp,
+            vecForward  = v3PosAhead
+        };
+    }
+
+
+
 }

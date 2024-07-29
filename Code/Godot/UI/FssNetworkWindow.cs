@@ -94,7 +94,6 @@ public partial class FssNetworkWindow : Window
 
         TcpIpClientAddrEdit.Text = config.GetParameter<string>("TcpIpClientAddr", "127.0.0.1");
         TcpIpClientPortEdit.Text = config.GetParameter<int>("TcpIpClientPort", 10003).ToString();
-
     }
 
     private void SaveControlValues()
