@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://0wryw30pk65n"]
+[gd_scene load_steps=5 format=3 uid="uid://dg74mauvh8v5g"]
 
 [ext_resource type="Script" path="res://Code/Godot/Map/FssMapManager.cs" id="1_ohteg"]
 [ext_resource type="Script" path="res://Code/Godot/Util/FssCameraMover.cs" id="2_in7jt"]

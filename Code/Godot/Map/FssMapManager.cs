@@ -46,6 +46,7 @@ public partial class FssMapManager : Node3D
                 LoadTile2(tileInfo);
             }
         }
+        DebugWedge();
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -69,9 +70,9 @@ public partial class FssMapManager : Node3D
         var meshData = await Task.Run(() =>
         {
             // Load the elevation data
-            var asciiArcArry = FssFloat2DArrayIO.LoadFromArcASIIGridFile(eleFilePath);
-            var croppedArray = FssFloat2DArrayOperations.CropToRange(asciiArcArry, new FssFloatRange(0f, 10000f));
-            var croppedArraySubSample = croppedArray.GetInterpolatedGrid(20, 20);
+            FssFloat2DArray asciiArcArry = FssFloat2DArrayIO.LoadFromArcASIIGridFile(eleFilePath);
+            FssFloat2DArray croppedArray = FssFloat2DArrayOperations.CropToRange(asciiArcArry, new FssFloatRange(0f, 10000f));
+            FssFloat2DArray croppedArraySubSample = croppedArray.GetInterpolatedGrid(20, 20);
 
             // Create the mesh
             var meshBuilder = new FssMeshBuilder();
@@ -123,6 +124,29 @@ public partial class FssMapManager : Node3D
     // MARK: Debug Functions
     // --------------------------------------------------------------------------------------------
 
+    private void DebugWedge()
+    {
+        FssFloat2DArray eleArray = new FssFloat2DArray(50, 50);
+        eleArray.SetAllVals(0.001f);
 
+        var meshBuilder = new FssMeshBuilder();
+        meshBuilder.AddSurface(
+            -10, 20, 
+            50, 20, 
+            5.1f, 0.000006f, 
+            eleArray);
+        var meshData = meshBuilder.BuildWithUV("surface");
+
+        // Add the mesh instances to the current Node3D
+        var meshInstanceW = new MeshInstance3D { Name = $"Water wire" };
+        meshInstanceW.Mesh = meshData;
+        meshInstanceW.MaterialOverride = FssMaterialFactory.WireframeWhiteMaterial();
+        AddChild(meshInstanceW);
+
+        var meshInstance = new MeshInstance3D { Name = $"water image" };
+        meshInstance.Mesh = meshData;
+        meshInstance.MaterialOverride = FssMaterialFactory.WaterMaterial();
+        AddChild(meshInstance);
+    }
 
 }
