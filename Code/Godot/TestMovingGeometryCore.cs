@@ -57,6 +57,7 @@ public partial class TestMovingGeometryCore : Node3D
         CreateLinkCylinder();
 
         CreatePlatform();
+        CreatePlatformNodes();
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -66,7 +67,7 @@ public partial class TestMovingGeometryCore : Node3D
         {
             UIPollTimer = FssCoreTime.RuntimeSecs + 1f; // Update the timer to the next whole second
 
-            GD.Print($"FocusPoint: Lat:{FssEarthCore.FocusPoint.LatDegs:0.00} Lon:{FssEarthCore.FocusPoint.LonDegs:0.00} RadiusM:{FssEarthCore.FocusPoint.RadiusM:0.00}");
+            GD.Print($"FocusPoint: Lat:{FssEarthCore.FocusLLA.LatDegs:0.00} Lon:{FssEarthCore.FocusLLA.LonDegs:0.00} RadiusM:{FssEarthCore.FocusLLA.RadiusM:0.00}");
 
             GD.Print($"PlatPos: Lat:{PlatformPos.LatDegs:0.00} Lon:{PlatformPos.LonDegs:0.00} RadiusM:{PlatformPos.RadiusM:0.00}");
         }
@@ -82,11 +83,12 @@ public partial class TestMovingGeometryCore : Node3D
         if (AnimAzDegs >  25f) AnimAzDelta = -1.55f;
         if (AnimAzDegs <   0f) AnimAzDelta =  1.55f;
 
-        FssEarthCore.FocusPoint = new FssLLAPoint() {
+        FssEarthCore.FocusLLA = new FssLLAPoint() {
             LatDegs = AnimElDegs,
             LonDegs = AnimAzDegs,
             RadiusM = FssEarthCore.EarthRadiusM };
 
+        // Update the gloabel Focus Position, LLA and Vector3
         FssEarthCore.UpdatePositions();
 
         // FocusPos = FssEarthCore.FocusPos;
@@ -96,6 +98,8 @@ public partial class TestMovingGeometryCore : Node3D
         UpdateLinkCylinder();
 
         UpdatePlatform(delta);
+        UpdatePlatformNodes();
+
     }
 
     // --------------------------------------------------------------------------------------------
@@ -258,6 +262,19 @@ public partial class TestMovingGeometryCore : Node3D
 
     private void UpdatePlatformNodes()
     {
+        // Get the focus point XYZ
+        FssXYZPoint focusXYZ = FssEarthCore.FocusLLA.ToXYZ();
 
+        // Calculate the platform XYZ
+        FssXYZPoint platXYZ = PlatformPos.ToXYZ();
+
+        // Calculate the relative position of the platform to the focus point
+        FssXYZPoint relXYZ = focusXYZ.XYZTo(platXYZ);
+
+        // Turn the XYZ into a vector3
+        Vector3 relPos = new Vector3((float)relXYZ.X, (float)relXYZ.Y, (float)relXYZ.Z);
+
+        // Update the position of the platform
+        PlaformBaseNode.Position = relPos;
     }
 }

@@ -5,7 +5,9 @@ public static class FssEarthCore
     public static double EarthRadiusM = 10;
     public static double backoffFraction = 0.2;
 
-    public static FssLLAPoint FocusPoint = new FssLLAPoint() {LatDegs = 0, LonDegs = 0, RadiusM = EarthRadiusM};
+    public static FssLLAPoint FocusLLA = new FssLLAPoint() {LatDegs = 0, LonDegs = 0, RadiusM = EarthRadiusM};
+
+    public static FssXYZPoint FocusXYZ = new FssXYZPoint(0, 0, 0);
 
     public static Vector3 FocusPos;
     public static Vector3 CorePos;
@@ -15,10 +17,12 @@ public static class FssEarthCore
         float CoreDist  = (float)(EarthRadiusM - (EarthRadiusM * backoffFraction));
         float FocusDist = (float)(EarthRadiusM * backoffFraction);
 
-        float lonRads = (float)FocusPoint.LonRads;
-        float latRads = (float)FocusPoint.LatRads;
+        float lonRads = (float)FocusLLA.LonRads;
+        float latRads = (float)FocusLLA.LatRads;
 
         FocusPos = FssGeoConvOperations.RealWorldToGodotFocusPoint((float)FocusDist, latRads, lonRads);
+        FocusXYZ = FocusLLA.ToXYZ();
+
 
         // FocusPos = new Vector3(
         //     FocusDist * Mathf.Cos(azRads) * Mathf.Cos(elRads),
