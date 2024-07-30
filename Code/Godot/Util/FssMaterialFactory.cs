@@ -93,11 +93,14 @@ public static class FssMaterialFactory
     // Usage: meshInstance.MaterialOverride = FssMaterialFactory.WaterMaterial();
     public static ShaderMaterial WaterMaterial()
     {
-        // Load the wireframe shader
-        Shader shader = (Shader)GD.Load("res://Shaders/water_001.gdshader");
-        ShaderMaterial material = new ShaderMaterial();
-       // wireframeMaterial.AlbedoColor = color;
-        material.Shader = shader;
+        // Load the .tres file
+        ShaderMaterial material = (ShaderMaterial)GD.Load("res://Materials/Water_002.tres");
+
+    //     // Load the wireframe shader
+    //     Shader shader = (Shader)GD.Load("res://Shaders/water_001.gdshader");
+    //     ShaderMaterial material = new ShaderMaterial();
+    //    // wireframeMaterial.AlbedoColor = color;
+    //     material.Shader = shader;
 
         return material;
     }

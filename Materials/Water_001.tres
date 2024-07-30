@@ -1,0 +1,24 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://bmqtdof8c10s5"]
+
+[ext_resource type="Shader" path="res://Shaders/water_001.gdshader" id="1_dmlt2"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_dmlt2")
+shader_parameter/albedo = Color(0.270588, 0.270588, 0.886275, 1)
+shader_parameter/albedo2 = Color(0.398642, 0.587427, 1, 1)
+shader_parameter/metallic = 0.0
+shader_parameter/roughness = 0.02
+shader_parameter/wave_direction = Vector2(2, 0)
+shader_parameter/wave_direction2 = Vector2(0, 1)
+shader_parameter/time_scale = 0.025
+shader_parameter/noise_scale = 0.2
+shader_parameter/height_scale = 0.15
+shader_parameter/color_deep = Color(0, 0, 0.266667, 1)
+shader_parameter/color_shallow = Color(0.000490934, 0.316433, 0.980495, 1)
+shader_parameter/beers_law = 2.0
+shader_parameter/depth_offset = -0.75
+shader_parameter/edge_scale = 0.1
+shader_parameter/near = 1.0
+shader_parameter/far = 100.0
+shader_parameter/edge_color = null

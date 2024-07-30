@@ -11,8 +11,13 @@ public struct FssTileInfo
 
 public partial class FssMapManager : Node3D
 {
-
     private string MapRootPath = "";
+
+    // Debug
+    private FssLLAPoint pos  = new FssLLAPoint() { LatDegs = 41, LonDegs = 6, AltMslM = 0 };
+    private FssCourse Course = new FssCourse() { HeadingDegs = 90, SpeedMps = 1 };
+    Node3D ModelNode         = null;
+    Node3D ModelResourceNode = null;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -47,11 +52,13 @@ public partial class FssMapManager : Node3D
             }
         }
         DebugWedge();
+        //DebugShip();
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
+        //UpdateModelPosition();
     }
 
     // --------------------------------------------------------------------------------------------
@@ -79,14 +86,14 @@ public partial class FssMapManager : Node3D
             meshBuilder.AddSurface(
                 (float)tileInfo.TileLLBounds.MinLonDegs, (float)tileInfo.TileLLBounds.MaxLonDegs,
                 (float)tileInfo.TileLLBounds.MinLatDegs, (float)tileInfo.TileLLBounds.MaxLatDegs,
-                5f, 0.000006f,
-                croppedArraySubSample
+                5f, 0.000016f,
+                asciiArcArry
             );
             meshBuilder.AddSurfaceWedgeSides(
                 (float)tileInfo.TileLLBounds.MinLonDegs, (float)tileInfo.TileLLBounds.MaxLonDegs,
                 (float)tileInfo.TileLLBounds.MinLatDegs, (float)tileInfo.TileLLBounds.MaxLatDegs,
-                5f, 0.000006f, 4.5f,
-                croppedArraySubSample
+                5f, 0.000016f, 4.5f,
+                asciiArcArry
             ); //bool flipTriangles = false)
             var meshData = meshBuilder.BuildWithUV(tileInfo.TileCode);
 
@@ -126,15 +133,16 @@ public partial class FssMapManager : Node3D
 
     private void DebugWedge()
     {
-        FssFloat2DArray eleArray = new FssFloat2DArray(50, 50);
+        FssFloat2DArray eleArray = new FssFloat2DArray(500, 500);
         eleArray.SetAllVals(0.001f);
 
         var meshBuilder = new FssMeshBuilder();
         meshBuilder.AddSurface(
-            -10, 20, 
-            50, 20, 
-            5.1f, 0.000006f, 
-            eleArray);
+            -10, 50,
+            60, 20,
+            5f, 0.000006f,
+            eleArray,
+            true);
         var meshData = meshBuilder.BuildWithUV("surface");
 
         // Add the mesh instances to the current Node3D
@@ -145,8 +153,76 @@ public partial class FssMapManager : Node3D
 
         var meshInstance = new MeshInstance3D { Name = $"water image" };
         meshInstance.Mesh = meshData;
-        meshInstance.MaterialOverride = FssMaterialFactory.WaterMaterial();
+        meshInstance.MaterialOverride = (ShaderMaterial)ResourceLoader.Load("res://Materials/Water_002.tres"); // FssMaterialFactory.WaterMaterial();
         AddChild(meshInstance);
+    }
+
+
+    private void DebugShip()
+    {
+        string ModelPath = "res://Resources/Models/Ship/GenericSupportShip/GenericSupportShip.glb";
+
+        PackedScene importedModel = (PackedScene)ResourceLoader.Load(ModelPath);
+        if (importedModel != null)
+        {
+            // Root of the model and orientation
+            ModelNode = new Node3D() { Name = "ModelNode" };
+            ModelNode.LookAt(Vector3.Forward, Vector3.Up);
+            AddChild(ModelNode);
+
+            // Instance the model
+            Node modelInstance     = importedModel.Instantiate();
+            ModelResourceNode      = modelInstance as Node3D;
+            ModelResourceNode.Name = "ModelResourceNode";
+            ModelResourceNode.LookAt(Vector3.Forward, Vector3.Up);
+
+            ModelNode.AddChild(ModelResourceNode);
+            ModelResourceNode.Scale    = new Vector3(0.05f, 0.05f, 0.05f); // Set the model scale
+            //ModelResourceNode.Scale    = new Vector3(0.005f, 0.005f, 0.005f); // Set the model scale
+            ModelResourceNode.Position = new Vector3(0f, 0f, 0f); // Set the model position
+
+        }
+    }
+
+    private void UpdateModelPosition()
+    {
+        // --- Define positions -----------------------
+
+        // Define the position and associated up direction for the label
+        FssLLAPoint posAbove = pos;
+        posAbove.AltMslM += 0.04f;
+
+        // Get the position 5 seconds ahead, or just north if stationary
+        FssLLAPoint posAhead = FssLLAPoint.Zero;
+        if (Course.IsStationary())
+        {
+            posAhead = pos;
+            posAhead.LatDegs += 0.001;
+        }
+        else
+        {
+            posAhead = pos.PlusPolarOffset(Course.ToPolarOffset(-5));
+        }
+
+        // --- Define vectors -----------------------
+
+        // Define the Vector3 Offsets
+        Vector3 vecPos   = FssGeoConvOperations.RealWorldToGodot(pos);
+        Vector3 vecAbove = FssGeoConvOperations.RealWorldToGodot(posAbove);
+        Vector3 vecAhead = FssGeoConvOperations.RealWorldToGodot(posAhead);
+
+
+        FssEntityV3 platVecs = FssGeoConvOperations.ReadWorldToStruct(pos, Course);
+
+
+        // Update node position and orientation
+        ModelNode.Position = platVecs.Position;// vecPos;
+        ModelNode.LookAt(platVecs.PosAhead, platVecs.PosAbove);
+
+        // Update camera position and orientation
+        //FssXYZPoint camOffsetXYZ = CameraOffset.ToXYZ();
+        //ModelCamera.Position = new Vector3((float)camOffsetXYZ.X, -(float)camOffsetXYZ.Y, -(float)camOffsetXYZ.Z);
+        //ModelCamera.LookAt(vecPos, vecAbove);
     }
 
 }

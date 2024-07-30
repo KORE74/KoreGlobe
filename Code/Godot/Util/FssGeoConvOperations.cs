@@ -29,6 +29,10 @@ public struct FssRWPlatformPositions
 
 public static class FssGeoConvOperations
 {
+    // --------------------------------------------------------------------------------------------
+    // MARK: Simple Conversion
+    // --------------------------------------------------------------------------------------------
+
     public static Vector3 RealWorldToGodot(float radius, float latDegs, float lonDegs)
     {
         float latRad = Mathf.DegToRad(latDegs);
@@ -41,24 +45,45 @@ public static class FssGeoConvOperations
         return new Vector3(x, y, z);
     }
 
-    public static Vector3 RealWorldToGodot(FssLLAPoint llap)
-    {
-        return RealWorldToGodot((float)llap.AltMslM, (float)llap.LatDegs, (float)llap.LonDegs);
-    }
-
-    public static Vector3 RealWorldToGodotFocusPoint(float radius, float latRads, float lonRads)
+    public static Vector3 RealWorldToGodotRads(float radius, float latRads, float lonRads)
     {
         float x = radius * Mathf.Cos(latRads) * Mathf.Cos(lonRads);
         float y = radius * Mathf.Sin(latRads);
         float z = radius * Mathf.Cos(latRads) * Mathf.Sin(lonRads) * -1.0f;
 
-       // Vector3 RawPosition = new Vector3(x, y, z);
-
-      //  Vector3 AdjustedPosition = RawPosition - FssEarthCore.FocusPos;
-
         return new Vector3(x, y, z);
     }
 
+    public static Vector3 RealWorldToGodot(FssLLAPoint llap)
+    {
+        return RealWorldToGodot((float)llap.AltMslM, (float)llap.LatDegs, (float)llap.LonDegs);
+    }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Focus Point Conversion
+    // --------------------------------------------------------------------------------------------
+
+    public static Vector3 RealWorldToGodotFocusPointRads(float radius, float latRads, float lonRads)
+    {
+        float x = radius * Mathf.Cos(latRads) * Mathf.Cos(lonRads);
+        float y = radius * Mathf.Sin(latRads);
+        float z = radius * Mathf.Cos(latRads) * Mathf.Sin(lonRads) * -1.0f;
+
+        Vector3 RawPosition = new Vector3(x, y, z);
+
+        Vector3 AdjustedPosition = RawPosition - FssEarthCore.FocusPos;
+
+        return AdjustedPosition;
+    }
+
+    public static Vector3 RealWorldToGodotFocusPoint(FssLLAPoint llap)
+    {
+        return RealWorldToGodotFocusPointRads((float)llap.AltMslM, (float)llap.LatRads, (float)llap.LonRads);
+    }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Conversion to structures
+    // --------------------------------------------------------------------------------------------
 
     // FssEntityV3 platformV3 = FssGeoConvOperations.ReadWorldToStruct(pos, course);
 
@@ -112,35 +137,33 @@ public static class FssGeoConvOperations
         // Vector3 v3Above = RealWorldToGodot(posAbove);
         // Vector3 v3Ahead = RealWorldToGodot(posAhead);
 
-        FssXYZPoint posXYZ       = FssEarthCore.FocusOffsetForRWLLA(pos);
-        FssXYZPoint posAboveXYZ  = FssEarthCore.FocusOffsetForRWLLA(posAbove);
-        FssXYZPoint posAheadXYZ  = FssEarthCore.FocusOffsetForRWLLA(posAhead);
+        FssXYZPoint focusOffsetXYZ       = FssEarthCore.FocusOffsetForRWLLA(pos);
+        FssXYZPoint focusOffsetAboveXYZ  = FssEarthCore.FocusOffsetForRWLLA(posAbove);
+        FssXYZPoint focusOffsetAheadXYZ  = FssEarthCore.FocusOffsetForRWLLA(posAhead);
 
-        posXYZ.Z      *= -1;
-        posAboveXYZ.Z *= -1;
-        posAheadXYZ.Z *= -1;
+        focusOffsetXYZ.Z      *= -1;
+        focusOffsetAboveXYZ.Z *= -1;
+        focusOffsetAheadXYZ.Z *= -1;
 
-        FssXYZPoint xyzLookAhead = posXYZ.XYZTo(posAheadXYZ);
-        FssXYZPoint xyzLookUp    = posXYZ.XYZTo(posAboveXYZ);
+        FssXYZPoint xyzLookAhead = focusOffsetXYZ.XYZTo(focusOffsetAheadXYZ);
+        FssXYZPoint xyzLookUp    = focusOffsetXYZ.XYZTo(focusOffsetAboveXYZ);
 
-        Vector3 v3Pos       = new Vector3((float)posXYZ.X,       (float)posXYZ.Y,       (float)posXYZ.Z);
-        Vector3 v3PosAhead  = new Vector3((float)posAheadXYZ.X,  (float)posAheadXYZ.Y,  (float)posAheadXYZ.Z);
-        Vector3 v3LookAhead = new Vector3((float)xyzLookAhead.X, (float)xyzLookAhead.Y, (float)xyzLookAhead.Z);
-        Vector3 v3LookUp    = new Vector3((float)xyzLookUp.X,    (float)xyzLookUp.Y,    (float)xyzLookUp.Z);
+        Vector3 v3Pos       = new Vector3((float)focusOffsetXYZ.X,      (float)focusOffsetXYZ.Y,      (float)focusOffsetXYZ.Z);
+        Vector3 v3PosAhead  = new Vector3((float)focusOffsetAboveXYZ.X, (float)focusOffsetAboveXYZ.Y, (float)focusOffsetAboveXYZ.Z);
+        Vector3 v3LookAhead = new Vector3((float)focusOffsetAheadXYZ.X, (float)focusOffsetAheadXYZ.Y, (float)focusOffsetAheadXYZ.Z);
+        Vector3 v3LookUp    = new Vector3((float)xyzLookUp.X,           (float)xyzLookUp.Y,           (float)xyzLookUp.Z);
 
         return new FssRWPlatformPositions {
             PosLLA      = pos,
             PosAboveLLA = posAbove,
             PosAheadLLA = posAhead,
-            PosXYZ      = posXYZ,
-            PosAboveXYZ = posAboveXYZ,
-            PosAheadXYZ = posAheadXYZ,
+            PosXYZ      = focusOffsetXYZ,
+            PosAboveXYZ = focusOffsetAboveXYZ,
+            PosAheadXYZ = focusOffsetAheadXYZ,
             vecPos      = v3Pos,
             vecUp       = v3LookUp,
             vecForward  = v3PosAhead
         };
     }
-
-
 
 }

@@ -2,39 +2,48 @@ using Godot;
 
 public static class FssEarthCore
 {
-    public static double EarthRadiusM = 10;
+    public static double EarthRadiusM    = 10;
     public static double backoffFraction = 0.05;
 
-    public static FssLLAPoint FocusLLA = new FssLLAPoint() {LatDegs = 0, LonDegs = 0, RadiusM = EarthRadiusM};
+    // LLA and then XYZ Real World locations from Earth Centre 0,0,0.
+    public static FssLLAPoint RwFocusLLA = new FssLLAPoint() {LatDegs = 0, LonDegs = 0, RadiusM = EarthRadiusM};
+    public static FssXYZPoint RwFocusXYZ = new FssXYZPoint(0, 0, 0);
 
-    public static FssXYZPoint FocusXYZ = new FssXYZPoint(0, 0, 0);
-    public static FssXYZPoint CoreXYZ  = new FssXYZPoint(0, 0, 0);
+    // Offset values from the 0,0,0 GE origin
+    public static FssLLAPoint RwFocusOffsetLLA = new FssLLAPoint() {LatDegs = 0, LonDegs = 0, RadiusM = EarthRadiusM};
+    public static FssLLAPoint RwCoreOffsetLLA  = new FssLLAPoint() {LatDegs = 0, LonDegs = 0, RadiusM = EarthRadiusM};
+    public static FssXYZPoint RwFocusOffsetXYZ = new FssXYZPoint(0, 0, 0);
+    public static FssXYZPoint RwCoreOffsetXYZ  = new FssXYZPoint(0, 0, 0);
 
+    // Vector3 GameEngine positions
     public static Vector3 FocusPos;
     public static Vector3 CorePos;
 
     public static void UpdatePositions()
     {
-        // Update the distances
-        double FocusDist = EarthRadiusM * backoffFraction;
-        double CoreDist  = EarthRadiusM - FocusDist;
+        // The Real World Focus point is a striaght up XYZ from the LLA, no offsets.
+        RwFocusXYZ = RwFocusLLA.ToXYZ();
+
+        // Update the offset distances from the 0,0,0 origin.
+        double FocusOffsetDist = EarthRadiusM * backoffFraction;
+        double CoreOffsetDist  = EarthRadiusM - FocusOffsetDist;
 
         // Update the forwards and backwards angles.
-        double lonRads     = FocusLLA.LonRads;
-        double latRads     = FocusLLA.LatRads;
+        double lonRads     = RwFocusLLA.LonRads;
+        double latRads     = RwFocusLLA.LatRads;
         double backLonRads = lonRads + Mathf.Pi;
         double backLatRads = latRads * -1;
 
-        // We start with the focus point, so we just have to calculate the (backwards) core point.
-        FssLLAPoint backLLA = new FssLLAPoint() {LatRads=backLatRads, LonRads=backLonRads, RadiusM=CoreDist};
+        RwFocusOffsetLLA = new FssLLAPoint() {LatRads=latRads,     LonRads=lonRads,     RadiusM=FocusOffsetDist};
+        RwCoreOffsetLLA  = new FssLLAPoint() {LatRads=backLatRads, LonRads=backLonRads, RadiusM=CoreOffsetDist};
+        RwFocusOffsetXYZ = RwFocusOffsetLLA.ToXYZ();
+        RwCoreOffsetXYZ  = RwCoreOffsetLLA.ToXYZ();
 
-        // Determine the real-world XYZ values
-        FocusXYZ = FocusLLA.ToXYZ();
-        CoreXYZ  = backLLA.ToXYZ();
+        // ---- Now GE Values ----
 
         // Convert the XYZ values to Godot coordinates
-        FocusPos = FssGeoConvOperations.RealWorldToGodotFocusPoint((float)FocusDist, (float)latRads,     (float)lonRads);
-        CorePos  = FssGeoConvOperations.RealWorldToGodotFocusPoint((float)CoreDist,  (float)backLatRads, (float)backLonRads);
+        FocusPos = FssGeoConvOperations.RealWorldToGodotRads((float)FocusOffsetDist, (float)latRads,     (float)lonRads);
+        CorePos  = FssGeoConvOperations.RealWorldToGodotRads((float)CoreOffsetDist,  (float)backLatRads, (float)backLonRads);
     }
 
 
@@ -42,7 +51,7 @@ public static class FssEarthCore
     {
         FssXYZPoint posXYZ = lla.ToXYZ();
 
-        FssXYZPoint posXYZOffset = FocusXYZ.XYZTo(posXYZ);
+        FssXYZPoint posXYZOffset = RwFocusXYZ.XYZTo(posXYZ);
 
         return posXYZOffset;
     }
@@ -51,7 +60,7 @@ public static class FssEarthCore
     {
         FssXYZPoint posXYZ = lla.ToXYZ();
 
-        FssXYZPoint posXYZOffset = FocusXYZ.XYZTo(posXYZ);
+        FssXYZPoint posXYZOffset = RwFocusXYZ.XYZTo(posXYZ);
 
         posXYZOffset.Z = posXYZOffset.Z * -1;
 

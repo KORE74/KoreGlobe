@@ -73,7 +73,7 @@ public partial class TestMovingGeometryCore : Node3D
         {
             UIPollTimer = FssCoreTime.RuntimeSecs + 1f; // Update the timer to the next whole second
 
-            GD.Print($"FocusPoint: Lat:{FssEarthCore.FocusLLA.LatDegs:0.00} Lon:{FssEarthCore.FocusLLA.LonDegs:0.00} RadiusM:{FssEarthCore.FocusLLA.RadiusM:0.00}");
+            GD.Print($"FocusPoint: Lat:{FssEarthCore.RwFocusLLA.LatDegs:0.00} Lon:{FssEarthCore.RwFocusLLA.LonDegs:0.00} RadiusM:{FssEarthCore.RwFocusLLA.RadiusM:0.00}");
             GD.Print($"PlatPos: Lat:{PlatformPos.LatDegs:0.00} Lon:{PlatformPos.LonDegs:0.00} RadiusM:{PlatformPos.RadiusM:0.00} // Course: Heading:{PlatformCourse.HeadingDegs:0.00} Speed:{PlatformCourse.SpeedMps:0.00}");
             GD.Print($"FocusPos: {FssEarthCore.FocusPos} // CorePos: {FssEarthCore.CorePos} // CorePos Magnitude {FssEarthCore.CorePos.Length()}");
         }
@@ -88,7 +88,7 @@ public partial class TestMovingGeometryCore : Node3D
         if (AnimAzDegs >  25f) AnimAzDelta = -1.55f;
         if (AnimAzDegs <   0f) AnimAzDelta =  1.55f;
 
-        FssEarthCore.FocusLLA = new FssLLAPoint() {
+        FssEarthCore.RwFocusLLA = new FssLLAPoint() {
             LatDegs = AnimElDegs,
             LonDegs = AnimAzDegs,
             RadiusM = FssEarthCore.EarthRadiusM };
@@ -277,8 +277,6 @@ public partial class TestMovingGeometryCore : Node3D
     private void UpdatePlatformNodes(double delta)
     {
         FssRWPlatformPositions rwStruct = FssGeoConvOperations.RealWorldStruct(PlatformPos, PlatformCourse);
-
-        Vector3 localPos = PlaformBaseNode.ToLocal(rwStruct.vecPos);
 
         PlaformBaseNode.LookAtFromPosition(rwStruct.vecPos, rwStruct.vecForward, rwStruct.vecUp);
     }
