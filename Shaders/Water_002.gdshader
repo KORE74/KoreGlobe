@@ -19,16 +19,16 @@ void vertex() {
 }
 
 void fragment() {
-    
+
     vec2 time  = (TIME * wave_direction)  * time_scale;
     vec2 time2 = (TIME * wave_direction2) * time_scale;
-    
+
     vec3 normal1 = texture(texture_normal,  UV + time).rgb;
     vec3 normal2 = texture(texture_normal2, UV + time2).rgb;
     vec3 normal_blend = mix(normal1, normal2, 0.5);
-    
+
     vec3 normal_blend2 = mix(texture(texture_normal,  UV + time).rgb, texture(texture_normal2, UV + time2).rgb, 0.5);
-    
+
 	// Called for every pixel the material is visible on.
     ALBEDO = albedo;
     METALLIC = metallic;

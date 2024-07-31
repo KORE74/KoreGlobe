@@ -71,31 +71,52 @@ public partial class FssMapManager : Node3D
         string rootDir = "res://Resources/Map/Lvl0_30x30";
         string imageFilePath = Path.Combine(rootDir, $"Sat_{tileInfo.TileCode}.png");
         string eleFilePath = Path.Combine(rootDir, $"Ele_{tileInfo.TileCode}.asc");
-        eleFilePath = FssGodotFileUtil.GetActualPath(eleFilePath);
+        string meshFilePath = Path.Combine(rootDir, $"Mesh_{tileInfo.TileCode}.mesh");
 
         // Run file loading and processing on a background thread
         var meshData = await Task.Run(() =>
         {
-            // Load the elevation data
-            FssFloat2DArray asciiArcArry = FssFloat2DArrayIO.LoadFromArcASIIGridFile(eleFilePath);
-            FssFloat2DArray croppedArray = FssFloat2DArrayOperations.CropToRange(asciiArcArry, new FssFloatRange(0f, 10000f));
-            FssFloat2DArray croppedArraySubSample = croppedArray.GetInterpolatedGrid(20, 20);
+            eleFilePath = FssGodotFileUtil.GetActualPath(eleFilePath);
+            meshFilePath = FssGodotFileUtil.GetActualPath(meshFilePath);
 
-            // Create the mesh
-            var meshBuilder = new FssMeshBuilder();
-            meshBuilder.AddSurface(
-                (float)tileInfo.TileLLBounds.MinLonDegs, (float)tileInfo.TileLLBounds.MaxLonDegs,
-                (float)tileInfo.TileLLBounds.MinLatDegs, (float)tileInfo.TileLLBounds.MaxLatDegs,
-                5f, 0.000016f,
-                asciiArcArry
-            );
-            meshBuilder.AddSurfaceWedgeSides(
-                (float)tileInfo.TileLLBounds.MinLonDegs, (float)tileInfo.TileLLBounds.MaxLonDegs,
-                (float)tileInfo.TileLLBounds.MinLatDegs, (float)tileInfo.TileLLBounds.MaxLatDegs,
-                5f, 0.000016f, 4.5f,
-                asciiArcArry
-            ); //bool flipTriangles = false)
-            var meshData = meshBuilder.BuildWithUV(tileInfo.TileCode);
+            bool loadMesh = File.Exists(meshFilePath);
+            bool saveMesh = !loadMesh;
+
+            FssMeshBuilder meshBuilder = new();
+            if (loadMesh)
+            {
+                meshBuilder.meshData = FssMeshDataIO.ReadMeshFromFile(meshFilePath);
+                FssCentralLog.AddEntry($"Loaded mesh: {meshFilePath}");
+            }
+            else
+            {
+                // Load the elevation data
+                FssFloat2DArray asciiArcArry = FssFloat2DArrayIO.LoadFromArcASIIGridFile(eleFilePath);
+                FssFloat2DArray croppedArray = FssFloat2DArrayOperations.CropToRange(asciiArcArry, new FssFloatRange(0f, 10000f));
+                FssFloat2DArray croppedArraySubSample = croppedArray.GetInterpolatedGrid(20, 20);
+
+                // Create the mesh
+                meshBuilder.AddSurface(
+                    (float)tileInfo.TileLLBounds.MinLonDegs, (float)tileInfo.TileLLBounds.MaxLonDegs,
+                    (float)tileInfo.TileLLBounds.MinLatDegs, (float)tileInfo.TileLLBounds.MaxLatDegs,
+                    5f, 0.000016f,
+                    croppedArraySubSample
+                );
+                meshBuilder.AddSurfaceWedgeSides(
+                    (float)tileInfo.TileLLBounds.MinLonDegs, (float)tileInfo.TileLLBounds.MaxLonDegs,
+                    (float)tileInfo.TileLLBounds.MinLatDegs, (float)tileInfo.TileLLBounds.MaxLatDegs,
+                    5f, 0.000016f, 4.5f,
+                    croppedArraySubSample
+                ); //bool flipTriangles = false)
+            }
+            ArrayMesh meshData = meshBuilder.BuildWithUV(tileInfo.TileCode);
+
+            if (saveMesh)
+            {
+                // Save the mesh to a file
+                FssMeshDataIO.WriteMeshToFile(meshBuilder.meshData, meshFilePath);
+                FssCentralLog.AddEntry($"Saved mesh: {meshFilePath}");
+            }
 
             return meshData;
         });
@@ -133,7 +154,7 @@ public partial class FssMapManager : Node3D
 
     private void DebugWedge()
     {
-        FssFloat2DArray eleArray = new FssFloat2DArray(500, 500);
+        FssFloat2DArray eleArray = new FssFloat2DArray(50, 50);
         eleArray.SetAllVals(0.001f);
 
         var meshBuilder = new FssMeshBuilder();
