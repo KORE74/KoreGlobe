@@ -40,7 +40,7 @@ public partial class FssTestRoute : Node3D
             Vector3 pointdiff = topoint - point;
 
             // Add sphere for the current point
-            MeshInstance3D childSphere = FssPrimitiveFactory.CreateSphere(point, 0.01f, new Color(.5f, 1f, .5f, 1f));
+            MeshInstance3D childSphere = FssPrimitiveFactory.CreateGodotSphere(point, 0.01f, new Color(.5f, 1f, .5f, 1f));
             AddChild(childSphere);
             childSphere.Name = $"Sphere{i:D2}";
 

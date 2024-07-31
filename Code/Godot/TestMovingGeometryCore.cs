@@ -15,6 +15,12 @@ public partial class TestMovingGeometryCore : Node3D
     Node3D ModelResourceNode;
     Node3D TrailNode;
 
+    Node3D TestNode;
+    Node3D TestNodeAhead;
+    Node3D TestNodeAbove;
+
+
+
     MeshInstance3D LinkCylinderMesh;
     MeshInstance3D LinkCylinderWire;
 
@@ -25,6 +31,7 @@ public partial class TestMovingGeometryCore : Node3D
     Material matWire;
 
     private float MarkerSize  = 0.2f;
+    private bool  WithWire = true;
 
     private float AnimAzDegs  = 0f;
     private float AnimElDegs  = 0f;
@@ -53,13 +60,11 @@ public partial class TestMovingGeometryCore : Node3D
 
         matColorRed    = FssMaterialFactory.SimpleColoredMaterial(new Color(0.9f, 0.3f, 0.3f, 1f));
         matColorBlue   = FssMaterialFactory.SimpleColoredMaterial(new Color(0.3f, 0.3f, 0.9f, 1f));
-        matColorYellow = FssMaterialFactory.SimpleColoredMaterial(new Color(0.8f, 0.8f, 0.3f, 1f));
+        matColorYellow = FssMaterialFactory.SimpleColoredMaterial(FssColorUtil.Colors["OffYellow"]);
         matColorWhite  = FssMaterialFactory.SimpleColoredMaterial(new Color(1f, 1f, 1f, 1f));
         matWire        = FssMaterialFactory.WireframeWhiteMaterial();
 
         CreateCoreNode();
-        CreateFocusNode();
-        CreateZeroNode();
         CreateLinkCylinder();
 
         CreatePlatform();
@@ -109,76 +114,41 @@ public partial class TestMovingGeometryCore : Node3D
 
     private void CreateCoreNode()
     {
-        // Create the core node
-        CoreNode = new Node3D() { Name = "CoreNode" };
+        CoreNode = FssPrimitiveFactory.CreateSphereNode("CoreNode", new Vector3(0f, 0f, 0f), MarkerSize, FssColorUtil.Colors["OffBlue"], WithWire);
         AddChild(CoreNode);
 
-        // Add sphere for the core point
-        FssMeshBuilder meshBuilder = new FssMeshBuilder();
-        meshBuilder.AddSphere(Vector3.Zero, MarkerSize, 16);
-        ArrayMesh meshData = meshBuilder.Build2("Sphere", false);
-
-        MeshInstance3D meshInstance    = new MeshInstance3D() { Name = "Color" };
-        meshInstance.Mesh              = meshData;
-        meshInstance.MaterialOverride  = matColorBlue;
-
-        MeshInstance3D meshInstanceW   = new MeshInstance3D() { Name = "Wire" };
-        meshInstanceW.Mesh             = meshData;
-        meshInstanceW.MaterialOverride = matWire;
-
-        CoreNode.AddChild(meshInstance);
-        CoreNode.AddChild(meshInstanceW);
-
-        // Attach the script to the core node
-        CoreNode.AddChild(new TestEarthCore((float)FssEarthCore.EarthRadiusM));
-
-        CoreNode.AddChild(new TestLabelMaker());
-    }
-
-    private void CreateFocusNode()
-    {
-        // Create the focus point node
-        FocusPointNode = new Node3D() { Name = "FocusPointNode" };
+        FocusPointNode = FssPrimitiveFactory.CreateSphereNode("FocusPointNode", new Vector3(0f, 0f, 0f), MarkerSize, FssColorUtil.Colors["OffYellow"], WithWire);
         AddChild(FocusPointNode);
 
-        // Add sphere for the core point
-        FssMeshBuilder meshBuilder = new FssMeshBuilder();
-        meshBuilder.AddSphere(Vector3.Zero, MarkerSize, 16);
-        ArrayMesh meshData = meshBuilder.Build2("Sphere", false);
-
-        MeshInstance3D meshInstance    = new MeshInstance3D() { Name = "Color" };
-        meshInstance.Mesh              = meshData;
-        meshInstance.MaterialOverride  = matColorYellow;
-
-        MeshInstance3D meshInstanceW   = new MeshInstance3D() { Name = "Wire" };
-        meshInstanceW.Mesh             = meshData;
-        meshInstanceW.MaterialOverride = matWire;
-
-        FocusPointNode.AddChild(meshInstance);
-        FocusPointNode.AddChild(meshInstanceW);
-    }
-
-    private void CreateZeroNode()
-    {
-        // Create the focus point node
-        ZeroNode = new Node3D() { Name = "ZeroNode" };
+        ZeroNode = FssPrimitiveFactory.CreateSphereNode("ZeroNode", new Vector3(0f, 0f, 0f), MarkerSize, FssColorUtil.Colors["OffRed"], WithWire);
         AddChild(ZeroNode);
 
-        // Add sphere for the core point
-        FssMeshBuilder meshBuilder = new FssMeshBuilder();
-        meshBuilder.AddSphere(Vector3.Zero, MarkerSize, 16);
-        ArrayMesh meshData = meshBuilder.Build2("Sphere", false);
 
-        MeshInstance3D meshInstance    = new MeshInstance3D() { Name = "Color" };
-        meshInstance.Mesh              = meshData;
-        meshInstance.MaterialOverride  = matColorRed;
+        {
+            Node3D tempNode1 = FssPrimitiveFactory.CreateSphereNode("tempNode1", new Vector3(0f, 1f, 0f), MarkerSize/3, FssColorUtil.Colors["Magenta"], WithWire);
+            FocusPointNode.AddChild(tempNode1);
 
-        MeshInstance3D meshInstanceW   = new MeshInstance3D() { Name = "Wire" };
-        meshInstanceW.Mesh             = meshData;
-        meshInstanceW.MaterialOverride = matWire;
+            Node3D tempNode2 = FssPrimitiveFactory.CreateSphereNode("tempNode2", new Vector3(0f, 2f, 0f), MarkerSize/3, FssColorUtil.Colors["Magenta"], WithWire);
+            FocusPointNode.AddChild(tempNode2);
 
-        ZeroNode.AddChild(meshInstance);
-        ZeroNode.AddChild(meshInstanceW);
+            Node3D tempNode3 = FssPrimitiveFactory.CreateSphereNode("tempNode3", new Vector3(1f, 1f, 0f), MarkerSize/3, FssColorUtil.Colors["Magenta"], WithWire);
+            FocusPointNode.AddChild(tempNode3);
+        }
+
+        {
+            TestNode = FssPrimitiveFactory.CreateSphereNode("TestNode", Vector3.Zero, MarkerSize/3, FssColorUtil.Colors["Yellow"], WithWire);
+            FocusPointNode.AddChild(TestNode);
+
+            TestNodeAbove = FssPrimitiveFactory.CreateSphereNode("TestNodeAbove", Vector3.Zero, MarkerSize/3, FssColorUtil.Colors["Yellow"], WithWire);
+            FocusPointNode.AddChild(TestNodeAbove);
+
+            TestNodeAhead = FssPrimitiveFactory.CreateSphereNode("TestNodeAhead", Vector3.Zero, MarkerSize/3, FssColorUtil.Colors["Yellow"], WithWire);
+            FocusPointNode.AddChild(TestNodeAhead);
+        }
+
+
+        CoreNode.AddChild(new TestEarthCore((float)FssEarthCore.EarthRadiusM));
+        CoreNode.AddChild(new TestLabelMaker());
     }
 
     private void CreateLinkCylinder()
@@ -205,12 +175,14 @@ public partial class TestMovingGeometryCore : Node3D
         float radius = MarkerSize * 0.5f;
 
         FssMeshBuilder meshBuilder = new FssMeshBuilder();
-        meshBuilder.AddCylinder(Vector3.Zero, pointdiff, radius, radius, 12, true);
-        ArrayMesh meshData = meshBuilder.Build2("Cylinder", false);
+        meshBuilder.AddCylinder(Vector3.Zero, pointdiff, radius, radius, 12, false);
+        ArrayMesh meshData = meshBuilder.Build2("LinkCylinder", false);
 
+        // Mesh
         LinkCylinderMesh.Position = frompoint;
         LinkCylinderMesh.Mesh     = meshData;
 
+        // Wireframe
         LinkCylinderWire.Position = frompoint;
         LinkCylinderWire.Mesh     = meshData;
     }
@@ -219,6 +191,10 @@ public partial class TestMovingGeometryCore : Node3D
     {
         CoreNode.Position       = FssEarthCore.CorePos;
         FocusPointNode.Position = FssEarthCore.FocusPos;
+
+        // Ensure the core and focus point rotations are zero
+        CoreNode.Rotation       = new Vector3(0f, 0f, 0f);
+        FocusPointNode.Rotation = new Vector3(0f, 0f, 0f);
     }
 
     // --------------------------------------------------------------------------------------------
@@ -262,7 +238,6 @@ public partial class TestMovingGeometryCore : Node3D
 
             PlaformBaseNode.AddChild(ModelResourceNode);
             ModelResourceNode.Scale    = new Vector3(0.25f, 0.25f, 0.25f); // Set the model scale
-            //ModelResourceNode.Scale    = new Vector3(0.005f, 0.005f, 0.005f); // Set the model scale
             ModelResourceNode.Position = new Vector3(0f, 0f, 0f); // Set the model position
         }
     }
@@ -278,7 +253,34 @@ public partial class TestMovingGeometryCore : Node3D
     {
         FssRWPlatformPositions rwStruct = FssGeoConvOperations.RealWorldStruct(PlatformPos, PlatformCourse);
 
-        PlaformBaseNode.LookAtFromPosition(rwStruct.vecPos, rwStruct.vecForward, rwStruct.vecUp);
+        // PlaformBaseNode.Position = rwStruct.vecPos;
+        // PlaformBaseNode.LookAt(rwStruct.vecPosAhead, rwStruct.vecPosAbove, true);
+
+        // Place the yellow nodes - local co-ordinate system to the focus node.
+        TestNode.Position      = rwStruct.vecPos;
+        TestNodeAbove.Position = rwStruct.vecPosAbove;
+        TestNodeAhead.Position = rwStruct.vecPosAhead;
+
+        // Vector3 pos   = new Vector3(0f, 1f, 0f);
+        // Vector3 ahead = new Vector3(0f, 2f, 0f);
+        // Vector3 above = new Vector3(1f, 1f, 0f);
+
+        Vector3 adjustedPos   = rwStruct.vecPos + FssEarthCore.FocusPos;
+        Vector3 adjustedAhead = ToGlobal(rwStruct.vecPosAhead + FssEarthCore.FocusPos);
+        Vector3 adjustedAbove = ToGlobal(rwStruct.vecPosAbove + FssEarthCore.FocusPos);
+
+        // ahead += FssEarthCore.FocusPos;
+        // above += FssEarthCore.FocusPos;
+
+        PlaformBaseNode.Position = adjustedPos;
+        PlaformBaseNode.LookAt(adjustedAhead, adjustedAbove, true);
+
+        PlaformBaseNode.LookAtFromPosition(
+            adjustedPos,
+            adjustedAhead,
+            adjustedAbove,
+            true);
+
     }
 
 }

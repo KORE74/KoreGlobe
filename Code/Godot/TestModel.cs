@@ -183,7 +183,7 @@ public partial class TestModel : Node3D
                 }
 
                 // Create a new sphere at the current position, and the ID
-                Node3D childSphere = FssPrimitiveFactory.CreateSphere(Vector3.Zero, 0.005f, new Color(0.9f, 0.9f, 0.9f, 1f));
+                Node3D childSphere = FssPrimitiveFactory.CreateGodotSphere(Vector3.Zero, 0.005f, new Color(0.9f, 0.9f, 0.9f, 1f));
                 childSphere.Name = $"{randomString}{nextId}";
                 TrailNode.AddChild(childSphere);
                 childSphere.Name = nextId;
