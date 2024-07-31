@@ -1,10 +1,11 @@
-[gd_scene load_steps=12 format=3 uid="uid://dg74mauvh8v5g"]
+[gd_scene load_steps=13 format=3 uid="uid://dg74mauvh8v5g"]
 
 [ext_resource type="Script" path="res://Code/Godot/Map/FssMapManager.cs" id="1_ohteg"]
 [ext_resource type="Script" path="res://Code/Godot/Util/FssCameraMover.cs" id="2_in7jt"]
 [ext_resource type="Material" uid="uid://cj5ibgakd4o85" path="res://Materials/Water_002.tres" id="3_ku5a4"]
 [ext_resource type="Texture2D" uid="uid://dcrr1ey2k0e1q" path="res://Resources/Misc/_0003_AllSkyFree_Screen_06.jpg" id="4_4wccw"]
 [ext_resource type="PackedScene" uid="uid://dqf60j3gnw1yb" path="res://Resources/Models/Ship/GenericSupportShip/GenericSupportShip.glb" id="4_nf0qu"]
+[ext_resource type="PackedScene" uid="uid://0hd7yk6ln67x" path="res://Resources/Models/Ship/GenericSmallShip/GenericSmallShip.glb" id="4_rtpvt"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_xowxg"]
 subdivide_width = 100
@@ -64,6 +65,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.23935, -1.37529, 0)
 material_override = ExtResource("3_ku5a4")
 mesh = SubResource("SphereMesh_el2sr")
 
+[node name="GenericSmallShip" parent="ZeroPoint" instance=ExtResource("4_rtpvt")]
+transform = Transform3D(0.0119689, 0, -0.00086361, 0, 0.012, 0, 0.00086361, 0, 0.0119689, -1.90061, -0.538613, 0.26439)
+
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.720975, 0.692962, 0, -0.692962, 0.720975, 0, 9.90914, 8.97345)
 
@@ -72,4 +76,4 @@ environment = SubResource("Environment_fn6fc")
 compositor = SubResource("Compositor_urr5b")
 
 [node name="GenericSupportShip" parent="." instance=ExtResource("4_nf0qu")]
-transform = Transform3D(0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, -2.94183, -0.521624, 0.42705)
+transform = Transform3D(0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, -2.94183, -0.521624, -0.581938)
