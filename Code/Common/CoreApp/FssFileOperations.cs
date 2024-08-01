@@ -63,5 +63,26 @@ public static class FssFileOperations
     {
         return filenames.OrderBy(filename => filename).ToList();
     }
+
+    // The standard Path.Combinbe can introduce a backslash "\" character.
+    // This version with will:
+    // - check for a backslah on the end of first or begoinning of the second path, removing it.
+    // - Join the to paths toegether with a forward slash.
+    //
+    // Usage example: FssFileOperations.JoinPaths("C:/Users/User/Documents", "file.txt");
+    //
+    public static string JoinPaths(string path1, string path2)
+    {
+        string normalizedPath1 = StandardizePath(path1);
+        string normalizedPath2 = StandardizePath(path2);
+
+        if (normalizedPath1.EndsWith("/"))
+            normalizedPath1 = normalizedPath1.Substring(0, normalizedPath1.Length - 1);
+
+        if (normalizedPath2.StartsWith("/"))
+            normalizedPath2 = normalizedPath2.Substring(1);
+
+        return $"{normalizedPath1}/{normalizedPath2}";
+    }
 }
 

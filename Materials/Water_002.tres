@@ -9,8 +9,8 @@ fractal_type = 2
 fractal_octaves = 7
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_rron3"]
-width = 4096
-height = 4096
+width = 256
+height = 256
 invert = true
 seamless = true
 seamless_blend_skirt = 0.301
@@ -25,8 +25,8 @@ fractal_type = 2
 fractal_octaves = 10
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_6qo8g"]
-width = 4096
-height = 4096
+width = 256
+height = 256
 seamless = true
 seamless_blend_skirt = 0.37
 as_normal_map = true

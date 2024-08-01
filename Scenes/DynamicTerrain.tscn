@@ -1,18 +1,10 @@
-[gd_scene load_steps=13 format=3 uid="uid://dg74mauvh8v5g"]
+[gd_scene load_steps=9 format=3 uid="uid://dg74mauvh8v5g"]
 
 [ext_resource type="Script" path="res://Code/Godot/Map/FssMapManager.cs" id="1_ohteg"]
 [ext_resource type="Script" path="res://Code/Godot/Util/FssCameraMover.cs" id="2_in7jt"]
-[ext_resource type="Material" uid="uid://cj5ibgakd4o85" path="res://Materials/Water_002.tres" id="3_ku5a4"]
 [ext_resource type="Texture2D" uid="uid://dcrr1ey2k0e1q" path="res://Resources/Misc/_0003_AllSkyFree_Screen_06.jpg" id="4_4wccw"]
-[ext_resource type="PackedScene" uid="uid://dqf60j3gnw1yb" path="res://Resources/Models/Ship/GenericSupportShip/GenericSupportShip.glb" id="4_nf0qu"]
-[ext_resource type="PackedScene" uid="uid://0hd7yk6ln67x" path="res://Resources/Models/Ship/GenericSmallShip/GenericSmallShip.glb" id="4_rtpvt"]
 
-[sub_resource type="QuadMesh" id="QuadMesh_xowxg"]
-subdivide_width = 100
-subdivide_depth = 100
-orientation = 1
-
-[sub_resource type="SphereMesh" id="SphereMesh_el2sr"]
+[sub_resource type="SphereMesh" id="SphereMesh_4oqdk"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_ia0su"]
 panorama = ExtResource("4_4wccw")
@@ -22,8 +14,9 @@ filter = false
 sky_material = SubResource("PanoramaSkyMaterial_ia0su")
 
 [sub_resource type="Environment" id="Environment_fn6fc"]
-background_mode = 2
+background_mode = 1
 background_color = Color(0.715415, 0.907309, 1, 1)
+background_energy_multiplier = 0.6
 sky = SubResource("Sky_l5nif")
 ambient_light_color = Color(0.627354, 0.749438, 0.997119, 1)
 reflected_light_source = 2
@@ -42,17 +35,12 @@ fog_sky_affect = 0.155
 script = ExtResource("1_ohteg")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(-0.0770169, -0.22257, 0.97187, -0.0175827, 0.974917, 0.221874, -0.996875, -7.34311e-09, -0.0789984, 6.18083, 2.39519, -0.28144)
+transform = Transform3D(-0.0770169, -0.22257, 0.97187, -0.0175827, 0.974917, 0.221874, -0.996875, -2.05533e-08, -0.0789984, 10.4234, 7.90567, -1.21029)
 fov = 40.0
 script = ExtResource("2_in7jt")
 
 [node name="ZeroPoint" type="MeshInstance3D" parent="."]
-
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="ZeroPoint"]
-transform = Transform3D(8, 0, 0, 0, 8, 0, 0, 0, 8, 0, -0.534468, -0.296645)
-cast_shadow = 0
-mesh = SubResource("QuadMesh_xowxg")
-surface_material_override/0 = ExtResource("3_ku5a4")
+mesh = SubResource("SphereMesh_4oqdk")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="ZeroPoint"]
 transform = Transform3D(1, 0, 0, 0, 0.552126, 0.833761, 0, -0.833761, 0.552126, 0, 0.997802, 4.60982)
@@ -60,20 +48,9 @@ transform = Transform3D(1, 0, 0, 0, 0.552126, 0.833761, 0, -0.833761, 0.552126, 
 [node name="OmniLight3D" type="OmniLight3D" parent="ZeroPoint"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.534964, 0)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="ZeroPoint"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.23935, -1.37529, 0)
-material_override = ExtResource("3_ku5a4")
-mesh = SubResource("SphereMesh_el2sr")
-
-[node name="GenericSmallShip" parent="ZeroPoint" instance=ExtResource("4_rtpvt")]
-transform = Transform3D(0.0119689, 0, -0.00086361, 0, 0.012, 0, 0.00086361, 0, 0.0119689, -1.90061, -0.538613, 0.26439)
-
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.720975, 0.692962, 0, -0.692962, 0.720975, 0, 9.90914, 8.97345)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_fn6fc")
 compositor = SubResource("Compositor_urr5b")
-
-[node name="GenericSupportShip" parent="." instance=ExtResource("4_nf0qu")]
-transform = Transform3D(0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, -2.94183, -0.521624, -0.581938)

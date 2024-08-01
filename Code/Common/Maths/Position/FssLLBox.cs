@@ -36,6 +36,11 @@ public struct FssLLBox
 
     // ------------------------------------------------------------------------
 
+    public double MidLatDegs => (MinLatDegs + MaxLatDegs) / 2.0;
+    public double MidLonDegs => (MinLonDegs + MaxLonDegs) / 2.0;
+
+    // ------------------------------------------------------------------------
+
     public double DeltaLatRads
     {
         get { return MaxLatRads - MinLatRads; }

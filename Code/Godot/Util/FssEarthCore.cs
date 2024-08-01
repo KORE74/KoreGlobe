@@ -2,6 +2,7 @@ using Godot;
 
 public static class FssEarthCore
 {
+    // FssEarthCore.EarthRadiusM
     public static double EarthRadiusM    = 10;
     public static double backoffFraction = 0.05;
 

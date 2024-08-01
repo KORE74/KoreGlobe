@@ -4,5 +4,6 @@
   "TcpIpServerAddr": "127.0.0.12",
   "TcpIpServerPort": 10003,
   "TcpIpClientAddr": "127.0.0.13",
-  "TcpIpClientPort": 10005
+  "TcpIpClientPort": 10005,
+  "MapRootPath": "C:/Util/Godot/MapLib"
 }
