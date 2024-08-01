@@ -21,8 +21,15 @@ public partial class FssMapTileNode : Node3D
 
     FssMapTileCode TileCode;
 
+    private float UIUpdateTimer = 0.0f;
+
     // Property to get the loaded texture
     public StandardMaterial3D LoadedMaterial => _material;
+
+    List<FssMapTileNode> ChildTiles = new();
+
+    private MeshInstance3D MeshInstance  = new MeshInstance3D();
+    private MeshInstance3D MeshInstanceW = new MeshInstance3D();
 
     // --------------------------------------------------------------------------------------------
 
@@ -37,7 +44,6 @@ public partial class FssMapTileNode : Node3D
         Name = tileCode.ToString();
 
         FssCentralLog.AddEntry($"Creating FssMapTileNode for {tileCode}");
-
     }
 
     // --------------------------------------------------------------------------------------------
@@ -76,6 +82,17 @@ public partial class FssMapTileNode : Node3D
             {
                 FssCentralLog.AddEntry("Creating subtiles for BG");
                 CreateSubtileNodes();
+            }
+        }
+
+
+        if (UIUpdateTimer < FssCoreTime.RuntimeSecs)
+        {
+            UIUpdateTimer = FssCoreTime.RuntimeSecs + 1f;
+
+            if ( AreChildTilesLoaded() )
+            {
+                SetChildrenVisibility(true);
             }
         }
     }
@@ -229,15 +246,16 @@ public partial class FssMapTileNode : Node3D
         };
 
         // Add the mesh instances to the current Node3D
-        // var meshInstanceW = new MeshInstance3D { Name = $"{tileCodeName} wire" };
-        // meshInstanceW.Mesh = meshData;
-        // meshInstanceW.MaterialOverride = FssMaterialFactory.WireframeWhiteMaterial();
-        // AddChild(meshInstanceW);
+        // MeshInstanceW = new MeshInstance3D { Name = $"{tileCodeName} wire" };
+        // MeshInstanceW.Mesh = meshData;
+        // MeshInstanceW.MaterialOverride = FssMaterialFactory.WireframeWhiteMaterial();
+        // AddChild(MeshInstanceW);
 
-        var meshInstance = new MeshInstance3D { Name = $"{tileCodeName} image" };
-        meshInstance.Mesh = meshData;
-        meshInstance.MaterialOverride = material;
-        AddChild(meshInstance);
+        MeshInstance = new MeshInstance3D { Name = $"{tileCodeName} image" };
+        MeshInstance.Mesh = meshData;
+        MeshInstance.MaterialOverride = material;
+        MeshInstance.Visible = false;
+        AddChild(MeshInstance);
 
         // Set the done flag
         _isDone = true;
@@ -294,36 +312,49 @@ public partial class FssMapTileNode : Node3D
             // Create a new node
             FssMapTileNode childTile = new FssMapTileNode(currTileCode);
             AddChild(childTile);
+
+            ChildTiles.Add(childTile);
         }
     }
 
     // Get the list of child tile names, then loop through, finding these nodes, and querying their IsDone property
     private bool AreChildTilesLoaded()
     {
-        // Compile the list of child node names.
-        List<FssMapTileCode> childTileCodes = TileCode.ChildCodesList();
+        // return false if there are no child tiles
+        if (ChildTiles.Count == 0)
+            return false;
 
         // Loop through the list of child node names, and query the IsDone property of each node.
-        foreach (FssMapTileCode currTileCode in childTileCodes)
+        foreach (FssMapTileNode currTile in ChildTiles)
         {
-            string tileName = currTileCode.ToString();
-            Node node = GetNode(tileName);
-            if (node is FssMapTileNode childTile)
+            // Query the IsDone property of the node
+            if (!currTile.IsDone)
             {
-                // Query the IsDone property of the node
-                if (!childTile.IsDone)
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                // The node doesn't exist, so we can't query the IsDone property
                 return false;
             }
         }
 
         // Return true, we've not found any false criteria in the search
         return true;
+    }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Visibility
+    // --------------------------------------------------------------------------------------------
+
+    private void SetVisibility(bool visible)
+    {
+        if (MeshInstance != null)
+            MeshInstance.Visible = visible;
+    }
+
+    private void SetChildrenVisibility(bool visible)
+    {
+        SetVisibility(!visible);
+        foreach (FssMapTileNode currTile in ChildTiles)
+        {
+            currTile.SetVisibility(visible);
+
+        }
     }
 }
