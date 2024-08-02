@@ -31,6 +31,9 @@ public partial class FssMapTileNode : Node3D
     private MeshInstance3D MeshInstance  = new MeshInstance3D();
     private MeshInstance3D MeshInstanceW = new MeshInstance3D();
 
+    public bool IntendedVisibility = false;
+    FssXYZPoint RwTileCenterXYZ = new FssXYZPoint(0, 0, 0);
+
     // --------------------------------------------------------------------------------------------
 
     // Constructor to initialize the texture path and start loading
@@ -42,6 +45,8 @@ public partial class FssMapTileNode : Node3D
         TileCode = tileCode;
 
         Name = tileCode.ToString();
+
+        RwTileCenterXYZ = FssMapTileCode.LLBoxForCode(tileCode).CenterPoint().ToXYZ();
 
         FssCentralLog.AddEntry($"Creating FssMapTileNode for {tileCode}");
     }
@@ -254,7 +259,7 @@ public partial class FssMapTileNode : Node3D
         MeshInstance = new MeshInstance3D { Name = $"{tileCodeName} image" };
         MeshInstance.Mesh = meshData;
         MeshInstance.MaterialOverride = material;
-        MeshInstance.Visible = false;
+        MeshInstance.Visible = IntendedVisibility;
         AddChild(MeshInstance);
 
         // Set the done flag
@@ -339,6 +344,20 @@ public partial class FssMapTileNode : Node3D
     }
 
     // --------------------------------------------------------------------------------------------
+    // MARK: Delete Subtiles
+    // --------------------------------------------------------------------------------------------
+
+    void DeleteSubtileNodes()
+    {
+        // Assume visibility is already set to false
+        foreach (FssMapTileNode currTile in ChildTiles)
+        {
+            currTile.QueueFree();
+        }
+        ChildTiles.Clear();
+    }
+
+    // --------------------------------------------------------------------------------------------
     // MARK: Visibility
     // --------------------------------------------------------------------------------------------
 
@@ -357,4 +376,28 @@ public partial class FssMapTileNode : Node3D
 
         }
     }
+
+    private void UpdateVisbilityRules()
+    {
+        // determine distance from the global focus point.
+        // if the distance is less than a certain value, set the visibility to true
+        // if the distance is greater than a certain value, set the visibility to false
+        // if the distance is short, endeavour to create aand load child tiles.
+        // if greater than a larger value, delete any child nodes to free resources.
+
+        float distanceFraction = (float)( RwTileCenterXYZ.DistanceTo(FssEarthCore.RwFocusXYZ) / FssEarthCore.EarthRadiusM );
+
+        // Distance judged in multiples of radius, to accomodate smaller worlds while debugging
+
+        float[] DisplayTileForLvl      = { 1f,   0.5f, 0.3f, 0.1f,    0.001f };
+        float[] CreateChildTilesForLvl = { 0.5f, 0.3f, 0.1f, 0.001f , 0.00001f};
+        float[] DeleteChildTilesForLvl = { 0.8f, 0.6f, 0.2f, 0.002f , 0.00002f};
+
+        if (distanceFraction < CreateChildTilesForLvl[TileCode.MapLvl])
+        {
+            CreateSubtileNodes();
+        }
+
+    }
+
 }

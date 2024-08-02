@@ -55,6 +55,7 @@ public partial class FssMapManager : Node3D
                 // };
 
                 FssMapTileNode newChildTile = new FssMapTileNode(currTileCode);
+                newChildTile.IntendedVisibility = true;
                 AddChild(newChildTile);
 
                 // LoadTile2(tileInfo);

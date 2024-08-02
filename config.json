@@ -5,7 +5,7 @@
   "TcpIpServerPort": 10003,
   "TcpIpClientAddr": "127.0.0.13",
   "TcpIpClientPort": 10005,
-  "MapRootPath3": "E:/Data/03-CodeProjects/24-GodotProjects/Maps",
-  "MapRootPath2": "C:/Util/Godot/MapLib",
-  "MapRootPath": "C:/Util/Data/FssLibrary/Maps"
+  "MapRootPath2": "E:/Data/03-CodeProjects/24-GodotProjects/Maps",
+  "MapRootPath": "C:/Util/Godot/MapLib",
+  "MapRootPath3": "C:/Util/Data/FssLibrary/Maps"
 }
