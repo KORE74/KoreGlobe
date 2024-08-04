@@ -68,6 +68,19 @@ public static class FssGeoConvOperations
     }
 
     // --------------------------------------------------------------------------------------------
+
+    public static FssXYZPoint GodotToRealWorld(Vector3 godotPos)
+    {
+        float x = godotPos.X;
+        float y = godotPos.Y;
+        float z = godotPos.Z;
+
+        z *= -1.0f;
+
+        return new FssXYZPoint(x, y, z);
+    }
+
+    // --------------------------------------------------------------------------------------------
     // MARK: Focus Point Conversion
     // --------------------------------------------------------------------------------------------
 

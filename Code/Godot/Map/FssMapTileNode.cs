@@ -95,9 +95,9 @@ public partial class FssMapTileNode : Node3D
         {
             UIUpdateTimer = FssCoreTime.RuntimeSecs + 1f;
 
-            if ( AreChildTilesLoaded() )
+            if (TileCode.ToString() == "BG")
             {
-                SetChildrenVisibility(true);
+                UpdateVisbilityRules();
             }
         }
     }
@@ -234,6 +234,12 @@ public partial class FssMapTileNode : Node3D
 
         FssCentralLog.AddEntry($"Looking for image file: {imageFilePath}");
 
+        // Check if the image file exists
+        if (!File.Exists(imageFilePath))
+        {
+            FssCentralLog.AddEntry($"Failed to location map tile image: {imageFilePath}");
+            return;
+        }
 
         var image = new Image();
         //var err = image.Load(imageFilePath);
@@ -322,6 +328,11 @@ public partial class FssMapTileNode : Node3D
         }
     }
 
+    private bool DoChildTilesExist()
+    {
+        return ChildTiles.Count > 0;
+    }
+
     // Get the list of child tile names, then loop through, finding these nodes, and querying their IsDone property
     private bool AreChildTilesLoaded()
     {
@@ -387,17 +398,39 @@ public partial class FssMapTileNode : Node3D
 
         float distanceFraction = (float)( RwTileCenterXYZ.DistanceTo(FssEarthCore.RwFocusXYZ) / FssEarthCore.EarthRadiusM );
 
+
+
         // Distance judged in multiples of radius, to accomodate smaller worlds while debugging
 
         float[] DisplayTileForLvl      = { 1f,   0.5f, 0.3f, 0.1f,    0.001f };
         float[] CreateChildTilesForLvl = { 0.5f, 0.3f, 0.1f, 0.001f , 0.00001f};
         float[] DeleteChildTilesForLvl = { 0.8f, 0.6f, 0.2f, 0.002f , 0.00002f};
 
-        if (distanceFraction < CreateChildTilesForLvl[TileCode.MapLvl])
+        bool shouldDisplayChildTiles = distanceFraction < DisplayTileForLvl[TileCode.MapLvl];
+        bool shouldCreateChildTiles  = distanceFraction < CreateChildTilesForLvl[TileCode.MapLvl];
+        bool shouldDeleteChildTiles  = distanceFraction > DeleteChildTilesForLvl[TileCode.MapLvl];
+        bool childTilesExist         = DoChildTilesExist();
+        bool childTilesLoaded        = AreChildTilesLoaded();
+
+        GD.Print($"Tile: {TileCode} Distance: {distanceFraction} Display: {shouldDisplayChildTiles} Create: {shouldCreateChildTiles} Delete: {shouldDeleteChildTiles}");
+
+
+        if (!childTilesExist && shouldCreateChildTiles)
         {
             CreateSubtileNodes();
         }
 
+        if (childTilesExist)
+        {
+            if (shouldDisplayChildTiles && childTilesLoaded)
+            {
+                SetChildrenVisibility(true);
+            }
+            else
+            {
+                SetChildrenVisibility(false);
+            }
+        }
     }
 
 }

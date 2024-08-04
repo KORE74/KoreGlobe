@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://dg74mauvh8v5g"]
 
 [ext_resource type="Script" path="res://Code/Godot/Map/FssMapManager.cs" id="1_ohteg"]
-[ext_resource type="Script" path="res://Code/Godot/Util/FssCameraMover.cs" id="2_in7jt"]
+[ext_resource type="Script" path="res://Code/Godot/Util/FssCameraMoverWorld.cs" id="2_x8bdw"]
 [ext_resource type="Texture2D" uid="uid://dcrr1ey2k0e1q" path="res://Resources/Misc/_0003_AllSkyFree_Screen_06.jpg" id="4_4wccw"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_4oqdk"]
@@ -37,7 +37,7 @@ script = ExtResource("1_ohteg")
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(-0.0770169, -0.22257, 0.97187, -0.0175827, 0.974917, 0.221874, -0.996875, -2.05533e-08, -0.0789984, 10.4234, 7.90567, -1.21029)
 fov = 40.0
-script = ExtResource("2_in7jt")
+script = ExtResource("2_x8bdw")
 
 [node name="ZeroPoint" type="MeshInstance3D" parent="."]
 mesh = SubResource("SphereMesh_4oqdk")
