@@ -6,6 +6,7 @@
   "TcpIpClientAddr": "127.0.0.13",
   "TcpIpClientPort": 10005,
   "MapRootPath2": "E:/Data/03-CodeProjects/24-GodotProjects/Maps",
-  "MapRootPath3": "C:/Util/Godot/MapLib",
-  "MapRootPath": "C:/Util/Data/GitRepos/Globe4-Maps/MapLib"
+  "MapRootPath4": "C:/Util/Godot/MapLib",
+  "MapRootPath3": "C:/Util/Data/GitRepos/Globe4-Maps/MapLib",
+  "MapRootPath": "C:/Util/Godot/Globe4_Maps/Alternative/Moon"
 }

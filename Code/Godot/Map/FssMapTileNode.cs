@@ -163,8 +163,8 @@ public partial class FssMapTileNode : Node3D
         FssCentralLog.AddEntry($"Looking for elevation file: {eleFilePath}");
         FssCentralLog.AddEntry($"Looking for mesh file: {meshFilePath}");
 
-        eleFilePath  = FssGodotFileUtil.GetActualPath(eleFilePath);
-        meshFilePath = FssGodotFileUtil.GetActualPath(meshFilePath);
+        eleFilePath   = FssGodotFileUtil.GetActualPath(eleFilePath);
+        meshFilePath  = FssGodotFileUtil.GetActualPath(meshFilePath);
 
         bool loadEle  = File.Exists(eleFilePath);
         bool loadMesh = File.Exists(meshFilePath);
@@ -183,8 +183,8 @@ public partial class FssMapTileNode : Node3D
             {
                 // Load the elevation data
                 FssFloat2DArray asciiArcArry = FssFloat2DArrayIO.LoadFromArcASIIGridFile(eleFilePath);
-                FssFloat2DArray croppedArray = FssFloat2DArrayOperations.CropToRange(asciiArcArry, new FssFloatRange(0f, 10000f));
-                FssFloat2DArray croppedArraySubSample = croppedArray.GetInterpolatedGrid(60, 60);
+                FssFloat2DArray croppedArray = FssFloat2DArrayOperations.CropToRange(asciiArcArry, new FssFloatRange(0f, 50000f));
+                FssFloat2DArray croppedArraySubSample = croppedArray.GetInterpolatedGrid(300, 300);
 
                 FssLLBox tileBounds = FssMapTileCode.LLBoxForCode(tileCode);
 
@@ -192,13 +192,13 @@ public partial class FssMapTileNode : Node3D
                 meshBuilder.AddSurface(
                     (float)tileBounds.MinLonDegs, (float)tileBounds.MaxLonDegs,
                     (float)tileBounds.MinLatDegs, (float)tileBounds.MaxLatDegs,
-                    (float)FssEarthCore.EarthRadiusM, 0.000016f,
+                    (float)FssEarthCore.EarthRadiusM, 0.000006f,
                     croppedArraySubSample
                 );
                 meshBuilder.AddSurfaceWedgeSides(
                     (float)tileBounds.MinLonDegs, (float)tileBounds.MaxLonDegs,
                     (float)tileBounds.MinLatDegs, (float)tileBounds.MaxLatDegs,
-                    (float)FssEarthCore.EarthRadiusM, 0.000016f, 4.5f,
+                    (float)FssEarthCore.EarthRadiusM, 0.000006f, 4.5f,
                     croppedArraySubSample
                 ); //bool flipTriangles = false)
             }
