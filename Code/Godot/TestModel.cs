@@ -7,9 +7,7 @@ using Godot;
 public partial class TestModel : Node3D
 {
     [Export]
-    public string ModelPath = "res://Resources/Plane_Paper/PaperPlanes_v002.glb";
-    //public string ModelPath = "res://Resources/FA-18F_v02.glb";
-
+    public string ModelPath = "res://Resources/Models/Plane/Plane_Paper/PaperPlanes_v002.glb";
 
     Node? CoreNode;
     FssLLAPoint PrevPos = new FssLLAPoint() { LatDegs = 0, LonDegs = -70, AltMslM = 1.4f };

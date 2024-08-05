@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://cle61uafx4wyg"]
+
+[ext_resource type="Script" path="res://Code/Godot/TestMovingGeometryCore.cs" id="1_uqvww"]
+[ext_resource type="Script" path="res://Code/Godot/Util/FssCameraMover.cs" id="2_uur7r"]
+
+[node name="MovingGeometry" type="Node3D"]
+script = ExtResource("1_uqvww")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.41542)
+fov = 40.0
+near = 0.001
+far = 8000.0
+script = ExtResource("2_uur7r")
+
+[node name="SpotLight3D" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.173648, 0.984808, 0, -0.984808, 0.173648, 0, 10, 3)
+spot_range = 16.0847
+spot_angle = 30.6739
