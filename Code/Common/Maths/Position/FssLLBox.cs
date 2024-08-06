@@ -116,9 +116,9 @@ public struct FssLLBox
 
     // ------------------------------------------------------------------------
 
-    public FssLLAPoint CenterPoint()
+    public FssLLPoint CenterPoint()
     {
-        return new FssLLAPoint()
+        return new FssLLPoint()
         {
             LatDegs = (MinLatDegs + MaxLatDegs) / 2.0,
             LonDegs = (MinLonDegs + MaxLonDegs) / 2.0,

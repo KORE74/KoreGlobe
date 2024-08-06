@@ -12,7 +12,6 @@ public partial class FssMeshBuilder
     public void AddPyramidByPoint(float baseDist, float baseWidth, float baseHeight)
     {
         Vector3 apex = new Vector3(0, 0, 0); // Apex of the pyramid
-        Vector3 baseCenter = new Vector3(0, 0, baseDist); // Base center at the origin
 
         List<Vector3> basePoints = new List<Vector3>();
 
@@ -30,6 +29,29 @@ public partial class FssMeshBuilder
         AddTriangle(basePoints[0], basePoints[3], basePoints[2]);
     }
 
+    public void AddPyramidByAzElDist(FssAzElBox azElBox, float baseDist)
+    {
+        Vector3 apex       = new Vector3(0, 0, 0); // Apex of the pyramid
 
+        // Do some basic trig with the AzEl values and the distance to get the height and width offsets
+        float azOffset = (float)(baseDist * Math.Sin(azElBox.HalfArcAzRads));
+        float elOffset = (float)(baseDist * Math.Sin(azElBox.HalfArcElRads));
+
+        List<Vector3> basePoints = new List<Vector3>();
+
+        // Elevation = y, Azimuth = x, distance = -z
+        // Generate base vertices
+        basePoints.Add(new Vector3(-azOffset, -elOffset, baseDist));
+        basePoints.Add(new Vector3( azOffset, -elOffset, baseDist));
+        basePoints.Add(new Vector3( azOffset,  elOffset, baseDist));
+        basePoints.Add(new Vector3(-azOffset,  elOffset, baseDist));
+ 
+        // Create the sized of the pyramid
+        AddFan(apex, basePoints, true); // true for wrapAround
+
+        // Create the base of the pyramid
+        AddTriangle(basePoints[0], basePoints[2], basePoints[1]);
+        AddTriangle(basePoints[0], basePoints[3], basePoints[2]);
+    }
 
 }

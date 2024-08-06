@@ -15,7 +15,7 @@ public partial class TestZeroOffset : Node3D
     Node3D TestNodeAhead;
     Node3D TestNodeAbove;
 
-
+    FssMapManager MapManager;
 
     Material matColorRed;
     Material matColorBlue;
@@ -134,10 +134,13 @@ public partial class TestZeroOffset : Node3D
         FssPrimitiveFactory.AddAxisMarkers(ZeroNode,      MarkerSize, MarkerSize/4);
 
         // Add the wedges
-        EarthCoreNode.AddChild(new TestEarthCore((float)FssZeroOffset.EarthRadiusM));
+        //EarthCoreNode.AddChild(new TestEarthCore((float)FssZeroOffset.EarthRadiusM));
 
         // Add the LL Labels
         EarthCoreNode.AddChild(new TestLabelMaker());
+
+        MapManager = new FssMapManager();
+        EarthCoreNode.AddChild(MapManager);
 
         // Add the platform root node, onto the zero node.
         EntityRootNode = new Node3D() { Name = "EntityRootNode" };  // This is the root node for all entities
@@ -151,7 +154,7 @@ public partial class TestZeroOffset : Node3D
         PlatformPos = new FssLLAPoint() {
             LatDegs = 10f,
             LonDegs = 10f,
-            RadiusM = 10f };
+            RadiusM = 10.3f };
 
         PlatformCourse = new FssCourse() {
             HeadingDegs = 0f,
@@ -187,6 +190,12 @@ public partial class TestZeroOffset : Node3D
             ModelResourceNode.Scale    = new Vector3(0.25f, 0.25f, 0.25f); // Set the model scale
             ModelResourceNode.Position = new Vector3(0f, 0f, 0f); // Set the model position
         }
+
+        FssAzElBox wedgeBox = FssAzElBox.BoxFromDimensions(30, 10); // Az, El
+        FssElementForwardWedge wedge = new FssElementForwardWedge() {
+            AzElBox    = wedgeBox,
+            DistanceM  = 1.0f };
+        PlaformBaseNode.AddChild(wedge);
     }
 
     // --------------------------------------------------------------------------------------------

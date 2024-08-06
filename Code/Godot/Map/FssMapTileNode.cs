@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 
 using Godot;
 
+// Note that map tile nodes always hang off the EarthCoreNode parent, they never use the ZeroPoint offset.
+
 public partial class FssMapTileNode : Node3D
 {
     private string _imagePath;
@@ -32,7 +34,7 @@ public partial class FssMapTileNode : Node3D
     private MeshInstance3D MeshInstanceW = new MeshInstance3D();
 
     public bool IntendedVisibility = false;
-    FssXYZPoint RwTileCenterXYZ = new FssXYZPoint(0, 0, 0);
+    //FssXYZPoint RwTileCenterXYZ = new FssXYZPoint(0, 0, 0);
 
     // --------------------------------------------------------------------------------------------
 
@@ -46,7 +48,7 @@ public partial class FssMapTileNode : Node3D
 
         Name = tileCode.ToString();
 
-        RwTileCenterXYZ = FssMapTileCode.LLBoxForCode(tileCode).CenterPoint().ToXYZ();
+        //RwTileCenterXYZ = FssMapTileCode.LLBoxForCode(tileCode).CenterPoint().ToXYZ();
 
         FssCentralLog.AddEntry($"Creating FssMapTileNode for {tileCode}");
     }
@@ -284,17 +286,22 @@ public partial class FssMapTileNode : Node3D
         Label3D label = FssLabel3DFactory.CreateLabel($"{tileCode.ToString()}", KPixelSize);
 
         FssLLBox tileBounds = FssMapTileCode.LLBoxForCode(tileCode);
+        FssLLPoint posLL = tileBounds.CenterPoint();
 
-        FssLLAPoint pos = new FssLLAPoint() {
-            LatDegs = tileBounds.MidLatDegs,
-            LonDegs = tileBounds.MidLonDegs,
-            RadiusM = FssZeroOffset.EarthRadiusM + 0.1 };
-        FssPosV3 posV3 = FssGeoConvOperations.RwToGeStruct(pos);
+        float labelGap = 0.05f;
+
+        // Determine the positions and orientation
+        FssLLAPoint pos  = new FssLLAPoint() { LatDegs = posLL.LatDegs,        LonDegs = posLL.LonDegs, RadiusM = FssZeroOffset.EarthRadiusM + labelGap};
+        FssLLAPoint posN = new FssLLAPoint() { LatDegs = posLL.LatDegs + 0.01, LonDegs = posLL.LonDegs, RadiusM = FssZeroOffset.EarthRadiusM + labelGap};
+
+        Godot.Vector3 v3Pos   = FssGeoConvOperations.RwToGe(pos);
+        Godot.Vector3 v3PosN  = FssGeoConvOperations.RwToGe(posN);
+        Godot.Vector3 v3VectN = v3PosN - v3Pos;
 
         AddChild(label);
 
-        label.Position = posV3.Pos;
-        label.LookAt(GlobalTransform.Origin, posV3.VecNorth);
+        label.Position = v3Pos;
+        label.LookAt(GlobalTransform.Origin, v3VectN);
     }
 
     // --------------------------------------------------------------------------------------------

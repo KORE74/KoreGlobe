@@ -80,6 +80,7 @@ public struct FssAzElBox
         };
     }
 
+    // Usage: FssAzElBox.BoxFromDimensions(10, 20);
     public static FssAzElBox BoxFromDimensions(double azDegs, double elDegs)
     {
         double halfAzDegs = azDegs / 2.0;

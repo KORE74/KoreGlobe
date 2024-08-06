@@ -23,7 +23,7 @@ public partial class TestLabelMaker : Node3D
             for (int lon = -180; lon < (180 - 5); lon += lonInc)
             {
                 // Determine the positions and orientation
-                FssLLAPoint pos = new FssLLAPoint() { LatDegs = lat, LonDegs = lon, RadiusM = FssZeroOffset.EarthRadiusM };
+                FssLLAPoint pos  = new FssLLAPoint() { LatDegs = lat, LonDegs = lon, RadiusM = FssZeroOffset.EarthRadiusM };
                 FssLLAPoint posN = new FssLLAPoint() { LatDegs = lat + 0.01, LonDegs = lon, RadiusM = FssZeroOffset.EarthRadiusM };
 
                 Godot.Vector3 v3Pos   = FssGeoConvOperations.RwToGe(pos);
