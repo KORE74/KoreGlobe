@@ -1,5 +1,3 @@
-using System;
-using System.Text;
 
 using Godot;
 
@@ -7,207 +5,127 @@ using Godot;
 // - Real world is in mainly SI units, with other accessor operations. The Godot World in is units of kilometers, to best suit the full world presentation.
 // - The Godot axis system does not match the ECEF orientatino of teh Z axis, so this will see inverting.
 
-public struct FssEntityV3
+public struct FssPosV3
 {
-    public Vector3 Position;
+    public Vector3 Pos;
     public Vector3 PosAbove;
-    public Vector3 PosAhead;
+    public Vector3 PosNorth;
+    public Vector3 VecUp;
+    public Vector3 VecNorth;
 }
 
-public struct FssRWPlatformPositions
+public struct FssEntityV3
 {
-    public FssLLAPoint PosLLA;
-    public FssLLAPoint PosAboveLLA;
-    public FssLLAPoint PosAheadLLA;
-
-    public FssXYZPoint PosXYZ;
-    public FssXYZPoint PosAboveXYZ;
-    public FssXYZPoint PosAheadXYZ;
-
-    public Vector3 vecPos;
-    public Vector3 vecPosAhead;
-    public Vector3 vecPosAbove;
-
-    public Vector3 vecOffsetAbove;
-    public Vector3 vecOffsetAhead;
-
-    // public Vector3 vecUp;
-    // public Vector3 vecForward;
-};
+    public Vector3 Pos;
+    public Vector3 PosAbove;
+    public Vector3 PosAhead;
+    public Vector3 PosNorth;
+    public Vector3 VecUp;
+    public Vector3 VecForward;
+    public Vector3 VecNorth;
+}
 
 public static class FssGeoConvOperations
 {
     // --------------------------------------------------------------------------------------------
-    // MARK: Simple Conversion
+    // MARK: Bare Position - No offsets
     // --------------------------------------------------------------------------------------------
-
-    public static Vector3 RealWorldToGodot(float radius, float latDegs, float lonDegs)
+    // FssGeoConvOperations.RwToGeStruct(pos);
+    public static Vector3 RwToGe(double radiusM, double latDegs, double lonDegs)
     {
-        float latRad = Mathf.DegToRad(latDegs);
-        float lonRad = Mathf.DegToRad(lonDegs);
-
-        float x = radius * Mathf.Cos(latRad) * Mathf.Cos(lonRad);
-        float y = radius * Mathf.Sin(latRad);
-        float z = radius * Mathf.Cos(latRad) * Mathf.Sin(lonRad) * -1.0f;
-
-        return new Vector3(x, y, z);
+        FssLLAPoint llap = new FssLLAPoint() { LatDegs = latDegs, LonDegs = lonDegs, RadiusM = radiusM };
+        FssXYZPoint p = llap.ToXYZ();
+        return new Vector3((float)p.X, (float)p.Y, (float)-p.Z);
     }
 
-    public static Vector3 RealWorldToGodotRads(float radius, float latRads, float lonRads)
+    public static Vector3 RwToGe(FssLLAPoint llap)
     {
-        float x = radius * Mathf.Cos(latRads) * Mathf.Cos(lonRads);
-        float y = radius * Mathf.Sin(latRads);
-        float z = radius * Mathf.Cos(latRads) * Mathf.Sin(lonRads) * -1.0f;
-
-        return new Vector3(x, y, z);
-    }
-
-    public static Vector3 RealWorldToGodot(FssLLAPoint llap)
-    {
-        return RealWorldToGodot((float)llap.AltMslM, (float)llap.LatDegs, (float)llap.LonDegs);
+        FssXYZPoint p = llap.ToXYZ();
+        return new Vector3((float)p.X, (float)p.Y, (float)-p.Z);
     }
 
     // --------------------------------------------------------------------------------------------
-
-    public static FssXYZPoint GodotToRealWorld(Vector3 godotPos)
-    {
-        float x = godotPos.X;
-        float y = godotPos.Y;
-        float z = godotPos.Z;
-
-        z *= -1.0f;
-
-        return new FssXYZPoint(x, y, z);
-    }
-
-    // --------------------------------------------------------------------------------------------
-    // MARK: Focus Point Conversion
+    // MARK: Position with Orientation
     // --------------------------------------------------------------------------------------------
 
-    public static Vector3 RealWorldToGodotFocusPointRads(float radius, float latRads, float lonRads)
-    {
-        float x = radius * Mathf.Cos(latRads) * Mathf.Cos(lonRads);
-        float y = radius * Mathf.Sin(latRads);
-        float z = radius * Mathf.Cos(latRads) * Mathf.Sin(lonRads) * -1.0f;
-
-        Vector3 RawPosition = new Vector3(x, y, z);
-
-        Vector3 AdjustedPosition = RawPosition - FssEarthCore.FocusPos;
-
-        return AdjustedPosition;
-    }
-
-    public static Vector3 RealWorldToGodotFocusPoint(FssLLAPoint llap)
-    {
-        return RealWorldToGodotFocusPointRads((float)llap.AltMslM, (float)llap.LatRads, (float)llap.LonRads);
-    }
-
-    // --------------------------------------------------------------------------------------------
-    // MARK: Conversion to structures
-    // --------------------------------------------------------------------------------------------
-
-    // FssEntityV3 platformV3 = FssGeoConvOperations.ReadWorldToStruct(pos, course);
-
-    public static FssEntityV3 ReadWorldToStruct(FssLLAPoint pos, FssCourse course)
+    // Usage: FssPosV3 posV3 = FssGeoConvOperations.RwToGeStruct(Pos);
+    public static FssPosV3 RwToGeStruct(FssLLAPoint pos)
     {
         // Define the position and associated up direction for the label
         FssLLAPoint posAbove = pos;
         posAbove.AltMslM += 0.04f;
 
-        // Get the position 5 seconds ahead, or just north if stationary
-        FssLLAPoint posAhead = FssLLAPoint.Zero;
-        if (course.IsStationary())
-        {
-            posAhead = pos;
-            posAhead.LatDegs += 0.001;
-        }
-        else
-        {
-            posAhead = pos.PlusPolarOffset(course.ToPolarOffset(-5));
-        }
+        // Define the position and associated up direction for the label
+        FssLLAPoint posNorth = pos;
+        posAbove.LatDegs += 0.01f;
 
-        Vector3 v3Pos   = RealWorldToGodot(pos);
-        Vector3 v3Above = RealWorldToGodot(posAbove);
-        Vector3 v3Ahead = RealWorldToGodot(posAhead);
+        // Define the aobsolye positions
+        Vector3 v3Pos        = FssZeroOffset.GeZeroPointOffset(pos.ToXYZ());
+        Vector3 v3PosAbove   = FssZeroOffset.GeZeroPointOffset(posAbove.ToXYZ());
+        Vector3 v3PosNorth   = FssZeroOffset.GeZeroPointOffset(posNorth.ToXYZ());
 
-        return new FssEntityV3 {
-            Position = v3Pos,
-            PosAbove = v3Above,
-            PosAhead = v3Ahead };
+        // Define the relative vectors
+        Vector3 v3VecUp      = v3PosAbove - v3Pos;
+        Vector3 v3VecNorth   = v3PosNorth - v3Pos;
+
+        FssPosV3 retStruct = new FssPosV3 {
+            Pos        = v3Pos,
+            PosAbove   = v3PosAbove,
+            PosNorth   = v3PosNorth,
+            VecUp      = v3VecUp,
+            VecNorth   = v3VecNorth};
+
+        return retStruct;
     }
 
-    public static FssRWPlatformPositions RealWorldStruct(FssLLAPoint pos, FssCourse course)
+    // --------------------------------------------------------------------------------------------
+    // MARK: Position with Course and Orientation
+    // --------------------------------------------------------------------------------------------
+
+    // Usage: FssEntityV3 platformV3 = FssGeoConvOperations.RealWorldToStruct(PlatformPos, PlatformCourse);
+
+    public static FssEntityV3 RwToGeStruct(FssLLAPoint pos, FssCourse course)
     {
         // Define the position and associated up direction for the label
         FssLLAPoint posAbove = pos;
-        posAbove.AltMslM += 0.24f;
+        posAbove.AltMslM += 0.04f;
+
+        // Define the position and associated up direction for the label
+        FssLLAPoint posNorth = pos;
+        posAbove.LatDegs += 0.01f;
 
         // Get the position 5 seconds ahead, or just north if stationary
         FssLLAPoint posAhead = FssLLAPoint.Zero;
         if (course.IsStationary())
         {
-            posAhead = pos;
             posAhead.LatDegs += 0.001;
         }
         else
         {
-            posAhead = pos.PlusPolarOffset(course.ToPolarOffset(3));
+            posAhead = pos.PlusPolarOffset(course.ToPolarOffset(5)); // The course, 5 seconds ahead
         }
 
-        // Figure out all the real world XYZ positions as offsets from the focus pos
-        FssXYZPoint focusOffsetXYZ       = FssEarthCore.FocusOffsetForRWLLA(pos);
-        FssXYZPoint focusOffsetAboveXYZ  = FssEarthCore.FocusOffsetForRWLLA(posAbove);
-        FssXYZPoint focusOffsetAheadXYZ  = FssEarthCore.FocusOffsetForRWLLA(posAhead);
+        // Define the aobsolye positions
+        Vector3 v3Pos        = FssZeroOffset.GeZeroPointOffset(pos.ToXYZ());
+        Vector3 v3PosAbove   = FssZeroOffset.GeZeroPointOffset(posAbove.ToXYZ());
+        Vector3 v3PosAhead   = FssZeroOffset.GeZeroPointOffset(posAhead.ToXYZ());
+        Vector3 v3PosNorth   = FssZeroOffset.GeZeroPointOffset(posNorth.ToXYZ());
 
-        // Flip the Z axis here for Godot axis orientation
-        focusOffsetXYZ.Z      *= -1;
-        focusOffsetAboveXYZ.Z *= -1;
-        focusOffsetAheadXYZ.Z *= -1;
+        // Define the relative vectors
+        Vector3 v3VecUp      = v3PosAbove - v3Pos;
+        Vector3 v3VecForward = v3PosAhead - v3Pos;
+        Vector3 v3VecNorth   = v3PosNorth - v3Pos;
 
-        // Determine the relative directions forward and up
-        // FssXYZPoint xyzLookAhead = focusOffsetXYZ.XYZTo(focusOffsetAheadXYZ);
-        // FssXYZPoint xyzLookUp    = focusOffsetXYZ.XYZTo(focusOffsetAboveXYZ);
+        FssEntityV3 retStruct = new FssEntityV3 {
+            Pos        = v3Pos,
+            PosAbove   = v3PosAbove,
+            PosAhead   = v3PosAhead,
+            PosNorth   = v3PosNorth,
+            VecUp      = v3VecUp,
+            VecForward = v3VecForward,
+            VecNorth   = v3VecNorth};
 
-        // Translate the RW into Godot Types
-        Vector3 v3Pos       = new Vector3((float)focusOffsetXYZ.X,      (float)focusOffsetXYZ.Y,      (float)focusOffsetXYZ.Z);
-        Vector3 v3PosAbove  = new Vector3((float)focusOffsetAboveXYZ.X, (float)focusOffsetAboveXYZ.Y, (float)focusOffsetAboveXYZ.Z);
-        Vector3 v3PosAhead  = new Vector3((float)focusOffsetAheadXYZ.X, (float)focusOffsetAheadXYZ.Y, (float)focusOffsetAheadXYZ.Z);
-
-        Vector3 v3LookAhead = new Vector3((float)focusOffsetAheadXYZ.X, (float)focusOffsetAheadXYZ.Y, (float)focusOffsetAheadXYZ.Z);
-        Vector3 v3LookUp    = new Vector3((float)focusOffsetAboveXYZ.X, (float)focusOffsetAboveXYZ.Y, (float)focusOffsetAboveXYZ.Z);
-
-        // v3PosAhead += FssEarthCore.FocusPos;
-        // v3PosAbove += FssEarthCore.FocusPos;
-
-        // StringBuilder sb = new StringBuilder();
-        // sb.AppendLine("RealWorldStruct:");
-        // sb.AppendLine("  pos: " + pos.ToString());
-        // sb.AppendLine("  posAbove: " + posAbove.ToString());
-        // sb.AppendLine("  posAhead: " + posAhead.ToString());
-        // sb.AppendLine("  focusOffsetXYZ: " + focusOffsetXYZ.ToString());
-        // sb.AppendLine("  focusOffsetAboveXYZ: " + focusOffsetAboveXYZ.ToString());
-        // sb.AppendLine("  focusOffsetAheadXYZ: " + focusOffsetAheadXYZ.ToString());
-        // sb.AppendLine("  v3Pos: " + v3Pos.ToString());
-        // sb.AppendLine("  v3PosAhead: " + v3PosAhead.ToString());
-        // sb.AppendLine("  v3LookUp: " + v3LookUp.ToString());
-        // sb.AppendLine("  v3LookAhead: " + v3LookAhead.ToString());
-        // FssCentralLog.AddEntry(sb.ToString());
-
-        return new FssRWPlatformPositions {
-            PosLLA         = pos,
-            PosAboveLLA    = posAbove,
-            PosAheadLLA    = posAhead,
-
-            PosXYZ         = focusOffsetXYZ,
-            PosAboveXYZ    = focusOffsetAboveXYZ,
-            PosAheadXYZ    = focusOffsetAheadXYZ,
-
-            vecPos         = v3Pos,
-            vecPosAhead    = v3PosAhead,
-            vecPosAbove    = v3PosAbove,
-
-            vecOffsetAbove = v3LookUp,
-            vecOffsetAhead = v3LookAhead
-        };
+        return retStruct;
     }
+
 }

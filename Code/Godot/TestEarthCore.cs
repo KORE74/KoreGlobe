@@ -8,7 +8,6 @@ public partial class TestEarthCore : MeshInstance3D
 
     public TestEarthCore()
     {
-
     }
 
     public TestEarthCore(float radius)
@@ -20,7 +19,7 @@ public partial class TestEarthCore : MeshInstance3D
     public override void _Ready()
     {
         CreateShell();
-        CreateTestWedge();
+        //CreateTestWedge();
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.

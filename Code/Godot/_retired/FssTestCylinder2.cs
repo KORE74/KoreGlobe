@@ -22,18 +22,18 @@ public partial class FssTestCylinder2 : Node3D
             for (int lon = -180; lon < (180 - 5); lon += lonInc)
             {
                 // Define the position and associated up direction for the label
-                Vector3 position      = FssGeoConvOperations.RealWorldToGodot(distance, lat, lon);
-                Vector3 northPosition = FssGeoConvOperations.RealWorldToGodot(distance, lat + 1, lon);
-                Vector3 eastPosition  = FssGeoConvOperations.RealWorldToGodot(distance, lat, lon + lonInc);
-                Vector3 southPosition = FssGeoConvOperations.RealWorldToGodot(distance, lat - latInc, lon);
-                Vector3 upDirection = (northPosition - position).Normalized();
+                //Vector3 position      = FssGeoConvOperations.RealWorldToGodot(distance, lat, lon);
+                //Vector3 northPosition = FssGeoConvOperations.RealWorldToGodot(distance, lat + 1, lon);
+                //Vector3 eastPosition  = FssGeoConvOperations.RealWorldToGodot(distance, lat, lon + lonInc);
+                //Vector3 southPosition = FssGeoConvOperations.RealWorldToGodot(distance, lat - latInc, lon);
+                //Vector3 upDirection = (northPosition - position).Normalized();
 
                 // find the centre of this object
-                Vector3 centre = this.Position;
-
-                CreateSphere(position, 0.0035f);
-                CreateCylinder(position, eastPosition, 0.0025f);
-                CreateCylinder(position, southPosition, 0.0025f);
+                //Vector3 centre = this.Position;
+//
+                //CreateSphere(position, 0.0035f);
+                //CreateCylinder(position, eastPosition, 0.0025f);
+                //CreateCylinder(position, southPosition, 0.0025f);
             }
         }
     }

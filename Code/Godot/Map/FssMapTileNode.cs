@@ -192,13 +192,13 @@ public partial class FssMapTileNode : Node3D
                 meshBuilder.AddSurface(
                     (float)tileBounds.MinLonDegs, (float)tileBounds.MaxLonDegs,
                     (float)tileBounds.MinLatDegs, (float)tileBounds.MaxLatDegs,
-                    (float)FssEarthCore.EarthRadiusM, 0.000006f,
+                    (float)FssZeroOffset.EarthRadiusM, 0.000006f,
                     croppedArraySubSample
                 );
                 meshBuilder.AddSurfaceWedgeSides(
                     (float)tileBounds.MinLonDegs, (float)tileBounds.MaxLonDegs,
                     (float)tileBounds.MinLatDegs, (float)tileBounds.MaxLatDegs,
-                    (float)FssEarthCore.EarthRadiusM, 0.000006f, 4.5f,
+                    (float)FssZeroOffset.EarthRadiusM, 0.000006f, 4.5f,
                     croppedArraySubSample
                 ); //bool flipTriangles = false)
             }
@@ -285,20 +285,16 @@ public partial class FssMapTileNode : Node3D
 
         FssLLBox tileBounds = FssMapTileCode.LLBoxForCode(tileCode);
 
-        float lat = (float)tileBounds.MidLatDegs;
-        float lon = (float)tileBounds.MidLonDegs;
-        float distance = (float)FssEarthCore.EarthRadiusM + 0.1f;
-
-        Vector3 position = FssGeoConvOperations.RealWorldToGodot(distance, lat, lon);
-        Vector3 northPosition = FssGeoConvOperations.RealWorldToGodot(distance, lat + 1, lon);
-        //Vector3 eastPosition  = FssGeoConvOperations.RealWorldToGodot(distance, lat, lon + 10);
-        //Vector3 southPosition = FssGeoConvOperations.RealWorldToGodot(distance, lat - 10, lon);
-        Vector3 upDirection = (northPosition - position).Normalized();
+        FssLLAPoint pos = new FssLLAPoint() {
+            LatDegs = tileBounds.MidLatDegs,
+            LonDegs = tileBounds.MidLonDegs,
+            RadiusM = FssZeroOffset.EarthRadiusM + 0.1 };
+        FssPosV3 posV3 = FssGeoConvOperations.RwToGeStruct(pos);
 
         AddChild(label);
 
-        label.Position = position;
-        label.LookAt(GlobalTransform.Origin, upDirection);
+        label.Position = posV3.Pos;
+        label.LookAt(GlobalTransform.Origin, posV3.VecNorth);
     }
 
     // --------------------------------------------------------------------------------------------
@@ -396,7 +392,7 @@ public partial class FssMapTileNode : Node3D
         // if the distance is short, endeavour to create aand load child tiles.
         // if greater than a larger value, delete any child nodes to free resources.
 
-        float distanceFraction = (float)( RwTileCenterXYZ.DistanceTo(FssEarthCore.RwFocusXYZ) / FssEarthCore.EarthRadiusM );
+        float distanceFraction = 0.1f;//(float)( RwTileCenterXYZ.DistanceTo(FssEarthCore.RwFocusXYZ) / FssEarthCore.EarthRadiusM );
 
 
 

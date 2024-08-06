@@ -35,8 +35,8 @@ public partial class FssMeshBuilder
             {
                 float azimuth = Mathf.Lerp(azimuthMin, azimuthMax, (float)x / resolutionAz);
 
-                Vector3 insidePoint  = FssGeoConvOperations.RealWorldToGodot(distanceMin, azimuth, elevation);
-                Vector3 outsidePoint = FssGeoConvOperations.RealWorldToGodot(distanceMax, azimuth, elevation);
+                Vector3 insidePoint  = FssGeoConvOperations.RwToGe(distanceMin, azimuth, elevation);
+                Vector3 outsidePoint = FssGeoConvOperations.RwToGe(distanceMax, azimuth, elevation);
 
                 insidePoints[x, y]  = insidePoint;
                 outsidePoints[x, y] = outsidePoint;
@@ -99,8 +99,8 @@ public partial class FssMeshBuilder
             {
                 float azDegs = azimuthMinDegs + ((float)x * azDeltaDegs);
 
-                Vector3 insidePoint  = FssGeoConvOperations.RealWorldToGodot(distanceMin, azDegs + azDeltaDegs, elDegs);
-                Vector3 outsidePoint = FssGeoConvOperations.RealWorldToGodot(distanceMax, azDegs + azDeltaDegs, elDegs);
+                Vector3 insidePoint  = FssGeoConvOperations.RwToGe(distanceMin, azDegs + azDeltaDegs, elDegs);
+                Vector3 outsidePoint = FssGeoConvOperations.RwToGe(distanceMax, azDegs + azDeltaDegs, elDegs);
 
                 // Store points in the edge lists
                 if (y == 0)            topInsideEdge.Add(insidePoint);

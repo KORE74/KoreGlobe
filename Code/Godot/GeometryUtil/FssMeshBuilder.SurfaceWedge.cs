@@ -51,7 +51,12 @@ public partial class FssMeshBuilder
                 float currAzDegs = azMinDegs + (float)x * azIncrement;
                 float currRadius = surfaceRadius + (surfaceArray[x, y] * surfaceScale);
 
-                points[x, y] = FssGeoConvOperations.RealWorldToGodot(currRadius, currElDegs, currAzDegs);
+                FssLLAPoint llap = new FssLLAPoint() {
+                    LatDegs = currElDegs,
+                    LonDegs = currAzDegs,
+                    RadiusM = currRadius
+                };
+                points[x, y] = FssGeoConvOperations.RwToGe(llap);
             }
         }
 
@@ -139,8 +144,8 @@ public partial class FssMeshBuilder
                 float currAzDegs    = azMinDegs + (float)x * azInc;
                 float topEdgeDelta  = topEdge[x] * surfaceScale;
 
-                topIds.Add( AddVertex(FssGeoConvOperations.RealWorldToGodot(surfaceRadius + topEdgeDelta, elMaxDegs, currAzDegs)) );
-                bottomIds.Add( AddVertex(FssGeoConvOperations.RealWorldToGodot(innerRadius, elMaxDegs, currAzDegs)) );
+                topIds.Add( AddVertex(FssGeoConvOperations.RwToGe(surfaceRadius + topEdgeDelta, elMaxDegs, currAzDegs)) );
+                bottomIds.Add( AddVertex(FssGeoConvOperations.RwToGe(innerRadius, elMaxDegs, currAzDegs)) );
 
                 AddUV(new Vector2(uvX, uvY1));
                 AddUV(new Vector2(uvX, uvY2));
@@ -187,8 +192,8 @@ public partial class FssMeshBuilder
                 float currAzDegs      = azMinDegs + (float)x * azInc;
                 float bottomEdgeDelta = bottomEdge[x] * surfaceScale;
 
-                topIds.Add( AddVertex(FssGeoConvOperations.RealWorldToGodot(surfaceRadius + bottomEdgeDelta, elMinDegs, currAzDegs)) );
-                bottomIds.Add( AddVertex(FssGeoConvOperations.RealWorldToGodot(innerRadius,                  elMinDegs, currAzDegs)) );
+                topIds.Add( AddVertex(FssGeoConvOperations.RwToGe(surfaceRadius + bottomEdgeDelta, elMinDegs, currAzDegs)) );
+                bottomIds.Add( AddVertex(FssGeoConvOperations.RwToGe(innerRadius,                  elMinDegs, currAzDegs)) );
 
                 AddUV(new Vector2(uvX, uvY1));
                 AddUV(new Vector2(uvX, uvY2));
@@ -234,8 +239,8 @@ public partial class FssMeshBuilder
                 float currElDegs = elMaxDegs - (float)y * elInc; // El max to min, to match UV min to max
                 float edgeDelta  = leftEdge[y] * surfaceScale;
 
-                topIds.Add( AddVertex(FssGeoConvOperations.RealWorldToGodot(surfaceRadius + edgeDelta, currElDegs, azMinDegs)) );
-                bottomIds.Add( AddVertex(FssGeoConvOperations.RealWorldToGodot(innerRadius,            currElDegs, azMinDegs)) );
+                topIds.Add( AddVertex(FssGeoConvOperations.RwToGe(surfaceRadius + edgeDelta, currElDegs, azMinDegs)) );
+                bottomIds.Add( AddVertex(FssGeoConvOperations.RwToGe(innerRadius,            currElDegs, azMinDegs)) );
 
                 AddUV(new Vector2(uvX1, uvY));
                 AddUV(new Vector2(uvX2, uvY));
@@ -281,8 +286,8 @@ public partial class FssMeshBuilder
                 float currElDegs = elMaxDegs - (float)y * elInc; // El max to min, to match UV min to max
                 float edgeDelta  = rightEdge[y] * surfaceScale;
 
-                topIds.Add( AddVertex(FssGeoConvOperations.RealWorldToGodot(surfaceRadius + edgeDelta, currElDegs, azMaxDegs)) );
-                bottomIds.Add( AddVertex(FssGeoConvOperations.RealWorldToGodot(innerRadius,            currElDegs, azMaxDegs)) );
+                topIds.Add( AddVertex(FssGeoConvOperations.RwToGe(surfaceRadius + edgeDelta, currElDegs, azMaxDegs)) );
+                bottomIds.Add( AddVertex(FssGeoConvOperations.RwToGe(innerRadius,            currElDegs, azMaxDegs)) );
 
                 AddUV(new Vector2(uvX1, uvY));
                 AddUV(new Vector2(uvX2, uvY));
@@ -345,8 +350,8 @@ public partial class FssMeshBuilder
                 float currAzDegs       = Mathf.Lerp(azMinDegs, azMaxDegs, (float)x / resolutionAz);
                 float outsidePointDelta = outerSurfaceDelta[x, y];
 
-                Vector3 insidePoint  = FssGeoConvOperations.RealWorldToGodot(radiusMin, currAzDegs, currElDegs);
-                Vector3 outsidePoint = FssGeoConvOperations.RealWorldToGodot(radiusMax + outsidePointDelta, currAzDegs, currElDegs);
+                Vector3 insidePoint  = FssGeoConvOperations.RwToGe(radiusMin, currAzDegs, currElDegs);
+                Vector3 outsidePoint = FssGeoConvOperations.RwToGe(radiusMax + outsidePointDelta, currAzDegs, currElDegs);
 
                 insideSurfacePoints.Add(insidePoint);
                 outsideSurfacePoints.Add(outsidePoint);

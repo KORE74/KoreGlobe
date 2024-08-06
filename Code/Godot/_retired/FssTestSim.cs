@@ -50,8 +50,8 @@ public partial class FssTestSim : Node3D
             pos.AltMslM = 1.25f;
 
             // Create the Vector3 positions
-            FssEntityV3 platformV3 = FssGeoConvOperations.ReadWorldToStruct(pos, course);
-            ModelNode.Position     = ModelNode.Position.Lerp(platformV3.Position, (float)(lerpSpeed * delta));
+            FssEntityV3 platformV3 = FssGeoConvOperations.RwToGeStruct(pos, course);
+            ModelNode.Position     = platformV3.Pos; //ModelNode.Position.Lerp(platformV3.Position, (float)(lerpSpeed * delta));
 
             // Find where we are currently looking, determine where we need to be looking, and lerp to that orientation
             Transform3D currentTransform = ModelNode.Transform;

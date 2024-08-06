@@ -38,7 +38,7 @@ public partial class FssCameraMoverWorld : Node3D
             Rotation += rotation * RotateSpeed * (float)(delta);
         }
 
-        RwPosition = FssGeoConvOperations.GodotToRealWorld(Position);
+        //RwPosition = FssGeoConvOperations.GodotToRealWorld(Position);
     }
 
     private void UpdateInputs()

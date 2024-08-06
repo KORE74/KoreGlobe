@@ -165,49 +165,50 @@ public partial class TestModel : Node3D
         {
             Timer4Hz = FssCoreTime.RuntimeSecs + 0.2f; // Update the timer to the next whole second
 
-            if (TrailNode != null)
-            {
-                // Create a new ID
-                string nextId = IdGen.NextId();
+            // if (TrailNode != null)
+            // {
+            //     // Create a new ID
+            //     string nextId = IdGen.NextId();
 
-                // If a child node with the ID exists, delete it.
+            //     // If a child node with the ID exists, delete it.
 
-                TrailNode.GetNodeOrNull(nextId)?.QueueFree();
-                if (TrailNode.HasNode(nextId))
-                {
-                    Node childNode = TrailNode.GetNode(nextId);
-                    TrailNode.RemoveChild(childNode);
-                    childNode.QueueFree();
-                }
+            //     TrailNode.GetNodeOrNull(nextId)?.QueueFree();
+            //     if (TrailNode.HasNode(nextId))
+            //     {
+            //         Node childNode = TrailNode.GetNode(nextId);
+            //         TrailNode.RemoveChild(childNode);
+            //         childNode.QueueFree();
+            //     }
 
-                // Create a new sphere at the current position, and the ID
-                Node3D childSphere = FssPrimitiveFactory.CreateGodotSphere(Vector3.Zero, 0.005f, new Color(0.9f, 0.9f, 0.9f, 1f));
-                childSphere.Name = $"{randomString}{nextId}";
-                TrailNode.AddChild(childSphere);
-                childSphere.Name = nextId;
+            //     // Create a new sphere at the current position, and the ID
+            //     Node3D childSphere = FssPrimitiveFactory.CreateGodotSphere(Vector3.Zero, 0.005f, new Color(0.9f, 0.9f, 0.9f, 1f));
+            //     childSphere.Name = $"{randomString}{nextId}";
+            //     TrailNode.AddChild(childSphere);
+            //     childSphere.Name = nextId;
 
-                // get the current position to assign to the sphere
-                Vector3 vecPos   = FssGeoConvOperations.RealWorldToGodot(pos);
-                childSphere.Position = vecPos;
 
-                // Create a new cylinder at the current position, and the ID
-                Vector3 vecPrevPos   = FssGeoConvOperations.RealWorldToGodot(PrevPos);
-                Vector3 vecDiff = vecPrevPos - vecPos;
+            //     // get the current position to assign to the sphere
+            //     Vector3 vecPos   = FssGeoConvOperations.RealWorldToGodot(pos);
+            //     childSphere.Position = vecPos;
 
-                FssMeshBuilder meshBuilder = new FssMeshBuilder();
-                meshBuilder.AddCylinder(Vector3.Zero, vecDiff, 0.005f, 0.005f, 12, true);
+            //     // Create a new cylinder at the current position, and the ID
+            //     Vector3 vecPrevPos   = FssGeoConvOperations.RealWorldToGodot(PrevPos);
+            //     Vector3 vecDiff = vecPrevPos - vecPos;
 
-                ArrayMesh meshData = meshBuilder.Build2("Wedge", false);
-                MeshInstance3D meshInstance = new();
-                meshInstance.Mesh = meshData;
-                meshInstance.MaterialOverride = matGrey;
+            //     FssMeshBuilder meshBuilder = new FssMeshBuilder();
+            //     meshBuilder.AddCylinder(Vector3.Zero, vecDiff, 0.005f, 0.005f, 12, true);
 
-                childSphere.AddChild(meshInstance);
-                //meshInstance.Position = vecDiff / 2.0f;
-                //meshInstance.LookAt(vecDiff, Vector3.Up);
+            //     ArrayMesh meshData = meshBuilder.Build2("Wedge", false);
+            //     MeshInstance3D meshInstance = new();
+            //     meshInstance.Mesh = meshData;
+            //     meshInstance.MaterialOverride = matGrey;
 
-                PrevPos = pos;
-            }
+            //     childSphere.AddChild(meshInstance);
+            //     //meshInstance.Position = vecDiff / 2.0f;
+            //     //meshInstance.LookAt(vecDiff, Vector3.Up);
+
+            //     PrevPos = pos;
+            // }
 
         }
 
@@ -241,40 +242,43 @@ public partial class TestModel : Node3D
     {
         // --- Define positions -----------------------
 
-        // Define the position and associated up direction for the label
-        FssLLAPoint posAbove = pos;
-        posAbove.AltMslM += 0.04f;
-
-        // Get the position 5 seconds ahead, or just north if stationary
-        FssLLAPoint posAhead = FssLLAPoint.Zero;
-        if (Course.IsStationary())
-        {
-            posAhead = pos;
-            posAhead.LatDegs += 0.001;
-        }
-        else
-        {
-            posAhead = pos.PlusPolarOffset(Course.ToPolarOffset(-5));
-        }
-
-        // --- Define vectors -----------------------
-
-        // Define the Vector3 Offsets
-        Vector3 vecPos   = FssGeoConvOperations.RealWorldToGodot(pos);
-        Vector3 vecAbove = FssGeoConvOperations.RealWorldToGodot(posAbove);
-        Vector3 vecAhead = FssGeoConvOperations.RealWorldToGodot(posAhead);
 
 
-        FssEntityV3 platVecs = FssGeoConvOperations.ReadWorldToStruct(pos, Course);
+
+        // // Define the position and associated up direction for the label
+        // FssLLAPoint posAbove = pos;
+        // posAbove.AltMslM += 0.04f;
+
+        // // Get the position 5 seconds ahead, or just north if stationary
+        // FssLLAPoint posAhead = FssLLAPoint.Zero;
+        // if (Course.IsStationary())
+        // {
+        //     posAhead = pos;
+        //     posAhead.LatDegs += 0.001;
+        // }
+        // else
+        // {
+        //     posAhead = pos.PlusPolarOffset(Course.ToPolarOffset(-5));
+        // }
+
+        // // --- Define vectors -----------------------
+
+        // // Define the Vector3 Offsets
+        // Vector3 vecPos   = FssGeoConvOperations.RealWorldToGodot(pos);
+        // Vector3 vecAbove = FssGeoConvOperations.RealWorldToGodot(posAbove);
+        // Vector3 vecAhead = FssGeoConvOperations.RealWorldToGodot(posAhead);
 
 
-        // Update node position and orientation
-        ModelNode.Position = platVecs.Position;// vecPos;
-        ModelNode.LookAt(platVecs.PosAhead, platVecs.PosAbove);
+        // FssEntityV3 platVecs = FssGeoConvOperations.RealWorldToStruct(pos, Course);
 
-        // Update camera position and orientation
-        FssXYZPoint camOffsetXYZ = CameraOffset.ToXYZ();
-        ModelCamera.Position = new Vector3((float)camOffsetXYZ.X, -(float)camOffsetXYZ.Y, -(float)camOffsetXYZ.Z);
-        ModelCamera.LookAt(vecPos, vecAbove);
+
+        // // Update node position and orientation
+        // ModelNode.Position = platVecs.Position;// vecPos;
+        // ModelNode.LookAt(platVecs.PosAhead, platVecs.PosAbove);
+
+        // // Update camera position and orientation
+        // FssXYZPoint camOffsetXYZ = CameraOffset.ToXYZ();
+        // ModelCamera.Position = new Vector3((float)camOffsetXYZ.X, -(float)camOffsetXYZ.Y, -(float)camOffsetXYZ.Z);
+        // ModelCamera.LookAt(vecPos, vecAbove);
     }
 }

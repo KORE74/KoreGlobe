@@ -239,14 +239,14 @@ public partial class FssMapManager : Node3D
         // --- Define vectors -----------------------
 
         // Define the Vector3 Offsets
-        Vector3 vecPos   = FssGeoConvOperations.RealWorldToGodot(pos);
-        Vector3 vecAbove = FssGeoConvOperations.RealWorldToGodot(posAbove);
-        Vector3 vecAhead = FssGeoConvOperations.RealWorldToGodot(posAhead);
+        //Vector3 vecPos   = FssGeoConvOperations.RealWorldToGodot(pos);
+        //Vector3 vecAbove = FssGeoConvOperations.RealWorldToGodot(posAbove);
+        //Vector3 vecAhead = FssGeoConvOperations.RealWorldToGodot(posAhead);
 
-        FssEntityV3 platVecs = FssGeoConvOperations.ReadWorldToStruct(pos, Course);
+        FssEntityV3 platVecs = FssGeoConvOperations.RwToGeStruct(pos, Course);
 
         // Update node position and orientation
-        ModelNode.Position = platVecs.Position;// vecPos;
+        ModelNode.Position = platVecs.Pos;// vecPos;
         ModelNode.LookAt(platVecs.PosAhead, platVecs.PosAbove);
 
         // Update camera position and orientation

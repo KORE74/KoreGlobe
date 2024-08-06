@@ -3,14 +3,13 @@ using System;
 
 public partial class TestZeroOffset : Node3D
 {
-    Vector3 EarthCoreOffset = new Vector3(0f, 0f, 0f);
-
+    // The two control nodes
     Node3D EarthCoreNode;
     Node3D ZeroNode;
+    Node3D EntityRootNode;
 
     Node3D PlaformBaseNode;
     Node3D ModelResourceNode;
-    Node3D TrailNode;
 
     Node3D TestNode;
     Node3D TestNodeAhead;
@@ -18,13 +17,8 @@ public partial class TestZeroOffset : Node3D
 
 
 
-    MeshInstance3D LinkCylinderMesh;
-    MeshInstance3D LinkCylinderWire;
-
     Material matColorRed;
     Material matColorBlue;
-    Material matColorYellow;
-    Material matColorWhite;
     Material matWire;
 
     private float MarkerSize  = 0.2f;
@@ -39,12 +33,16 @@ public partial class TestZeroOffset : Node3D
     private float UIPollTimer2 = 0.0f;
     private float PollTimerTrailNode = 0.0f;
 
+
+
     private FssLLAPoint    PlatformPos;
     private FssCourse      PlatformCourse;
     private FssCourseDelta PlatformCourseDelta;
 
-    private FssCyclicIdGenerator IdGen = new FssCyclicIdGenerator(250);
-    private string randomString = FssRandomStringGenerator.GenerateRandomString(5);
+
+
+    // private FssCyclicIdGenerator IdGen = new FssCyclicIdGenerator(250);
+    // private string randomString = FssRandomStringGenerator.GenerateRandomString(5);
 
     // --------------------------------------------------------------------------------------------
     // MARK: Node _Ready and _Process
@@ -53,20 +51,28 @@ public partial class TestZeroOffset : Node3D
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        FssEarthCore.EarthRadiusM = 10;
+        FssZeroOffset.EarthRadiusM = 10;
 
-        matColorRed    = FssMaterialFactory.SimpleColoredMaterial(new Color(0.9f, 0.3f, 0.3f, 1f));
-        matColorBlue   = FssMaterialFactory.SimpleColoredMaterial(new Color(0.3f, 0.3f, 0.9f, 1f));
-        matColorYellow = FssMaterialFactory.SimpleColoredMaterial(FssColorUtil.Colors["OffYellow"]);
-        matColorWhite  = FssMaterialFactory.SimpleColoredMaterial(new Color(1f, 1f, 1f, 1f));
-        matWire        = FssMaterialFactory.WireframeWhiteMaterial();
+        // Init the zero pos
+        FssLLAPoint zeroPos = new FssLLAPoint() {
+            LatDegs = 20f,
+            LonDegs = 90f,
+            RadiusM = FssZeroOffset.EarthRadiusM };
+        FssZeroOffset.SetLLA(zeroPos);
 
+        // Init materials
+        matColorRed  = FssMaterialFactory.SimpleColoredMaterial(new Color(0.9f, 0.3f, 0.3f, 1f));
+        matColorBlue = FssMaterialFactory.SimpleColoredMaterial(new Color(0.3f, 0.3f, 0.9f, 1f));
+        matWire      = FssMaterialFactory.WireframeWhiteMaterial();
+
+        // Create Nodes
         CreateCoreNode();
-        CreateLinkCylinder();
 
         CreatePlatform();
         CreatePlatformNodes();
     }
+
+    // --------------------------------------------------------------------------------------------
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
@@ -75,127 +81,69 @@ public partial class TestZeroOffset : Node3D
         {
             UIPollTimer = FssCoreTime.RuntimeSecs + 1f; // Update the timer to the next whole second
 
-            GD.Print($"FocusPoint: Lat:{FssEarthCore.RwFocusLLA.LatDegs:0.00} Lon:{FssEarthCore.RwFocusLLA.LonDegs:0.00} RadiusM:{FssEarthCore.RwFocusLLA.RadiusM:0.00}");
-            GD.Print($"PlatPos: Lat:{PlatformPos.LatDegs:0.00} Lon:{PlatformPos.LonDegs:0.00} RadiusM:{PlatformPos.RadiusM:0.00} // Course: Heading:{PlatformCourse.HeadingDegs:0.00} Speed:{PlatformCourse.SpeedMps:0.00}");
-            GD.Print($"FocusPos: {FssEarthCore.FocusPos} // CorePos: {FssEarthCore.CorePos} // CorePos Magnitude {FssEarthCore.CorePos.Length()}");
+            GD.Print($"ZeroOffset: Lat:{FssZeroOffset.RwZeroPointLLA.LatDegs:0.00} Lon:{FssZeroOffset.RwZeroPointLLA.LonDegs:0.00} RadiusM:{FssZeroOffset.RwZeroPointLLA.RadiusM:0.00}");
+            GD.Print($"ZeroOffset: X:{FssZeroOffset.RwZeroPointXYZ.X:0.00} Y:{FssZeroOffset.RwZeroPointXYZ.Y:0.00} Z:{FssZeroOffset.RwZeroPointXYZ.Z:0.00}");
+
+            GD.Print($"Platform: Lat:{PlatformPos.LatDegs:0.00} Lon:{PlatformPos.LonDegs:0.00} Alt:{PlatformPos.AltMslM:0.00} RadiusM:{PlatformPos.RadiusM:0.00}");
+            GD.Print($"Platform: Hdg:{PlatformCourse.HeadingDegs:0.00} Spd:{PlatformCourse.SpeedMps:0.00}");
+
+            GD.Print($"PlatformNodePos: X:{PlaformBaseNode.Position.X:0.00} Y:{PlaformBaseNode.Position.Y:0.00} Z:{PlaformBaseNode.Position.Z:0.00}");
+
+            GD.Print("\n");
+
         }
 
-        float scale = 0.7f;
+        // float scale = 0.7f;
 
-        AnimAzDegs += AnimAzDelta * ((float)delta * scale);
-        AnimElDegs += AnimElDelta * ((float)delta * scale);
+        // AnimAzDegs += AnimAzDelta * ((float)delta * scale);
+        // AnimElDegs += AnimElDelta * ((float)delta * scale);
 
-        if (AnimElDegs >  25f) AnimElDelta = -1.05f;
-        if (AnimElDegs <   0f) AnimElDelta =  1.05f;
-        if (AnimAzDegs >  25f) AnimAzDelta = -1.55f;
-        if (AnimAzDegs <   0f) AnimAzDelta =  1.55f;
+        // if (AnimElDegs >  25f) AnimElDelta = -1.05f;
+        // if (AnimElDegs <   0f) AnimElDelta =  1.05f;
+        // if (AnimAzDegs >  25f) AnimAzDelta = -1.55f;
+        // if (AnimAzDegs <   0f) AnimAzDelta =  1.55f;
 
-        FssEarthCore.RwFocusLLA = new FssLLAPoint() {
-            LatDegs = AnimElDegs,
-            LonDegs = AnimAzDegs,
-            RadiusM = FssEarthCore.EarthRadiusM };
+        // FssEarthCore.RwFocusLLA = new FssLLAPoint() {
+        //     LatDegs = AnimElDegs,
+        //     LonDegs = AnimAzDegs,
+        //     RadiusM = FssEarthCore.EarthRadiusM };
 
-        // Update the gloabel Focus Position, LLA and Vector3
-        FssEarthCore.UpdatePositions();
+        // // Update the gloabel Focus Position, LLA and Vector3
+        // FssEarthCore.UpdatePositions();
 
-        UpdatePositions();
-        UpdateLinkCylinder();
+        UpdateCoreNodePositions();
 
         UpdatePlatform(delta);
-        UpdatePlatformNodes(delta);
+        UpdatePlatformNodes2();
     }
 
     // --------------------------------------------------------------------------------------------
-    // MARK: Create Major moving geometry nodes.
+    // MARK: Create
     // --------------------------------------------------------------------------------------------
 
     private void CreateCoreNode()
     {
-        CoreNode = FssPrimitiveFactory.CreateSphereNode("CoreNode", new Vector3(0f, 0f, 0f), MarkerSize, FssColorUtil.Colors["OffBlue"], WithWire);
-        AddChild(CoreNode);
-
-        FocusPointNode = FssPrimitiveFactory.CreateSphereNode("FocusPointNode", new Vector3(0f, 0f, 0f), MarkerSize, FssColorUtil.Colors["OffYellow"], WithWire);
-        AddChild(FocusPointNode);
-
+        // Create the two marker objects
+        EarthCoreNode = FssPrimitiveFactory.CreateSphereNode("EarthCoreNode", new Vector3(0f, 0f, 0f), MarkerSize, FssColorUtil.Colors["OffBlue"], WithWire);
+        AddChild(EarthCoreNode);
         ZeroNode = FssPrimitiveFactory.CreateSphereNode("ZeroNode", new Vector3(0f, 0f, 0f), MarkerSize, FssColorUtil.Colors["OffRed"], WithWire);
         AddChild(ZeroNode);
 
+        // Add axis markers to the core and zero nodes
+        FssPrimitiveFactory.AddAxisMarkers(EarthCoreNode, MarkerSize, MarkerSize/4);
+        FssPrimitiveFactory.AddAxisMarkers(ZeroNode,      MarkerSize, MarkerSize/4);
 
-        {
-            Node3D tempNode1 = FssPrimitiveFactory.CreateSphereNode("tempNode1", new Vector3(0f, 1f, 0f), MarkerSize/3, FssColorUtil.Colors["Magenta"], WithWire);
-            FocusPointNode.AddChild(tempNode1);
+        // Add the wedges
+        EarthCoreNode.AddChild(new TestEarthCore((float)FssZeroOffset.EarthRadiusM));
 
-            Node3D tempNode2 = FssPrimitiveFactory.CreateSphereNode("tempNode2", new Vector3(0f, 2f, 0f), MarkerSize/3, FssColorUtil.Colors["Magenta"], WithWire);
-            FocusPointNode.AddChild(tempNode2);
+        // Add the LL Labels
+        EarthCoreNode.AddChild(new TestLabelMaker());
 
-            Node3D tempNode3 = FssPrimitiveFactory.CreateSphereNode("tempNode3", new Vector3(1f, 1f, 0f), MarkerSize/3, FssColorUtil.Colors["Magenta"], WithWire);
-            FocusPointNode.AddChild(tempNode3);
-        }
-
-        {
-            TestNode = FssPrimitiveFactory.CreateSphereNode("TestNode", Vector3.Zero, MarkerSize/3, FssColorUtil.Colors["Yellow"], WithWire);
-            FocusPointNode.AddChild(TestNode);
-
-            TestNodeAbove = FssPrimitiveFactory.CreateSphereNode("TestNodeAbove", Vector3.Zero, MarkerSize/3, FssColorUtil.Colors["Yellow"], WithWire);
-            FocusPointNode.AddChild(TestNodeAbove);
-
-            TestNodeAhead = FssPrimitiveFactory.CreateSphereNode("TestNodeAhead", Vector3.Zero, MarkerSize/3, FssColorUtil.Colors["Yellow"], WithWire);
-            FocusPointNode.AddChild(TestNodeAhead);
-        }
-
-
-        CoreNode.AddChild(new TestEarthCore((float)FssEarthCore.EarthRadiusM));
-        CoreNode.AddChild(new TestLabelMaker());
+        // Add the platform root node, onto the zero node.
+        EntityRootNode = new Node3D() { Name = "EntityRootNode" };  // This is the root node for all entities
+        ZeroNode.AddChild(EntityRootNode);
     }
 
-    private void CreateLinkCylinder()
-    {
-        // Create the focus point node
-        LinkCylinderNode = new Node3D() { Name = "LinkCylinder" };
-        AddChild(LinkCylinderNode);
-
-        LinkCylinderMesh                  = new MeshInstance3D() { Name = "Color" };
-        LinkCylinderMesh.MaterialOverride = matColorWhite;
-        LinkCylinderNode.AddChild(LinkCylinderMesh);
-
-        LinkCylinderWire                  = new MeshInstance3D() { Name = "Wire" };
-        LinkCylinderWire.MaterialOverride = matWire;
-        LinkCylinderNode.AddChild(LinkCylinderWire);
-    }
-
-    private void UpdateLinkCylinder()
-    {
-        Vector3 frompoint = FssEarthCore.CorePos;
-        Vector3 topoint   = FssEarthCore.FocusPos;
-        Vector3 pointdiff = topoint - frompoint;
-
-        float radius = MarkerSize * 0.5f;
-
-        FssMeshBuilder meshBuilder = new FssMeshBuilder();
-        meshBuilder.AddCylinder(Vector3.Zero, pointdiff, radius, radius, 12, false);
-        ArrayMesh meshData = meshBuilder.Build2("LinkCylinder", false);
-
-        // Mesh
-        LinkCylinderMesh.Position = frompoint;
-        LinkCylinderMesh.Mesh     = meshData;
-
-        // Wireframe
-        LinkCylinderWire.Position = frompoint;
-        LinkCylinderWire.Mesh     = meshData;
-    }
-
-    private void UpdatePositions()
-    {
-        CoreNode.Position       = FssEarthCore.CorePos;
-        FocusPointNode.Position = FssEarthCore.FocusPos;
-
-        // Ensure the core and focus point rotations are zero
-        CoreNode.Rotation       = new Vector3(0f, 0f, 0f);
-        FocusPointNode.Rotation = new Vector3(0f, 0f, 0f);
-    }
-
-    // --------------------------------------------------------------------------------------------
-    // MARK: Create and update moving platform
     // --------------------------------------------------------------------------------------------
 
     private void CreatePlatform()
@@ -214,15 +162,17 @@ public partial class TestZeroOffset : Node3D
             SpeedChangeMpMps              = 0f };
     }
 
+    // --------------------------------------------------------------------------------------------
+
     private void CreatePlatformNodes()
     {
         // Create the core for the platform, to place and orient
         PlaformBaseNode = new Node3D() { Name = "PlaformBaseNode" };
-        FocusPointNode.AddChild(PlaformBaseNode);
+        EntityRootNode.AddChild(PlaformBaseNode);
 
         FssPrimitiveFactory.AddAxisMarkers(PlaformBaseNode, 0.2f, 0.05f);
 
-        string ModelPath = "res://Resources/Plane_Paper/PaperPlanes_v002.glb";
+        string ModelPath = "res://Resources/Models/Plane/Plane_Paper/PaperPlanes_v002.glb";
 
         PackedScene importedModel = (PackedScene)ResourceLoader.Load(ModelPath);
         if (importedModel != null)
@@ -239,6 +189,26 @@ public partial class TestZeroOffset : Node3D
         }
     }
 
+    // --------------------------------------------------------------------------------------------
+    // MARK: Update
+    // --------------------------------------------------------------------------------------------
+
+    private void UpdateCoreNodePositions()
+    {
+        FssLLAPoint p = FssZeroOffset.RwZeroPointLLA;
+        p.LonDegs += 0.01f;
+        FssZeroOffset.SetLLA(p);
+
+        ZeroNode.Position      = FssZeroOffset.GeZeroPoint();
+        EarthCoreNode.Position = FssZeroOffset.GeCorePoint();
+
+        // Ensure the core and focus point rotations are zero, we'll calculate those separately.
+        EarthCoreNode.Rotation = new Vector3(0f, 0f, 0f);
+        ZeroNode.Rotation      = new Vector3(0f, 0f, 0f);
+    }
+
+    // --------------------------------------------------------------------------------------------
+
     private void UpdatePlatform(double delta)
     {
         // Update real world position
@@ -246,38 +216,22 @@ public partial class TestZeroOffset : Node3D
         PlatformPos    = PlatformPos.PlusDeltaForTime(PlatformCourse, delta);
     }
 
-    private void UpdatePlatformNodes(double delta)
+    // --------------------------------------------------------------------------------------------
+
+    private void UpdatePlatformNodes()
     {
-        FssRWPlatformPositions rwStruct = FssGeoConvOperations.RealWorldStruct(PlatformPos, PlatformCourse);
+        PlaformBaseNode.Position = FssZeroOffset.GeZeroPointOffset(PlatformPos.ToXYZ());
+    }
 
-        // PlaformBaseNode.Position = rwStruct.vecPos;
-        // PlaformBaseNode.LookAt(rwStruct.vecPosAhead, rwStruct.vecPosAbove, true);
-
-        // Place the yellow nodes - local co-ordinate system to the focus node.
-        TestNode.Position      = rwStruct.vecPos;
-        TestNodeAbove.Position = rwStruct.vecPosAbove;
-        TestNodeAhead.Position = rwStruct.vecPosAhead;
-
-        // Vector3 pos   = new Vector3(0f, 1f, 0f);
-        // Vector3 ahead = new Vector3(0f, 2f, 0f);
-        // Vector3 above = new Vector3(1f, 1f, 0f);
-
-        Vector3 adjustedPos   = rwStruct.vecPos + FssEarthCore.FocusPos;
-        Vector3 adjustedAhead = ToGlobal(rwStruct.vecPosAhead + FssEarthCore.FocusPos);
-        Vector3 adjustedAbove = ToGlobal(rwStruct.vecPosAbove + FssEarthCore.FocusPos);
-
-        // ahead += FssEarthCore.FocusPos;
-        // above += FssEarthCore.FocusPos;
-
-        PlaformBaseNode.Position = adjustedPos;
-        PlaformBaseNode.LookAt(adjustedAhead, adjustedAbove, true);
+    private void UpdatePlatformNodes2()
+    {
+        FssEntityV3 platformV3 = FssGeoConvOperations.RwToGeStruct(PlatformPos, PlatformCourse);
 
         PlaformBaseNode.LookAtFromPosition(
-            adjustedPos,
-            adjustedAhead,
-            adjustedAbove,
+            platformV3.Pos,
+            platformV3.PosAhead,
+            platformV3.VecUp,
             true);
-
     }
 
 }

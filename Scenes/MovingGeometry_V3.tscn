@@ -1,13 +1,13 @@
 [gd_scene load_steps=3 format=3 uid="uid://cle61uafx4wyg"]
 
-[ext_resource type="Script" path="res://Code/Godot/TestMovingGeometryCore.cs" id="1_uqvww"]
+[ext_resource type="Script" path="res://Code/Godot/TestZeroOffset.cs" id="1_awllb"]
 [ext_resource type="Script" path="res://Code/Godot/Util/FssCameraMover.cs" id="2_uur7r"]
 
 [node name="MovingGeometry" type="Node3D"]
-script = ExtResource("1_uqvww")
+script = ExtResource("1_awllb")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.41542)
+transform = Transform3D(-0.0098958, 0, 0.999951, 0, 1, 0, -0.999951, 0, -0.0098958, 10.3465, -0.263696, 0.306362)
 fov = 40.0
 near = 0.001
 far = 8000.0

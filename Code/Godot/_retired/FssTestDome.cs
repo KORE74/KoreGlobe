@@ -65,15 +65,15 @@ public partial class FssTestDome : Node3D
         // --- Define vectors -----------------------
 
         // Define the Vector3 Offsets
-        Vector3 vecPos   = FssGeoConvOperations.RealWorldToGodot(pos);
-        Vector3 vecAbove = FssGeoConvOperations.RealWorldToGodot(posAbove);
-        Vector3 vecAhead = FssGeoConvOperations.RealWorldToGodot(posAhead);
-
-        FssEntityV3 platVecs = FssGeoConvOperations.ReadWorldToStruct(pos, FssCourse.Zero);
-
-        // Update node position and orientation
-        ModelNode.Position = platVecs.Position;// vecPos;
-        ModelNode.LookAt(platVecs.PosAhead, platVecs.PosAbove);
+        //Vector3 vecPos   = FssGeoConvOperations.RealWorldToGodot(pos);
+        //Vector3 vecAbove = FssGeoConvOperations.RealWorldToGodot(posAbove);
+        //Vector3 vecAhead = FssGeoConvOperations.RealWorldToGodot(posAhead);
+//
+        //FssEntityV3 platVecs = FssGeoConvOperations.RealWorldToStruct(pos, FssCourse.Zero);
+//
+        //// Update node position and orientation
+        //ModelNode.Position = platVecs.Position;// vecPos;
+        //ModelNode.LookAt(platVecs.PosAhead, platVecs.PosAbove);
 
         // Update camera position and orientation
         // FssXYZPoint camOffsetXYZ = CameraOffset.ToXYZ();
