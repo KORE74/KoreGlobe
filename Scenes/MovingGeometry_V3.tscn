@@ -1,19 +1,50 @@
-[gd_scene load_steps=3 format=3 uid="uid://cle61uafx4wyg"]
+[gd_scene load_steps=7 format=3 uid="uid://cle61uafx4wyg"]
 
 [ext_resource type="Script" path="res://Code/Godot/TestZeroOffset.cs" id="1_awllb"]
 [ext_resource type="Script" path="res://Code/Godot/Util/FssCameraMover.cs" id="2_uur7r"]
+[ext_resource type="PackedScene" uid="uid://ck4tngsqwb7jf" path="res://Scenes/ui_top.tscn" id="3_3wlp5"]
 
-[node name="MovingGeometry" type="Node3D"]
+[sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_1kdqr"]
+
+[sub_resource type="Sky" id="Sky_04td5"]
+sky_material = SubResource("PhysicalSkyMaterial_1kdqr")
+
+[sub_resource type="Environment" id="Environment_u3ced"]
+background_mode = 1
+background_color = Color(0.56732, 0.766407, 0.790569, 1)
+background_energy_multiplier = 1.16
+sky = SubResource("Sky_04td5")
+ambient_light_source = 2
+ambient_light_color = Color(0.875644, 0.893054, 0.867068, 1)
+reflected_light_source = 2
+ssr_depth_tolerance = 0.01
+ssao_radius = 1.47
+glow_enabled = true
+fog_enabled = true
+fog_light_energy = 1.63
+fog_sun_scatter = 0.56
+adjustment_enabled = true
+
+[node name="Root" type="Node3D"]
+top_level = true
+
+[node name="Scene" type="Node3D" parent="."]
+top_level = true
 script = ExtResource("1_awllb")
 
-[node name="Camera3D" type="Camera3D" parent="."]
+[node name="SpotLight3D" type="SpotLight3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 0.173648, 0.984808, 0, -0.984808, 0.173648, 0, 10, 3)
+spot_range = 16.0847
+spot_angle = 30.6739
+
+[node name="Camera3D" type="Camera3D" parent="Scene"]
 transform = Transform3D(-0.0098958, 0, 0.999951, 0, 1, 0, -0.999951, 0, -0.0098958, 10.3465, -0.263696, 0.306362)
 fov = 40.0
 near = 0.001
 far = 8000.0
 script = ExtResource("2_uur7r")
 
-[node name="SpotLight3D" type="SpotLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.173648, 0.984808, 0, -0.984808, 0.173648, 0, 10, 3)
-spot_range = 16.0847
-spot_angle = 30.6739
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Scene"]
+environment = SubResource("Environment_u3ced")
+
+[node name="UITop" parent="." instance=ExtResource("3_3wlp5")]

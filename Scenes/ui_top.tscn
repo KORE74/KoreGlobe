@@ -1,0 +1,748 @@
+[gd_scene load_steps=23 format=3 uid="uid://ck4tngsqwb7jf"]
+
+[ext_resource type="StyleBox" uid="uid://cg5jbxqki88ph" path="res://Themes/new_style_box_flat.tres" id="1_fred0"]
+[ext_resource type="Script" path="res://Code/Godot/UI/FssUIHeader.cs" id="2_iuuet"]
+[ext_resource type="Theme" uid="uid://p1asdjvj8ece" path="res://Themes/GreenToggle.tres" id="3_454jl"]
+[ext_resource type="Texture2D" uid="uid://b5neqrik7nbhj" path="res://Resources/Icons/White_Connections2.png" id="4_2axux"]
+[ext_resource type="Texture2D" uid="uid://c535aixjgoih0" path="res://Resources/Icons/White_Options.png" id="5_ks0k1"]
+[ext_resource type="Theme" uid="uid://dygto0gp0wtwi" path="res://Themes/Red_Button.tres" id="6_rgbsb"]
+[ext_resource type="Texture2D" uid="uid://bpjmofp0dir0d" path="res://Resources/Icons/White_Close.png" id="7_mru6u"]
+[ext_resource type="Texture2D" uid="uid://8km4gxg0fgok" path="res://Resources/Icons/White_Log.png" id="8_4gj75"]
+[ext_resource type="Theme" uid="uid://b73ifjtcxnugj" path="res://Themes/YellowToggle.tres" id="9_xvvq8"]
+[ext_resource type="Texture2D" uid="uid://dec5v78k63oif" path="res://Resources/Icons/White_Globe.png" id="10_ebi24"]
+[ext_resource type="Texture2D" uid="uid://buqwf6wctolbe" path="res://Resources/Icons/Plane.png" id="11_c00mr"]
+[ext_resource type="Theme" uid="uid://f7cusn8cepiu" path="res://Themes/Green_Button.tres" id="12_nxgov"]
+[ext_resource type="Texture2D" uid="uid://dgq7if4l4dpys" path="res://Resources/Icons/Align.png" id="13_pe2s4"]
+[ext_resource type="Texture2D" uid="uid://cvkgx537okkdr" path="res://Resources/Icons/arrow_left.png" id="14_w6k6m"]
+[ext_resource type="Texture2D" uid="uid://msmhfxb7v8b" path="res://Resources/Icons/arrow_right.png" id="15_7rjg6"]
+[ext_resource type="Script" path="res://Code/Godot/UI/FssCliWindow.cs" id="16_unelf"]
+[ext_resource type="Script" path="res://Code/Godot/UI/FssNetworkWindow.cs" id="17_xs6g5"]
+[ext_resource type="Script" path="res://Code/Godot/UI/FssSettingWindow.cs" id="18_sk1xa"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_3y634"]
+allow_unpress = true
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_anppk"]
+allow_unpress = true
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_lkqfi"]
+
+[sub_resource type="Shortcut" id="Shortcut_2ktqs"]
+
+[node name="UITop" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="MarginContainer-ScreenInset" type="MarginContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer-Screen" type="VBoxContainer" parent="Control/MarginContainer-ScreenInset"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HeaderContainer" type="PanelContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen"]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("1_fred0")
+script = ExtResource("2_iuuet")
+
+[node name="MarginContainer-HeaderInset" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="HeaderContainer-LeftAlign" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset"]
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Network-IconButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("3_454jl")
+toggle_mode = true
+icon = ExtResource("4_2axux")
+expand_icon = true
+
+[node name="Setting-IconButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("3_454jl")
+toggle_mode = true
+icon = ExtResource("5_ks0k1")
+icon_alignment = 1
+expand_icon = true
+
+[node name="Label" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
+layout_mode = 2
+text = "Mode:"
+
+[node name="OptionButton" type="OptionButton" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
+layout_mode = 2
+item_count = 5
+popup/item_0/text = "Real World"
+popup/item_1/text = "Logical"
+popup/item_1/id = 1
+popup/item_2/text = "InfoGraphic"
+popup/item_2/id = 2
+popup/item_3/text = "Transmitter"
+popup/item_3/id = 3
+popup/item_4/text = "Receiver"
+popup/item_4/id = 4
+
+[node name="HeaderContainer-RightAlign" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
+layout_direction = 3
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 5
+
+[node name="Exit-IconButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign/HeaderContainer-RightAlign"]
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+theme = ExtResource("6_rgbsb")
+icon = ExtResource("7_mru6u")
+icon_alignment = 1
+expand_icon = true
+
+[node name="CLI-IconButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign/HeaderContainer-RightAlign"]
+clip_contents = true
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+theme = ExtResource("3_454jl")
+theme_override_constants/outline_size = 5
+toggle_mode = true
+icon = ExtResource("8_4gj75")
+icon_alignment = 1
+expand_icon = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Control-PlatPos" type="Control" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -119.0
+offset_top = -82.0
+offset_right = 119.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="PanelContainer-CamMode" type="PanelContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("1_fred0")
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer-PanelRows" type="VBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows"]
+layout_mode = 2
+text = "Camera Mode
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Button3" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("9_xvvq8")
+theme_override_constants/outline_size = 10
+toggle_mode = true
+button_pressed = true
+action_mode = 0
+button_group = SubResource("ButtonGroup_3y634")
+icon = ExtResource("10_ebi24")
+expand_icon = true
+
+[node name="Button2" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("9_xvvq8")
+toggle_mode = true
+action_mode = 0
+button_group = SubResource("ButtonGroup_anppk")
+icon = ExtResource("11_c00mr")
+icon_alignment = 1
+expand_icon = true
+
+[node name="Button" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("12_nxgov")
+theme_override_constants/outline_size = 10
+disabled = true
+toggle_mode = true
+action_mode = 0
+button_group = SubResource("ButtonGroup_lkqfi")
+icon = ExtResource("13_pe2s4")
+expand_icon = true
+
+[node name="PanelContainer-Pos2" type="PanelContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("1_fred0")
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer-PanelRows" type="VBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2/MarginContainer/VBoxContainer-PanelRows"]
+layout_mode = 2
+text = "Near Platform"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2/MarginContainer/VBoxContainer-PanelRows"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Button2" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("3_454jl")
+icon = ExtResource("14_w6k6m")
+icon_alignment = 1
+expand_icon = true
+
+[node name="Label" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+custom_minimum_size = Vector2(130, 45)
+layout_mode = 2
+text = "Platform 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("3_454jl")
+theme_override_constants/outline_size = 10
+icon = ExtResource("15_7rjg6")
+expand_icon = true
+
+[node name="PanelContainer-Pos" type="PanelContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("1_fred0")
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer-PanelRows" type="VBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos/MarginContainer/VBoxContainer-PanelRows"]
+layout_mode = 2
+text = "Far Platform"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos/MarginContainer/VBoxContainer-PanelRows"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Button2" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("3_454jl")
+icon = ExtResource("14_w6k6m")
+icon_alignment = 1
+expand_icon = true
+
+[node name="Label" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+custom_minimum_size = Vector2(130, 45)
+layout_mode = 2
+text = "Platform 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("3_454jl")
+theme_override_colors/icon_pressed_color = Color(1, 0.397701, 0.329255, 1)
+theme_override_colors/icon_hover_color = Color(0.456283, 0.767747, 0.448169, 1)
+theme_override_colors/icon_disabled_color = Color(0.255659, 0.255659, 0.255659, 1)
+icon = ExtResource("15_7rjg6")
+icon_alignment = 1
+expand_icon = true
+
+[node name="FooterContainer" type="PanelContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="MarginContainer-FooterInset" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/FooterContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="FooterContainer-LeftAlign" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/FooterContainer/MarginContainer-FooterInset"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Button" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/FooterContainer/MarginContainer-FooterInset/FooterContainer-LeftAlign"]
+custom_minimum_size = Vector2(70, 40)
+layout_mode = 2
+size_flags_horizontal = 0
+tooltip_text = "ToolTip!"
+focus_mode = 0
+keep_pressed_outside = true
+shortcut = SubResource("Shortcut_2ktqs")
+text = "Button"
+
+[node name="OptionButton" type="OptionButton" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/FooterContainer/MarginContainer-FooterInset/FooterContainer-LeftAlign"]
+layout_mode = 2
+focus_mode = 0
+item_count = 4
+popup/item_0/text = "sadfsadfa"
+popup/item_1/text = "sadfsadf"
+popup/item_1/id = 1
+popup/item_2/text = "sadfs"
+popup/item_2/id = 2
+popup/item_3/text = "2323"
+popup/item_3/id = 3
+
+[node name="FooterContainer-RightAlign" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/FooterContainer/MarginContainer-FooterInset/FooterContainer-LeftAlign"]
+layout_direction = 3
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 5
+
+[node name="Button" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/FooterContainer/MarginContainer-FooterInset/FooterContainer-LeftAlign/FooterContainer-RightAlign"]
+custom_minimum_size = Vector2(70, 40)
+layout_mode = 2
+size_flags_horizontal = 0
+tooltip_text = "ToolTip!"
+focus_mode = 0
+keep_pressed_outside = true
+shortcut = SubResource("Shortcut_2ktqs")
+text = "Button"
+
+[node name="CLIWindow" type="Window" parent="."]
+auto_translate_mode = 1
+title = "Internal CLI"
+initial_position = 2
+size = Vector2i(500, 300)
+visible = false
+script = ExtResource("16_unelf")
+
+[node name="TabContainer" type="TabContainer" parent="CLIWindow"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+current_tab = 0
+tab_focus_mode = 0
+
+[node name="Log" type="VBoxContainer" parent="CLIWindow/TabContainer"]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="LogScrollContainer" type="ScrollContainer" parent="CLIWindow/TabContainer/Log"]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="LogLabel" type="Label" parent="CLIWindow/TabContainer/Log/LogScrollContainer"]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 2
+autowrap_mode = 1
+
+[node name="CLI" type="VBoxContainer" parent="CLIWindow/TabContainer"]
+visible = false
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CLIWindow/TabContainer/CLI"]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="CommandResponseLabel" type="Label" parent="CLIWindow/TabContainer/CLI/ScrollContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "af"
+clip_text = true
+text_overrun_behavior = 1
+
+[node name="CommandEntryEdit" type="LineEdit" parent="CLIWindow/TabContainer/CLI"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="NetworkWindow" type="Window" parent="."]
+auto_translate_mode = 1
+title = "Network"
+initial_position = 2
+size = Vector2i(520, 425)
+visible = false
+unresizable = true
+popup_window = true
+min_size = Vector2i(400, 300)
+keep_title_visible = true
+script = ExtResource("17_xs6g5")
+
+[node name="MarginContainer" type="MarginContainer" parent="NetworkWindow"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 2
+size_flags_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="NetworkWindow/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_constants/separation = 10
+
+[node name="Row1-UDP" type="HBoxContainer" parent="NetworkWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="UdpIpAddrLabel" type="Label" parent="NetworkWindow/MarginContainer/VBoxContainer/Row1-UDP"]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "UDP Receiver IP"
+vertical_alignment = 1
+
+[node name="UdpIpAddrEdit" type="LineEdit" parent="NetworkWindow/MarginContainer/VBoxContainer/Row1-UDP"]
+custom_minimum_size = Vector2(145, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "222.222.222.222"
+
+[node name="UdpIpPortLabel" type="Label" parent="NetworkWindow/MarginContainer/VBoxContainer/Row1-UDP"]
+custom_minimum_size = Vector2(45, 0)
+layout_direction = 2
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Port
+"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="UdpIpPortEdit" type="LineEdit" parent="NetworkWindow/MarginContainer/VBoxContainer/Row1-UDP"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "10000"
+
+[node name="UdpIpConnectButton" type="Button" parent="NetworkWindow/MarginContainer/VBoxContainer/Row1-UDP"]
+layout_mode = 2
+text = "Connect"
+
+[node name="Row2-TCPServer" type="HBoxContainer" parent="NetworkWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TcpIpServerAddrLabel" type="Label" parent="NetworkWindow/MarginContainer/VBoxContainer/Row2-TCPServer"]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "TCP Server IP"
+
+[node name="TcpIpServerAddrEdit" type="LineEdit" parent="NetworkWindow/MarginContainer/VBoxContainer/Row2-TCPServer"]
+custom_minimum_size = Vector2(145, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="TcpIpServerPortLabel" type="Label" parent="NetworkWindow/MarginContainer/VBoxContainer/Row2-TCPServer"]
+custom_minimum_size = Vector2(45, 0)
+layout_direction = 2
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Port"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="TcpIpSerfverPortEdit" type="LineEdit" parent="NetworkWindow/MarginContainer/VBoxContainer/Row2-TCPServer"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="TcpIpServerConnectButton" type="Button" parent="NetworkWindow/MarginContainer/VBoxContainer/Row2-TCPServer"]
+layout_mode = 2
+text = "Connect"
+
+[node name="Row3-TCPClient" type="HBoxContainer" parent="NetworkWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TcpIpClientAddrLabel" type="Label" parent="NetworkWindow/MarginContainer/VBoxContainer/Row3-TCPClient"]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "TCP Server IP"
+
+[node name="TcpIpClientAddrEdit" type="LineEdit" parent="NetworkWindow/MarginContainer/VBoxContainer/Row3-TCPClient"]
+custom_minimum_size = Vector2(145, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="TcpIpClientPortLabel" type="Label" parent="NetworkWindow/MarginContainer/VBoxContainer/Row3-TCPClient"]
+custom_minimum_size = Vector2(45, 0)
+layout_direction = 2
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Port"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="TcpIpClientPortEdit" type="LineEdit" parent="NetworkWindow/MarginContainer/VBoxContainer/Row3-TCPClient"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="TcpIpClientConnectButton" type="Button" parent="NetworkWindow/MarginContainer/VBoxContainer/Row3-TCPClient"]
+layout_mode = 2
+text = "Connect"
+
+[node name="HSeparator2" type="HSeparator" parent="NetworkWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Row-Status" type="HBoxContainer" parent="NetworkWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="NetworkStatusTextEdit" type="TextEdit" parent="NetworkWindow/MarginContainer/VBoxContainer/Row-Status"]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Network Status label"
+editable = false
+
+[node name="HSeparator" type="HSeparator" parent="NetworkWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="RowFinal" type="HBoxContainer" parent="NetworkWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 2
+theme_override_constants/separation = 10
+
+[node name="CancelButton" type="Button" parent="NetworkWindow/MarginContainer/VBoxContainer/RowFinal"]
+custom_minimum_size = Vector2(70, 45)
+layout_mode = 2
+text = "Cancel"
+
+[node name="OkButton" type="Button" parent="NetworkWindow/MarginContainer/VBoxContainer/RowFinal"]
+custom_minimum_size = Vector2(70, 45)
+layout_mode = 2
+text = "OK"
+
+[node name="SettingWindow" type="Window" parent="."]
+auto_translate_mode = 1
+title = "Settings"
+initial_position = 2
+size = Vector2i(600, 215)
+visible = false
+script = ExtResource("18_sk1xa")
+
+[node name="MarginContainer" type="MarginContainer" parent="SettingWindow"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 2
+size_flags_vertical = 0
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SettingWindow/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Row1-MapPath" type="HBoxContainer" parent="SettingWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MapPathLabel" type="Label" parent="SettingWindow/MarginContainer/VBoxContainer/Row1-MapPath"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Map Path"
+vertical_alignment = 1
+
+[node name="MapPathLineEdit" type="LineEdit" parent="SettingWindow/MarginContainer/VBoxContainer/Row1-MapPath"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "X:/BaseDirectory/Option/MapDirectory/"
+
+[node name="Row2-CapturePath" type="HBoxContainer" parent="SettingWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="CapturePathLabel" type="Label" parent="SettingWindow/MarginContainer/VBoxContainer/Row2-CapturePath"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Screenshot Path"
+vertical_alignment = 1
+
+[node name="CapturePathLineEdit" type="LineEdit" parent="SettingWindow/MarginContainer/VBoxContainer/Row2-CapturePath"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "X:/BaseDirectory/Option/MapDirectory/"
+
+[node name="HSeparator" type="HSeparator" parent="SettingWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Row2-CapturePath2" type="HBoxContainer" parent="SettingWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Language" type="Label" parent="SettingWindow/MarginContainer/VBoxContainer/Row2-CapturePath2"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Language"
+vertical_alignment = 1
+
+[node name="OptionButton" type="OptionButton" parent="SettingWindow/MarginContainer/VBoxContainer/Row2-CapturePath2"]
+layout_mode = 2
+size_flags_horizontal = 3
+item_count = 3
+popup/item_0/text = "English"
+popup/item_0/id = 1
+popup/item_1/text = "French"
+popup/item_1/id = 2
+popup/item_2/text = "German"
+popup/item_2/id = 3
+
+[node name="HSeparator2" type="HSeparator" parent="SettingWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="RowFinal" type="HBoxContainer" parent="SettingWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 2
+
+[node name="CancelButton" type="Button" parent="SettingWindow/MarginContainer/VBoxContainer/RowFinal"]
+custom_minimum_size = Vector2(70, 45)
+layout_mode = 2
+text = "Cancel"
+
+[node name="OkButton" type="Button" parent="SettingWindow/MarginContainer/VBoxContainer/RowFinal"]
+custom_minimum_size = Vector2(70, 45)
+layout_mode = 2
+text = "OK"
+
+[node name="PlatformWindow" type="Window" parent="."]
+auto_translate_mode = 1
+initial_position = 2
+size = Vector2i(400, 300)
+visible = false
+
+[node name="MarginContainer" type="MarginContainer" parent="PlatformWindow"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Platform" type="VBoxContainer" parent="PlatformWindow/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="OptionButton" type="OptionButton" parent="PlatformWindow/MarginContainer/Platform"]
+layout_mode = 2
+focus_mode = 0
+item_count = 1
+popup/item_0/text = "plat1"
+
+[node name="TabContainer" type="TabContainer" parent="PlatformWindow/MarginContainer/Platform"]
+layout_mode = 2
+size_flags_vertical = 3
+current_tab = 0
+
+[node name="Platform" type="VBoxContainer" parent="PlatformWindow/MarginContainer/Platform/TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 0

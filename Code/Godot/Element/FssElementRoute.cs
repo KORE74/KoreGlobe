@@ -15,10 +15,6 @@ public partial class FssElementRoute : Node3D
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        // Init materials
-        // matColorRed  = FssMaterialFactory.SimpleColoredMaterial(new Color(0.9f, 0.3f, 0.3f, 1f));
-        // matColorBlue = FssMaterialFactory.SimpleColoredMaterial(new Color(0.3f, 0.3f, 0.9f, 1f));
-        // matWire      = FssMaterialFactory.WireframeWhiteMaterial();
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -82,7 +78,6 @@ public partial class FssElementRoute : Node3D
             meshInstance.Position = platformV3.Pos;
         }
 
-
     }
 
     // Update called to keep the route in place with the zero point.
@@ -101,48 +96,9 @@ public partial class FssElementRoute : Node3D
 
 
 
-
-        // for (int i=0; i<numLinks; i++)
-        // {
-        //     FssEntityV3 platformV3 = FssGeoConvOperations.RwToGeStruct(RoutePoints[i], RoutePoints[i+1]);
-
-        //     Vector3 p1 = RouteNodes[i].Position;
-        //     Vector3 p2 = RouteNodes[i+1].Position;
-        //     Vector3 vecToDest = p2 - p1;
-
-        // //     // Vector3 fromPoint = FssZeroOffset.GeZeroPointOffset(RoutePoints[i].ToXYZ());
-        // //     // Vector3 toPoint   = FssZeroOffset.GeZeroPointOffset(RoutePoints[i+1].ToXYZ());
-
-        //     RouteLinks[i].Position = p1;
-        //     RouteLinks[i].LookAt(p1, Vector3.Up);
-        // }
-
-
-
-
-
-
-
-
-
         for (int i=0; i<numLinks; i++)
         {
             FssEntityV3 platformV3 = FssGeoConvOperations.RwToGeStruct(RoutePoints[i], RoutePoints[i+1]);
-
-        //     Vector3 p1 = platformV3.Pos;
-        //     Vector3 p2 = platformV3.PosAhead;
-
-        //     Vector3 vecToDest = p2 - p1;
-
-        //     Vector3 vecUp = platformV3.VecUp;
-
-        // //     // Vector3 fromPoint = FssZeroOffset.GeZeroPointOffset(RoutePoints[i].ToXYZ());
-        // //     // Vector3 toPoint   = FssZeroOffset.GeZeroPointOffset(RoutePoints[i+1].ToXYZ());
-
-        //     RouteLinks[i].Position = p1;
-        //     RouteLinks[i].LookAt(p2, vecUp);
-
-
 
             RouteLinks[i].LookAtFromPosition(
                 platformV3.Pos,
@@ -151,12 +107,6 @@ public partial class FssElementRoute : Node3D
                 true);
 
         }
-
-
-
-
-
-
 
     }
 

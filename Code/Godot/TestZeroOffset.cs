@@ -19,6 +19,7 @@ public partial class TestZeroOffset : Node3D
     FssMapManager      MapManager;
     FssElementContrail ElementContrail;
     FssElementRoute    ElementRoute;
+    FssGodotEntityManager   EntityManager;
 
     Material matColorRed;
     Material matColorBlue;
@@ -57,10 +58,14 @@ public partial class TestZeroOffset : Node3D
     {
         FssZeroOffset.EarthRadiusM = 10;
 
+        // Randomize the zero point in each run so we don't bake-in assumptions.
+        double randomLat = FssValueUtils.RandomInRange(-45, 45);
+        double randomLon = FssValueUtils.RandomInRange(-180, 180);
+
         // Init the zero pos
         FssLLAPoint zeroPos = new FssLLAPoint() {
-            LatDegs = 20f,
-            LonDegs = 90f,
+            LatDegs = randomLat,
+            LonDegs = randomLon,
             RadiusM = FssZeroOffset.EarthRadiusM };
         FssZeroOffset.SetLLA(zeroPos);
 
@@ -216,6 +221,9 @@ public partial class TestZeroOffset : Node3D
         route.Add(new FssLLAPoint() { LatDegs = 41f, LonDegs = 13f, RadiusM = 10.5f });
         route.Add(new FssLLAPoint() { LatDegs = 44f, LonDegs = 16f, RadiusM = 10.3f });
         ElementRoute.SetRoutePoints(route);
+
+        EntityManager = new FssGodotEntityManager();
+        ZeroNode.AddChild(EntityManager);
     }
 
     // --------------------------------------------------------------------------------------------
