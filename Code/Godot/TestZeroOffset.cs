@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class TestZeroOffset : Node3D
 {
@@ -15,7 +16,9 @@ public partial class TestZeroOffset : Node3D
     Node3D TestNodeAhead;
     Node3D TestNodeAbove;
 
-    FssMapManager MapManager;
+    FssMapManager      MapManager;
+    FssElementContrail ElementContrail;
+    FssElementRoute    ElementRoute;
 
     Material matColorRed;
     Material matColorBlue;
@@ -40,6 +43,7 @@ public partial class TestZeroOffset : Node3D
     private FssCourseDelta PlatformCourseDelta;
 
 
+    private float TimerContrail = 0.0f;
 
     // private FssCyclicIdGenerator IdGen = new FssCyclicIdGenerator(250);
     // private string randomString = FssRandomStringGenerator.GenerateRandomString(5);
@@ -196,6 +200,22 @@ public partial class TestZeroOffset : Node3D
             AzElBox    = wedgeBox,
             DistanceM  = 1.0f };
         PlaformBaseNode.AddChild(wedge);
+
+
+        ElementContrail = new FssElementContrail();
+        ElementContrail.InitElement("TestPlatform");
+        ZeroNode.AddChild(ElementContrail);
+
+        ElementRoute = new FssElementRoute();
+        ElementRoute.InitElement("TestPlatform");
+        ZeroNode.AddChild(ElementRoute);
+
+        List<FssLLAPoint> route = new List<FssLLAPoint>();
+        route.Add(new FssLLAPoint() { LatDegs = 40f, LonDegs = 10f, RadiusM = 10.3f });
+        route.Add(new FssLLAPoint() { LatDegs = 42f, LonDegs = 12f, RadiusM = 10.4f });
+        route.Add(new FssLLAPoint() { LatDegs = 41f, LonDegs = 13f, RadiusM = 10.5f });
+        route.Add(new FssLLAPoint() { LatDegs = 44f, LonDegs = 16f, RadiusM = 10.3f });
+        ElementRoute.SetRoutePoints(route);
     }
 
     // --------------------------------------------------------------------------------------------
@@ -223,6 +243,13 @@ public partial class TestZeroOffset : Node3D
         // Update real world position
         PlatformCourse = PlatformCourse.PlusDeltaForTime(PlatformCourseDelta, delta);
         PlatformPos    = PlatformPos.PlusDeltaForTime(PlatformCourse, delta);
+
+        if (TimerContrail < FssCoreTime.RuntimeSecs)
+        {
+            TimerContrail = FssCoreTime.RuntimeSecs + 0.5f;
+            ElementContrail.AddTrailPoint(PlatformPos);
+        }
+
     }
 
     // --------------------------------------------------------------------------------------------

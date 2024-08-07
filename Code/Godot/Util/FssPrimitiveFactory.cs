@@ -9,7 +9,7 @@ public static class FssPrimitiveFactory
 {
 
     // Usage:
-    // - AddChild( FssPrimitiveFactory.CreateSphere(new Vector3(0f, 1f, 0f), 1.2f, new Color(0.5f, 1.0f, 0.5f, 0.7f)) );
+    // - AddChild( FssPrimitiveFactory.CreateGodotSphere(new Vector3(0f, 1f, 0f), 1.2f, new Color(0.5f, 1.0f, 0.5f, 0.7f)) );
 
     // --------------------------------------------------------------------------------------------
     // MARK: Godot Primitives
@@ -88,6 +88,39 @@ public static class FssPrimitiveFactory
         return cylinder;
     }
 
+
+    public static MeshInstance3D CreateGodotCylinder(Vector3 fromPoint, Vector3 toPoint, float radius, Color color)
+    {
+        // Implementation is to create a cylinder from the current point (assumed 0,0,0) to the end point.
+        // The rotation of the cylinder is not considered.
+
+        MeshInstance3D cylinder = new MeshInstance3D();
+        CylinderMesh cylinderMesh = new CylinderMesh
+        {
+            TopRadius      = radius,
+            BottomRadius   = radius,
+            Height         = fromPoint.DistanceTo(toPoint),
+            RadialSegments = 12,
+            Rings          = 3
+        };
+
+        cylinder.Mesh             = cylinderMesh;
+        cylinder.MaterialOverride = FssMaterialFactory.SimpleColoredMaterial(color);
+
+        cylinder.Position = (fromPoint + toPoint) / 2.0f;
+        cylinder.LookAt(toPoint, Vector3.Up);
+
+        return cylinder;
+    }
+
+    // function to place an existingCylinder between the two points and orient it towards the toPoint
+    // FssPrimitiveFactory.OrientGodotCylinder(cylinder, fromPoint, toPoint);
+    public static void OrientGodotCylinder(MeshInstance3D cylinder, FssEntityV3 platformV3)
+    {
+        cylinder.Position = (platformV3.Pos + platformV3.PosAhead) / 2.0f;
+        cylinder.LookAt(platformV3.PosAhead, platformV3.VecUp);
+    }
+
     // --------------------------------------------------------------------------------------------
     // MARK: Special Case Primitives
     // --------------------------------------------------------------------------------------------
@@ -118,5 +151,6 @@ public static class FssPrimitiveFactory
         // CreateCylinder(node, Vector3.Zero, new Vector3(0f, offsetSize, 0f), markerRadius * 0.5f, new Color(0.0f, 1.0f, 0.0f, 1.0f));
         // CreateCylinder(node, Vector3.Zero, new Vector3(0f, 0f, offsetSize), markerRadius * 0.5f, new Color(0.0f, 0.0f, 1.0f, 1.0f));
     }
+
 
 }

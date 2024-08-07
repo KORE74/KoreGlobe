@@ -37,7 +37,7 @@ public static class FssColorUtil
     // #MARK: Internal static list of named colors
     // --------------------------------------------------------------------------------------------
 
-    // Usage: FssColorUtil.Colors["OffYellow"];
+    // Usage: FssColorUtil.Colors["Magenta"];
 
     public static readonly Dictionary<string, Color> Colors = new Dictionary<string, Color>
     {

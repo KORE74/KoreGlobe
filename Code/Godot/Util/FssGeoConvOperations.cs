@@ -28,8 +28,9 @@ public struct FssEntityV3
 public static class FssGeoConvOperations
 {
     // --------------------------------------------------------------------------------------------
-    // MARK: Bare Position - No offsets
+    // MARK: Bare Position - No Zero offsets
     // --------------------------------------------------------------------------------------------
+
     // FssGeoConvOperations.RwToGeStruct(pos);
     public static Vector3 RwToGe(double radiusM, double latDegs, double lonDegs)
     {
@@ -42,6 +43,16 @@ public static class FssGeoConvOperations
     {
         FssXYZPoint p = llap.ToXYZ();
         return new Vector3((float)p.X, (float)p.Y, (float)-p.Z);
+    }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Bare Position - WITH Zero offsets
+    // --------------------------------------------------------------------------------------------
+
+    // Usage: Vector3 v3Pos = FssGeoConvOperations.RwToOffsetGe(pos);
+    public static Vector3 RwToOffsetGe(FssLLAPoint pos)
+    {
+        return FssZeroOffset.GeZeroPointOffset(pos.ToXYZ());
     }
 
     // --------------------------------------------------------------------------------------------
@@ -92,7 +103,7 @@ public static class FssGeoConvOperations
 
         // Define the position and associated up direction for the label
         FssLLAPoint posNorth = pos;
-        posAbove.LatDegs += 0.01f;
+        posNorth.LatDegs += 0.01f;
 
         // Get the position 5 seconds ahead, or just north if stationary
         FssLLAPoint posAhead = FssLLAPoint.Zero;
@@ -109,6 +120,42 @@ public static class FssGeoConvOperations
         Vector3 v3Pos        = FssZeroOffset.GeZeroPointOffset(pos.ToXYZ());
         Vector3 v3PosAbove   = FssZeroOffset.GeZeroPointOffset(posAbove.ToXYZ());
         Vector3 v3PosAhead   = FssZeroOffset.GeZeroPointOffset(posAhead.ToXYZ());
+        Vector3 v3PosNorth   = FssZeroOffset.GeZeroPointOffset(posNorth.ToXYZ());
+
+        // Define the relative vectors
+        Vector3 v3VecUp      = v3PosAbove - v3Pos;
+        Vector3 v3VecForward = v3PosAhead - v3Pos;
+        Vector3 v3VecNorth   = v3PosNorth - v3Pos;
+
+        FssEntityV3 retStruct = new FssEntityV3 {
+            Pos        = v3Pos,
+            PosAbove   = v3PosAbove,
+            PosAhead   = v3PosAhead,
+            PosNorth   = v3PosNorth,
+            VecUp      = v3VecUp,
+            VecForward = v3VecForward,
+            VecNorth   = v3VecNorth};
+
+        return retStruct;
+    }
+
+
+    // Usage: FssEntityV3 platformV3 = FssGeoConvOperations.RwToGeStruct(currPos, futurePos);
+
+    public static FssEntityV3 RwToGeStruct(FssLLAPoint frompos, FssLLAPoint topos)
+    {
+        // Define the position and associated up direction for the label
+        FssLLAPoint posAbove = frompos;
+        posAbove.AltMslM += 0.04f;
+
+        // Define the position and associated up direction for the label
+        FssLLAPoint posNorth = frompos;
+        posNorth.LatDegs += 0.01f;
+
+        // Define the aobsolye positions
+        Vector3 v3Pos        = FssZeroOffset.GeZeroPointOffset(frompos.ToXYZ());
+        Vector3 v3PosAbove   = FssZeroOffset.GeZeroPointOffset(posAbove.ToXYZ());
+        Vector3 v3PosAhead   = FssZeroOffset.GeZeroPointOffset(topos.ToXYZ());
         Vector3 v3PosNorth   = FssZeroOffset.GeZeroPointOffset(posNorth.ToXYZ());
 
         // Define the relative vectors
