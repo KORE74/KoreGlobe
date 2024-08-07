@@ -113,7 +113,12 @@ public static class FssGeoConvOperations
         }
         else
         {
-            posAhead = pos.PlusPolarOffset(course.ToPolarOffset(5)); // The course, 5 seconds ahead
+            // get the offset and ensure we have sufficient magnitude
+            FssPolarOffset aheadCourse = course.ToPolarOffset(5);
+            if (aheadCourse.RangeM < 0.1)
+                aheadCourse.RangeM = 0.1;
+
+            posAhead = pos.PlusPolarOffset(aheadCourse); // The course, 5 seconds ahead
         }
 
         // Define the aobsolye positions
@@ -123,9 +128,9 @@ public static class FssGeoConvOperations
         Vector3 v3PosNorth   = FssZeroOffset.GeZeroPointOffset(posNorth.ToXYZ());
 
         // Define the relative vectors
-        Vector3 v3VecUp      = v3PosAbove - v3Pos;
-        Vector3 v3VecForward = v3PosAhead - v3Pos;
-        Vector3 v3VecNorth   = v3PosNorth - v3Pos;
+        Vector3 v3VecUp      = (v3PosAbove - v3Pos).Normalized();
+        Vector3 v3VecForward = (v3PosAhead - v3Pos).Normalized();
+        Vector3 v3VecNorth   = (v3PosNorth - v3Pos).Normalized();
 
         FssEntityV3 retStruct = new FssEntityV3 {
             Pos        = v3Pos,

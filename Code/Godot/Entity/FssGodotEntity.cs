@@ -33,7 +33,7 @@ public partial class FssGodotEntity : Node3D
         // Create a marker for the entity
         Node3D marker = new Node3D() { Name = "AxisMarker" };
         AddChild(marker);
-        FssPrimitiveFactory.AddAxisMarkers(marker, 0.2f, 0.01f);
+        FssPrimitiveFactory.AddAxisMarkers(marker, 0.1f, 0.03f);
     }
 
     // --------------------------------------------------------------------------------------------
@@ -54,9 +54,15 @@ public partial class FssGodotEntity : Node3D
             return;
         }
 
+
         FssEntityV3 entityVecs = FssGeoConvOperations.RwToGeStruct((FssLLAPoint)pos, (FssCourse)course);
 
-        LookAtFromPosition(entityVecs.Pos, entityVecs.PosAbove, entityVecs.VecUp, true);
+        GD.Print($"Name: {EntityName} PosLLA:{pos} Ahead:{entityVecs.PosAhead} up:{entityVecs.VecUp}");
+
+        Position = entityVecs.Pos;
+        //LookAtFromPosition(entityVecs.Pos, entityVecs.PosAhead, entityVecs.VecUp, true);
+
+        LookAt(entityVecs.PosAhead, entityVecs.VecUp);
     }
 
 }

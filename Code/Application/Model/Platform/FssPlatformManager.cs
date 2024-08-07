@@ -218,7 +218,7 @@ public class FssPlatformManager
             if (currPlat.Kinetics != null)
             {
                 FssLLAPoint currPos = currPlat.Kinetics.CurrPosition;
-                report += $"Platform: {currPlat.Name} at Lat: {currPos.LatDegs:0.0000}, Lon: {currPos.LonDegs:0.0000}, Alt: {currPos.AltMslM:0.0000}\n";
+                report += $"Platform:{currPlat.Name} at LatDegs:{currPos.LatDegs:0.0000}, LonDegs:{currPos.LonDegs:0.0000}, AltMslM:{currPos.AltMslM:0.0000}, RadiusM:{currPos.RadiusM}\n";
             }
         }
 

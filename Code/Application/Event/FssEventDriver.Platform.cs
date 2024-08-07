@@ -223,13 +223,22 @@ public partial class FssEventDriver
     {
         FssCentralLog.AddEntry("Creating Test Platform Entities");
 
-        FssLLAPoint loc1 = new FssLLAPoint() { LatDegs = 52.8, LonDegs = -4.2, AltMslM = 1000 };
-        FssLLAPoint loc2 = new FssLLAPoint() { LatDegs = 52.9, LonDegs =  0.3, AltMslM = 2000 };
-        FssLLAPoint loc3 = new FssLLAPoint() { LatDegs = 52.7, LonDegs =  8.1, AltMslM = 3000 };
+        // FssLLAPoint loc1 = new FssLLAPoint() { LatDegs = 52.8, LonDegs = -4.2, AltMslM = 1000 };
+        // FssLLAPoint loc2 = new FssLLAPoint() { LatDegs = 52.9, LonDegs =  0.3, AltMslM = 2000 };
+        // FssLLAPoint loc3 = new FssLLAPoint() { LatDegs = 52.7, LonDegs =  8.1, AltMslM = 3000 };
 
-        FssCourse course1 = new FssCourse() { HeadingDegs = 270, SpeedKph = 15000 };
-        FssCourse course2 = new FssCourse() { HeadingDegs = 180, SpeedKph = 20000 };
-        FssCourse course3 = new FssCourse() { HeadingDegs =  90, SpeedKph = 30000 };
+        FssLLAPoint loc1 = new FssLLAPoint() { LatDegs = 52.8, LonDegs = -4.2, RadiusM = 10.1 };
+        FssLLAPoint loc2 = new FssLLAPoint() { LatDegs = 52.9, LonDegs =  0.3, RadiusM = 10.2 };
+        FssLLAPoint loc3 = new FssLLAPoint() { LatDegs = 52.7, LonDegs =  8.1, RadiusM = 10.15 };
+
+        // FssCourse course1 = new FssCourse() { HeadingDegs = 270, SpeedKph = 15000 };
+        // FssCourse course2 = new FssCourse() { HeadingDegs = 180, SpeedKph = 20000 };
+        // FssCourse course3 = new FssCourse() { HeadingDegs =  90, SpeedKph = 30000 };
+
+        FssCourse course1 = new FssCourse() { HeadingDegs = 270, SpeedKph = 0.001 };
+        FssCourse course2 = new FssCourse() { HeadingDegs = 180, SpeedKph = 0.002 };
+        FssCourse course3 = new FssCourse() { HeadingDegs =  90, SpeedKph = 0.003 };
+
 
         AddPlatform("TEST-001", "F16");
         SetPlatformStartLLA("TEST-001", loc1);
