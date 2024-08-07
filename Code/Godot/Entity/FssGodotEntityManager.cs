@@ -6,6 +6,8 @@ public partial class FssGodotEntityManager : Node3D
 {
     List<FssGodotEntity> EntityList = new List<FssGodotEntity>();
 
+    float TimerModelCheck = 0.0f;
+
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
@@ -15,9 +17,12 @@ public partial class FssGodotEntityManager : Node3D
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
-
+        if (TimerModelCheck < FssCoreTime.RuntimeSecs)
+        {
+            TimerModelCheck = FssCoreTime.RuntimeSecs + 1f;
+            MatchPlatformNodesToModel();
+        }
     }
-
 
     // --------------------------------------------------------------------------------------------
     // MARK: Create
@@ -47,6 +52,7 @@ public partial class FssGodotEntityManager : Node3D
                 // We have it in the model, but not in the entity list. Add it.
                 FssGodotEntity newEntity = new FssGodotEntity();
                 newEntity.Name = currModelName;
+                newEntity.EntityName = currModelName;
                 EntityList.Add(newEntity);
                 AddChild(newEntity);
             }

@@ -92,6 +92,36 @@ public partial class FssEventDriver
         FssAppFactory.Instance.PlatformManager.PlatForName(platName)?.Type;
 
     // ---------------------------------------------------------------------------------------------
+    // #MARK: Platform Position
+    // ---------------------------------------------------------------------------------------------
+
+    public FssLLAPoint? GetPlatformPosition(string platName)
+    {
+        // Get the platform
+        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
+
+        if (platform == null)
+            return null;
+
+        return platform.Kinetics.CurrPosition;
+    }
+
+    public void SetPlatformPosition(string platName, FssLLAPoint newpos)
+    {
+        // Get the platform
+        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
+
+        if (platform == null)
+        {
+            FssCentralLog.AddEntry($"E00003: Platform {platName} not found.");
+            return;
+        }
+
+        // Set the platform's position
+        platform.Kinetics.CurrPosition = newpos;
+    }
+
+    // ---------------------------------------------------------------------------------------------
     // #MARK: Platform Course
     // ---------------------------------------------------------------------------------------------
 

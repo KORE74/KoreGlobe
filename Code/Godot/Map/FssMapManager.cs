@@ -64,7 +64,7 @@ public partial class FssMapManager : Node3D
         //DebugWedge();
         //DebugShip();
 
-        CreateMapLibaryDirectories();
+        // FssMapFileOperations.CreateMapLibraryDirectories();
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.

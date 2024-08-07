@@ -1,19 +1,23 @@
 using Godot;
 using System;
 
-public partial class FssGodotEntity : Node
+#nullable enable
+
+public partial class FssGodotEntity : Node3D
 {
 
+    public string EntityName { get; set; }
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
+        CreateEntity();
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
-
+        UpdateEntityPosition();
     }
 
 
@@ -21,12 +25,38 @@ public partial class FssGodotEntity : Node
     // MARK: Create
     // --------------------------------------------------------------------------------------------
 
+    public void CreateEntity()
+    {
+        // Set this node name. - This gets the position and earth orinetation set on it.
+        Name = EntityName;
 
-
+        // Create a marker for the entity
+        Node3D marker = new Node3D() { Name = "AxisMarker" };
+        AddChild(marker);
+        FssPrimitiveFactory.AddAxisMarkers(marker, 0.2f, 0.01f);
+    }
 
     // --------------------------------------------------------------------------------------------
     // MARK: Update
     // --------------------------------------------------------------------------------------------
 
+    public void UpdateEntityPosition()
+    {
+        // Update the position and orientation of the entity.
+        // This is done by the parent node.
+
+        FssLLAPoint? pos    = FssAppFactory.Instance.EventDriver.GetPlatformPosition(EntityName);
+        FssCourse?   course = FssAppFactory.Instance.EventDriver.PlatformCurrCourse(EntityName);
+
+        if (pos == null || course == null)
+        {
+            GD.Print($"E00005: Platform {EntityName} not found.");
+            return;
+        }
+
+        FssEntityV3 entityVecs = FssGeoConvOperations.RwToGeStruct((FssLLAPoint)pos, (FssCourse)course);
+
+        LookAtFromPosition(entityVecs.Pos, entityVecs.PosAbove, entityVecs.VecUp, true);
+    }
 
 }
