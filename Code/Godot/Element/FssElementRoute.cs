@@ -11,6 +11,7 @@ public partial class FssElementRoute : Node3D
     List<FssLLAPoint>    RoutePoints = new List<FssLLAPoint>();
     List<Node3D>         RouteNodes  = new List<Node3D>();
     List<MeshInstance3D> RouteLinks  = new List<MeshInstance3D>();
+    List<MeshInstance3D> RouteRods   = new List<MeshInstance3D>();
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -43,6 +44,9 @@ public partial class FssElementRoute : Node3D
         foreach (FssLLAPoint point in routePoints)
             RoutePoints.Add(point);
 
+        // - - - - - - - - - - - - - - - - - - - - - - - - -
+        // Create the nodes
+
         int numNodes = routePoints.Count;
         int numLinks = RoutePoints.Count - 1;
 
@@ -54,7 +58,34 @@ public partial class FssElementRoute : Node3D
             AddChild(newNode);
         }
 
+        // - - - - - - - - - - - - - - - - - - - - - - - - -
+        // Add the vertical rods below each node
+
+        // for (int i = 0; i < numNodes; i++)
+        // {
+        //     FssLLAPoint topPoint    = RoutePoints[i];
+        //     FssLLAPoint bottomPoint = topPoint;
+        //     topPoint.RadiusM = 1f;
+        //     float height = (float)(topPoint.RadiusM - bottomPoint.RadiusM);
+
+        //     Vector3 topV3 = FssGeoConvOperations.RwToOffsetGe(topPoint);
+        //     Vector3 botV3 = FssGeoConvOperations.RwToOffsetGe(bottomPoint);
+
+        //     FssMeshBuilder meshBuilder = new FssMeshBuilder();
+        //     meshBuilder.AddCylinder(Vector3.Zero, new Vector3(0, -height, 0), 0.02f, 0.002f, 12, true);
+        //     ArrayMesh meshData = meshBuilder.Build2($"rod_{i}", false);
+
+        //     // Add the mesh to the current Node3D
+        //     MeshInstance3D meshInstance   = new() { Name = $"Rod_{i}" };
+        //     meshInstance.Mesh             = meshData;
+        //     meshInstance.MaterialOverride = FssMaterialFactory.SimpleColoredMaterial(new Color(0.5f, 0.5f, 0.5f, 1f));
+        //     RouteRods.Add(meshInstance);
+        //     AddChild(meshInstance);
+        // }
+
+        // - - - - - - - - - - - - - - - - - - - - - - - - -
         // Create the links between the nodes in RouteLinks.
+
         for (int i = 0; i < numLinks; i++)
         {
             FssEntityV3 platformV3 = FssGeoConvOperations.RwToGeStruct(RoutePoints[i], RoutePoints[i+1]);
@@ -94,6 +125,30 @@ public partial class FssElementRoute : Node3D
             RouteNodes[i].Position = FssGeoConvOperations.RwToOffsetGe(RoutePoints[i]);
         }
 
+        // for (int i = 0; i < numNodes; i++)
+        // {
+        //     FssLLAPoint topPoint = RoutePoints[i];
+        //     if (i < numNodes)
+        //     {
+        //         FssLLAPoint toPoint = RoutePoints[i+1];
+
+        //         FssEntityV3 rodV3 = FssGeoConvOperations.RwToGeStruct(topPoint, toPoint);
+
+
+        //         RouteRods[i].LookAtFromPosition(
+        //             rodV3.Pos,
+        //             rodV3.PosAbove,
+        //             rodV3.VecUp,
+        //             true);
+
+
+        //     }
+
+        //     // Vector3 topV3 = FssGeoConvOperations.RwToOffsetGe(topPoint);
+        //     // Vector3 botV3 = FssGeoConvOperations.RwToOffsetGe(bottomPoint);
+
+
+        // }
 
 
         for (int i=0; i<numLinks; i++)
