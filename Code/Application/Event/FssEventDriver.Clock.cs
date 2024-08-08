@@ -18,10 +18,10 @@ public partial class FssEventDriver
 
     public void ClockReset()
     {
-
+        FssAppFactory.Instance.ModelRun.Reset();
     }
 
-    public void SetClockSeonds(double secs)
+    public void SetClockSeconds(double secs)
     {
 
     }

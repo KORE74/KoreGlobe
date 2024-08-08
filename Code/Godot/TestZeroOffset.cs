@@ -154,6 +154,8 @@ public partial class TestZeroOffset : Node3D
         // Add the platform root node, onto the zero node.
         EntityRootNode = new Node3D() { Name = "EntityRootNode" };  // This is the root node for all entities
         ZeroNode.AddChild(EntityRootNode);
+
+        FssZeroOffset.ZeroNode = ZeroNode;
     }
 
     // --------------------------------------------------------------------------------------------

@@ -1,11 +1,15 @@
 {
   "UdpIpAddr": "10.111.11.47",
   "UdpIpPort": 10001,
-  "TcpIpServerAddr": "127.0.0.12",
-  "TcpIpServerPort": 10003,
+  "TcpIpServerAddr": "10.111.11.47",
+  "TcpIpServerPort": 61512,
   "TcpIpClientAddr": "127.0.0.13",
   "TcpIpClientPort": 10005,
-  "MapRootPath": "C:/Util/Data/Godot/Globe4-Maps/MapLib",
-  "MapRootPath3": "C:/Util/Godot/Globe4-Maps/MapLib",
-  "MapRootPath2": "C:/Util/Godot/Globe4-Maps/Alternative/Moon"
+  "MapRootPath3": "C:/Util/Data/Godot/Globe4-Maps/MapLib",
+  "MapRootPath": "C:/Util/Godot/Globe4-Maps/MapLib",
+  "MapRootPath2": "C:/Util/Godot/Globe4-Maps/Alternative/Moon",
+  "MaintainConnections": true,
+  "MaintainConnections_UDP": false,
+  "MaintainConnections_TCPServer": true,
+  "MaintainConnections_TCPClient": false
 }

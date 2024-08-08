@@ -3,6 +3,10 @@ using Godot;
 
 public static class FssZeroOffset
 {
+
+    // FssZeroOffset.ZeroNode
+    public static Node3D ZeroNode;
+
     public static double EarthRadiusM = 10;
 
     // Real World Earth Center is 0,0,0. We create an offset 0,0,0 for the purposes og focussing the

@@ -20,10 +20,12 @@ public partial class FssEventDriver
 
     }
 
-    public string ReportLocalIP()
-    {
-        return "pp"; // return FssAppFactory.Instance.NetworkHub.localIPAddrStr();
-    }
+    // Usage: FssEventDriver.NetworkConnect("TcpClient", "TcpClient", "127.0.0.1", 12345);
+    public void NetworkConnect(string connName, string connType, string ipAddrStr, int port) => FssAppFactory.Instance.NetworkHub.createConnection(connName, connType, ipAddrStr, port);
+
+    public void NetworkDisconnect(string connName) => FssAppFactory.Instance.NetworkHub.endConnection(connName);
+
+    public string ReportLocalIP() => FssAppFactory.Instance.NetworkHub.localIPAddrStr();
 
     // Usage: FssEventDriver.NetworkReport
     public string NetworkReport() => FssAppFactory.Instance.NetworkHub.Report();

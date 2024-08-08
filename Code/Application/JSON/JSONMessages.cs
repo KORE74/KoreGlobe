@@ -12,6 +12,7 @@ namespace FssJSON
 
     // --------------------------------------------------------------------------------------------
 
+    // Usage: IncomingMessageHandler.ProcessMessage("AppShutdown", message);
     public class IncomingMessageHandler
     {
         static public JSONMessage ProcessMessage(string strtype, string msgText)

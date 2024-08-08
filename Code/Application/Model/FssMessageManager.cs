@@ -8,7 +8,7 @@ using FssJSON;
 
 // Class to translate an incoming JSON Message into calls to the Event Driver
 
-public class FssMessageManager
+public partial class FssMessageManager
 {
     private bool ThreadRunning = false;
 
@@ -70,17 +70,38 @@ public class FssMessageManager
 
         FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage: {message}");
 
-        // Process the message
-        // switch (message.MessageType)
-        // {
-        //     case "network":
-        //         ProcessNetworkMessage(message);
-        //         break;
+        // Get the message type
+        string msgType = IncomingMessageHandler.GetMessageTypeName(message.msgData);
 
-        //     default:
-        //         FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage: Unknown message type: {message.MessageType}");
-        //         break;
-        // }
+        // Convert the message to a JSON object
+        JSONMessage msg = IncomingMessageHandler.ProcessMessage(msgType, message.msgData);
+
+        if      (msg is PlatAdd platAddMsg)          { ProcessMessage_PlatAdd(platAddMsg); }
+        else if (msg is PlatDelete platDelMsg)       { ProcessMessage_PlatDelete(platDelMsg); }
+        else if (msg is PlatPosition platPosMsg)     { ProcessMessage_PlatPosition(platPosMsg); }
+        else if (msg is PlatUpdate platUpdMsg)       { ProcessMessage_PlatUpdate(platUpdMsg); }
+        else if (msg is PlatWayPoints platWayPtsMsg) { ProcessMessage_PlatWayPoints(platWayPtsMsg); }
+        else if (msg is ScenLoad scenLoadMsg)        { ProcessMessage_ScenLoad(scenLoadMsg); }
+        else if (msg is ScenStart scenStartMsg)      { ProcessMessage_ScenStart(scenStartMsg); }
+        else if (msg is ScenStop scenStopMsg)        { ProcessMessage_ScenStop(scenStopMsg); }
+        else if (msg is ScenPause scenPauseMsg)      { ProcessMessage_ScenPause(scenPauseMsg); }
+        else if (msg is ScenCont scenContMsg)        { ProcessMessage_ScenCont(scenContMsg); }
+        else if (msg is ClockSync clockSyncMsg)      { ProcessMessage_ClockSync(clockSyncMsg); }
+        else if (msg is BeamLoad beamLoadMsg)        { ProcessMessage_BeamLoad(beamLoadMsg); }
+        else if (msg is BeamDelete beamDelMsg)       { ProcessMessage_BeamDelete(beamDelMsg); }
+        else if (msg is BeamEnable beamEnMsg)        { ProcessMessage_BeamEnable(beamEnMsg); }
+        else if (msg is BeamDisable beamDisMsg)      { ProcessMessage_BeamDisable(beamDisMsg); }
+        else if (msg is RxAntenna rxAntMsg)          { ProcessMessage_RxAntenna(rxAntMsg); }
+        else if (msg is ScanPattern scanPatMsg)      { ProcessMessage_ScanPattern(scanPatMsg); }
+
+        else if (msg is PlatformElement_AddCircularScan platElemAddCircScanMsg) { ProcessMessage_PlatformElement_AddCircularScan(platElemAddCircScanMsg); }
+        else
+        {
+            FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage: Unknown message type: {msgType}");
+        }
+
+
+
     }
 
 }

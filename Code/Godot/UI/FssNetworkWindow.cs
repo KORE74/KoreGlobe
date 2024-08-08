@@ -21,6 +21,8 @@ public partial class FssNetworkWindow : Window
     LineEdit TcpIpClientPortEdit;
     Button   TcpIpClientConnectButton;
 
+    CheckBox MaintainConnectionCheckBox;
+
     TextEdit NetworkStatusTextEdit;
 
     Button OkButton;
@@ -49,6 +51,8 @@ public partial class FssNetworkWindow : Window
         TcpIpClientPortEdit  = (LineEdit)FindChild("TcpIpClientPortEdit");
         TcpIpClientConnectButton = (Button)FindChild("TcpIpClientConnectButton");
 
+        MaintainConnectionCheckBox = (CheckBox)FindChild("MaintainConnectionCheckBox");
+
         NetworkStatusTextEdit = (TextEdit)FindChild("NetworkStatusTextEdit");
 
         OkButton     = (Button)FindChild("OkButton");
@@ -64,8 +68,12 @@ public partial class FssNetworkWindow : Window
         string configUdpIpAddr = config.GetParameter<string>("UdpIpAddr", "127.0.0.1");
         int    configUdpIpPort = config.GetParameter<int>("UdpIpPort", 10001);
 
+        UdpIpConnectButton.Connect("pressed", new Callable(this, "OnUdpIpConnectButtonPressed"));
+        TcpIpServerConnectButton.Connect("pressed", new Callable(this, "OnTcpIpServerConnectButtonPressed"));
+        TcpIpClientConnectButton.Connect("pressed", new Callable(this, "OnTcpIpClientConnectButtonPressed"));
+
         LocaliseUIText();
-        WriteControlValues();
+        PopulateDialogControls();
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -83,17 +91,28 @@ public partial class FssNetworkWindow : Window
     // MARK: Data Read and Write
     // --------------------------------------------------------------------------------------------
 
-    private void WriteControlValues()
+    private void PopulateDialogControls()
     {
         var config = FssCentralConfig.Instance;
-        UdpIpAddrEdit.Text = config.GetParameter<string>("UdpIpAddr", "127.0.0.1");
-        UdpIpPortEdit.Text = config.GetParameter<int>("UdpIpPort", 10001).ToString();
+        UdpIpAddrEdit.Text        = config.GetParameter<string>("UdpIpAddr", "127.0.0.1");
+        UdpIpPortEdit.Text        = config.GetParameter<int>("UdpIpPort", 10001).ToString();
 
-        TcpIpServerAddrEdit.Text = config.GetParameter<string>("TcpIpServerAddr", "127.0.0.1");
+        TcpIpServerAddrEdit.Text  = config.GetParameter<string>("TcpIpServerAddr", "127.0.0.1");
         TcpIpSerfverPortEdit.Text = config.GetParameter<int>("TcpIpServerPort", 10002).ToString();
 
-        TcpIpClientAddrEdit.Text = config.GetParameter<string>("TcpIpClientAddr", "127.0.0.1");
-        TcpIpClientPortEdit.Text = config.GetParameter<int>("TcpIpClientPort", 10003).ToString();
+        TcpIpClientAddrEdit.Text  = config.GetParameter<string>("TcpIpClientAddr", "127.0.0.1");
+        TcpIpClientPortEdit.Text  = config.GetParameter<int>("TcpIpClientPort", 10003).ToString();
+
+        bool maintainConnections = config.GetParameter<bool>("MaintainConnections", false);
+        MaintainConnectionCheckBox.SetPressedNoSignal( maintainConnections );
+
+        if (maintainConnections)
+        {
+            UdpIpConnectButton.SetPressedNoSignal( config.GetParameter<bool>("MaintainConnections_UDP", false) );
+            TcpIpServerConnectButton.SetPressedNoSignal( config.GetParameter<bool>("MaintainConnections_TCPServer", false) );
+            TcpIpClientConnectButton.SetPressedNoSignal( config.GetParameter<bool>("MaintainConnections_TCPClient", false) );
+        }
+
     }
 
     private void SaveControlValues()
@@ -116,6 +135,13 @@ public partial class FssNetworkWindow : Window
 
         config.SetParameter("TcpIpClientAddr", TcpIpClientAddrEdit.Text);
         config.SetParameter("TcpIpClientPort", tcpIpClientPort);
+
+        config.SetParameter("MaintainConnections", MaintainConnectionCheckBox.IsPressed());
+
+        config.SetParameter("MaintainConnections_UDP", UdpIpConnectButton.IsPressed());
+        config.SetParameter("MaintainConnections_TCPServer", TcpIpServerConnectButton.IsPressed());
+        config.SetParameter("MaintainConnections_TCPClient", TcpIpClientConnectButton.IsPressed());
+
     }
 
 
@@ -148,6 +174,69 @@ public partial class FssNetworkWindow : Window
         Visible = false;
 
         // Update the controls from values in the config file
-        WriteControlValues();
+        PopulateDialogControls();
     }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: UI Interactions - Connections
+    // --------------------------------------------------------------------------------------------
+
+    public void OnUdpIpConnectButtonPressed()
+    {
+        // first check the status is now pressed
+        if ( UdpIpConnectButton.IsPressed() )
+        {
+            FssCentralLog.AddEntry("FssNetworkWindow.OnUdpIpConnectButtonPressed");
+
+            string ipAddr = UdpIpAddrEdit.Text;
+            int   port   = int.Parse(UdpIpPortEdit.Text);
+
+            FssAppFactory.Instance.EventDriver.NetworkConnect("UdpReceiver", "UdpReceiver", ipAddr, port);
+        }
+        else // Else disconnect
+        {
+            FssCentralLog.AddEntry("FssNetworkWindow.OnUdpIpConnectButtonPressed - Disconnect");
+            FssAppFactory.Instance.EventDriver.NetworkDisconnect("UdpReceiver");
+        }
+        FssCentralLog.AddEntry("FssNetworkWindow.OnUdpIpConnectButtonPressed");
+    }
+
+    public void OnTcpIpServerConnectButtonPressed()
+    {
+        // first check the status is now pressed
+        if (TcpIpServerConnectButton.IsPressed())
+        {
+            FssCentralLog.AddEntry("FssNetworkWindow.OnTcpIpServerConnectButtonPressed");
+
+            string ipAddr = TcpIpServerAddrEdit.Text;
+            int   port   = int.Parse(TcpIpSerfverPortEdit.Text);
+
+            FssAppFactory.Instance.EventDriver.NetworkConnect("TcpServer", "TcpServer", ipAddr, port);
+        }
+        else // Else disconnect
+        {
+            FssCentralLog.AddEntry("FssNetworkWindow.OnTcpIpServerConnectButtonPressed - Disconnect");
+            FssAppFactory.Instance.EventDriver.NetworkDisconnect("TcpServer");
+        }
+    }
+
+    public void OnTcpIpClientConnectButtonPressed()
+    {
+        // first check the status is now pressed
+        if (TcpIpClientConnectButton.IsPressed())
+        {
+            FssCentralLog.AddEntry("FssNetworkWindow.OnTcpIpClientConnectButtonPressed");
+
+            string ipAddr = TcpIpClientAddrEdit.Text;
+            int   port   = int.Parse(TcpIpClientPortEdit.Text);
+
+            FssAppFactory.Instance.EventDriver.NetworkConnect("TcpClient", "TcpClient", ipAddr, port);
+        }
+        else // Else disconnect
+        {
+            FssCentralLog.AddEntry("FssNetworkWindow.OnTcpIpClientConnectButtonPressed - Disconnect");
+            FssAppFactory.Instance.EventDriver.NetworkDisconnect("TcpClient");
+        }
+    }
+
 }

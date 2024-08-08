@@ -121,7 +121,7 @@ public static class FssGeoConvOperations
             posAhead = pos.PlusPolarOffset(aheadCourse); // The course, 5 seconds ahead
         }
 
-        // Define the aobsolye positions
+        // Define the absolute positions
         Vector3 v3Pos        = FssZeroOffset.GeZeroPointOffset(pos.ToXYZ());
         Vector3 v3PosAbove   = FssZeroOffset.GeZeroPointOffset(posAbove.ToXYZ());
         Vector3 v3PosAhead   = FssZeroOffset.GeZeroPointOffset(posAhead.ToXYZ());
@@ -144,6 +144,7 @@ public static class FssGeoConvOperations
         return retStruct;
     }
 
+    // --------------------------------------------------------------------------------------------
 
     // Usage: FssEntityV3 platformV3 = FssGeoConvOperations.RwToGeStruct(currPos, futurePos);
 

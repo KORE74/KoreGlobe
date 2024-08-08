@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://ck4tngsqwb7jf"]
+[gd_scene load_steps=24 format=3 uid="uid://ck4tngsqwb7jf"]
 
 [ext_resource type="StyleBox" uid="uid://cg5jbxqki88ph" path="res://Themes/new_style_box_flat.tres" id="1_fred0"]
 [ext_resource type="Script" path="res://Code/Godot/UI/FssUIHeader.cs" id="2_iuuet"]
@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://msmhfxb7v8b" path="res://Resources/Icons/arrow_right.png" id="15_7rjg6"]
 [ext_resource type="Script" path="res://Code/Godot/UI/FssCliWindow.cs" id="16_unelf"]
 [ext_resource type="Script" path="res://Code/Godot/UI/FssNetworkWindow.cs" id="17_xs6g5"]
+[ext_resource type="Theme" uid="uid://dmowlcnw0dkpk" path="res://Themes/BlueToggle.tres" id="18_3dgka"]
 [ext_resource type="Script" path="res://Code/Godot/UI/FssSettingWindow.cs" id="18_sk1xa"]
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_3y634"]
@@ -453,7 +454,7 @@ layout_mode = 2
 auto_translate_mode = 1
 title = "Network"
 initial_position = 2
-size = Vector2i(520, 425)
+size = Vector2i(540, 480)
 visible = false
 unresizable = true
 popup_window = true
@@ -467,8 +468,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 2
-size_flags_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
@@ -476,7 +477,6 @@ theme_override_constants/margin_bottom = 10
 
 [node name="VBoxContainer" type="VBoxContainer" parent="NetworkWindow/MarginContainer"]
 layout_mode = 2
-size_flags_horizontal = 0
 size_flags_vertical = 0
 theme_override_constants/separation = 10
 
@@ -515,6 +515,11 @@ text = "10000"
 
 [node name="UdpIpConnectButton" type="Button" parent="NetworkWindow/MarginContainer/VBoxContainer/Row1-UDP"]
 layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+theme = ExtResource("18_3dgka")
+theme_override_constants/outline_size = 0
+toggle_mode = true
 text = "Connect"
 
 [node name="Row2-TCPServer" type="HBoxContainer" parent="NetworkWindow/MarginContainer/VBoxContainer"]
@@ -548,6 +553,10 @@ size_flags_horizontal = 0
 
 [node name="TcpIpServerConnectButton" type="Button" parent="NetworkWindow/MarginContainer/VBoxContainer/Row2-TCPServer"]
 layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+theme = ExtResource("18_3dgka")
+toggle_mode = true
 text = "Connect"
 
 [node name="Row3-TCPClient" type="HBoxContainer" parent="NetworkWindow/MarginContainer/VBoxContainer"]
@@ -558,7 +567,7 @@ theme_override_constants/separation = 10
 custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
 size_flags_horizontal = 0
-text = "TCP Server IP"
+text = "TCP Client IP"
 
 [node name="TcpIpClientAddrEdit" type="LineEdit" parent="NetworkWindow/MarginContainer/VBoxContainer/Row3-TCPClient"]
 custom_minimum_size = Vector2(145, 0)
@@ -581,9 +590,21 @@ size_flags_horizontal = 0
 
 [node name="TcpIpClientConnectButton" type="Button" parent="NetworkWindow/MarginContainer/VBoxContainer/Row3-TCPClient"]
 layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+theme = ExtResource("18_3dgka")
+toggle_mode = true
 text = "Connect"
 
 [node name="HSeparator2" type="HSeparator" parent="NetworkWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MaintainConnectionCheckBox" type="CheckBox" parent="NetworkWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+text = "Maintain Connections"
+
+[node name="HSeparator3" type="HSeparator" parent="NetworkWindow/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
 [node name="Row-Status" type="HBoxContainer" parent="NetworkWindow/MarginContainer/VBoxContainer"]

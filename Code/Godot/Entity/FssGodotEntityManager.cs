@@ -57,10 +57,7 @@ public partial class FssGodotEntityManager : Node3D
                 AddChild(newEntity);
             }
         }
-
-
     }
-
 
     // --------------------------------------------------------------------------------------------
     // MARK: Update

@@ -19,8 +19,6 @@ public class FssAppFactory
     public FssEventDriver     EventDriver      { get; private set; }
     public FssPlatformManager PlatformManager  { get; private set; }
     public FssNetworkHub      NetworkHub       { get; private set; }
-    //public FssMapIOManager    MapIOManager     { get; private set; }
-    //public FssEleManager      EleManager       { get; private set; }
     public FssSimTime         SimClock         { get; private set; }
     public FssModelRun        ModelRun         { get; private set; }
     public FssMessageManager  MessageManager   { get; private set; }

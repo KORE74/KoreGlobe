@@ -10,7 +10,7 @@ using System.Collections.Generic;
 public partial class FssEventDriver
 {
     // ---------------------------------------------------------------------------------------------
-    // #MARK: Platform Position
+    // #MARK: Platform Management
     // ---------------------------------------------------------------------------------------------
 
     public void AddPlatform(string platName)
@@ -43,6 +43,41 @@ public partial class FssEventDriver
         newPlat.Type = platType;
     }
 
+    public bool DoesPlatformExist(string platName) => FssAppFactory.Instance.PlatformManager.DoesPlatExist(platName);
+
+    public void DeletePlatform(string platName) => FssAppFactory.Instance.PlatformManager.Delete(platName);
+
+    public void DeleteAllPlatforms() => FssAppFactory.Instance.PlatformManager.DeleteAllPlatforms();
+
+    public int NumPlatforms() => FssAppFactory.Instance.PlatformManager.NumPlatforms();
+
+    // ---------------------------------------------------------------------------------------------
+    // #MARK: Platform Full Details
+    // ---------------------------------------------------------------------------------------------
+
+    public void SetPlatformDetails(string platName, FssLLAPoint startPos, FssLLAPoint currPos, FssAttitude att, FssCourse course, FssCourseDelta courseDelta)
+    {
+        // Get the platform
+        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
+
+        if (platform == null)
+        {
+            FssCentralLog.AddEntry($"E00003: Platform {platName} not found.");
+            return;
+        }
+
+        // Set the platform's details
+        platform.Kinetics.StartPosition   = startPos;
+        platform.Kinetics.CurrPosition    = currPos;
+        platform.Kinetics.CurrAttitude    = att;
+        platform.Kinetics.CurrCourse      = course;
+        platform.Kinetics.CurrCourseDelta = courseDelta;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    // #MARK: Platform Position
+    // ---------------------------------------------------------------------------------------------
+
     public void SetPlatformStartLLA(string platName, FssLLAPoint newpos)
     {
         // Get the platform
@@ -58,7 +93,7 @@ public partial class FssEventDriver
         platform.Kinetics.StartPosition = newpos;
     }
 
-    public FssLLAPoint? PlatformCurrLLA(string platName)
+    public FssLLAPoint? PlatformStartLLA(string platName)
     {
         // Get the platform
         FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
@@ -67,6 +102,34 @@ public partial class FssEventDriver
             return null;
 
         return platform.Kinetics.StartPosition;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public void SetPlatformPosition(string platName, FssLLAPoint newpos)
+    {
+        // Get the platform
+        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
+
+        if (platform == null)
+        {
+            FssCentralLog.AddEntry($"E00003: Platform {platName} not found.");
+            return;
+        }
+
+        // Set the platform's position
+        platform.Kinetics.CurrPosition = newpos;
+    }
+
+    public FssLLAPoint? GetPlatformPosition(string platName)
+    {
+        // Get the platform
+        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
+
+        if (platform == null)
+            return null;
+
+        return platform.Kinetics.CurrPosition;
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -92,10 +155,10 @@ public partial class FssEventDriver
         FssAppFactory.Instance.PlatformManager.PlatForName(platName)?.Type;
 
     // ---------------------------------------------------------------------------------------------
-    // #MARK: Platform Position
+    // #MARK: Platform Attitude
     // ---------------------------------------------------------------------------------------------
 
-    public FssLLAPoint? GetPlatformPosition(string platName)
+    public FssAttitude? GetPlatformAttitude(string platName)
     {
         // Get the platform
         FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
@@ -103,10 +166,10 @@ public partial class FssEventDriver
         if (platform == null)
             return null;
 
-        return platform.Kinetics.CurrPosition;
+        return platform.Kinetics.CurrAttitude;
     }
 
-    public void SetPlatformPosition(string platName, FssLLAPoint newpos)
+    public void SetPlatformAttitude(string platName, FssAttitude newatt)
     {
         // Get the platform
         FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
@@ -117,8 +180,8 @@ public partial class FssEventDriver
             return;
         }
 
-        // Set the platform's position
-        platform.Kinetics.CurrPosition = newpos;
+        // Set the platform's attitude
+        platform.Kinetics.CurrAttitude = newatt;
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -178,13 +241,7 @@ public partial class FssEventDriver
     // #MARK: Platform Management
     // ---------------------------------------------------------------------------------------------
 
-    public bool DoesPlatformExist(string platName) => FssAppFactory.Instance.PlatformManager.DoesPlatExist(platName);
 
-    public void DeletePlatform(string platName) => FssAppFactory.Instance.PlatformManager.Delete(platName);
-
-    public void DeleteAllPlatforms() => FssAppFactory.Instance.PlatformManager.DeleteAllPlatforms();
-
-    public int NumPlatforms() => FssAppFactory.Instance.PlatformManager.NumPlatforms();
 
     // ---------------------------------------------------------------------------------------------
     // #MARK: Platform Report
@@ -235,20 +292,20 @@ public partial class FssEventDriver
         // FssCourse course2 = new FssCourse() { HeadingDegs = 180, SpeedKph = 20000 };
         // FssCourse course3 = new FssCourse() { HeadingDegs =  90, SpeedKph = 30000 };
 
-        FssCourse course1 = new FssCourse() { HeadingDegs = 270, SpeedKph = 0.001 };
-        FssCourse course2 = new FssCourse() { HeadingDegs = 180, SpeedKph = 0.002 };
-        FssCourse course3 = new FssCourse() { HeadingDegs =  90, SpeedKph = 0.003 };
+        FssCourse course1 = new FssCourse() { HeadingDegs = 270, SpeedKph = 0.08 };
+        FssCourse course2 = new FssCourse() { HeadingDegs = 180, SpeedKph = 0.08 };
+        FssCourse course3 = new FssCourse() { HeadingDegs =  90, SpeedKph = 0.08 };
 
 
         AddPlatform("TEST-001", "F16");
         SetPlatformStartLLA("TEST-001", loc1);
         SetPlatformCourse("TEST-001", course1);
-        SetPlatformCourseDelta("TEST-002", new FssCourseDelta() { HeadingChangeClockwiseDegsSec = 5, SpeedChangeMpMps = 0 });
+        SetPlatformCourseDelta("TEST-001", new FssCourseDelta() { HeadingChangeClockwiseDegsSec = 5, SpeedChangeMpMps = 0 });
 
         AddPlatform("TEST-002", "F18");
         SetPlatformStartLLA("TEST-002", loc2);
         SetPlatformCourse("TEST-002", course2);
-        SetPlatformCourseDelta("TEST-002", new FssCourseDelta() { HeadingChangeClockwiseDegsSec = 20, SpeedChangeMpMps = 0 });
+        SetPlatformCourseDelta("TEST-002", new FssCourseDelta() { HeadingChangeClockwiseDegsSec = -8, SpeedChangeMpMps = 0 });
 
         AddPlatform("TEST-003", "Tornado");
         SetPlatformStartLLA("TEST-003", loc3);

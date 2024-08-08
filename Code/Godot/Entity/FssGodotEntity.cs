@@ -5,13 +5,21 @@ using System;
 
 public partial class FssGodotEntity : Node3D
 {
-
     public string EntityName { get; set; }
+
+    private FssElementContrail ElementContrail;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
         CreateEntity();
+
+        ElementContrail = new FssElementContrail();
+        ElementContrail.InitElement(EntityName);
+        ElementContrail.SetModel(EntityName);
+        FssZeroOffset.ZeroNode.AddChild(ElementContrail);
+
+
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -57,7 +65,7 @@ public partial class FssGodotEntity : Node3D
 
         FssEntityV3 entityVecs = FssGeoConvOperations.RwToGeStruct((FssLLAPoint)pos, (FssCourse)course);
 
-        GD.Print($"Name: {EntityName} PosLLA:{pos} Ahead:{entityVecs.PosAhead} up:{entityVecs.VecUp}");
+        //GD.Print($"Name: {EntityName} PosLLA:{pos} Ahead:{entityVecs.PosAhead} up:{entityVecs.VecUp}");
 
         Position = entityVecs.Pos;
         //LookAtFromPosition(entityVecs.Pos, entityVecs.PosAhead, entityVecs.VecUp, true);

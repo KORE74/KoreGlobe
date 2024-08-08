@@ -60,6 +60,12 @@ public class FssModelRun
         }
     }
 
+    public void Reset()
+    {
+        Stop();
+        FssAppFactory.Instance.SimClock.Reset();
+    }
+
     private void RunModel()
     {
         bool running = FssAppFactory.Instance.SimClock.IsRunning;

@@ -10,7 +10,11 @@ public partial class FssElementContrail : Node3D
 {
     List<FssLLAPoint> TrailPoints   = new List<FssLLAPoint>();
     List<MeshInstance3D> TrailNodes = new List<MeshInstance3D>();
-    int MaxTrailPoints = 250;
+    int MaxTrailPoints = 60;
+
+    string ModelName;
+    bool UseModel = false;
+    float TimerModelTrail = 0.0f;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -20,6 +24,7 @@ public partial class FssElementContrail : Node3D
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
+        AddTrailFromModel();
         UpdateTrail();
     }
 
@@ -31,6 +36,12 @@ public partial class FssElementContrail : Node3D
     {
         // *this* is a node added to the ZeroPoint
         Name = $"{platformName}-ContrailRoot";
+    }
+
+    public void SetModel(string modelName)
+    {
+        ModelName = modelName;
+        UseModel = true;
     }
 
     // --------------------------------------------------------------------------------------------
@@ -45,6 +56,25 @@ public partial class FssElementContrail : Node3D
 
         TrailPoints.Add(point);
     }
+
+    public void AddTrailFromModel()
+    {
+        // Add a point from the model
+        if (UseModel)
+        {
+
+            if (TimerModelTrail < FssCoreTime.RuntimeSecs)
+            {
+                TimerModelTrail = FssCoreTime.RuntimeSecs + 1f;
+
+                FssLLAPoint? PlatformPos = FssAppFactory.Instance.EventDriver.GetPlatformPosition(ModelName);
+
+                if (PlatformPos != null)
+                    AddTrailPoint((FssLLAPoint)PlatformPos);
+            }
+        }
+    }
+
 
     // Update called to keep the trail in place with the zero point.
     // Iterate through the points, creating new segments as needed and moving old ones to the latest position.
