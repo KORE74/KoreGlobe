@@ -6,7 +6,9 @@ public partial class FssCameraMoverWorld : Camera3D
     public FssLLAPoint CamPos    = new FssLLAPoint() { LatDegs = 50, LonDegs = -1, AltMslM = 1000 };
     public FssCourse   CamCourse = new FssCourse() {HeadingDegs = 30, SpeedKph = 0};
 
-    public FssPolarOffset CamOffset = new FssPolarOffset(0, 0, 0);
+    public FssPolarOffset CamOffset = new FssPolarOffset(10, 0, 0);
+
+    private float TimerCamReport = 0;
 
     // ------------------------------------------------------------------------------------------------
 
@@ -19,6 +21,14 @@ public partial class FssCameraMoverWorld : Camera3D
     public override void _Process(double delta)
     {
         UpdateInputs();
+
+        if (TimerCamReport < FssCoreTime.RuntimeSecs)
+        {
+            TimerCamReport = FssCoreTime.RuntimeSecs + 3f;
+
+            GD.Print($"CamPos:{CamPos}");
+
+        }
 
         // if (direction.Length() > 0)
         // {
@@ -71,7 +81,11 @@ public partial class FssCameraMoverWorld : Camera3D
         }
 
         // Create a polar offset to apply to the camera position
-        CamOffset = new FssPolarOffset(translateUpM, translateLeftM, translateFwdM, CamCourse.HeadingDegs);
+        CamOffset.AzDegs += rotateLeftDegs;
+        CamOffset.ElDegs += rotateUpDegs;
+        CamOffset.RangeM += translateFwdM;
+
+        GD.Print($"CamOffset:{CamOffset}");
     }
 
     // ------------------------------------------------------------------------------------------------
@@ -88,5 +102,17 @@ public partial class FssCameraMoverWorld : Camera3D
         // // Set the camera rotation
         // Vector3 GeRot = new Vector3(0, 0, 0);
         // RotationDegrees = GeRot;
+
+        // If the range value of the offset is non-zero, get the offset and apply it to the position. Then zero the range.
+        if (CamOffset.RangeM > 1)
+        {
+            FssXYZPoint camXYZ = CamOffset.ToXYZ();
+            Vector3 GePos = FssZeroOffset.GeZeroPointOffset(camXYZ);
+
+
+            CamOffset.RangeM = 0;
+        }
+
+
     }
 }

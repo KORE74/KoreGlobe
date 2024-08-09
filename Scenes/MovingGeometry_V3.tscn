@@ -37,6 +37,7 @@ spot_angle = 30.6739
 
 [node name="Camera3D" type="Camera3D" parent="Scene"]
 transform = Transform3D(-0.0098958, 0, 0.999951, 0, 1, 0, -0.999951, 0, -0.0098958, 10.3465, -0.263696, 0.306362)
+current = true
 fov = 40.0
 near = 0.001
 far = 12000.0

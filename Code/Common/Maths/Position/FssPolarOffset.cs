@@ -1,6 +1,7 @@
 using System;
 
 // FssPolarOffset: Class represents a straight line (no earth curvature) between two points.
+using Godot;
 
 public struct FssPolarOffset
 {
@@ -23,8 +24,8 @@ public struct FssPolarOffset
 
     public double RangeKm
     {
-        get { return (RangeM * FssPosConsts.MetresToKmMultiplier); }
-        set { RangeM = (value * FssPosConsts.KmToMetresMultiplier); }
+        get { return RangeM * FssPosConsts.MetresToKmMultiplier; }
+        set { RangeM = value * FssPosConsts.KmToMetresMultiplier; }
     }
 
     public double AltOffsetM

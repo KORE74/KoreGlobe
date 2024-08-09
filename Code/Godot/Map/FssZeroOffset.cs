@@ -3,7 +3,6 @@ using Godot;
 
 public static class FssZeroOffset
 {
-
     // FssZeroOffset.ZeroNode
     public static Node3D ZeroNode;
 
@@ -55,5 +54,4 @@ public static class FssZeroOffset
     {
         return new Vector3((float)-RwZeroPointXYZ.X, (float)-RwZeroPointXYZ.Y, (float)RwZeroPointXYZ.Z);
     }
-
 }
