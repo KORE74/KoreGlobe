@@ -3,7 +3,9 @@ using System;
 
 public partial class FssCameraMover : Node3D
 {
-    public float MoveSpeed   = 1.5f; // Tunable speed parameters
+    [Export]
+    public float MoveSpeed   = (float)(FssZeroOffset.GeEarthRadius / 0.75); // Tunable speed parameters
+
     public float RotateSpeed = 1.0f;
     Vector3 direction = new Vector3();
     Vector3 rotation  = new Vector3();

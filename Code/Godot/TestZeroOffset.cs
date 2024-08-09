@@ -12,6 +12,7 @@ public partial class TestZeroOffset : Node3D
     Node3D PlaformBaseNode;
     Node3D ModelResourceNode;
 
+
     Node3D TestNode;
     Node3D TestNodeAhead;
     Node3D TestNodeAbove;
@@ -20,6 +21,7 @@ public partial class TestZeroOffset : Node3D
     FssElementContrail ElementContrail;
     FssElementRoute    ElementRoute;
     FssGodotEntityManager   EntityManager;
+    FssCameraMoverWorld WorldCamNode;
 
     Material matColorRed;
     Material matColorBlue;
@@ -56,17 +58,15 @@ public partial class TestZeroOffset : Node3D
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        FssZeroOffset.EarthRadiusM = 10;
-
         // Randomize the zero point in each run so we don't bake-in assumptions.
-        double randomLat = FssValueUtils.RandomInRange(-45, 45);
-        double randomLon = FssValueUtils.RandomInRange(-180, 180);
+        double randomLat = FssValueUtils.RandomInRange(50, 52);
+        double randomLon = FssValueUtils.RandomInRange(-4, -2);
 
         // Init the zero pos
         FssLLAPoint zeroPos = new FssLLAPoint() {
             LatDegs = randomLat,
             LonDegs = randomLon,
-            RadiusM = FssZeroOffset.EarthRadiusM };
+            RadiusM = FssZeroOffset.GeEarthRadius };
         FssZeroOffset.SetLLA(zeroPos);
 
         // Init materials
@@ -143,10 +143,13 @@ public partial class TestZeroOffset : Node3D
         FssPrimitiveFactory.AddAxisMarkers(ZeroNode,      MarkerSize, MarkerSize/4);
 
         // Add the wedges
-        //EarthCoreNode.AddChild(new TestEarthCore((float)FssZeroOffset.EarthRadiusM));
+        //EarthCoreNode.AddChild(new TestEarthCore((float)FssZeroOffset.GeEarthRadius));
+
+        WorldCamNode = new FssCameraMoverWorld();
+        EarthCoreNode.AddChild(WorldCamNode);
 
         // Add the LL Labels
-        EarthCoreNode.AddChild(new TestLabelMaker());
+        //EarthCoreNode.AddChild(new TestLabelMaker());
 
         MapManager = new FssMapManager();
         EarthCoreNode.AddChild(MapManager);
@@ -218,10 +221,10 @@ public partial class TestZeroOffset : Node3D
         ZeroNode.AddChild(ElementRoute);
 
         List<FssLLAPoint> route = new List<FssLLAPoint>();
-        route.Add(new FssLLAPoint() { LatDegs = 40f, LonDegs = 10f, RadiusM = 10.3f });
-        route.Add(new FssLLAPoint() { LatDegs = 42f, LonDegs = 12f, RadiusM = 10.4f });
-        route.Add(new FssLLAPoint() { LatDegs = 41f, LonDegs = 13f, RadiusM = 10.5f });
-        route.Add(new FssLLAPoint() { LatDegs = 44f, LonDegs = 16f, RadiusM = 10.3f });
+        route.Add(new FssLLAPoint() { LatDegs = 40f, LonDegs = 10f, RadiusM = 100f });
+        route.Add(new FssLLAPoint() { LatDegs = 42f, LonDegs = 12f, RadiusM = 100f });
+        route.Add(new FssLLAPoint() { LatDegs = 41f, LonDegs = 13f, RadiusM = 110f });
+        route.Add(new FssLLAPoint() { LatDegs = 44f, LonDegs = 16f, RadiusM = 100f });
         ElementRoute.SetRoutePoints(route);
 
         EntityManager = new FssGodotEntityManager();
@@ -235,7 +238,7 @@ public partial class TestZeroOffset : Node3D
     private void UpdateCoreNodePositions()
     {
         FssLLAPoint p = FssZeroOffset.RwZeroPointLLA;
-        p.LonDegs += 0.01f;
+        p.LonDegs += 0.001f;
         FssZeroOffset.SetLLA(p);
 
         ZeroNode.Position      = FssZeroOffset.GeZeroPoint();

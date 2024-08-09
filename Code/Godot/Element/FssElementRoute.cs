@@ -13,6 +13,8 @@ public partial class FssElementRoute : Node3D
     List<MeshInstance3D> RouteLinks  = new List<MeshInstance3D>();
     List<MeshInstance3D> RouteRods   = new List<MeshInstance3D>();
 
+    private static float BaseNodeSize = (float)(FssZeroOffset.GeEarthRadius / 100);
+
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
@@ -53,7 +55,7 @@ public partial class FssElementRoute : Node3D
         // Take the LLA RoutePoints, output spheres in RouteNodes.
         for (int i = 0; i < numNodes; i++)
         {
-            Node3D newNode = FssPrimitiveFactory.CreateSphereNode($"Node_{i}", Vector3.Zero, 0.025f, FssColorUtil.Colors["Magenta"]);
+            Node3D newNode = FssPrimitiveFactory.CreateSphereNode($"Node_{i}", Vector3.Zero, BaseNodeSize, FssColorUtil.Colors["Magenta"]);
             RouteNodes.Add(newNode);
             AddChild(newNode);
         }
@@ -86,6 +88,8 @@ public partial class FssElementRoute : Node3D
         // - - - - - - - - - - - - - - - - - - - - - - - - -
         // Create the links between the nodes in RouteLinks.
 
+        float lineRadius = BaseNodeSize * 0.8f;
+
         for (int i = 0; i < numLinks; i++)
         {
             FssEntityV3 platformV3 = FssGeoConvOperations.RwToGeStruct(RoutePoints[i], RoutePoints[i+1]);
@@ -96,7 +100,7 @@ public partial class FssElementRoute : Node3D
             Vector3 cylinderforwardvec = new Vector3(0, 0, length);
 
             FssMeshBuilder meshBuilder = new FssMeshBuilder();
-            meshBuilder.AddCylinder(Vector3.Zero, cylinderforwardvec, 0.02f, 0.002f, 12, true);
+            meshBuilder.AddCylinder(Vector3.Zero, cylinderforwardvec, lineRadius, lineRadius, 12, true);
             ArrayMesh meshData = meshBuilder.Build2($"cylinder_{i}", false);
 
             // Add the mesh to the current Node3D

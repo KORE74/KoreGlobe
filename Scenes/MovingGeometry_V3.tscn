@@ -19,8 +19,6 @@ ambient_light_color = Color(0.875644, 0.893054, 0.867068, 1)
 reflected_light_source = 2
 ssr_depth_tolerance = 0.01
 ssao_radius = 1.47
-glow_enabled = true
-fog_enabled = true
 fog_light_energy = 1.63
 fog_sun_scatter = 0.56
 adjustment_enabled = true
@@ -41,8 +39,9 @@ spot_angle = 30.6739
 transform = Transform3D(-0.0098958, 0, 0.999951, 0, 1, 0, -0.999951, 0, -0.0098958, 10.3465, -0.263696, 0.306362)
 fov = 40.0
 near = 0.001
-far = 8000.0
+far = 12000.0
 script = ExtResource("2_uur7r")
+MoveSpeed = 5.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Scene"]
 environment = SubResource("Environment_u3ced")

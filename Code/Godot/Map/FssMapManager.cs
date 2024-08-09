@@ -15,6 +15,9 @@ public partial class FssMapManager : Node3D
 {
     private string MapRootPath = "";
 
+    // FssMapManager.LoadRefLLAPoint
+    public static FssLLAPoint LoadRefLLAPoint = new FssLLAPoint() { LatDegs = 41, LonDegs = 6, AltMslM = 0 };
+
     // Debug
     private FssLLAPoint pos  = new FssLLAPoint() { LatDegs = 41, LonDegs = 6, AltMslM = 0 };
     private FssCourse Course = new FssCourse() { HeadingDegs = 90, SpeedMps = 1 };
@@ -169,11 +172,14 @@ public partial class FssMapManager : Node3D
         FssFloat2DArray eleArray = new FssFloat2DArray(50, 50);
         eleArray.SetAllVals(0.001f);
 
+        float innerRadius = (float)FssZeroOffset.GeEarthRadius * 0.9f;
+        float outerRadius = (float)FssZeroOffset.GeEarthRadius;
+
         var meshBuilder = new FssMeshBuilder();
         meshBuilder.AddSurface(
             -10, 50,
             60, 20,
-            5f, 0.000006f,
+            outerRadius, 0.000006f,
             eleArray,
             true);
         var meshData = meshBuilder.BuildWithUV("surface");

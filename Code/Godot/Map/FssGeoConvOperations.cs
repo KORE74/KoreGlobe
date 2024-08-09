@@ -28,12 +28,28 @@ public struct FssEntityV3
 public static class FssGeoConvOperations
 {
     // --------------------------------------------------------------------------------------------
+    // MARK: Elevation conversion
+    // --------------------------------------------------------------------------------------------
+
+    // routine to take a model elevation in meters, and ouput a scaled elevation in km, in propoortion
+    // to the current presentation range FssZeroOffset.GeEarthRadius.
+    public static float ScaleElevation(double modelEleM)
+    {
+        // Determine model to presentation scale factor
+        double scaleMetersPerDisplayUnit = FssPosConsts.EarthRadiusM / FssZeroOffset.GeEarthRadius;
+
+        return (float)(modelEleM / scaleMetersPerDisplayUnit);
+    }
+
+    // --------------------------------------------------------------------------------------------
     // MARK: Bare Position - No Zero offsets
     // --------------------------------------------------------------------------------------------
 
     // FssGeoConvOperations.RwToGeStruct(pos);
     public static Vector3 RwToGe(double radiusM, double latDegs, double lonDegs)
     {
+        //radiusM = ScaleElevation(radiusM);
+
         FssLLAPoint llap = new FssLLAPoint() { LatDegs = latDegs, LonDegs = lonDegs, RadiusM = radiusM };
         FssXYZPoint p = llap.ToXYZ();
         return new Vector3((float)p.X, (float)p.Y, (float)-p.Z);
@@ -41,6 +57,8 @@ public static class FssGeoConvOperations
 
     public static Vector3 RwToGe(FssLLAPoint llap)
     {
+        //llap.RadiusM = ScaleElevation(llap.RadiusM);
+
         FssXYZPoint p = llap.ToXYZ();
         return new Vector3((float)p.X, (float)p.Y, (float)-p.Z);
     }
@@ -52,6 +70,7 @@ public static class FssGeoConvOperations
     // Usage: Vector3 v3Pos = FssGeoConvOperations.RwToOffsetGe(pos);
     public static Vector3 RwToOffsetGe(FssLLAPoint pos)
     {
+        //pos.RadiusM = ScaleElevation(pos.RadiusM);
         return FssZeroOffset.GeZeroPointOffset(pos.ToXYZ());
     }
 

@@ -34,11 +34,29 @@ public static class FssMaterialFactory
         // Load the wireframe shader
         Shader shader = (Shader)GD.Load("res://Shaders/wireframe_white_v001.gdshader");
         ShaderMaterial wireframeMaterial = new ShaderMaterial();
+
+        wireframeMaterial.SetShaderParameter("wirecolor", new Color(1.0f, 0.0f, 0.0f));
+
        // wireframeMaterial.AlbedoColor = color;
         wireframeMaterial.Shader = shader;
 
         return wireframeMaterial;
     }
+
+    public static ShaderMaterial WireframeMaterial(Color col)
+    {
+        // Load the wireframe shader
+        Shader shader = (Shader)GD.Load("res://Shaders/wireframe_v001.gdshader");
+        ShaderMaterial wireframeMaterial = new ShaderMaterial();
+
+        wireframeMaterial.SetShaderParameter("wirecolor", col);
+
+       // wireframeMaterial.AlbedoColor = color;
+        wireframeMaterial.Shader = shader;
+
+        return wireframeMaterial;
+    }
+
 
     // --------------------------------------------------------------------------------------------
     // #MARK: Experimental / new functions

@@ -7,7 +7,8 @@ public static class FssZeroOffset
     // FssZeroOffset.ZeroNode
     public static Node3D ZeroNode;
 
-    public static double EarthRadiusM = 10;
+    // FssZeroOffset.GeEarthRadius
+    public static double GeEarthRadius = 10; //FssPosConsts.EarthRadiusKm / 100;
 
     // Real World Earth Center is 0,0,0. We create an offset 0,0,0 for the purposes og focussing the
     // game engine view within the range of its floating point precision.
@@ -54,4 +55,5 @@ public static class FssZeroOffset
     {
         return new Vector3((float)-RwZeroPointXYZ.X, (float)-RwZeroPointXYZ.Y, (float)RwZeroPointXYZ.Z);
     }
+
 }

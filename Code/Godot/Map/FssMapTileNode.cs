@@ -38,6 +38,10 @@ public partial class FssMapTileNode : Node3D
 
     // --------------------------------------------------------------------------------------------
 
+    public static readonly int[] TileSizePointsPerLvl = { 30, 50, 100, 300, 500 };
+
+    // --------------------------------------------------------------------------------------------
+
     // Constructor to initialize the texture path and start loading
     public FssMapTileNode(FssMapTileCode tileCode)
     {
@@ -67,7 +71,7 @@ public partial class FssMapTileNode : Node3D
         {
             LoadMaterial(TileCode);
 
-            LabelTile(TileCode);
+            //LabelTile(TileCode);
 
             // AddChild( new MeshInstance3D() {
             //     Name             = "MapTileMesh",
@@ -169,7 +173,7 @@ public partial class FssMapTileNode : Node3D
         meshFilePath  = FssGodotFileUtil.GetActualPath(meshFilePath);
 
         bool loadEle  = File.Exists(eleFilePath);
-        bool loadMesh = File.Exists(meshFilePath);
+        bool loadMesh = false; //File.Exists(meshFilePath);
         bool saveMesh = !loadMesh;
 
         // Run file loading and processing on a background thread
@@ -183,10 +187,12 @@ public partial class FssMapTileNode : Node3D
             }
             else
             {
+                int res = TileSizePointsPerLvl[TileCode.MapLvl];
+
                 // Load the elevation data
                 FssFloat2DArray asciiArcArry = FssFloat2DArrayIO.LoadFromArcASIIGridFile(eleFilePath);
                 FssFloat2DArray croppedArray = FssFloat2DArrayOperations.CropToRange(asciiArcArry, new FssFloatRange(0f, 50000f));
-                FssFloat2DArray croppedArraySubSample = croppedArray.GetInterpolatedGrid(300, 300);
+                FssFloat2DArray croppedArraySubSample = croppedArray.GetInterpolatedGrid(res, res);
 
                 FssLLBox tileBounds = FssMapTileCode.LLBoxForCode(tileCode);
 
@@ -194,13 +200,13 @@ public partial class FssMapTileNode : Node3D
                 meshBuilder.AddSurface(
                     (float)tileBounds.MinLonDegs, (float)tileBounds.MaxLonDegs,
                     (float)tileBounds.MinLatDegs, (float)tileBounds.MaxLatDegs,
-                    (float)FssZeroOffset.EarthRadiusM, 0.000006f,
+                    (float)FssZeroOffset.GeEarthRadius, 0.000006f,
                     croppedArraySubSample
                 );
                 meshBuilder.AddSurfaceWedgeSides(
                     (float)tileBounds.MinLonDegs, (float)tileBounds.MaxLonDegs,
                     (float)tileBounds.MinLatDegs, (float)tileBounds.MaxLatDegs,
-                    (float)FssZeroOffset.EarthRadiusM, 0.000006f, 4.5f,
+                    (float)FssZeroOffset.GeEarthRadius, 0.000006f, (float)(FssZeroOffset.GeEarthRadius * 0.95),
                     croppedArraySubSample
                 ); //bool flipTriangles = false)
             }
@@ -259,10 +265,10 @@ public partial class FssMapTileNode : Node3D
         };
 
         // Add the mesh instances to the current Node3D
-        // MeshInstanceW = new MeshInstance3D { Name = $"{tileCodeName} wire" };
-        // MeshInstanceW.Mesh = meshData;
-        // MeshInstanceW.MaterialOverride = FssMaterialFactory.WireframeWhiteMaterial();
-        // AddChild(MeshInstanceW);
+        MeshInstanceW = new MeshInstance3D { Name = $"{tileCodeName} wire" };
+        MeshInstanceW.Mesh = meshData;
+        MeshInstanceW.MaterialOverride = FssMaterialFactory.WireframeMaterial(new Color(0f, 0f, 0f, 0.3f));
+        AddChild(MeshInstanceW);
 
         MeshInstance = new MeshInstance3D { Name = $"{tileCodeName} image" };
         MeshInstance.Mesh = meshData;
@@ -291,8 +297,8 @@ public partial class FssMapTileNode : Node3D
         float labelGap = 0.05f;
 
         // Determine the positions and orientation
-        FssLLAPoint pos  = new FssLLAPoint() { LatDegs = posLL.LatDegs,        LonDegs = posLL.LonDegs, RadiusM = FssZeroOffset.EarthRadiusM + labelGap};
-        FssLLAPoint posN = new FssLLAPoint() { LatDegs = posLL.LatDegs + 0.01, LonDegs = posLL.LonDegs, RadiusM = FssZeroOffset.EarthRadiusM + labelGap};
+        FssLLAPoint pos  = new FssLLAPoint() { LatDegs = posLL.LatDegs,        LonDegs = posLL.LonDegs, RadiusM = FssZeroOffset.GeEarthRadius + labelGap};
+        FssLLAPoint posN = new FssLLAPoint() { LatDegs = posLL.LatDegs + 0.01, LonDegs = posLL.LonDegs, RadiusM = FssZeroOffset.GeEarthRadius + labelGap};
 
         Godot.Vector3 v3Pos   = FssGeoConvOperations.RwToGe(pos);
         Godot.Vector3 v3PosN  = FssGeoConvOperations.RwToGe(posN);
@@ -379,6 +385,9 @@ public partial class FssMapTileNode : Node3D
     {
         if (MeshInstance != null)
             MeshInstance.Visible = visible;
+
+        if (MeshInstanceW != null)
+            MeshInstanceW.Visible = visible;
     }
 
     private void SetChildrenVisibility(bool visible)

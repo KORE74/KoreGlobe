@@ -20,7 +20,7 @@ public static class FssPosConsts
 
     // https://en.wikipedia.org/wiki/Earth_radius
     // Metric system 6,357 to 6,378 km
-    public const double EarthRadiusKm = 6365.0;
+    public const double EarthRadiusKm = 6365.0; // FssPosConsts.EarthRadiusKm
     public const double EarthRadiusM = EarthRadiusKm * 1000.0;
 
     public const double TileEdgeDepthKm = 25.0;
