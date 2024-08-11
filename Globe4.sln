@@ -1,19 +1,19 @@
 ﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fss4", "Fss4.csproj", "{EB30A5D5-3A11-4155-ABF0-E2C55BC6F1FF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Globe4", "Globe4.csproj", "{7E35C48F-6717-420D-98ED-6602F8BFA84B}"
 EndProject
 Global
-    GlobalSection(SolutionConfigurationPlatforms) = preSolution
-    Debug|Any CPU = Debug|Any CPU
-    ExportDebug|Any CPU = ExportDebug|Any CPU
-    ExportRelease|Any CPU = ExportRelease|Any CPU
-    EndGlobalSection
-    GlobalSection(ProjectConfigurationPlatforms) = postSolution
-        {EB30A5D5-3A11-4155-ABF0-E2C55BC6F1FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-        {EB30A5D5-3A11-4155-ABF0-E2C55BC6F1FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-        {EB30A5D5-3A11-4155-ABF0-E2C55BC6F1FF}.ExportDebug|Any CPU.ActiveCfg = ExportDebug|Any CPU
-        {EB30A5D5-3A11-4155-ABF0-E2C55BC6F1FF}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
-        {EB30A5D5-3A11-4155-ABF0-E2C55BC6F1FF}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
-        {EB30A5D5-3A11-4155-ABF0-E2C55BC6F1FF}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
-    EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+	Debug|Any CPU = Debug|Any CPU
+	ExportDebug|Any CPU = ExportDebug|Any CPU
+	ExportRelease|Any CPU = ExportRelease|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7E35C48F-6717-420D-98ED-6602F8BFA84B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E35C48F-6717-420D-98ED-6602F8BFA84B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E35C48F-6717-420D-98ED-6602F8BFA84B}.ExportDebug|Any CPU.ActiveCfg = ExportDebug|Any CPU
+		{7E35C48F-6717-420D-98ED-6602F8BFA84B}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
+		{7E35C48F-6717-420D-98ED-6602F8BFA84B}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
+		{7E35C48F-6717-420D-98ED-6602F8BFA84B}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
+	EndGlobalSection
 EndGlobal

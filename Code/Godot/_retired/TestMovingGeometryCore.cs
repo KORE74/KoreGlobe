@@ -62,7 +62,7 @@ public partial class TestMovingGeometryCore : Node3D
     //     matColorBlue   = FssMaterialFactory.SimpleColoredMaterial(new Color(0.3f, 0.3f, 0.9f, 1f));
     //     matColorYellow = FssMaterialFactory.SimpleColoredMaterial(FssColorUtil.Colors["OffYellow"]);
     //     matColorWhite  = FssMaterialFactory.SimpleColoredMaterial(new Color(1f, 1f, 1f, 1f));
-    //     matWire        = FssMaterialFactory.WireframeWhiteMaterial();
+    //     matWire        = FssMaterialFactory.WireframeMaterial(FssColorUtil.Colors["White"]);
 
     //     CreateCoreNode();
     //     CreateLinkCylinder();

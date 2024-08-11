@@ -97,6 +97,9 @@ public class FssConsole
         commandHandlers.Add(new FssCommandPlatReportElem());
         commandHandlers.Add(new FssCommandPlatReportPos());
 
+        //commandHandlers.Add(new FssCommandModelJsonRead());
+        //commandHandlers.Add(new FssCommandModelJsonWrite());
+
         // Platform control
         commandHandlers.Add(new FssCommandPlatTestScenario());
         commandHandlers.Add(new FssCommandPlatAdd());

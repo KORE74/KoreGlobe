@@ -12,7 +12,7 @@ public partial class TestModel : Node3D
     Node? CoreNode;
     FssLLAPoint PrevPos = new FssLLAPoint() { LatDegs = 0, LonDegs = -70, AltMslM = 1.4f };
 
-    ShaderMaterial     matWire  = FssMaterialFactory.WireframeWhiteMaterial();
+    ShaderMaterial     matWire  = FssMaterialFactory.WireframeMaterial(FssColorUtil.Colors["White"]);
     StandardMaterial3D matGrey  = FssMaterialFactory.SimpleColoredMaterial(new Color(0.5f, 0.5f, 0.5f, 1f));
 
     // Define the position and course
@@ -86,7 +86,7 @@ public partial class TestModel : Node3D
 
             ArrayMesh meshData = frontWedge.Build2("Sphere", false);
 
-            var matWire      = FssMaterialFactory.WireframeWhiteMaterial();
+            var matWire      = FssMaterialFactory.WireframeMaterial(FssColorUtil.Colors["White"]);
             var matTransBlue = FssMaterialFactory.TransparentColoredMaterial(new Color(0.2f, 0.2f, 0.7f, 0.4f));
 
             MeshInstance3D meshInstance    = new() { Name = "FrontWedge" };

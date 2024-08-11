@@ -72,7 +72,7 @@ public partial class TestZeroOffset : Node3D
         // Init materials
         matColorRed  = FssMaterialFactory.SimpleColoredMaterial(new Color(0.9f, 0.3f, 0.3f, 1f));
         matColorBlue = FssMaterialFactory.SimpleColoredMaterial(new Color(0.3f, 0.3f, 0.9f, 1f));
-        matWire      = FssMaterialFactory.WireframeWhiteMaterial();
+        matWire      = FssMaterialFactory.WireframeMaterial(FssColorUtil.Colors["White"]);
 
         // Create Nodes
         CreateCoreNode();
@@ -139,8 +139,11 @@ public partial class TestZeroOffset : Node3D
         AddChild(ZeroNode);
 
         // Add axis markers to the core and zero nodes
-        FssPrimitiveFactory.AddAxisMarkers(EarthCoreNode, MarkerSize, MarkerSize/4);
-        FssPrimitiveFactory.AddAxisMarkers(ZeroNode,      MarkerSize, MarkerSize/4);
+        //FssPrimitiveFactory.AddAxisMarkers(EarthCoreNode, MarkerSize, MarkerSize/4);
+        //FssPrimitiveFactory.AddAxisMarkers(ZeroNode,      MarkerSize, MarkerSize/4);
+
+        EarthCoreNode.AddChild( FssPrimitiveFactory.AxisMarkerNode(MarkerSize, MarkerSize/4) );
+        ZeroNode.AddChild(      FssPrimitiveFactory.AxisMarkerNode(MarkerSize, MarkerSize/4) );
 
         // Add the wedges
         //EarthCoreNode.AddChild(new TestEarthCore((float)FssZeroOffset.GeEarthRadius));

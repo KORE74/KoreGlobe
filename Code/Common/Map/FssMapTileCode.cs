@@ -46,6 +46,9 @@ public class FssMapTileCode
     public int HorizCount => NumTilesHorizPerLvl[MapLvl];
     public int VertCount  => NumTilesVertPerLvl[MapLvl];
 
+    public int HorizIndex => CodeList[MapLvl].LonIndex;
+    public int VertIndex  => CodeList[MapLvl].LatIndex;
+
     // --------------------------------------------------------------------------------------------
     // MARK: Constructor
     // --------------------------------------------------------------------------------------------

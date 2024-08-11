@@ -11,7 +11,7 @@ public partial class TestMeshBuilder : Node
         //meshBuilder.AddSphere(Vector3.Zero, 1, 36);
 
         var matGrey = FssMaterialFactory.TransparentColoredMaterial(new Color(0.5f, 0.5f, 0.5f, 1f));
-        var matWire = FssMaterialFactory.WireframeWhiteMaterial();
+        var matWire = FssMaterialFactory.WireframeMaterial(FssColorUtil.Colors["White"]);
 
         ArrayMesh meshData = meshBuilder.Build("MeshBuilder", false);
 

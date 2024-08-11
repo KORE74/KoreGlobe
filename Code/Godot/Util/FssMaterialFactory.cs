@@ -6,7 +6,6 @@ public static class FssMaterialFactory
     // #MARK: Mature / fixed functions
     // --------------------------------------------------------------------------------------------
 
-
     // Function to create a simple colored material
     public static StandardMaterial3D SimpleColoredMaterial(Color color)
     {
@@ -28,21 +27,7 @@ public static class FssMaterialFactory
 
     // Apply a wireframe shader, to see each triangle in a mesh.
     // Usage:
-    //   meshInstance.MaterialOverride = FssMaterialFactory.WireframeWhiteMaterial();
-    public static ShaderMaterial WireframeWhiteMaterial()
-    {
-        // Load the wireframe shader
-        Shader shader = (Shader)GD.Load("res://Shaders/wireframe_white_v001.gdshader");
-        ShaderMaterial wireframeMaterial = new ShaderMaterial();
-
-        wireframeMaterial.SetShaderParameter("wirecolor", new Color(1.0f, 0.0f, 0.0f));
-
-       // wireframeMaterial.AlbedoColor = color;
-        wireframeMaterial.Shader = shader;
-
-        return wireframeMaterial;
-    }
-
+    //   meshInstance.MaterialOverride = FssMaterialFactory.WireframeMaterial(FssColorUtil.Colors["White"]);
     public static ShaderMaterial WireframeMaterial(Color col)
     {
         // Load the wireframe shader
@@ -57,23 +42,9 @@ public static class FssMaterialFactory
         return wireframeMaterial;
     }
 
-
     // --------------------------------------------------------------------------------------------
     // #MARK: Experimental / new functions
     // --------------------------------------------------------------------------------------------
-
-    // Apply a wireframe shader, to see each triangle in a mesh.
-    // Usage:
-    //   meshInstance.MaterialOverride = FssMaterialFactory.WireframeShaderMaterial();
-    // public static ShaderMaterial WireframeShaderMaterial(Color color)
-    // {
-    //     // Load the wireframe shader
-    //     Shader shader = (Shader)GD.Load("res://Shaders/wireframe_test_002.gdshader");
-    //     ShaderMaterial wireframeMaterial = new ShaderMaterial();
-    //    // wireframeMaterial.AlbedoColor = color;
-    //     wireframeMaterial.Shader = shader;
-    //     return wireframeMaterial;
-    // }
 
     public static ShaderMaterial VertexColorMaterial()
     {
@@ -90,17 +61,6 @@ public static class FssMaterialFactory
     {
         // Load the wireframe shader
         Shader shader = (Shader)GD.Load("res://Shaders/VertexColor2.gdshader");
-        ShaderMaterial material = new ShaderMaterial();
-       // wireframeMaterial.AlbedoColor = color;
-        material.Shader = shader;
-
-        return material;
-    }
-
-    public static ShaderMaterial BubbleMaterial()
-    {
-        // Load the wireframe shader
-        Shader shader = (Shader)GD.Load("res://Shaders/bubble.gdshader");
         ShaderMaterial material = new ShaderMaterial();
        // wireframeMaterial.AlbedoColor = color;
         material.Shader = shader;

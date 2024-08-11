@@ -28,7 +28,7 @@ public partial class FssTestRoute : Node3D
             //RouteVectors.Add(FssGeoConvOperations.RealWorldToGodot(point));
 
         // Create the materials
-        var matWire  = FssMaterialFactory.WireframeWhiteMaterial();
+        var matWire  = FssMaterialFactory.WireframeMaterial(FssColorUtil.Colors["White"]);
         var matGrey  = FssMaterialFactory.TransparentColoredMaterial(new Color(0.5f, 0.5f, 0.5f, 1f));
 
 

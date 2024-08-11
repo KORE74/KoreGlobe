@@ -27,6 +27,9 @@ public partial class FssMapManager : Node3D
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
+        // Setup this node
+        Name = "MapManager";
+
         // Read the config values
         var config = FssCentralConfig.Instance;
         MapRootPath = config.GetParameter<string>("MapRootPath", "");
@@ -154,7 +157,7 @@ public partial class FssMapManager : Node3D
     //     // Add the mesh instances to the current Node3D
     //     var meshInstanceW = new MeshInstance3D { Name = $"{tileInfo.TileCode} wire" };
     //     meshInstanceW.Mesh = meshData;
-    //     meshInstanceW.MaterialOverride = FssMaterialFactory.WireframeWhiteMaterial();
+    //     meshInstanceW.MaterialOverride = FssMaterialFactory.WireframeMaterial(FssColorUtil.Colors["White"]);
     //     AddChild(meshInstanceW);
 
     //     var meshInstance = new MeshInstance3D { Name = $"{tileInfo.TileCode} image" };
@@ -187,7 +190,7 @@ public partial class FssMapManager : Node3D
         // Add the mesh instances to the current Node3D
         var meshInstanceW = new MeshInstance3D { Name = $"Water wire" };
         meshInstanceW.Mesh = meshData;
-        meshInstanceW.MaterialOverride = FssMaterialFactory.WireframeWhiteMaterial();
+        meshInstanceW.MaterialOverride = FssMaterialFactory.WireframeMaterial(FssColorUtil.Colors["White"]);
         AddChild(meshInstanceW);
 
         var meshInstance = new MeshInstance3D { Name = $"water image" };

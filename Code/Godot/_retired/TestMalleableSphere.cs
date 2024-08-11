@@ -16,7 +16,7 @@ public partial class TestMalleableSphere : Node3D
         FssMeshBuilder meshBuilder = new();
         meshBuilder.AddMalleableSphere(new Vector3(0, 0, 0), radiusList, colorRange);
 
-        var matWire        = FssMaterialFactory.WireframeWhiteMaterial();
+        var matWire        = FssMaterialFactory.WireframeMaterial(FssColorUtil.Colors["White"]);
         var matVertexColor = FssMaterialFactory.VertexColorMaterial();
         var matBlue        = FssMaterialFactory.SimpleColoredMaterial(new Color(0.0f, 0.5f, 1.0f, 1.0f));
 

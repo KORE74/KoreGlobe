@@ -11,8 +11,9 @@ public partial class FssMapTileNode : Node3D
 {
     private string _imagePath;
     private bool _isDone;
-    StandardMaterial3D _material;
+    public StandardMaterial3D _material;
     public ArrayMesh meshData;
+    public ImageTexture TerrainTexture;
 
     private bool MeshDone = false;
 
@@ -82,7 +83,7 @@ public partial class FssMapTileNode : Node3D
             // AddChild( new MeshInstance3D() {
             //     Name             = "MapTileMeshW",
             //     Mesh             = meshData,
-            //     MaterialOverride = FssMaterialFactory.WireframeWhiteMaterial()
+            //     MaterialOverride = FssMaterialFactory.WireframeMaterial(FssColorUtil.Colors["White"]);
             // });
 
             OneShotFlag = true;
@@ -257,10 +258,10 @@ public partial class FssMapTileNode : Node3D
             GD.PrintErr($"Failed to load image: {imageFilePath}");
             return;
         }
-        var texture = ImageTexture.CreateFromImage(image);
+        TerrainTexture = ImageTexture.CreateFromImage(image);
         var material = new StandardMaterial3D
         {
-            AlbedoTexture = texture,
+            AlbedoTexture = TerrainTexture,
             ShadingMode = StandardMaterial3D.ShadingModeEnum.Unshaded
         };
 

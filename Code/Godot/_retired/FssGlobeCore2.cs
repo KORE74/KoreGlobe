@@ -21,7 +21,7 @@ public partial class FssGlobeCore2 : Node3D
             var testSphereInstance = new MeshInstance3D();
             testSphereInstance.Name             = "TestSphere";
             testSphereInstance.Mesh             = sphereMesh;
-            testSphereInstance.MaterialOverride = FssMaterialFactory.WireframeWhiteMaterial();
+            testSphereInstance.MaterialOverride = FssMaterialFactory.WireframeMaterial(FssColorUtil.Colors["White"]);
             testSphereInstance.Position         = new Vector3(0.0f, 0.0f, 0.0f);
             testSphereInstance.Scale            = new Vector3(1f, 1f, 1f);
             AddChild(testSphereInstance);

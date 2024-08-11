@@ -6,6 +6,8 @@ using System.Linq;
 
 public static class FssFileOperations
 {
+    // --------------------------------------------------------------------------------------------
+
     // Function to standardize a path, changing any backslash characters to a "/".
 
     // Usage example: FssFileOperations.StandardizePath("C:\\Users\\User\\Documents\\file.txt");
@@ -32,6 +34,8 @@ public static class FssFileOperations
         return standardizedPath;
     }
 
+    // --------------------------------------------------------------------------------------------
+
     // List all the files under a given top level directory.
     public static List<string> Filenames(string startPath)
     {
@@ -54,15 +58,21 @@ public static class FssFileOperations
         return filenames;
     }
 
+    // --------------------------------------------------------------------------------------------
+
     public static List<string> FilterFilenameList(List<string> filenames, string substring)
     {
         return filenames.Where(filename => filename.Contains(substring)).ToList();
     }
 
+    // --------------------------------------------------------------------------------------------
+
     public static List<string> OrderAlphabetically(List<string> filenames)
     {
         return filenames.OrderBy(filename => filename).ToList();
     }
+
+    // --------------------------------------------------------------------------------------------
 
     // The standard Path.Combinbe can introduce a backslash "\" character.
     // This version with will:
@@ -84,5 +94,19 @@ public static class FssFileOperations
 
         return $"{normalizedPath1}/{normalizedPath2}";
     }
+
+    // --------------------------------------------------------------------------------------------
+
+    // Check the filename string has the right extension, or add it if it doesn't.
+
+    // Usage example: FssFileOperations.EnsureExtension("file.txt", ".json");
+    public static string EnsureExtension(string filename, string extension)
+    {
+        if (filename.EndsWith(extension))
+            return filename;
+        else
+            return $"{filename}{extension}";
+    }
+
 }
 

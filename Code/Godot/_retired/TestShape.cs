@@ -84,7 +84,7 @@ public partial class TestShape : Node3D
         meshInstance.Scale = new Vector3(0.5f, 0.5f, 0.5f);
 
         // Assign wireframe material
-        meshInstance.MaterialOverride = FssMaterialFactory.WireframeWhiteMaterial();
+        meshInstance.MaterialOverride = FssMaterialFactory.WireframeMaterial(FssColorUtil.Colors["White"]);
 
         // Add the MeshInstance3D to the scene
         AddChild(meshInstance);

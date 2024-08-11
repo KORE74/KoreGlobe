@@ -32,7 +32,7 @@ public partial class TestEarthCore : MeshInstance3D
         FssMeshBuilder meshBuilder  = new ();
 
         Color colorBlue = new Color(0.5f, 0.5f, 1f, 0.85f);
-        var matWire = FssMaterialFactory.WireframeWhiteMaterial();
+        var matWire = FssMaterialFactory.WireframeMaterial(FssColorUtil.Colors["White"]);
 
         //var matTestWite   = FssMaterialFactory.WireframeShaderMaterial(new Color(0.2f, 0.2f, 0.7f, 0.4f));
 
@@ -129,7 +129,7 @@ public partial class TestEarthCore : MeshInstance3D
 
         AddChild(meshInstance);
 
-        var matWire = FssMaterialFactory.WireframeWhiteMaterial();
+        var matWire = FssMaterialFactory.WireframeMaterial(FssColorUtil.Colors["White"]);
         //matWire.Transparency = 0.85;
 
         MeshInstance3D meshInstanceW   = new();

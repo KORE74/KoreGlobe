@@ -28,7 +28,7 @@ public partial class FssElementForwardWedge : Node3D
     private void CreateWedge()
     {
         var matTransBlue = FssMaterialFactory.TransparentColoredMaterial(new Color(0.2f, 0.2f, 0.7f, 0.4f));
-        var matWire      = FssMaterialFactory.WireframeWhiteMaterial();
+        var matWire      = FssMaterialFactory.WireframeMaterial(FssColorUtil.Colors["White"]);
 
         FssMeshBuilder meshBuilder  = new ();
 

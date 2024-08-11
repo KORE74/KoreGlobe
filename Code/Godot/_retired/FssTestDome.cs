@@ -25,7 +25,7 @@ public partial class FssTestDome : Node3D
 
             ArrayMesh meshData = meshBuilder.Build2("Dome", false);
 
-            var matWire      = FssMaterialFactory.WireframeWhiteMaterial();
+            var matWire      = FssMaterialFactory.WireframeMaterial(FssColorUtil.Colors["White"]);
             var matTransBlue = FssMaterialFactory.TransparentColoredMaterial(new Color(0.2f, 0.2f, 0.7f, 0.4f));
 
             MeshInstance3D meshInstance    = new() { Name = "Dome" };

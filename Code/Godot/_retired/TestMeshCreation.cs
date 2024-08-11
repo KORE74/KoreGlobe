@@ -9,7 +9,7 @@ public partial class TestMeshCreation : Node3D
         meshBuilder.AddBox(Vector3.Zero, 0.1f, 0.2f, 0.3f);
         ArrayMesh meshData = meshBuilder.Build2("Mesh", false);
 
-        var matWire      = FssMaterialFactory.WireframeWhiteMaterial();
+        var matWire      = FssMaterialFactory.WireframeMaterial(FssColorUtil.Colors["White"]);
         var matTransBlue = FssMaterialFactory.TransparentColoredMaterial(new Color(0.2f, 0.2f, 0.7f, 0.4f));
 
         MeshInstance3D meshInstance    = new() { Name = "Cube" };

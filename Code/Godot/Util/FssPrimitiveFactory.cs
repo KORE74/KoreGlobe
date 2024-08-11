@@ -54,7 +54,7 @@ public static class FssPrimitiveFactory
         {
             MeshInstance3D meshInstanceW   = new MeshInstance3D() { Name = "Wire" };
             meshInstanceW.Mesh             = meshData;
-            meshInstanceW.MaterialOverride = FssMaterialFactory.WireframeWhiteMaterial();;
+            meshInstanceW.MaterialOverride = FssMaterialFactory.WireframeMaterial(FssColorUtil.Colors["White"]);
             newNode.AddChild(meshInstanceW);
         }
 
@@ -152,5 +152,12 @@ public static class FssPrimitiveFactory
         // CreateCylinder(node, Vector3.Zero, new Vector3(0f, 0f, offsetSize), markerRadius * 0.5f, new Color(0.0f, 0.0f, 1.0f, 1.0f));
     }
 
+    // AddChild( FssPrimitiveFactory.AxisMarkerNode(1.2f, 0.1f) );
+    public static Node3D AxisMarkerNode(float offsetSize, float markerRadius)
+    {
+        Node3D node = new Node3D() { Name = "AxisMarkers" };
+        AddAxisMarkers(node, offsetSize, markerRadius);
+        return node;
+    }
 
 }
