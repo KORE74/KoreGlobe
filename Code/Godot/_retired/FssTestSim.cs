@@ -1,3 +1,5 @@
+#nullable enable
+
 using System;
 
 using Godot;
@@ -10,7 +12,7 @@ public partial class FssTestSim : Node3D
     private bool   IsCreated = false;
     private float lerpSpeed = 5.0f; // Adjust this value to control the lerp speed
 
-    private Node3D ModelNode = null;
+    private Node3D ModelNode;
 
     public override void _Ready()
     {

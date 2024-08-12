@@ -26,7 +26,7 @@ public partial class FssCameraMoverWorld : Camera3D
         {
             TimerCamReport = FssCoreTime.RuntimeSecs + 3f;
 
-            GD.Print($"CamPos:{CamPos}");
+            // GD.Print($"CamPos:{CamPos}");
 
         }
 
@@ -85,7 +85,7 @@ public partial class FssCameraMoverWorld : Camera3D
         CamOffset.ElDegs += rotateUpDegs;
         CamOffset.RangeM += translateFwdM;
 
-        GD.Print($"CamOffset:{CamOffset}");
+        // GD.Print($"CamOffset:{CamOffset}");
     }
 
     // ------------------------------------------------------------------------------------------------

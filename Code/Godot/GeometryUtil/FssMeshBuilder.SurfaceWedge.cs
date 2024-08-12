@@ -100,6 +100,7 @@ public partial class FssMeshBuilder
         }
     }
 
+    // --------------------------------------------------------------------------------------------
 
     // Add the sides of a wedge shape, connecting the top and bottom surfaces
     public void AddSurfaceWedgeSides(
@@ -127,7 +128,7 @@ public partial class FssMeshBuilder
         // Top
         {
             // Loop across the top edge, creating the surface and lower edge points, that we then add as a ribbon.
-            float uvX = 0.0f;
+            float uvX  = 0.0f;
             float uvY1 = 0.001f;
             float uvY2 = 0.002f;
 
@@ -141,8 +142,8 @@ public partial class FssMeshBuilder
                 uvX = (float)x / (resolutionAz-1);
                 uvX = FssValueUtils.ScaleVal(uvX, 0f, 1f, 0.001f, 0.999f);
 
-                float currAzDegs    = azMinDegs + (float)x * azInc;
-                float topEdgeDelta  = topEdge[x] * surfaceScale;
+                float currAzDegs   = azMinDegs + (float)x * azInc;
+                float topEdgeDelta = topEdge[x] * surfaceScale;
 
                 topIds.Add( AddVertex(FssGeoConvOperations.RwToGe(surfaceRadius + topEdgeDelta, elMaxDegs, currAzDegs)) );
                 bottomIds.Add( AddVertex(FssGeoConvOperations.RwToGe(innerRadius, elMaxDegs, currAzDegs)) );
@@ -175,7 +176,7 @@ public partial class FssMeshBuilder
         // Bottom
         {
             // Loop across the top edge, creating the surface and lower edge points, that we then add as a ribbon.
-            float uvX = 0.0f;
+            float uvX  = 0.0f;
             float uvY1 = 0.998f;
             float uvY2 = 0.999f;
 
@@ -222,7 +223,7 @@ public partial class FssMeshBuilder
 
         // Left
         {
-            float uvY = 0.0f;
+            float uvY  = 0.0f;
             float uvX1 = 0.002f;
             float uvX2 = 0.001f;
 
@@ -269,7 +270,7 @@ public partial class FssMeshBuilder
 
         // Right
         {
-            float uvY = 0.0f;
+            float uvY  = 0.0f;
             float uvX1 = 0.998f;
             float uvX2 = 0.999f;
 
@@ -379,5 +380,5 @@ public partial class FssMeshBuilder
         AddRibbon(leftInsideEdge,   leftOutsideEdge);
         AddRibbon(rightOutsideEdge, rightInsideEdge);
     }
-
 }
+

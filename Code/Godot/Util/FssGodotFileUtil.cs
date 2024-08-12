@@ -13,14 +13,14 @@ public static class FssGodotFileUtil
         string absolutePath = ProjectSettings.GlobalizePath(resourcePath);
 
         // Optionally check if the file exists at the absolute path
-        if (File.Exists(absolutePath))
-        {
-            GD.Print("File exists at the absolute path.");
-        }
-        else
-        {
-            GD.Print("File does not exist at the absolute path.");
-        }
+        // if (File.Exists(absolutePath))
+        // {
+        //     GD.Print("File exists at the absolute path.");
+        // }
+        // else
+        // {
+        //     GD.Print("File does not exist at the absolute path.");
+        // }
 
         return absolutePath;
     }

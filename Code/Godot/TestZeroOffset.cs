@@ -90,16 +90,15 @@ public partial class TestZeroOffset : Node3D
         {
             UIPollTimer = FssCoreTime.RuntimeSecs + 1f; // Update the timer to the next whole second
 
-            GD.Print($"ZeroOffset: Lat:{FssZeroOffset.RwZeroPointLLA.LatDegs:0.00} Lon:{FssZeroOffset.RwZeroPointLLA.LonDegs:0.00} RadiusM:{FssZeroOffset.RwZeroPointLLA.RadiusM:0.00}");
-            GD.Print($"ZeroOffset: X:{FssZeroOffset.RwZeroPointXYZ.X:0.00} Y:{FssZeroOffset.RwZeroPointXYZ.Y:0.00} Z:{FssZeroOffset.RwZeroPointXYZ.Z:0.00}");
+            // GD.Print($"ZeroOffset: Lat:{FssZeroOffset.RwZeroPointLLA.LatDegs:0.00} Lon:{FssZeroOffset.RwZeroPointLLA.LonDegs:0.00} RadiusM:{FssZeroOffset.RwZeroPointLLA.RadiusM:0.00}");
+            // GD.Print($"ZeroOffset: X:{FssZeroOffset.RwZeroPointXYZ.X:0.00} Y:{FssZeroOffset.RwZeroPointXYZ.Y:0.00} Z:{FssZeroOffset.RwZeroPointXYZ.Z:0.00}");
 
-            GD.Print($"Platform: Lat:{PlatformPos.LatDegs:0.00} Lon:{PlatformPos.LonDegs:0.00} Alt:{PlatformPos.AltMslM:0.00} RadiusM:{PlatformPos.RadiusM:0.00}");
-            GD.Print($"Platform: Hdg:{PlatformCourse.HeadingDegs:0.00} Spd:{PlatformCourse.SpeedMps:0.00}");
+            // GD.Print($"Platform: Lat:{PlatformPos.LatDegs:0.00} Lon:{PlatformPos.LonDegs:0.00} Alt:{PlatformPos.AltMslM:0.00} RadiusM:{PlatformPos.RadiusM:0.00}");
+            // GD.Print($"Platform: Hdg:{PlatformCourse.HeadingDegs:0.00} Spd:{PlatformCourse.SpeedMps:0.00}");
 
-            GD.Print($"PlatformNodePos: X:{PlaformBaseNode.Position.X:0.00} Y:{PlaformBaseNode.Position.Y:0.00} Z:{PlaformBaseNode.Position.Z:0.00}");
+            // GD.Print($"PlatformNodePos: X:{PlaformBaseNode.Position.X:0.00} Y:{PlaformBaseNode.Position.Y:0.00} Z:{PlaformBaseNode.Position.Z:0.00}");
 
-            GD.Print("\n");
-
+            // GD.Print("\n");
         }
 
         // float scale = 0.7f;

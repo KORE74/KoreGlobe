@@ -5,14 +5,14 @@ using System;
 
 public partial class FssUIHeader : PanelContainer
 {
-    private Button CliButton;
-    private Button SettingButton;
-    private Button NetworkButton;
-    private Button ExitButton;
+    private Button? CliButton;
+    private Button? SettingButton;
+    private Button? NetworkButton;
+    private Button? ExitButton;
 
-    private Window CliWindowNode;
-    private Window SettingWindowNode;
-    private Window NetworkWindowNode;
+    private Window? CliWindowNode;
+    private Window? SettingWindowNode;
+    private Window? NetworkWindowNode;
 
     float UIPollTimer = 0f;
 
@@ -60,11 +60,11 @@ public partial class FssUIHeader : PanelContainer
             UIPollTimer = FssCoreTime.RuntimeSecs + 0.2f; // Update the timer to the next whole second
 
             // Update each window visibility to the button state - in case we have alternative ways to close the window
-            NetworkButton.ButtonPressed = NetworkWindowNode.Visible;
-            SettingButton.ButtonPressed = SettingWindowNode.Visible;
-            CliButton.ButtonPressed     = CliWindowNode.Visible;
+            NetworkButton!.ButtonPressed = NetworkWindowNode!.Visible;
+            SettingButton!.ButtonPressed = SettingWindowNode!.Visible;
+            CliButton!.ButtonPressed     = CliWindowNode!.Visible;
         }
-    }
+    } 
 
     // --------------------------------------------------------------------------------------------
     // MARK: UI Interactions
@@ -83,19 +83,19 @@ public partial class FssUIHeader : PanelContainer
     public void OnCLIButtonPressed()
     {
         FssCentralLog.AddEntry("FssUIHeader.OnCLIToggleButtonPressed");
-        CliWindowNode.Visible = CliButton.ButtonPressed;
+        CliWindowNode!.Visible = CliButton!.ButtonPressed;
     }
 
     public void OnSettingButtonPressed()
     {
         FssCentralLog.AddEntry("FssUIHeader.OnSettingButtonPressed");
-        SettingWindowNode.Visible = SettingButton.ButtonPressed;
+        SettingWindowNode!.Visible = SettingButton!.ButtonPressed;
     }
 
     public void OnNetworkButtonPressed()
     {
         FssCentralLog.AddEntry("FssUIHeader.OnNetworkButtonPressed");
-        NetworkWindowNode.Visible = NetworkButton.ButtonPressed;
+        NetworkWindowNode!.Visible = NetworkButton!.ButtonPressed;
     }
 
 }

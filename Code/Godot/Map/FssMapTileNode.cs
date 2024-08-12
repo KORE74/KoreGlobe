@@ -21,6 +21,7 @@ public partial class FssMapTileNode : Node3D
     public bool IsDone => _isDone;
 
     private bool OneShotFlag = false;
+    private bool TexOneShotFlag = false;
 
     FssMapTileCode TileCode;
 
@@ -33,6 +34,8 @@ public partial class FssMapTileNode : Node3D
 
     private MeshInstance3D MeshInstance  = new MeshInstance3D();
     private MeshInstance3D MeshInstanceW = new MeshInstance3D();
+
+    string ImageFilePath = string.Empty;
 
     public bool IntendedVisibility = false;
     //FssXYZPoint RwTileCenterXYZ = new FssXYZPoint(0, 0, 0);
@@ -88,15 +91,21 @@ public partial class FssMapTileNode : Node3D
 
             OneShotFlag = true;
 
-            GD.Print("=========> MapTileMesh added to FssMapTileNode");
+            //GD.Print("=========> MapTileMesh added to FssMapTileNode");
 
             if (TileCode.ToString() == "BG")
             {
                 FssCentralLog.AddEntry("Creating subtiles for BG");
                 CreateSubtileNodes();
             }
-        }
 
+
+
+
+
+
+
+        }
 
         if (UIUpdateTimer < FssCoreTime.RuntimeSecs)
         {
@@ -106,7 +115,34 @@ public partial class FssMapTileNode : Node3D
             {
                 UpdateVisbilityRules();
             }
+
+
+            // if (!TexOneShotFlag)
+            // {
+
+            //     // Check for texture
+            //     {
+            //         //GD.Print($"Texture: {ImageFilePath}");
+
+            //         if (FssTextureLoader.Instance.IsTextureAvailable(ImageFilePath))
+            //         {
+            //             Material textureMat = FssTextureLoader.Instance.GetMaterialWithTexture(ImageFilePath);
+
+            //             GD.Print($"Texture loaded: {FssTextureLoader.Instance.TextureCacheList()}");
+
+            //             TexOneShotFlag = true;
+            //         }
+            //     }
+
+
+            // }
+
+
         }
+
+
+
+
     }
 
     // --------------------------------------------------------------------------------------------
@@ -279,6 +315,22 @@ public partial class FssMapTileNode : Node3D
 
         // Set the done flag
         _isDone = true;
+
+        // ----------------------------------------------------------------------------------------
+
+        // Trigger texture loading
+        {
+            ImageFilePath = imageFilePath;
+
+            FssTextureLoader TL = FssTextureLoader.GetGlobal();
+
+            //GD.Print($"Queueing texture: {ImageFilePath}");
+
+            if (FssTextureLoader.IsFileLoadable(ImageFilePath))
+                TL.QueueTexture(ImageFilePath);
+
+        }
+
     }
 
     // --------------------------------------------------------------------------------------------
@@ -425,7 +477,7 @@ public partial class FssMapTileNode : Node3D
         bool childTilesExist         = DoChildTilesExist();
         bool childTilesLoaded        = AreChildTilesLoaded();
 
-        GD.Print($"Tile: {TileCode} Distance: {distanceFraction} Display: {shouldDisplayChildTiles} Create: {shouldCreateChildTiles} Delete: {shouldDeleteChildTiles}");
+        //GD.Print($"Tile: {TileCode} Distance: {distanceFraction} Display: {shouldDisplayChildTiles} Create: {shouldCreateChildTiles} Delete: {shouldDeleteChildTiles}");
 
 
         if (!childTilesExist && shouldCreateChildTiles)
