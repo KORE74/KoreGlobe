@@ -26,7 +26,7 @@ public static class FssPlatformElementOperations
                 newElem = new FssPlatformElementRadarWedge();
                 break;
             case "RecieverPatterns":
-                newElem = new FssPlatformElementRecieverPatterns();
+                newElem = new FssPlatformElementAntennaPatterns();
                 break;
             default:
                 break;

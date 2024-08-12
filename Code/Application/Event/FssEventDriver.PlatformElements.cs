@@ -80,6 +80,24 @@ public partial class FssEventDriver
     }
 
 
+    public void PlatformAddAntennaPattern(string platName, string elemName, FssPolarOffset offset, FssAzElBox azElBox)
+    {
+        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
+
+        if (platform == null)
+        {
+            FssCentralLog.AddEntry($"E00003: PlatformAddAntennaPattern: Platform {platName} not found.");
+            return;
+        }
+
+
+
+    }
+
+
+    
+
+
 
     // public void SetPlatformStartLLA(string platName, FssLLALocation loc)
     // {
@@ -93,5 +111,3 @@ public partial class FssEventDriver
     //     platform.Motion.InitialLocation = loc;
     // }
 }
-
-

@@ -39,6 +39,38 @@ namespace FssJSON
         [JsonPropertyName("Pattern")]
         public double Pattern { get; set; } = 0.0;
 
+        // -----------------------------------------------------
+        // Complex accessors
+
+        public FssAzElBox AzElBox
+        {
+            get
+            {
+                return new FssAzElBox()
+                {
+                    MinAzDegs = AzMinDegs,
+                    MaxAzDegs = AzMinDegs + AzSpanDegs,
+                    MinElDegs = ElMinDegs,
+                    MaxElDegs = ElMinDegs + ElSpanDegs
+                };
+            }
+        }
+
+        public FssPolarOffset PolarOffset
+        {
+            get
+            {
+                return new FssPolarOffset()
+                {
+                    AzDegs = AzOffsetDegs,
+                    ElDegs = ElOffsetDegs,
+                    RangeM = 1.0
+                };
+            }
+        }
+
+        // -----------------------------------------------------
+
         public static RxAntenna ParseJSON(string json)
         {
             var options = new JsonSerializerOptions

@@ -32,6 +32,14 @@ public partial class FssMessageManager
     private void ProcessMessage_RxAntenna(RxAntenna rxAntMsg)
     {
         FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_RxAntenna");
+
+        string         platName           = rxAntMsg.PlatName;
+        string         patternName        = rxAntMsg.PortName;
+        FssAzElBox     patternSize        = rxAntMsg.AzElBox;
+        FssPolarOffset patternPolarOffset = rxAntMsg.PolarOffset;
+
+        FssAppFactory.Instance.EventDriver.PlatformAddAntennaPattern(platName, patternName, patternPolarOffset, patternSize);
+
     }
 
     private void ProcessMessage_ScanPattern(ScanPattern scanPatMsg)
@@ -49,4 +57,3 @@ public partial class FssMessageManager
         FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_PlatformElement_AddCircularScan: Name:{platElemAddCircScanMsg.PlatName}");
     }
 }
-
