@@ -15,18 +15,12 @@ public partial class FssTextureLoader : Node
     // Queue to manage texture loading requests
     private readonly Queue<string> _loadQueue = new Queue<string>();
 
-    // Task to manage the current texture loading
-    private Task<ImageTexture?>? _loadingTask = null;
-
-    // The file path of the currently loading texture
-    private string? _currentLoadingFilePath = null;
-
     // Lock object for thread safety
     private readonly object _lock = new object();
 
     // ------------------------------------------------------------------------------------------------
 
-   // public static FssTextureLoader Instance { get; private set; }
+    // public static FssTextureLoader Instance { get; private set; }
 
     public static FssTextureLoader? GetGlobal()
     {
@@ -48,71 +42,30 @@ public partial class FssTextureLoader : Node
         return TL;
     }
 
-
     // ------------------------------------------------------------------------------------------------
 
     public override void _Process(double delta)
     {
-        GD.Print($"TextureCacheList: {_loadQueue.Count}");
-
-        // If there's no active loading task, start the next one in the queue
         lock (_lock)
         {
-            GD.Print("1");
-
-            if (_loadingTask == null) GD.Print("1.1");
-            if (_loadQueue.Count > 0) GD.Print("1.2");
-
-            if (_loadingTask == null && _loadQueue.Count > 0)
+            // if there is a file to load
+            if (_loadQueue.Count > 0)
             {
+                string filePath = _loadQueue.Dequeue();
 
-                GD.Print("2");
+                var image = new Image();
 
-                _currentLoadingFilePath = _loadQueue.Dequeue();
-                _loadingTask            = LoadTextureAsync(_currentLoadingFilePath);
-
-                GD.Print($"Loading texture: {_currentLoadingFilePath}");
-            }
-            else
-            {
-                GD.Print($"No textures to load. {_loadQueue.Count}");
-            }
-        }
-
-        GD.Print("3");
-
-        if (_loadingTask != null)
-        {
-            GD.Print("4");
-            if ( _loadingTask.IsCompleted) GD.Print("5");
-        }
-
-        // Check if the current loading task is complete
-        if (_loadingTask != null && _loadingTask.IsCompleted)
-        {
-            ImageTexture? texture = _loadingTask.Result;
-
-            if (texture != null && _currentLoadingFilePath != null)
-            {
-                GD.Print($"Texture loaded successfully for: {_currentLoadingFilePath}");
-
-                // Cache the texture
-                lock (_lock)
+                var err = image.Load(filePath);
+                if (err != Error.Ok)
                 {
-                    if (!_textureCache.ContainsKey(_currentLoadingFilePath))
-                    {
-                        _textureCache[_currentLoadingFilePath] = texture;
-                    }
+                    GD.PrintErr($"Failed to load image: {filePath}");
+                    return;
                 }
-            }
-            else
-            {
-                GD.PrintErr("Failed to load texture.");
-            }
 
-            // Reset task and path for the next load
-            _loadingTask = null;
-            _currentLoadingFilePath = null;
+                GD.Print($"Loaded texture: {filePath}");
+                var texture = ImageTexture.CreateFromImage(image);
+                _textureCache[filePath] = texture;
+            }
         }
     }
 
@@ -151,26 +104,25 @@ public partial class FssTextureLoader : Node
 
     // ------------------------------------------------------------------------------------------------
 
-    private async Task<ImageTexture?> LoadTextureAsync(string filePath)
+    public void ReleaseTexture(string filePath)
     {
-        var image = new Image();
-        var err = await Task.Run(() => image.Load(filePath));
-
-        if (err != Error.Ok)
+        lock (_lock)
         {
-            GD.PrintErr($"Failed to load image: {filePath}, Error: {err}");
-            return null;
+            if (_textureCache.ContainsKey(filePath))
+            {
+                _textureCache.Remove(filePath);
+                GD.Print($"Released texture: {filePath}");
+            }
+            else
+            {
+                GD.Print($"Texture not found: {filePath}");
+            }
         }
-
-        // Ensure this part runs on the main thread
-        await ToSignal(GetTree(), "idle_frame");
-
-        return ImageTexture.CreateFromImage(image);
     }
 
     // ------------------------------------------------------------------------------------------------
 
-    public bool IsTextureAvailable(string filePath)
+    public bool IsTextureLoaded(string filePath)
     {
         lock (_lock)
         {

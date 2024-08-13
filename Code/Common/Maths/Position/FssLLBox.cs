@@ -90,6 +90,10 @@ public struct FssLLBox
 
     // ------------------------------------------------------------------------
 
+    public FssLLPoint CenterPoint => new FssLLPoint() { LatDegs = (MinLatDegs + MaxLatDegs) / 2.0, LonDegs = (MinLonDegs + MaxLonDegs) / 2.0 };
+
+    // ------------------------------------------------------------------------
+
     public FssLLBox(double tlLatRads, double tlLonRads, double latHeightRads, double lonWidthRads)
     {
         MinLatRads     = tlLatRads;
@@ -112,17 +116,6 @@ public struct FssLLBox
         if (InputLLA.LonDegs > MaxLonDegs) return false;
 
         return true;
-    }
-
-    // ------------------------------------------------------------------------
-
-    public FssLLPoint CenterPoint()
-    {
-        return new FssLLPoint()
-        {
-            LatDegs = (MinLatDegs + MaxLatDegs) / 2.0,
-            LonDegs = (MinLonDegs + MaxLonDegs) / 2.0,
-        };
     }
 
     // ------------------------------------------------------------------------

@@ -63,6 +63,17 @@ public static class FssGeoConvOperations
         return new Vector3((float)p.X, (float)p.Y, (float)-p.Z);
     }
 
+
+    // FssGeoConvOperations.GeToRw(pos);
+    public static FssLLAPoint GeToRw(Vector3 gePos)
+    {
+        FssXYZPoint p = new FssXYZPoint(gePos.X, gePos.Y, -gePos.Z);
+
+        FssLLAPoint llap = FssLLAPoint.FromXYZ(FssZeroOffset.RwZeroPointXYZ + p);
+
+        return llap;
+    }
+
     // --------------------------------------------------------------------------------------------
     // MARK: Bare Position - WITH Zero offsets
     // --------------------------------------------------------------------------------------------
@@ -199,5 +210,9 @@ public static class FssGeoConvOperations
 
         return retStruct;
     }
+
+    // --------------------------------------------------------------------------------------------
+
+
 
 }

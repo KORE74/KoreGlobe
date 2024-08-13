@@ -9,21 +9,25 @@ using Godot;
 
 public partial class FssMapTileNode : Node3D
 {
-    private string _imagePath;
-    private bool _isDone;
     public StandardMaterial3D _material;
-    public ArrayMesh meshData;
+    public ArrayMesh TileMeshData;
     public ImageTexture TerrainTexture;
 
+    // Construction Flags
+    private bool ConstructionComplete = false;
     private bool MeshDone = false;
+    private bool MeshInstatiated = false;
+    private bool ImageDone = false;
 
     // Property to check if the material loading is done
-    public bool IsDone => _isDone;
+    public bool IsDone => ConstructionComplete;
 
     private bool OneShotFlag = false;
-    private bool TexOneShotFlag = false;
 
-    FssMapTileCode TileCode;
+    // Map Tile Readonly values
+    private FssMapTileCode       TileCode;
+    private FssXYZPoint          RwTileCenterXYZ;
+    private FssTileNodeFilepaths Filepaths;
 
     private float UIUpdateTimer = 0.0f;
 
@@ -35,153 +39,107 @@ public partial class FssMapTileNode : Node3D
     private MeshInstance3D MeshInstance  = new MeshInstance3D();
     private MeshInstance3D MeshInstanceW = new MeshInstance3D();
 
-    string ImageFilePath = string.Empty;
-
     public bool IntendedVisibility = false;
-    //FssXYZPoint RwTileCenterXYZ = new FssXYZPoint(0, 0, 0);
 
     // --------------------------------------------------------------------------------------------
 
     public static readonly int[] TileSizePointsPerLvl = { 30, 50, 100, 300, 500 };
 
     // --------------------------------------------------------------------------------------------
+    // MARK: Constructor
+    // --------------------------------------------------------------------------------------------
 
     // Constructor to initialize the texture path and start loading
     public FssMapTileNode(FssMapTileCode tileCode)
     {
-        // _imagePath = imagePath;
-        // _isDone = false;
-        // StartLoading();
         TileCode = tileCode;
 
+        // Set the node name
         Name = tileCode.ToString();
 
-        //RwTileCenterXYZ = FssMapTileCode.LLBoxForCode(tileCode).CenterPoint().ToXYZ();
+        // Setup a few readonly values that help control visibility
+        FssLLBox llBoxForCode = FssMapTileCode.LLBoxForCode(tileCode);
+
+        FssLLPoint  tileBoxLLCentre  = llBoxForCode.CenterPoint;
+        FssLLAPoint tileBoxLLACentre = new FssLLAPoint() { LatDegs = tileBoxLLCentre.LatDegs, LonDegs = tileBoxLLCentre.LonDegs, AltMslM = 0 };
+        RwTileCenterXYZ = tileBoxLLACentre.ToXYZ();
 
         FssCentralLog.AddEntry($"Creating FssMapTileNode for {tileCode}");
     }
 
     // --------------------------------------------------------------------------------------------
+    // MARK: Node Routines
+    // --------------------------------------------------------------------------------------------
 
     public override void _Ready()
     {
+        // Figure out the file paths for the tile
+        Filepaths = new FssTileNodeFilepaths(TileCode);
+
+        // Fire off the fully background task of creating/loading the mesh
         Task.Run(() => LoadTileEle(TileCode));
+
+        // Get the global texture loader instance
+        FssTextureLoader? TL = FssTextureLoader.GetGlobal();
+        if ((TL != null) && (Filepaths.ImageFileExists))
+            TL.QueueTexture(Filepaths.ImageFilepath);
+
+        LabelTile(TileCode);
     }
+
+    // --------------------------------------------------------------------------------------------
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
-        if (MeshDone && OneShotFlag == false)
+        if (!ConstructionComplete)
         {
-            LoadMaterial(TileCode);
-
-            //LabelTile(TileCode);
-
-            // AddChild( new MeshInstance3D() {
-            //     Name             = "MapTileMesh",
-            //     Mesh             = meshData,
-            //     MaterialOverride = _material
-            // });
-
-            // AddChild( new MeshInstance3D() {
-            //     Name             = "MapTileMeshW",
-            //     Mesh             = meshData,
-            //     MaterialOverride = FssMaterialFactory.WireframeMaterial(FssColorUtil.Colors["White"]);
-            // });
-
-            OneShotFlag = true;
-
-            //GD.Print("=========> MapTileMesh added to FssMapTileNode");
-
-            if (TileCode.ToString() == "BG")
+            if ((MeshDone) && (!MeshInstatiated))
             {
-                FssCentralLog.AddEntry("Creating subtiles for BG");
-                CreateSubtileNodes();
+                InstatiateMesh();
+                MeshInstatiated = true;
             }
 
+            if (MeshInstatiated)
+            {
+                FssTextureLoader? TL = FssTextureLoader.GetGlobal();
+                if ((TL != null) && (Filepaths.ImageFileExists))
+                {
+                    if (TL.IsTextureLoaded(Filepaths.ImageFilepath))
+                    {
+                        ApplyImageMaterial();
+                        ImageDone = true;
+                        FssCentralLog.AddEntry($"Texture loaded: {Filepaths.ImageFilepath}");
+                    }
 
+                    if (ImageDone)
+                    {
+                        ConstructionComplete = true;
+                    }
+                }
+            }
+        }
 
-
-
-
-
+        if (ConstructionComplete && !OneShotFlag)
+        {
+            if ((TileCode.ToString() == "BF") || (TileCode.ToString() == "BG"))
+            {
+                FssCentralLog.AddEntry("Creating subtiles for BF/BG");
+                CreateSubtileNodes();
+            }
+            OneShotFlag = true;
         }
 
         if (UIUpdateTimer < FssCoreTime.RuntimeSecs)
         {
             UIUpdateTimer = FssCoreTime.RuntimeSecs + 1f;
 
-            if (TileCode.ToString() == "BG")
+            if ((TileCode.ToString() == "BF") || (TileCode.ToString() == "BG"))
             {
                 UpdateVisbilityRules();
             }
-
-
-            // if (!TexOneShotFlag)
-            // {
-
-            //     // Check for texture
-            //     {
-            //         //GD.Print($"Texture: {ImageFilePath}");
-
-            //         if (FssTextureLoader.Instance.IsTextureAvailable(ImageFilePath))
-            //         {
-            //             Material textureMat = FssTextureLoader.Instance.GetMaterialWithTexture(ImageFilePath);
-
-            //             GD.Print($"Texture loaded: {FssTextureLoader.Instance.TextureCacheList()}");
-
-            //             TexOneShotFlag = true;
-            //         }
-            //     }
-
-
-            // }
-
-
         }
-
-
-
-
     }
-
-    // --------------------------------------------------------------------------------------------
-
-    // Async
-
-    // // Method to start the texture loading process
-    // private async void StartLoading()
-    // {
-    //     var image = await LoadImageAsync(_imagePath);
-    //     CallDeferred(nameof(GetMaterial), image);
-
-    // }
-
-    // // Asynchronous method to load the image
-    // private async Task<Image> LoadImageAsync(string path)
-    // {
-    //     return await Task.Run(() => {
-    //         // Load the image from the file system
-    //         Image image = new Image();
-    //         image.Load(path);
-    //         return image;
-    //     });
-    // }
-
-    // --------------------------------------------------------------------------------------------
-
-    // Image / texture / material functions
-
-    // // Method to create a material with the loaded texture
-    // private void GetMaterial(Image image)
-    // {
-    //     _material = new StandardMaterial3D();
-    //     _material.AlbedoTexture = ImageTexture.CreateFromImage(image);
-
-    //     // Only set the done flag AFTER the material is created
-    //     _isDone = true;
-
-    // }
 
     // --------------------------------------------------------------------------------------------
     // MARK: Load Assets
@@ -191,26 +149,8 @@ public partial class FssMapTileNode : Node3D
     {
         string tileCodeName = tileCode.ToString();
 
-        // Setup the path to the map level directory
-        var config = FssCentralConfig.Instance;
-        string externalRootPath = config.GetParameter("MapRootPath", "");
-        string externalMapLvlFilePath = FssFileOperations.JoinPaths(externalRootPath, FssMapTileCode.PathPerLvl[tileCode.MapLvl]);
-        if (tileCode.MapLvl != 0)
-            externalMapLvlFilePath = FssFileOperations.JoinPaths(externalMapLvlFilePath, tileCode.ParentString());
-
-        // Setup the file paths
-        string imageFilePath = FssFileOperations.JoinPaths(externalMapLvlFilePath, $"Sat_{tileCodeName}.png");
-        string eleFilePath   = FssFileOperations.JoinPaths(externalMapLvlFilePath, $"Ele_{tileCodeName}.asc");
-        string meshFilePath  = FssFileOperations.JoinPaths(externalMapLvlFilePath, $"Mesh_{tileCodeName}.mesh");
-
-        FssCentralLog.AddEntry($"Looking for elevation file: {eleFilePath}");
-        FssCentralLog.AddEntry($"Looking for mesh file: {meshFilePath}");
-
-        eleFilePath   = FssGodotFileUtil.GetActualPath(eleFilePath);
-        meshFilePath  = FssGodotFileUtil.GetActualPath(meshFilePath);
-
-        bool loadEle  = File.Exists(eleFilePath);
-        bool loadMesh = false; //File.Exists(meshFilePath);
+        bool loadEle  = Filepaths.EleFileExists;
+        bool loadMesh = false; // Filepaths.MeshFileExists;
         bool saveMesh = !loadMesh;
 
         // Run file loading and processing on a background thread
@@ -219,15 +159,15 @@ public partial class FssMapTileNode : Node3D
             FssMeshBuilder meshBuilder = new();
             if (loadMesh)
             {
-                meshBuilder.meshData = FssMeshDataIO.ReadMeshFromFile(meshFilePath);
-                FssCentralLog.AddEntry($"Loaded mesh: {meshFilePath}");
+                meshBuilder.meshData = FssMeshDataIO.ReadMeshFromFile(Filepaths.MeshFilepath);
+                FssCentralLog.AddEntry($"Loaded mesh: {Filepaths.MeshFilepath}");
             }
             else
             {
                 int res = TileSizePointsPerLvl[TileCode.MapLvl];
 
                 // Load the elevation data
-                FssFloat2DArray asciiArcArry = FssFloat2DArrayIO.LoadFromArcASIIGridFile(eleFilePath);
+                FssFloat2DArray asciiArcArry = FssFloat2DArrayIO.LoadFromArcASIIGridFile(Filepaths.EleFilepath);
                 FssFloat2DArray croppedArray = FssFloat2DArrayOperations.CropToRange(asciiArcArry, new FssFloatRange(0f, 50000f));
                 FssFloat2DArray croppedArraySubSample = croppedArray.GetInterpolatedGrid(res, res);
 
@@ -247,90 +187,49 @@ public partial class FssMapTileNode : Node3D
                     croppedArraySubSample
                 ); //bool flipTriangles = false)
             }
-            meshData = meshBuilder.BuildWithUV(tileCodeName);
+            TileMeshData = meshBuilder.BuildWithUV(tileCodeName);
             MeshDone = true;
 
             if (saveMesh)
             {
                 // Save the mesh to a file
-                FssMeshDataIO.WriteMeshToFile(meshBuilder.meshData, meshFilePath);
-                FssCentralLog.AddEntry($"Saved mesh: {meshFilePath}");
+                FssMeshDataIO.WriteMeshToFile(meshBuilder.meshData, Filepaths.MeshFilepath);
+                FssCentralLog.AddEntry($"Saved mesh: {Filepaths.MeshFilepath}");
             }
-
-            //CallDeferred(nameof(LoadMaterial), tileCode);
         }
     }
 
-    private void LoadMaterial(FssMapTileCode tileCode)
+    // --------------------------------------------------------------------------------------------
+
+    private void InstatiateMesh()
     {
-        string tileCodeName = tileCode.ToString();
-
-        // Setup the path to the map level directory
-        var config = FssCentralConfig.Instance;
-        string externalRootPath = config.GetParameter("MapRootPath", "");
-        string externalMapLvlFilePath = FssFileOperations.JoinPaths(externalRootPath, FssMapTileCode.PathPerLvl[tileCode.MapLvl]);
-        if (tileCode.MapLvl != 0)
-            externalMapLvlFilePath = FssFileOperations.JoinPaths(externalMapLvlFilePath, tileCode.ParentString());
-
-        // Setup the file paths
-        string imageFilePath = FssFileOperations.JoinPaths(externalMapLvlFilePath, $"Sat_{tileCodeName}.png");
-
-        imageFilePath  = FssGodotFileUtil.GetActualPath(imageFilePath);
-
-        FssCentralLog.AddEntry($"Looking for image file: {imageFilePath}");
-
-        // Check if the image file exists
-        if (!File.Exists(imageFilePath))
-        {
-            FssCentralLog.AddEntry($"Failed to location map tile image: {imageFilePath}");
-            return;
-        }
-
-        var image = new Image();
-        //var err = image.Load(imageFilePath);
-        var err = image.Load(imageFilePath);
-        if (err != Error.Ok)
-        {
-            GD.PrintErr($"Failed to load image: {imageFilePath}");
-            return;
-        }
-        TerrainTexture = ImageTexture.CreateFromImage(image);
-        var material = new StandardMaterial3D
-        {
-            AlbedoTexture = TerrainTexture,
-            ShadingMode = StandardMaterial3D.ShadingModeEnum.Unshaded
-        };
-
-        // Add the mesh instances to the current Node3D
-        MeshInstanceW = new MeshInstance3D { Name = $"{tileCodeName} wire" };
-        MeshInstanceW.Mesh = meshData;
-        MeshInstanceW.MaterialOverride = FssMaterialFactory.WireframeMaterial(new Color(0f, 0f, 0f, 0.3f));
-        AddChild(MeshInstanceW);
-
-        MeshInstance = new MeshInstance3D { Name = $"{tileCodeName} image" };
-        MeshInstance.Mesh = meshData;
-        MeshInstance.MaterialOverride = material;
+        MeshInstance = new MeshInstance3D { Name = $"{TileCode.ToString()} mesh" };
+        MeshInstance.Mesh = TileMeshData;
         MeshInstance.Visible = IntendedVisibility;
         AddChild(MeshInstance);
 
-        // Set the done flag
-        _isDone = true;
+        MeshInstanceW = new MeshInstance3D { Name = $"{TileCode.ToString()} wire" };
+        MeshInstanceW.Mesh = TileMeshData;
+        MeshInstanceW.MaterialOverride = FssMaterialFactory.WireframeMaterial(new Color(0f, 0f, 0f, 0.3f));
+        AddChild(MeshInstanceW);
+    }
 
-        // ----------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
-        // Trigger texture loading
+    private void ApplyImageMaterial()
+    {
+        FssTextureLoader? TL = FssTextureLoader.GetGlobal();
+        if (TL != null)
         {
-            ImageFilePath = imageFilePath;
-
-            FssTextureLoader TL = FssTextureLoader.GetGlobal();
-
-            //GD.Print($"Queueing texture: {ImageFilePath}");
-
-            if (FssTextureLoader.IsFileLoadable(ImageFilePath))
-                TL.QueueTexture(ImageFilePath);
-
+            if (TL.IsTextureLoaded(Filepaths.ImageFilepath))
+            {
+                Material? mat = TL.GetMaterialWithTexture(Filepaths.ImageFilepath);
+                if (mat != null)
+                {
+                    MeshInstance.MaterialOverride = mat;
+                }
+            }
         }
-
     }
 
     // --------------------------------------------------------------------------------------------
@@ -345,9 +244,9 @@ public partial class FssMapTileNode : Node3D
         Label3D label = FssLabel3DFactory.CreateLabel($"{tileCode.ToString()}", KPixelSize);
 
         FssLLBox tileBounds = FssMapTileCode.LLBoxForCode(tileCode);
-        FssLLPoint posLL = tileBounds.CenterPoint();
+        FssLLPoint posLL = tileBounds.CenterPoint;
 
-        float labelGap = 0.05f;
+        float labelGap = 0.2f;
 
         // Determine the positions and orientation
         FssLLAPoint pos  = new FssLLAPoint() { LatDegs = posLL.LatDegs,        LonDegs = posLL.LonDegs, RadiusM = FssZeroOffset.GeEarthRadius + labelGap};
@@ -461,7 +360,10 @@ public partial class FssMapTileNode : Node3D
         // if the distance is short, endeavour to create aand load child tiles.
         // if greater than a larger value, delete any child nodes to free resources.
 
-        float distanceFraction = 0.1f;//(float)( RwTileCenterXYZ.DistanceTo(FssEarthCore.RwFocusXYZ) / FssEarthCore.EarthRadiusM );
+
+        float distanceFraction = (float)( FssMapManager.LoadRefXYZ.DistanceTo(RwTileCenterXYZ) / FssPosConsts.EarthRadiusM );
+
+        GD.Print($"Tile:{Name} Distance:{distanceFraction}");
 
 
 

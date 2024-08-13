@@ -200,11 +200,11 @@ public partial class TestZeroOffset : Node3D
             Node modelInstance     = importedModel.Instantiate();
             ModelResourceNode      = modelInstance as Node3D;
             ModelResourceNode.Name = "ModelResourceNode";
-            ModelResourceNode.LookAt(Vector3.Forward, Vector3.Up);
 
             PlaformBaseNode.AddChild(ModelResourceNode);
             ModelResourceNode.Scale    = new Vector3(0.25f, 0.25f, 0.25f); // Set the model scale
             ModelResourceNode.Position = new Vector3(0f, 0f, 0f); // Set the model position
+            ModelResourceNode.LookAt(Vector3.Forward, Vector3.Up);
         }
 
         FssAzElBox wedgeBox = FssAzElBox.BoxFromDimensions(30, 10); // Az, El
@@ -264,7 +264,6 @@ public partial class TestZeroOffset : Node3D
             TimerContrail = FssCoreTime.RuntimeSecs + 0.5f;
             ElementContrail.AddTrailPoint(PlatformPos);
         }
-
     }
 
     // --------------------------------------------------------------------------------------------

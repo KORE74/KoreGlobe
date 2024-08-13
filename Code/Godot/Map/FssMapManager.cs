@@ -15,8 +15,10 @@ public partial class FssMapManager : Node3D
 {
     private string MapRootPath = "";
 
-    // FssMapManager.LoadRefLLAPoint
-    public static FssLLAPoint LoadRefLLAPoint = new FssLLAPoint() { LatDegs = 41, LonDegs = 6, AltMslM = 0 };
+    // Load reference point - The position against which map tile load operations are judged
+    // FssMapManager.LoadRefLLA
+    public static FssLLAPoint LoadRefLLA = new FssLLAPoint() { LatDegs = 41, LonDegs = 6, AltMslM = 0 };
+    public static FssXYZPoint LoadRefXYZ => LoadRefLLA.ToXYZ();
 
     // Debug
     private FssLLAPoint pos  = new FssLLAPoint() { LatDegs = 41, LonDegs = 6, AltMslM = 0 };

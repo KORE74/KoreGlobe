@@ -113,6 +113,7 @@ public struct FssLLAPoint
         return retXYZ;
     }
 
+    // Usage: FssLLAPoint pos = FssLLAPoint.FromXYZ(xyz);
     public static FssLLAPoint FromXYZ(FssXYZPoint inputXYZ)
     {
         double radius = inputXYZ.Magnitude;

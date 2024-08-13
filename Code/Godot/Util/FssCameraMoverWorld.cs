@@ -3,7 +3,7 @@ using System;
 
 public partial class FssCameraMoverWorld : Camera3D
 {
-    public FssLLAPoint CamPos    = new FssLLAPoint() { LatDegs = 50, LonDegs = -1, AltMslM = 1000 };
+    public static FssLLAPoint CamPos    = new FssLLAPoint() { LatDegs = 50, LonDegs = -1, AltMslM = 1000 };
     public FssCourse   CamCourse = new FssCourse() {HeadingDegs = 30, SpeedKph = 0};
 
     public FssPolarOffset CamOffset = new FssPolarOffset(10, 0, 0);

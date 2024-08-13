@@ -37,6 +37,8 @@ public partial class FssCameraMover : Node3D
         {
             Rotation += rotation * RotateSpeed * (float)(delta);
         }
+
+        FssMapManager.LoadRefLLA = FssGeoConvOperations.GeToRw(Position);
     }
 
     private void UpdateInputs()
