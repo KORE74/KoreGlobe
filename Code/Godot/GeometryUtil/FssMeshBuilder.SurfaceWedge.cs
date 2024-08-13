@@ -26,7 +26,7 @@ public partial class FssMeshBuilder
     public void AddSurface(
         float azMinDegs, float azMaxDegs,
         float elMinDegs, float elMaxDegs,
-        float surfaceRadius, float surfaceScale,
+        float surfaceRadius,
         FssFloat2DArray surfaceArray,
         bool flipTriangles = false)
     {
@@ -49,7 +49,7 @@ public partial class FssMeshBuilder
             {
                 float currElDegs = elMaxDegs - (float)y * elIncrement; // Note we go from top to bottom
                 float currAzDegs = azMinDegs + (float)x * azIncrement;
-                float currRadius = surfaceRadius + (surfaceArray[x, y] * surfaceScale);
+                float currRadius = surfaceRadius + (surfaceArray[x, y]);
 
                 FssLLAPoint llap = new FssLLAPoint() {
                     LatDegs = currElDegs,
@@ -106,7 +106,7 @@ public partial class FssMeshBuilder
     public void AddSurfaceWedgeSides(
         float azMinDegs, float azMaxDegs,
         float elMinDegs, float elMaxDegs,
-        float surfaceRadius, float surfaceScale, float innerRadius,
+        float surfaceRadius, float innerRadius,
         FssFloat2DArray surfaceArray,
         bool flipTriangles = false)
     {
@@ -143,7 +143,7 @@ public partial class FssMeshBuilder
                 uvX = FssValueUtils.ScaleVal(uvX, 0f, 1f, 0.001f, 0.999f);
 
                 float currAzDegs   = azMinDegs + (float)x * azInc;
-                float topEdgeDelta = topEdge[x] * surfaceScale;
+                float topEdgeDelta = topEdge[x];
 
                 topIds.Add( AddVertex(FssGeoConvOperations.RwToGe(surfaceRadius + topEdgeDelta, elMaxDegs, currAzDegs)) );
                 bottomIds.Add( AddVertex(FssGeoConvOperations.RwToGe(innerRadius, elMaxDegs, currAzDegs)) );
@@ -191,7 +191,7 @@ public partial class FssMeshBuilder
                 uvX = FssValueUtils.ScaleVal(uvX, 0f, 1f, 0.001f, 0.999f);
 
                 float currAzDegs      = azMinDegs + (float)x * azInc;
-                float bottomEdgeDelta = bottomEdge[x] * surfaceScale;
+                float bottomEdgeDelta = bottomEdge[x];
 
                 topIds.Add( AddVertex(FssGeoConvOperations.RwToGe(surfaceRadius + bottomEdgeDelta, elMinDegs, currAzDegs)) );
                 bottomIds.Add( AddVertex(FssGeoConvOperations.RwToGe(innerRadius,                  elMinDegs, currAzDegs)) );
@@ -238,7 +238,7 @@ public partial class FssMeshBuilder
                 uvY = FssValueUtils.ScaleVal(uvY, 0f, 1f, 0.001f, 0.999f);
 
                 float currElDegs = elMaxDegs - (float)y * elInc; // El max to min, to match UV min to max
-                float edgeDelta  = leftEdge[y] * surfaceScale;
+                float edgeDelta  = leftEdge[y];
 
                 topIds.Add( AddVertex(FssGeoConvOperations.RwToGe(surfaceRadius + edgeDelta, currElDegs, azMinDegs)) );
                 bottomIds.Add( AddVertex(FssGeoConvOperations.RwToGe(innerRadius,            currElDegs, azMinDegs)) );
@@ -285,7 +285,7 @@ public partial class FssMeshBuilder
                 uvY = FssValueUtils.ScaleVal(uvY, 0f, 1f, 0.001f, 0.999f);
 
                 float currElDegs = elMaxDegs - (float)y * elInc; // El max to min, to match UV min to max
-                float edgeDelta  = rightEdge[y] * surfaceScale;
+                float edgeDelta  = rightEdge[y];
 
                 topIds.Add( AddVertex(FssGeoConvOperations.RwToGe(surfaceRadius + edgeDelta, currElDegs, azMaxDegs)) );
                 bottomIds.Add( AddVertex(FssGeoConvOperations.RwToGe(innerRadius,            currElDegs, azMaxDegs)) );
@@ -381,4 +381,3 @@ public partial class FssMeshBuilder
         AddRibbon(rightOutsideEdge, rightInsideEdge);
     }
 }
-

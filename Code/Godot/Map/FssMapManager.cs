@@ -184,7 +184,7 @@ public partial class FssMapManager : Node3D
         meshBuilder.AddSurface(
             -10, 50,
             60, 20,
-            outerRadius, 0.000006f,
+            outerRadius,
             eleArray,
             true);
         var meshData = meshBuilder.BuildWithUV("surface");

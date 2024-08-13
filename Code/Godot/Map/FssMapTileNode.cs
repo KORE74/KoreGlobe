@@ -43,7 +43,7 @@ public partial class FssMapTileNode : Node3D
 
     // --------------------------------------------------------------------------------------------
 
-    public static readonly int[] TileSizePointsPerLvl = { 30, 50, 100, 300, 500 };
+    public static readonly int[] TileSizePointsPerLvl = { 30, 500, 100, 300, 500 };
 
     // --------------------------------------------------------------------------------------------
     // MARK: Constructor
@@ -177,13 +177,13 @@ public partial class FssMapTileNode : Node3D
                 meshBuilder.AddSurface(
                     (float)tileBounds.MinLonDegs, (float)tileBounds.MaxLonDegs,
                     (float)tileBounds.MinLatDegs, (float)tileBounds.MaxLatDegs,
-                    (float)FssZeroOffset.GeEarthRadius, 0.000006f,
+                    (float)FssPosConsts.EarthRadiusM,
                     croppedArraySubSample
                 );
                 meshBuilder.AddSurfaceWedgeSides(
                     (float)tileBounds.MinLonDegs, (float)tileBounds.MaxLonDegs,
                     (float)tileBounds.MinLatDegs, (float)tileBounds.MaxLatDegs,
-                    (float)FssZeroOffset.GeEarthRadius, 0.000006f, (float)(FssZeroOffset.GeEarthRadius * 0.95),
+                    (float)FssPosConsts.EarthRadiusM, (float)FssPosConsts.EarthRadiusM * 0.9f,
                     croppedArraySubSample
                 ); //bool flipTriangles = false)
             }

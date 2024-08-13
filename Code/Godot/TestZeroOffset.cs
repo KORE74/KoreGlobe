@@ -62,17 +62,20 @@ public partial class TestZeroOffset : Node3D
         double randomLat = FssValueUtils.RandomInRange(50, 52);
         double randomLon = FssValueUtils.RandomInRange(-4, -2);
 
-        // Init the zero pos
+        // Init the real world zero pos
         FssLLAPoint zeroPos = new FssLLAPoint() {
             LatDegs = randomLat,
             LonDegs = randomLon,
-            RadiusM = FssZeroOffset.GeEarthRadius };
+            RadiusM = FssPosConsts.EarthRadiusM };
         FssZeroOffset.SetLLA(zeroPos);
 
         // Init materials
         matColorRed  = FssMaterialFactory.SimpleColoredMaterial(new Color(0.9f, 0.3f, 0.3f, 1f));
         matColorBlue = FssMaterialFactory.SimpleColoredMaterial(new Color(0.3f, 0.3f, 0.9f, 1f));
         matWire      = FssMaterialFactory.WireframeMaterial(FssColorUtil.Colors["White"]);
+
+        GD.Print($"System Info\n- FssZeroOffset.RwToGeDistanceMultiplierM:{FssZeroOffset.RwToGeDistanceMultiplierM}");
+
 
         // Create Nodes
         CreateCoreNode();
@@ -241,7 +244,7 @@ public partial class TestZeroOffset : Node3D
     {
         FssLLAPoint p = FssZeroOffset.RwZeroPointLLA;
         p.LonDegs += 0.001f;
-        FssZeroOffset.SetLLA(p);
+        FssZeroOffset.SetLLA(p); // The Set() updates the XYZ as well.
 
         ZeroNode.Position      = FssZeroOffset.GeZeroPoint();
         EarthCoreNode.Position = FssZeroOffset.GeCorePoint();

@@ -90,14 +90,14 @@ public partial class TestEarthCore : MeshInstance3D
         meshBuilder.AddSurface(
             0, 30, //float azMinDegs, float azMaxDegs,
             30, 60, //float elMinDegs, float elMaxDegs,
-            3.5f, 0.000002f, //float surfaceRadius, float surfaceScale,
+            3.5f, //float surfaceRadius,
             croppedArraySubSample //FssFloat2DArray surfaceArray,
         ); //bool flipTriangles = false)
 
         meshBuilder.AddSurfaceWedgeSides(
             0, 30, //float azMinDegs, float azMaxDegs,
             30, 60, //float elMinDegs, float elMaxDegs,
-            3.5f, 0.000002f, 3.0f,
+            3.5f, 3.0f,
             croppedArraySubSample //FssFloat2DArray surfaceArray,
         ); //bool flipTriangles = false)
 

@@ -48,21 +48,21 @@ public static class FssGeoConvOperations
     // FssGeoConvOperations.RwToGeStruct(pos);
     public static Vector3 RwToGe(double radiusM, double latDegs, double lonDegs)
     {
-        //radiusM = ScaleElevation(radiusM);
+        // Scale the radius
+        radiusM = radiusM * FssZeroOffset.RwToGeDistanceMultiplierM;
 
+        // Convert the LLA to an XYZ - No offset for this function
         FssLLAPoint llap = new FssLLAPoint() { LatDegs = latDegs, LonDegs = lonDegs, RadiusM = radiusM };
         FssXYZPoint p = llap.ToXYZ();
+
+        // Create a new vecotr3, with teh Z axis inverted as Godot needs.
         return new Vector3((float)p.X, (float)p.Y, (float)-p.Z);
     }
 
     public static Vector3 RwToGe(FssLLAPoint llap)
     {
-        //llap.RadiusM = ScaleElevation(llap.RadiusM);
-
-        FssXYZPoint p = llap.ToXYZ();
-        return new Vector3((float)p.X, (float)p.Y, (float)-p.Z);
+        return RwToGe(llap.RadiusM, llap.LatDegs, llap.LonDegs);
     }
-
 
     // FssGeoConvOperations.GeToRw(pos);
     public static FssLLAPoint GeToRw(Vector3 gePos)

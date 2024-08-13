@@ -3,25 +3,32 @@ using Godot;
 
 public static class FssZeroOffset
 {
-    // FssZeroOffset.ZeroNode
+    // ZeroNode: A node always at 0,0,0 for objects (platforms) to be parented to.
     public static Node3D ZeroNode;
-
-    // FssZeroOffset.GeEarthRadius
-    public static double GeEarthRadius = 10; //FssPosConsts.EarthRadiusKm / 100;
 
     // Real World Earth Center is 0,0,0. We create an offset 0,0,0 for the purposes og focussing the
     // game engine view within the range of its floating point precision.
     public static FssLLAPoint RwZeroPointLLA = new FssLLAPoint();
 
-    // Offset from real-world Earth center to game engine center. We use this to calculate the game engine XYZ offset.
+    // Offset "FROM real-world Earth center TO game engine center". We use the inverse of this to place the earth center.
     public static FssXYZPoint RwZeroPointXYZ = new FssXYZPoint(0, 0, 0);
 
-    // Usage: FssZeroOffset.SetLLA(new FssLLAPoint(0, 0, 0));
+    // Game engine earth radius and conversion around it.
+    public static double GeEarthRadius = 65;
+    public static double RwToGeDistanceMultiplierM = GeEarthRadius / FssPosConsts.EarthRadiusM;
+    public static double GeToRwDistanceMultiplierM = 1 / RwToGeDistanceMultiplierM;
+
+    // --------------------------------------------------------------------------------------------
+
     public static void SetLLA(FssLLAPoint rwLLA)
     {
         RwZeroPointLLA = rwLLA;
         RwZeroPointXYZ = rwLLA.ToXYZ();
+
+        //GD.Print($"FssZeroOffset.SetLLA: RwZeroPointLLA:{RwZeroPointLLA} RwZeroPointXYZ:{RwZeroPointXYZ}");
     }
+
+    // --------------------------------------------------------------------------------------------
 
     // The real-world XYZ we have from the model in A. the Earth centre offset is B, and we need the game engine
     // zero-offset C: C = A - B
@@ -52,6 +59,11 @@ public static class FssZeroOffset
     // Usage: Vector3 GeCorePos = FssZeroOffset.GeCorePoint();
     public static Vector3 GeCorePoint()
     {
-        return new Vector3((float)-RwZeroPointXYZ.X, (float)-RwZeroPointXYZ.Y, (float)RwZeroPointXYZ.Z);
+        // The Z axis is inverted in the Godot engine, but as we're creating an iverted vector, the inverse of this pplies (ie to X and Y)
+        double x = RwZeroPointXYZ.X * RwToGeDistanceMultiplierM * -1;
+        double y = RwZeroPointXYZ.Y * RwToGeDistanceMultiplierM * -1;
+        double z = RwZeroPointXYZ.Z * RwToGeDistanceMultiplierM;
+
+        return new Vector3((float)x, (float)y, (float)z);
     }
 }
