@@ -43,7 +43,7 @@ public partial class FssMapTileNode : Node3D
 
     // --------------------------------------------------------------------------------------------
 
-    public static readonly int[] TileSizePointsPerLvl = { 30, 500, 100, 300, 500 };
+    public static readonly int[] TileSizePointsPerLvl = { 30, 50, 100, 300, 500 };
 
     // --------------------------------------------------------------------------------------------
     // MARK: Constructor
@@ -254,7 +254,7 @@ public partial class FssMapTileNode : Node3D
 
         Godot.Vector3 v3Pos   = FssGeoConvOperations.RwToGe(pos);
         Godot.Vector3 v3PosN  = FssGeoConvOperations.RwToGe(posN);
-        Godot.Vector3 v3VectN = v3PosN - v3Pos;
+        Godot.Vector3 v3VectN = (v3PosN - v3Pos).Normalized();
 
         AddChild(label);
 
@@ -363,7 +363,7 @@ public partial class FssMapTileNode : Node3D
 
         float distanceFraction = (float)( FssMapManager.LoadRefXYZ.DistanceTo(RwTileCenterXYZ) / FssPosConsts.EarthRadiusM );
 
-        GD.Print($"Tile:{Name} Distance:{distanceFraction}");
+        GD.Print($"Tile:{Name} Distance:{distanceFraction:0.00}");
 
 
 

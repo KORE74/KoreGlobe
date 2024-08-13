@@ -50,7 +50,7 @@ public struct FssLLAPoint
 
     public override string ToString()
     {
-        return string.Format("({0:F2}, {1:F2}, {2:F2})", LatDegs, LonDegs, AltMslM);
+        return string.Format("(LatDegs:{0:F2}, LonDegs:{1:F2}, AltMslM:{2:F2})", LatDegs, LonDegs, AltMslM);
     }
 
     // ------------------------------------------------------------------------

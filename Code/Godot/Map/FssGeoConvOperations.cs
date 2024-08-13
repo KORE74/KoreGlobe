@@ -64,12 +64,29 @@ public static class FssGeoConvOperations
         return RwToGe(llap.RadiusM, llap.LatDegs, llap.LonDegs);
     }
 
+    // --------------------------------------------------------------------------------------------
+
+    // A GE position is a vec3 AS AN OFFSET FROM TEH 0,0,0 position. 
+    // 1 - We start by scaling that back into a real world offset.
+    // 2 - We apply the real world earth centre offset (still all in XYZ)
+    // 3 - We convert the XYZ into an LLA.
+
     // FssGeoConvOperations.GeToRw(pos);
     public static FssLLAPoint GeToRw(Vector3 gePos)
     {
-        FssXYZPoint p = new FssXYZPoint(gePos.X, gePos.Y, -gePos.Z);
+        // 1 - Scale the position back to real world
+        //     The GE position has a flipped Z axis, so we need to invert it back
+        double rwX = gePos.X * FssZeroOffset.GeToRwDistanceMultiplierM;
+        double rwY = gePos.Y * FssZeroOffset.GeToRwDistanceMultiplierM;
+        double rwZ = gePos.Z * FssZeroOffset.GeToRwDistanceMultiplierM * -1;
+        
+        FssXYZPoint rwOffset = new FssXYZPoint(rwX, rwY, rwZ);
 
-        FssLLAPoint llap = FssLLAPoint.FromXYZ(FssZeroOffset.RwZeroPointXYZ + p);
+        // 2 - Apply the real world earth centre offset
+        FssXYZPoint rwEarthCentrePos = FssZeroOffset.RwZeroPointXYZ + rwOffset;
+
+        // 3 - Convert the XYZ into an LLA
+        FssLLAPoint llap = FssLLAPoint.FromXYZ(rwEarthCentrePos);
 
         return llap;
     }
@@ -94,11 +111,11 @@ public static class FssGeoConvOperations
     {
         // Define the position and associated up direction for the label
         FssLLAPoint posAbove = pos;
-        posAbove.AltMslM += 0.04f;
+        posAbove.AltMslM += 100.0f;
 
         // Define the position and associated up direction for the label
         FssLLAPoint posNorth = pos;
-        posAbove.LatDegs += 0.01f;
+        posAbove.LatDegs += 1.01f;
 
         // Define the aobsolye positions
         Vector3 v3Pos        = FssZeroOffset.GeZeroPointOffset(pos.ToXYZ());
@@ -129,11 +146,11 @@ public static class FssGeoConvOperations
     {
         // Define the position and associated up direction for the label
         FssLLAPoint posAbove = pos;
-        posAbove.AltMslM += 0.04f;
+        posAbove.AltMslM += 100.0f;
 
         // Define the position and associated up direction for the label
         FssLLAPoint posNorth = pos;
-        posNorth.LatDegs += 0.01f;
+        posNorth.LatDegs += 1.01f;
 
         // Get the position 5 seconds ahead, or just north if stationary
         FssLLAPoint posAhead = FssLLAPoint.Zero;
@@ -182,11 +199,11 @@ public static class FssGeoConvOperations
     {
         // Define the position and associated up direction for the label
         FssLLAPoint posAbove = frompos;
-        posAbove.AltMslM += 0.04f;
+        posAbove.AltMslM += 100.04f;
 
         // Define the position and associated up direction for the label
         FssLLAPoint posNorth = frompos;
-        posNorth.LatDegs += 0.01f;
+        posNorth.LatDegs += 1.01f;
 
         // Define the aobsolye positions
         Vector3 v3Pos        = FssZeroOffset.GeZeroPointOffset(frompos.ToXYZ());

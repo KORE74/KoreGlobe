@@ -12,7 +12,6 @@ public partial class TestZeroOffset : Node3D
     Node3D PlaformBaseNode;
     Node3D ModelResourceNode;
 
-
     Node3D TestNode;
     Node3D TestNodeAhead;
     Node3D TestNodeAbove;

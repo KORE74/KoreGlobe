@@ -10,6 +10,8 @@ public partial class FssCameraMover : Node3D
     Vector3 direction = new Vector3();
     Vector3 rotation  = new Vector3();
 
+    float TimerReport = 0.0f;
+
     public override void _Ready()
     {
         // Initialization code if needed
@@ -39,6 +41,14 @@ public partial class FssCameraMover : Node3D
         }
 
         FssMapManager.LoadRefLLA = FssGeoConvOperations.GeToRw(Position);
+
+        if (TimerReport < FssCoreTime.RuntimeSecs)
+        {
+            TimerReport = FssCoreTime.RuntimeSecs + 1f;
+
+            GD.Print($"LoadRefLLA: {FssMapManager.LoadRefLLA}");
+        }
+
     }
 
     private void UpdateInputs()

@@ -119,6 +119,8 @@ public partial class FssElementRoute : Node3D
     // Iterate through the points, creating new segments as needed and moving old ones to the latest position.
     public void UpdateRoute()
     {
+        return; 
+        
         int numNodes  = RouteNodes.Count;
         int numLinks  = RouteLinks.Count;
 
