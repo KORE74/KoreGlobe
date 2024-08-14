@@ -18,6 +18,9 @@ public static class FssZeroOffset
     public static double RwToGeDistanceMultiplierM = GeEarthRadius / FssPosConsts.EarthRadiusM;
     public static double GeToRwDistanceMultiplierM = 1 / RwToGeDistanceMultiplierM;
 
+    // Define a reasonable "Up Distance" (Real World Meters) that still works when scales to the GE ranges.
+    public static double UpDistRwM = (GeEarthRadius / 10) * GeToRwDistanceMultiplierM;
+
     // --------------------------------------------------------------------------------------------
 
     public static void SetLLA(FssLLAPoint rwLLA)
@@ -38,12 +41,32 @@ public static class FssZeroOffset
         return RwZeroPointXYZ.XYZTo(RwXYZ);
     }
 
+
+    // To convert from an RW XYZ to a GE XYZ, we need to:
+    // 1 - Subtract the zero point offset to get the offset XYZ.
+    // 2 - Invert the Z axis to match the Godot engine orientation.
+    // 3 - Scale the XYZ by the GE distance multiplier.
+    // 4 - Return the vector3.
+
     // Usage: Vector3 GePos = FssZeroOffset.GeZeroPointOffset(RwXYZPos);
 
     public static Vector3 GeZeroPointOffset(FssXYZPoint RwXYZ)
     {
-        FssXYZPoint p = RwZeroPointXYZ.XYZTo(RwXYZ);
-        return new Vector3((float)p.X, (float)p.Y, (float)-p.Z);
+        // 1 - Subtract the zero point offset to get the offset XYZ.
+        FssXYZPoint rwOffsetXYZ = RwZeroPointXYZ.XYZTo(RwXYZ);
+
+        // 2 - Invert the Z axis to match the Godot engine orientation.
+        double x = rwOffsetXYZ.X;
+        double y = rwOffsetXYZ.Y;
+        double z = rwOffsetXYZ.Z * -1;
+
+        // 3 - Scale the XYZ by the GE distance multiplier.
+        x = x * RwToGeDistanceMultiplierM;
+        y = y * RwToGeDistanceMultiplierM;
+        z = z * RwToGeDistanceMultiplierM;
+
+        // 4 - Return the vector3.
+        return new Vector3((float)x, (float)y, (float)z);
     }
 
     // Usage: FssZeroOffset.GeZeroPoint()

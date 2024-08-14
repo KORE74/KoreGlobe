@@ -279,6 +279,11 @@ public partial class TestZeroOffset : Node3D
     {
         FssEntityV3 platformV3 = FssGeoConvOperations.RwToGeStruct(PlatformPos, PlatformCourse);
 
+        FssGeoConvOperations.DebugV3(
+            platformV3.Pos,
+            platformV3.PosAhead,
+            platformV3.PosAbove);
+    
         PlaformBaseNode.LookAtFromPosition(
             platformV3.Pos,
             platformV3.PosAhead,

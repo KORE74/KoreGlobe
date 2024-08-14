@@ -111,7 +111,7 @@ public static class FssGeoConvOperations
     {
         // Define the position and associated up direction for the label
         FssLLAPoint posAbove = pos;
-        posAbove.AltMslM += 100.0f;
+        posAbove.AltMslM += FssZeroOffset.UpDistRwM;
 
         // Define the position and associated up direction for the label
         FssLLAPoint posNorth = pos;
@@ -146,7 +146,7 @@ public static class FssGeoConvOperations
     {
         // Define the position and associated up direction for the label
         FssLLAPoint posAbove = pos;
-        posAbove.AltMslM += 100.0f;
+        posAbove.AltMslM += FssZeroOffset.UpDistRwM;
 
         // Define the position and associated up direction for the label
         FssLLAPoint posNorth = pos;
@@ -161,11 +161,10 @@ public static class FssGeoConvOperations
         else
         {
             // get the offset and ensure we have sufficient magnitude
-            FssPolarOffset aheadCourse = course.ToPolarOffset(5);
-            if (aheadCourse.RangeM < 0.1)
-                aheadCourse.RangeM = 0.1;
+            FssRangeBearing aheadCourse = new FssRangeBearing() { RangeM = 1000, BearingDegs = course.HeadingDegs };
 
-            posAhead = pos.PlusPolarOffset(aheadCourse); // The course, 5 seconds ahead
+            //posAhead = pos.PlusPolarOffset(aheadCourse); // The course, 5 seconds ahead
+            posAhead = pos.PlusRangeBearing(aheadCourse);
         }
 
         // Define the absolute positions
@@ -199,7 +198,7 @@ public static class FssGeoConvOperations
     {
         // Define the position and associated up direction for the label
         FssLLAPoint posAbove = frompos;
-        posAbove.AltMslM += 100.04f;
+        posAbove.AltMslM += FssZeroOffset.UpDistRwM;
 
         // Define the position and associated up direction for the label
         FssLLAPoint posNorth = frompos;
@@ -230,6 +229,12 @@ public static class FssGeoConvOperations
 
     // --------------------------------------------------------------------------------------------
 
+    public static void DebugV3(Vector3 pos, Vector3 posAhead, Vector3 posAbove)
+    {
+        double distUp    = pos.DistanceTo(posAbove);
+        double distAhead = pos.DistanceTo(posAhead);
 
+        GD.Print($"V3Debug\n- Pos:{pos}\n- PosAbove:{posAbove} // DistUp:{distUp}\n- PosAhead:{posAhead} // DistAhead:{distAhead}");
+    }
 
 }
