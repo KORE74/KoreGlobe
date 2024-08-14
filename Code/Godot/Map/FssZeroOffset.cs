@@ -19,7 +19,17 @@ public static class FssZeroOffset
     public static double GeToRwDistanceMultiplierM = 1 / RwToGeDistanceMultiplierM;
 
     // Define a reasonable "Up Distance" (Real World Meters) that still works when scales to the GE ranges.
-    public static double UpDistRwM = (GeEarthRadius / 10) * GeToRwDistanceMultiplierM;
+    public static double UpDistRwM    = 2 * GeToRwDistanceMultiplierM;
+    public static double AheadDistGeM = 2 * GeToRwDistanceMultiplierM;
+
+    // --------------------------------------------------------------------------------------------
+
+    // Report the constants for debugging.
+    // Usage: FssZeroOffset.ReportConsts();
+    public static void ReportConsts()
+    {
+        GD.Print($"FssZeroOffset.ReportConsts:\n- GeEarthRadius:{GeEarthRadius}\n- RwToGeDistanceMultiplierM:{RwToGeDistanceMultiplierM}\n- GeToRwDistanceMultiplierM:{GeToRwDistanceMultiplierM}\n- AheadDistGeM:{AheadDistGeM}\n- UpDistRwM:{UpDistRwM}");
+    }
 
     // --------------------------------------------------------------------------------------------
 
@@ -40,7 +50,6 @@ public static class FssZeroOffset
     {
         return RwZeroPointXYZ.XYZTo(RwXYZ);
     }
-
 
     // To convert from an RW XYZ to a GE XYZ, we need to:
     // 1 - Subtract the zero point offset to get the offset XYZ.

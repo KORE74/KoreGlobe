@@ -255,9 +255,10 @@ public struct FssLLAPoint
     // #MARK: Range Bearing
     // ------------------------------------------------------------------------
 
+    // Use haversine formula to calculate distance
+
     public FssRangeBearing RangeBearingTo(FssLLAPoint destPos)
     {
-        // Use haversine formula to calculate distance
         double lat1 = this.LatRads;
         double lon1 = this.LonRads;
         double lat2 = destPos.LatRads;
@@ -281,14 +282,15 @@ public struct FssLLAPoint
 
     public FssLLAPoint PlusRangeBearing(FssRangeBearing inputRB)
     {
-        double LatRads = this.LatRads;
-        double LonRads = this.LonRads;
-        double CalcRadius = this.RadiusM;
-        double InputRangeM = inputRB.RangeM;
+        // Setup working variables
+        double LatRads          = this.LatRads;
+        double LonRads          = this.LonRads;
+        double CalcRadius       = this.RadiusM;
+        double InputRangeM      = inputRB.RangeM;
         double InputBearingRads = inputRB.BearingRads;
 
         // Shortcut calculations, avoid repetition.
-        double SinLatRads = Math.Sin(LatRads);
+        double SinLatRads           = Math.Sin(LatRads);
         double RangeDividedByRadius = InputRangeM / CalcRadius;
 
         double NewLatRads =
@@ -347,8 +349,6 @@ public struct FssLLAPoint
 
         return new FssLLAPoint(newLatRads, newLonRads, newRadiusM);
     }
-
-
 
     public FssLLAPoint PlusPolarOffset(double azRads, double elRads, double rangeM)
     {

@@ -73,8 +73,7 @@ public partial class TestZeroOffset : Node3D
         matColorBlue = FssMaterialFactory.SimpleColoredMaterial(new Color(0.3f, 0.3f, 0.9f, 1f));
         matWire      = FssMaterialFactory.WireframeMaterial(FssColorUtil.Colors["White"]);
 
-        GD.Print($"System Info\n- FssZeroOffset.RwToGeDistanceMultiplierM:{FssZeroOffset.RwToGeDistanceMultiplierM}");
-
+        FssZeroOffset.ReportConsts();
 
         // Create Nodes
         CreateCoreNode();
@@ -170,16 +169,16 @@ public partial class TestZeroOffset : Node3D
     private void CreatePlatform()
     {
         PlatformPos = new FssLLAPoint() {
-            LatDegs = 10f,
-            LonDegs = 10f,
-            RadiusM = 10.3f };
+            LatDegs = 10,
+            LonDegs = 10,
+            AltMslM = 1000,};
 
         PlatformCourse = new FssCourse() {
-            HeadingDegs = 0f,
-            SpeedMps    = 0.15f };
+            HeadingDegs = 95f,
+            SpeedMps    = 20000.15f };
 
         PlatformCourseDelta = new FssCourseDelta() {
-            HeadingChangeClockwiseDegsSec = -8f,
+            HeadingChangeClockwiseDegsSec = -2f,
             SpeedChangeMpMps              = 0f };
     }
 
@@ -225,10 +224,10 @@ public partial class TestZeroOffset : Node3D
         ZeroNode.AddChild(ElementRoute);
 
         List<FssLLAPoint> route = new List<FssLLAPoint>();
-        route.Add(new FssLLAPoint() { LatDegs = 40f, LonDegs = 10f, RadiusM = 100f });
-        route.Add(new FssLLAPoint() { LatDegs = 42f, LonDegs = 12f, RadiusM = 100f });
-        route.Add(new FssLLAPoint() { LatDegs = 41f, LonDegs = 13f, RadiusM = 110f });
-        route.Add(new FssLLAPoint() { LatDegs = 44f, LonDegs = 16f, RadiusM = 100f });
+        route.Add(new FssLLAPoint() { LatDegs = 40f, LonDegs = 10f, AltMslM = 11300f });
+        route.Add(new FssLLAPoint() { LatDegs = 42f, LonDegs = 12f, AltMslM = 11100f });
+        route.Add(new FssLLAPoint() { LatDegs = 41f, LonDegs = 13f, AltMslM = 12100f });
+        route.Add(new FssLLAPoint() { LatDegs = 44f, LonDegs = 16f, AltMslM = 11000f });
         ElementRoute.SetRoutePoints(route);
 
         EntityManager = new FssGodotEntityManager();
@@ -242,8 +241,14 @@ public partial class TestZeroOffset : Node3D
     private void UpdateCoreNodePositions()
     {
         FssLLAPoint p = FssZeroOffset.RwZeroPointLLA;
-        p.LonDegs += 0.001f;
+        //p.LonDegs += 0.001f;
+
+
+        //p.LatDegs = FssMapManager.LoadRefLLA.LatDegs;
+        //p.LonDegs = FssMapManager.LoadRefLLA.LonDegs;
+
         FssZeroOffset.SetLLA(p); // The Set() updates the XYZ as well.
+
 
         ZeroNode.Position      = FssZeroOffset.GeZeroPoint();
         EarthCoreNode.Position = FssZeroOffset.GeCorePoint();
@@ -277,18 +282,20 @@ public partial class TestZeroOffset : Node3D
 
     private void UpdatePlatformNodes2()
     {
-        FssEntityV3 platformV3 = FssGeoConvOperations.RwToGeStruct(PlatformPos, PlatformCourse);
+        //FssEntityV3 platformV3 = FssGeoConvOperations.RwToGeStruct(PlatformPos, PlatformCourse);
+        FssEntityV3 platformV3 = FssGeoConvOperations.RwToGeStruct(PlatformPos, PlatformCourse.HeadingDegs);
 
-        FssGeoConvOperations.DebugV3(
-            platformV3.Pos,
-            platformV3.PosAhead,
-            platformV3.PosAbove);
-    
+        // FssGeoConvOperations.DebugV3(
+        //     platformV3.Pos,
+        //     platformV3.PosAhead,
+        //     platformV3.PosAbove);
+
         PlaformBaseNode.LookAtFromPosition(
             platformV3.Pos,
             platformV3.PosAhead,
             platformV3.VecUp,
             true);
     }
-
 }
+
+

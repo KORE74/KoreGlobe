@@ -9,41 +9,48 @@ using Godot;
 
 public partial class FssMapTileNode : Node3D
 {
-    public StandardMaterial3D _material;
-    public ArrayMesh TileMeshData;
-    public ImageTexture TerrainTexture;
+    public StandardMaterial3D   _material;
+    public ArrayMesh            TileMeshData;
+    public ImageTexture         TerrainTexture;
+    public FssUvBoxDropEdgeTile UVBox;
 
     // Construction Flags
     private bool ConstructionComplete = false;
-    private bool MeshDone = false;
-    private bool MeshInstatiated = false;
-    private bool ImageDone = false;
+    private bool MeshDone             = false;
+    private bool MeshInstatiated      = false;
+    private bool ImageDone            = false;
 
     // Property to check if the material loading is done
     public bool IsDone => ConstructionComplete;
 
     private bool OneShotFlag = false;
 
-    // Map Tile Readonly values
-    private FssMapTileCode       TileCode;
+    // Map Tile Readable values
+    public  FssMapTileCode       TileCode;
     private FssXYZPoint          RwTileCenterXYZ;
-    private FssTileNodeFilepaths Filepaths;
+    public  FssTileNodeFilepaths Filepaths;
+    public  FssFloat2DArray      TileEleData;
 
     private float UIUpdateTimer = 0.0f;
 
     // Property to get the loaded texture
     public StandardMaterial3D LoadedMaterial => _material;
 
+    public FssMapTileNode ParentTile = null;
     List<FssMapTileNode> ChildTiles = new();
 
     private MeshInstance3D MeshInstance  = new MeshInstance3D();
     private MeshInstance3D MeshInstanceW = new MeshInstance3D();
+    private Label3D TileCodeLabel;
 
-    public bool IntendedVisibility = false;
+
+    public bool IntendedVisibility         = false;
+    public bool IntendedChildrenVisibility = false;
 
     // --------------------------------------------------------------------------------------------
 
-    public static readonly int[] TileSizePointsPerLvl = { 30, 50, 100, 300, 500 };
+    public static readonly int[]   TileSizePointsPerLvl = { 30, 50, 100, 300, 500 };
+    public static readonly float[] LabelSizePerLvl      = { 0.1f, 0.005f, 0.002f, 0.001f, 0.001f };
 
     // --------------------------------------------------------------------------------------------
     // MARK: Constructor
@@ -81,8 +88,17 @@ public partial class FssMapTileNode : Node3D
 
         // Get the global texture loader instance
         FssTextureLoader? TL = FssTextureLoader.GetGlobal();
-        if ((TL != null) && (Filepaths.ImageFileExists))
-            TL.QueueTexture(Filepaths.ImageFilepath);
+        if (TL != null)
+        {
+            if (Filepaths.ImageFileExists)
+            {
+                TL.QueueTexture(Filepaths.ImageFilepath);
+            }
+            else
+            {
+                Filepaths.ImageFilepath = ParentTile.Filepaths.ImageFilepath;
+            }
+        }
 
         LabelTile(TileCode);
     }
@@ -120,21 +136,21 @@ public partial class FssMapTileNode : Node3D
             }
         }
 
-        if (ConstructionComplete && !OneShotFlag)
-        {
-            if ((TileCode.ToString() == "BF") || (TileCode.ToString() == "BG"))
-            {
-                FssCentralLog.AddEntry("Creating subtiles for BF/BG");
-                CreateSubtileNodes();
-            }
-            OneShotFlag = true;
-        }
+        // if (ConstructionComplete && !OneShotFlag)
+        // {
+        //     if ((TileCode.ToString() == "BF") || (TileCode.ToString() == "BG"))
+        //     {
+        //         FssCentralLog.AddEntry("Creating subtiles for BF/BG");
+        //         CreateSubtileNodes();
+        //     }
+        //     OneShotFlag = true;
+        // }
 
         if (UIUpdateTimer < FssCoreTime.RuntimeSecs)
         {
-            UIUpdateTimer = FssCoreTime.RuntimeSecs + 1f;
+            UIUpdateTimer = FssCoreTime.RuntimeSecs + .1f;
 
-            if ((TileCode.ToString() == "BF") || (TileCode.ToString() == "BG"))
+            //if ((TileCode.ToString() == "BF") || (TileCode.ToString() == "BG") || (TileCode.ToString() == "BF_BF"))
             {
                 UpdateVisbilityRules();
             }
@@ -150,7 +166,7 @@ public partial class FssMapTileNode : Node3D
         string tileCodeName = tileCode.ToString();
 
         bool loadEle  = Filepaths.EleFileExists;
-        bool loadMesh = false; // Filepaths.MeshFileExists;
+        bool loadMesh = false; //Filepaths.MeshFileExists;
         bool saveMesh = !loadMesh;
 
         // Run file loading and processing on a background thread
@@ -166,10 +182,41 @@ public partial class FssMapTileNode : Node3D
             {
                 int res = TileSizePointsPerLvl[TileCode.MapLvl];
 
-                // Load the elevation data
-                FssFloat2DArray asciiArcArry = FssFloat2DArrayIO.LoadFromArcASIIGridFile(Filepaths.EleFilepath);
-                FssFloat2DArray croppedArray = FssFloat2DArrayOperations.CropToRange(asciiArcArry, new FssFloatRange(0f, 50000f));
-                FssFloat2DArray croppedArraySubSample = croppedArray.GetInterpolatedGrid(res, res);
+                // --------------------------------------
+                // Loading or sourcing the elevation data
+
+                if (Filepaths.EleFileExists)
+                {
+                    // Load the elevation data
+                    FssFloat2DArray asciiArcArry = FssFloat2DArrayIO.LoadFromArcASIIGridFile(Filepaths.EleFilepath);
+                    FssFloat2DArray croppedArray = FssFloat2DArrayOperations.CropToRange(asciiArcArry, new FssFloatRange(0f, 50000f));
+                    FssFloat2DArray croppedArraySubSample = croppedArray.GetInterpolatedGrid(res, res);
+
+                    TileEleData = croppedArraySubSample;
+
+                    UVBox = new FssUvBoxDropEdgeTile(FssUvBoxDropEdgeTile.UVTopLeft, FssUvBoxDropEdgeTile.UVBottomRight, res, res);
+                }
+                else
+                {
+                    // Else, no elevation exists, subsample the parent tile elevation data and UV-Box.
+                    if (ParentTile != null)
+                    {
+                        TileEleData = ParentTile.TileEleData.GetInterpolatedSubgrid(tileCode.GridPos, res, res);
+                        saveMesh = false;
+
+                        UVBox = new FssUvBoxDropEdgeTile(ParentTile.UVBox, res, res, tileCode.GridPos);
+                    }
+                    // Else no parent, create a flat tile
+                    else
+                    {
+                        TileEleData = new FssFloat2DArray(res, res);
+                        saveMesh = false;
+
+                        UVBox = FssUvBoxDropEdgeTile.Default(res, res);
+                    }
+                }
+
+                // --------------------------------------
 
                 FssLLBox tileBounds = FssMapTileCode.LLBoxForCode(tileCode);
 
@@ -178,13 +225,13 @@ public partial class FssMapTileNode : Node3D
                     (float)tileBounds.MinLonDegs, (float)tileBounds.MaxLonDegs,
                     (float)tileBounds.MinLatDegs, (float)tileBounds.MaxLatDegs,
                     (float)FssPosConsts.EarthRadiusM,
-                    croppedArraySubSample
+                    TileEleData
                 );
                 meshBuilder.AddSurfaceWedgeSides(
                     (float)tileBounds.MinLonDegs, (float)tileBounds.MaxLonDegs,
                     (float)tileBounds.MinLatDegs, (float)tileBounds.MaxLatDegs,
                     (float)FssPosConsts.EarthRadiusM, (float)FssPosConsts.EarthRadiusM * 0.9f,
-                    croppedArraySubSample
+                    TileEleData
                 ); //bool flipTriangles = false)
             }
             TileMeshData = meshBuilder.BuildWithUV(tileCodeName);
@@ -200,18 +247,23 @@ public partial class FssMapTileNode : Node3D
     }
 
     // --------------------------------------------------------------------------------------------
+    // MARK: Final Load instantiation steps
+    // --------------------------------------------------------------------------------------------
 
     private void InstatiateMesh()
     {
         MeshInstance = new MeshInstance3D { Name = $"{TileCode.ToString()} mesh" };
         MeshInstance.Mesh = TileMeshData;
-        MeshInstance.Visible = IntendedVisibility;
         AddChild(MeshInstance);
 
         MeshInstanceW = new MeshInstance3D { Name = $"{TileCode.ToString()} wire" };
         MeshInstanceW.Mesh = TileMeshData;
         MeshInstanceW.MaterialOverride = FssMaterialFactory.WireframeMaterial(new Color(0f, 0f, 0f, 0.3f));
         AddChild(MeshInstanceW);
+
+        // Will be made visible when the texture is loaded
+        MeshInstance.Visible  = IntendedVisibility;
+        MeshInstanceW.Visible = IntendedVisibility;
     }
 
     // --------------------------------------------------------------------------------------------
@@ -240,8 +292,8 @@ public partial class FssMapTileNode : Node3D
 
     private void LabelTile(FssMapTileCode tileCode)
     {
-        float KPixelSize = 0.0033f;
-        Label3D label = FssLabel3DFactory.CreateLabel($"{tileCode.ToString()}", KPixelSize);
+        float KPixelSize = LabelSizePerLvl[tileCode.MapLvl];
+        TileCodeLabel = FssLabel3DFactory.CreateLabel($"{tileCode.ToString()}", KPixelSize);
 
         FssLLBox tileBounds = FssMapTileCode.LLBoxForCode(tileCode);
         FssLLPoint posLL = tileBounds.CenterPoint;
@@ -249,17 +301,17 @@ public partial class FssMapTileNode : Node3D
         float labelGap = 0.2f;
 
         // Determine the positions and orientation
-        FssLLAPoint pos  = new FssLLAPoint() { LatDegs = posLL.LatDegs,        LonDegs = posLL.LonDegs, RadiusM = FssZeroOffset.GeEarthRadius + labelGap};
-        FssLLAPoint posN = new FssLLAPoint() { LatDegs = posLL.LatDegs + 0.01, LonDegs = posLL.LonDegs, RadiusM = FssZeroOffset.GeEarthRadius + labelGap};
+        FssLLAPoint pos  = new FssLLAPoint() { LatDegs = posLL.LatDegs,        LonDegs = posLL.LonDegs, AltMslM = 1000};
+        FssLLAPoint posN = new FssLLAPoint() { LatDegs = posLL.LatDegs + 0.01, LonDegs = posLL.LonDegs, AltMslM = 1000};
 
         Godot.Vector3 v3Pos   = FssGeoConvOperations.RwToGe(pos);
         Godot.Vector3 v3PosN  = FssGeoConvOperations.RwToGe(posN);
         Godot.Vector3 v3VectN = (v3PosN - v3Pos).Normalized();
 
-        AddChild(label);
+        AddChild(TileCodeLabel);
 
-        label.Position = v3Pos;
-        label.LookAt(GlobalTransform.Origin, v3VectN);
+        TileCodeLabel.Position = v3Pos;
+        TileCodeLabel.LookAt(GlobalTransform.Origin, v3VectN);
     }
 
     // --------------------------------------------------------------------------------------------
@@ -283,6 +335,8 @@ public partial class FssMapTileNode : Node3D
 
             // Create a new node
             FssMapTileNode childTile = new FssMapTileNode(currTileCode);
+            childTile.ParentTile = this;
+            childTile.IntendedVisibility = false;
             AddChild(childTile);
 
             ChildTiles.Add(childTile);
@@ -335,20 +389,32 @@ public partial class FssMapTileNode : Node3D
 
     private void SetVisibility(bool visible)
     {
+        // If the children are visible, we're not going to make this tile visible.
+        if (IntendedChildrenVisibility)
+        {
+            visible = false;
+        }
+
+        IntendedVisibility = visible;
+
         if (MeshInstance != null)
             MeshInstance.Visible = visible;
 
         if (MeshInstanceW != null)
             MeshInstanceW.Visible = visible;
+
+        if (TileCodeLabel != null)
+            TileCodeLabel.Visible = visible;
     }
 
     private void SetChildrenVisibility(bool visible)
     {
+        IntendedChildrenVisibility = visible;
         SetVisibility(!visible);
+
         foreach (FssMapTileNode currTile in ChildTiles)
         {
             currTile.SetVisibility(visible);
-
         }
     }
 
@@ -360,38 +426,51 @@ public partial class FssMapTileNode : Node3D
         // if the distance is short, endeavour to create aand load child tiles.
         // if greater than a larger value, delete any child nodes to free resources.
 
-
         float distanceFraction = (float)( FssMapManager.LoadRefXYZ.DistanceTo(RwTileCenterXYZ) / FssPosConsts.EarthRadiusM );
 
-        GD.Print($"Tile:{Name} Distance:{distanceFraction:0.00}");
-
-
+        //GD.Print($"Tile:{Name} Distance:{distanceFraction:0.00}");
 
         // Distance judged in multiples of radius, to accomodate smaller worlds while debugging
 
-        float[] DisplayTileForLvl      = { 1f,   0.5f, 0.3f, 0.1f,    0.001f };
-        float[] CreateChildTilesForLvl = { 0.5f, 0.3f, 0.1f, 0.001f , 0.00001f};
-        float[] DeleteChildTilesForLvl = { 0.8f, 0.6f, 0.2f, 0.002f , 0.00002f};
+        float[] DisplayTileForLvl      = { 1f,   0.1f, 0.05f, 0.025f, 0.001f };
+        float[] CreateChildTilesForLvl = { 1.2f, 0.2f, 0.10f, 0.050f, 0.002f};
+        float[] DeleteChildTilesForLvl = { 1.5f, 0.4f, 0.20f, 0.100f, 0.003f};
 
         bool shouldDisplayChildTiles = distanceFraction < DisplayTileForLvl[TileCode.MapLvl];
-        bool shouldCreateChildTiles  = distanceFraction < CreateChildTilesForLvl[TileCode.MapLvl];
+        bool shouldCreateChildTiles  = (distanceFraction < CreateChildTilesForLvl[TileCode.MapLvl]) && (TileCode.MapLvl <= 1);
         bool shouldDeleteChildTiles  = distanceFraction > DeleteChildTilesForLvl[TileCode.MapLvl];
         bool childTilesExist         = DoChildTilesExist();
         bool childTilesLoaded        = AreChildTilesLoaded();
 
         //GD.Print($"Tile: {TileCode} Distance: {distanceFraction} Display: {shouldDisplayChildTiles} Create: {shouldCreateChildTiles} Delete: {shouldDeleteChildTiles}");
 
+        //MeshInstance.Visible  = IntendedVisibility;
+        //MeshInstanceW.Visible = IntendedVisibility;
 
         if (!childTilesExist && shouldCreateChildTiles)
         {
             CreateSubtileNodes();
+            GD.Print($"Created subtiles for {TileCode}");
         }
 
         if (childTilesExist)
         {
-            if (shouldDisplayChildTiles && childTilesLoaded)
+            if (childTilesLoaded)
             {
-                SetChildrenVisibility(true);
+                if (shouldDisplayChildTiles)
+                {
+                    SetChildrenVisibility(true);
+                }
+                else
+                {
+                    SetChildrenVisibility(false);
+
+                    if (shouldDeleteChildTiles)
+                    {
+                        DeleteSubtileNodes();
+                        GD.Print($"Deleted subtiles for {TileCode}");
+                    }
+                }
             }
             else
             {

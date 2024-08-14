@@ -8,7 +8,7 @@ public class FssTileNodeFilepaths
 {
     public string EleFilepath { get; }
     public string MeshFilepath { get; }
-    public string ImageFilepath { get; }
+    public string ImageFilepath { get; set; }
 
     public bool EleFileExists { get; } = false;
     public bool MeshFileExists  { get; } = false;
@@ -33,8 +33,8 @@ public class FssTileNodeFilepaths
 
 
         // Check if the files exist
-        EleFileExists = File.Exists(EleFilepath);
-        MeshFileExists = File.Exists(MeshFilepath);
+        EleFileExists   = File.Exists(EleFilepath);
+        MeshFileExists  = File.Exists(MeshFilepath);
         ImageFileExists = File.Exists(ImageFilepath);
 
     }

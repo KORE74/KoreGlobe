@@ -289,7 +289,7 @@ public class FssFloat2DArray
     // MARK: Edge functions
     // --------------------------------------------------------------------------------------------
 
-    // array.GetEdge(FssFloat2DArray.Edge.Top) 
+    // array.GetEdge(FssFloat2DArray.Edge.Top)
 
     public FssFloat1DArray GetEdge(Edge e)
     {
@@ -469,6 +469,25 @@ public class FssFloat2DArray
         }
         return outGrid;
     }
+
+
+
+
+    public FssFloat2DArray GetInterpolatedSubgrid(Fss2DGridPos gridPos, int subgridWidth, int subgridHeight)
+    {
+        int totalSubgridWidth  = gridPos.Width  * subgridWidth;
+        int totalSubgridHeight = gridPos.Height * subgridHeight;
+
+        FssFloat2DArray interpolatedGrid = GetInterpolatedGrid(totalSubgridWidth, totalSubgridHeight);
+
+        int subgridStartX = gridPos.PosX * subgridWidth;
+        int subgridStartY = gridPos.PosY * subgridHeight;
+
+        return interpolatedGrid.GetSubgrid(subgridStartX, subgridStartY, subgridWidth, subgridHeight);
+    }
+
+
+
 
     public FssFloat2DArray[,] GetInterpolatedSubGridCellWithOverlap(int inNumSubgridCols, int inNumSubgridRows, int inSubgridSizeX, int inSubgridSizeY)
     {

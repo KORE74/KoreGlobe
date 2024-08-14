@@ -49,6 +49,8 @@ public class FssMapTileCode
     public int HorizIndex => CodeList[MapLvl].LonIndex;
     public int VertIndex  => CodeList[MapLvl].LatIndex;
 
+    public Fss2DGridPos GridPos => new Fss2DGridPos(HorizCount, VertCount, HorizIndex, VertIndex);
+
     // --------------------------------------------------------------------------------------------
     // MARK: Constructor
     // --------------------------------------------------------------------------------------------

@@ -66,7 +66,7 @@ public static class FssGeoConvOperations
 
     // --------------------------------------------------------------------------------------------
 
-    // A GE position is a vec3 AS AN OFFSET FROM TEH 0,0,0 position. 
+    // A GE position is a vec3 AS AN OFFSET FROM TEH 0,0,0 position.
     // 1 - We start by scaling that back into a real world offset.
     // 2 - We apply the real world earth centre offset (still all in XYZ)
     // 3 - We convert the XYZ into an LLA.
@@ -79,7 +79,7 @@ public static class FssGeoConvOperations
         double rwX = gePos.X * FssZeroOffset.GeToRwDistanceMultiplierM;
         double rwY = gePos.Y * FssZeroOffset.GeToRwDistanceMultiplierM;
         double rwZ = gePos.Z * FssZeroOffset.GeToRwDistanceMultiplierM * -1;
-        
+
         FssXYZPoint rwOffset = new FssXYZPoint(rwX, rwY, rwZ);
 
         // 2 - Apply the real world earth centre offset
@@ -110,12 +110,8 @@ public static class FssGeoConvOperations
     public static FssPosV3 RwToGeStruct(FssLLAPoint pos)
     {
         // Define the position and associated up direction for the label
-        FssLLAPoint posAbove = pos;
-        posAbove.AltMslM += FssZeroOffset.UpDistRwM;
-
-        // Define the position and associated up direction for the label
-        FssLLAPoint posNorth = pos;
-        posAbove.LatDegs += 1.01f;
+        FssLLAPoint posAbove = new FssLLAPoint() { LatDegs = pos.LatDegs,     LonDegs = pos.LonDegs, AltMslM = pos.AltMslM + FssZeroOffset.UpDistRwM};
+        FssLLAPoint posNorth = new FssLLAPoint() { LatDegs = pos.LatDegs + 1, LonDegs = pos.LonDegs, AltMslM = pos.AltMslM};
 
         // Define the aobsolye positions
         Vector3 v3Pos        = FssZeroOffset.GeZeroPointOffset(pos.ToXYZ());
@@ -145,27 +141,12 @@ public static class FssGeoConvOperations
     public static FssEntityV3 RwToGeStruct(FssLLAPoint pos, FssCourse course)
     {
         // Define the position and associated up direction for the label
-        FssLLAPoint posAbove = pos;
-        posAbove.AltMslM += FssZeroOffset.UpDistRwM;
+        FssLLAPoint posAbove = new FssLLAPoint() { LatDegs = pos.LatDegs,     LonDegs = pos.LonDegs, AltMslM = pos.AltMslM + FssZeroOffset.UpDistRwM};
+        FssLLAPoint posNorth = new FssLLAPoint() { LatDegs = pos.LatDegs + 1, LonDegs = pos.LonDegs, AltMslM = pos.AltMslM};
 
-        // Define the position and associated up direction for the label
-        FssLLAPoint posNorth = pos;
-        posNorth.LatDegs += 1.01f;
-
-        // Get the position 5 seconds ahead, or just north if stationary
-        FssLLAPoint posAhead = FssLLAPoint.Zero;
-        if (course.IsStationary())
-        {
-            posAhead.LatDegs += 0.001;
-        }
-        else
-        {
-            // get the offset and ensure we have sufficient magnitude
-            FssRangeBearing aheadCourse = new FssRangeBearing() { RangeM = 1000, BearingDegs = course.HeadingDegs };
-
-            //posAhead = pos.PlusPolarOffset(aheadCourse); // The course, 5 seconds ahead
-            posAhead = pos.PlusRangeBearing(aheadCourse);
-        }
+        // get the offset and ensure we have sufficient magnitude
+        FssRangeBearing aheadCourse = new FssRangeBearing() { RangeM = FssZeroOffset.AheadDistGeM, BearingDegs = course.HeadingDegs };
+        FssLLAPoint posAhead = pos.PlusRangeBearing(aheadCourse);
 
         // Define the absolute positions
         Vector3 v3Pos        = FssZeroOffset.GeZeroPointOffset(pos.ToXYZ());
@@ -189,6 +170,112 @@ public static class FssGeoConvOperations
 
         return retStruct;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public static FssEntityV3 RwToGeStruct(FssLLAPoint pos, double HeadingDegs)
+    {
+        // Translate the core position to the GE offset vector3
+        Vector3 v3Pos        = FssZeroOffset.GeZeroPointOffset(pos.ToXYZ());
+
+        // Define the position and associated up direction for the label
+        FssLLAPoint posAbove = new FssLLAPoint() { LatDegs = pos.LatDegs, LonDegs = pos.LonDegs, AltMslM = pos.AltMslM + FssZeroOffset.UpDistRwM};
+        Vector3 v3PosAbove   = FssZeroOffset.GeZeroPointOffset(posAbove.ToXYZ());
+
+        // get the offset and ensure we have sufficient magnitude
+        FssRangeBearing aheadCourse = new FssRangeBearing() { RangeM = FssZeroOffset.AheadDistGeM, BearingDegs = HeadingDegs };
+        FssLLAPoint posAhead = pos.PlusRangeBearing(aheadCourse);
+        Vector3 v3PosAhead   = FssZeroOffset.GeZeroPointOffset(posAhead.ToXYZ());
+
+        {
+            FssXYZPoint p      = pos.ToXYZ();
+            FssXYZPoint pAhead = posAhead.ToXYZ();
+            FssXYZPoint pAbove = posAbove.ToXYZ();
+
+            double distUp    = p.DistanceTo(pAbove);
+            double distAhead = p.DistanceTo(pAhead);
+
+            // GD.Print($"V3Debug2\n- Pos:{p}\n- PosAbove:{pAbove} // DistUp:{distUp}\n- PosAhead:{pAhead} // DistAhead:{distAhead}");
+        }
+
+
+        // Define the relative vectors
+        Vector3 v3VecUp      = (v3PosAbove - v3Pos).Normalized();
+        Vector3 v3VecForward = (v3PosAhead - v3Pos).Normalized();
+
+        // Find the north position
+        FssLLAPoint posNorth = FssLLAPoint.Zero;
+        Vector3 v3PosNorth   = Vector3.Zero;
+        Vector3 v3VecNorth   = Vector3.Zero;
+        if (pos.LatDegs < 89.89)
+        {
+            posNorth   = new FssLLAPoint() { LatDegs = pos.LatDegs + 0.1, LonDegs = pos.LonDegs, AltMslM = pos.AltMslM};
+            v3PosNorth = FssZeroOffset.GeZeroPointOffset(posNorth.ToXYZ());
+            v3VecNorth   = (v3PosNorth - v3Pos).Normalized();
+        }
+
+        FssEntityV3 retStruct = new FssEntityV3 {
+            Pos        = v3Pos,
+            PosAbove   = v3PosAbove,
+            PosAhead   = v3PosAhead,
+            PosNorth   = v3PosNorth,
+            VecUp      = v3VecUp,
+            VecForward = v3VecForward,
+            VecNorth   = v3VecNorth};
+
+        return retStruct;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // --------------------------------------------------------------------------------------------
 

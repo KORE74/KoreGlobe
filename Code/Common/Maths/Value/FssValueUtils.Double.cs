@@ -19,6 +19,8 @@ public static partial class FssValueUtils
 
     // ------------------------------------------------------------------------
 
+    // FssValueUtils.LimitToRange(5, 0, 10) // Returns 5
+
     public static double LimitToRange(double val, double rangemin, double rangemax)
     {
         return (val < rangemin) ? rangemin : ((val > rangemax) ? rangemax : val);

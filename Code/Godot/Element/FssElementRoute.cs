@@ -13,7 +13,7 @@ public partial class FssElementRoute : Node3D
     List<MeshInstance3D> RouteLinks  = new List<MeshInstance3D>();
     List<MeshInstance3D> RouteRods   = new List<MeshInstance3D>();
 
-    private static float BaseNodeSize = (float)(FssZeroOffset.GeEarthRadius / 100);
+    private static float BaseNodeSize = (float)(1500 * FssZeroOffset.RwToGeDistanceMultiplierM);
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -55,7 +55,7 @@ public partial class FssElementRoute : Node3D
         // Take the LLA RoutePoints, output spheres in RouteNodes.
         for (int i = 0; i < numNodes; i++)
         {
-            Node3D newNode = FssPrimitiveFactory.CreateSphereNode($"Node_{i}", Vector3.Zero, BaseNodeSize, FssColorUtil.Colors["Magenta"]);
+            Node3D newNode = FssPrimitiveFactory.CreateSphereNode($"Node_{i}", Vector3.Zero, BaseNodeSize * 2f, FssColorUtil.Colors["White"]);
             RouteNodes.Add(newNode);
             AddChild(newNode);
         }
@@ -119,8 +119,7 @@ public partial class FssElementRoute : Node3D
     // Iterate through the points, creating new segments as needed and moving old ones to the latest position.
     public void UpdateRoute()
     {
-        return; 
-        
+
         int numNodes  = RouteNodes.Count;
         int numLinks  = RouteLinks.Count;
 
@@ -130,6 +129,8 @@ public partial class FssElementRoute : Node3D
             // Update the node position
             RouteNodes[i].Position = FssGeoConvOperations.RwToOffsetGe(RoutePoints[i]);
         }
+
+
 
         // for (int i = 0; i < numNodes; i++)
         // {

@@ -42,13 +42,14 @@ public partial class FssCameraMover : Node3D
 
         FssMapManager.LoadRefLLA = FssGeoConvOperations.GeToRw(Position);
 
+        MoveSpeed = (float)(FssValueUtils.LimitToRange(FssMapManager.LoadRefLLA.AltMslKm / 80, 0.02, 5000));
+
         if (TimerReport < FssCoreTime.RuntimeSecs)
         {
             TimerReport = FssCoreTime.RuntimeSecs + 1f;
 
-            GD.Print($"LoadRefLLA: {FssMapManager.LoadRefLLA}");
+            GD.Print($"LoadRefLLA: {FssMapManager.LoadRefLLA} // MoveSpeed: {MoveSpeed}");
         }
-
     }
 
     private void UpdateInputs()
@@ -76,5 +77,4 @@ public partial class FssCameraMover : Node3D
             if (Input.IsActionPressed("ui_down"))  direction.Y -= 1;
         }
     }
-
 }
