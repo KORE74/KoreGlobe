@@ -6,13 +6,13 @@ using System.IO;
 
 public class FssTileNodeFilepaths
 {
-    public string EleFilepath { get; }
-    public string MeshFilepath { get; }
+    public string EleFilepath   { get; set; }
+    public string MeshFilepath  { get; set; }
     public string ImageFilepath { get; set; }
 
-    public bool EleFileExists { get; } = false;
-    public bool MeshFileExists  { get; } = false;
-    public bool ImageFileExists{ get; } = false;
+    public bool EleFileExists   { get; set; } = false;
+    public bool MeshFileExists  { get; set; } = false;
+    public bool ImageFileExists { get; set; } = false;
 
     public FssTileNodeFilepaths(FssMapTileCode tileCode)
     {
@@ -27,20 +27,15 @@ public class FssTileNodeFilepaths
             externalMapLvlFilePath = FssFileOperations.JoinPaths(externalMapLvlFilePath, tileCode.ParentString());
 
         // Setup the file paths
-        ImageFilepath = FssFileOperations.JoinPaths(externalMapLvlFilePath, $"Sat_{tileCodeName}.png");
-        EleFilepath   = FssFileOperations.JoinPaths(externalMapLvlFilePath, $"Ele_{tileCodeName}.asc");
-        MeshFilepath  = FssFileOperations.JoinPaths(externalMapLvlFilePath, $"Mesh_{tileCodeName}.mesh");
-
+        ImageFilepath   = FssFileOperations.JoinPaths(externalMapLvlFilePath, $"Sat_{tileCodeName}.png");
+        EleFilepath     = FssFileOperations.JoinPaths(externalMapLvlFilePath, $"Ele_{tileCodeName}.asc");
+        MeshFilepath    = FssFileOperations.JoinPaths(externalMapLvlFilePath, $"Mesh_{tileCodeName}.mesh");
 
         // Check if the files exist
         EleFileExists   = File.Exists(EleFilepath);
         MeshFileExists  = File.Exists(MeshFilepath);
         ImageFileExists = File.Exists(ImageFilepath);
-
     }
-
-
-
 }
 
 

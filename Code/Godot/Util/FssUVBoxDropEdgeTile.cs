@@ -38,10 +38,10 @@ public class FssUvBoxDropEdgeTile
     public FssUvBoxDropEdgeTile(FssUvBoxDropEdgeTile parentBox, int horizSize, int vertSize, Fss2DGridPos gridPos)
     {
         // Calculate the new UV box from the parent box and grid position
-        float minParentX = TopLeft.X;
-        float maxParentX = BottomRight.X;
-        float minParentY = TopLeft.Y;
-        float maxParentY = BottomRight.Y;
+        float minParentX = parentBox.TopLeft.X;
+        float minParentY = parentBox.TopLeft.Y;
+        float maxParentX = parentBox.BottomRight.X;
+        float maxParentY = parentBox.BottomRight.Y;
 
         float diffParentX = maxParentX - minParentX;
         float diffParentY = maxParentY - minParentY;
@@ -51,8 +51,8 @@ public class FssUvBoxDropEdgeTile
         float childMinY = minParentY + gridPos.TopEdgeFraction * diffParentY;
         float childMaxY = minParentY + gridPos.BottomEdgeFraction * diffParentY;
 
-        Vector2 childTopLeft     = new Vector2(childMinX, childMinY);
-        Vector2 childBottomRight = new Vector2(childMaxX, childMaxY);
+        TopLeft     = new Vector2(childMinX, childMinY);
+        BottomRight = new Vector2(childMaxX, childMaxY);
 
         BoxEdgeOffset  = parentBox.BoxEdgeOffset;
         BoxInsetOffset = parentBox.BoxInsetOffset;
@@ -70,7 +70,7 @@ public class FssUvBoxDropEdgeTile
     // --------------------------------------------------------------------------------------------
 
     // Initializes the UV grid with offsets and insets
-    private void InitializeUvGrid(int horizSize, int vertSize)
+    public void InitializeUvGrid(int horizSize, int vertSize)
     {
         UVGrid = new Vector2[horizSize + 2, vertSize + 2];
 
@@ -123,6 +123,15 @@ public class FssUvBoxDropEdgeTile
             throw new ArgumentOutOfRangeException($"Index out of bounds: x={x}, y={y}");
 
         return UVGrid[x, y];
+    }
+
+    // --------------------------------------------------------------------------------------------
+
+    // ToString override
+
+    public override string ToString()
+    {
+        return $"Left:{TopLeft.X:0.00}, Right:{BottomRight.X:0.00}, Top:{TopLeft.Y:0.00}, Bottom:{BottomRight.Y:0.00} // res:{UVGrid.GetLength(0)} ";
     }
 
 }

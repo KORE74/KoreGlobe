@@ -317,6 +317,153 @@ public partial class FssMeshBuilder
 
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public void AddSurfaceWithUVBox(
+        float azMinDegs, float azMaxDegs,
+        float elMinDegs, float elMaxDegs,
+        float surfaceRadius,
+        FssFloat2DArray surfaceArray,
+        FssUvBoxDropEdgeTile uvBox,
+        bool flipTriangles = false)
+    {
+        int resolutionEl = surfaceArray.Height;
+        int resolutionAz = surfaceArray.Width;
+
+        uvBox.InitializeUvGrid(resolutionAz, resolutionEl);
+
+        // Create a 2D array to hold the points for the surface
+        Vector3[,] points = new Vector3[resolutionAz, resolutionEl];
+        int [,] indices   = new int[resolutionAz, resolutionEl];
+
+        // [0,0] is the top left corner of the surface, and [0,0]UV is the top left corner of the UV map
+        // We'll need to adjust the elevation and azimuth values to match this iteration across the 2D array.
+
+        float elIncrement = (elMaxDegs - elMinDegs) / (resolutionEl - 1);
+        float azIncrement = (azMaxDegs - azMinDegs) / (resolutionAz - 1);
+
+        for (int y = 0; y < resolutionEl; y++)
+        {
+            for (int x = 0; x < resolutionAz; x++)
+            {
+                float currElDegs = elMaxDegs - (float)y * elIncrement; // Note we go from top to bottom
+                float currAzDegs = azMinDegs + (float)x * azIncrement;
+                float currRadius = surfaceRadius + (surfaceArray[x, y]);
+
+                FssLLAPoint llap = new FssLLAPoint() {
+                    LatDegs = currElDegs,
+                    LonDegs = currAzDegs,
+                    RadiusM = currRadius
+                };
+                points[x, y] = FssGeoConvOperations.RwToGe(llap);
+            }
+        }
+
+        for (int y = 0; y < resolutionEl; y++)
+        {
+            float yfrac = (float)y / (resolutionEl-1); // 0 y is the top row.
+            yfrac = FssValueUtils.ScaleVal(yfrac, 0f, 1f, 0.001f, 0.999f);
+
+            for (int x = 0; x < resolutionAz; x++)
+            {
+                float xfrac = (float)x / (resolutionAz-1);
+                xfrac = FssValueUtils.ScaleVal(xfrac, 0f, 1f, 0.001f, 0.999f);
+
+                indices[x, y] = AddVertex(points[x, y]);
+                AddNormal(points[x, y].Normalized());
+                //AddUV(new Vector2(xfrac, yfrac));
+                AddUV(uvBox.GetUV(x, y));
+            }
+        }
+
+        for (int y = 0; y < resolutionEl-1; y++)
+        {
+            for (int x = 0; x < resolutionAz-1; x++)
+            {
+                int i1 = indices[x,     y];
+                int i2 = indices[x,     y + 1];
+                int i3 = indices[x + 1, y];
+                int i4 = indices[x + 1, y + 1];
+
+                // Create two MeshData.Triangles using the four MeshData.Vertices just added
+                if (flipTriangles)
+                {
+                    AddTriangle(i1, i2, i3);
+                    AddTriangle(i2, i4, i3);
+                }
+                else
+                {
+                    AddTriangle(i3, i2, i1);
+                    AddTriangle(i3, i4, i2);
+                }
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     // --------------------------------------------------------------------------------------------
 
     public void AddSurfaceWedge(

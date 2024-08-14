@@ -49,8 +49,8 @@ public partial class FssMapTileNode : Node3D
 
     // --------------------------------------------------------------------------------------------
 
-    public static readonly int[]   TileSizePointsPerLvl = { 30, 50, 100, 300, 500 };
-    public static readonly float[] LabelSizePerLvl      = { 0.1f, 0.005f, 0.002f, 0.001f, 0.001f };
+    public static readonly int[]   TileSizePointsPerLvl = { 30, 50, 50, 50, 50 };
+    public static readonly float[] LabelSizePerLvl      = { 0.1f, 0.005f, 0.002f, 0.0005f, 0.000006f };
 
     // --------------------------------------------------------------------------------------------
     // MARK: Constructor
@@ -94,10 +94,7 @@ public partial class FssMapTileNode : Node3D
             {
                 TL.QueueTexture(Filepaths.ImageFilepath);
             }
-            else
-            {
-                Filepaths.ImageFilepath = ParentTile.Filepaths.ImageFilepath;
-            }
+
         }
 
         LabelTile(TileCode);
@@ -167,10 +164,10 @@ public partial class FssMapTileNode : Node3D
 
         bool loadEle  = Filepaths.EleFileExists;
         bool loadMesh = false; //Filepaths.MeshFileExists;
-        bool saveMesh = !loadMesh;
+        bool saveMesh = false;//!loadMesh;
 
         // Run file loading and processing on a background thread
-        if (loadEle || loadMesh)
+        //if (loadEle || loadMesh)
         {
             FssMeshBuilder meshBuilder = new();
             if (loadMesh)
@@ -192,9 +189,10 @@ public partial class FssMapTileNode : Node3D
                     FssFloat2DArray croppedArray = FssFloat2DArrayOperations.CropToRange(asciiArcArry, new FssFloatRange(0f, 50000f));
                     FssFloat2DArray croppedArraySubSample = croppedArray.GetInterpolatedGrid(res, res);
 
-                    TileEleData = croppedArraySubSample;
+                    TileEleData = croppedArray; // croppedArraySubSample
 
-                    UVBox = new FssUvBoxDropEdgeTile(FssUvBoxDropEdgeTile.UVTopLeft, FssUvBoxDropEdgeTile.UVBottomRight, res, res);
+                    //UVBox = new FssUvBoxDropEdgeTile(FssUvBoxDropEdgeTile.UVTopLeft, FssUvBoxDropEdgeTile.UVBottomRight, res, res);
+                    //GD.Print($"{tileCode} - Clean UVBox - {UVBox}");
                 }
                 else
                 {
@@ -204,7 +202,8 @@ public partial class FssMapTileNode : Node3D
                         TileEleData = ParentTile.TileEleData.GetInterpolatedSubgrid(tileCode.GridPos, res, res);
                         saveMesh = false;
 
-                        UVBox = new FssUvBoxDropEdgeTile(ParentTile.UVBox, res, res, tileCode.GridPos);
+                        //UVBox = new FssUvBoxDropEdgeTile(ParentTile.UVBox, res, res, tileCode.GridPos);
+                        //GD.Print($"{tileCode} - Subsampled UVBox - {UVBox} // ParentTile.UVBox{ParentTile.UVBox} // tileCode.GridPos: {tileCode.GridPos}");
                     }
                     // Else no parent, create a flat tile
                     else
@@ -212,7 +211,35 @@ public partial class FssMapTileNode : Node3D
                         TileEleData = new FssFloat2DArray(res, res);
                         saveMesh = false;
 
-                        UVBox = FssUvBoxDropEdgeTile.Default(res, res);
+                        //UVBox = FssUvBoxDropEdgeTile.Default(res, res);
+                        //GD.Print($"{tileCode} - Zero UVBox - {UVBox}");
+                    }
+                }
+
+                // --------------------------------------
+
+                int widthRes = TileEleData.Width;
+                int heightRes = TileEleData.Height;
+
+                if (Filepaths.ImageFileExists)
+                {
+                    UVBox = new FssUvBoxDropEdgeTile(FssUvBoxDropEdgeTile.UVTopLeft, FssUvBoxDropEdgeTile.UVBottomRight, widthRes, heightRes);
+                    GD.Print($"{tileCode} - Clean UVBox - {UVBox}");
+                }
+                else
+                {
+                    if (ParentTile != null)
+                    {
+                        Filepaths.ImageFilepath   = ParentTile.Filepaths.ImageFilepath;
+                        Filepaths.ImageFileExists = ParentTile.Filepaths.ImageFileExists;
+
+                        UVBox = new FssUvBoxDropEdgeTile(ParentTile.UVBox, widthRes, heightRes, tileCode.GridPos);
+                        GD.Print($"{tileCode} - Subsampled UVBox - {UVBox} // ParentTile.UVBox{ParentTile.UVBox} // tileCode.GridPos: {tileCode.GridPos}");
+                    }
+                    else
+                    {
+                        UVBox = FssUvBoxDropEdgeTile.Default(widthRes, heightRes);
+                        GD.Print($"{tileCode} - Zero UVBox - {UVBox}");
                     }
                 }
 
@@ -221,11 +248,11 @@ public partial class FssMapTileNode : Node3D
                 FssLLBox tileBounds = FssMapTileCode.LLBoxForCode(tileCode);
 
                 // Create the mesh
-                meshBuilder.AddSurface(
+                meshBuilder.AddSurfaceWithUVBox(
                     (float)tileBounds.MinLonDegs, (float)tileBounds.MaxLonDegs,
                     (float)tileBounds.MinLatDegs, (float)tileBounds.MaxLatDegs,
                     (float)FssPosConsts.EarthRadiusM,
-                    TileEleData
+                    TileEleData, UVBox
                 );
                 meshBuilder.AddSurfaceWedgeSides(
                     (float)tileBounds.MinLonDegs, (float)tileBounds.MaxLonDegs,
@@ -298,16 +325,15 @@ public partial class FssMapTileNode : Node3D
         FssLLBox tileBounds = FssMapTileCode.LLBoxForCode(tileCode);
         FssLLPoint posLL = tileBounds.CenterPoint;
 
-        float labelGap = 0.2f;
-
         // Determine the positions and orientation
-        FssLLAPoint pos  = new FssLLAPoint() { LatDegs = posLL.LatDegs,        LonDegs = posLL.LonDegs, AltMslM = 1000};
-        FssLLAPoint posN = new FssLLAPoint() { LatDegs = posLL.LatDegs + 0.01, LonDegs = posLL.LonDegs, AltMslM = 1000};
+        FssLLAPoint pos  = new FssLLAPoint() { LatDegs = posLL.LatDegs,        LonDegs = posLL.LonDegs, AltMslM = 2000};
+        FssLLAPoint posN = new FssLLAPoint() { LatDegs = posLL.LatDegs + 0.01, LonDegs = posLL.LonDegs, AltMslM = 2000};
 
         Godot.Vector3 v3Pos   = FssGeoConvOperations.RwToGe(pos);
         Godot.Vector3 v3PosN  = FssGeoConvOperations.RwToGe(posN);
         Godot.Vector3 v3VectN = (v3PosN - v3Pos).Normalized();
 
+        TileCodeLabel.Visible = IntendedVisibility;
         AddChild(TileCodeLabel);
 
         TileCodeLabel.Position = v3Pos;
@@ -432,12 +458,12 @@ public partial class FssMapTileNode : Node3D
 
         // Distance judged in multiples of radius, to accomodate smaller worlds while debugging
 
-        float[] DisplayTileForLvl      = { 1f,   0.1f, 0.05f, 0.025f, 0.001f };
-        float[] CreateChildTilesForLvl = { 1.2f, 0.2f, 0.10f, 0.050f, 0.002f};
-        float[] DeleteChildTilesForLvl = { 1.5f, 0.4f, 0.20f, 0.100f, 0.003f};
+        float[] DisplayTileForLvl      = { 1f,   0.1f, 0.05f, 0.025f, 0.0005f };
+        float[] CreateChildTilesForLvl = { 1.2f, 0.2f, 0.10f, 0.050f, 0.0010f};
+        float[] DeleteChildTilesForLvl = { 1.5f, 0.4f, 0.20f, 0.100f, 0.0015f};
 
         bool shouldDisplayChildTiles = distanceFraction < DisplayTileForLvl[TileCode.MapLvl];
-        bool shouldCreateChildTiles  = (distanceFraction < CreateChildTilesForLvl[TileCode.MapLvl]) && (TileCode.MapLvl <= 1);
+        bool shouldCreateChildTiles  = (distanceFraction < CreateChildTilesForLvl[TileCode.MapLvl]) && (TileCode.MapLvl <= 2);
         bool shouldDeleteChildTiles  = distanceFraction > DeleteChildTilesForLvl[TileCode.MapLvl];
         bool childTilesExist         = DoChildTilesExist();
         bool childTilesLoaded        = AreChildTilesLoaded();

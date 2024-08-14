@@ -297,5 +297,3 @@ public partial class TestZeroOffset : Node3D
             true);
     }
 }
-
-
