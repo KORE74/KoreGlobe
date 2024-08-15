@@ -11,7 +11,7 @@ using FssNetworking;
 public partial class FssEventDriver
 {
     // ---------------------------------------------------------------------------------------------
-    // Command Execution
+    // MARK: Command Execution
     // ---------------------------------------------------------------------------------------------
 
     public void AddPlatformElement(string platName, string elemName, string platElemType)
@@ -20,6 +20,16 @@ public partial class FssEventDriver
         FssPlatformElementOperations.CreatePlatformElement(platName, elemName, platElemType);
     }
 
+    public void DeletePlatformElement(string platName, string elemName)
+    {
+        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
+
+        if (platform == null)
+            return;
+
+        platform.DeleteElement(elemName);
+    }
+        
 
     public void PlatformAddSizerBox(string platName, string platType)
     {
@@ -43,7 +53,7 @@ public partial class FssEventDriver
     }
 
     // ---------------------------------------------------------------------------------------------
-    // Add scans
+    // MARK: Add scans
     // ---------------------------------------------------------------------------------------------
 
     public void PlatformAddScanHemisphere(string platName, string elemName, double DetectionRangeKms)
@@ -96,7 +106,14 @@ public partial class FssEventDriver
 
 
     
+    // ---------------------------------------------------------------------------------------------
+    // MARK: Element Name Helpers
+    // ---------------------------------------------------------------------------------------------
 
+    public static string ElementNameForBeam(string platName, string emitName, string beamName)
+    {
+        return $"{platName}_{emitName}_{beamName}";
+    }
 
 
     // public void SetPlatformStartLLA(string platName, FssLLALocation loc)

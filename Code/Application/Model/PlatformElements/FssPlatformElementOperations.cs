@@ -38,25 +38,40 @@ public static class FssPlatformElementOperations
         return newElem;
     }
 
+    // ---------------------------------------------------------------------------------------------
+    // MARK: Element Access Operations
+    // ---------------------------------------------------------------------------------------------
+
+    // public static FssPlatformElement? ElementForName(FssPlatform platform, string elemname)
+    // {
+    //     foreach (var element in platform.Elements)
+    //     {
+    //         if (element.Name == elemname)
+    //             return element;
+    //     }
+    //     return null;
+    // }
+
+    // public static bool DoesElementExist(FssPlatform platform, string elemname)
+    // {
+    //     foreach (var element in platform.Elements)
+    //     {
+    //         if (element.Name == elemname)
+    //             return true;
+    //     }
+    //     return false;
+    // }
+
+    // public static void DeleteElement(FssPlatform platform, string elemname)
+    // {
+    //     foreach (var element in platform.Elements)
+    //     {
+    //         if (element.Name == elemname)
+    //         {
+    //             platform.Elements.Remove(element);
+    //             return;
+    //         }
+    //     }
+    // }
+
 }
-
-//     public static FssPlatformElement? ElementForName(FssPlatform platform, string elemname)
-//     {
-//         foreach (var element in platform.Elements)
-//         {
-//             if (element.Name == elemname)
-//                 return element;
-//         }
-//         return null;
-//     }
-
-//     public static bool DoesElementExist(FssPlatform platform, string elemname)
-//     {
-//         foreach (var element in platform.Elements)
-//         {
-//             if (element.Name == elemname)
-//                 return true;
-//         }
-//         return false;
-//     }
-

@@ -6,6 +6,8 @@ public class FssPlatformElementScanPattern : FssPlatformElement
 {
     public string Type {set; get; } = "ScanPattern";
 
+    public bool Enabled { get; set; } = false;
+
     // Incoming Data
 
     // Internally Dervied values

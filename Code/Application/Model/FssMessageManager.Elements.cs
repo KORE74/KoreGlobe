@@ -11,31 +11,70 @@ public partial class FssMessageManager
 {
     private void ProcessMessage_BeamLoad(BeamLoad beamLoadMsg)
     {
-        FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_BeamLoad: Name:{beamLoadMsg.BeamName}");
-
         // Extract everything from the message for convenience
         string platName = beamLoadMsg.PlatName;
-        string elemName = beamLoadMsg.BeamName;
         double detectionRangeRxMtrs = beamLoadMsg.DetectionRangeRxMtrs;
         double detectionRangeMtrs = beamLoadMsg.DetectionRangeMtrs;
         FssAzElBox azElBox = beamLoadMsg.AzElBox();
+
+        string elemName = FssEventDriver.ElementNameForBeam(
+            beamLoadMsg.PlatName,
+            beamLoadMsg.EmitName,
+            beamLoadMsg.BeamName
+        );
+
+        FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_BeamLoad: Name:{elemName}");
 
         FssAppFactory.Instance.EventDriver.PlatformAddScanWedge(platName, elemName, detectionRangeMtrs, detectionRangeRxMtrs, azElBox);
     }
 
     private void ProcessMessage_BeamDelete(BeamDelete beamDelMsg)
     {
-        FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_BeamDelete: Name:{beamDelMsg.BeamName}");
+        string elemName = FssEventDriver.ElementNameForBeam(
+            beamDelMsg.PlatName,
+            beamDelMsg.EmitName,
+            beamDelMsg.BeamName
+        );
+
+        FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_BeamDelete: Name:{elemName}");
+
+        //FssAppFactory.Instance.EventDriver.DeleteElement(beamDelMsg.PlatName, elemName);
+
+        // Get the platform
+        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(beamDelMsg.PlatName);
+        if (platform == null)
+        {
+            FssCentralLog.AddEntry($"E00003: BeamDelete: Platform {beamDelMsg.PlatName} not found.");
+            return;
+        }
+
+        // Get the element
+        FssPlatformElement? element = platform.ElementForName(elemName);
+        if (element != null)
+            platform.DeleteElement(elemName);
     }
 
     private void ProcessMessage_BeamEnable(BeamEnable beamEnMsg)
     {
-        FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_BeamEnable: Name:{beamEnMsg.BeamName}");
+        string elemName = FssEventDriver.ElementNameForBeam(
+            beamEnMsg.PlatName,
+            beamEnMsg.EmitName,
+            beamEnMsg.BeamName
+        );
+
+        FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_BeamEnable: Name:{elemName}");
+
     }
 
     private void ProcessMessage_BeamDisable(BeamDisable beamDisMsg)
     {
-        FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_BeamDisable: Name:{beamDisMsg.BeamName}");
+        string elemName = FssEventDriver.ElementNameForBeam(
+            beamDisMsg.PlatName,
+            beamDisMsg.EmitName,
+            beamDisMsg.BeamName
+        );
+
+        FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_BeamDisable: Name:{elemName}");
 
     }
 
