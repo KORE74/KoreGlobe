@@ -12,6 +12,15 @@ public partial class FssMessageManager
     private void ProcessMessage_BeamLoad(BeamLoad beamLoadMsg)
     {
         FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_BeamLoad: Name:{beamLoadMsg.BeamName}");
+
+        // Extract everything from the message for convenience
+        string platName = beamLoadMsg.PlatName;
+        string elemName = beamLoadMsg.BeamName;
+        double detectionRangeRxMtrs = beamLoadMsg.DetectionRangeRxMtrs;
+        double detectionRangeMtrs = beamLoadMsg.DetectionRangeMtrs;
+        FssAzElBox azElBox = beamLoadMsg.AzElBox();
+
+        FssAppFactory.Instance.EventDriver.PlatformAddScanWedge(platName, elemName, detectionRangeMtrs, detectionRangeRxMtrs, azElBox);
     }
 
     private void ProcessMessage_BeamDelete(BeamDelete beamDelMsg)
@@ -27,6 +36,7 @@ public partial class FssMessageManager
     private void ProcessMessage_BeamDisable(BeamDisable beamDisMsg)
     {
         FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_BeamDisable: Name:{beamDisMsg.BeamName}");
+
     }
 
     private void ProcessMessage_RxAntenna(RxAntenna rxAntMsg)
@@ -39,7 +49,6 @@ public partial class FssMessageManager
         FssPolarOffset patternPolarOffset = rxAntMsg.PolarOffset;
 
         FssAppFactory.Instance.EventDriver.PlatformAddAntennaPattern(platName, patternName, patternPolarOffset, patternSize);
-
     }
 
     private void ProcessMessage_ScanPattern(ScanPattern scanPatMsg)
