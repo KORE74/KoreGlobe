@@ -62,7 +62,7 @@ public partial class FssTextureLoader : Node
                     return;
                 }
 
-                GD.Print($"Loaded texture: {filePath}");
+                // GD.Print($"Loaded texture: {filePath}");
                 var texture = ImageTexture.CreateFromImage(image);
                 _textureCache[filePath] = texture;
             }

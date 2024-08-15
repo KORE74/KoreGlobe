@@ -48,6 +48,11 @@ public partial class FssMapTileNode : Node3D
     // public bool IntendedChildrenVisibility = false;
     // public bool AppliedVisibility          = false;
 
+    // Record the states we assign, so we can restict  actions to just changes.
+    public bool VisibleState                  = false;
+    public bool ChildrenVisibleState          = false;
+    public bool ChildrenActiveState           = false;
+
     public FssRandomLoopList RandomLoopList = new FssRandomLoopList(30, 0.12f, 0.15f);
 
     // --------------------------------------------------------------------------------------------
@@ -129,12 +134,8 @@ public partial class FssMapTileNode : Node3D
                     {
                         ApplyImageMaterial();
                         ImageDone = true;
-                        FssCentralLog.AddEntry($"Texture loaded: {Filepaths.ImageFilepath}");
-                    }
-
-                    if (ImageDone)
-                    {
                         ConstructionComplete = true;
+                        FssCentralLog.AddEntry($"Texture loaded: {Filepaths.ImageFilepath}");
                     }
                 }
             }
@@ -150,13 +151,19 @@ public partial class FssMapTileNode : Node3D
         //     OneShotFlag = true;
         // }
 
-        if (UIUpdateTimer < FssCoreTime.RuntimeSecs)
-        {
-            UIUpdateTimer = FssCoreTime.RuntimeSecs + RandomLoopList.GetNext();
+        if (TileCode.MapLvl == 0) ActiveVisibility = true;
 
-            //if ((TileCode.ToString() == "BF") || (TileCode.ToString() == "BG") || (TileCode.ToString() == "BF_BF"))
+        if (ActiveVisibility)
+        {
+
+            if (UIUpdateTimer < FssCoreTime.RuntimeSecs)
             {
-                UpdateVisbilityRules();
+                UIUpdateTimer = FssCoreTime.RuntimeSecs + RandomLoopList.GetNext();
+
+                //if ((TileCode.ToString() == "BF") || (TileCode.ToString() == "BG") || (TileCode.ToString() == "BF_BF"))
+                {
+                    UpdateVisbilityRules();
+                }
             }
         }
     }
@@ -422,47 +429,45 @@ public partial class FssMapTileNode : Node3D
     // MARK: Visibility
     // --------------------------------------------------------------------------------------------
 
-    //Available states:
-    // Out of range: Tile is not visible, children are not visible.   => False, False
-    // Just in range: Tile is visible, children are not visible.      => True, False
-    // In range and close: Tile is not visible, children are visible. => False, True
-
-    // private void SetTileVisibility(bool visible, bool childrenVisible)
-    // {
-    //     bool outOfRange      = !visible && !childrenVisible;
-    //     bool justInRange     =  visible && !childrenVisible;
-    //     bool inRangeAndClose = !visible &&  childrenVisible;
-
-    //     if (outOfRange)
-    //     {
-    //         SetVisibility(false);
-    //         SetChildrenVisibility(false);
-    //     }
-    //     else if (justInRange)
-    //     {
-    //         SetVisibility(true);
-    //         SetChildrenVisibility(false);
-    //     }
-    //     else if (inRangeAndClose)
-    //     {
-    //         SetVisibility(false);
-    //         SetChildrenVisibility(true);
-    //     }
-    // }
-
     private void SetVisibility(bool visible)
     {
-        if (MeshInstance != null)  MeshInstance.Visible  = visible;
-        if (MeshInstanceW != null) MeshInstanceW.Visible = visible;
-        if (TileCodeLabel != null) TileCodeLabel.Visible = visible;
+        if (VisibleState != visible)
+        {
+            VisibleState = visible;
+            //GD.Print($"Setting visibility for {TileCode} to {visible}");
+
+            if (MeshInstance != null)  MeshInstance.Visible  = visible;
+            if (MeshInstanceW != null) MeshInstanceW.Visible = visible;
+            if (TileCodeLabel != null) TileCodeLabel.Visible = visible;
+        }
     }
 
     private void SetChildrenVisibility(bool visible)
     {
-        foreach (FssMapTileNode currTile in ChildTiles)
+        if (ChildrenVisibleState != visible)
         {
-            currTile.ActiveVisibility = visible;
-            currTile.SetVisibility(visible);
+            ChildrenVisibleState = visible;
+            
+            //GD.Print($"Setting children visibility for {TileCode} to {visible}");
+
+            foreach (FssMapTileNode currTile in ChildTiles)
+            {
+                currTile.SetVisibility(visible);
+            }
+        }
+    }
+
+    private void SetChildrenActive(bool active)
+    {
+        if (ChildrenActiveState != active)
+        {
+            ChildrenActiveState = active;
+            //GD.Print($"Setting children active for {TileCode} to {active}");
+
+            foreach (FssMapTileNode currTile in ChildTiles)
+            {
+                currTile.ActiveVisibility = active;
+            }
         }
     }
 
@@ -504,6 +509,7 @@ public partial class FssMapTileNode : Node3D
             if (shouldCreateChildTiles && !childTilesExist)
             {
                 CreateSubtileNodes();
+                SetChildrenVisibility(false);
                 GD.Print($"Created subtiles for {TileCode}");
             }
 
@@ -512,11 +518,13 @@ public partial class FssMapTileNode : Node3D
             {
                 if (shouldDisplayChildTiles)
                 {
+                    SetChildrenActive(true);
                     SetChildrenVisibility(true);
                     SetVisibility(false);
                 }
                 else
                 {
+                    SetChildrenActive(false);
                     SetChildrenVisibility(false);
                     SetVisibility(true);
 
@@ -529,16 +537,15 @@ public partial class FssMapTileNode : Node3D
             }
             else
             {
+                SetChildrenActive(false);
                 SetVisibility(true); // no children ready, show the parent
             }
         }
         else
         {
             SetVisibility(false);
+            SetChildrenVisibility(false);
+            SetChildrenActive(false);
         }
-
-
-
     }
-
 }
