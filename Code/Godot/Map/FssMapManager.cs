@@ -63,7 +63,7 @@ public partial class FssMapManager : Node3D
                 // };
 
                 FssMapTileNode newChildTile = new FssMapTileNode(currTileCode);
-                newChildTile.IntendedVisibility = true; // default the lvl0 tiles to visible
+                //newChildTile.IntendedVisibility = true; // default the lvl0 tiles to visible
                 AddChild(newChildTile);
 
                 // LoadTile2(tileInfo);
