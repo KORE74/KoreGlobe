@@ -65,49 +65,49 @@ public class Fss3DModelLibrary
 
     public void LoadModel(string modelName)
     {
-        if (!ModelInfoList.ContainsKey(modelName))
-        {
-            GD.PrintErr($"Model does not exist: {modelName}");
-            return;
-        }
+        // if (!ModelInfoList.ContainsKey(modelName))
+        // {
+        //     GD.PrintErr($"Model does not exist: {modelName}");
+        //     return;
+        // }
 
-        // Ensure the model is not already loaded
-        if (ModelCache.ContainsKey(modelName))
-        {
-            GD.PrintErr($"Model already loaded: {modelName}");
-            return;
-        }
+        // // Ensure the model is not already loaded
+        // if (ModelCache.ContainsKey(modelName))
+        // {
+        //     GD.PrintErr($"Model already loaded: {modelName}");
+        //     return;
+        // }
 
-        // Load the model asynchronously
-        {
-            var modelInfo = ModelInfoList[modelName];
-            var modelPath = modelInfo.FilePath;
+        // // Load the model asynchronously
+        // {
+        //     var modelInfo = ModelInfoList[modelName];
+        //     var modelPath = modelInfo.FilePath;
 
-            // Ensure the file exists
-            if (!System.IO.File.Exists(modelPath))
-            {
-                GD.PrintErr($"File not found: {modelPath}");
-                return;
-            }
+        //     // Ensure the file exists
+        //     if (!System.IO.File.Exists(modelPath))
+        //     {
+        //         GD.PrintErr($"File not found: {modelPath}");
+        //         return;
+        //     }
 
-            // Load the GLTF file asynchronously
-            {
-                var gltfState  = new GLTFState();
-                var gltfLoader = new GLTFLoader();
+        //     // Load the GLTF file asynchronously
+        //     {
+        //         var gltfState  = new GLTFState();
+        //         var gltfLoader = new GLTFLoader();
 
-                var error = gltfLoader.LoadFromFile(modelPath, gltfState);
+        //         var error = gltfLoader.LoadFromFile(modelPath, gltfState);
 
-                if (error != Error.Ok)
-                {
-                    GD.PrintErr($"Failed to load GLTF file: {modelPath}");
-                    return;
-                }
+        //         if (error != Error.Ok)
+        //         {
+        //             GD.PrintErr($"Failed to load GLTF file: {modelPath}");
+        //             return;
+        //         }
 
-                // Create the scene tree from the loaded GLTF file
-                var sceneRoot = gltfState.GenerateScene();
-                ModelCache.Add(modelName, sceneRoot);
-            };
-        }
+        //         // Create the scene tree from the loaded GLTF file
+        //         var sceneRoot = gltfState.GenerateScene();
+        //         ModelCache.Add(modelName, sceneRoot);
+        //     };
+        // }
     }
 
     // ------------------------------------------------------------------------------------------------

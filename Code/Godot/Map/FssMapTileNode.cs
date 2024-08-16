@@ -14,6 +14,9 @@ public partial class FssMapTileNode : Node3D
     public ImageTexture         TerrainTexture;
     public FssUvBoxDropEdgeTile UVBox;
 
+    public bool ChildEleSubampled = false;
+    public FssFloat2DArray[,] ChildEleData;
+
     // Construction Flags
     private bool ConstructionComplete = false;
     private bool MeshDone             = false;
@@ -57,12 +60,12 @@ public partial class FssMapTileNode : Node3D
 
     // --------------------------------------------------------------------------------------------
 
-    public static readonly int[]   TileSizePointsPerLvl = { 30, 50, 50, 50, 50 };
+    public static readonly int[]   TileSizePointsPerLvl = { 15, 20, 20, 20, 20 };
     public static readonly float[] LabelSizePerLvl      = { 0.1f, 0.005f, 0.002f, 0.0002f, 0.000003f };
 
-    public static readonly float[] childTileDisplayForLvl = { 1f,   0.1f, 0.05f, 0.025f, 0.0005f };
-    public static readonly float[] CreateChildTilesForLvl = { 1.2f, 0.2f, 0.10f, 0.050f, 0.0010f};
-    public static readonly float[] DeleteChildTilesForLvl = { 1.5f, 0.4f, 0.20f, 0.100f, 0.0015f};
+    public static readonly float[] childTileDisplayForLvl = { 0.8f, 0.15f, 0.04f, 0.025f, 0.0005f };
+    public static readonly float[] CreateChildTilesForLvl = { 1.0f, 0.25f, 0.08f, 0.050f, 0.0010f};
+    public static readonly float[] DeleteChildTilesForLvl = { 1.2f, 0.40f, 0.16f, 0.100f, 0.0015f};
 
     // --------------------------------------------------------------------------------------------
     // MARK: Constructor
@@ -167,7 +170,7 @@ public partial class FssMapTileNode : Node3D
     // Single-thread critical areas will be in factored out functions that are CallDeferred().
     // Note that CallDeferred() is not a blocking call, it will be executed on the next frame.
 
-    private async void TileCreation(FssMapTileCode tileCode)
+    private void BackgroundTileCreation(FssMapTileCode tileCode)
     {
         // Figure out the file paths for the tile
         Filepaths = new FssTileNodeFilepaths(TileCode);
@@ -199,6 +202,7 @@ public partial class FssMapTileNode : Node3D
         }
 
         CallDeferred(nameof(MainThreadFinalizeCreation));
+
     }
 
     private void LoadTileEle(FssMapTileCode tileCode)
@@ -233,6 +237,10 @@ public partial class FssMapTileNode : Node3D
                     FssFloat2DArray croppedArraySubSample = croppedArray.GetInterpolatedGrid(res, res);
 
                     TileEleData = croppedArraySubSample;
+
+                    // Speculatively create the child tile subsampled data before we lose the read file.
+
+
 
                     //UVBox = new FssUvBoxDropEdgeTile(FssUvBoxDropEdgeTile.UVTopLeft, FssUvBoxDropEdgeTile.UVBottomRight, res, res);
                     //GD.Print($"{tileCode} - Clean UVBox - {UVBox}");
