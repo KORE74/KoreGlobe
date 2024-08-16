@@ -42,29 +42,97 @@ public partial class FssTextureLoader : Node
         return TL;
     }
 
-    // ------------------------------------------------------------------------------------------------
+  // ------------------------------------------------------------------------------------------------
 
     public override void _Process(double delta)
     {
         lock (_lock)
         {
-            // if there is a file to load
+            // Process texture loading queue
             if (_loadQueue.Count > 0)
             {
                 string filePath = _loadQueue.Dequeue();
+                LoadTextureAsync(filePath);
+            }
+        }
+    }
 
-                var image = new Image();
+    // ------------------------------------------------------------------------------------------------
 
-                var err = image.Load(filePath);
-                if (err != Error.Ok)
-                {
-                    GD.PrintErr($"Failed to load image: {filePath}");
-                    return;
-                }
+    private async void LoadTextureAsync(string filePath)
+    {
+        // Load image off the main thread
+        var image = await Task.Run(() =>
+        {
+            var img = new Image();
+            var err = img.Load(filePath);
+            if (err != Error.Ok)
+            {
+                GD.PrintErr($"Failed to load image: {filePath}");
+                return null;
+            }
+            return img;
+        });
 
-                // GD.Print($"Loaded texture: {filePath}");
+        if (image != null)
+        {
+            // Ensure texture creation happens on the main thread
+            CallDeferred(nameof(CreateTexture), filePath, image);
+        }
+    }
+
+    // ------------------------------------------------------------------------------------------------
+
+    public ImageTexture? LoadTextureDirect(string filePath)
+    {
+        lock (_lock)
+        {
+            // Check if the texture is already loaded
+            if (_textureCache.ContainsKey(filePath))
+            {
+                GD.Print($"Texture already loaded: {filePath}");
+                return _textureCache[filePath];
+            }
+        }
+
+        // Load image synchronously
+        var image = new Image();
+        var err = image.Load(filePath);
+        if (err != Error.Ok)
+        {
+            GD.PrintErr($"Failed to load image: {filePath}");
+            return null;
+        }
+
+        // Create the texture synchronously
+        var texture = ImageTexture.CreateFromImage(image);
+
+        // Cache the texture
+        lock (_lock)
+        {
+            if (!_textureCache.ContainsKey(filePath))
+            {
+                _textureCache[filePath] = texture;
+            }
+        }
+
+        GD.Print($"Loaded and created texture directly: {filePath}");
+
+        return texture;
+    }
+
+    // ------------------------------------------------------------------------------------------------
+
+    private void CreateTexture(string filePath, Image image)
+    {
+        lock (_lock)
+        {
+            if (!_textureCache.ContainsKey(filePath))
+            {
                 var texture = ImageTexture.CreateFromImage(image);
                 _textureCache[filePath] = texture;
+
+                GD.Print($"Loaded and created texture: {filePath}");
             }
         }
     }
