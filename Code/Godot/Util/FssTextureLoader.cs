@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 using Godot;
 
-public partial class FssTextureLoader : Node
+public partial class FssTextureLoader
 {
     // Cache to store loaded textures
     private readonly Dictionary<string, ImageTexture> _textureCache = new Dictionary<string, ImageTexture>();
@@ -20,66 +20,85 @@ public partial class FssTextureLoader : Node
 
     // ------------------------------------------------------------------------------------------------
 
-    // public static FssTextureLoader Instance { get; private set; }
+    // Standard C# singleton pattern
 
-    public static FssTextureLoader? GetGlobal()
+    private static FssTextureLoader? _instance;
+
+    public static FssTextureLoader Instance
     {
-         var tree = Engine.GetMainLoop() as SceneTree;
-
-         if (tree == null)
-         {
-             GD.PrintErr("Failed to get SceneTree.");
-             return null;
-         }
-
-        FssTextureLoader? TL = tree.Root.GetNodeOrNull<FssTextureLoader>("FssTextureLoader_Global");
-
-        if (TL == null)
+        get
         {
-            GD.PrintErr("Failed to get TextureLoader.");
-        }
-
-        return TL;
-    }
-
-  // ------------------------------------------------------------------------------------------------
-
-    public override void _Process(double delta)
-    {
-        lock (_lock)
-        {
-            // Process texture loading queue
-            if (_loadQueue.Count > 0)
+            if (_instance == null)
             {
-                string filePath = _loadQueue.Dequeue();
-                LoadTextureAsync(filePath);
+                _instance = new FssTextureLoader();
             }
+            return _instance;
         }
     }
+
 
     // ------------------------------------------------------------------------------------------------
 
-    private async void LoadTextureAsync(string filePath)
-    {
-        // Load image off the main thread
-        var image = await Task.Run(() =>
-        {
-            var img = new Image();
-            var err = img.Load(filePath);
-            if (err != Error.Ok)
-            {
-                GD.PrintErr($"Failed to load image: {filePath}");
-                return null;
-            }
-            return img;
-        });
+    // public static FssTextureLoader Instance { get; private set; }
 
-        if (image != null)
-        {
-            // Ensure texture creation happens on the main thread
-            CallDeferred(nameof(CreateTexture), filePath, image);
-        }
-    }
+    // public static FssTextureLoader? GetGlobal()
+    // {
+    //      var tree = Engine.GetMainLoop() as SceneTree;
+
+    //      if (tree == null)
+    //      {
+    //          GD.PrintErr("Failed to get SceneTree.");
+    //          return null;
+    //      }
+
+    //     FssTextureLoader? TL = tree.Root.GetNodeOrNull<FssTextureLoader>("FssTextureLoader_Global");
+
+    //     if (TL == null)
+    //     {
+    //         GD.PrintErr("Failed to get TextureLoader.");
+    //     }
+
+    //     return TL;
+    // }
+
+  // ------------------------------------------------------------------------------------------------
+
+    // public override void _Process(double delta)
+    // {
+    //     lock (_lock)
+    //     {
+    //         // Process texture loading queue
+    //         if (_loadQueue.Count > 0)
+    //         {
+    //             string filePath = _loadQueue.Dequeue();
+    //             LoadTextureAsync(filePath);
+    //         }
+    //     }
+    // }
+
+    // ------------------------------------------------------------------------------------------------
+
+    // private async void LoadTextureAsync(string filePath)
+    // {
+    //     // Load image off the main thread
+    //     var image = await Task.Run(() =>
+    //     {
+    //         var img = new Image();
+    //         var err = img.Load(filePath);
+    //         if (err != Error.Ok)
+    //         {
+    //             GD.PrintErr($"Failed to load image: {filePath}");
+    //             return null;
+    //         }
+    //         return img;
+    //     });
+
+    //     if (image != null)
+    //     {
+    //         // Ensure texture creation happens on the main thread
+    //         CallDeferred(nameof(CreateTexture), filePath, image);
+    //     }
+    // }
 
     // ------------------------------------------------------------------------------------------------
 
@@ -90,7 +109,7 @@ public partial class FssTextureLoader : Node
             // Check if the texture is already loaded
             if (_textureCache.ContainsKey(filePath))
             {
-                GD.Print($"Texture already loaded: {filePath}");
+                //GD.Print($"Texture already loaded: {filePath}");
                 return _textureCache[filePath];
             }
         }
@@ -156,11 +175,11 @@ public partial class FssTextureLoader : Node
                 {
                     _loadQueue.Enqueue(filePath);
 
-                    GD.Print($"Queued texture_: {filePath} ({_loadQueue.Count})");
+                    //GD.Print($"Queued texture_: {filePath} ({_loadQueue.Count})");
                 }
                 else
                 {
-                    GD.Print($"Texture already loaded or queued: {filePath}");
+                    //GD.Print($"Texture already loaded or queued: {filePath}");
                 }
             }
         }

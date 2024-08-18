@@ -20,10 +20,10 @@ public class FssMapTileCode
     // Constants
     // --------------------------------------------------------------------------------------------
 
-    public static readonly int MaxMapLvl = 4;
+    public static readonly int MaxMapLvl = 2; // 4;
 
-    public static readonly int[] NumTilesVertPerLvl  = {  6, 6, 5, 5 };
-    public static readonly int[] NumTilesHorizPerLvl = { 12, 6, 5, 5 };
+    public static readonly int[] NumTilesVertPerLvl  = {  6, 6, 5, 5, 5 };
+    public static readonly int[] NumTilesHorizPerLvl = { 12, 6, 5, 5, 5 };
 
     public static readonly double[] TileSizeDegsPerLvl  = {  30, 5, 1, 0.2, 0.04 };
 
@@ -41,7 +41,7 @@ public class FssMapTileCode
 
     public List<FssLevelCodeElement> CodeList { get; private set; }
 
-    public int MapLvl => (CodeList.Count - 1);
+    public int MapLvl     => (CodeList.Count - 1);
 
     public int HorizCount => NumTilesHorizPerLvl[MapLvl];
     public int VertCount  => NumTilesVertPerLvl[MapLvl];
@@ -84,7 +84,7 @@ public class FssMapTileCode
         if (x < 0) x = 0;
         if (y < 0) y = 0;
         if (x >= NumTilesHorizPerLvl[level]) x = NumTilesHorizPerLvl[level] - 1;
-        if (y >= NumTilesVertPerLvl[level]) y = NumTilesVertPerLvl[level] - 1;
+        if (y >= NumTilesVertPerLvl[level])  y = NumTilesVertPerLvl[level] - 1;
 
         FssLevelCodeElement l = new FssLevelCodeElement() { LatIndex = y, LonIndex = x };
         CodeList.Add(l);
@@ -98,7 +98,7 @@ public class FssMapTileCode
         if (x < 0) x = 0;
         if (y < 0) y = 0;
         if (x >= NumTilesHorizPerLvl[level]) x = NumTilesHorizPerLvl[level] - 1;
-        if (y >= NumTilesVertPerLvl[level]) y = NumTilesVertPerLvl[level] - 1;
+        if (y >= NumTilesVertPerLvl[level])  y = NumTilesVertPerLvl[level] - 1;
 
         CodeList[level] = new FssLevelCodeElement() { LatIndex = y, LonIndex = x };
     }

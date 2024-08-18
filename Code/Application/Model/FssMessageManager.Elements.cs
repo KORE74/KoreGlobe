@@ -63,7 +63,6 @@ public partial class FssMessageManager
         );
 
         FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_BeamEnable: Name:{elemName}");
-
     }
 
     private void ProcessMessage_BeamDisable(BeamDisable beamDisMsg)

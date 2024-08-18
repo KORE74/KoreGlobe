@@ -22,10 +22,6 @@ boot_splash/image="res://Resources/SplashScreen/Splash-001-Halfsize.png"
 boot_splash/fullsize=false
 config/icon="res://icon2.svg"
 
-[autoload]
-
-FssTextureLoader_Global="*res://Code/Godot/Util/FssTextureLoader.cs"
-
 [dotnet]
 
 project/assembly_name="Globe4"

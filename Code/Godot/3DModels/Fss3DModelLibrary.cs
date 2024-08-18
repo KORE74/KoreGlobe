@@ -4,6 +4,7 @@
 
 using Godot;
 
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 
@@ -13,8 +14,40 @@ public class Fss3DModelLibrary
     Dictionary<string, Fss3DModelInfo> ModelInfoList = new Dictionary<string, Fss3DModelInfo>();
 
     // Named list of specific 3D model objects for Godot scene tree.
-    Dictionary<string, Node>           ModelCache    = new Dictionary<string, Node>();
+    Dictionary<string, Node> ModelCache = new Dictionary<string, Node>();
 
+
+    // ------------------------------------------------------------------------------------------------
+    // MARK: Load / Save JSON Config
+    // ------------------------------------------------------------------------------------------------
+
+    // usage: Fss3DModelLibrary.T1();
+
+    public static void T1(Node parent)
+    {
+        // string ModelPath = "C:/Util/Data/Godot/Globe4-3DModels/Prep/Plane/FA-18F/FA-18F_007.fbx";
+
+        string ModelPath = "C:/Util/Data/Godot/Globe4-3DModels/Prep/Ship/GenericSupportShip/GenericSupportShip.glb";
+
+
+        PackedScene importedModel = (PackedScene)ResourceLoader.Load(ModelPath);
+
+        if (importedModel != null)
+        {
+            // Instance the model
+            Node modelInstance     = importedModel.Instantiate();
+
+            // Add the model to the scene
+            parent.AddChild(modelInstance);
+
+            GD.Print($"====== Loaded model: {ModelPath}");
+        }
+        else
+        {
+            GD.PrintErr($"====== Failed to load model: {ModelPath}");
+        }
+
+    }
 
     // ------------------------------------------------------------------------------------------------
     // MARK: Load / Save JSON Config
@@ -190,9 +223,6 @@ public class Fss3DModelLibrary
         ModelInfoList.Add(newModelName, ModelInfoList[modelName]);
     }
 }
-
-
-
 
 
 

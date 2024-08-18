@@ -18,6 +18,8 @@ public class FssUvBoxDropEdgeTile
     public static Vector2 UVTopLeft     = new Vector2(0.0f, 0.0f);
     public static Vector2 UVBottomRight = new Vector2(1.0f, 1.0f);
 
+    public bool UseEdgeOffsets { get; set; } = false; // flag to generate a simpler UV grid when false
+
     // --------------------------------------------------------------------------------------------
 
     // Constructor that sets up the corners and initializes the UV grid
@@ -38,24 +40,24 @@ public class FssUvBoxDropEdgeTile
     public FssUvBoxDropEdgeTile(FssUvBoxDropEdgeTile parentBox, int horizSize, int vertSize, Fss2DGridPos gridPos)
     {
         // Calculate the new UV box from the parent box and grid position
-        float minParentX = parentBox.TopLeft.X;
-        float minParentY = parentBox.TopLeft.Y;
-        float maxParentX = parentBox.BottomRight.X;
-        float maxParentY = parentBox.BottomRight.Y;
+        float minParentX  = parentBox.TopLeft.X;
+        float minParentY  = parentBox.TopLeft.Y;
+        float maxParentX  = parentBox.BottomRight.X;
+        float maxParentY  = parentBox.BottomRight.Y;
 
         float diffParentX = maxParentX - minParentX;
         float diffParentY = maxParentY - minParentY;
 
-        float childMinX = minParentX + gridPos.LeftEdgeFraction * diffParentX;
-        float childMaxX = minParentX + gridPos.RightEdgeFraction * diffParentX;
-        float childMinY = minParentY + gridPos.TopEdgeFraction * diffParentY;
-        float childMaxY = minParentY + gridPos.BottomEdgeFraction * diffParentY;
+        float childMinX   = minParentX + gridPos.LeftEdgeFraction   * diffParentX;
+        float childMaxX   = minParentX + gridPos.RightEdgeFraction  * diffParentX;
+        float childMinY   = minParentY + gridPos.TopEdgeFraction    * diffParentY;
+        float childMaxY   = minParentY + gridPos.BottomEdgeFraction * diffParentY;
 
-        TopLeft     = new Vector2(childMinX, childMinY);
-        BottomRight = new Vector2(childMaxX, childMaxY);
+        TopLeft           = new Vector2(childMinX, childMinY);
+        BottomRight       = new Vector2(childMaxX, childMaxY);
 
-        BoxEdgeOffset  = parentBox.BoxEdgeOffset;
-        BoxInsetOffset = parentBox.BoxInsetOffset;
+        BoxEdgeOffset     = parentBox.BoxEdgeOffset;
+        BoxInsetOffset    = parentBox.BoxInsetOffset;
 
         InitializeUvGrid(horizSize, vertSize);
     }

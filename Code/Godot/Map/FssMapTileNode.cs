@@ -26,8 +26,6 @@ public partial class FssMapTileNode : Node3D
     // Property to check if the material loading is done
     public bool IsDone => ConstructionComplete;
 
-    private bool OneShotFlag = false;
-
     // Map Tile Readable values
     public  FssMapTileCode       TileCode;
     private FssXYZPoint          RwTileCenterXYZ;
@@ -47,9 +45,6 @@ public partial class FssMapTileNode : Node3D
     private Label3D TileCodeLabel;
 
     public bool ActiveVisibility           = false;
-    // public bool IntendedVisibility         = false;
-    // public bool IntendedChildrenVisibility = false;
-    // public bool AppliedVisibility          = false;
 
     // Record the states we assign, so we can restict  actions to just changes.
     public bool VisibleState                  = false;
@@ -61,11 +56,11 @@ public partial class FssMapTileNode : Node3D
     // --------------------------------------------------------------------------------------------
 
     public static readonly int[]   TileSizePointsPerLvl = { 15, 20, 20, 20, 20 };
-    public static readonly float[] LabelSizePerLvl      = { 0.1f, 0.005f, 0.002f, 0.0002f, 0.000003f };
+    public static readonly float[] LabelSizePerLvl      = { 0.1f, 0.005f, 0.002f, 0.0002f, 0.00003f };
 
-    public static readonly float[] childTileDisplayForLvl = { 0.8f, 0.15f, 0.04f, 0.025f, 0.0005f };
-    public static readonly float[] CreateChildTilesForLvl = { 1.0f, 0.25f, 0.08f, 0.050f, 0.0010f};
-    public static readonly float[] DeleteChildTilesForLvl = { 1.2f, 0.40f, 0.16f, 0.100f, 0.0015f};
+    public static readonly float[] childTileDisplayForLvl = { 0.8f, 0.15f, 0.04f, 0.0025f, 0.0000005f };
+    public static readonly float[] CreateChildTilesForLvl = { 1.0f, 0.25f, 0.08f, 0.0050f, 0.0000010f};
+    public static readonly float[] DeleteChildTilesForLvl = { 1.2f, 0.40f, 0.16f, 0.0100f, 0.0000015f};
 
     // --------------------------------------------------------------------------------------------
     // MARK: Constructor
@@ -86,7 +81,7 @@ public partial class FssMapTileNode : Node3D
         FssLLAPoint tileBoxLLACentre = new FssLLAPoint() { LatDegs = tileBoxLLCentre.LatDegs, LonDegs = tileBoxLLCentre.LonDegs, AltMslM = 0 };
         RwTileCenterXYZ = tileBoxLLACentre.ToXYZ();
 
-        Task.Run(() => TileCreation(tileCode));
+        Task.Run(() => BackgroundTileCreation(tileCode));
 
         // FssCentralLog.AddEntry($"Creating FssMapTileNode for {tileCode}");
     }
@@ -104,7 +99,7 @@ public partial class FssMapTileNode : Node3D
         Task.Run(() => LoadTileEle(TileCode));
 
         // Get the global texture loader instance
-        FssTextureLoader? TL = FssTextureLoader.GetGlobal();
+        FssTextureLoader? TL = FssTextureLoader.Instance;
         if (TL != null)
         {
             if (Filepaths.ImageFileExists)
@@ -138,7 +133,7 @@ public partial class FssMapTileNode : Node3D
 
                 if (MeshInstatiated)
                 {
-                    FssTextureLoader? TL = FssTextureLoader.GetGlobal();
+                    FssTextureLoader? TL = FssTextureLoader.Instance;
                     if ((TL != null) && (Filepaths.ImageFileExists))
                     {
                         if (TL.IsTextureLoaded(Filepaths.ImageFilepath))
@@ -181,7 +176,7 @@ public partial class FssMapTileNode : Node3D
         InstatiateMesh();
 
         // Load the image data
-        FssTextureLoader? TL = FssTextureLoader.GetGlobal();
+        FssTextureLoader? TL = FssTextureLoader.Instance;
         if (TL != null)
         {
             if (Filepaths.ImageFileExists)
@@ -324,7 +319,6 @@ public partial class FssMapTileNode : Node3D
         }
     }
 
-
     private void MainThreadFinalizeCreation()
     {
         // Add the mesh to the tree
@@ -367,7 +361,7 @@ public partial class FssMapTileNode : Node3D
 
     private void ApplyImageMaterial()
     {
-        FssTextureLoader? TL = FssTextureLoader.GetGlobal();
+        FssTextureLoader? TL = FssTextureLoader.Instance;
         if (TL != null)
         {
             if (TL.IsTextureLoaded(Filepaths.ImageFilepath))
@@ -556,7 +550,7 @@ public partial class FssMapTileNode : Node3D
             //float[] DisplayTileForLvl      = { 1f,   0.1f, 0.05f, 0.025f, 0.0005f };
 
             bool shouldDisplayChildTiles = distanceFraction < childTileDisplayForLvl[TileCode.MapLvl];
-            bool shouldCreateChildTiles  = (distanceFraction < CreateChildTilesForLvl[TileCode.MapLvl]) && (TileCode.MapLvl <= 2);
+            bool shouldCreateChildTiles  = (distanceFraction < CreateChildTilesForLvl[TileCode.MapLvl]) && (TileCode.MapLvl < FssMapTileCode.MaxMapLvl);
             bool shouldDeleteChildTiles  = distanceFraction > DeleteChildTilesForLvl[TileCode.MapLvl];
             bool childTilesExist         = DoChildTilesExist();
             bool childTilesLoaded        = AreChildTilesLoaded();

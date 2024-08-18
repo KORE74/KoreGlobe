@@ -80,6 +80,8 @@ public partial class TestZeroOffset : Node3D
 
         CreatePlatform();
         CreatePlatformNodes();
+
+        Fss3DModelLibrary.T1(ZeroNode);
     }
 
     // --------------------------------------------------------------------------------------------
