@@ -98,13 +98,13 @@ public partial class FssMapTileNode : Node3D
 
             if (TileCode.ToString() == "BF_CF_AA")
             {
-                string x = (TileMaterial == null) ? "null" : "not null";
+                // string x = (TileMaterial == null) ? "null" : "not null";
 
-                GD.Print($"Tile:{TileCode} Filepaths:{Filepaths.ImageFilepath} ImageDone:{ImageDone} MeshDone:{MeshDone} MeshInstatiated:{MeshInstatiated} ConstructionComplete:{ConstructionComplete}");
-                if (ParentTile != null) GD.Print($"Parent:{ParentTile.TileCode}");
-                GD.Print($"UVBox:{UVBox}");
-                GD.Print($"EleData:{TileEleData.sizeStr()}");
-                GD.Print($"TileMaterial:{x}");
+                // GD.Print($"Tile:{TileCode} Filepaths:{Filepaths.ImageFilepath} ImageDone:{ImageDone} MeshDone:{MeshDone} MeshInstatiated:{MeshInstatiated} ConstructionComplete:{ConstructionComplete}");
+                // if (ParentTile != null) GD.Print($"Parent:{ParentTile.TileCode}");
+                // GD.Print($"UVBox:{UVBox}");
+                // GD.Print($"EleData:{TileEleData.sizeStr()}");
+                // GD.Print($"TileMaterial:{x}");
             }
 
             if (ConstructionComplete)
@@ -403,7 +403,7 @@ public partial class FssMapTileNode : Node3D
             {
                 CreateSubtileNodes();
                 SetChildrenVisibility(false);
-                GD.Print($"Created subtiles for {TileCode}");
+                // GD.Print($"Created subtiles for {TileCode}");
             }
 
             // If the child tiles exist, and they are loaded, and we should display them, set their visibility to true.
@@ -424,7 +424,7 @@ public partial class FssMapTileNode : Node3D
                     if (shouldDeleteChildTiles)
                     {
                         DeleteSubtileNodes();
-                        GD.Print($"Deleted subtiles for {TileCode}");
+                        // GD.Print($"Deleted subtiles for {TileCode}");
                     }
                 }
             }
@@ -468,7 +468,9 @@ public partial class FssMapTileNode : Node3D
                 TileMaterial = TL.GetMaterialWithTexture(Filepaths.ImageFilepath);
 
                 if (TileMaterial != null)
+                {
                     ImageDone = true;
+                }
             }
         }
 
@@ -489,11 +491,17 @@ public partial class FssMapTileNode : Node3D
 
             if (TileMaterial != null)
                 ImageDone = true;
-        }
 
-        // Setup the UV Box - Sourced from the parent (which may already be subsampled), we subsample for this tile's range
-        // Get the grid position of this tile in its parent (eg [1x,2y] in a 5x5 grid).
-        UVBox = new FssUvBoxDropEdgeTile(ParentTile.UVBox, TileCode.GridPos);
+            // Setup the UV Box - Sourced from the parent (which may already be subsampled), we subsample for this tile's range
+            // Get the grid position of this tile in its parent (eg [1x,2y] in a 5x5 grid).
+            UVBox = new FssUvBoxDropEdgeTile(ParentTile.UVBox, TileCode.GridPos);
+
+        }
+        else
+        {
+            // Subsmapling, but no parent. Setup a default.
+            UVBox = FssUvBoxDropEdgeTile.Default(TileSizePointsPerLvl[TileCode.MapLvl], TileSizePointsPerLvl[TileCode.MapLvl]);
+        }
     }
 
     // --------------------------------------------------------------------------------------------

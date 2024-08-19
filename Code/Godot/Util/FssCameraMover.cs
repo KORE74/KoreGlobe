@@ -48,7 +48,7 @@ public partial class FssCameraMover : Node3D
         {
             TimerReport = FssCoreTime.RuntimeSecs + 1f;
 
-            GD.Print($"LoadRefLLA: {FssMapManager.LoadRefLLA} // MoveSpeed: {MoveSpeed}");
+            // GD.Print($"LoadRefLLA: {FssMapManager.LoadRefLLA} // MoveSpeed: {MoveSpeed}");
         }
     }
 

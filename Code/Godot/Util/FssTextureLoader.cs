@@ -135,7 +135,7 @@ public partial class FssTextureLoader
             }
         }
 
-        GD.Print($"Loaded and created texture directly: {filePath}");
+        // GD.Print($"Loaded and created texture directly: {filePath}");
 
         return texture;
     }
@@ -151,7 +151,7 @@ public partial class FssTextureLoader
                 var texture = ImageTexture.CreateFromImage(image);
                 _textureCache[filePath] = texture;
 
-                GD.Print($"Loaded and created texture: {filePath}");
+                // GD.Print($"Loaded and created texture: {filePath}");
             }
         }
     }

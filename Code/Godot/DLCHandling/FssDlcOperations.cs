@@ -75,14 +75,14 @@ public static class FssDlcOperations
 
     public static void CreateDlc(string dlcPath)
     {
-        if (ProjectSettings.SaveResourcePack(dlcPath))
-        {
-            GD.Print("DLC pack created successfully!");
-        }
-        else
-        {
-            GD.Print("Failed to create DLC pack.");
-        }
+        // if (ProjectSettings.SaveResourcePack(dlcPath))
+        // {
+        //     GD.Print("DLC pack created successfully!");
+        // }
+        // else
+        // {
+        //     GD.Print("Failed to create DLC pack.");
+        // }
     }
 
 }
