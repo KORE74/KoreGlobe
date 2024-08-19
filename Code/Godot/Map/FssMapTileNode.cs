@@ -152,10 +152,29 @@ public partial class FssMapTileNode : Node3D
 
 
 
-        if (Filepaths.EleFileExists)
-            LoadTileEle();
-        else
-            SubsampleParentTileEle(); // Also handles the lack of a parent
+        // if (Filepaths.MeshFileExists)
+        // {
+        //     // Load the mesh data
+        //     FssMeshBuilder meshBuilder = new();
+        //     FssMeshData meshData = FssMeshDataIO.ReadMeshFromFile(Filepaths.MeshFilepath);
+        //     meshBuilder.meshData = meshData;
+        //     TileMeshData = meshBuilder.BuildWithUV(TileCode.ToString());
+        //     MeshDone = true;
+        // }
+        // else
+        // {
+
+
+            if (Filepaths.EleFileExists)
+                LoadTileEle();
+            else
+                SubsampleParentTileEle(); // Also handles the lack of a parent
+
+
+
+        // }
+
+
 
         // Pause the thread, being a good citizen with lots of tasks around.
         await Task.Yield();
@@ -164,8 +183,13 @@ public partial class FssMapTileNode : Node3D
         CreateMesh(); // Take the Tile position data, the ele data, and the UV box, and draw the mesh.
         InstatiateMesh(); // Create the node objects - kjust not add them to the tree yet.
 
+
+
         // Pause the thread, being a good citizen with lots of tasks around.
         await Task.Yield();
+
+
+
 
         CallDeferred(nameof(MainThreadFinalizeCreation));
     }
@@ -585,6 +609,13 @@ public partial class FssMapTileNode : Node3D
 
         TileMeshData = meshBuilder.BuildWithUV(TileCode.ToString());
 
+        // bool saveMesh = true;
+        // if (saveMesh)
+        // {
+        //     // Save the mesh to a file
+        //     FssMeshDataIO.WriteMeshToFile(meshBuilder.meshData, Filepaths.MeshFilepath);
+        //     FssCentralLog.AddEntry($"Saved mesh: {Filepaths.MeshFilepath}");
+        // }
     }
 
 }

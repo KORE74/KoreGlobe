@@ -78,8 +78,8 @@ public class FssUvBoxDropEdgeTile
     {
         UVGrid = new Vector2[horizSize, vertSize];
 
-        float horizStep = (BottomRight.X - TopLeft.X) / horizSize;
-        float vertStep  = (BottomRight.Y - TopLeft.Y) / vertSize;
+        float horizStep = (BottomRight.X - TopLeft.X) / (horizSize - 1);
+        float vertStep  = (BottomRight.Y - TopLeft.Y) / (vertSize - 1);
 
         for (int y = 0; y < vertSize; y++)
         {
