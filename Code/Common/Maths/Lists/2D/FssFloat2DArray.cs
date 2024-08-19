@@ -20,7 +20,7 @@ public class FssFloat2DArray
     public bool Populated { get; set; }
 
     // --------------------------------------------------------------------------------------------
-    // MARKL Constructors
+    // MARK: Constructors
     // --------------------------------------------------------------------------------------------
 
     // Gridsize = number of points on any size of the square grid, say 20.
@@ -397,7 +397,7 @@ public class FssFloat2DArray
     }
 
     // =====================================================================================
-    // Grid Functions
+    // MARK: Grid Functions
     // =====================================================================================
 
     // Create a subsampled grid, size defined by a skip counter. 1 = every other item.

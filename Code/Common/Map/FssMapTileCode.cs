@@ -20,12 +20,12 @@ public class FssMapTileCode
     // Constants
     // --------------------------------------------------------------------------------------------
 
-    public static readonly int MaxMapLvl = 2; // 4;
+    public static readonly int MaxMapLvl = 5;
 
-    public static readonly int[] NumTilesVertPerLvl  = {  6, 6, 5, 5, 5 };
-    public static readonly int[] NumTilesHorizPerLvl = { 12, 6, 5, 5, 5 };
+    public static readonly int[] NumTilesVertPerLvl  = {  6, 6, 5, 5, 5, 5};
+    public static readonly int[] NumTilesHorizPerLvl = { 12, 6, 5, 5, 5, 5};
 
-    public static readonly double[] TileSizeDegsPerLvl  = {  30, 5, 1, 0.2, 0.04 };
+    public static readonly double[] TileSizeDegsPerLvl  = {  30, 5, 1, 0.2, 0.04, 0.008 };
 
     // Tile code string constants - Letter vertical from top-left down, Letter horizontal from top-left right. eg AB_CD
     public static readonly int MinTileCodeStrLen = 2;
@@ -33,7 +33,7 @@ public class FssMapTileCode
     public static readonly char CodeSeparator = '_';
     public static readonly char[] LetterLookup = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J' , 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T'};
 
-    public static readonly string[] PathPerLvl = { "Lvl0_30x30", "Lvl1_5x5", "Lvl2_1x1", "Lvl3_0p2x0p2", "Lvl4_0p04x0p04" };
+    public static readonly string[] PathPerLvl = { "Lvl0_30x30", "Lvl1_5x5", "Lvl2_1x1", "Lvl3_0p2x0p2", "Lvl4_0p04x0p04", "Lvl5_0p008x0p008"};
 
     // --------------------------------------------------------------------------------------------
     // Attributes

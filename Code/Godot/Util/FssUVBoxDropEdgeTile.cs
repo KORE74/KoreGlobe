@@ -8,8 +8,8 @@ public class FssUvBoxDropEdgeTile
     public Vector2 BottomRight { get; private set; }
 
     // The edge offset for the tile, to prevent texture bleeding
-    public float BoxEdgeOffset  { get; private set; }
-    public float BoxInsetOffset { get; private set; }
+    public float BoxEdgeOffset  { get; set; }
+    public float BoxInsetOffset { get; set; }
 
     // The grid of UVs output for the tile, accomodating the drop-edge and insets
     private Vector2[,] UVGrid;
@@ -24,7 +24,7 @@ public class FssUvBoxDropEdgeTile
 
     // Constructor that sets up the corners and initializes the UV grid
 
-    public FssUvBoxDropEdgeTile(Vector2 topLeft, Vector2 bottomRight, int horizSize, int vertSize, float edgeOffset = 0.001f, float insetOffset = 0.001f)
+    public FssUvBoxDropEdgeTile(Vector2 topLeft, Vector2 bottomRight, float edgeOffset = 0.001f, float insetOffset = 0.001f)
     {
         TopLeft     = topLeft;
         BottomRight = bottomRight;
@@ -32,12 +32,12 @@ public class FssUvBoxDropEdgeTile
         BoxEdgeOffset  = edgeOffset;
         BoxInsetOffset = insetOffset;
 
-        InitializeUvGrid(horizSize, vertSize);
+        //InitializeUvGrid(horizSize, vertSize);
     }
 
     // Constructor that derives the UV box from a parent tile and subgrid position
 
-    public FssUvBoxDropEdgeTile(FssUvBoxDropEdgeTile parentBox, int horizSize, int vertSize, Fss2DGridPos gridPos)
+    public FssUvBoxDropEdgeTile(FssUvBoxDropEdgeTile parentBox, Fss2DGridPos gridPos)
     {
         // Calculate the new UV box from the parent box and grid position
         float minParentX  = parentBox.TopLeft.X;
@@ -59,7 +59,7 @@ public class FssUvBoxDropEdgeTile
         BoxEdgeOffset     = parentBox.BoxEdgeOffset;
         BoxInsetOffset    = parentBox.BoxInsetOffset;
 
-        InitializeUvGrid(horizSize, vertSize);
+        //InitializeUvGrid(horizSize, vertSize);
     }
 
     // With no input information, return a default UV box
@@ -67,6 +67,27 @@ public class FssUvBoxDropEdgeTile
     public static FssUvBoxDropEdgeTile Default(int horizSize, int vertSize)
     {
         return new FssUvBoxDropEdgeTile(UVTopLeft, UVBottomRight, horizSize, vertSize);
+    }
+
+    // --------------------------------------------------------------------------------------------
+
+    // Create a simpler grid that just interpolates across the main UV range.
+    // Takes into account the TopLeft BottomRight corners.
+
+    public void InitializeSimpleUvGrid(int horizSize, int vertSize)
+    {
+        UVGrid = new Vector2[horizSize, vertSize];
+
+        float horizStep = (BottomRight.X - TopLeft.X) / horizSize;
+        float vertStep  = (BottomRight.Y - TopLeft.Y) / vertSize;
+
+        for (int y = 0; y < vertSize; y++)
+        {
+            for (int x = 0; x < horizSize; x++)
+            {
+                UVGrid[x, y] = new Vector2(TopLeft.X + (x * horizStep), TopLeft.Y + (y * vertStep));
+            }
+        }
     }
 
     // --------------------------------------------------------------------------------------------

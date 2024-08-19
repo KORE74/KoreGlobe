@@ -9,9 +9,9 @@ using Godot;
 
 public partial class FssMapTileNode : Node3D
 {
-    public StandardMaterial3D   _material;
+    public StandardMaterial3D?  TileMaterial = null;
     public ArrayMesh            TileMeshData;
-    public ImageTexture         TerrainTexture;
+    //public ImageTexture         TerrainTexture;
     public FssUvBoxDropEdgeTile UVBox;
 
     public bool ChildEleSubampled = false;
@@ -32,19 +32,19 @@ public partial class FssMapTileNode : Node3D
     public  FssTileNodeFilepaths Filepaths;
     public  FssFloat2DArray      TileEleData;
 
+    // Timer for UI updates. Has some minor randomisation applied to even out the load.
     private float UIUpdateTimer = 0.0f;
 
     // Property to get the loaded texture
-    public StandardMaterial3D LoadedMaterial => _material;
-
     public FssMapTileNode ParentTile = null;
-    List<FssMapTileNode> ChildTiles = new();
+    List<FssMapTileNode>  ChildTiles = new();
 
     private MeshInstance3D MeshInstance  = new MeshInstance3D();
     private MeshInstance3D MeshInstanceW = new MeshInstance3D();
     private Label3D TileCodeLabel;
 
-    public bool ActiveVisibility           = false;
+    // Flag set when the tile (or its children) should be visible. Gates the main visibility processing.
+    public bool ActiveVisibility              = false;
 
     // Record the states we assign, so we can restict  actions to just changes.
     public bool VisibleState                  = false;
@@ -55,12 +55,12 @@ public partial class FssMapTileNode : Node3D
 
     // --------------------------------------------------------------------------------------------
 
-    public static readonly int[]   TileSizePointsPerLvl = { 15, 20, 20, 20, 20 };
-    public static readonly float[] LabelSizePerLvl      = { 0.1f, 0.005f, 0.002f, 0.0002f, 0.00003f };
+    public static readonly int[]   TileSizePointsPerLvl   = { 15,   20,     20,     20,      20,         20 };
+    public static readonly float[] LabelSizePerLvl        = { 0.1f, 0.005f, 0.002f, 0.0002f, 0.00003f,   0.000005f };
 
-    public static readonly float[] childTileDisplayForLvl = { 0.8f, 0.15f, 0.04f, 0.0025f, 0.0000005f };
-    public static readonly float[] CreateChildTilesForLvl = { 1.0f, 0.25f, 0.08f, 0.0050f, 0.0000010f};
-    public static readonly float[] DeleteChildTilesForLvl = { 1.2f, 0.40f, 0.16f, 0.0100f, 0.0000015f};
+    public static readonly float[] childTileDisplayForLvl = { 0.8f, 0.15f,  0.04f,  0.0045f, 0.00120f, 0.0000005f};
+    public static readonly float[] CreateChildTilesForLvl = { 1.0f, 0.25f,  0.08f,  0.0050f, 0.00140f, 0.0000005f};
+    public static readonly float[] DeleteChildTilesForLvl = { 1.2f, 0.40f,  0.16f,  0.0080f, 0.00180f, 0.0000005f};
 
     // --------------------------------------------------------------------------------------------
     // MARK: Constructor
@@ -69,21 +69,12 @@ public partial class FssMapTileNode : Node3D
     // Constructor to initialize the texture path and start loading
     public FssMapTileNode(FssMapTileCode tileCode)
     {
+        // Set the core Tilecode and node name.
         TileCode = tileCode;
-
-        // Set the node name
         Name = tileCode.ToString();
 
-        // Setup a few readonly values that help control visibility
-        FssLLBox llBoxForCode = FssMapTileCode.LLBoxForCode(tileCode);
-
-        FssLLPoint  tileBoxLLCentre  = llBoxForCode.CenterPoint;
-        FssLLAPoint tileBoxLLACentre = new FssLLAPoint() { LatDegs = tileBoxLLCentre.LatDegs, LonDegs = tileBoxLLCentre.LonDegs, AltMslM = 0 };
-        RwTileCenterXYZ = tileBoxLLACentre.ToXYZ();
-
+        // Fire off the fully background task of creating/loading the mesh
         Task.Run(() => BackgroundTileCreation(tileCode));
-
-        // FssCentralLog.AddEntry($"Creating FssMapTileNode for {tileCode}");
     }
 
     // --------------------------------------------------------------------------------------------
@@ -92,23 +83,6 @@ public partial class FssMapTileNode : Node3D
 
     public override void _Ready()
     {
-        // Figure out the file paths for the tile
-        Filepaths = new FssTileNodeFilepaths(TileCode);
-
-        // Fire off the fully background task of creating/loading the mesh
-        Task.Run(() => LoadTileEle(TileCode));
-
-        // Get the global texture loader instance
-        FssTextureLoader? TL = FssTextureLoader.Instance;
-        if (TL != null)
-        {
-            if (Filepaths.ImageFileExists)
-            {
-                TL.QueueTexture(Filepaths.ImageFilepath);
-            }
-
-        }
-
         LabelTile(TileCode);
     }
 
@@ -122,31 +96,16 @@ public partial class FssMapTileNode : Node3D
         {
             UIUpdateTimer = FssCoreTime.RuntimeSecs + RandomLoopList.GetNext();
 
-            if (!ConstructionComplete)
+            if (TileCode.ToString() == "BF_CF_AA")
             {
-                if ((MeshDone) && (!MeshInstatiated))
-                {
-                    InstatiateMesh();
-                    MeshInstatiated = true;
-                    return;
-                }
+                string x = (TileMaterial == null) ? "null" : "not null";
 
-                if (MeshInstatiated)
-                {
-                    FssTextureLoader? TL = FssTextureLoader.Instance;
-                    if ((TL != null) && (Filepaths.ImageFileExists))
-                    {
-                        if (TL.IsTextureLoaded(Filepaths.ImageFilepath))
-                        {
-                            ApplyImageMaterial();
-                            ImageDone = true;
-                            ConstructionComplete = true;
-                            FssCentralLog.AddEntry($"Texture loaded: {Filepaths.ImageFilepath}");
-                        }
-                    }
-                }
+                GD.Print($"Tile:{TileCode} Filepaths:{Filepaths.ImageFilepath} ImageDone:{ImageDone} MeshDone:{MeshDone} MeshInstatiated:{MeshInstatiated} ConstructionComplete:{ConstructionComplete}");
+                if (ParentTile != null) GD.Print($"Parent:{ParentTile.TileCode}");
+                GD.Print($"UVBox:{UVBox}");
+                GD.Print($"EleData:{TileEleData.sizeStr()}");
+                GD.Print($"TileMaterial:{x}");
             }
-
 
             if (ConstructionComplete)
             {
@@ -165,158 +124,50 @@ public partial class FssMapTileNode : Node3D
     // Single-thread critical areas will be in factored out functions that are CallDeferred().
     // Note that CallDeferred() is not a blocking call, it will be executed on the next frame.
 
-    private void BackgroundTileCreation(FssMapTileCode tileCode)
+    private async void BackgroundTileCreation(FssMapTileCode tileCode)
     {
-        // Figure out the file paths for the tile
-        Filepaths = new FssTileNodeFilepaths(TileCode);
+        // Starting: Set the flags that will be used later to determine activity around the tile wheil we construct it.
+        ConstructionComplete = false;
+        ActiveVisibility     = false;
 
-        // Load the elevation data / UV-Box / Mesh
-        LoadTileEle(tileCode);
+        //etup some basic elements of the tile ahead of the mail elevation and image loading.
+        SetupTileCenterXYZ();
+        Filepaths = new FssTileNodeFilepaths(TileCode); // Figure out the file paths for the tile
 
-        InstatiateMesh();
+        // Pause the thread, being a good citizen with lots of tasks around.
+        await Task.Yield();
 
-        // Load the image data
-        FssTextureLoader? TL = FssTextureLoader.Instance;
-        if (TL != null)
-        {
-            if (Filepaths.ImageFileExists)
-            {
-                TL.QueueTexture(Filepaths.ImageFilepath);
-            }
 
-            ImageTexture? tex = TL.LoadTextureDirect(Filepaths.ImageFilepath);
-            if (tex != null)
-            {
-                Material? mat = TL.GetMaterialWithTexture(Filepaths.ImageFilepath);
-                if (mat != null)
-                {
-                    MeshInstance.MaterialOverride = mat;
-                }
-            }
 
-        }
+        // Load the image data - which will determine the UVBox it will need.
+        // - 1 - we find the image and load it.
+        // - 2 - We copy the parent tile image and UVBox, and subsample them.
+        if (Filepaths.ImageFileExists)
+            LoadTileImage();
+        else
+            SubsampleParentTileImage();
+
+        // Pause the thread, being a good citizen with lots of tasks around.
+        await Task.Yield();
+
+
+
+        if (Filepaths.EleFileExists)
+            LoadTileEle();
+        else
+            SubsampleParentTileEle(); // Also handles the lack of a parent
+
+        // Pause the thread, being a good citizen with lots of tasks around.
+        await Task.Yield();
+
+
+        CreateMesh(); // Take the Tile position data, the ele data, and the UV box, and draw the mesh.
+        InstatiateMesh(); // Create the node objects - kjust not add them to the tree yet.
+
+        // Pause the thread, being a good citizen with lots of tasks around.
+        await Task.Yield();
 
         CallDeferred(nameof(MainThreadFinalizeCreation));
-
-    }
-
-    private void LoadTileEle(FssMapTileCode tileCode)
-    {
-        string tileCodeName = tileCode.ToString();
-
-        bool loadEle  = Filepaths.EleFileExists;
-        bool loadMesh = false; //Filepaths.MeshFileExists;
-        bool saveMesh = false; //!loadMesh;
-
-        // Run file loading and processing on a background thread
-        //if (loadEle || loadMesh)
-        {
-            FssMeshBuilder meshBuilder = new();
-            if (loadMesh)
-            {
-                meshBuilder.meshData = FssMeshDataIO.ReadMeshFromFile(Filepaths.MeshFilepath);
-                FssCentralLog.AddEntry($"Loaded mesh: {Filepaths.MeshFilepath}");
-            }
-            else
-            {
-                int res = TileSizePointsPerLvl[TileCode.MapLvl];
-
-                // --------------------------------------
-                // Loading or sourcing the elevation data
-
-                if (Filepaths.EleFileExists)
-                {
-                    // Load the elevation data
-                    FssFloat2DArray asciiArcArry = FssFloat2DArrayIO.LoadFromArcASIIGridFile(Filepaths.EleFilepath);
-                    FssFloat2DArray croppedArray = FssFloat2DArrayOperations.CropToRange(asciiArcArry, new FssFloatRange(0f, 50000f));
-                    FssFloat2DArray croppedArraySubSample = croppedArray.GetInterpolatedGrid(res, res);
-
-                    TileEleData = croppedArraySubSample;
-
-                    // Speculatively create the child tile subsampled data before we lose the read file.
-
-
-
-                    //UVBox = new FssUvBoxDropEdgeTile(FssUvBoxDropEdgeTile.UVTopLeft, FssUvBoxDropEdgeTile.UVBottomRight, res, res);
-                    //GD.Print($"{tileCode} - Clean UVBox - {UVBox}");
-                }
-                else
-                {
-                    // Else, no elevation exists, subsample the parent tile elevation data and UV-Box.
-                    if (ParentTile != null)
-                    {
-                        TileEleData = ParentTile.TileEleData.GetInterpolatedSubgrid(tileCode.GridPos, res, res);
-                        saveMesh = false;
-
-                        //UVBox = new FssUvBoxDropEdgeTile(ParentTile.UVBox, res, res, tileCode.GridPos);
-                        //GD.Print($"{tileCode} - Subsampled UVBox - {UVBox} // ParentTile.UVBox{ParentTile.UVBox} // tileCode.GridPos: {tileCode.GridPos}");
-                    }
-                    // Else no parent, create a flat tile
-                    else
-                    {
-                        TileEleData = new FssFloat2DArray(res, res);
-                        saveMesh = false;
-
-                        //UVBox = FssUvBoxDropEdgeTile.Default(res, res);
-                        //GD.Print($"{tileCode} - Zero UVBox - {UVBox}");
-                    }
-                }
-
-                // --------------------------------------
-
-                int widthRes = TileEleData.Width;
-                int heightRes = TileEleData.Height;
-
-                if (Filepaths.ImageFileExists)
-                {
-                    UVBox = new FssUvBoxDropEdgeTile(FssUvBoxDropEdgeTile.UVTopLeft, FssUvBoxDropEdgeTile.UVBottomRight, widthRes, heightRes);
-                    //GD.Print($"{tileCode} - Clean UVBox - {UVBox}");
-                }
-                else
-                {
-                    if (ParentTile != null)
-                    {
-                        Filepaths.ImageFilepath   = ParentTile.Filepaths.ImageFilepath;
-                        Filepaths.ImageFileExists = ParentTile.Filepaths.ImageFileExists;
-
-                        UVBox = new FssUvBoxDropEdgeTile(ParentTile.UVBox, widthRes, heightRes, tileCode.GridPos);
-                        //GD.Print($"{tileCode} - Subsampled UVBox - {UVBox} // ParentTile.UVBox{ParentTile.UVBox} // tileCode.GridPos: {tileCode.GridPos}");
-                    }
-                    else
-                    {
-                        UVBox = FssUvBoxDropEdgeTile.Default(widthRes, heightRes);
-                        //GD.Print($"{tileCode} - Zero UVBox - {UVBox}");
-                    }
-                }
-
-                // --------------------------------------
-
-                FssLLBox tileBounds = FssMapTileCode.LLBoxForCode(tileCode);
-
-                // Create the mesh
-                meshBuilder.AddSurfaceWithUVBox(
-                    (float)tileBounds.MinLonDegs, (float)tileBounds.MaxLonDegs,
-                    (float)tileBounds.MinLatDegs, (float)tileBounds.MaxLatDegs,
-                    (float)FssPosConsts.EarthRadiusM,
-                    TileEleData, UVBox
-                );
-                meshBuilder.AddSurfaceWedgeSides(
-                    (float)tileBounds.MinLonDegs, (float)tileBounds.MaxLonDegs,
-                    (float)tileBounds.MinLatDegs, (float)tileBounds.MaxLatDegs,
-                    (float)FssPosConsts.EarthRadiusM, (float)FssPosConsts.EarthRadiusM * 0.9f,
-                    TileEleData
-                ); //bool flipTriangles = false)
-            }
-            TileMeshData = meshBuilder.BuildWithUV(tileCodeName);
-            MeshDone = true;
-
-            if (saveMesh)
-            {
-                // Save the mesh to a file
-                FssMeshDataIO.WriteMeshToFile(meshBuilder.meshData, Filepaths.MeshFilepath);
-                FssCentralLog.AddEntry($"Saved mesh: {Filepaths.MeshFilepath}");
-            }
-        }
     }
 
     private void MainThreadFinalizeCreation()
@@ -345,6 +196,8 @@ public partial class FssMapTileNode : Node3D
         MeshInstanceW.Mesh = TileMeshData;
         MeshInstanceW.MaterialOverride = FssMaterialFactory.WireframeMaterial(new Color(0f, 0f, 0f, 0.3f));
         //AddChild(MeshInstanceW);
+
+        ApplyImageMaterial();
 
         // Will be made visible when the texture is loaded
         MeshInstance.Visible  = false;
@@ -479,6 +332,11 @@ public partial class FssMapTileNode : Node3D
     // MARK: Visibility
     // --------------------------------------------------------------------------------------------
 
+    // Applying each stage of the visibility rules to the tile and its children, split out for clarity
+    // and to ease debugging and development steps.
+
+    // Each function checks the current state, and if it is not the desired state, sets it.
+
     private void SetVisibility(bool visible)
     {
         if (VisibleState != visible)
@@ -521,34 +379,19 @@ public partial class FssMapTileNode : Node3D
         }
     }
 
+    // --------------------------------------------------------------------------------------------
+
     private void UpdateVisbilityRules()
     {
-        // determine distance from the global focus point.
-        // if the distance is less than a certain value, set the visibility to true
-        // if the distance is greater than a certain value, set the visibility to false
-        // if the distance is short, endeavour to create aand load child tiles.
-        // if greater than a larger value, delete any child nodes to free resources.
-
-
-
-
-        // Determine the "ActiveVisibility" for every tile for its level.
-        // without ActiveVisibility, the update visbility rules will not be applied and the tile should not be displayed.
-        // Tile with ActiveVisibility may be visible, or their children may be visisble.
-
-        // IntendedVisibility: A flag set by a parent tile to indicate that the tile (or its children) should be visible.
-
+        // Lvl0 tiles are always marked as active, so we have a starting point for the "towers of hanoi" tree of applying visibility rules.
         if (TileCode.MapLvl == 0) ActiveVisibility = true;
 
         if (ActiveVisibility)
         {
+            // To allow for different game-engine deisplay radii, we do everything in terms of a fraction of the displayed Earth's radius.
             float distanceFraction = (float)( FssMapManager.LoadRefXYZ.DistanceTo(RwTileCenterXYZ) / FssPosConsts.EarthRadiusM );
 
-            //GD.Print($"Tile:{Name} Distance:{distanceFraction:0.00}");
-
-            // Distances judged in multiples of radius, to accomodate smaller worlds (GE Radius)
-            //float[] DisplayTileForLvl      = { 1f,   0.1f, 0.05f, 0.025f, 0.0005f };
-
+            // The logic could get complex, so factored it all out into a set of statement flags.
             bool shouldDisplayChildTiles = distanceFraction < childTileDisplayForLvl[TileCode.MapLvl];
             bool shouldCreateChildTiles  = (distanceFraction < CreateChildTilesForLvl[TileCode.MapLvl]) && (TileCode.MapLvl < FssMapTileCode.MaxMapLvl);
             bool shouldDeleteChildTiles  = distanceFraction > DeleteChildTilesForLvl[TileCode.MapLvl];
@@ -598,4 +441,142 @@ public partial class FssMapTileNode : Node3D
             SetChildrenActive(false);
         }
     }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Private - Helper methods
+    // --------------------------------------------------------------------------------------------
+
+    private void SetupTileCenterXYZ()
+    {
+        // Setup a few readonly values that help control visibility
+        FssLLBox llBoxForCode = FssMapTileCode.LLBoxForCode(TileCode);
+
+        FssLLPoint  tileBoxLLCentre  = llBoxForCode.CenterPoint;
+        FssLLAPoint tileBoxLLACentre = new FssLLAPoint() { LatDegs = tileBoxLLCentre.LatDegs, LonDegs = tileBoxLLCentre.LonDegs, AltMslM = 0 };
+        RwTileCenterXYZ = tileBoxLLACentre.ToXYZ();
+    }
+
+    private void LoadTileImage()
+    {
+        FssTextureLoader? TL = FssTextureLoader.Instance;
+        if (TL != null)
+        {
+            ImageTexture? tex = TL.LoadTextureDirect(Filepaths.ImageFilepath);
+
+            if (tex != null)
+            {
+                TileMaterial = TL.GetMaterialWithTexture(Filepaths.ImageFilepath);
+
+                if (TileMaterial != null)
+                    ImageDone = true;
+            }
+        }
+
+        // Setup the UV Box - new image, so a full 0,0 -> 1,1 range
+        UVBox = new FssUvBoxDropEdgeTile(FssUvBoxDropEdgeTile.UVTopLeft, FssUvBoxDropEdgeTile.UVBottomRight);
+    }
+
+    private void SubsampleParentTileImage()
+    {
+        if (ParentTile != null)
+        {
+            FssTextureLoader? TL = FssTextureLoader.Instance;
+
+            Filepaths.ImageFilepath = ParentTile.Filepaths.ImageFilepath;
+            Filepaths.ImageFileExists = ParentTile.Filepaths.ImageFileExists;
+
+            TileMaterial = TL.GetMaterialWithTexture(Filepaths.ImageFilepath);
+
+            if (TileMaterial != null)
+                ImageDone = true;
+        }
+
+        // Setup the UV Box - Sourced from the parent (which may already be subsampled), we subsample for this tile's range
+        // Get the grid position of this tile in its parent (eg [1x,2y] in a 5x5 grid).
+        UVBox = new FssUvBoxDropEdgeTile(ParentTile.UVBox, TileCode.GridPos);
+    }
+
+    // --------------------------------------------------------------------------------------------
+
+    private void LoadTileEle()
+    {
+        int resX = TileSizePointsPerLvl[TileCode.MapLvl];
+        int resY = TileSizePointsPerLvl[TileCode.MapLvl];
+
+        FssFloat2DArray asciiArcArry = FssFloat2DArrayIO.LoadFromArcASIIGridFile(Filepaths.EleFilepath);
+        FssFloat2DArray croppedArray = FssFloat2DArrayOperations.CropToRange(asciiArcArry, new FssFloatRange(0f, 50000f));
+        FssFloat2DArray croppedArraySubSample = croppedArray.GetInterpolatedGrid(resX, resY);
+
+        TileEleData = croppedArraySubSample;
+
+        // Speculatively create the child tile subsampled data before we lose the read file.
+        // Get the grid size for the child tiles
+
+        if (TileCode.MapLvl < FssMapTileCode.MaxMapLvl)
+        {
+            int horizChildNumTiles = FssMapTileCode.NumTilesVertPerLvl[TileCode.MapLvl + 1];
+            int vertChildNumTiles  = FssMapTileCode.NumTilesHorizPerLvl[TileCode.MapLvl + 1];
+
+            int horizChildTileRes = TileSizePointsPerLvl[TileCode.MapLvl + 1];
+            int vertChildTileRes  = TileSizePointsPerLvl[TileCode.MapLvl + 1];
+
+            ChildEleData = croppedArray.GetInterpolatedSubGridCellWithOverlap(horizChildNumTiles, vertChildNumTiles, horizChildTileRes, vertChildTileRes);
+        }
+    }
+
+    private void SubsampleParentTileEle()
+    {
+        if (ParentTile != null)
+        {
+            Fss2DGridPos tileGridPos = TileCode.GridPos;
+
+            TileEleData = ParentTile.ChildEleData[tileGridPos.PosX, tileGridPos.PosY];
+
+            if (TileCode.MapLvl < FssMapTileCode.MaxMapLvl)
+            {
+                int horizChildNumTiles = FssMapTileCode.NumTilesVertPerLvl[TileCode.MapLvl + 1];
+                int vertChildNumTiles  = FssMapTileCode.NumTilesHorizPerLvl[TileCode.MapLvl + 1];
+
+                int horizChildTileRes = TileSizePointsPerLvl[TileCode.MapLvl + 1];
+                int vertChildTileRes  = TileSizePointsPerLvl[TileCode.MapLvl + 1];
+
+                ChildEleData = TileEleData.GetInterpolatedSubGridCellWithOverlap(horizChildNumTiles, vertChildNumTiles, horizChildTileRes, vertChildTileRes);
+            }
+        }
+        else
+        {
+            TileEleData = new FssFloat2DArray(TileSizePointsPerLvl[TileCode.MapLvl], TileSizePointsPerLvl[TileCode.MapLvl]);
+        }
+    }
+
+    private void CreateMesh()
+    {
+        // Pre-requisites:
+        // - TileCode
+        // - TileEleData
+        // - UVBox
+        // - TileMaterial
+
+        FssMeshBuilder meshBuilder = new();
+
+        FssLLBox tileBounds = FssMapTileCode.LLBoxForCode(TileCode);
+
+        // Create the mesh
+        meshBuilder.AddSurfaceWithUVBox(
+            (float)tileBounds.MinLonDegs, (float)tileBounds.MaxLonDegs,
+            (float)tileBounds.MinLatDegs, (float)tileBounds.MaxLatDegs,
+            (float)FssPosConsts.EarthRadiusM,
+            TileEleData, UVBox
+        );
+        meshBuilder.AddSurfaceWedgeSides(
+            (float)tileBounds.MinLonDegs, (float)tileBounds.MaxLonDegs,
+            (float)tileBounds.MinLatDegs, (float)tileBounds.MaxLatDegs,
+            (float)FssPosConsts.EarthRadiusM, (float)FssPosConsts.EarthRadiusM * 0.9f,
+            TileEleData
+        ); //bool flipTriangles = false)
+
+        TileMeshData = meshBuilder.BuildWithUV(TileCode.ToString());
+
+    }
+
 }

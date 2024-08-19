@@ -12,10 +12,10 @@ public static class FssMapTileNodeOperations
     public static ImageTexture? ScavengeTextureFromParent(FssMapTileNode parentTileNode, FssMapTileCode childtileCode)
     {
         // First get the texture at all, from the parent node material
-        ImageTexture parentTex = parentTileNode.TerrainTexture;
+        //ImageTexture parentTex = parentTileNode.TerrainTexture;
 
-        if (parentTex == null)
-            return null;
+       // if (parentTex == null)
+     //       return null;
 
         // Now we need to subdivide the texture into the child tile
         // First, get the UV coordinates for the parent tile
@@ -34,7 +34,7 @@ public static class FssMapTileNodeOperations
     // {
     //     var config = FssCentralConfig.Instance;
     //     string externalRootPath = config.GetParameter("MapRootPath", "");
-        
+
     //     string externalMapLvlFilePath = FssFileOperations.JoinPaths(externalRootPath, FssMapTileCode.PathPerLvl[tileCode.MapLvl]);
 
     //     if (lvl != 0)

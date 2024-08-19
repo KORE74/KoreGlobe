@@ -359,7 +359,9 @@ public partial class FssMeshBuilder
         int resolutionEl = surfaceArray.Height;
         int resolutionAz = surfaceArray.Width;
 
-        uvBox.InitializeUvGrid(resolutionAz, resolutionEl);
+        uvBox.BoxEdgeOffset = 0.00f;
+        uvBox.BoxInsetOffset = 0.00f;
+        uvBox.InitializeSimpleUvGrid(resolutionAz, resolutionEl);
 
         // Create a 2D array to hold the points for the surface
         Vector3[,] points = new Vector3[resolutionAz, resolutionEl];

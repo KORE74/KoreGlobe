@@ -229,7 +229,7 @@ public partial class FssTextureLoader
 
     // ------------------------------------------------------------------------------------------------
 
-    public Material? GetMaterialWithTexture(string filePath)
+    public StandardMaterial3D? GetMaterialWithTexture(string filePath)
     {
         var texture = GetTexture(filePath);
         if (texture != null)

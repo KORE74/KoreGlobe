@@ -16,37 +16,31 @@ public class Fss3DModelLibrary
     // Named list of specific 3D model objects for Godot scene tree.
     Dictionary<string, Node> ModelCache = new Dictionary<string, Node>();
 
-
     // ------------------------------------------------------------------------------------------------
     // MARK: Load / Save JSON Config
     // ------------------------------------------------------------------------------------------------
 
-    // usage: Fss3DModelLibrary.T1();
+    // usage: Fss3DModelLibrary.TestLoadModel();
 
-    public static void T1(Node parent)
+    public static void TestLoadModel(Node parent)
     {
-        // string ModelPath = "C:/Util/Data/Godot/Globe4-3DModels/Prep/Plane/FA-18F/FA-18F_007.fbx";
+        string ModelPathG = "C:/Util/Godot/Globe4-3DModels/Prep/Ship/GenericSupportShip/GenericSupportShip.glb";
+        string ModelPathF = "C:/Util/Godot/Globe4-3DModels/Prep/Ship/GenericSupportShip/GenericSupportShip.fbx";
+        string ModelPathR = "res://Resources/Models/Plane/Plane_Paper/PaperPlanes_v002.glb";
 
-        string ModelPath = "C:/Util/Data/Godot/Globe4-3DModels/Prep/Ship/GenericSupportShip/GenericSupportShip.glb";
-
-
-        PackedScene importedModel = (PackedScene)ResourceLoader.Load(ModelPath);
+        PackedScene importedModel = (PackedScene)ResourceLoader.Load(ModelPathR);
 
         if (importedModel != null)
         {
-            // Instance the model
-            Node modelInstance     = importedModel.Instantiate();
-
-            // Add the model to the scene
+            // Instance the model. Add the model to the scene
+            Node modelInstance = importedModel.Instantiate();
             parent.AddChild(modelInstance);
-
-            GD.Print($"====== Loaded model: {ModelPath}");
+            GD.Print($"====== Loaded model: {ModelPathR}");
         }
         else
         {
-            GD.PrintErr($"====== Failed to load model: {ModelPath}");
+            GD.PrintErr($"====== Failed to load model: {ModelPathR}");
         }
-
     }
 
     // ------------------------------------------------------------------------------------------------

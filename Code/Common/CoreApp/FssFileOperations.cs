@@ -65,6 +65,19 @@ public static class FssFileOperations
         return filenames.Where(filename => filename.Contains(substring)).ToList();
     }
 
+    // Filter where the string starts or ends with a specific string
+
+    public static List<string> FilterFilenameSuffix(List<string> filenames, string suffixsubstring)
+    {
+        return filenames.Where(filename => filename.EndsWith(suffixsubstring)).ToList();
+    }
+
+    public static List<string> FilterFilenamePrefix(List<string> filenames, string prefixsubstring)
+    {
+        return filenames.Where(filename => filename.StartsWith(prefixsubstring)).ToList();
+    }
+
+
     // --------------------------------------------------------------------------------------------
 
     public static List<string> OrderAlphabetically(List<string> filenames)
