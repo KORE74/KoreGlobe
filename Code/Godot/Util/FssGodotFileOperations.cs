@@ -11,7 +11,8 @@ using System.IO;
 public static class FssGodotFileOperations
 {
     public static string RootDir    = "res://";
-    public static string DlcRootDir = "res://DLC/";
+    public static string DlcLoadDir = "res://DLC/";
+    public static string DlcPrepDir = "res://Resources/DLCPrep/";
 
     // Usage: string filePath = FssGodotFileUtil.GetActualPath("res://assets/earth/earth.jpg");
 
@@ -29,6 +30,7 @@ public static class FssGodotFileOperations
 
     // List all the files, in the godot virtual file system, under a given top level directory.
 
+    // Usage: List<string> fileList = FssGodotFileUtil.ListFiles("res://assets/earth");
     public static List<string> ListFiles(string topLevel)
     {
         List<string> fileList = new List<string>();
@@ -102,7 +104,7 @@ public static class FssGodotFileOperations
 
     public static List<string> ListLoadedDLCs()
     {
-        return ListSubdirectories(DlcRootDir);
+        return ListSubdirectories(DlcLoadDir);
     }
 
     public static List<string> ListDLCFiles(string dlcRootPath)

@@ -75,8 +75,8 @@ public partial class TestEarthCore : MeshInstance3D
         FssMeshBuilder meshBuilder  = new ();
 
 
-        //string filePath = FssGodotFileUtil.GetActualPath("res://Resources/Map/Lvl0_30x30/Ele_BG_1km.asc");
-        string filePath = FssGodotFileUtil.GetActualPath("res://Resources/Map/Lvl0_30x30/Ele_BG.asc");
+        //string filePath = FssGodotFileOperations.GetActualPath("res://Resources/Map/Lvl0_30x30/Ele_BG_1km.asc");
+        string filePath = FssGodotFileOperations.GetActualPath("res://Resources/Map/Lvl0_30x30/Ele_BG.asc");
 
         FssFloat2DArray asciiArcArry = FssFloat2DArrayIO.LoadFromArcASIIGridFile(filePath);
         FssFloat2DArray croppedArray = FssFloat2DArrayOperations.CropToRange(asciiArcArry, new FssFloatRange(0f, 10000f));

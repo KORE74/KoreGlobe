@@ -81,11 +81,12 @@ public partial class TestZeroOffset : Node3D
         CreatePlatform();
         CreatePlatformNodes();
 
-        Fss3DModelLibrary.TestLoadModel(ZeroNode);
+        //Fss3DModelLibrary.TestLoadModel(ZeroNode);
+
         FssDlcOperations.CreateDlc();
         FssDlcOperations.LoadDlc();
 
-        List<string> fileList = FssGodotFileOperations.ListFiles("res://");
+        List<string> fileList = FssGodotFileOperations.ListFiles("res://DLCPrep");
         foreach (string file in fileList)
         {
             GD.Print($"=> File: {file}");
@@ -236,7 +237,8 @@ public partial class TestZeroOffset : Node3D
 
         FssPrimitiveFactory.AddAxisMarkers(PlaformBaseNode, 0.2f, 0.05f);
 
-        string ModelPath = "res://Resources/Models/Plane/Plane_Paper/PaperPlanes_v002.glb";
+        //string ModelPath = "res://Resources/Models/Plane/Plane_Paper/PaperPlanes_v002.glb";
+        string ModelPath = "res://Resources/DLCPrep/CivillianVehicles/Plane/PlanePaper/PaperPlanes_v002.glb";
 
         PackedScene importedModel = (PackedScene)ResourceLoader.Load(ModelPath);
         if (importedModel != null)

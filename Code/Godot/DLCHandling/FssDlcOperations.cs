@@ -10,6 +10,9 @@ public static class FssDlcOperations
 {
     private static string dlcDirectory = "DLC";
 
+    private static string dlcExportFolder = "C:/Util/Data/Godot/ExportDLC";
+    //private static string dlcExportFolder = "c:/util/godot/dlc/";
+
     // --------------------------------------------------------------------------------------------
 
     public static void EnsureDlcFolderExists()
@@ -75,11 +78,25 @@ public static class FssDlcOperations
 
     public static void CreateDlc()
     {
+        // List all potential DLC files, in the res://DLCPrep folder
+        {
+
+            List<string> fileList = FssGodotFileOperations.ListFiles(FssGodotFileOperations.DlcPrepDir);
+
+            foreach (string file in fileList)
+            {
+                GD.Print($"DLC Prep: {file}");
+            }
+
+        }
+
+        return;
+
+
         {
             // define the PCK Files
-            string dlcFolder = "c:/util/godot/dlc/";
             string dlcName = "DLC_001.pck";
-            string fullpath = FssFileOperations.JoinPaths(dlcFolder, dlcName);
+            string fullpath = FssFileOperations.JoinPaths(dlcExportFolder, dlcName);
 
             // Start the packing
             var packer = new PckPacker();
@@ -111,9 +128,8 @@ public static class FssDlcOperations
     public static void LoadDlc()
     {
         {
-            string dlcFolder = "c:/util/godot/dlc/";
             string dlcName = "DLC_001.pck";
-            string fullpath = FssFileOperations.JoinPaths(dlcFolder, dlcName);
+            string fullpath = FssFileOperations.JoinPaths(dlcExportFolder, dlcName);
 
             ProjectSettings.LoadResourcePack(fullpath);
 
