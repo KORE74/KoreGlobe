@@ -47,7 +47,7 @@ public class Fss3DModelLibrary
     // MARK: Load / Save JSON Config
     // ------------------------------------------------------------------------------------------------
 
-    public void LoadJSONConfig(string fullFilepath)
+    public void LoadJSONConfigFile(string fullFilepath)
     {
         // Ensure the file exists
         if (!System.IO.File.Exists(fullFilepath))
@@ -72,6 +72,40 @@ public class Fss3DModelLibrary
             {
                 ModelInfoList.Add(model.Name, model);
             }
+        }
+    }
+
+    // ------------------------------------------------------------------------------------------------
+    // MARK: Load / Save JSON Config String
+    // ------------------------------------------------------------------------------------------------
+
+    // Usage: string JSONString = Fss3DModelLibrary.SerializeJSONConfig(ModelInfoList.Values.ToList());
+    public static string SerializeJSONConfig(List<Fss3DModelInfo> modelList)
+    {
+        // Serialize the model list to JSON
+        return JsonSerializer.Serialize(modelList);
+    }
+
+    // To allow us to read the JSON config from multiple sources, we pass the already read string to this
+    // function to decode it and add it to the model list.
+    // Use standard .Net JSON parser.
+    public static void DeserializeJSONConfig(string JSONString)
+    {
+        GD.Print($"JSONString: {JSONString}");
+
+        var modelList = JsonSerializer.Deserialize<List<Fss3DModelInfo>>(JSONString);
+
+        if (modelList == null)
+        {
+            GD.PrintErr($"Failed to load JSON string.");
+            return;
+        }
+
+        // Add the model information to the list
+        foreach (var model in modelList)
+        {
+            //modelList.Add(model.Name, model);
+            GD.Print($"Loaded model: {model.Name}");
         }
     }
 

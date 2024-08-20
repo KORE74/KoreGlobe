@@ -1,4 +1,5 @@
 using System;
+using System.Text.Json.Serialization;
 
 // FssXYZPoint: A class to hold an XYZ position. Units are abstract, for the consumer to decide the context.
 // This class is immutable, so all operations return a new object.
@@ -9,6 +10,7 @@ public class FssXYZPoint : FssXYZ
     public double Y { get; set; }
     public double Z { get; set; }
 
+    [JsonIgnore]
     public double Magnitude {
         get
         {

@@ -83,7 +83,47 @@ public partial class TestZeroOffset : Node3D
 
         Fss3DModelLibrary.TestLoadModel(ZeroNode);
         FssDlcOperations.CreateDlc();
+        FssDlcOperations.LoadDlc();
 
+        List<string> fileList = FssGodotFileOperations.ListFiles("res://");
+        foreach (string file in fileList)
+        {
+            GD.Print($"=> File: {file}");
+        }
+
+        List<string> dlcList = FssGodotFileOperations.ListLoadedDLCs();
+        foreach (string dlc in dlcList)
+        {
+            GD.Print($"=> DLC: {dlc}");
+
+            List<string> dlcFiles = FssGodotFileOperations.ListFiles(dlc);
+            foreach (string file in dlcFiles)
+            {
+                GD.Print($"=> DLC {dlc} // DLCFile: {file}");
+
+                // if the file is a JSON, load it into the library
+                if (file.EndsWith(".json"))
+                {
+                    GD.Print($"Processing JSON file: {file}");
+
+                    // Use the godot virtual file system to open and rad te file
+                    using FileAccess filea = FileAccess.Open(file, FileAccess.ModeFlags.Read);
+                    string content = filea.GetAsText();
+
+
+
+                    // deserialize the JSON string into a list of Fss3DModelInfo objects
+                    //<List<Fss3DModelInfo> modelList = JsonSerializer.Deserialize<List<Fss3DModelInfo>>(jsonString);
+
+                    Fss3DModelLibrary.DeserializeJSONConfig(content);
+                }
+
+            }
+
+
+        }
+
+        FssDlcOperations.DlcInv();
     }
 
     // --------------------------------------------------------------------------------------------
@@ -300,4 +340,10 @@ public partial class TestZeroOffset : Node3D
             platformV3.VecUp,
             true);
     }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Debug
+    // --------------------------------------------------------------------------------------------
+
+
 }

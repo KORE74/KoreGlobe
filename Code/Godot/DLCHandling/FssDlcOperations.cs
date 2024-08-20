@@ -73,76 +73,78 @@ public static class FssDlcOperations
 
     // --------------------------------------------------------------------------------------------
 
-    
     public static void CreateDlc()
     {
-        // var width  = ProjectSettings.GetSetting("display/window/size/width");
-        // var height = ProjectSettings.GetSetting("display/window/size/height");
-
-        // GD.Print($"Width: {width} // Height: {height}");
-
-        // // convert (or check) the var to a float and then vector2
-        // float viewport_width  = VarToFloat(width);
-        // float viewport_height = VarToFloat(height);
-
-        // Vector2 viewport_start_size = new Vector2(viewport_width, viewport_height);
-
-        // GD.Print($"Viewport start size: {viewport_start_size}");
-
-
         {
+            // define the PCK Files
+            string dlcFolder = "c:/util/godot/dlc/";
+            string dlcName = "DLC_001.pck";
+            string fullpath = FssFileOperations.JoinPaths(dlcFolder, dlcName);
+
+            // Start the packing
             var packer = new PckPacker();
-            packer.PckStart("test.pck");
-            packer.AddFile("cmd.txt", "DLCs/cmd2.txt");
-            packer.AddFile("icon2.svg", "DLCs/icon2.svg");
+            packer.PckStart(fullpath);
+
+            // Add files to the pack
+            string currResPath = "icon2.svg";
+            string DLCResPath = "res://DLC/001/icon2.svg";
+            var x = packer.AddFile(DLCResPath, currResPath);
+            GD.Print($"Added file:{currResPath}  // to {DLCResPath} // return: {x}");
+
+            // Add files to the pack
+            currResPath = "cmd.txt";
+            DLCResPath = "res://DLC/001/cmd.txt";
+            x = packer.AddFile(DLCResPath, currResPath);
+            GD.Print($"Added file:{currResPath}  // to {DLCResPath} // return: {x}");
+
+            // Add files to the pack
+            currResPath = "inventory.json";
+            DLCResPath = "res://DLC/001/inventory.json";
+            x = packer.AddFile(DLCResPath, currResPath);
+            GD.Print($"Added file:{currResPath}  // to {DLCResPath} // return: {x}");
+
+            // Conclude the adding
             packer.Flush(true);
         }
-
-
-        {
-            ProjectSettings.LoadResourcePack("res://PCK002.zip");
-
-        }
-
-        {
-
-            DirContents("res://");
-
-
-
-            // List<string> files = FindResourceFiles("DLCs");
-
-            // foreach (string file in files)
-            // {
-            //     GD.Print($"Found file: {file}");
-            // }
-
-
-
-            // string[] loadedPacks = ProjectSettings.GetResourcePackList();
-            // foreach (string pack in loadedPacks)
-            // {
-            //     GD.Print($"Loaded pack: {pack}");
-            // }
-        }
-
-        // var viewport_start_size = new Vector2(
-        //     ProjectSettings.GetSetting("display/window/size/viewport_width"),
-        //     ProjectSettings.GetSetting("display/window/size/viewport_height")
-        // );
-
-
-        // ProjectSettings
-        // if (ProjectSettings.SaveResourcePack(dlcPath))
-        // {
-        //     GD.Print("DLC pack created successfully!");
-        // }
-        // else
-        // {
-        //     GD.Print("Failed to create DLC pack.");
-        // }
     }
 
+    public static void LoadDlc()
+    {
+        {
+            string dlcFolder = "c:/util/godot/dlc/";
+            string dlcName = "DLC_001.pck";
+            string fullpath = FssFileOperations.JoinPaths(dlcFolder, dlcName);
+
+            ProjectSettings.LoadResourcePack(fullpath);
+
+            // // Open the text file from the resource pack
+            // string filePath = "res://DLCs/cmd.txt";
+
+            // if (Godot.FileAccess.FileExists(filePath))
+            //     GD.Print("======= File exists!");
+        }
+
+    }
+
+    // FssDlcOperations.DlcInv()
+    public static void DlcInv()
+    {
+        List<Fss3DModelInfo> modelList = new List<Fss3DModelInfo>();
+
+        Fss3DModelInfo info1 = new Fss3DModelInfo() { Name = "Model1", FilePath = "res://DLCs/001/model1.glb", RwAABB = new FssXYZBox() { Height = 10, Depth = 9, Width = 8}, Scale = 1.0f };
+        Fss3DModelInfo info2 = new Fss3DModelInfo() { Name = "Model2", FilePath = "res://DLCs/001/model2.glb", RwAABB = new FssXYZBox(), Scale = 10.0f };
+        Fss3DModelInfo info3 = new Fss3DModelInfo() { Name = "Model3", FilePath = "res://DLCs/001/model3.glb", RwAABB = new FssXYZBox(), Scale = 0.00001f };
+
+        modelList.Add(info1);
+        modelList.Add(info2);
+        modelList.Add(info3);
+
+        string JSONString = Fss3DModelLibrary.SerializeJSONConfig(modelList);
+        GD.Print(JSONString);
+    }
+
+
+    // --------------------------------------------------------------------------------------------
 
     public static float VarToFloat(object input)
     {
@@ -202,7 +204,7 @@ public static class FssDlcOperations
         }
         else
         {
-            GD.Print("An error occurred when trying to access the path.");
+            GD.Print($"An error occurred when trying to access the path: {path}");
         }
     }
 
@@ -211,7 +213,7 @@ public static class FssDlcOperations
         // Determine the full path to the resource folder
         string resourcePath = FssFileOperations.JoinPaths("res://", subdirPath);
 
-        resourcePath = "res://DLCs/";
+        resourcePath = "./DLCs/";
         GD.Print($"Looking for resources in: {resourcePath}");
 
         // Our return value
