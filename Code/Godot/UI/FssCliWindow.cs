@@ -56,7 +56,6 @@ public partial class FssCliWindow : Window
         GD.Print($"CLIWindow OnCommandSubmitted: {newText}");
         FssCentralLog.AddEntry($"CLIWindow OnCommandSubmitted: {newText}");
 
-
         if (newText == "clear" || newText == "cls")
         {
             CallDeferred(nameof(ClearLabel));
@@ -108,12 +107,10 @@ public partial class FssCliWindow : Window
         }
     }
 
-
     private void UpdateLogLabel()
     {
         LogLabel.Text = LogSB.ToString();
     }
-
 
     private void ScrollToBottom()
     {
@@ -123,7 +120,6 @@ public partial class FssCliWindow : Window
     // Function to update the label periodically
     private void OnUpdateTimerElapsed(object sender, ElapsedEventArgs e)
     {
-
         CallDeferred(nameof(UpdateConsoleLabel));
 
         // Update the string builder in the timer, just to take anything off the main thread
@@ -132,7 +128,6 @@ public partial class FssCliWindow : Window
             LogSB.AppendLine(line);
 
         CallDeferred(nameof(UpdateLogLabel));
-
     }
 
     public void ToggleVisibility()
