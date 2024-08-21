@@ -1,6 +1,6 @@
 [gd_scene load_steps=25 format=3 uid="uid://ck4tngsqwb7jf"]
 
-[ext_resource type="StyleBox" uid="uid://cg5jbxqki88ph" path="res://Themes/new_style_box_flat.tres" id="1_fred0"]
+[ext_resource type="StyleBox" path="res://Themes/new_style_box_flat.tres" id="1_fred0"]
 [ext_resource type="Script" path="res://Code/Godot/UI/FssUIHeader.cs" id="2_iuuet"]
 [ext_resource type="Theme" uid="uid://p1asdjvj8ece" path="res://Themes/GreenToggle.tres" id="3_454jl"]
 [ext_resource type="Texture2D" uid="uid://b5neqrik7nbhj" path="res://Resources/Icons/White_Connections2.png" id="4_2axux"]
@@ -642,7 +642,7 @@ text = "OK"
 auto_translate_mode = 1
 title = "Settings"
 initial_position = 2
-size = Vector2i(600, 255)
+size = Vector2i(600, 295)
 visible = false
 script = ExtResource("18_sk1xa")
 
@@ -707,6 +707,34 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_horizontal = 3
 text = "X:/BaseDirectory/Option/MapDirectory/"
+
+[node name="Row4-MapLevel" type="HBoxContainer" parent="SettingWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MaxMapLvlLabel" type="Label" parent="SettingWindow/MarginContainer/VBoxContainer/Row4-MapLevel"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Max Map Level"
+vertical_alignment = 1
+
+[node name="HSlider" type="HSlider" parent="SettingWindow/MarginContainer/VBoxContainer/Row4-MapLevel"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 6.0
+value = 1.0
+rounded = true
+tick_count = 6
+ticks_on_borders = true
+
+[node name="MaxMapLvlValueLabel" type="Label" parent="SettingWindow/MarginContainer/VBoxContainer/Row4-MapLevel"]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "5"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="HSeparator" type="HSeparator" parent="SettingWindow/MarginContainer/VBoxContainer"]
 layout_mode = 2

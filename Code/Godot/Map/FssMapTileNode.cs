@@ -71,7 +71,7 @@ public partial class FssMapTileNode : Node3D
     {
         // Set the core Tilecode and node name.
         TileCode = tileCode;
-        Name = tileCode.ToString();
+        Name     = tileCode.ToString();
 
         // Fire off the fully background task of creating/loading the mesh
         Task.Run(() => BackgroundTileCreation(tileCode));
@@ -421,6 +421,8 @@ public partial class FssMapTileNode : Node3D
             bool shouldDeleteChildTiles  = distanceFraction > DeleteChildTilesForLvl[TileCode.MapLvl];
             bool childTilesExist         = DoChildTilesExist();
             bool childTilesLoaded        = AreChildTilesLoaded();
+
+            //shouldCreateChildTiles = false; // Debug
 
             // If we should create child tiles, and they don't exist, create them.
             if (shouldCreateChildTiles && !childTilesExist)

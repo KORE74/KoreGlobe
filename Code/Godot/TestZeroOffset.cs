@@ -83,48 +83,53 @@ public partial class TestZeroOffset : Node3D
 
         //Fss3DModelLibrary.TestLoadModel(ZeroNode);
 
-        FssDlcOperations.CreateDlc();
-        FssDlcOperations.LoadDlc();
+        bool DLCTesting = false;
 
-        List<string> fileList = FssGodotFileOperations.ListFiles("res://DLCPrep");
-        foreach (string file in fileList)
+        if (DLCTesting)
         {
-            GD.Print($"=> File: {file}");
-        }
+            FssDlcOperations.CreateDlc();
+            FssDlcOperations.LoadDlc();
 
-        List<string> dlcList = FssGodotFileOperations.ListLoadedDLCs();
-        foreach (string dlc in dlcList)
-        {
-            GD.Print($"=> DLC: {dlc}");
-
-            List<string> dlcFiles = FssGodotFileOperations.ListFiles(dlc);
-            foreach (string file in dlcFiles)
+            List<string> fileList = FssGodotFileOperations.ListFiles("res://DLCPrep");
+            foreach (string file in fileList)
             {
-                GD.Print($"=> DLC {dlc} // DLCFile: {file}");
+                GD.Print($"=> File: {file}");
+            }
 
-                // if the file is a JSON, load it into the library
-                if (file.EndsWith(".json"))
+            List<string> dlcList = FssGodotFileOperations.ListLoadedDLCs();
+            foreach (string dlc in dlcList)
+            {
+                GD.Print($"=> DLC: {dlc}");
+
+                List<string> dlcFiles = FssGodotFileOperations.ListFiles(dlc);
+                foreach (string file in dlcFiles)
                 {
-                    GD.Print($"Processing JSON file: {file}");
+                    GD.Print($"=> DLC {dlc} // DLCFile: {file}");
 
-                    // Use the godot virtual file system to open and rad te file
-                    using FileAccess filea = FileAccess.Open(file, FileAccess.ModeFlags.Read);
-                    string content = filea.GetAsText();
+                    // if the file is a JSON, load it into the library
+                    if (file.EndsWith(".json"))
+                    {
+                        GD.Print($"Processing JSON file: {file}");
+
+                        // Use the godot virtual file system to open and rad te file
+                        using FileAccess filea = FileAccess.Open(file, FileAccess.ModeFlags.Read);
+                        string content = filea.GetAsText();
 
 
 
-                    // deserialize the JSON string into a list of Fss3DModelInfo objects
-                    //<List<Fss3DModelInfo> modelList = JsonSerializer.Deserialize<List<Fss3DModelInfo>>(jsonString);
+                        // deserialize the JSON string into a list of Fss3DModelInfo objects
+                        //<List<Fss3DModelInfo> modelList = JsonSerializer.Deserialize<List<Fss3DModelInfo>>(jsonString);
 
-                    Fss3DModelLibrary.DeserializeJSONConfig(content);
+                        Fss3DModelLibrary.DeserializeJSONConfig(content);
+                    }
+
                 }
+
 
             }
 
-
+            FssDlcOperations.DlcInv();
         }
-
-        FssDlcOperations.DlcInv();
     }
 
     // --------------------------------------------------------------------------------------------
@@ -193,8 +198,8 @@ public partial class TestZeroOffset : Node3D
         // Add the wedges
         //EarthCoreNode.AddChild(new TestEarthCore((float)FssZeroOffset.GeEarthRadius));
 
-        WorldCamNode = new FssCameraMoverWorld();
-        EarthCoreNode.AddChild(WorldCamNode);
+        //WorldCamNode = new FssCameraMoverWorld();
+        //EarthCoreNode.AddChild(WorldCamNode);
 
         // Add the LL Labels
         //EarthCoreNode.AddChild(new TestLabelMaker());

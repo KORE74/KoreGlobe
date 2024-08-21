@@ -78,9 +78,9 @@ public partial class FssSettingWindow : Window
 
     private void WriteControlValues()
     {
-        MapPathLineEdit.Text       = FssCentralConfig.Instance.GetParam<string>("MapRootPath",   "");
-        MeshCachePathLineEdit.Text = FssCentralConfig.Instance.GetParam<string>("MeshCachePath", "");
-        CapturePathLineEdit.Text   = FssCentralConfig.Instance.GetParam<string>("CapturePath",   "");
+        MapPathLineEdit.Text       = FssCentralConfig.Instance.GetParam<string>("MapRootPath");
+        MeshCachePathLineEdit.Text = FssCentralConfig.Instance.GetParam<string>("MeshCachePath");
+        CapturePathLineEdit.Text   = FssCentralConfig.Instance.GetParam<string>("CapturePath");
 
         ActiveLanguageLabel.Text   = FssLanguageStrings.Instance.CurrActiveLanguage();
     }
