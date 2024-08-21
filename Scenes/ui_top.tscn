@@ -642,8 +642,7 @@ text = "OK"
 auto_translate_mode = 1
 title = "Settings"
 initial_position = 2
-size = Vector2i(600, 295)
-visible = false
+size = Vector2i(600, 315)
 script = ExtResource("18_sk1xa")
 
 [node name="MarginContainer" type="MarginContainer" parent="SettingWindow"]
@@ -710,6 +709,7 @@ text = "X:/BaseDirectory/Option/MapDirectory/"
 
 [node name="Row4-MapLevel" type="HBoxContainer" parent="SettingWindow/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_constants/separation = 20
 
 [node name="MaxMapLvlLabel" type="Label" parent="SettingWindow/MarginContainer/VBoxContainer/Row4-MapLevel"]
 custom_minimum_size = Vector2(150, 0)
@@ -718,7 +718,16 @@ size_flags_horizontal = 0
 text = "Max Map Level"
 vertical_alignment = 1
 
+[node name="MaxMapLvlValueLabel" type="Label" parent="SettingWindow/MarginContainer/VBoxContainer/Row4-MapLevel"]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "5"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="HSlider" type="HSlider" parent="SettingWindow/MarginContainer/VBoxContainer/Row4-MapLevel"]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
 min_value = 1.0
@@ -728,13 +737,13 @@ rounded = true
 tick_count = 6
 ticks_on_borders = true
 
-[node name="MaxMapLvlValueLabel" type="Label" parent="SettingWindow/MarginContainer/VBoxContainer/Row4-MapLevel"]
-custom_minimum_size = Vector2(30, 0)
+[node name="TileInfoButton" type="Button" parent="SettingWindow/MarginContainer/VBoxContainer/Row4-MapLevel"]
+custom_minimum_size = Vector2(90, 40)
 layout_mode = 2
-size_flags_horizontal = 0
-text = "5"
-horizontal_alignment = 1
-vertical_alignment = 1
+focus_mode = 0
+theme = ExtResource("18_3dgka")
+toggle_mode = true
+text = "Tile Info"
 
 [node name="HSeparator" type="HSeparator" parent="SettingWindow/MarginContainer/VBoxContainer"]
 layout_mode = 2

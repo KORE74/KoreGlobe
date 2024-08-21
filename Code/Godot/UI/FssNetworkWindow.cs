@@ -152,6 +152,8 @@ public partial class FssNetworkWindow : Window
 
     private void UpdateUIText()
     {
+        Title                         = FssLanguageStrings.Instance.GetParam("Network");
+
         UdpIpAddrLabel.Text           = FssLanguageStrings.Instance.GetParam("UdpIpAddrLabel");
         UdpIpPortLabel.Text           = FssLanguageStrings.Instance.GetParam("Port");
         UdpIpConnectButton.Text       = FssLanguageStrings.Instance.GetParam("Connect");

@@ -101,6 +101,7 @@ public partial class FssSettingWindow : Window
 
     private void UpdateUIText()
     {
+        Title                   = FssLanguageStrings.Instance.GetParam("Settings");
         MapPathLabel.Text       = FssLanguageStrings.Instance.GetParam("MapPathLabel");
         MeshCachePathLabel.Text = FssLanguageStrings.Instance.GetParam("MeshCachePathLabel");
         CapturePathLabel.Text   = FssLanguageStrings.Instance.GetParam("CapturePathLabel");
