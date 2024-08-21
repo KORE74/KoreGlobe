@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://ck4tngsqwb7jf"]
+[gd_scene load_steps=25 format=3 uid="uid://ck4tngsqwb7jf"]
 
 [ext_resource type="StyleBox" uid="uid://cg5jbxqki88ph" path="res://Themes/new_style_box_flat.tres" id="1_fred0"]
 [ext_resource type="Script" path="res://Code/Godot/UI/FssUIHeader.cs" id="2_iuuet"]
@@ -8,6 +8,7 @@
 [ext_resource type="Theme" uid="uid://dygto0gp0wtwi" path="res://Themes/Red_Button.tres" id="6_rgbsb"]
 [ext_resource type="Texture2D" uid="uid://bpjmofp0dir0d" path="res://Resources/Icons/White_Close.png" id="7_mru6u"]
 [ext_resource type="Texture2D" uid="uid://8km4gxg0fgok" path="res://Resources/Icons/White_Log.png" id="8_4gj75"]
+[ext_resource type="Script" path="res://Code/Godot/UI/FssUICameraControl.cs" id="9_ro3fa"]
 [ext_resource type="Theme" uid="uid://b73ifjtcxnugj" path="res://Themes/YellowToggle.tres" id="9_xvvq8"]
 [ext_resource type="Texture2D" uid="uid://dec5v78k63oif" path="res://Resources/Icons/White_Globe.png" id="10_ebi24"]
 [ext_resource type="Texture2D" uid="uid://buqwf6wctolbe" path="res://Resources/Icons/Plane.png" id="11_c00mr"]
@@ -146,12 +147,13 @@ expand_icon = true
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Control-PlatPos" type="Control" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer"]
+[node name="Control-CameraControl" type="Control" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 10
+script = ExtResource("9_ro3fa")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -164,34 +166,34 @@ offset_right = 119.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="PanelContainer-CamMode" type="PanelContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer"]
+[node name="PanelContainer-CamMode" type="PanelContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer"]
 layout_mode = 2
 theme_override_styles/panel = ExtResource("1_fred0")
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer/PanelContainer-CamMode"]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="VBoxContainer-PanelRows" type="VBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode/MarginContainer"]
+[node name="VBoxContainer-PanelRows" type="VBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer/PanelContainer-CamMode/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="Label" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows"]
+[node name="CameraModeLabel" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows"]
 layout_mode = 2
 text = "Camera Mode
 "
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows"]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="Button3" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+[node name="CameraModeWorldButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 focus_mode = 0
@@ -204,7 +206,7 @@ button_group = SubResource("ButtonGroup_3y634")
 icon = ExtResource("10_ebi24")
 expand_icon = true
 
-[node name="Button2" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+[node name="CameraModeChaseCamButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 focus_mode = 0
@@ -216,7 +218,7 @@ icon = ExtResource("11_c00mr")
 icon_alignment = 1
 expand_icon = true
 
-[node name="Button" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+[node name="CameraModeAlignCamButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 focus_mode = 0
@@ -229,33 +231,33 @@ button_group = SubResource("ButtonGroup_lkqfi")
 icon = ExtResource("13_pe2s4")
 expand_icon = true
 
-[node name="PanelContainer-Pos2" type="PanelContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer"]
+[node name="PanelContainer-NearCamTarget" type="PanelContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer"]
 layout_mode = 2
 theme_override_styles/panel = ExtResource("1_fred0")
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer/PanelContainer-NearCamTarget"]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="VBoxContainer-PanelRows" type="VBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2/MarginContainer"]
+[node name="VBoxContainer-PanelRows" type="VBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer/PanelContainer-NearCamTarget/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="Label" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2/MarginContainer/VBoxContainer-PanelRows"]
+[node name="NearTargetPanelLabel" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer/PanelContainer-NearCamTarget/MarginContainer/VBoxContainer-PanelRows"]
 layout_mode = 2
 text = "Near Platform"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2/MarginContainer/VBoxContainer-PanelRows"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer/PanelContainer-NearCamTarget/MarginContainer/VBoxContainer-PanelRows"]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="Button2" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+[node name="NearTargetNextButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer/PanelContainer-NearCamTarget/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 focus_mode = 0
@@ -264,14 +266,14 @@ icon = ExtResource("14_w6k6m")
 icon_alignment = 1
 expand_icon = true
 
-[node name="Label" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+[node name="NearTargetLabel" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer/PanelContainer-NearCamTarget/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
 custom_minimum_size = Vector2(130, 45)
 layout_mode = 2
 text = "Platform 1"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Button" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos2/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+[node name="NearTargetPrevButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer/PanelContainer-NearCamTarget/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 focus_mode = 0
@@ -280,33 +282,33 @@ theme_override_constants/outline_size = 10
 icon = ExtResource("15_7rjg6")
 expand_icon = true
 
-[node name="PanelContainer-Pos" type="PanelContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer"]
+[node name="PanelContainer-FarCamTarget" type="PanelContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer"]
 layout_mode = 2
 theme_override_styles/panel = ExtResource("1_fred0")
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer/PanelContainer-FarCamTarget"]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="VBoxContainer-PanelRows" type="VBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos/MarginContainer"]
+[node name="VBoxContainer-PanelRows" type="VBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer/PanelContainer-FarCamTarget/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="Label" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos/MarginContainer/VBoxContainer-PanelRows"]
+[node name="FarTargetPanelLabel" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer/PanelContainer-FarCamTarget/MarginContainer/VBoxContainer-PanelRows"]
 layout_mode = 2
 text = "Far Platform"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos/MarginContainer/VBoxContainer-PanelRows"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer/PanelContainer-FarCamTarget/MarginContainer/VBoxContainer-PanelRows"]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="Button2" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+[node name="FarTargetNextButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer/PanelContainer-FarCamTarget/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 focus_mode = 0
@@ -315,14 +317,14 @@ icon = ExtResource("14_w6k6m")
 icon_alignment = 1
 expand_icon = true
 
-[node name="Label" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+[node name="FarTargetLabel" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer/PanelContainer-FarCamTarget/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
 custom_minimum_size = Vector2(130, 45)
 layout_mode = 2
 text = "Platform 1"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Button" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-PlatPos/HBoxContainer/PanelContainer-Pos/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+[node name="FarTargetPrevButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer/PanelContainer-FarCamTarget/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 focus_mode = 0
@@ -454,11 +456,10 @@ layout_mode = 2
 auto_translate_mode = 1
 title = "Network"
 initial_position = 2
-size = Vector2i(540, 480)
-visible = false
+size = Vector2i(650, 480)
 unresizable = true
 popup_window = true
-min_size = Vector2i(400, 300)
+min_size = Vector2i(540, 480)
 keep_title_visible = true
 script = ExtResource("17_xs6g5")
 
@@ -477,7 +478,6 @@ theme_override_constants/margin_bottom = 10
 
 [node name="VBoxContainer" type="VBoxContainer" parent="NetworkWindow/MarginContainer"]
 layout_mode = 2
-size_flags_vertical = 0
 theme_override_constants/separation = 10
 
 [node name="Row1-UDP" type="HBoxContainer" parent="NetworkWindow/MarginContainer/VBoxContainer"]
@@ -485,7 +485,7 @@ layout_mode = 2
 theme_override_constants/separation = 10
 
 [node name="UdpIpAddrLabel" type="Label" parent="NetworkWindow/MarginContainer/VBoxContainer/Row1-UDP"]
-custom_minimum_size = Vector2(130, 0)
+custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 text = "UDP Receiver IP"
@@ -498,7 +498,7 @@ size_flags_horizontal = 0
 text = "222.222.222.222"
 
 [node name="UdpIpPortLabel" type="Label" parent="NetworkWindow/MarginContainer/VBoxContainer/Row1-UDP"]
-custom_minimum_size = Vector2(45, 0)
+custom_minimum_size = Vector2(60, 0)
 layout_direction = 2
 layout_mode = 2
 size_flags_horizontal = 0
@@ -527,7 +527,8 @@ layout_mode = 2
 theme_override_constants/separation = 10
 
 [node name="TcpIpServerAddrLabel" type="Label" parent="NetworkWindow/MarginContainer/VBoxContainer/Row2-TCPServer"]
-custom_minimum_size = Vector2(130, 0)
+clip_contents = true
+custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 text = "TCP Server IP"
@@ -538,7 +539,7 @@ layout_mode = 2
 size_flags_horizontal = 0
 
 [node name="TcpIpServerPortLabel" type="Label" parent="NetworkWindow/MarginContainer/VBoxContainer/Row2-TCPServer"]
-custom_minimum_size = Vector2(45, 0)
+custom_minimum_size = Vector2(60, 0)
 layout_direction = 2
 layout_mode = 2
 size_flags_horizontal = 0
@@ -564,7 +565,7 @@ layout_mode = 2
 theme_override_constants/separation = 10
 
 [node name="TcpIpClientAddrLabel" type="Label" parent="NetworkWindow/MarginContainer/VBoxContainer/Row3-TCPClient"]
-custom_minimum_size = Vector2(130, 0)
+custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 text = "TCP Client IP"
@@ -575,7 +576,7 @@ layout_mode = 2
 size_flags_horizontal = 0
 
 [node name="TcpIpClientPortLabel" type="Label" parent="NetworkWindow/MarginContainer/VBoxContainer/Row3-TCPClient"]
-custom_minimum_size = Vector2(45, 0)
+custom_minimum_size = Vector2(60, 0)
 layout_direction = 2
 layout_mode = 2
 size_flags_horizontal = 0
@@ -640,7 +641,7 @@ text = "OK"
 auto_translate_mode = 1
 title = "Settings"
 initial_position = 2
-size = Vector2i(600, 215)
+size = Vector2i(600, 255)
 visible = false
 script = ExtResource("18_sk1xa")
 
@@ -676,6 +677,21 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "X:/BaseDirectory/Option/MapDirectory/"
 
+[node name="Row2-MeshCachePath" type="HBoxContainer" parent="SettingWindow/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MeshCachePathLabel" type="Label" parent="SettingWindow/MarginContainer/VBoxContainer/Row2-MeshCachePath"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Mesh Cache"
+vertical_alignment = 1
+
+[node name="MeshCachePathLineEdit" type="LineEdit" parent="SettingWindow/MarginContainer/VBoxContainer/Row2-MeshCachePath"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "X:/BaseDirectory/Option/MapDirectory/"
+
 [node name="Row2-CapturePath" type="HBoxContainer" parent="SettingWindow/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
@@ -697,23 +713,31 @@ layout_mode = 2
 [node name="Row2-CapturePath2" type="HBoxContainer" parent="SettingWindow/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Language" type="Label" parent="SettingWindow/MarginContainer/VBoxContainer/Row2-CapturePath2"]
+[node name="LanguageLabel" type="Label" parent="SettingWindow/MarginContainer/VBoxContainer/Row2-CapturePath2"]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Language"
 vertical_alignment = 1
 
-[node name="OptionButton" type="OptionButton" parent="SettingWindow/MarginContainer/VBoxContainer/Row2-CapturePath2"]
+[node name="LanguagePrevButton" type="Button" parent="SettingWindow/MarginContainer/VBoxContainer/Row2-CapturePath2"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+icon = ExtResource("14_w6k6m")
+icon_alignment = 1
+expand_icon = true
+
+[node name="ActiveLanguageLabel" type="Label" parent="SettingWindow/MarginContainer/VBoxContainer/Row2-CapturePath2"]
 layout_mode = 2
 size_flags_horizontal = 3
-item_count = 3
-popup/item_0/text = "English"
-popup/item_0/id = 1
-popup/item_1/text = "French"
-popup/item_1/id = 2
-popup/item_2/text = "German"
-popup/item_2/id = 3
+text = "English"
+horizontal_alignment = 1
+
+[node name="LanguageNextButton" type="Button" parent="SettingWindow/MarginContainer/VBoxContainer/Row2-CapturePath2"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+icon = ExtResource("15_7rjg6")
+expand_icon = true
 
 [node name="HSeparator2" type="HSeparator" parent="SettingWindow/MarginContainer/VBoxContainer"]
 layout_mode = 2

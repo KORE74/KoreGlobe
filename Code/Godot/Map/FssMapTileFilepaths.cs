@@ -21,7 +21,7 @@ public class FssTileNodeFilepaths
 
         // Setup the path to the map level directory
         var config = FssCentralConfig.Instance;
-        string externalRootPath = config.GetParameter("MapRootPath", "");
+        string externalRootPath = config.GetParam("MapRootPath", "");
         string externalMapLvlFilePath = FssFileOperations.JoinPaths(externalRootPath, FssMapTileCode.PathPerLvl[tileCode.MapLvl]);
         if (tileCode.MapLvl != 0)
             externalMapLvlFilePath = FssFileOperations.JoinPaths(externalMapLvlFilePath, tileCode.ParentString());

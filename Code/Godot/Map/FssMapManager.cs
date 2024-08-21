@@ -34,7 +34,7 @@ public partial class FssMapManager : Node3D
 
         // Read the config values
         var config = FssCentralConfig.Instance;
-        MapRootPath = config.GetParameter<string>("MapRootPath", "");
+        MapRootPath = config.GetParam<string>("MapRootPath", "");
         config.WriteToFile();
 
         for (int lonId = 0; lonId < 12; lonId++)

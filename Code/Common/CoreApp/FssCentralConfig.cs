@@ -3,64 +3,72 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 
-/*
-Usage:
-
-    var config = FssCentralConfig.Instance;
-
-    // Set parameters
-    config.SetParameter("AppName", "MyApplication");
-    config.SetParameter("MaxRetries", 5);
-    config.SetParameter("IsEnabled", true);
-    config.SetParameter("Timeout", 2.5);
-
-    // Write parameters to file
-    config.WriteToFile();
-
-    // Read parameters
-    string appName = config.GetParameter("AppName", "DefaultAppName");
-    int maxRetries = config.GetParameter("MaxRetries", 3);
-    bool isEnabled = config.GetParameter("IsEnabled", false);
-    double timeout = config.GetParameter("Timeout", 1.0);
-
-
-*/
-
 public sealed class FssCentralConfig
 {
+    // Lazy initialization of the singleton instance
     private static readonly Lazy<FssCentralConfig> _instance =
         new Lazy<FssCentralConfig>(() => new FssCentralConfig());
 
+    // The path where the configuration file will be stored
     private const string ConfigFilePath = "config.json";
+
+    // Dictionary to store configuration parameters
     private Dictionary<string, JsonElement> _parameters;
 
+    // --------------------------------------------------------------------------------------------
+    // MARK: Constructor and Singleton
+    // --------------------------------------------------------------------------------------------
+
+    // Static constructor to ensure the singleton is initialized on startup
+    static FssCentralConfig()
+    {
+        // Force the instance to be created
+        _ = Instance;
+
+        // Force the app language
+        //FssLanguageStrings.Instance.SetActiveLanguage( FssCentralConfig.Instance.GetParam<string>("ActiveLanguage") );
+    }
+
+    // Private constructor to prevent external instantiation
     private FssCentralConfig()
     {
         _parameters = new Dictionary<string, JsonElement>();
-        ReadFromFile();
+        ReadFromFile(); // Load existing configuration if the file exists
     }
 
+    // Public property to access the singleton instance
     public static FssCentralConfig Instance => _instance.Value;
 
-    public void SetParameter(string key, object value)
+    // --------------------------------------------------------------------------------------------
+    // MARK: Params
+    // --------------------------------------------------------------------------------------------
+
+    // Method to set a parameter value
+    public void SetParam(string key, object value)
     {
         var jsonElement = JsonSerializer.SerializeToElement(value);
         _parameters[key] = jsonElement;
     }
 
-    public T GetParameter<T>(string key, T defaultValue = default)
+    // Generic method to get a parameter value with a default fallback
+    public T GetParam<T>(string key, T defaultValue = default)
     {
-        // If the key exists, return the value
         if (_parameters.TryGetValue(key, out JsonElement value))
         {
             return value.Deserialize<T>();
         }
 
-        // Otherwise, set the default value and return it
-        SetParameter(key, defaultValue);
+        // If the key doesn't exist, store and return the default value
+        SetParam(key, defaultValue);
         return defaultValue;
     }
 
+    // --------------------------------------------------------------------------------------------
+    // MARK: Files
+    // --------------------------------------------------------------------------------------------
+
+
+    // Method to save the current parameters to the configuration file
     public void WriteToFile()
     {
         var options = new JsonSerializerOptions { WriteIndented = true };
@@ -68,12 +76,13 @@ public sealed class FssCentralConfig
         File.WriteAllText(ConfigFilePath, json);
     }
 
+    // Method to load parameters from the configuration file
     private void ReadFromFile()
     {
         if (File.Exists(ConfigFilePath))
         {
             string json = File.ReadAllText(ConfigFilePath);
-            _parameters = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(json);
+            _parameters = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(json) ?? new Dictionary<string, JsonElement>();
         }
     }
 }

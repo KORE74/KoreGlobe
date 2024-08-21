@@ -5,11 +5,14 @@
   "TcpIpServerPort": 61512,
   "TcpIpClientAddr": "127.0.0.13",
   "TcpIpClientPort": 10005,
-  "MapRootPath": "C:/Util/Dropbox/MapLib",
-  "MapRootPath3": "C:/Util/Godot/Globe4-Maps/MapLib",
+  "MapRootPath3": "C:/Util/Dropbox/MapLib",
+  "MapRootPath": "X:/BaseDirectory/Option/MapDirectory/",
   "MapRootPath2": "C:/Util/Godot/Globe4-Maps/Alternative/Moon",
   "MaintainConnections": true,
   "MaintainConnections_UDP": false,
   "MaintainConnections_TCPServer": true,
-  "MaintainConnections_TCPClient": false
+  "MaintainConnections_TCPClient": false,
+  "MeshCachePath": "X:/BaseDirectory/Option/MapDirectory/",
+  "CapturePath": "X:/BaseDirectory/Option/MapDirectory/",
+  "ActiveLanguage": "German"
 }

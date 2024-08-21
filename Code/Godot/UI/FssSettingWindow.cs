@@ -6,20 +6,42 @@ public partial class FssSettingWindow : Window
     // Controls - Top to bottom
     Label    MapPathLabel;
     LineEdit MapPathLineEdit;
+
+    Label    MeshCachePathLabel;
+    LineEdit MeshCachePathLineEdit;
+
     Label    CapturePathLabel;
     LineEdit CapturePathLineEdit;
+
+    Label    LanguageLabel;
+    Button   LanguageNextButton;
+    Label    ActiveLanguageLabel;
+    Button   LanguagePrevButton;
+
     Button   OkButton;
     Button   CancelButton;
+
+    float    TimerUIUpdate = 0.0f;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        MapPathLabel        = (Label)FindChild("MapPathLabel");
-        MapPathLineEdit     = (LineEdit)FindChild("MapPathLineEdit");
-        CapturePathLabel    = (Label)FindChild("CapturePathLabel");
-        CapturePathLineEdit = (LineEdit)FindChild("CapturePathLineEdit");
-        OkButton            = (Button)FindChild("OkButton");
-        CancelButton        = (Button)FindChild("CancelButton");
+        MapPathLabel          = (Label)FindChild("MapPathLabel");
+        MapPathLineEdit       = (LineEdit)FindChild("MapPathLineEdit");
+
+        MeshCachePathLabel    = (Label)FindChild("MeshCachePathLabel");
+        MeshCachePathLineEdit = (LineEdit)FindChild("MeshCachePathLineEdit");
+
+        CapturePathLabel      = (Label)FindChild("CapturePathLabel");
+        CapturePathLineEdit   = (LineEdit)FindChild("CapturePathLineEdit");
+
+        LanguageLabel         = (Label)FindChild("LanguageLabel");
+        LanguageNextButton    = (Button)FindChild("LanguageNextButton");
+        ActiveLanguageLabel   = (Label)FindChild("ActiveLanguageLabel");
+        LanguagePrevButton    = (Button)FindChild("LanguagePrevButton");
+
+        OkButton              = (Button)FindChild("OkButton");
+        CancelButton          = (Button)FindChild("CancelButton");
 
         // If any of the controls are null, we have a code-vs-UI mismatch, so report this.
         if (MapPathLabel == null || MapPathLineEdit == null || CapturePathLabel == null || CapturePathLineEdit == null || OkButton == null || CancelButton == null)
@@ -27,6 +49,9 @@ public partial class FssSettingWindow : Window
             FssCentralLog.AddEntry("FssSettingWindow: One or more controls not found");
             return;
         }
+
+        LanguageNextButton.Connect("pressed", new Callable(this, "OnNextLanguageButtonPressed"));
+        LanguagePrevButton.Connect("pressed", new Callable(this, "OnPrevLanguageButtonPressed"));
 
         OkButton.Connect("pressed", new Callable(this, "OnOkButtonPressed"));
         CancelButton.Connect("pressed", new Callable(this, "OnCancelButtonPressed"));
@@ -37,10 +62,14 @@ public partial class FssSettingWindow : Window
         UpdateUIText();
     }
 
-
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
+        if (TimerUIUpdate < FssCoreTime.RuntimeSecs)
+        {
+            TimerUIUpdate = FssCoreTime.RuntimeSecs + 1f;
+            UpdateUIText();
+        }
     }
 
     // --------------------------------------------------------------------------------------------
@@ -49,37 +78,21 @@ public partial class FssSettingWindow : Window
 
     private void WriteControlValues()
     {
-        // var config = FssCentralConfig.Instance;
-        // UdpIpAddrEdit.Text = config.GetParameter<string>("UdpIpAddr", "127.0.0.1");
-        // UdpIpPortEdit.Text = config.GetParameter<int>("UdpIpPort", 10001).ToString();
+        MapPathLineEdit.Text       = FssCentralConfig.Instance.GetParam<string>("MapRootPath",   "");
+        MeshCachePathLineEdit.Text = FssCentralConfig.Instance.GetParam<string>("MeshCachePath", "");
+        CapturePathLineEdit.Text   = FssCentralConfig.Instance.GetParam<string>("CapturePath",   "");
 
-        // TcpIpServerAddrEdit.Text = config.GetParameter<string>("TcpIpServerAddr", "127.0.0.1");
-        // TcpIpSerfverPortEdit.Text = config.GetParameter<int>("TcpIpServerPort", 10002).ToString();
-
-        // TcpIpClientAddrEdit.Text = config.GetParameter<string>("TcpIpClientAddr", "127.0.0.1");
-        // TcpIpClientPortEdit.Text = config.GetParameter<int>("TcpIpClientPort", 10003).ToString();
+        ActiveLanguageLabel.Text   = FssLanguageStrings.Instance.CurrActiveLanguage();
     }
 
     private void SaveControlValues()
     {
-        // int udpIpPort = 0;
-        // int tcpIpServerPort = 0;
-        // int tcpIpClientPort = 0;
+        FssCentralConfig.Instance.SetParam("MapRootPath",   MapPathLineEdit.Text);
+        FssCentralConfig.Instance.SetParam("MeshCachePath", MeshCachePathLineEdit.Text);
+        FssCentralConfig.Instance.SetParam("CapturePath",   CapturePathLineEdit.Text);
 
-        // int.TryParse(UdpIpPortEdit.Text, out int udpIpPort);
-        // int.TryParse(TcpIpSerfverPortEdit.Text, out int tcpIpServerPort);
-        // int.TryParse(TcpIpClientPortEdit.Text, out int tcpIpClientPort);
-
-
-        // var config = FssCentralConfig.Instance;
-        // config.SetParameter("UdpIpAddr", UdpIpAddrEdit.Text);
-        // config.SetParameter("UdpIpPort", udpIpPort);
-
-        // config.SetParameter("TcpIpServerAddr", TcpIpServerAddrEdit.Text);
-        // config.SetParameter("TcpIpServerPort", tcpIpServerPort);
-
-        // config.SetParameter("TcpIpClientAddr", TcpIpClientAddrEdit.Text);
-        // config.SetParameter("TcpIpClientPort", tcpIpClientPort);
+        // Set the activae language in FssLanguageStrings, it will pass this on to the config
+        FssCentralConfig.Instance.SetParam("ActiveLanguage", FssLanguageStrings.Instance.CurrActiveLanguage());
     }
 
     // --------------------------------------------------------------------------------------------
@@ -88,8 +101,12 @@ public partial class FssSettingWindow : Window
 
     private void UpdateUIText()
     {
-        OkButton.Text = "OK-2";
-        CancelButton.Text = "Cancel-2";
+        MapPathLabel.Text       = FssLanguageStrings.Instance.GetParam("MapPathLabel");
+        MeshCachePathLabel.Text = FssLanguageStrings.Instance.GetParam("MeshCachePathLabel");
+        CapturePathLabel.Text   = FssLanguageStrings.Instance.GetParam("CapturePathLabel");
+
+        OkButton.Text           = FssLanguageStrings.Instance.GetParam("Ok");
+        CancelButton.Text       = FssLanguageStrings.Instance.GetParam("Cancel");
     }
 
     // --------------------------------------------------------------------------------------------
@@ -99,13 +116,30 @@ public partial class FssSettingWindow : Window
     public void OnOkButtonPressed()
     {
         FssCentralLog.AddEntry("FssSettingWindow.OnOkButtonPressed");
-
+        SaveControlValues();
         Visible = false;
     }
+
     public void OnCancelButtonPressed()
     {
         FssCentralLog.AddEntry("FssSettingWindow.OnCancelButtonPressed");
 
         Visible = false;
+    }
+
+    public void OnNextLanguageButtonPressed()
+    {
+        FssCentralLog.AddEntry("FssSettingWindow.OnNextLanguageButtonPressed");
+
+        FssLanguageStrings.Instance.NextActiveLanguage();
+        ActiveLanguageLabel.Text = FssLanguageStrings.Instance.CurrActiveLanguage();
+    }
+
+    public void OnPrevLanguageButtonPressed()
+    {
+        FssCentralLog.AddEntry("FssSettingWindow.OnPrevLanguageButtonPressed");
+
+        FssLanguageStrings.Instance.PrevActiveLanguage();
+        ActiveLanguageLabel.Text = FssLanguageStrings.Instance.CurrActiveLanguage();
     }
 }
