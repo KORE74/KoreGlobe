@@ -457,6 +457,7 @@ auto_translate_mode = 1
 title = "Network"
 initial_position = 2
 size = Vector2i(650, 480)
+visible = false
 unresizable = true
 popup_window = true
 min_size = Vector2i(540, 480)

@@ -153,15 +153,15 @@ public partial class FssNetworkWindow : Window
     private void UpdateUIText()
     {
         UdpIpAddrLabel.Text           = FssLanguageStrings.Instance.GetParam("UdpIpAddrLabel");
-        UdpIpPortLabel.Text           = FssLanguageStrings.Instance.GetParam("UdpIpPortLabel");
+        UdpIpPortLabel.Text           = FssLanguageStrings.Instance.GetParam("Port");
         UdpIpConnectButton.Text       = FssLanguageStrings.Instance.GetParam("Connect");
 
         TcpIpServerAddrLabel.Text     = FssLanguageStrings.Instance.GetParam("TcpIpServerAddrLabel");
-        TcpIpServerPortLabel.Text     = FssLanguageStrings.Instance.GetParam("TcpIpServerPortLabel");
+        TcpIpServerPortLabel.Text     = FssLanguageStrings.Instance.GetParam("Port");
         TcpIpServerConnectButton.Text = FssLanguageStrings.Instance.GetParam("Connect");
 
         TcpIpClientAddrLabel.Text     = FssLanguageStrings.Instance.GetParam("TcpIpClientAddrLabel");
-        TcpIpClientPortLabel.Text     = FssLanguageStrings.Instance.GetParam("TcpIpClientPortLabel");
+        TcpIpClientPortLabel.Text     = FssLanguageStrings.Instance.GetParam("Port");
         TcpIpClientConnectButton.Text = FssLanguageStrings.Instance.GetParam("Connect");
 
         MaintainConnectionCheckBox.Text = FssLanguageStrings.Instance.GetParam("MaintainConnectionCheckBox");

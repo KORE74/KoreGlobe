@@ -8,11 +8,11 @@
   "MapRootPath3": "C:/Util/Dropbox/MapLib",
   "MapRootPath": "X:/BaseDirectory/Option/MapDirectory/",
   "MapRootPath2": "C:/Util/Godot/Globe4-Maps/Alternative/Moon",
-  "MaintainConnections": true,
+  "MaintainConnections": false,
   "MaintainConnections_UDP": false,
-  "MaintainConnections_TCPServer": true,
+  "MaintainConnections_TCPServer": false,
   "MaintainConnections_TCPClient": false,
   "MeshCachePath": "X:/BaseDirectory/Option/MapDirectory/",
   "CapturePath": "X:/BaseDirectory/Option/MapDirectory/",
-  "ActiveLanguage": "German"
+  "ActiveLanguage": "English"
 }
