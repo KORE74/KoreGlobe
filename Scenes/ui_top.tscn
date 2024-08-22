@@ -1,6 +1,6 @@
 [gd_scene load_steps=25 format=3 uid="uid://ck4tngsqwb7jf"]
 
-[ext_resource type="StyleBox" uid="uid://cg5jbxqki88ph" path="res://Themes/new_style_box_flat.tres" id="1_fred0"]
+[ext_resource type="StyleBox" path="res://Themes/new_style_box_flat.tres" id="1_fred0"]
 [ext_resource type="Script" path="res://Code/Godot/UI/FssUIHeader.cs" id="2_iuuet"]
 [ext_resource type="Theme" uid="uid://p1asdjvj8ece" path="res://Themes/GreenToggle.tres" id="3_454jl"]
 [ext_resource type="Texture2D" uid="uid://b5neqrik7nbhj" path="res://Resources/Icons/White_Connections2.png" id="4_2axux"]
@@ -731,6 +731,7 @@ vertical_alignment = 1
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
+focus_mode = 0
 min_value = 1.0
 max_value = 6.0
 value = 1.0
@@ -762,6 +763,7 @@ vertical_alignment = 1
 [node name="LanguagePrevButton" type="Button" parent="SettingWindow/MarginContainer/VBoxContainer/Row2-CapturePath2"]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
+focus_mode = 0
 icon = ExtResource("14_w6k6m")
 icon_alignment = 1
 expand_icon = true
@@ -775,6 +777,7 @@ horizontal_alignment = 1
 [node name="LanguageNextButton" type="Button" parent="SettingWindow/MarginContainer/VBoxContainer/Row2-CapturePath2"]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
+focus_mode = 0
 icon = ExtResource("15_7rjg6")
 expand_icon = true
 
@@ -788,11 +791,13 @@ size_flags_vertical = 2
 [node name="CancelButton" type="Button" parent="SettingWindow/MarginContainer/VBoxContainer/RowFinal"]
 custom_minimum_size = Vector2(70, 45)
 layout_mode = 2
+focus_mode = 0
 text = "Cancel"
 
 [node name="OkButton" type="Button" parent="SettingWindow/MarginContainer/VBoxContainer/RowFinal"]
 custom_minimum_size = Vector2(70, 45)
 layout_mode = 2
+focus_mode = 0
 text = "OK"
 
 [node name="PlatformWindow" type="Window" parent="."]

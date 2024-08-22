@@ -83,52 +83,53 @@ public partial class TestZeroOffset : Node3D
 
         //Fss3DModelLibrary.TestLoadModel(ZeroNode);
 
-        bool DLCTesting = false;
+        bool DLCTesting = true;
 
         if (DLCTesting)
         {
             FssDlcOperations.CreateDlc();
-            FssDlcOperations.LoadDlc();
 
-            List<string> fileList = FssGodotFileOperations.ListFiles("res://DLCPrep");
-            foreach (string file in fileList)
-            {
-                GD.Print($"=> File: {file}");
-            }
+            // FssDlcOperations.LoadDlc();
 
-            List<string> dlcList = FssGodotFileOperations.ListLoadedDLCs();
-            foreach (string dlc in dlcList)
-            {
-                GD.Print($"=> DLC: {dlc}");
+            // List<string> fileList = FssGodotFileOperations.ListFiles("res://DLCPrep");
+            // foreach (string file in fileList)
+            // {
+            //     GD.Print($"=> File: {file}");
+            // }
 
-                List<string> dlcFiles = FssGodotFileOperations.ListFiles(dlc);
-                foreach (string file in dlcFiles)
-                {
-                    GD.Print($"=> DLC {dlc} // DLCFile: {file}");
+            // List<string> dlcList = FssGodotFileOperations.ListLoadedDLCs();
+            // foreach (string dlc in dlcList)
+            // {
+            //     GD.Print($"=> DLC: {dlc}");
 
-                    // if the file is a JSON, load it into the library
-                    if (file.EndsWith(".json"))
-                    {
-                        GD.Print($"Processing JSON file: {file}");
+            //     List<string> dlcFiles = FssGodotFileOperations.ListFiles(dlc);
+            //     foreach (string file in dlcFiles)
+            //     {
+            //         GD.Print($"=> DLC {dlc} // DLCFile: {file}");
 
-                        // Use the godot virtual file system to open and rad te file
-                        using FileAccess filea = FileAccess.Open(file, FileAccess.ModeFlags.Read);
-                        string content = filea.GetAsText();
+            //         // if the file is a JSON, load it into the library
+            //         if (file.EndsWith(".json"))
+            //         {
+            //             GD.Print($"Processing JSON file: {file}");
 
-
-
-                        // deserialize the JSON string into a list of Fss3DModelInfo objects
-                        //<List<Fss3DModelInfo> modelList = JsonSerializer.Deserialize<List<Fss3DModelInfo>>(jsonString);
-
-                        Fss3DModelLibrary.DeserializeJSONConfig(content);
-                    }
-
-                }
+            //             // Use the godot virtual file system to open and rad te file
+            //             using FileAccess filea = FileAccess.Open(file, FileAccess.ModeFlags.Read);
+            //             string content = filea.GetAsText();
 
 
-            }
 
-            FssDlcOperations.DlcInv();
+            //             // deserialize the JSON string into a list of Fss3DModelInfo objects
+            //             //<List<Fss3DModelInfo> modelList = JsonSerializer.Deserialize<List<Fss3DModelInfo>>(jsonString);
+
+            //             Fss3DModelLibrary.DeserializeJSONConfig(content);
+            //         }
+
+            //     }
+
+            // FssDlcOperations.DlcInv();
+
+            // }
+
         }
     }
 

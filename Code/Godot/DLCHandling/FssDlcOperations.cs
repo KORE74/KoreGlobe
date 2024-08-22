@@ -78,9 +78,21 @@ public static class FssDlcOperations
 
     public static void CreateDlc()
     {
+
+
+        {
+            List<string> DLCsToExport = FssGodotFileOperations.ListDLCPrepDirs();
+            GD.Print($"DLCs to export: {DLCsToExport.Count}");
+            foreach (string dlc in DLCsToExport)
+            {
+                GD.Print($"Exporting DLC: {dlc}");
+            }
+        }
+
+        return;
+
         // List all potential DLC files, in the res://DLCPrep folder
         {
-
             List<string> fileList = FssGodotFileOperations.ListFiles(FssGodotFileOperations.DlcPrepDir);
 
             foreach (string file in fileList)
@@ -159,7 +171,6 @@ public static class FssDlcOperations
         GD.Print(JSONString);
     }
 
-
     // --------------------------------------------------------------------------------------------
 
     public static float VarToFloat(object input)
@@ -197,6 +208,7 @@ public static class FssDlcOperations
 
     // Function to list files in a resource folder (looking for files loaded from a PCK file)
 
+    // --------------------------------------------------------------------------------------------
 
     private static void DirContents(string path)
     {
@@ -223,6 +235,8 @@ public static class FssDlcOperations
             GD.Print($"An error occurred when trying to access the path: {path}");
         }
     }
+
+    // --------------------------------------------------------------------------------------------
 
     private static List<string> FindResourceFiles(string subdirPath)
     {

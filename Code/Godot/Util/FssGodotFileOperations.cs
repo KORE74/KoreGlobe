@@ -113,6 +113,18 @@ public static class FssGodotFileOperations
     }
 
     // --------------------------------------------------------------------------------------------
+
+    public static List<string> ListDLCPrepDirs()
+    {
+        return ListSubdirectories(DlcPrepDir);
+    }
+
+    public static List<string> ListDLCPrepFiles()
+    {
+        return ListSubdirectories(DlcPrepDir);
+    }
+
+    // --------------------------------------------------------------------------------------------
     // MARK: Utilities
     // --------------------------------------------------------------------------------------------
 

@@ -22,11 +22,6 @@ boot_splash/image="res://Resources/SplashScreen/Splash-001-Halfsize.png"
 boot_splash/fullsize=false
 config/icon="res://icon2.svg"
 
-[debug]
-
-settings/stdout/print_fps=true
-settings/stdout/print_gpu_profile=true
-
 [dotnet]
 
 project/assembly_name="Globe4"
