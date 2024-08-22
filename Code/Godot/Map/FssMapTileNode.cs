@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 
 using Godot;
 
+#nullable enable
+
 // Note that map tile nodes always hang off the EarthCoreNode parent, they never use the ZeroPoint offset.
 
 public partial class FssMapTileNode : Node3D
@@ -293,7 +295,7 @@ public partial class FssMapTileNode : Node3D
         // Loop through the list of child node names, and create a new node for each one, if it does not exist.
         foreach (FssMapTileCode currTileCode in childTileCodes)
         {
-            FssCentralLog.AddEntry($"Creating subtile: {currTileCode}");
+            //FssCentralLog.AddEntry($"Creating subtile: {currTileCode}");
 
             string tileName = currTileCode.ToString();
 
@@ -368,9 +370,11 @@ public partial class FssMapTileNode : Node3D
             VisibleState = visible;
             //GD.Print($"Setting visibility for {TileCode} to {visible}");
 
+            bool showDebug  = FssMapManager.ShowDebug  && visible;
+
             if (MeshInstance != null)  MeshInstance.Visible  = visible;
-            if (MeshInstanceW != null) MeshInstanceW.Visible = visible;
-            if (TileCodeLabel != null) TileCodeLabel.Visible = visible;
+            if (MeshInstanceW != null) MeshInstanceW.Visible = showDebug;
+            if (TileCodeLabel != null) TileCodeLabel.Visible = showDebug;
         }
     }
 
@@ -415,14 +419,16 @@ public partial class FssMapTileNode : Node3D
             // To allow for different game-engine deisplay radii, we do everything in terms of a fraction of the displayed Earth's radius.
             float distanceFraction = (float)( FssMapManager.LoadRefXYZ.DistanceTo(RwTileCenterXYZ) / FssPosConsts.EarthRadiusM );
 
+            int maxMapLvl = FssMapManager.CurrMaxMapLvl;
+
             // The logic could get complex, so factored it all out into a set of statement flags.
             bool shouldDisplayChildTiles = distanceFraction < childTileDisplayForLvl[TileCode.MapLvl];
-            bool shouldCreateChildTiles  = (distanceFraction < CreateChildTilesForLvl[TileCode.MapLvl]) && (TileCode.MapLvl < FssMapTileCode.MaxMapLvl);
+            bool shouldCreateChildTiles  = (distanceFraction < CreateChildTilesForLvl[TileCode.MapLvl]) && (TileCode.MapLvl < maxMapLvl);
             bool shouldDeleteChildTiles  = distanceFraction > DeleteChildTilesForLvl[TileCode.MapLvl];
             bool childTilesExist         = DoChildTilesExist();
             bool childTilesLoaded        = AreChildTilesLoaded();
 
-            //shouldCreateChildTiles = false; // Debug
+            // shouldCreateChildTiles = false; // Debug
 
             // If we should create child tiles, and they don't exist, create them.
             if (shouldCreateChildTiles && !childTilesExist)

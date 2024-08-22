@@ -154,20 +154,20 @@ public partial class FssNetworkWindow : Window
     {
         Title                         = FssLanguageStrings.Instance.GetParam("Network");
 
-        UdpIpAddrLabel.Text           = FssLanguageStrings.Instance.GetParam("UdpIpAddrLabel");
+        UdpIpAddrLabel.Text           = FssLanguageStrings.Instance.GetParam("UdpIpAddr");
         UdpIpPortLabel.Text           = FssLanguageStrings.Instance.GetParam("Port");
         UdpIpConnectButton.Text       = FssLanguageStrings.Instance.GetParam("Connect");
 
-        TcpIpServerAddrLabel.Text     = FssLanguageStrings.Instance.GetParam("TcpIpServerAddrLabel");
+        TcpIpServerAddrLabel.Text     = FssLanguageStrings.Instance.GetParam("TcpIpServerAddr");
         TcpIpServerPortLabel.Text     = FssLanguageStrings.Instance.GetParam("Port");
         TcpIpServerConnectButton.Text = FssLanguageStrings.Instance.GetParam("Connect");
 
-        TcpIpClientAddrLabel.Text     = FssLanguageStrings.Instance.GetParam("TcpIpClientAddrLabel");
+        TcpIpClientAddrLabel.Text     = FssLanguageStrings.Instance.GetParam("TcpIpClientAddr");
         TcpIpClientPortLabel.Text     = FssLanguageStrings.Instance.GetParam("Port");
         TcpIpClientConnectButton.Text = FssLanguageStrings.Instance.GetParam("Connect");
 
-        MaintainConnectionCheckBox.Text = FssLanguageStrings.Instance.GetParam("MaintainConnectionCheckBox");
-        NetworkStatusTextEdit.Text      = FssLanguageStrings.Instance.GetParam("NetworkStatusTextEdit");
+        MaintainConnectionCheckBox.Text = FssLanguageStrings.Instance.GetParam("MaintainConnection");
+        NetworkStatusTextEdit.Text      = FssLanguageStrings.Instance.GetParam("NetworkStatus");
 
         OkButton.Text     = FssLanguageStrings.Instance.GetParam("Ok");
         CancelButton.Text = FssLanguageStrings.Instance.GetParam("Cancel");

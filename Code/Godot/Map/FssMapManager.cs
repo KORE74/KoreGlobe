@@ -13,12 +13,15 @@ using System.Threading.Tasks;
 
 public partial class FssMapManager : Node3D
 {
-    private string MapRootPath = "";
+    // Common map path point (save the config being queried excessively) // FssMapManager.MapRootPath
+    public static string MapRootPath = "";
 
     // Load reference point - The position against which map tile load operations are judged
     // FssMapManager.LoadRefLLA
     public static FssLLAPoint LoadRefLLA = new FssLLAPoint() { LatDegs = 41, LonDegs = 6, AltMslM = 0 };
     public static FssXYZPoint LoadRefXYZ => LoadRefLLA.ToXYZ();
+    public static bool ShowDebug = false;
+    public static int CurrMaxMapLvl = 1;
 
     // Debug
     private FssLLAPoint pos  = new FssLLAPoint() { LatDegs = 41, LonDegs = 6, AltMslM = 0 };
@@ -32,9 +35,7 @@ public partial class FssMapManager : Node3D
         // Setup this node
         Name = "MapManager";
 
-        // Read the config values
-        var config = FssCentralConfig.Instance;
-        MapRootPath = config.GetParam<string>("MapRootPath");
+        LoadConfig();
 
         for (int lonId = 0; lonId < 12; lonId++)
         {
@@ -49,6 +50,46 @@ public partial class FssMapManager : Node3D
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
+    }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Config Load
+    // --------------------------------------------------------------------------------------------
+
+    private static void LoadConfig()
+    {
+        // Read the debug flag from config
+        var config = FssCentralConfig.Instance;
+
+        // Read each of the params
+        ShowDebug     = config.GetParam<bool>("ShowDebug");
+        CurrMaxMapLvl = config.GetParam<int>("MaxMapLvl");
+        MapRootPath   = config.GetParam<string>("MapRootPath");
+
+        // Apply some validation to the max map level
+        CurrMaxMapLvl = FssValueUtils.Clamp(CurrMaxMapLvl, 1, FssMapTileCode.MaxMapLvl);
+    }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Config Update
+    // --------------------------------------------------------------------------------------------
+
+    public static void SetDebug(bool debug)
+    {
+        ShowDebug = debug;
+
+        // Save the debug flag to config
+        var config = FssCentralConfig.Instance;
+        config.SetParam("ShowDebug", ShowDebug);
+    }
+
+    public static void SetMaxMapLvl(int maxMapLvl)
+    {
+        CurrMaxMapLvl = FssValueUtils.Clamp(maxMapLvl, 1, FssMapTileCode.MaxMapLvl);
+
+        // Save the max map level to config
+        var config = FssCentralConfig.Instance;
+        config.SetParam("MaxMapLvl", CurrMaxMapLvl);
     }
 
 }

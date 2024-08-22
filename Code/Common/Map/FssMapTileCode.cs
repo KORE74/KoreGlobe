@@ -20,6 +20,8 @@ public class FssMapTileCode
     // Constants
     // --------------------------------------------------------------------------------------------
 
+    // FssMapTileCode.MaxMapLvl
+
     public static readonly int MaxMapLvl = 5;
 
     public static readonly int[] NumTilesVertPerLvl  = {  6, 6, 5, 5, 5, 5};

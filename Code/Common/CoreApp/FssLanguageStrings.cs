@@ -181,6 +181,7 @@ public class FssLanguageStrings
         if (!ConfigData.ContainsKey(LookupName(name)))
         {
             SetParam(name, "undefined string", false);
+            SaveJSONConfig(JSONFilename);
         }
         return ConfigData[LookupName(name)];
     }

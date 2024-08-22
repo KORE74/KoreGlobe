@@ -55,8 +55,8 @@ public partial class FssUICameraControl : Control
 
     private void UpdateUIText()
     {
-        CameraModeLabel.Text      = FssLanguageStrings.Instance.GetParam("CameraModeLabel");
-        NearTargetPanelLabel.Text = FssLanguageStrings.Instance.GetParam("NearTargetPanelLabel");
-        FarTargetPanelLabel.Text  = FssLanguageStrings.Instance.GetParam("FarTargetPanelLabel");
+        CameraModeLabel.Text      = FssLanguageStrings.Instance.GetParam("CameraMode");
+        NearTargetPanelLabel.Text = FssLanguageStrings.Instance.GetParam("NearTargetPanel");
+        FarTargetPanelLabel.Text  = FssLanguageStrings.Instance.GetParam("FarTargetPanel");
     }
 }

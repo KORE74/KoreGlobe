@@ -1,9 +1,14 @@
 using System.IO;
+using System.Text.Json;
 
 using Godot;
 
 public static class FssMeshDataIO
 {
+    // --------------------------------------------------------------------------------------------
+    // MARK: Binary IO
+    // --------------------------------------------------------------------------------------------
+
     // Usage: FssMeshDataIO.WriteMeshToFile(meshData, path);
     public static void WriteMeshToFile(FssMeshData meshData, string path)
     {
@@ -101,6 +106,36 @@ public static class FssMeshDataIO
                 Vector2 uv = new Vector2(x, y);
                 meshData.UVs.Add(uv);
             }
+        }
+
+        return meshData;
+    }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: JSON IO
+    // --------------------------------------------------------------------------------------------
+
+    // Usage: FssMeshDataIO.WriteMeshToJSON(meshData, path);
+    public static void WriteMeshToJSON(FssMeshData meshData, string path)
+    {
+        string jsonString = JsonSerializer.Serialize(meshData, new JsonSerializerOptions { WriteIndented = true });
+        File.WriteAllText(path, jsonString);
+    }
+
+    // Usage: FssMeshData meshData = FssMeshDataIO.ReadMeshFromJSON(path);
+
+    public static FssMeshData ReadMeshFromJSON(string path)
+    {
+        FssMeshData meshData = new FssMeshData();
+
+        if (File.Exists(path))
+        {
+            string jsonString = File.ReadAllText(path);
+            meshData = JsonSerializer.Deserialize<FssMeshData>(jsonString);
+        }
+        else
+        {
+            meshData.Name = $"DefaultCube: Failed To Load {path}";
         }
 
         return meshData;
