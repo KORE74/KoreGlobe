@@ -67,7 +67,7 @@ public partial class FssMapManager : Node3D
         MapRootPath   = config.GetParam<string>("MapRootPath");
 
         // Apply some validation to the max map level
-        CurrMaxMapLvl = FssValueUtils.Clamp(CurrMaxMapLvl, 1, FssMapTileCode.MaxMapLvl);
+        CurrMaxMapLvl = FssValueUtils.Clamp(CurrMaxMapLvl, 0, FssMapTileCode.MaxMapLvl);
     }
 
     // --------------------------------------------------------------------------------------------
@@ -85,7 +85,7 @@ public partial class FssMapManager : Node3D
 
     public static void SetMaxMapLvl(int maxMapLvl)
     {
-        CurrMaxMapLvl = FssValueUtils.Clamp(maxMapLvl, 1, FssMapTileCode.MaxMapLvl);
+        CurrMaxMapLvl = FssValueUtils.Clamp(maxMapLvl, 0, FssMapTileCode.MaxMapLvl);
 
         // Save the max map level to config
         var config = FssCentralConfig.Instance;

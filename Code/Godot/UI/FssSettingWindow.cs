@@ -28,6 +28,10 @@ public partial class FssSettingWindow : Window
 
     float    TimerUIUpdate = 0.0f;
 
+    // --------------------------------------------------------------------------------------------
+    // MARK: Standard Functions
+    // --------------------------------------------------------------------------------------------
+
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {

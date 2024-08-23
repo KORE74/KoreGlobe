@@ -1,6 +1,6 @@
-[gd_scene load_steps=25 format=3 uid="uid://ck4tngsqwb7jf"]
+[gd_scene load_steps=26 format=3 uid="uid://ck4tngsqwb7jf"]
 
-[ext_resource type="StyleBox" path="res://Themes/new_style_box_flat.tres" id="1_fred0"]
+[ext_resource type="StyleBox" uid="uid://cg5jbxqki88ph" path="res://Themes/new_style_box_flat.tres" id="1_fred0"]
 [ext_resource type="Script" path="res://Code/Godot/UI/FssUIHeader.cs" id="2_iuuet"]
 [ext_resource type="Theme" uid="uid://p1asdjvj8ece" path="res://Themes/GreenToggle.tres" id="3_454jl"]
 [ext_resource type="Texture2D" uid="uid://b5neqrik7nbhj" path="res://Resources/Icons/White_Connections2.png" id="4_2axux"]
@@ -20,6 +20,7 @@
 [ext_resource type="Script" path="res://Code/Godot/UI/FssNetworkWindow.cs" id="17_xs6g5"]
 [ext_resource type="Theme" uid="uid://dmowlcnw0dkpk" path="res://Themes/BlueToggle.tres" id="18_3dgka"]
 [ext_resource type="Script" path="res://Code/Godot/UI/FssSettingWindow.cs" id="18_sk1xa"]
+[ext_resource type="Script" path="res://Code/Godot/UI/FssPlatformSelectWindow.cs" id="21_6xmyp"]
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_3y634"]
 allow_unpress = true
@@ -732,8 +733,7 @@ custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
-min_value = 1.0
-max_value = 6.0
+max_value = 5.0
 value = 1.0
 rounded = true
 tick_count = 6
@@ -789,24 +789,24 @@ layout_mode = 2
 size_flags_vertical = 2
 
 [node name="CancelButton" type="Button" parent="SettingWindow/MarginContainer/VBoxContainer/RowFinal"]
-custom_minimum_size = Vector2(70, 45)
+custom_minimum_size = Vector2(90, 45)
 layout_mode = 2
 focus_mode = 0
 text = "Cancel"
 
 [node name="OkButton" type="Button" parent="SettingWindow/MarginContainer/VBoxContainer/RowFinal"]
-custom_minimum_size = Vector2(70, 45)
+custom_minimum_size = Vector2(90, 45)
 layout_mode = 2
 focus_mode = 0
 text = "OK"
 
-[node name="PlatformWindow" type="Window" parent="."]
+[node name="PlatformDetailsWindow" type="Window" parent="."]
 auto_translate_mode = 1
+title = "Platform Details"
 initial_position = 2
-size = Vector2i(400, 300)
-visible = false
+size = Vector2i(500, 350)
 
-[node name="MarginContainer" type="MarginContainer" parent="PlatformWindow"]
+[node name="MarginContainer" type="MarginContainer" parent="PlatformDetailsWindow"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -817,21 +817,113 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="Platform" type="VBoxContainer" parent="PlatformWindow/MarginContainer"]
+[node name="Platform" type="VBoxContainer" parent="PlatformDetailsWindow/MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="OptionButton" type="OptionButton" parent="PlatformWindow/MarginContainer/Platform"]
+[node name="PlatformSelectList" type="OptionButton" parent="PlatformDetailsWindow/MarginContainer/Platform"]
 layout_mode = 2
 focus_mode = 0
 item_count = 1
 popup/item_0/text = "plat1"
 
-[node name="TabContainer" type="TabContainer" parent="PlatformWindow/MarginContainer/Platform"]
+[node name="PlatformTabs" type="TabContainer" parent="PlatformDetailsWindow/MarginContainer/Platform"]
 layout_mode = 2
 size_flags_vertical = 3
 current_tab = 0
+tab_focus_mode = 0
 
-[node name="Platform" type="VBoxContainer" parent="PlatformWindow/MarginContainer/Platform/TabContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="PlatformDetailsWindow/MarginContainer/Platform/PlatformTabs"]
 layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
 metadata/_tab_index = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PlatformDetailsWindow/MarginContainer/Platform/PlatformTabs/MarginContainer"]
+clip_contents = true
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Control3" type="Control" parent="PlatformDetailsWindow/MarginContainer/Platform/PlatformTabs/MarginContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="PlatformDetailsWindow/MarginContainer/Platform/PlatformTabs/MarginContainer/HBoxContainer/Control3"]
+layout_mode = 2
+offset_right = 480.0
+offset_bottom = 258.0
+
+[node name="Label" type="Label" parent="PlatformDetailsWindow/MarginContainer/Platform/PlatformTabs/MarginContainer/HBoxContainer/Control3/Panel"]
+layout_mode = 2
+offset_left = 2.0
+offset_top = -27.0
+offset_right = 482.0
+offset_bottom = -4.0
+text = "sdas asd ad "
+
+[node name="Control2" type="Control" parent="PlatformDetailsWindow/MarginContainer/Platform/PlatformTabs/MarginContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="PlatformDetailsWindow/MarginContainer/Platform/PlatformTabs/MarginContainer/HBoxContainer/Control2"]
+offset_right = 480.0
+offset_bottom = 258.0
+
+[node name="Label" type="Label" parent="PlatformDetailsWindow/MarginContainer/Platform/PlatformTabs/MarginContainer/HBoxContainer/Control2/Panel"]
+offset_left = 2.0
+offset_top = -27.0
+offset_right = 482.0
+offset_bottom = -4.0
+text = "sdasdadada sa  dasd "
+
+[node name="Control" type="Control" parent="PlatformDetailsWindow/MarginContainer/Platform/PlatformTabs/MarginContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="PlatformSelectWindow" type="Window" parent="."]
+title = "Platform Select"
+initial_position = 2
+size = Vector2i(300, 300)
+visible = false
+transient = true
+exclusive = true
+unresizable = true
+popup_window = true
+script = ExtResource("21_6xmyp")
+
+[node name="MarginContainer" type="MarginContainer" parent="PlatformSelectWindow"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Platform" type="VBoxContainer" parent="PlatformSelectWindow/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="PlatformList" type="ItemList" parent="PlatformSelectWindow/MarginContainer/Platform"]
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 0
+max_text_lines = 10
+auto_height = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PlatformSelectWindow/MarginContainer/Platform"]
+layout_direction = 3
+layout_mode = 2
+
+[node name="CancelButton" type="Button" parent="PlatformSelectWindow/MarginContainer/Platform/HBoxContainer"]
+custom_minimum_size = Vector2(90, 45)
+layout_mode = 2
+focus_mode = 0
+text = "Cancel"
+
+[node name="SelectButton" type="Button" parent="PlatformSelectWindow/MarginContainer/Platform/HBoxContainer"]
+custom_minimum_size = Vector2(90, 45)
+layout_mode = 2
+focus_mode = 0
+text = "Select"
