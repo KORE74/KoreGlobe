@@ -66,6 +66,8 @@ public static class FssFileOperations
     }
 
     // Filter where the string starts or ends with a specific string
+    
+    // Usage example: FssFileOperations.FilterFilenameSuffix(filenames, ".json");
 
     public static List<string> FilterFilenameSuffix(List<string> filenames, string suffixsubstring)
     {

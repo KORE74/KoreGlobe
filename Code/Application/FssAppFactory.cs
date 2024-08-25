@@ -98,5 +98,9 @@ public class FssAppFactory
     {
         ConsoleInterface.Start();
         MessageManager.Start();
+
+        // co-ordinate some config (avoid directly coupling the classes)
+        FssCentralLog.LoggingActive = FssCentralConfig.Instance.GetParam<bool>("LoggingActive");
+        FssCentralLog.UpdatePath(FssCentralConfig.Instance.GetParam<string>("LogPath"));
     }
 }

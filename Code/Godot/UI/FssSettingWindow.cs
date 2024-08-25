@@ -3,26 +3,33 @@ using System;
 
 public partial class FssSettingWindow : Window
 {
-    // Controls - Top to bottom
+    // Map Control Section
     Label    MapPathLabel;
     LineEdit MapPathLineEdit;
 
     Label    MeshCachePathLabel;
     LineEdit MeshCachePathLineEdit;
 
-    Label    CapturePathLabel;
-    LineEdit CapturePathLineEdit;
-
-    Label    LanguageLabel;
-    Button   LanguageNextButton;
-    Label    ActiveLanguageLabel;
-    Button   LanguagePrevButton;
-
     Label    MaxMapLvlLabel;
     Label    MaxMapLvlValueLabel;
     HSlider  MaxMapLvlSlider;
     Button   ToggleTileDetailsButton;
 
+    // Capture & Log Section
+    Label    CapturePathLabel;
+    LineEdit CapturePathLineEdit;
+
+    Label    LogPathLabel;
+    LineEdit LogPathLineEdit;
+    Button   ToggleLogButton;
+
+    // Language Section
+    Label    LanguageLabel;
+    Button   LanguageNextButton;
+    Label    ActiveLanguageLabel;
+    Button   LanguagePrevButton;
+
+    // Dialog Buttons
     Button   OkButton;
     Button   CancelButton;
 
@@ -35,25 +42,33 @@ public partial class FssSettingWindow : Window
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
+        // Map Control Section
         MapPathLabel            = (Label)FindChild("MapPathLabel");
         MapPathLineEdit         = (LineEdit)FindChild("MapPathLineEdit");
 
         MeshCachePathLabel      = (Label)FindChild("MeshCachePathLabel");
         MeshCachePathLineEdit   = (LineEdit)FindChild("MeshCachePathLineEdit");
 
-        CapturePathLabel        = (Label)FindChild("CapturePathLabel");
-        CapturePathLineEdit     = (LineEdit)FindChild("CapturePathLineEdit");
-
         MaxMapLvlLabel          = (Label)FindChild("MaxMapLvlLabel");
         MaxMapLvlValueLabel     = (Label)FindChild("MaxMapLvlValueLabel");
         MaxMapLvlSlider         = (HSlider)FindChild("MaxMapLvlSlider");
         ToggleTileDetailsButton = (Button)FindChild("ToggleTileDetailsButton");
 
+        // Capture & Log Section
+        CapturePathLabel        = (Label)FindChild("CapturePathLabel");
+        CapturePathLineEdit     = (LineEdit)FindChild("CapturePathLineEdit");
+
+        LogPathLabel            = (Label)FindChild("LogPathLabel");
+        LogPathLineEdit         = (LineEdit)FindChild("LogPathLineEdit");
+        ToggleLogButton         = (Button)FindChild("ToggleLogButton");
+
+        // Language Section
         LanguageLabel           = (Label)FindChild("LanguageLabel");
         LanguageNextButton      = (Button)FindChild("LanguageNextButton");
         ActiveLanguageLabel     = (Label)FindChild("ActiveLanguageLabel");
         LanguagePrevButton      = (Button)FindChild("LanguagePrevButton");
 
+        // Dialog Buttons
         OkButton                = (Button)FindChild("OkButton");
         CancelButton            = (Button)FindChild("CancelButton");
 
@@ -69,6 +84,8 @@ public partial class FssSettingWindow : Window
 
         MaxMapLvlSlider.Connect("value_changed", new Callable(this, "OnMaxMapLvlSliderValueChanged"));
         ToggleTileDetailsButton.Connect("pressed", new Callable(this, "OnToggleTileDetailsButtonPressed"));
+
+        ToggleLogButton.Connect("pressed", new Callable(this, "OnToggleLogButtonPressed"));
 
         OkButton.Connect("pressed", new Callable(this, "OnOkButtonPressed"));
         CancelButton.Connect("pressed", new Callable(this, "OnCancelButtonPressed"));
@@ -99,6 +116,7 @@ public partial class FssSettingWindow : Window
         MapPathLineEdit.Text       = FssCentralConfig.Instance.GetParam<string>("MapRootPath");
         MeshCachePathLineEdit.Text = FssCentralConfig.Instance.GetParam<string>("MeshCachePath");
         CapturePathLineEdit.Text   = FssCentralConfig.Instance.GetParam<string>("CapturePath");
+        LogPathLineEdit.Text       = FssCentralConfig.Instance.GetParam<string>("LogPath");
 
         ActiveLanguageLabel.Text   = FssLanguageStrings.Instance.CurrActiveLanguage();
 
@@ -106,6 +124,8 @@ public partial class FssSettingWindow : Window
         MaxMapLvlSlider.Value      = FssMapManager.CurrMaxMapLvl;
 
         ToggleTileDetailsButton.SetPressed(FssMapManager.ShowDebug);
+
+        ToggleLogButton.SetPressed(FssCentralLog.LoggingActive);
     }
 
     private void SaveControlValues()
@@ -113,9 +133,14 @@ public partial class FssSettingWindow : Window
         FssCentralConfig.Instance.SetParam("MapRootPath",   MapPathLineEdit.Text);
         FssCentralConfig.Instance.SetParam("MeshCachePath", MeshCachePathLineEdit.Text);
         FssCentralConfig.Instance.SetParam("CapturePath",   CapturePathLineEdit.Text);
+        FssCentralConfig.Instance.SetParam("LogPath",       LogPathLineEdit.Text);
 
         // Set the active language in FssLanguageStrings, it will pass this on to the config
         FssCentralConfig.Instance.SetParam("ActiveLanguage", FssLanguageStrings.Instance.CurrActiveLanguage());
+
+        // Toggle the log window
+        FssCentralLog.LoggingActive = ToggleLogButton.IsPressed();
+        FssCentralConfig.Instance.SetParam("LoggingActive", FssCentralLog.LoggingActive);
 
         FssCentralConfig.Instance.WriteToFile();
     }
@@ -130,6 +155,7 @@ public partial class FssSettingWindow : Window
         MapPathLabel.Text            = FssLanguageStrings.Instance.GetParam("MapPath");
         MeshCachePathLabel.Text      = FssLanguageStrings.Instance.GetParam("MeshCachePath");
         CapturePathLabel.Text        = FssLanguageStrings.Instance.GetParam("CapturePath");
+        LogPathLabel.Text            = FssLanguageStrings.Instance.GetParam("LogPath");
         MaxMapLvlLabel.Text          = FssLanguageStrings.Instance.GetParam("MaxMapLvl");
         ToggleTileDetailsButton.Text = FssLanguageStrings.Instance.GetParam("TileInfo");
 
@@ -189,5 +215,10 @@ public partial class FssSettingWindow : Window
 
         // Save the debug flag to config
         FssMapManager.SetDebug(ToggleTileDetailsButton.IsPressed());
+    }
+
+    public void OnToggleLogButtonPressed()
+    {
+        FssCentralLog.AddEntry("FssSettingWindow.OnToggleLogButtonPressed");
     }
 }

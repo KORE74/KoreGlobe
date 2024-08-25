@@ -6,7 +6,7 @@ public class FssXYZBox : FssXYZ
 
     public double Width  { get; set; }
     public double Height { get; set; }
-    public double Depth  { get; set; }
+    public double Length  { get; set; }
 
     public enum EnumFace   { Top, Bottom, Left, Right, Front, Back }
     public enum EnumCorner { TopLeftFront, TopRightFront, BottomLeftFront, BottomRightFront, TopLeftBack, TopRightBack, BottomLeftBack, BottomRightBack }
@@ -22,15 +22,15 @@ public class FssXYZBox : FssXYZ
 
         Width  = 0;
         Height = 0;
-        Depth  = 0;
+        Length = 0;
     }
 
-    public FssXYZBox(FssXYZPoint center, double width, double height, double depth)
+    public FssXYZBox(FssXYZPoint center, double width, double height, double length)
     {
         Center = center;
         Width  = width;
         Height = height;
-        Depth  = depth;
+        Length = length;
     }
 
     // --------------------------------------------------------------------------------------------
@@ -55,7 +55,7 @@ public class FssXYZBox : FssXYZ
     {
         Width  *= scale;
         Height *= scale;
-        Depth  *= scale;
+        Length *= scale;
     
         Center *= scale;
     }
@@ -64,8 +64,8 @@ public class FssXYZBox : FssXYZ
     // MARK: Offset methods
     // --------------------------------------------------------------------------------------------
 
-    public double OffsetForwards  { get { return (Depth / 2) - Center.Z; } }
-    public double OffsetBackwards { get { return (Depth / 2) + Center.Z; } }
+    public double OffsetForwards  { get { return (Length / 2) - Center.Z; } }
+    public double OffsetBackwards { get { return (Length / 2) + Center.Z; } }
     public double OffsetLeft      { get { return (Width / 2) - Center.X; } }
     public double OffsetRight     { get { return (Width / 2) + Center.X; } }
     public double OffsetUp        { get { return (Height / 2) - Center.Y; } }
@@ -75,24 +75,24 @@ public class FssXYZBox : FssXYZ
     // MARK: Corner methods
     // --------------------------------------------------------------------------------------------
 
-    // Get the corner of the box - considering the width, height and depth
+    // Get the corner of the box - considering the width, height and length
 
     public FssXYZPoint Corner(EnumCorner corner)
     {
         double halfWidth  = Width  / 2;
         double halfHeight = Height / 2;
-        double halfDepth  = Depth  / 2;
+        double halfLength  = Length  / 2;
 
         switch(corner)
         {
-            case EnumCorner.TopLeftFront:     return new FssXYZPoint(Center.X - halfWidth, Center.Y + halfHeight, Center.Z - halfDepth);
-            case EnumCorner.TopRightFront:    return new FssXYZPoint(Center.X + halfWidth, Center.Y + halfHeight, Center.Z - halfDepth);
-            case EnumCorner.BottomLeftFront:  return new FssXYZPoint(Center.X - halfWidth, Center.Y - halfHeight, Center.Z - halfDepth);
-            case EnumCorner.BottomRightFront: return new FssXYZPoint(Center.X + halfWidth, Center.Y - halfHeight, Center.Z - halfDepth);
-            case EnumCorner.TopLeftBack:      return new FssXYZPoint(Center.X - halfWidth, Center.Y + halfHeight, Center.Z + halfDepth);
-            case EnumCorner.TopRightBack:     return new FssXYZPoint(Center.X + halfWidth, Center.Y + halfHeight, Center.Z + halfDepth);
-            case EnumCorner.BottomLeftBack:   return new FssXYZPoint(Center.X - halfWidth, Center.Y - halfHeight, Center.Z + halfDepth);
-            case EnumCorner.BottomRightBack:  return new FssXYZPoint(Center.X + halfWidth, Center.Y - halfHeight, Center.Z + halfDepth);
+            case EnumCorner.TopLeftFront:     return new FssXYZPoint(Center.X - halfWidth, Center.Y + halfHeight, Center.Z - halfLength);
+            case EnumCorner.TopRightFront:    return new FssXYZPoint(Center.X + halfWidth, Center.Y + halfHeight, Center.Z - halfLength);
+            case EnumCorner.BottomLeftFront:  return new FssXYZPoint(Center.X - halfWidth, Center.Y - halfHeight, Center.Z - halfLength);
+            case EnumCorner.BottomRightFront: return new FssXYZPoint(Center.X + halfWidth, Center.Y - halfHeight, Center.Z - halfLength);
+            case EnumCorner.TopLeftBack:      return new FssXYZPoint(Center.X - halfWidth, Center.Y + halfHeight, Center.Z + halfLength);
+            case EnumCorner.TopRightBack:     return new FssXYZPoint(Center.X + halfWidth, Center.Y + halfHeight, Center.Z + halfLength);
+            case EnumCorner.BottomLeftBack:   return new FssXYZPoint(Center.X - halfWidth, Center.Y - halfHeight, Center.Z + halfLength);
+            case EnumCorner.BottomRightBack:  return new FssXYZPoint(Center.X + halfWidth, Center.Y - halfHeight, Center.Z + halfLength);
             default:
                 return Center;
         }
@@ -102,7 +102,7 @@ public class FssXYZBox : FssXYZ
     // MARK: Edge methods
     // --------------------------------------------------------------------------------------------
 
-    // Get the edge of the box - considering the width, height and depth.
+    // Get the edge of the box - considering the width, height and length.
 
     public FssXYZLine Edge(EnumEdge edge)
     {

@@ -87,9 +87,9 @@ public partial class TestZeroOffset : Node3D
 
         if (DLCTesting)
         {
-            FssDlcOperations.CreateDlc();
+            //FssDlcOperations.CreateDlc();
 
-            // FssDlcOperations.LoadDlc();
+            FssDlcOperations.LoadDlc();
 
             // List<string> fileList = FssGodotFileOperations.ListFiles("res://DLCPrep");
             // foreach (string file in fileList)

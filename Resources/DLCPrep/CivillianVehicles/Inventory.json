@@ -1,12 +1,12 @@
 [
   {
     "Name": "Model1",
-    "FilePath": "res://DLCs/001/model1.glb",
+    "FilePath": "res://DLCs/CivilianVehicles/Plane/Boeing777/Boeing777-300ER.glb",
     "RwAABB": {
       "Centre": { "X": 0, "Y": 0, "Z": 0 },
-      "Width": 8,
+      "Width": 25,
       "Height": 10,
-      "Depth": 9
+      "Depth": 30
     },
     "Scale": 1
   },

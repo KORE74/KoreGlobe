@@ -119,5 +119,8 @@
   "UdpReceiveAddress_German": "Udp Empfangs-IP",
   "TileInfo_English": "Tile Info",
   "TileInfo_French": "Tile Info",
-  "TileInfo_German": "Tile Info"
+  "TileInfo_German": "Tile Info",
+  "LogPath_English": "Log Path",
+  "LogPath_French": "Log Path",
+  "LogPath_German": "Log Path"
 }

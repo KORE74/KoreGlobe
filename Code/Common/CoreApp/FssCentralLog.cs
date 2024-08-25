@@ -11,9 +11,10 @@ using System.Threading;
 
 public static class FssCentralLog
 {
-    private static string runtimeFilename { get; } = $"{FssCoreTime.TimestampLocal}.log";
+    private static string runtimeFilename { get; set; } = $"{FssCoreTime.TimestampLocal}.log";
     private static List<string> logEntries = new List<string>();
     private static readonly object lockObject = new object();
+    public static bool LoggingActive { set; get; } = true;
 
     static FssCentralLog()
     {
@@ -24,8 +25,16 @@ public static class FssCentralLog
         AddEntry($"Startup: Version {versionStr}");
     }
 
+    public static void UpdatePath(string newPath)
+    {
+        runtimeFilename = FssFileOperations.JoinPaths(newPath, $"{FssCoreTime.TimestampLocal}.log");
+    }
+
     public static void AddEntry(string entry)
     {
+        if (!LoggingActive)
+            return;
+
         // Try to lock the exclusive access to write our log, wait a maximum of 100ms before abandoning the log.
         if (Monitor.TryEnter(lockObject, TimeSpan.FromMilliseconds(100)))
         {
@@ -56,7 +65,6 @@ public static class FssCentralLog
 
         lock (lockObject)
         {
-
             foreach (string line in logEntries)
             {
                 result.Add(line);
@@ -74,6 +82,9 @@ public static class FssCentralLog
 
     private static void AppendToFile(string fileName, string entry)
     {
+        if (!LoggingActive)
+            return;
+
         try
         {
             File.AppendAllText(fileName, entry + Environment.NewLine);

@@ -10,7 +10,7 @@ public static class FssDlcOperations
 {
     private static string dlcDirectory = "DLC";
 
-    private static string dlcExportFolder = "C:/Util/Data/Godot/ExportDLC";
+    // private static string dlcExportFolder = "C:/Util/Data/Godot/ExportDLC";
     //private static string dlcExportFolder = "c:/util/godot/dlc/";
 
     // --------------------------------------------------------------------------------------------
@@ -78,72 +78,70 @@ public static class FssDlcOperations
 
     public static void CreateDlc()
     {
+        // Path to write new .pck files into
+        string dlcExportFolder = FssCentralConfig.Instance.GetParam<string>("CapturePath");
 
+        // List the potential DLCs to export
+        List<string> DLCsToExport = FssGodotFileOperations.ListDLCPrepDirs();
 
+        foreach (string dlc in DLCsToExport)
         {
-            List<string> DLCsToExport = FssGodotFileOperations.ListDLCPrepDirs();
-            GD.Print($"DLCs to export: {DLCsToExport.Count}");
-            foreach (string dlc in DLCsToExport)
-            {
-                GD.Print($"Exporting DLC: {dlc}");
-            }
-        }
+            string dlcName = FssGodotFileOperations.LastPathElement(dlc);
+            string dlcPckName = $"{dlcName}.pck";
+            string dlcPckPath = FssGodotFileOperations.JoinPaths(dlcExportFolder, dlcPckName);
 
-        return;
-
-        // List all potential DLC files, in the res://DLCPrep folder
-        {
-            List<string> fileList = FssGodotFileOperations.ListFiles(FssGodotFileOperations.DlcPrepDir);
-
-            foreach (string file in fileList)
-            {
-                GD.Print($"DLC Prep: {file}");
-            }
-
-        }
-
-        return;
-
-
-        {
-            // define the PCK Files
-            string dlcName = "DLC_001.pck";
-            string fullpath = FssFileOperations.JoinPaths(dlcExportFolder, dlcName);
+            GD.Print($"\n\n\nExporting DLC: {dlcName} to {dlcPckPath}");
 
             // Start the packing
             var packer = new PckPacker();
-            packer.PckStart(fullpath);
+            packer.PckStart(dlcPckPath);
 
-            // Add files to the pack
-            string currResPath = "icon2.svg";
-            string DLCResPath = "res://DLC/001/icon2.svg";
-            var x = packer.AddFile(DLCResPath, currResPath);
-            GD.Print($"Added file:{currResPath}  // to {DLCResPath} // return: {x}");
+            // list all the files in the DLCs folder
+            List<string> fileList = FssGodotFileOperations.ListFiles(dlc, FssGodotFileOperations.ListContent.Files);
 
-            // Add files to the pack
-            currResPath = "cmd.txt";
-            DLCResPath = "res://DLC/001/cmd.txt";
-            x = packer.AddFile(DLCResPath, currResPath);
-            GD.Print($"Added file:{currResPath}  // to {DLCResPath} // return: {x}");
+            foreach (string file in fileList)
+            {
+                // subtract the DLC folder from the path, to get just the path relative to the DLC folder
+                string relativePath = file.Substring(dlc.Length + 1);
+                string pckPath = FssFileOperations.JoinPaths(FssGodotFileOperations.DlcLoadDir, relativePath);
 
-            // Add files to the pack
-            currResPath = "inventory.json";
-            DLCResPath = "res://DLC/001/inventory.json";
-            x = packer.AddFile(DLCResPath, currResPath);
-            GD.Print($"Added file:{currResPath}  // to {DLCResPath} // return: {x}");
+                // Add files to the pack
+                var x = packer.AddFile(pckPath, file);
+                GD.Print($"Added file:{relativePath}  // to {pckPath} // return: {x}");
+            
+            }
 
-            // Conclude the adding
+            // Conclude the adding for this file
             packer.Flush(true);
         }
     }
 
     public static void LoadDlc()
     {
-        {
-            string dlcName = "DLC_001.pck";
-            string fullpath = FssFileOperations.JoinPaths(dlcExportFolder, dlcName);
+        // Path to write new .pck files into
+        string dlcExportFolder = FssCentralConfig.Instance.GetParam<string>("CapturePath");
 
-            ProjectSettings.LoadResourcePack(fullpath);
+        // Find the DLCs to load (anything under the DLC folder with a .pck extension)
+        List<string> dlcPacks = FssGodotFileOperations.ListFiles(FssGodotFileOperations.DlcLoadDir, FssGodotFileOperations.ListContent.Files);
+        dlcPacks = FssFileOperations.FilterFilenameSuffix(dlcPacks, ".pck");
+
+        foreach (string dlc in dlcPacks)
+        {
+            string dlcName = FssGodotFileOperations.LastPathElement(dlc);
+            string dlcPath = FssGodotFileOperations.JoinPaths(dlcExportFolder, dlcName);
+
+            GD.Print($"\n\n\nLoading DLC: {dlcName} from {dlcPath}");
+
+            // Load the DLC pack
+            //ProjectSettings.LoadResourcePack(dlcPath);
+        }      
+
+
+        {
+            // string dlcName = "DLC_001.pck";
+            // string fullpath = FssFileOperations.JoinPaths(dlcExportFolder, dlcName);
+
+            // ProjectSettings.LoadResourcePack(fullpath);
 
             // // Open the text file from the resource pack
             // string filePath = "res://DLCs/cmd.txt";
@@ -159,7 +157,7 @@ public static class FssDlcOperations
     {
         List<Fss3DModelInfo> modelList = new List<Fss3DModelInfo>();
 
-        Fss3DModelInfo info1 = new Fss3DModelInfo() { Name = "Model1", FilePath = "res://DLCs/001/model1.glb", RwAABB = new FssXYZBox() { Height = 10, Depth = 9, Width = 8}, Scale = 1.0f };
+        Fss3DModelInfo info1 = new Fss3DModelInfo() { Name = "Model1", FilePath = "res://DLCs/001/model1.glb", RwAABB = new FssXYZBox() { Height = 10, Length = 9, Width = 8}, Scale = 1.0f };
         Fss3DModelInfo info2 = new Fss3DModelInfo() { Name = "Model2", FilePath = "res://DLCs/001/model2.glb", RwAABB = new FssXYZBox(), Scale = 10.0f };
         Fss3DModelInfo info3 = new Fss3DModelInfo() { Name = "Model3", FilePath = "res://DLCs/001/model3.glb", RwAABB = new FssXYZBox(), Scale = 0.00001f };
 

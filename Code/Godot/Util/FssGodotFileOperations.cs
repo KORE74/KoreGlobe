@@ -11,8 +11,10 @@ using System.IO;
 public static class FssGodotFileOperations
 {
     public static string RootDir    = "res://";
-    public static string DlcLoadDir = "res://DLC/";
-    public static string DlcPrepDir = "res://Resources/DLCPrep/";
+    public static string DlcLoadDir = "res://Resources/DLC/"; // FssGodotFileOperations.DlcLoadDir
+    public static string DlcPrepDir = "res://Resources/DLCPrep/"; // FssGodotFileOperations.DlcPrepDir
+
+    public enum ListContent { Files, Directories, Both };
 
     // Usage: string filePath = FssGodotFileUtil.GetActualPath("res://assets/earth/earth.jpg");
 
@@ -31,7 +33,7 @@ public static class FssGodotFileOperations
     // List all the files, in the godot virtual file system, under a given top level directory.
 
     // Usage: List<string> fileList = FssGodotFileUtil.ListFiles("res://assets/earth");
-    public static List<string> ListFiles(string topLevel)
+    public static List<string> ListFiles(string topLevel, ListContent content = ListContent.Files)
     {
         List<string> fileList = new List<string>();
 
@@ -42,50 +44,21 @@ public static class FssGodotFileOperations
         {
             dir.ListDirBegin();
             string fileName = dir.GetNext();
-            GD.Print($"fileName: {fileName}");
+
             while (fileName != "")
             {
                 if (dir.CurrentIsDir())
                 {
-                    fileList.Add(JoinPaths(topLevel, fileName));
+                    if (content == ListContent.Directories || content == ListContent.Both)
+                        fileList.Add(JoinPaths(topLevel, fileName));
 
-                    List<string> subList = ListFiles(JoinPaths(topLevel, fileName));
+                    List<string> subList = ListFiles(JoinPaths(topLevel, fileName), content);
                     fileList.AddRange(subList);
                 }
                 else
                 {
-                    fileList.Add(JoinPaths(topLevel, fileName));
-                }
-                fileName = dir.GetNext();
-            }
-        }
-        else
-        {
-            GD.Print("An error occurred when trying to access the path.");
-        }
-
-        return fileList;
-    }
-
-    // --------------------------------------------------------------------------------------------
-
-    public static List<string> ListSubdirectories(string topLevel)
-    {
-        List<string> fileList = new List<string>();
-
-        GD.Print($"Listing contents of directory: {topLevel}");
-
-        using var dir = DirAccess.Open(topLevel);
-        if (dir != null)
-        {
-            dir.ListDirBegin();
-            string fileName = dir.GetNext();
-            GD.Print($"fileName: {fileName}");
-            while (fileName != "")
-            {
-                if (dir.CurrentIsDir())
-                {
-                    fileList.Add(JoinPaths(topLevel, fileName));
+                    if (content == ListContent.Files || content == ListContent.Both)
+                        fileList.Add(JoinPaths(topLevel, fileName));
                 }
                 fileName = dir.GetNext();
             }
@@ -104,7 +77,7 @@ public static class FssGodotFileOperations
 
     public static List<string> ListLoadedDLCs()
     {
-        return ListSubdirectories(DlcLoadDir);
+        return ListFiles(DlcLoadDir, ListContent.Directories);
     }
 
     public static List<string> ListDLCFiles(string dlcRootPath)
@@ -116,12 +89,12 @@ public static class FssGodotFileOperations
 
     public static List<string> ListDLCPrepDirs()
     {
-        return ListSubdirectories(DlcPrepDir);
+        return ListFiles(DlcPrepDir, ListContent.Directories);
     }
 
     public static List<string> ListDLCPrepFiles()
     {
-        return ListSubdirectories(DlcPrepDir);
+        return ListFiles(DlcPrepDir, ListContent.Files);
     }
 
     // --------------------------------------------------------------------------------------------
@@ -139,5 +112,10 @@ public static class FssGodotFileOperations
         return $"{path1}/{path2}";
     }
 
-
+    // Usage: string fileName = FssGodotFileOperations.LastPathElement("res://assets/earth/earth.jpg");
+    public static string LastPathElement(string path)
+    {
+        string[] parts = path.Split("/");
+        return parts[parts.Length - 1];
+    }
 }
