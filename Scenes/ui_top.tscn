@@ -1,6 +1,6 @@
 [gd_scene load_steps=28 format=3 uid="uid://ck4tngsqwb7jf"]
 
-[ext_resource type="StyleBox" path="res://Themes/new_style_box_flat.tres" id="1_fred0"]
+[ext_resource type="StyleBox" uid="uid://l27fuiuspgfw" path="res://Themes/Panel.tres" id="1_ndm6o"]
 [ext_resource type="Script" path="res://Code/Godot/UI/FssUIHeader.cs" id="2_iuuet"]
 [ext_resource type="Theme" uid="uid://p1asdjvj8ece" path="res://Themes/GreenToggle.tres" id="3_454jl"]
 [ext_resource type="Texture2D" uid="uid://b5neqrik7nbhj" path="res://Resources/Icons/White_Connections2.png" id="4_2axux"]
@@ -70,7 +70,7 @@ size_flags_horizontal = 3
 
 [node name="HeaderContainer" type="PanelContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen"]
 layout_mode = 2
-theme_override_styles/panel = ExtResource("1_fred0")
+theme_override_styles/panel = ExtResource("1_ndm6o")
 script = ExtResource("2_iuuet")
 
 [node name="MarginContainer-HeaderInset" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer"]
@@ -154,13 +154,15 @@ size_flags_vertical = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = 10
+size_flags_horizontal = 0
+theme_override_constants/separation = 5
 
 [node name="Panel" type="Panel" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(70, 300)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
+theme_override_styles/panel = ExtResource("1_ndm6o")
 
 [node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/Panel"]
 layout_mode = 1
@@ -189,6 +191,7 @@ expand_icon = true
 [node name="Button" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
+theme = ExtResource("18_3dgka")
 text = "RXTX"
 
 [node name="FPSLabel" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
@@ -199,40 +202,46 @@ FPS"
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[node name="PanelPlatformResize" type="Panel" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer"]
-visible = false
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="PanelPlatformResize" type="Panel" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/VBoxContainer"]
 custom_minimum_size = Vector2(400, 70)
 layout_mode = 2
 size_flags_horizontal = 2
 size_flags_vertical = 0
+theme_override_styles/panel = ExtResource("1_ndm6o")
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/PanelPlatformResize"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/VBoxContainer/PanelPlatformResize"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/PanelPlatformResize/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/VBoxContainer/PanelPlatformResize/MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="RWSizeToggleButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/PanelPlatformResize/MarginContainer/HBoxContainer"]
+[node name="RWScaleToggleButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/VBoxContainer/PanelPlatformResize/MarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 theme = ExtResource("9_xvvq8")
 icon = ExtResource("11_mvn6c")
 expand_icon = true
 
-[node name="InfoGraphicToggleButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/PanelPlatformResize/MarginContainer/HBoxContainer"]
+[node name="InfographicToggleButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/VBoxContainer/PanelPlatformResize/MarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 theme = ExtResource("9_xvvq8")
 text = "INFO"
 
-[node name="HSlider" type="HSlider" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/PanelPlatformResize/MarginContainer/HBoxContainer"]
+[node name="InfographicScaleSlider" type="HSlider" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/VBoxContainer/PanelPlatformResize/MarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(200, 50)
 layout_mode = 2
 min_value = 1.0
@@ -241,20 +250,21 @@ value = 1.0
 tick_count = 10
 ticks_on_borders = true
 
-[node name="Label" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/PanelPlatformResize/MarginContainer/HBoxContainer"]
+[node name="InfographicScaleLabel" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/VBoxContainer/PanelPlatformResize/MarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 text = "100"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PanelRxTxShown" type="Panel" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer"]
+[node name="PanelRxTxShown" type="Panel" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/VBoxContainer"]
 custom_minimum_size = Vector2(120, 70)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
+theme_override_styles/panel = ExtResource("1_ndm6o")
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/PanelRxTxShown"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/VBoxContainer/PanelRxTxShown"]
 layout_mode = 1
 offset_right = 124.0
 offset_bottom = 70.0
@@ -263,16 +273,16 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/PanelRxTxShown/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/VBoxContainer/PanelRxTxShown/MarginContainer"]
 layout_mode = 2
 
-[node name="ShowTxButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/PanelRxTxShown/MarginContainer/HBoxContainer"]
+[node name="ShowTxButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/VBoxContainer/PanelRxTxShown/MarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 size_flags_vertical = 0
 text = "TX"
 
-[node name="ShowRxButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/PanelRxTxShown/MarginContainer/HBoxContainer"]
+[node name="ShowRxButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/VBoxContainer/PanelRxTxShown/MarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 size_flags_vertical = 0
@@ -299,7 +309,7 @@ grow_vertical = 0
 
 [node name="PanelContainer-CamMode" type="PanelContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer"]
 layout_mode = 2
-theme_override_styles/panel = ExtResource("1_fred0")
+theme_override_styles/panel = ExtResource("1_ndm6o")
 
 [node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer/PanelContainer-CamMode"]
 layout_mode = 2
@@ -364,7 +374,7 @@ expand_icon = true
 
 [node name="PanelContainer-NearCamTarget" type="PanelContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer"]
 layout_mode = 2
-theme_override_styles/panel = ExtResource("1_fred0")
+theme_override_styles/panel = ExtResource("1_ndm6o")
 
 [node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer/PanelContainer-NearCamTarget"]
 layout_mode = 2
@@ -415,7 +425,7 @@ expand_icon = true
 
 [node name="PanelContainer-FarCamTarget" type="PanelContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer"]
 layout_mode = 2
-theme_override_styles/panel = ExtResource("1_fred0")
+theme_override_styles/panel = ExtResource("1_ndm6o")
 
 [node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer/PanelContainer-FarCamTarget"]
 layout_mode = 2
