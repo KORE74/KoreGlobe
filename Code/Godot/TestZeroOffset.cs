@@ -78,8 +78,6 @@ public partial class TestZeroOffset : Node3D
         // Create Nodes
         CreateCoreNode();
 
-        CreatePlatform();
-        CreatePlatformNodes();
 
         //Fss3DModelLibrary.TestLoadModel(ZeroNode);
 
@@ -89,48 +87,28 @@ public partial class TestZeroOffset : Node3D
         {
             //FssDlcOperations.CreateDlc();
 
-            FssDlcOperations.LoadDlc();
+            List<string> dlcList = FssDlcOperations.ListLoadableDlcPaths();
 
-            // List<string> fileList = FssGodotFileOperations.ListFiles("res://DLCPrep");
-            // foreach (string file in fileList)
-            // {
-            //     GD.Print($"=> File: {file}");
-            // }
+            foreach (string dlc in dlcList)
+                FssDlcOperations.LoadDlc(dlc);
 
-            // List<string> dlcList = FssGodotFileOperations.ListLoadedDLCs();
-            // foreach (string dlc in dlcList)
-            // {
-            //     GD.Print($"=> DLC: {dlc}");
+            FssCentralLog.AddEntry( FssDlcOperations.DlcReport() );
 
-            //     List<string> dlcFiles = FssGodotFileOperations.ListFiles(dlc);
-            //     foreach (string file in dlcFiles)
-            //     {
-            //         GD.Print($"=> DLC {dlc} // DLCFile: {file}");
-
-            //         // if the file is a JSON, load it into the library
-            //         if (file.EndsWith(".json"))
-            //         {
-            //             GD.Print($"Processing JSON file: {file}");
-
-            //             // Use the godot virtual file system to open and rad te file
-            //             using FileAccess filea = FileAccess.Open(file, FileAccess.ModeFlags.Read);
-            //             string content = filea.GetAsText();
-
-
-
-            //             // deserialize the JSON string into a list of Fss3DModelInfo objects
-            //             //<List<Fss3DModelInfo> modelList = JsonSerializer.Deserialize<List<Fss3DModelInfo>>(jsonString);
-
-            //             Fss3DModelLibrary.DeserializeJSONConfig(content);
-            //         }
-
-            //     }
-
-            // FssDlcOperations.DlcInv();
-
-            // }
+            // Find the JSON files in each DLC and report on them
+            List<string> dlcTitlesList = FssDlcOperations.ListLoadedDlcTitles();
+            foreach (string currDlcTitle in dlcTitlesList)
+            {
+                string invJson = FssDlcOperations.InventoryJsonForDLCTitle(currDlcTitle);
+                FssCentralLog.AddEntry($"DLC: {currDlcTitle} JSON: {invJson}");
+            }
+            
 
         }
+
+        CreatePlatform();
+        CreatePlatformNodes();
+
+
     }
 
     // --------------------------------------------------------------------------------------------
@@ -222,7 +200,7 @@ public partial class TestZeroOffset : Node3D
         PlatformPos = new FssLLAPoint() {
             LatDegs = 10,
             LonDegs = 10,
-            AltMslM = 1000,};
+            AltMslM = 5000,};
 
         PlatformCourse = new FssCourse() {
             HeadingDegs = 95f,
@@ -244,7 +222,7 @@ public partial class TestZeroOffset : Node3D
         FssPrimitiveFactory.AddAxisMarkers(PlaformBaseNode, 0.2f, 0.05f);
 
         //string ModelPath = "res://Resources/Models/Plane/Plane_Paper/PaperPlanes_v002.glb";
-        string ModelPath = "res://Resources/DLCPrep/CivillianVehicles/Plane/PlanePaper/PaperPlanes_v002.glb";
+        string ModelPath = "res://Resources/DLC/PlaceholderModels/Plane/PlanePaper/PaperPlanes_v002.glb";
 
         PackedScene importedModel = (PackedScene)ResourceLoader.Load(ModelPath);
         if (importedModel != null)

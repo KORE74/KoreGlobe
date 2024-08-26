@@ -16,7 +16,8 @@
   "CapturePath": "C:/Util/Data/Godot/Globe4-Capture/",
   "ActiveLanguage": "English",
   "ShowDebug": true,
-  "MaxMapLvl": 1,
+  "MaxMapLvl": 2,
   "LoggingActive": true,
-  "LogPath": "C:/Util/Data/Godot/Globe4-Capture/"
+  "LogPath": "C:/Util/Data/Godot/Globe4-Capture/",
+  "DlcPath": "C:/Util/Data/Godot/Globe4-DLC/"
 }

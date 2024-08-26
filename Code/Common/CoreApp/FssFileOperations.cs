@@ -59,6 +59,8 @@ public static class FssFileOperations
     }
 
     // --------------------------------------------------------------------------------------------
+    // MARK: Filtering
+    // --------------------------------------------------------------------------------------------
 
     public static List<string> FilterFilenameList(List<string> filenames, string substring)
     {
@@ -79,6 +81,17 @@ public static class FssFileOperations
         return filenames.Where(filename => filename.StartsWith(prefixsubstring)).ToList();
     }
 
+    // --------------------------------------------------------------------------------------------
+
+    public static List<string> RemovePrefix(List<string> filenames, string prefix)
+    {
+        return filenames.Select(filename => filename.StartsWith(prefix) ? filename.Substring(prefix.Length) : filename).ToList();
+    }
+
+    public static List<string> RemoveSuffix(List<string> filenames, string suffix)
+    {
+        return filenames.Select(filename => filename.EndsWith(suffix) ? filename.Substring(0, filename.Length - suffix.Length) : filename).ToList();
+    }
 
     // --------------------------------------------------------------------------------------------
 
@@ -87,6 +100,8 @@ public static class FssFileOperations
         return filenames.OrderBy(filename => filename).ToList();
     }
 
+    // --------------------------------------------------------------------------------------------
+    // MARK: Joining Paths
     // --------------------------------------------------------------------------------------------
 
     // The standard Path.Combinbe can introduce a backslash "\" character.
@@ -110,6 +125,8 @@ public static class FssFileOperations
         return $"{normalizedPath1}/{normalizedPath2}";
     }
 
+    // --------------------------------------------------------------------------------------------
+    // MARK: File Extension
     // --------------------------------------------------------------------------------------------
 
     // Check the filename string has the right extension, or add it if it doesn't.

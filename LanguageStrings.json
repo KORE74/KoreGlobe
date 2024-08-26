@@ -118,9 +118,15 @@
   "UdpReceiveAddress_French": "IP de r\u00E9ception Udp",
   "UdpReceiveAddress_German": "Udp Empfangs-IP",
   "TileInfo_English": "Tile Info",
-  "TileInfo_French": "Tile Info",
-  "TileInfo_German": "Tile Info",
+  "TileInfo_French": "Info tuile",
+  "TileInfo_German": "Kachelinfo",
   "LogPath_English": "Log Path",
-  "LogPath_French": "Log Path",
-  "LogPath_German": "Log Path"
+  "LogPath_French": "Chemin du journal",
+  "LogPath_German": "Protokollpfad",
+  "DlcPath_English": "DLC Path",
+  "DlcLoaded_English": "DLC Loaded",
+  "DlcPath_German": "DLC-Pfad",
+  "DlcLoaded_German": "DLC geladen",
+  "DlcPath_French": "Chemin du DLC",
+  "DlcLoaded_French": "DLC charg\u00E9"
 }

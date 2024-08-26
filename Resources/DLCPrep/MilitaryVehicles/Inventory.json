@@ -1,35 +1,35 @@
 [
   {
-    "Name": "Model1",
-    "FilePath": "res://DLCs/001/model1.glb",
+    "Name": "C-130",
+    "FilePath": "res://Resources/DLC/MilitaryVehicles/Plane/C-130/C-130.glb",
     "RwAABB": {
       "Centre": { "X": 0, "Y": 0, "Z": 0 },
-      "Width": 8,
+      "Width": 30,
       "Height": 10,
-      "Depth": 9
+      "Length": 30
     },
     "Scale": 1
   },
   {
-    "Name": "Model2",
-    "FilePath": "res://DLCs/001/model2.glb",
+    "Name": "F18",
+    "FilePath": "res://Resources/DLC/MilitaryVehicles/Plane/F18/FA-18F_v02.glb",
     "RwAABB": {
       "Centre": { "X": 0, "Y": 0, "Z": 0 },
-      "Width": 0,
-      "Height": 0,
-      "Depth": 0
+      "Width": 10,
+      "Height": 4,
+      "Length": 13
     },
-    "Scale": 10
+    "Scale": 1
   },
   {
-    "Name": "Model3",
-    "FilePath": "res://DLCs/001/model3.glb",
+    "Name": "MQ9Reaper",
+    "FilePath": "res://Resources/DLC/MilitaryVehicles/UAV/MQ-9 Reaper/MQ-9 Reaper.glb",
     "RwAABB": {
       "Centre": { "X": 0, "Y": 0, "Z": 0 },
-      "Width": 0,
-      "Height": 0,
-      "Depth": 0
+      "Width": 10,
+      "Height": 3,
+      "Length": 10
     },
-    "Scale": 1e-5
+    "Scale": 10
   }
 ]

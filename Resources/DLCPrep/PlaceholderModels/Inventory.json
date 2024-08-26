@@ -1,0 +1,14 @@
+[
+    {
+      "Name": "PaperPlane",
+      "FilePath": "res://Resources/DLC/PlaceholderModels/Plane/PaperPlane/PaperPlanes_v002.glb",
+      "RwAABB": {
+        "Centre": { "X": 0, "Y": 0, "Z": 0 },
+        "Width": 8,
+        "Height": 5,
+        "Length": 9
+      },
+      "Scale": 1
+    }
+  ]
+  

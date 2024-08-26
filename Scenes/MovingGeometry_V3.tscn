@@ -1,27 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://cle61uafx4wyg"]
+[gd_scene load_steps=4 format=3 uid="uid://cle61uafx4wyg"]
 
 [ext_resource type="Script" path="res://Code/Godot/TestZeroOffset.cs" id="1_awllb"]
 [ext_resource type="Script" path="res://Code/Godot/Util/FssCameraMover.cs" id="2_uur7r"]
 [ext_resource type="PackedScene" uid="uid://ck4tngsqwb7jf" path="res://Scenes/ui_top.tscn" id="3_3wlp5"]
-
-[sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_1kdqr"]
-
-[sub_resource type="Sky" id="Sky_04td5"]
-sky_material = SubResource("PhysicalSkyMaterial_1kdqr")
-
-[sub_resource type="Environment" id="Environment_u3ced"]
-background_mode = 1
-background_color = Color(0.56732, 0.766407, 0.790569, 1)
-background_energy_multiplier = 1.16
-sky = SubResource("Sky_04td5")
-ambient_light_source = 2
-ambient_light_color = Color(0.875644, 0.893054, 0.867068, 1)
-reflected_light_source = 2
-ssr_depth_tolerance = 0.01
-ssao_radius = 1.47
-fog_light_energy = 1.63
-fog_sun_scatter = 0.56
-adjustment_enabled = true
 
 [node name="Root" type="Node3D"]
 top_level = true
@@ -42,8 +23,5 @@ fov = 40.0
 near = 0.001
 far = 12000.0
 script = ExtResource("2_uur7r")
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="Scene"]
-environment = SubResource("Environment_u3ced")
 
 [node name="UITop" parent="." instance=ExtResource("3_3wlp5")]

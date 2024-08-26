@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class FssSettingWindow : Window
 {
@@ -28,6 +29,13 @@ public partial class FssSettingWindow : Window
     Button   LanguageNextButton;
     Label    ActiveLanguageLabel;
     Button   LanguagePrevButton;
+
+    // DLC Section
+    Label    DLCPathLabel;
+    LineEdit DLCPathLineEdit;
+    Label    DLCLoadedLabel;
+    ItemList DLCLoadedList;
+    Button   DLCRefreshButton;
 
     // Dialog Buttons
     Button   OkButton;
@@ -68,6 +76,13 @@ public partial class FssSettingWindow : Window
         ActiveLanguageLabel     = (Label)FindChild("ActiveLanguageLabel");
         LanguagePrevButton      = (Button)FindChild("LanguagePrevButton");
 
+        // DLC Section
+        DLCPathLabel            = (Label)FindChild("DLCPathLabel");
+        DLCPathLineEdit         = (LineEdit)FindChild("DLCPathLineEdit");
+        DLCLoadedLabel          = (Label)FindChild("DLCLoadedLabel");
+        DLCLoadedList           = (ItemList)FindChild("DLCLoadedList");
+        DLCRefreshButton        = (Button)FindChild("DLCRefreshButton");
+
         // Dialog Buttons
         OkButton                = (Button)FindChild("OkButton");
         CancelButton            = (Button)FindChild("CancelButton");
@@ -79,16 +94,18 @@ public partial class FssSettingWindow : Window
             return;
         }
 
-        LanguageNextButton.Connect("pressed", new Callable(this, "OnNextLanguageButtonPressed"));
-        LanguagePrevButton.Connect("pressed", new Callable(this, "OnPrevLanguageButtonPressed"));
+        // Wire up button pressed
+        LanguageNextButton.Connect(     "pressed", new Callable(this, "OnNextLanguageButtonPressed"));
+        LanguagePrevButton.Connect(     "pressed", new Callable(this, "OnPrevLanguageButtonPressed"));
+        ToggleTileDetailsButton.Connect("pressed", new Callable(this, "OnToggleTileDetailsButtonPressed"));
+        ToggleLogButton.Connect(        "pressed", new Callable(this, "OnToggleLogButtonPressed"));
+        OkButton.Connect(               "pressed", new Callable(this, "OnOkButtonPressed"));
+        CancelButton.Connect(           "pressed", new Callable(this, "OnCancelButtonPressed"));
+        DLCRefreshButton.Connect(       "pressed", new Callable(this, "OnDLCRefreshButtonPressed"));
 
         MaxMapLvlSlider.Connect("value_changed", new Callable(this, "OnMaxMapLvlSliderValueChanged"));
-        ToggleTileDetailsButton.Connect("pressed", new Callable(this, "OnToggleTileDetailsButtonPressed"));
 
-        ToggleLogButton.Connect("pressed", new Callable(this, "OnToggleLogButtonPressed"));
 
-        OkButton.Connect("pressed", new Callable(this, "OnOkButtonPressed"));
-        CancelButton.Connect("pressed", new Callable(this, "OnCancelButtonPressed"));
 
         // Connect the close_requested signal to the OnCloseRequested function
         Connect("close_requested", new Callable(this, "OnCancelButtonPressed"));
@@ -96,6 +113,8 @@ public partial class FssSettingWindow : Window
         UpdateUIText();
         WriteControlValues();
     }
+
+    // --------------------------------------------------------------------------------------------
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
@@ -117,6 +136,7 @@ public partial class FssSettingWindow : Window
         MeshCachePathLineEdit.Text = FssCentralConfig.Instance.GetParam<string>("MeshCachePath");
         CapturePathLineEdit.Text   = FssCentralConfig.Instance.GetParam<string>("CapturePath");
         LogPathLineEdit.Text       = FssCentralConfig.Instance.GetParam<string>("LogPath");
+        DLCPathLineEdit.Text       = FssCentralConfig.Instance.GetParam<string>("DlcPath");
 
         ActiveLanguageLabel.Text   = FssLanguageStrings.Instance.CurrActiveLanguage();
 
@@ -126,6 +146,8 @@ public partial class FssSettingWindow : Window
         ToggleTileDetailsButton.SetPressed(FssMapManager.ShowDebug);
 
         ToggleLogButton.SetPressed(FssCentralLog.LoggingActive);
+
+        UpdateDlcList();
     }
 
     private void SaveControlValues()
@@ -134,6 +156,7 @@ public partial class FssSettingWindow : Window
         FssCentralConfig.Instance.SetParam("MeshCachePath", MeshCachePathLineEdit.Text);
         FssCentralConfig.Instance.SetParam("CapturePath",   CapturePathLineEdit.Text);
         FssCentralConfig.Instance.SetParam("LogPath",       LogPathLineEdit.Text);
+        FssCentralConfig.Instance.SetParam("DlcPath",       DLCPathLineEdit.Text);
 
         // Set the active language in FssLanguageStrings, it will pass this on to the config
         FssCentralConfig.Instance.SetParam("ActiveLanguage", FssLanguageStrings.Instance.CurrActiveLanguage());
@@ -143,6 +166,19 @@ public partial class FssSettingWindow : Window
         FssCentralConfig.Instance.SetParam("LoggingActive", FssCentralLog.LoggingActive);
 
         FssCentralConfig.Instance.WriteToFile();
+    }
+
+    private void UpdateDlcList()
+    {
+        // Clear the list
+        DLCLoadedList.Clear();
+
+        // // Get the list of files in the DLC path
+        List<string> loadedDLCTitlesList = FssDlcOperations.ListLoadedDlcTitles();
+
+        // Populate the list control
+        foreach(string dlcName in loadedDLCTitlesList)
+            DLCLoadedList.AddItem(dlcName);
     }
 
     // --------------------------------------------------------------------------------------------
@@ -158,9 +194,12 @@ public partial class FssSettingWindow : Window
         LogPathLabel.Text            = FssLanguageStrings.Instance.GetParam("LogPath");
         MaxMapLvlLabel.Text          = FssLanguageStrings.Instance.GetParam("MaxMapLvl");
         ToggleTileDetailsButton.Text = FssLanguageStrings.Instance.GetParam("TileInfo");
+        LanguageLabel.Text           = FssLanguageStrings.Instance.GetParam("Language");
+        DLCPathLabel.Text            = FssLanguageStrings.Instance.GetParam("DlcPath");
+        DLCLoadedLabel.Text          = FssLanguageStrings.Instance.GetParam("DlcLoaded");
 
-        OkButton.Text           = FssLanguageStrings.Instance.GetParam("Ok");
-        CancelButton.Text       = FssLanguageStrings.Instance.GetParam("Cancel");
+        OkButton.Text                = FssLanguageStrings.Instance.GetParam("Ok");
+        CancelButton.Text            = FssLanguageStrings.Instance.GetParam("Cancel");
     }
 
     // --------------------------------------------------------------------------------------------
@@ -220,5 +259,14 @@ public partial class FssSettingWindow : Window
     public void OnToggleLogButtonPressed()
     {
         FssCentralLog.AddEntry("FssSettingWindow.OnToggleLogButtonPressed");
+    }
+
+    public void OnDLCRefreshButtonPressed()
+    {
+        // Unload existing DLC
+
+        // Refresh DLC List
+        UpdateDlcList();
+
     }
 }

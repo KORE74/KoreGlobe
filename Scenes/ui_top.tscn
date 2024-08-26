@@ -110,6 +110,7 @@ text = "Mode:"
 layout_mode = 2
 item_count = 5
 popup/item_0/text = "Real World"
+popup/item_0/id = 0
 popup/item_1/text = "Logical"
 popup/item_1/id = 1
 popup/item_2/text = "InfoGraphic"
@@ -368,6 +369,7 @@ layout_mode = 2
 focus_mode = 0
 item_count = 4
 popup/item_0/text = "sadfsadfa"
+popup/item_0/id = 0
 popup/item_1/text = "sadfsadf"
 popup/item_1/id = 1
 popup/item_2/text = "sadfs"
@@ -396,6 +398,7 @@ auto_translate_mode = 1
 title = "Internal CLI"
 initial_position = 2
 size = Vector2i(700, 400)
+visible = false
 min_size = Vector2i(600, 400)
 script = ExtResource("16_unelf")
 
@@ -689,11 +692,12 @@ custom_minimum_size = Vector2(70, 45)
 layout_mode = 2
 text = "OK"
 
-[node name="SettingWindow2" type="Window" parent="."]
+[node name="SettingWindow" type="Window" parent="."]
 auto_translate_mode = 1
 title = "Settings"
 initial_position = 2
 size = Vector2i(600, 420)
+visible = false
 min_size = Vector2i(550, 420)
 max_size = Vector2i(1300, 420)
 content_scale_size = Vector2i(0, 400)
@@ -702,7 +706,7 @@ content_scale_aspect = 1
 content_scale_stretch = 1
 script = ExtResource("18_sk1xa")
 
-[node name="MarginContainer" type="MarginContainer" parent="SettingWindow2"]
+[node name="MarginContainer" type="MarginContainer" parent="SettingWindow"]
 clip_contents = true
 anchors_preset = 15
 anchor_right = 1.0
@@ -716,16 +720,173 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="TabContainer" type="TabContainer" parent="SettingWindow2/MarginContainer"]
+[node name="TabContainer" type="TabContainer" parent="SettingWindow/MarginContainer"]
 layout_mode = 2
 size_flags_vertical = 0
 current_tab = 0
+tab_focus_mode = 0
 
-[node name="DLC" type="VBoxContainer" parent="SettingWindow2/MarginContainer/TabContainer"]
+[node name="Misc" type="MarginContainer" parent="SettingWindow/MarginContainer/TabContainer"]
 layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
 metadata/_tab_index = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="SettingWindow2/MarginContainer/TabContainer/DLC"]
+[node name="VBoxContainer" type="VBoxContainer" parent="SettingWindow/MarginContainer/TabContainer/Misc"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Row-MapPath" type="HBoxContainer" parent="SettingWindow/MarginContainer/TabContainer/Misc/VBoxContainer"]
+layout_mode = 2
+
+[node name="MapPathLabel" type="Label" parent="SettingWindow/MarginContainer/TabContainer/Misc/VBoxContainer/Row-MapPath"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Map Path"
+vertical_alignment = 1
+
+[node name="MapPathLineEdit" type="LineEdit" parent="SettingWindow/MarginContainer/TabContainer/Misc/VBoxContainer/Row-MapPath"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "X:/BaseDirectory/Option/MapDirectory/"
+
+[node name="Row-MeshCachePath" type="HBoxContainer" parent="SettingWindow/MarginContainer/TabContainer/Misc/VBoxContainer"]
+layout_mode = 2
+
+[node name="MeshCachePathLabel" type="Label" parent="SettingWindow/MarginContainer/TabContainer/Misc/VBoxContainer/Row-MeshCachePath"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Mesh Cache"
+vertical_alignment = 1
+
+[node name="MeshCachePathLineEdit" type="LineEdit" parent="SettingWindow/MarginContainer/TabContainer/Misc/VBoxContainer/Row-MeshCachePath"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "X:/BaseDirectory/Option/MapDirectory/"
+
+[node name="Row-MapLevel" type="HBoxContainer" parent="SettingWindow/MarginContainer/TabContainer/Misc/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="MaxMapLvlLabel" type="Label" parent="SettingWindow/MarginContainer/TabContainer/Misc/VBoxContainer/Row-MapLevel"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Max Map Level"
+vertical_alignment = 1
+
+[node name="MaxMapLvlValueLabel" type="Label" parent="SettingWindow/MarginContainer/TabContainer/Misc/VBoxContainer/Row-MapLevel"]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "5"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MaxMapLvlSlider" type="HSlider" parent="SettingWindow/MarginContainer/TabContainer/Misc/VBoxContainer/Row-MapLevel"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+max_value = 5.0
+value = 1.0
+rounded = true
+tick_count = 6
+ticks_on_borders = true
+
+[node name="ToggleTileDetailsButton" type="Button" parent="SettingWindow/MarginContainer/TabContainer/Misc/VBoxContainer/Row-MapLevel"]
+custom_minimum_size = Vector2(90, 40)
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("18_3dgka")
+toggle_mode = true
+text = "Tile Info"
+
+[node name="HSeparator3" type="HSeparator" parent="SettingWindow/MarginContainer/TabContainer/Misc/VBoxContainer"]
+layout_mode = 2
+
+[node name="Row-CapturePath" type="HBoxContainer" parent="SettingWindow/MarginContainer/TabContainer/Misc/VBoxContainer"]
+layout_mode = 2
+
+[node name="CapturePathLabel" type="Label" parent="SettingWindow/MarginContainer/TabContainer/Misc/VBoxContainer/Row-CapturePath"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Screenshot Path"
+vertical_alignment = 1
+
+[node name="CapturePathLineEdit" type="LineEdit" parent="SettingWindow/MarginContainer/TabContainer/Misc/VBoxContainer/Row-CapturePath"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "X:/BaseDirectory/Option/MapDirectory/"
+
+[node name="Row-LogPath" type="HBoxContainer" parent="SettingWindow/MarginContainer/TabContainer/Misc/VBoxContainer"]
+layout_mode = 2
+
+[node name="LogPathLabel" type="Label" parent="SettingWindow/MarginContainer/TabContainer/Misc/VBoxContainer/Row-LogPath"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Log Path"
+vertical_alignment = 1
+
+[node name="LogPathLineEdit" type="LineEdit" parent="SettingWindow/MarginContainer/TabContainer/Misc/VBoxContainer/Row-LogPath"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "X:/BaseDirectory/Option/MapDirectory/"
+
+[node name="ToggleLogButton" type="Button" parent="SettingWindow/MarginContainer/TabContainer/Misc/VBoxContainer/Row-LogPath"]
+custom_minimum_size = Vector2(90, 40)
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("18_3dgka")
+toggle_mode = true
+text = "Log"
+
+[node name="HSeparator" type="HSeparator" parent="SettingWindow/MarginContainer/TabContainer/Misc/VBoxContainer"]
+layout_mode = 2
+
+[node name="Row-LanguageSelect" type="HBoxContainer" parent="SettingWindow/MarginContainer/TabContainer/Misc/VBoxContainer"]
+layout_mode = 2
+
+[node name="LanguageLabel" type="Label" parent="SettingWindow/MarginContainer/TabContainer/Misc/VBoxContainer/Row-LanguageSelect"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Language"
+vertical_alignment = 1
+
+[node name="LanguagePrevButton" type="Button" parent="SettingWindow/MarginContainer/TabContainer/Misc/VBoxContainer/Row-LanguageSelect"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("14_w6k6m")
+icon_alignment = 1
+expand_icon = true
+
+[node name="ActiveLanguageLabel" type="Label" parent="SettingWindow/MarginContainer/TabContainer/Misc/VBoxContainer/Row-LanguageSelect"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "English"
+horizontal_alignment = 1
+
+[node name="LanguageNextButton" type="Button" parent="SettingWindow/MarginContainer/TabContainer/Misc/VBoxContainer/Row-LanguageSelect"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+focus_mode = 0
+icon = ExtResource("15_7rjg6")
+expand_icon = true
+
+[node name="DLC" type="VBoxContainer" parent="SettingWindow/MarginContainer/TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="SettingWindow/MarginContainer/TabContainer/DLC"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/margin_left = 10
@@ -733,40 +894,40 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="SettingWindow2/MarginContainer/TabContainer/DLC/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="SettingWindow/MarginContainer/TabContainer/DLC/MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Row-DLCPath" type="HBoxContainer" parent="SettingWindow2/MarginContainer/TabContainer/DLC/MarginContainer/VBoxContainer"]
+[node name="Row-DLCPath" type="HBoxContainer" parent="SettingWindow/MarginContainer/TabContainer/DLC/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="DLCPathLabel" type="Label" parent="SettingWindow2/MarginContainer/TabContainer/DLC/MarginContainer/VBoxContainer/Row-DLCPath"]
+[node name="DLCPathLabel" type="Label" parent="SettingWindow/MarginContainer/TabContainer/DLC/MarginContainer/VBoxContainer/Row-DLCPath"]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 text = "DLC Path"
 vertical_alignment = 1
 
-[node name="DLCPathLineEdit" type="LineEdit" parent="SettingWindow2/MarginContainer/TabContainer/DLC/MarginContainer/VBoxContainer/Row-DLCPath"]
+[node name="DLCPathLineEdit" type="LineEdit" parent="SettingWindow/MarginContainer/TabContainer/DLC/MarginContainer/VBoxContainer/Row-DLCPath"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "X:/BaseDirectory/Option/MapDirectory/"
 
-[node name="HSeparator" type="HSeparator" parent="SettingWindow2/MarginContainer/TabContainer/DLC/MarginContainer/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="SettingWindow/MarginContainer/TabContainer/DLC/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Row-DLCReport" type="HBoxContainer" parent="SettingWindow2/MarginContainer/TabContainer/DLC/MarginContainer/VBoxContainer"]
+[node name="Row-DLCReport" type="HBoxContainer" parent="SettingWindow/MarginContainer/TabContainer/DLC/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 2
 
-[node name="DLCReportLabel" type="Label" parent="SettingWindow2/MarginContainer/TabContainer/DLC/MarginContainer/VBoxContainer/Row-DLCReport"]
+[node name="DLCLoadedLabel" type="Label" parent="SettingWindow/MarginContainer/TabContainer/DLC/MarginContainer/VBoxContainer/Row-DLCReport"]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 text = "DLC Loaded"
 
-[node name="DLCList" type="ItemList" parent="SettingWindow2/MarginContainer/TabContainer/DLC/MarginContainer/VBoxContainer/Row-DLCReport"]
+[node name="DLCLoadedList" type="ItemList" parent="SettingWindow/MarginContainer/TabContainer/DLC/MarginContainer/VBoxContainer/Row-DLCReport"]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
@@ -777,368 +938,24 @@ item_0/text = "sdadasd"
 item_1/text = "asdadad"
 item_2/text = "asdadadada"
 
-[node name="DLCReportButton" type="Button" parent="SettingWindow2/MarginContainer/TabContainer/DLC/MarginContainer/VBoxContainer/Row-DLCReport"]
+[node name="DLCRefreshButton" type="Button" parent="SettingWindow/MarginContainer/TabContainer/DLC/MarginContainer/VBoxContainer/Row-DLCReport"]
 custom_minimum_size = Vector2(90, 45)
 layout_mode = 2
 size_flags_vertical = 0
 focus_mode = 0
-theme = ExtResource("18_3dgka")
-text = "Report"
+text = "Refresh"
 
-[node name="Misc" type="MarginContainer" parent="SettingWindow2/MarginContainer/TabContainer"]
-visible = false
-layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-metadata/_tab_index = 1
-
-[node name="VBoxContainer" type="VBoxContainer" parent="SettingWindow2/MarginContainer/TabContainer/Misc"]
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="Row-MapPath" type="HBoxContainer" parent="SettingWindow2/MarginContainer/TabContainer/Misc/VBoxContainer"]
-layout_mode = 2
-
-[node name="MapPathLabel" type="Label" parent="SettingWindow2/MarginContainer/TabContainer/Misc/VBoxContainer/Row-MapPath"]
-custom_minimum_size = Vector2(150, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-text = "Map Path"
-vertical_alignment = 1
-
-[node name="MapPathLineEdit" type="LineEdit" parent="SettingWindow2/MarginContainer/TabContainer/Misc/VBoxContainer/Row-MapPath"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "X:/BaseDirectory/Option/MapDirectory/"
-
-[node name="Row-MeshCachePath" type="HBoxContainer" parent="SettingWindow2/MarginContainer/TabContainer/Misc/VBoxContainer"]
-layout_mode = 2
-
-[node name="MeshCachePathLabel" type="Label" parent="SettingWindow2/MarginContainer/TabContainer/Misc/VBoxContainer/Row-MeshCachePath"]
-custom_minimum_size = Vector2(150, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-text = "Mesh Cache"
-vertical_alignment = 1
-
-[node name="MeshCachePathLineEdit" type="LineEdit" parent="SettingWindow2/MarginContainer/TabContainer/Misc/VBoxContainer/Row-MeshCachePath"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "X:/BaseDirectory/Option/MapDirectory/"
-
-[node name="Row-MapLevel" type="HBoxContainer" parent="SettingWindow2/MarginContainer/TabContainer/Misc/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 20
-
-[node name="MaxMapLvlLabel" type="Label" parent="SettingWindow2/MarginContainer/TabContainer/Misc/VBoxContainer/Row-MapLevel"]
-custom_minimum_size = Vector2(150, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-text = "Max Map Level"
-vertical_alignment = 1
-
-[node name="MaxMapLvlValueLabel" type="Label" parent="SettingWindow2/MarginContainer/TabContainer/Misc/VBoxContainer/Row-MapLevel"]
-custom_minimum_size = Vector2(30, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-text = "5"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="MaxMapLvlSlider" type="HSlider" parent="SettingWindow2/MarginContainer/TabContainer/Misc/VBoxContainer/Row-MapLevel"]
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-size_flags_horizontal = 3
-focus_mode = 0
-max_value = 5.0
-value = 1.0
-rounded = true
-tick_count = 6
-ticks_on_borders = true
-
-[node name="ToggleTileDetailsButton" type="Button" parent="SettingWindow2/MarginContainer/TabContainer/Misc/VBoxContainer/Row-MapLevel"]
-custom_minimum_size = Vector2(90, 40)
-layout_mode = 2
-focus_mode = 0
-theme = ExtResource("18_3dgka")
-toggle_mode = true
-text = "Tile Info"
-
-[node name="HSeparator3" type="HSeparator" parent="SettingWindow2/MarginContainer/TabContainer/Misc/VBoxContainer"]
-layout_mode = 2
-
-[node name="Row-CapturePath" type="HBoxContainer" parent="SettingWindow2/MarginContainer/TabContainer/Misc/VBoxContainer"]
-layout_mode = 2
-
-[node name="CapturePathLabel" type="Label" parent="SettingWindow2/MarginContainer/TabContainer/Misc/VBoxContainer/Row-CapturePath"]
-custom_minimum_size = Vector2(150, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-text = "Screenshot Path"
-vertical_alignment = 1
-
-[node name="CapturePathLineEdit" type="LineEdit" parent="SettingWindow2/MarginContainer/TabContainer/Misc/VBoxContainer/Row-CapturePath"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "X:/BaseDirectory/Option/MapDirectory/"
-
-[node name="Row-LogPath" type="HBoxContainer" parent="SettingWindow2/MarginContainer/TabContainer/Misc/VBoxContainer"]
-layout_mode = 2
-
-[node name="LogPathLabel" type="Label" parent="SettingWindow2/MarginContainer/TabContainer/Misc/VBoxContainer/Row-LogPath"]
-custom_minimum_size = Vector2(150, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-text = "Log Path"
-vertical_alignment = 1
-
-[node name="LogPathLineEdit" type="LineEdit" parent="SettingWindow2/MarginContainer/TabContainer/Misc/VBoxContainer/Row-LogPath"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "X:/BaseDirectory/Option/MapDirectory/"
-
-[node name="ToggleLogButton" type="Button" parent="SettingWindow2/MarginContainer/TabContainer/Misc/VBoxContainer/Row-LogPath"]
-custom_minimum_size = Vector2(90, 40)
-layout_mode = 2
-focus_mode = 0
-theme = ExtResource("18_3dgka")
-toggle_mode = true
-text = "Log"
-
-[node name="HSeparator" type="HSeparator" parent="SettingWindow2/MarginContainer/TabContainer/Misc/VBoxContainer"]
-layout_mode = 2
-
-[node name="Row-LanguageSelect" type="HBoxContainer" parent="SettingWindow2/MarginContainer/TabContainer/Misc/VBoxContainer"]
-layout_mode = 2
-
-[node name="LanguageLabel" type="Label" parent="SettingWindow2/MarginContainer/TabContainer/Misc/VBoxContainer/Row-LanguageSelect"]
-custom_minimum_size = Vector2(150, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-text = "Language"
-vertical_alignment = 1
-
-[node name="LanguagePrevButton" type="Button" parent="SettingWindow2/MarginContainer/TabContainer/Misc/VBoxContainer/Row-LanguageSelect"]
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
-focus_mode = 0
-icon = ExtResource("14_w6k6m")
-icon_alignment = 1
-expand_icon = true
-
-[node name="ActiveLanguageLabel" type="Label" parent="SettingWindow2/MarginContainer/TabContainer/Misc/VBoxContainer/Row-LanguageSelect"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "English"
-horizontal_alignment = 1
-
-[node name="LanguageNextButton" type="Button" parent="SettingWindow2/MarginContainer/TabContainer/Misc/VBoxContainer/Row-LanguageSelect"]
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
-focus_mode = 0
-icon = ExtResource("15_7rjg6")
-expand_icon = true
-
-[node name="RowFinal" type="HBoxContainer" parent="SettingWindow2/MarginContainer"]
+[node name="RowFinal" type="HBoxContainer" parent="SettingWindow/MarginContainer"]
 layout_mode = 2
 size_flags_vertical = 10
 
-[node name="CancelButton" type="Button" parent="SettingWindow2/MarginContainer/RowFinal"]
+[node name="CancelButton" type="Button" parent="SettingWindow/MarginContainer/RowFinal"]
 custom_minimum_size = Vector2(90, 45)
 layout_mode = 2
 focus_mode = 0
 text = "Cancel"
 
-[node name="OkButton" type="Button" parent="SettingWindow2/MarginContainer/RowFinal"]
-custom_minimum_size = Vector2(90, 45)
-layout_mode = 2
-focus_mode = 0
-text = "OK"
-
-[node name="SettingWindow" type="Window" parent="."]
-auto_translate_mode = 1
-title = "Settings"
-initial_position = 2
-size = Vector2i(600, 380)
-visible = false
-script = ExtResource("18_sk1xa")
-
-[node name="MarginContainer" type="MarginContainer" parent="SettingWindow"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 2
-size_flags_vertical = 0
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="VBoxContainer" type="VBoxContainer" parent="SettingWindow/MarginContainer"]
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="Row1-MapPath" type="HBoxContainer" parent="SettingWindow/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="MapPathLabel" type="Label" parent="SettingWindow/MarginContainer/VBoxContainer/Row1-MapPath"]
-custom_minimum_size = Vector2(150, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-text = "Map Path"
-vertical_alignment = 1
-
-[node name="MapPathLineEdit" type="LineEdit" parent="SettingWindow/MarginContainer/VBoxContainer/Row1-MapPath"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "X:/BaseDirectory/Option/MapDirectory/"
-
-[node name="Row2-MeshCachePath" type="HBoxContainer" parent="SettingWindow/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="MeshCachePathLabel" type="Label" parent="SettingWindow/MarginContainer/VBoxContainer/Row2-MeshCachePath"]
-custom_minimum_size = Vector2(150, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-text = "Mesh Cache"
-vertical_alignment = 1
-
-[node name="MeshCachePathLineEdit" type="LineEdit" parent="SettingWindow/MarginContainer/VBoxContainer/Row2-MeshCachePath"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "X:/BaseDirectory/Option/MapDirectory/"
-
-[node name="Row4-MapLevel" type="HBoxContainer" parent="SettingWindow/MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 20
-
-[node name="MaxMapLvlLabel" type="Label" parent="SettingWindow/MarginContainer/VBoxContainer/Row4-MapLevel"]
-custom_minimum_size = Vector2(150, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-text = "Max Map Level"
-vertical_alignment = 1
-
-[node name="MaxMapLvlValueLabel" type="Label" parent="SettingWindow/MarginContainer/VBoxContainer/Row4-MapLevel"]
-custom_minimum_size = Vector2(30, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-text = "5"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="MaxMapLvlSlider" type="HSlider" parent="SettingWindow/MarginContainer/VBoxContainer/Row4-MapLevel"]
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-size_flags_horizontal = 3
-focus_mode = 0
-max_value = 5.0
-value = 1.0
-rounded = true
-tick_count = 6
-ticks_on_borders = true
-
-[node name="ToggleTileDetailsButton" type="Button" parent="SettingWindow/MarginContainer/VBoxContainer/Row4-MapLevel"]
-custom_minimum_size = Vector2(90, 40)
-layout_mode = 2
-focus_mode = 0
-theme = ExtResource("18_3dgka")
-toggle_mode = true
-text = "Tile Info"
-
-[node name="HSeparator3" type="HSeparator" parent="SettingWindow/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="Row-CapturePath" type="HBoxContainer" parent="SettingWindow/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="CapturePathLabel" type="Label" parent="SettingWindow/MarginContainer/VBoxContainer/Row-CapturePath"]
-custom_minimum_size = Vector2(150, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-text = "Screenshot Path"
-vertical_alignment = 1
-
-[node name="CapturePathLineEdit" type="LineEdit" parent="SettingWindow/MarginContainer/VBoxContainer/Row-CapturePath"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "X:/BaseDirectory/Option/MapDirectory/"
-
-[node name="Row-LogPath" type="HBoxContainer" parent="SettingWindow/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="LogPathLabel" type="Label" parent="SettingWindow/MarginContainer/VBoxContainer/Row-LogPath"]
-custom_minimum_size = Vector2(150, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-text = "Log Path"
-vertical_alignment = 1
-
-[node name="LogPathLineEdit" type="LineEdit" parent="SettingWindow/MarginContainer/VBoxContainer/Row-LogPath"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "X:/BaseDirectory/Option/MapDirectory/"
-
-[node name="ToggleLogButton" type="Button" parent="SettingWindow/MarginContainer/VBoxContainer/Row-LogPath"]
-custom_minimum_size = Vector2(90, 40)
-layout_mode = 2
-focus_mode = 0
-theme = ExtResource("18_3dgka")
-toggle_mode = true
-text = "Log"
-
-[node name="HSeparator" type="HSeparator" parent="SettingWindow/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="Row-LanguageSelect" type="HBoxContainer" parent="SettingWindow/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="LanguageLabel" type="Label" parent="SettingWindow/MarginContainer/VBoxContainer/Row-LanguageSelect"]
-custom_minimum_size = Vector2(150, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-text = "Language"
-vertical_alignment = 1
-
-[node name="LanguagePrevButton" type="Button" parent="SettingWindow/MarginContainer/VBoxContainer/Row-LanguageSelect"]
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
-focus_mode = 0
-icon = ExtResource("14_w6k6m")
-icon_alignment = 1
-expand_icon = true
-
-[node name="ActiveLanguageLabel" type="Label" parent="SettingWindow/MarginContainer/VBoxContainer/Row-LanguageSelect"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "English"
-horizontal_alignment = 1
-
-[node name="LanguageNextButton" type="Button" parent="SettingWindow/MarginContainer/VBoxContainer/Row-LanguageSelect"]
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
-focus_mode = 0
-icon = ExtResource("15_7rjg6")
-expand_icon = true
-
-[node name="HSeparator2" type="HSeparator" parent="SettingWindow/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="RowFinal" type="HBoxContainer" parent="SettingWindow/MarginContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 2
-
-[node name="CancelButton" type="Button" parent="SettingWindow/MarginContainer/VBoxContainer/RowFinal"]
-custom_minimum_size = Vector2(90, 45)
-layout_mode = 2
-focus_mode = 0
-text = "Cancel"
-
-[node name="OkButton" type="Button" parent="SettingWindow/MarginContainer/VBoxContainer/RowFinal"]
+[node name="OkButton" type="Button" parent="SettingWindow/MarginContainer/RowFinal"]
 custom_minimum_size = Vector2(90, 45)
 layout_mode = 2
 focus_mode = 0
@@ -1171,6 +988,7 @@ layout_mode = 2
 focus_mode = 0
 item_count = 1
 popup/item_0/text = "plat1"
+popup/item_0/id = 0
 
 [node name="PlatformTabs" type="TabContainer" parent="PlatformDetailsWindow/MarginContainer/Platform"]
 layout_mode = 2

@@ -1,18 +1,36 @@
 using System;
 using System.IO;
+using System.Text;
 using System.Collections.Generic;
 
 using Godot;
 
 // static class to handling generic functionality around finding and importing DLCs
 
+// We have a few areas where DLCs are considered:
+// - Prep: The folders of files in the res:// area that are prepared for export
+// - Files: The exported .pck files that could be loaded.
+// - Loaded: The DLCs that are loaded into the game, with accessibly JSON and glTF files.
+
+// This class builds ontop of:
+// - FssFileOperations: General file operations
+// - FssGodotFileOperations: Godot specific file operations
+
 public static class FssDlcOperations
 {
     private static string dlcDirectory = "DLC";
 
+    public static string RootDir    = "res://";
+    public static string DlcLoadDir = "res://Resources/DLC/"; // FssGodotFileOperations.DlcLoadDir
+    public static string DlcPrepDir = "res://Resources/DLCPrep/"; // FssGodotFileOperations.DlcPrepDir
+
+
     // private static string dlcExportFolder = "C:/Util/Data/Godot/ExportDLC";
     //private static string dlcExportFolder = "c:/util/godot/dlc/";
 
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: DLC Pre-export listing
     // --------------------------------------------------------------------------------------------
 
     public static void EnsureDlcFolderExists()
@@ -26,253 +44,233 @@ public static class FssDlcOperations
             Directory.CreateDirectory(fullDlcPath);
     }
 
-    // --------------------------------------------------------------------------------------------
-
-    public static List<string> FindDLCs()
+    public static List<string> AllDlcExportableContent()
     {
-        // Base path for the DLCs
-        string execDir = FssFileOperations.StandardizePath(OS.GetExecutablePath().GetBaseDir());
-        string fullDlcPath = FssFileOperations.JoinPaths(execDir, dlcDirectory);
+        List<string> dlcListing = FssGodotFileOperations.ListFiles(DlcPrepDir, FssGodotFileOperations.ListContent.Both);
+        return dlcListing;
+    }
 
-        // Get the list of files in the DLC directory
-        List<string> dlcFiles = FssFileOperations.Filenames(fullDlcPath);
+    public static List<string> DlcExportTitles()
+    {
+        List<string> dlcListing = FssGodotFileOperations.ListFiles(DlcPrepDir, FssGodotFileOperations.ListContent.Directories, false);
+        List<string> dlcTitles = new List<string>();
 
-        // Filter the list to only include files with the .pak extension
-        List<string> dlcPaks = FssFileOperations.FilterFilenameSuffix(dlcFiles, ".pak");
+        foreach (string dlc in dlcListing)
+        {
+            string dlcName = FssGodotFileOperations.LastPathElement(dlc);
+            dlcTitles.Add(dlcName);
+        }
+        return dlcTitles;
+    }
 
-        return dlcPaks;
+    public static List<string> DlcExportContentForTitle(string DlcTitle)
+    {
+        // Determine the prefix we need
+        string dlcPrefix = FssGodotFileOperations.JoinPaths(DlcPrepDir, DlcTitle);
+
+        // Get the listing of all the files in the DLC Prep area. Any with a matching prefix 
+        // have the prefix removed and added to the output list.
+
+        List<string> dlcFullListing = FssGodotFileOperations.ListFiles(DlcPrepDir, FssGodotFileOperations.ListContent.Both);
+        List<string> filteredList   = FssFileOperations.FilterFilenamePrefix(dlcFullListing, dlcPrefix);
+        List<string> OutputList     = FssFileOperations.RemovePrefix(filteredList, dlcPrefix);
+
+        return OutputList;
     }
 
     // --------------------------------------------------------------------------------------------
-
-    // A string of teh available DLCs (and directories) for reporting
-
-    public static string DlcReport()
-    {
-        List<string> dlcPaks = FindDLCs();
-        string dlcReport = "Available DLCs:\n";
-
-        foreach (string dlc in dlcPaks)
-        {
-            dlcReport += $"- {Path.GetFileName(dlc)}\n";
-        }
-
-        return dlcReport;
-    }
-
-    // --------------------------------------------------------------------------------------------
-
-    public static void LoadDlc(string dlcPath)
-    {
-        if (ProjectSettings.LoadResourcePack(dlcPath))
-        {
-            GD.Print("DLC pack loaded successfully!");
-        }
-        else
-        {
-            GD.Print("Failed to load DLC pack.");
-        }
-    }
-
+    // MARK: Create DLC
     // --------------------------------------------------------------------------------------------
 
     public static void CreateDlc()
     {
-        // Path to write new .pck files into
-        string dlcExportFolder = FssCentralConfig.Instance.GetParam<string>("CapturePath");
-
+         string dlcExportFolder = FssCentralConfig.Instance.GetParam<string>("DlcPath");
+       
         // List the potential DLCs to export
-        List<string> DLCsToExport = FssGodotFileOperations.ListDLCPrepDirs();
+        List<string> DLCsToExport = DlcExportTitles();
 
-        foreach (string dlc in DLCsToExport)
+        foreach (string dlcName in DLCsToExport)
         {
-            string dlcName = FssGodotFileOperations.LastPathElement(dlc);
             string dlcPckName = $"{dlcName}.pck";
-            string dlcPckPath = FssGodotFileOperations.JoinPaths(dlcExportFolder, dlcPckName);
+            
+            // PCK File
+            string dlcPckFilename = FssGodotFileOperations.JoinPaths(dlcExportFolder, dlcPckName);
+            if (File.Exists(dlcPckFilename))
+                File.Delete(dlcPckFilename);
 
-            GD.Print($"\n\n\nExporting DLC: {dlcName} to {dlcPckPath}");
+            GD.Print($"\n\n\nExporting DLC: {dlcName} to {dlcPckFilename}");
 
             // Start the packing
             var packer = new PckPacker();
-            packer.PckStart(dlcPckPath);
+            packer.PckStart(dlcPckFilename);
 
             // list all the files in the DLCs folder
-            List<string> fileList = FssGodotFileOperations.ListFiles(dlc, FssGodotFileOperations.ListContent.Files);
+            List<string> fileList = DlcExportContentForTitle(dlcName);
 
             foreach (string file in fileList)
             {
-                // subtract the DLC folder from the path, to get just the path relative to the DLC folder
-                string relativePath = file.Substring(dlc.Length + 1);
-                string pckPath = FssFileOperations.JoinPaths(FssGodotFileOperations.DlcLoadDir, relativePath);
+                string localFileLocation = FssGodotFileOperations.JoinPaths(DlcPrepDir, dlcName, file);
+                string loadDesination    = FssGodotFileOperations.JoinPaths(DlcLoadDir, dlcName, file);
 
                 // Add files to the pack
-                var x = packer.AddFile(pckPath, file);
-                GD.Print($"Added file:{relativePath}  // to {pckPath} // return: {x}");
-            
+                var x = packer.AddFile(loadDesination, localFileLocation);
+                GD.Print($"Added file:{file}  // to {loadDesination} // return: {x}");
             }
 
-            // Conclude the adding for this file
+            // Conclude the adding for this .PCK file
             packer.Flush(true);
         }
     }
 
-    public static void LoadDlc()
-    {
-        // Path to write new .pck files into
-        string dlcExportFolder = FssCentralConfig.Instance.GetParam<string>("CapturePath");
-
-        // Find the DLCs to load (anything under the DLC folder with a .pck extension)
-        List<string> dlcPacks = FssGodotFileOperations.ListFiles(FssGodotFileOperations.DlcLoadDir, FssGodotFileOperations.ListContent.Files);
-        dlcPacks = FssFileOperations.FilterFilenameSuffix(dlcPacks, ".pck");
-
-        foreach (string dlc in dlcPacks)
-        {
-            string dlcName = FssGodotFileOperations.LastPathElement(dlc);
-            string dlcPath = FssGodotFileOperations.JoinPaths(dlcExportFolder, dlcName);
-
-            GD.Print($"\n\n\nLoading DLC: {dlcName} from {dlcPath}");
-
-            // Load the DLC pack
-            //ProjectSettings.LoadResourcePack(dlcPath);
-        }      
-
-
-        {
-            // string dlcName = "DLC_001.pck";
-            // string fullpath = FssFileOperations.JoinPaths(dlcExportFolder, dlcName);
-
-            // ProjectSettings.LoadResourcePack(fullpath);
-
-            // // Open the text file from the resource pack
-            // string filePath = "res://DLCs/cmd.txt";
-
-            // if (Godot.FileAccess.FileExists(filePath))
-            //     GD.Print("======= File exists!");
-        }
-
-    }
-
-    // FssDlcOperations.DlcInv()
-    public static void DlcInv()
-    {
-        List<Fss3DModelInfo> modelList = new List<Fss3DModelInfo>();
-
-        Fss3DModelInfo info1 = new Fss3DModelInfo() { Name = "Model1", FilePath = "res://DLCs/001/model1.glb", RwAABB = new FssXYZBox() { Height = 10, Length = 9, Width = 8}, Scale = 1.0f };
-        Fss3DModelInfo info2 = new Fss3DModelInfo() { Name = "Model2", FilePath = "res://DLCs/001/model2.glb", RwAABB = new FssXYZBox(), Scale = 10.0f };
-        Fss3DModelInfo info3 = new Fss3DModelInfo() { Name = "Model3", FilePath = "res://DLCs/001/model3.glb", RwAABB = new FssXYZBox(), Scale = 0.00001f };
-
-        modelList.Add(info1);
-        modelList.Add(info2);
-        modelList.Add(info3);
-
-        string JSONString = Fss3DModelLibrary.SerializeJSONConfig(modelList);
-        GD.Print(JSONString);
-    }
-
+    // --------------------------------------------------------------------------------------------
+    // MARK: Load DLC
     // --------------------------------------------------------------------------------------------
 
-    public static float VarToFloat(object input)
+    // Loadable = on the disk, not inside the godot virtual filesystem
+
+    public static List<string> ListLoadableDlcPaths()
     {
-        if (input is float)
+        string dlcExportFolder = FssCentralConfig.Instance.GetParam<string>("DlcPath");
+
+        List<string> dlcFolderFiles = FssFileOperations.Filenames(dlcExportFolder);
+        List<string> dlcPCKFiles    = FssFileOperations.FilterFilenameSuffix(dlcFolderFiles, ".pck");
+
+        return dlcPCKFiles;
+    }
+
+    public static void LoadDlc(string dlcPath)
+    {
+        // string dlcExportFolder = FssCentralConfig.Instance.GetParam<string>("DlcPath");
+        // string dlcPckName = $"{dlcName}.pck";
+        // string dlcPath = FssFileOperations.JoinPaths(dlcExportFolder, dlcPckName);
+
+        if (ProjectSettings.LoadResourcePack(dlcPath))
         {
-            return (float)input;
-        }
-        else if (input is string)
-        {
-            if (float.TryParse((string)input, out float result))
-            {
-                return result;
-            }
+            GD.Print($"DLC pack loaded successfully! ({dlcPath})");
         }
         else
         {
-            try
-            {
-                return Convert.ToSingle(input);
-            }
-            catch (InvalidCastException)
-            {
-                // Handle the case where input cannot be converted to float
-            }
-            catch (FormatException)
-            {
-                // Handle the case where input is a string that doesn't represent a valid float
-            }
+            GD.Print($"Failed to load DLC pack: {dlcPath}");
         }
-
-        // Return -1 if the conversion fails
-        return -1;
     }
 
-    // Function to list files in a resource folder (looking for files loaded from a PCK file)
+    // Handle the "Inventory.json" file in the DLC, adding the items to the modellibrary
 
-    // --------------------------------------------------------------------------------------------
-
-    private static void DirContents(string path)
+    public static string InventoryJsonForDLCTitle(string dlcTitle)
     {
-        using var dir = DirAccess.Open(path);
-        if (dir != null)
+        string dlcPath       = FssGodotFileOperations.JoinPaths(DlcLoadDir, dlcTitle);
+        string inventoryPath = FssGodotFileOperations.JoinPaths(dlcPath, "Inventory.json");
+
+        if (!FssGodotFileOperations.Exists(inventoryPath))
         {
-            dir.ListDirBegin();
-            string fileName = dir.GetNext();
-            while (fileName != "")
-            {
-                if (dir.CurrentIsDir())
-                {
-                    GD.Print($"Found directory: {fileName}");
-                }
-                else
-                {
-                    GD.Print($"Found file: {fileName}");
-                }
-                fileName = dir.GetNext();
-            }
+            FssCentralLog.AddEntry($"Did not find expected file: {inventoryPath}");
+            return "";
         }
-        else
-        {
-            GD.Print($"An error occurred when trying to access the path: {path}");
-        }
+
+        string strFileContent = FssGodotFileOperations.LoadFromFile(inventoryPath);
+
+        //string inventoryJson = FssGodotFileOperations.LoadText(inventoryPath);
+        return strFileContent;
     }
 
     // --------------------------------------------------------------------------------------------
+    // MARK: Loaded DLC
+    // --------------------------------------------------------------------------------------------
 
-    private static List<string> FindResourceFiles(string subdirPath)
+    // Loaded = inside the godot virtual filesystem
+
+    public static List<string> ListLoadedDlcPaths()
     {
-        // Determine the full path to the resource folder
-        string resourcePath = FssFileOperations.JoinPaths("res://", subdirPath);
-
-        resourcePath = "./DLCs/";
-        GD.Print($"Looking for resources in: {resourcePath}");
-
-        // Our return value
-        List<string> resFiles = new List<string>();
-
-        // Open the directory
-        var dir = DirAccess.Open(resourcePath);
-
-        if (dir != null)
-        {
-            dir.ListDirBegin();
-            string fileName;
-
-            while ((fileName = dir.GetNext()) != "")
-            {
-                if (!dir.CurrentIsDir())
-                {
-                    // Create the path we would need to later access and open the file
-                    string filePath = FssFileOperations.JoinPaths(subdirPath, fileName);
-                    resFiles.Add(filePath);
-                }
-            }
-
-            dir.ListDirEnd();
-        }
-        else
-        {
-            GD.PrintErr("Failed to open directory: ", subdirPath);
-        }
-
-        return resFiles;
+        List<string> loadedDlcPathsList = FssGodotFileOperations.ListFiles(DlcLoadDir, FssGodotFileOperations.ListContent.Directories, false);
+        return loadedDlcPathsList;
     }
 
+    public static List<string> ListLoadedDlcTitles()
+    {
+        List<string> loadedDlcPathsList  = FssGodotFileOperations.ListFiles(DlcLoadDir, FssGodotFileOperations.ListContent.Directories, false);
+        List<string> loadedDlcTitlesList = FssFileOperations.RemovePrefix(loadedDlcPathsList, DlcLoadDir);
+        return loadedDlcTitlesList;
+    }
+
+    public static List<string> ListLoadedDlcContentForPath(string LoadedDlcPath)
+    {
+        List<string> dlcFullListing = FssGodotFileOperations.ListFiles(LoadedDlcPath, FssGodotFileOperations.ListContent.Both);
+        //List<string> filteredList   = FssFileOperations.FilterFilenamePrefix(dlcFullListing, dlcPrefix);
+        //List<string> OutputList     = FssFileOperations.RemovePrefix(filteredList, dlcPrefix);
+
+        return dlcFullListing;
+    }
+
+    public static List<string> ListLoadedDlcContentForTitle(string dlcTitle)
+    {
+        // Determine the loaded path from the title
+        string loadedDlcPath = FssGodotFileOperations.JoinPaths(DlcLoadDir, dlcTitle);
+
+        List<string> dlcFullListing = FssGodotFileOperations.ListFiles(loadedDlcPath, FssGodotFileOperations.ListContent.Both);
+        //List<string> filteredList   = FssFileOperations.FilterFilenamePrefix(dlcFullListing, dlcPrefix);
+        //List<string> OutputList     = FssFileOperations.RemovePrefix(filteredList, dlcPrefix);
+
+        return dlcFullListing;
+    }
+
+    public static List<string> ListLoadedDlcContent()
+    {
+        List<string> loadedDlc = FssGodotFileOperations.ListFiles(DlcLoadDir, FssGodotFileOperations.ListContent.Both);
+        return loadedDlc;
+    }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: DLC Report
+    // --------------------------------------------------------------------------------------------
+
+    // A list of all prep, pck and loaded DLCs in one string report for debugging analysis
+
+    public static string DlcReport()
+    {
+        StringBuilder sb = new StringBuilder();
+
+        sb.AppendLine("DLC Report");
+
+        sb.AppendLine("Prep DLCs");
+        List<string> prepDlcs = DlcExportTitles();
+        foreach (string dlc in prepDlcs)
+        {
+            sb.AppendLine(dlc);
+            List<string> content = DlcExportContentForTitle(dlc);
+            foreach (string file in content)
+            {
+                sb.AppendLine($"- {file}");
+            }
+        }
+
+        sb.AppendLine("\nLoadable DLCs");
+        sb.AppendLine($"- DLC Path: {FssCentralConfig.Instance.GetParam<string>("DlcPath")}");
+        List<string> loadableDlcs = ListLoadableDlcPaths();
+        foreach (string dlc in loadableDlcs)
+        {
+            sb.AppendLine($"- {dlc}");
+        }
+
+        sb.AppendLine("\nLoaded DLCs");
+        List<string> loadedDlcs = ListLoadedDlcTitles();
+        foreach (string dlc in loadedDlcs)
+        {
+            sb.AppendLine($"- {dlc}");
+            List<string> content = ListLoadedDlcContentForTitle(dlc);
+            foreach (string file in content)
+            {
+                sb.AppendLine($"- {file}");
+            }
+        }
+
+        sb.AppendLine("\nLoaded DLC Content");
+        List<string> loadedContent = ListLoadedDlcContent();
+        foreach (string file in loadedContent)
+        {
+            sb.AppendLine($"- {file}");
+        }
+
+
+        return sb.ToString();
+    }
 }

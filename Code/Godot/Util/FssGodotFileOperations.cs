@@ -1,7 +1,7 @@
 
 using Godot;
 using System.Collections.Generic;
-using System.IO;
+//using System.IO;
 
 
 // Class to perform file operations on the Godot virtual file system under "res://".
@@ -10,9 +10,6 @@ using System.IO;
 
 public static class FssGodotFileOperations
 {
-    public static string RootDir    = "res://";
-    public static string DlcLoadDir = "res://Resources/DLC/"; // FssGodotFileOperations.DlcLoadDir
-    public static string DlcPrepDir = "res://Resources/DLCPrep/"; // FssGodotFileOperations.DlcPrepDir
 
     public enum ListContent { Files, Directories, Both };
 
@@ -33,7 +30,8 @@ public static class FssGodotFileOperations
     // List all the files, in the godot virtual file system, under a given top level directory.
 
     // Usage: List<string> fileList = FssGodotFileUtil.ListFiles("res://assets/earth");
-    public static List<string> ListFiles(string topLevel, ListContent content = ListContent.Files)
+    public static List<string> ListFiles(string topLevel, ListContent content = ListContent.Files, bool recursive = true)
+
     {
         List<string> fileList = new List<string>();
 
@@ -45,15 +43,24 @@ public static class FssGodotFileOperations
             dir.ListDirBegin();
             string fileName = dir.GetNext();
 
-            while (fileName != "")
+            while (!string.IsNullOrEmpty(fileName))
             {
+                if (fileName == "." || fileName == "..")
+                {
+                    fileName = dir.GetNext();
+                    continue;
+                }
+
                 if (dir.CurrentIsDir())
                 {
                     if (content == ListContent.Directories || content == ListContent.Both)
                         fileList.Add(JoinPaths(topLevel, fileName));
 
-                    List<string> subList = ListFiles(JoinPaths(topLevel, fileName), content);
-                    fileList.AddRange(subList);
+                    if (recursive)
+                    {
+                        List<string> subList = ListFiles(JoinPaths(topLevel, fileName), content);
+                        fileList.AddRange(subList);
+                    }
                 }
                 else
                 {
@@ -72,32 +79,6 @@ public static class FssGodotFileOperations
     }
 
     // --------------------------------------------------------------------------------------------
-    // MARK: DLC Specific
-    // --------------------------------------------------------------------------------------------
-
-    public static List<string> ListLoadedDLCs()
-    {
-        return ListFiles(DlcLoadDir, ListContent.Directories);
-    }
-
-    public static List<string> ListDLCFiles(string dlcRootPath)
-    {
-        return ListFiles(dlcRootPath);
-    }
-
-    // --------------------------------------------------------------------------------------------
-
-    public static List<string> ListDLCPrepDirs()
-    {
-        return ListFiles(DlcPrepDir, ListContent.Directories);
-    }
-
-    public static List<string> ListDLCPrepFiles()
-    {
-        return ListFiles(DlcPrepDir, ListContent.Files);
-    }
-
-    // --------------------------------------------------------------------------------------------
     // MARK: Utilities
     // --------------------------------------------------------------------------------------------
 
@@ -112,10 +93,36 @@ public static class FssGodotFileOperations
         return $"{path1}/{path2}";
     }
 
+    public static string JoinPaths(string path1, string path2, string path3)
+    {
+        string path = JoinPaths(path1, path2);
+        path = JoinPaths(path, path3);
+
+        return path;
+    }
+
     // Usage: string fileName = FssGodotFileOperations.LastPathElement("res://assets/earth/earth.jpg");
     public static string LastPathElement(string path)
     {
         string[] parts = path.Split("/");
         return parts[parts.Length - 1];
     }
+
+    // Check a path exists in the Godot virtual file system.
+    // Usage: bool exists = FssGodotFileOperations.Exists("res://assets/earth/earth.jpg");
+    public static bool Exists(string path)
+    {
+        bool exists = FileAccess.FileExists(path);
+        return exists;
+    }
+
+
+    // Usage: string strFileContent = FssGodotFileOperations.LoadFromFile(PathName);
+    public static string LoadFromFile(string resPath)
+    {
+        using var file = FileAccess.Open(resPath, FileAccess.ModeFlags.Read);
+        string content = file.GetAsText();
+        return content;
+    }
+
 }

@@ -8,6 +8,10 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 
+// The FssDlcOperations class deals with the creation/loading and managing or DLC .PCK files.
+// The Fss3DModelLibrary class deals with the supply of 3D model Nodes to the application, along with the 
+// model informatino around scaling, bounding boxes, etc.
+
 public class Fss3DModelLibrary
 {
     // List of model information, and attributes under general C# control.
@@ -47,31 +51,24 @@ public class Fss3DModelLibrary
     // MARK: Load / Save JSON Config
     // ------------------------------------------------------------------------------------------------
 
-    public void LoadJSONConfigFile(string fullFilepath)
+    // Load a file from the Godot virtual file system, adding its details to the model list.
+    // See: FssDLCOperations.InventoryJsonForDLCTitle()
+
+    public void LoadJSONConfigFile(string jsonString)
     {
-        // Ensure the file exists
-        if (!System.IO.File.Exists(fullFilepath))
+        // string jsonString = System.IO.File.ReadAllText(fullFilepath);
+        var modelList = JsonSerializer.Deserialize<List<Fss3DModelInfo>>(jsonString);
+
+        if (modelList == null)
         {
-            GD.PrintErr($"File not found: {fullFilepath}");
+            GD.PrintErr($"Failed to parse JSON file");
             return;
         }
 
-        // Load the JSON file
+        // Add the model information to the list
+        foreach (var model in modelList)
         {
-            string jsonString = System.IO.File.ReadAllText(fullFilepath);
-            var modelList = JsonSerializer.Deserialize<List<Fss3DModelInfo>>(jsonString);
-
-            if (modelList == null)
-            {
-                GD.PrintErr($"Failed to load JSON file: {fullFilepath}");
-                return;
-            }
-
-            // Add the model information to the list
-            foreach (var model in modelList)
-            {
-                ModelInfoList.Add(model.Name, model);
-            }
+            ModelInfoList.Add(model.Name, model);
         }
     }
 
