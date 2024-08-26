@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://ck4tngsqwb7jf"]
+[gd_scene load_steps=28 format=3 uid="uid://ck4tngsqwb7jf"]
 
 [ext_resource type="StyleBox" path="res://Themes/new_style_box_flat.tres" id="1_fred0"]
 [ext_resource type="Script" path="res://Code/Godot/UI/FssUIHeader.cs" id="2_iuuet"]
@@ -10,8 +10,10 @@
 [ext_resource type="Texture2D" uid="uid://8km4gxg0fgok" path="res://Resources/Icons/White_Log.png" id="8_4gj75"]
 [ext_resource type="Script" path="res://Code/Godot/UI/FssUICameraControl.cs" id="9_ro3fa"]
 [ext_resource type="Theme" uid="uid://b73ifjtcxnugj" path="res://Themes/YellowToggle.tres" id="9_xvvq8"]
+[ext_resource type="Texture2D" uid="uid://cgdps8gwwaqcw" path="res://Resources/Icons/Resize.png" id="10_8ih3r"]
 [ext_resource type="Texture2D" uid="uid://dec5v78k63oif" path="res://Resources/Icons/White_Globe.png" id="10_ebi24"]
 [ext_resource type="Texture2D" uid="uid://buqwf6wctolbe" path="res://Resources/Icons/Plane.png" id="11_c00mr"]
+[ext_resource type="Texture2D" uid="uid://bkkco3s7nxvm4" path="res://Resources/Icons/Icon-121.png" id="11_mvn6c"]
 [ext_resource type="Theme" uid="uid://f7cusn8cepiu" path="res://Themes/Green_Button.tres" id="12_nxgov"]
 [ext_resource type="Texture2D" uid="uid://dgq7if4l4dpys" path="res://Resources/Icons/Align.png" id="13_pe2s4"]
 [ext_resource type="Texture2D" uid="uid://cvkgx537okkdr" path="res://Resources/Icons/arrow_left.png" id="14_w6k6m"]
@@ -108,6 +110,7 @@ text = "Mode:"
 
 [node name="OptionButton" type="OptionButton" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
 layout_mode = 2
+focus_mode = 0
 item_count = 5
 popup/item_0/text = "Real World"
 popup/item_0/id = 0
@@ -148,6 +151,132 @@ expand_icon = true
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen"]
 layout_mode = 2
 size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Panel" type="Panel" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(70, 300)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/Panel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="PlatformScaleButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("18_3dgka")
+icon = ExtResource("10_8ih3r")
+expand_icon = true
+
+[node name="Button" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+text = "RXTX"
+
+[node name="FPSLabel" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 10
+text = "100
+FPS"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="PanelPlatformResize" type="Panel" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(400, 70)
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/PanelPlatformResize"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/PanelPlatformResize/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="RWSizeToggleButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/PanelPlatformResize/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+theme = ExtResource("9_xvvq8")
+icon = ExtResource("11_mvn6c")
+expand_icon = true
+
+[node name="InfoGraphicToggleButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/PanelPlatformResize/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+theme = ExtResource("9_xvvq8")
+text = "INFO"
+
+[node name="HSlider" type="HSlider" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/PanelPlatformResize/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+min_value = 1.0
+max_value = 10.0
+value = 1.0
+tick_count = 10
+ticks_on_borders = true
+
+[node name="Label" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/PanelPlatformResize/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+text = "100"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PanelRxTxShown" type="Panel" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(120, 70)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/PanelRxTxShown"]
+layout_mode = 1
+offset_right = 124.0
+offset_bottom = 70.0
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/PanelRxTxShown/MarginContainer"]
+layout_mode = 2
+
+[node name="ShowTxButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/PanelRxTxShown/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_vertical = 0
+text = "TX"
+
+[node name="ShowRxButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/PanelRxTxShown/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_vertical = 0
+text = "RX"
 
 [node name="Control-CameraControl" type="Control" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer"]
 layout_mode = 2

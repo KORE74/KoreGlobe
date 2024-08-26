@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://de0i7hqtxuu8o"
-path="res://.godot/imported/PaperPlanes_v002.glb-29fbf5f8619547d21b17025828f7d47a.scn"
+uid="uid://cpoiq2m45i027"
+path="res://.godot/imported/Tornado.glb-b40d10a2c50cec934b46ac7a423f0e4e.scn"
 
 [deps]
 
-source_file="res://Resources/DLCPrep/PlaceholderModels/Plane/PlanePaper/PaperPlanes_v002.glb"
-dest_files=["res://.godot/imported/PaperPlanes_v002.glb-29fbf5f8619547d21b17025828f7d47a.scn"]
+source_file="res://Resources/DLCPrep/MilitaryVehicles/Plane/Tornado/Tornado.glb"
+dest_files=["res://.godot/imported/Tornado.glb-b40d10a2c50cec934b46ac7a423f0e4e.scn"]
 
 [params]
 

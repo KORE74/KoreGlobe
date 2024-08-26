@@ -85,7 +85,7 @@ public partial class TestZeroOffset : Node3D
 
         if (DLCTesting)
         {
-            //FssDlcOperations.CreateDlc();
+            FssDlcOperations.CreateDlc();
 
             List<string> dlcList = FssDlcOperations.ListLoadableDlcPaths();
 
@@ -103,7 +103,18 @@ public partial class TestZeroOffset : Node3D
             }
             
 
+            string invJson2 = FssDlcOperations.InventoryJsonForDLCTitle("PlaceholderModels");
+            Fss3DModelLibrary.LoadJSONConfigFile(invJson2);
+
+            string invJson3 = FssDlcOperations.InventoryJsonForDLCTitle("MilitaryVehicles");
+            Fss3DModelLibrary.LoadJSONConfigFile(invJson3);
+
+
+
+            FssCentralLog.AddEntry( Fss3DModelLibrary.ReportContent() );
         }
+
+
 
         CreatePlatform();
         CreatePlatformNodes();
@@ -224,18 +235,31 @@ public partial class TestZeroOffset : Node3D
         //string ModelPath = "res://Resources/Models/Plane/Plane_Paper/PaperPlanes_v002.glb";
         string ModelPath = "res://Resources/DLC/PlaceholderModels/Plane/PlanePaper/PaperPlanes_v002.glb";
 
-        PackedScene importedModel = (PackedScene)ResourceLoader.Load(ModelPath);
-        if (importedModel != null)
-        {
-            // Instance the model
-            Node modelInstance     = importedModel.Instantiate();
-            ModelResourceNode      = modelInstance as Node3D;
-            ModelResourceNode.Name = "ModelResourceNode";
+        // PackedScene importedModel = (PackedScene)ResourceLoader.Load(ModelPath);
+        // if (importedModel != null)
+        // {
+        //     // Instance the model
+        //     Node modelInstance     = importedModel.Instantiate();
+        //     ModelResourceNode      = modelInstance as Node3D;
+        //     ModelResourceNode.Name = "ModelResourceNode";
 
+        //     PlaformBaseNode.AddChild(ModelResourceNode);
+        //     ModelResourceNode.Scale    = new Vector3(0.25f, 0.25f, 0.25f); // Set the model scale
+        //     ModelResourceNode.Position = new Vector3(0f, 0f, 0f); // Set the model position
+        //     ModelResourceNode.LookAt(Vector3.Forward, Vector3.Up);
+        // }
+
+        string PaperPlaneName = "Tornado";
+
+        Node modelNode = Fss3DModelLibrary.PrepModel(PaperPlaneName);
+        if (modelNode != null)
+        {
+            ModelResourceNode = modelNode as Node3D;
             PlaformBaseNode.AddChild(ModelResourceNode);
-            ModelResourceNode.Scale    = new Vector3(0.25f, 0.25f, 0.25f); // Set the model scale
-            ModelResourceNode.Position = new Vector3(0f, 0f, 0f); // Set the model position
-            ModelResourceNode.LookAt(Vector3.Forward, Vector3.Up);
+        }
+        else
+        {
+            FssCentralLog.AddEntry($"ModelResourceNode is null {PaperPlaneName}");
         }
 
         FssAzElBox wedgeBox = FssAzElBox.BoxFromDimensions(30, 10); // Az, El

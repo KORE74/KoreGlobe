@@ -2,20 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b7gcnvtna8b72"
-path.s3tc="res://.godot/imported/C-130_kc130grey-kc130grey.png-077e60e380c67668e4325c1c484155cc.s3tc.ctex"
+uid="uid://2caiohjtwjxr"
+path.s3tc="res://.godot/imported/Tornado_tornado-3.webp-905c1bb176dc538baa46bbd18dc1203e.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
 generator_parameters={
-"md5": "72b6e016f7810d67306c1aa8752ce988"
+"md5": "3083c1f8804dc4e23b3f077dbf6f2bff"
 }
 
 [deps]
 
-source_file="res://Resources/DLCPrep/MilitaryVehicles/Plane/C-130/C-130_kc130grey-kc130grey.png"
-dest_files=["res://.godot/imported/C-130_kc130grey-kc130grey.png-077e60e380c67668e4325c1c484155cc.s3tc.ctex"]
+source_file="res://Resources/DLCPrep/MilitaryVehicles/Plane/Tornado/Tornado_tornado-3.webp"
+dest_files=["res://.godot/imported/Tornado_tornado-3.webp-905c1bb176dc538baa46bbd18dc1203e.s3tc.ctex"]
 
 [params]
 

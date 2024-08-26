@@ -2,24 +2,23 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b7gcnvtna8b72"
-path.s3tc="res://.godot/imported/C-130_kc130grey-kc130grey.png-077e60e380c67668e4325c1c484155cc.s3tc.ctex"
+uid="uid://bj8korhe8qwat"
+path="res://.godot/imported/Tornado_tornado-3_1.png-0746426e1e17f8694f6670cb39d10d0f.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
-"vram_texture": true
+"vram_texture": false
 }
 generator_parameters={
-"md5": "72b6e016f7810d67306c1aa8752ce988"
+"md5": "f2c5f023fd1e494544a10b2f85fc214f"
 }
 
 [deps]
 
-source_file="res://Resources/DLCPrep/MilitaryVehicles/Plane/C-130/C-130_kc130grey-kc130grey.png"
-dest_files=["res://.godot/imported/C-130_kc130grey-kc130grey.png-077e60e380c67668e4325c1c484155cc.s3tc.ctex"]
+source_file="res://Resources/DLCPrep/MilitaryVehicles/Plane/Tornado/Tornado_tornado-3_1.png"
+dest_files=["res://.godot/imported/Tornado_tornado-3_1.png-0746426e1e17f8694f6670cb39d10d0f.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1
@@ -35,4 +34,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=0
+detect_3d/compress_to=1

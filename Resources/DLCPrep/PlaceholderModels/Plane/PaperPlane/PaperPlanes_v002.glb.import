@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://8lfapbi364e7"
-path="res://.godot/imported/C-130.glb-c05eb909e43bf8c8a0f73d947f17f851.scn"
+uid="uid://de0i7hqtxuu8o"
+path="res://.godot/imported/PaperPlanes_v002.glb-4612766078094d5c5590302fd1cc2050.scn"
 
 [deps]
 
-source_file="res://Resources/DLCPrep/MilitaryVehicles/Plane/C-130/C-130.glb"
-dest_files=["res://.godot/imported/C-130.glb-c05eb909e43bf8c8a0f73d947f17f851.scn"]
+source_file="res://Resources/DLCPrep/PlaceholderModels/Plane/PaperPlane/PaperPlanes_v002.glb"
+dest_files=["res://.godot/imported/PaperPlanes_v002.glb-4612766078094d5c5590302fd1cc2050.scn"]
 
 [params]
 

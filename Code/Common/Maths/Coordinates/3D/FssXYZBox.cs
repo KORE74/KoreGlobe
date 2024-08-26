@@ -81,7 +81,7 @@ public class FssXYZBox : FssXYZ
     {
         double halfWidth  = Width  / 2;
         double halfHeight = Height / 2;
-        double halfLength  = Length  / 2;
+        double halfLength = Length  / 2;
 
         switch(corner)
         {
@@ -123,6 +123,15 @@ public class FssXYZBox : FssXYZ
             default:
                 return new FssXYZLine(Center, Center);
         }
+    }
+
+    // --------------------------------------------------------------------------------------------
+
+    // Override the ToString method to return a string representation of the box.
+
+    public override string ToString()
+    {
+        return $"Center:{Center}, Width:{Width:F2}, Height:{Height:F2}, Length:{Length:F2}";
     }
 
 }

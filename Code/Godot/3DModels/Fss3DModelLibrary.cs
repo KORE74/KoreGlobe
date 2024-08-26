@@ -6,7 +6,10 @@ using Godot;
 
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Text.Json;
+// using System.Text.Json.Serialization;
+// using System.Linq;
 
 // The FssDlcOperations class deals with the creation/loading and managing or DLC .PCK files.
 // The Fss3DModelLibrary class deals with the supply of 3D model Nodes to the application, along with the 
@@ -15,10 +18,10 @@ using System.Text.Json;
 public class Fss3DModelLibrary
 {
     // List of model information, and attributes under general C# control.
-    Dictionary<string, Fss3DModelInfo> ModelInfoList = new Dictionary<string, Fss3DModelInfo>();
+    private static Dictionary<string, Fss3DModelInfo> ModelInfoList = new Dictionary<string, Fss3DModelInfo>();
 
     // Named list of specific 3D model objects for Godot scene tree.
-    Dictionary<string, Node> ModelCache = new Dictionary<string, Node>();
+    private static Dictionary<string, Node> ModelCache = new Dictionary<string, Node>();
 
     // ------------------------------------------------------------------------------------------------
     // MARK: Load / Save JSON Config
@@ -47,6 +50,56 @@ public class Fss3DModelLibrary
         }
     }
 
+
+    // ------------------------------------------------------------------------------------------------
+    // MARK: Supply Model
+    // ------------------------------------------------------------------------------------------------
+
+    // Usage: Node modelNode = Fss3DModelLibrary.PrepModel("GenericSupportShip");
+    public static Node PrepModel(string modelName)
+    {
+        // If the model is already loaded, return it
+        if (ModelCache.ContainsKey(modelName))
+        {
+            return ModelCache[modelName];
+        }
+
+        // If the name is not in the ModelInfoList, we don't know about it, so return null 
+        if (!ModelInfoList.ContainsKey(modelName))
+        {
+            GD.PrintErr($"Model does not exist: {modelName}");
+            return null;
+        }
+
+        // Load the model
+        string modelResPath = ModelInfoList[modelName].FilePath;
+        float modelScale    = ModelInfoList[modelName].Scale;
+        Vector3 modelOffset = ModelInfoList[modelName].CenterOffset;
+
+        // Access the model resource
+        PackedScene importedModel = (PackedScene)ResourceLoader.Load(modelResPath);
+
+        // If the model resource is not null, instantiate it
+        if (importedModel != null)
+        {
+            // Instance the model
+            Node modelInstance       = importedModel.Instantiate();
+            Node3D ModelResourceNode = modelInstance as Node3D;
+            ModelResourceNode.Name   = modelName;
+
+            ModelResourceNode.Scale    = new Vector3(modelScale, modelScale, modelScale); // Set the model scale
+            ModelResourceNode.Position = modelOffset; // Set the model position
+            ModelResourceNode.LookAt(Vector3.Forward, Vector3.Up);
+
+            ModelCache.Add(modelName, ModelResourceNode);
+        }
+        else
+        {
+            FssCentralLog.AddEntry($"Failed to load model. name:{modelName} // Path:{modelResPath}");
+        }
+        return ModelCache[modelName];
+    }
+
     // ------------------------------------------------------------------------------------------------
     // MARK: Load / Save JSON Config
     // ------------------------------------------------------------------------------------------------
@@ -54,9 +107,9 @@ public class Fss3DModelLibrary
     // Load a file from the Godot virtual file system, adding its details to the model list.
     // See: FssDLCOperations.InventoryJsonForDLCTitle()
 
-    public void LoadJSONConfigFile(string jsonString)
+    // Usage: Fss3DModelLibrary.LoadJSONConfigFile(jsonString);
+    public static void LoadJSONConfigFile(string jsonString)
     {
-        // string jsonString = System.IO.File.ReadAllText(fullFilepath);
         var modelList = JsonSerializer.Deserialize<List<Fss3DModelInfo>>(jsonString);
 
         if (modelList == null)
@@ -69,6 +122,7 @@ public class Fss3DModelLibrary
         foreach (var model in modelList)
         {
             ModelInfoList.Add(model.Name, model);
+            FssCentralLog.AddEntry($"Loaded JSON: {model.Name}");
         }
     }
 
@@ -86,23 +140,21 @@ public class Fss3DModelLibrary
     // To allow us to read the JSON config from multiple sources, we pass the already read string to this
     // function to decode it and add it to the model list.
     // Use standard .Net JSON parser.
-    public static void DeserializeJSONConfig(string JSONString)
+    public static void DeserializeJSONConfig(string jsonString)
     {
-        GD.Print($"JSONString: {JSONString}");
-
-        var modelList = JsonSerializer.Deserialize<List<Fss3DModelInfo>>(JSONString);
+        var modelList = JsonSerializer.Deserialize<List<Fss3DModelInfo>>(jsonString);
 
         if (modelList == null)
         {
-            GD.PrintErr($"Failed to load JSON string.");
+            GD.PrintErr($"Failed to parse JSON file");
             return;
         }
 
         // Add the model information to the list
         foreach (var model in modelList)
         {
-            //modelList.Add(model.Name, model);
-            GD.Print($"Loaded model: {model.Name}");
+            ModelInfoList.Add(model.Name, model);
+            FssCentralLog.AddEntry($"Loaded JSON: {model.Name}");
         }
     }
 
@@ -115,6 +167,29 @@ public class Fss3DModelLibrary
 
         // Write the JSON to the file
         System.IO.File.WriteAllText(fullFilepath, jsonString);
+    }
+
+    // ------------------------------------------------------------------------------------------------
+    // MARK: Content Report
+    // ------------------------------------------------------------------------------------------------
+
+    public static string ReportContent()
+    {
+        StringBuilder report = new StringBuilder();
+
+        report.AppendLine("Model Library Content Report");
+        report.AppendLine("=============================");
+        report.AppendLine();
+
+        foreach (var model in ModelInfoList.Values)
+        {
+            report.AppendLine($"Model: {model.Name}");
+            report.AppendLine($"  Path: {model.FilePath}");
+            report.AppendLine($"  AABB: {model.RwAABB}");
+            report.AppendLine();
+        }
+
+        return report.ToString();
     }
 
     // ------------------------------------------------------------------------------------------------
