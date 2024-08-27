@@ -148,6 +148,12 @@ public static partial class FssValueUtils
         return Math.Abs(val - matchval) <= tolerance;
     }
 
+    // Usage: FssValueUtils.IsZero(val)
+    public static bool IsZero(double val, double tolerance = FssConsts.ArbitraryMinDouble)
+    {
+        return EqualsWithinTolerance(val, 0, tolerance);
+    }
+
     // ------------------------------------------------------------------------
 
     // Generates a random float value between minVal and maxVal (inclusive)

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 using FssJSON;
 
@@ -240,6 +241,41 @@ public class FssPlatformManager
         }
 
         return report;
+    }
+
+    public string FullReport()
+    {
+        StringBuilder sb = new StringBuilder();
+
+        sb.AppendLine("Platform Manager Report");
+        sb.AppendLine("=======================");
+        sb.AppendLine();
+
+        sb.AppendLine("Platform List");
+        sb.AppendLine("-------------");
+        foreach (FssPlatform currPlat in PlatfomList)
+        {
+            sb.AppendLine($"Platform: {currPlat.Name}");
+            sb.AppendLine($"- CurrPosition: {currPlat.Kinetics?.CurrPosition}");
+            sb.AppendLine($"- StartPosition: {currPlat.Kinetics?.StartPosition}");
+            sb.AppendLine($"- CurrAttitude: {currPlat.Kinetics?.CurrAttitude}");
+            sb.AppendLine($"- CurrCourse: {currPlat.Kinetics?.CurrCourse}");
+            sb.AppendLine($"- CurrCourseDelta: {currPlat.Kinetics?.CurrCourseDelta}");
+        }
+
+        sb.AppendLine();
+        sb.AppendLine("Platform Elements");
+        sb.AppendLine("-----------------");
+        foreach (FssPlatform currPlat in PlatfomList)
+        {
+            sb.AppendLine($"Platform: {currPlat.Name}");
+            foreach (FssPlatformElement currElem in currPlat.ElementsList)
+            {
+                sb.AppendLine($"- Element: {currElem.Name} Type: {currElem.Type}");
+            }
+        }
+
+        return sb.ToString();
     }
 
     // --------------------------------------------------------------------------------------------

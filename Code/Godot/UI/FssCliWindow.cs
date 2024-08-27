@@ -6,28 +6,52 @@ using System.Collections.Generic;
 
 public partial class FssCliWindow : Window
 {
+    // CLI tab
     private Label           CommandResponseLabel;
     private LineEdit        CommandEntryEdit;
+
+    // Log tab
     private ScrollContainer ScrollContainer;
     private Label           LogLabel;
 
-    private StringBuilder LogSB;
+    // Report tab
+    private CodeEdit        AppReportEdit;
+    private Button          ReportRegenButton;
+    private Button          ClipboardButton;
 
+    private StringBuilder LogSB;
     private System.Timers.Timer LabelUpdateTimer;
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Node Functions
+    // --------------------------------------------------------------------------------------------
 
     public override void _Ready()
     {
         // Get references to the Label, LineEdit, and ScrollContainer
-        CommandResponseLabel = GetNode<Label>("TabContainer/CLI/ScrollContainer/CommandResponseLabel");
-        CommandEntryEdit     = GetNode<LineEdit>("TabContainer/CLI/CommandEntryEdit");
-        ScrollContainer      = GetNode<ScrollContainer>("TabContainer/CLI/ScrollContainer");
-        LogLabel             = GetNode<Label>("TabContainer/Log/LogScrollContainer/LogLabel");
+        
+        // CLI tab
+        CommandResponseLabel = (Label)FindChild("CommandResponseLabel");
+        CommandEntryEdit     = (LineEdit)FindChild("CommandEntryEdit");
+
+        // Log tab
+        ScrollContainer      = (ScrollContainer)FindChild("ScrollContainer");
+        LogLabel             = (Label)FindChild("LogLabel");
+
+        // Report tab
+        AppReportEdit        = (CodeEdit)FindChild("AppReportEdit");
+        ReportRegenButton    = (Button)FindChild("ReportRegenButton");
+        ClipboardButton      = (Button)FindChild("ClipboardButton");
+
 
         // Connect the text_submitted signal of the LineEdit to the OnCommandSubmitted function
         CommandEntryEdit.Connect("text_submitted", new Callable(this, "OnCommandSubmitted"));
 
         // Connect the close_requested signal to the OnCloseRequested function
         Connect("close_requested", new Callable(this, "OnCloseRequested"));
+
+        ReportRegenButton.Connect("pressed", new Callable(this, "OnReportRegenButtonPressed"));
+        ClipboardButton.Connect("pressed", new Callable(this, "OnClipboardButtonPressed"));
 
         LogSB = new StringBuilder();
 
@@ -40,12 +64,37 @@ public partial class FssCliWindow : Window
         OnCommandSubmitted("version");
     }
 
-    // Function to handle the close_requested signal
-    private void OnCloseRequested()
+    // --------------------------------------------------------------------------------------------
+    // MARK: UI Actions - Log
+    // --------------------------------------------------------------------------------------------
+
+    private void UpdateLogLabel()
     {
-        // Hide the window
-        Hide();
+        LogLabel.Text = LogSB.ToString();
     }
+
+    private void ScrollToBottom()
+    {
+        ScrollContainer.ScrollVertical = (int)(ScrollContainer.GetVScrollBar().MaxValue);
+    }
+
+    // Function to update the label periodically
+    private void OnUpdateTimerElapsed(object sender, ElapsedEventArgs e)
+    {
+        CallDeferred(nameof(UpdateConsoleLabel));
+
+        // Update the string builder in the timer, just to take anything off the main thread
+        List<string> lines = FssCentralLog.GetLatestLines();
+        foreach (string line in lines)
+            LogSB.AppendLine(line);
+
+        CallDeferred(nameof(UpdateLogLabel));
+    }
+
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: UI Actions - CLI
+    // --------------------------------------------------------------------------------------------
 
     // Function to handle the text_submitted signal of the LineEdit
     private void OnCommandSubmitted(string newText)
@@ -71,10 +120,7 @@ public partial class FssCliWindow : Window
         CallDeferred(nameof(ClearCommandEdit));
     }
 
-    // --------------------------------------------------------------------------------------------
-
     // Functions perform actions on the labels. Have to be done on the main thread, which is what the CallDeferred function does.
-
     public void ClearCommandEdit()
     {
         CommandEntryEdit.Text = "";
@@ -107,27 +153,67 @@ public partial class FssCliWindow : Window
         }
     }
 
-    private void UpdateLogLabel()
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: UI Actions - Report
+    // --------------------------------------------------------------------------------------------
+
+    // Create a report for everything in the application, split into sections 
+
+    private void OnReportRegenButtonPressed()
     {
-        LogLabel.Text = LogSB.ToString();
+        StringBuilder sb = new StringBuilder();
+
+        sb.AppendLine("Application Report");
+        sb.AppendLine("===================");
+
+        // Add the time and version info
+        sb.AppendLine($"Time: {DateTime.Now}");
+        sb.AppendLine($"Version: {FssGlobals.VersionString}");
+
+        // Add the network report
+        sb.AppendLine();
+        sb.AppendLine("Network Report");
+        sb.AppendLine("--------------");
+        sb.Append(FssAppFactory.Instance.EventDriver.NetworkReport());
+
+        // Add the DLC report
+        sb.AppendLine();
+        sb.AppendLine("DLC Report");
+        sb.AppendLine("----------");
+        sb.Append(FssDlcOperations.DlcReport());
+
+        // Model report
+        sb.AppendLine();
+        sb.AppendLine("Model Report");
+        sb.AppendLine("------------");
+        sb.Append(FssAppFactory.Instance.PlatformManager.FullReport());
+
+        // Texture report
+        sb.AppendLine();
+        sb.AppendLine("Texture Report");
+        sb.AppendLine("--------------");
+        
+        sb.Append(FssTextureLoader.Instance.TextureCacheList());
+
+        AppReportEdit.Text = sb.ToString();
+
     }
 
-    private void ScrollToBottom()
+    private void OnClipboardButtonPressed()
     {
-        ScrollContainer.ScrollVertical = (int)(ScrollContainer.GetVScrollBar().MaxValue);
+        DisplayServer.ClipboardSet(AppReportEdit.Text);
     }
 
-    // Function to update the label periodically
-    private void OnUpdateTimerElapsed(object sender, ElapsedEventArgs e)
+    // --------------------------------------------------------------------------------------------
+    // MARK: UI Actions - Misc
+    // --------------------------------------------------------------------------------------------
+
+    // Function to handle the close_requested signal
+    private void OnCloseRequested()
     {
-        CallDeferred(nameof(UpdateConsoleLabel));
-
-        // Update the string builder in the timer, just to take anything off the main thread
-        List<string> lines = FssCentralLog.GetLatestLines();
-        foreach (string line in lines)
-            LogSB.AppendLine(line);
-
-        CallDeferred(nameof(UpdateLogLabel));
+        // Hide the window
+        Hide();
     }
 
     public void ToggleVisibility()
@@ -135,4 +221,5 @@ public partial class FssCliWindow : Window
         Visible = !Visible;
         GD.Print("ToggleVisible");
     }
+
 }

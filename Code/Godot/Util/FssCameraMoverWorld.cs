@@ -1,14 +1,18 @@
 using Godot;
 using System;
 
-public partial class FssCameraMoverWorld : Camera3D
+public partial class FssCameraMoverWorld : Node3D
 {
-    public static FssLLAPoint CamPos    = new FssLLAPoint() { LatDegs = 50, LonDegs = -1, AltMslM = 1000 };
-    public FssCourse   CamCourse = new FssCourse() {HeadingDegs = 30, SpeedKph = 0};
+    public FssLLAPoint CamPos    = new FssLLAPoint() { LatDegs = 50, LonDegs = -1, AltMslM = 5000 };
+    public FssCourse   CamCourse = new FssCourse()   { HeadingDegs = 180, SpeedKph = 0 };
 
     public FssPolarOffset CamOffset = new FssPolarOffset(10, 0, 0);
 
+    public float camPitch = 0;
+
     private float TimerCamReport = 0;
+
+    public Camera3D CamNode;
 
     // ------------------------------------------------------------------------------------------------
 
@@ -16,6 +20,8 @@ public partial class FssCameraMoverWorld : Camera3D
     {
         // Initialization code if needed
         Name = "WorldCam";
+
+        CamNode = GetNode<Camera3D>("WorldCam");
     }
 
     public override void _Process(double delta)
@@ -29,6 +35,9 @@ public partial class FssCameraMoverWorld : Camera3D
             // GD.Print($"CamPos:{CamPos}");
 
         }
+
+        // Turn the position CamPos into a GE positino and place the camera
+        UpdateCameraPosition();
 
         // if (direction.Length() > 0)
         // {
@@ -59,31 +68,76 @@ public partial class FssCameraMoverWorld : Camera3D
         double translateUpM   = 0;
         double rotateUpDegs   = 0;
         double rotateLeftDegs = 0;
+        CamCourse.SpeedKph = 0;
+
+        double translateSpeed = 2500;
+        double rotateSpeed    = 2;
+        double translateUpSpeed = 100;
+        
+        double MoveSpeed = (float)(FssValueUtils.LimitToRange(CamPos.AltMslKm / 0.03, 2500, 5000000));
+        translateSpeed = MoveSpeed;
 
         if (Input.IsActionPressed("ui_shift"))
         {
-            if (Input.IsActionPressed("ui_up"))    translateUpM += 1;
-            if (Input.IsActionPressed("ui_down") ) translateUpM -= 1;
+            if (Input.IsActionPressed("ui_up"))    translateUpM   += 1;
+            if (Input.IsActionPressed("ui_down") ) translateUpM   -= 1;
         }
         else if (Input.IsActionPressed("ui_alt"))
         {
-            if (Input.IsActionPressed("ui_up"))    rotateUpDegs += 2f;
-            if (Input.IsActionPressed("ui_down"))  rotateUpDegs -= 2f;
-            if (Input.IsActionPressed("ui_left"))  rotateLeftDegs += 2f;
-            if (Input.IsActionPressed("ui_right")) rotateLeftDegs -= 2f;
+            if (Input.IsActionPressed("ui_up"))    rotateUpDegs   += 1f;
+            if (Input.IsActionPressed("ui_down"))  rotateUpDegs   -= 1f;
+            if (Input.IsActionPressed("ui_left"))  rotateLeftDegs -= 1f;
+            if (Input.IsActionPressed("ui_right")) rotateLeftDegs += 1f;
         }
         else
         {
+            if (Input.IsActionPressed("ui_up"))    translateFwdM -= 1;
+            if (Input.IsActionPressed("ui_down"))  translateFwdM += 1;
             if (Input.IsActionPressed("ui_left"))  translateLeftM += 1;
             if (Input.IsActionPressed("ui_right")) translateLeftM -= 1;
-            if (Input.IsActionPressed("ui_up"))    translateFwdM += 1;
-            if (Input.IsActionPressed("ui_down"))  translateFwdM -= 1;
         }
 
         // Create a polar offset to apply to the camera position
-        CamOffset.AzDegs += rotateLeftDegs;
-        CamOffset.ElDegs += rotateUpDegs;
-        CamOffset.RangeM += translateFwdM;
+        // CamOffset.AzDegs += rotateLeftDegs;
+        // CamOffset.ElDegs += rotateUpDegs;
+        // CamOffset.RangeM += translateFwdM;
+
+        // Simple: Apply alt and heading chanegs
+        CamPos.AltMslM        += translateUpM   * MoveSpeed;//translateUpSpeed;
+        CamCourse.HeadingDegs += rotateLeftDegs * rotateSpeed;
+        CamCourse.SpeedKph    += translateFwdM  * MoveSpeed;//translateSpeed;
+
+        if (!FssValueUtils.IsZero(CamCourse.SpeedKph))
+        {
+            CamPos = CamPos.PlusRangeBearing(CamCourse.OffsetForTime(1));
+        }
+
+        // Translation means setting up a temp course 90 degree off, and adding that.
+        if (translateLeftM != 0)
+        {
+            FssCourse tempCourse = new FssCourse(translateLeftM * translateSpeed, CamCourse.HeadingDegs + 90);
+            CamPos = CamPos.PlusRangeBearing(tempCourse.OffsetForTime(1));
+        }
+
+        //FssMapManager.LoadRefLLA = CamPos;
+
+        rotateUpDegs *= 2;
+        //rotateUpDegs = FssValueUtils.LimitToRange(rotateUpDegs, -50, 50);
+        camPitch     = FssValueUtils.LimitToRange(camPitch, -80, 0);
+        camPitch += (float)rotateUpDegs;
+
+        //CamNode.Translation = new Vector3(0, 0, 0);
+
+        // if the camera is present and current, Use the position to drive the map update.
+        if (CamNode != null)
+        {
+            if (CamNode.IsCurrent())
+            {
+                CamNode.RotationDegrees = new Vector3(camPitch, 0, 0);
+                FssMapManager.LoadRefLLA = FssGeoConvOperations.GeToRw(Position);
+            }
+        }
+
 
         // GD.Print($"CamOffset:{CamOffset}");
     }
@@ -94,25 +148,20 @@ public partial class FssCameraMoverWorld : Camera3D
 
     private void UpdateCameraPosition()
     {
-        // // Set the camera position
-        // FssZeroOffset.SetLLA(CamPos);
+        // Set the camera position
         // Vector3 GePos = FssZeroOffset.GeZeroPointOffset(CamPos.ToXYZ());
         // Translation = GePos;
 
-        // // Set the camera rotation
-        // Vector3 GeRot = new Vector3(0, 0, 0);
-        // RotationDegrees = GeRot;
+        Position = FssZeroOffset.GeZeroPointOffset(CamPos.ToXYZ());
 
-        // If the range value of the offset is non-zero, get the offset and apply it to the position. Then zero the range.
-        if (CamOffset.RangeM > 1)
-        {
-            FssXYZPoint camXYZ = CamOffset.ToXYZ();
-            Vector3 GePos = FssZeroOffset.GeZeroPointOffset(camXYZ);
+        // Use the heading and LLA position to update the camera rotation
+        FssEntityV3 platformV3 = FssGeoConvOperations.RwToGeStruct(CamPos, CamCourse.HeadingDegs);
 
-
-            CamOffset.RangeM = 0;
-        }
-
+        LookAtFromPosition(
+            platformV3.Pos,
+            platformV3.PosAhead,
+            platformV3.VecUp,
+            true);
 
     }
 }

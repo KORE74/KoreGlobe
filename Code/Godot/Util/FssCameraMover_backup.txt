@@ -1,10 +1,10 @@
 using Godot;
 using System;
 
-public partial class FssCameraMover : Camera3D
+public partial class FssCameraMover : Node3D
 {
     [Export]
-    public float MoveSpeed   = (float)(FssZeroOffset.GeEarthRadius / 0.75); // Tunable speed parameters
+    public float MoveSpeed = (float)(FssZeroOffset.GeEarthRadius / 0.75); // Tunable speed parameters
 
     public float RotateSpeed = 1.0f;
     Vector3 CamDirection = new Vector3();
@@ -12,9 +12,11 @@ public partial class FssCameraMover : Camera3D
 
     float TimerReport = 0.0f;
 
+    // ------------------------------------------------------------------------------------------------
+
     public override void _Ready()
     {
-        // Initialization code if needed
+        Name = "FssCameraMover";
     }
 
     public override void _Process(double delta)
@@ -30,23 +32,17 @@ public partial class FssCameraMover : Camera3D
             Vector3 forward = -Transform.Basis.Z;
             Vector3 right   =  Transform.Basis.X;
             Vector3 up      =  Transform.Basis.Y;
-            Vector3 globalDirection = (forward * CamDirection.Z) + (right * CamDirection.X) + (up * CamDirection.Y);
+            Vector3 globalCamDirection = (forward * CamDirection.Z) + (right * CamDirection.X) + (up * CamDirection.Y);
 
             // Move the object
-            Position += globalDirection * MoveSpeed * (float)(delta);
+            Position += globalCamDirection * MoveSpeed * (float)(delta);
         }
         if (CamRotation.Length() > 0)
         {
-            Rotation += CamRotation * RotateSpeed * (float)(delta);
+            CamRotation += CamRotation * RotateSpeed * (float)(delta);
         }
 
-        // If the node is a camera, update the FssMapManager.LoadRefLLA
-        if (this is Camera3D)
-        {
-            Camera3D camNode = (Camera3D)this;
-            if (camNode.IsCurrent())
-                FssMapManager.LoadRefLLA = FssGeoConvOperations.GeToRw(Position);
-        }
+        FssMapManager.LoadRefLLA = FssGeoConvOperations.GeToRw(Position);
 
         MoveSpeed = (float)(FssValueUtils.LimitToRange(FssMapManager.LoadRefLLA.AltMslKm / 80, 0.02, 5000));
 
@@ -57,6 +53,8 @@ public partial class FssCameraMover : Camera3D
             // GD.Print($"LoadRefLLA: {FssMapManager.LoadRefLLA} // MoveSpeed: {MoveSpeed}");
         }
     }
+
+    // ------------------------------------------------------------------------------------------------
 
     private void UpdateInputs()
     {

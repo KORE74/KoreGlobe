@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://ck4tngsqwb7jf"]
+[gd_scene load_steps=27 format=3 uid="uid://ck4tngsqwb7jf"]
 
 [ext_resource type="StyleBox" uid="uid://l27fuiuspgfw" path="res://Themes/Panel.tres" id="1_ndm6o"]
 [ext_resource type="Script" path="res://Code/Godot/UI/FssUIHeader.cs" id="2_iuuet"]
@@ -14,21 +14,16 @@
 [ext_resource type="Texture2D" uid="uid://dec5v78k63oif" path="res://Resources/Icons/White_Globe.png" id="10_ebi24"]
 [ext_resource type="Texture2D" uid="uid://buqwf6wctolbe" path="res://Resources/Icons/Plane.png" id="11_c00mr"]
 [ext_resource type="Texture2D" uid="uid://bkkco3s7nxvm4" path="res://Resources/Icons/Icon-121.png" id="11_mvn6c"]
-[ext_resource type="Theme" uid="uid://f7cusn8cepiu" path="res://Themes/Green_Button.tres" id="12_nxgov"]
+[ext_resource type="Theme" uid="uid://dogj72yxwe87e" path="res://Themes/OrangeToggle.tres" id="13_kfn1l"]
 [ext_resource type="Texture2D" uid="uid://dgq7if4l4dpys" path="res://Resources/Icons/Align.png" id="13_pe2s4"]
 [ext_resource type="Texture2D" uid="uid://cvkgx537okkdr" path="res://Resources/Icons/arrow_left.png" id="14_w6k6m"]
 [ext_resource type="Texture2D" uid="uid://msmhfxb7v8b" path="res://Resources/Icons/arrow_right.png" id="15_7rjg6"]
+[ext_resource type="ButtonGroup" uid="uid://th4gb4ncypks" path="res://Scenes/ButtonGroup_CamMode.tres" id="15_83ia6"]
 [ext_resource type="Script" path="res://Code/Godot/UI/FssCliWindow.cs" id="16_unelf"]
 [ext_resource type="Script" path="res://Code/Godot/UI/FssNetworkWindow.cs" id="17_xs6g5"]
 [ext_resource type="Theme" uid="uid://dmowlcnw0dkpk" path="res://Themes/BlueToggle.tres" id="18_3dgka"]
 [ext_resource type="Script" path="res://Code/Godot/UI/FssSettingWindow.cs" id="18_sk1xa"]
 [ext_resource type="Script" path="res://Code/Godot/UI/FssPlatformSelectWindow.cs" id="21_6xmyp"]
-
-[sub_resource type="ButtonGroup" id="ButtonGroup_3y634"]
-allow_unpress = true
-
-[sub_resource type="ButtonGroup" id="ButtonGroup_anppk"]
-allow_unpress = true
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_lkqfi"]
 
@@ -191,6 +186,7 @@ expand_icon = true
 [node name="Button" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
+focus_mode = 0
 theme = ExtResource("18_3dgka")
 text = "RXTX"
 
@@ -231,6 +227,7 @@ theme_override_constants/separation = 10
 [node name="RWScaleToggleButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/VBoxContainer/PanelPlatformResize/MarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
+focus_mode = 0
 theme = ExtResource("9_xvvq8")
 icon = ExtResource("11_mvn6c")
 expand_icon = true
@@ -238,6 +235,7 @@ expand_icon = true
 [node name="InfographicToggleButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/VBoxContainer/PanelPlatformResize/MarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
+focus_mode = 0
 theme = ExtResource("9_xvvq8")
 text = "INFO"
 
@@ -253,12 +251,12 @@ ticks_on_borders = true
 [node name="InfographicScaleLabel" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/VBoxContainer/PanelPlatformResize/MarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
-text = "100"
+text = "10"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="PanelRxTxShown" type="Panel" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/VBoxContainer"]
-custom_minimum_size = Vector2(120, 70)
+custom_minimum_size = Vector2(120, 60)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
@@ -266,8 +264,11 @@ theme_override_styles/panel = ExtResource("1_ndm6o")
 
 [node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/VBoxContainer/PanelRxTxShown"]
 layout_mode = 1
-offset_right = 124.0
-offset_bottom = 70.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
@@ -275,17 +276,24 @@ theme_override_constants/margin_bottom = 10
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/VBoxContainer/PanelRxTxShown/MarginContainer"]
 layout_mode = 2
+theme_override_constants/separation = 10
 
 [node name="ShowTxButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/VBoxContainer/PanelRxTxShown/MarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 size_flags_vertical = 0
+focus_mode = 0
+theme = ExtResource("13_kfn1l")
+toggle_mode = true
 text = "TX"
 
 [node name="ShowRxButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/VBoxContainer/PanelRxTxShown/MarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 size_flags_vertical = 0
+focus_mode = 0
+theme = ExtResource("13_kfn1l")
+toggle_mode = true
 text = "RX"
 
 [node name="Control-CameraControl" type="Control" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer"]
@@ -334,6 +342,19 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_horizontal = 4
 
+[node name="CameraModeXYZButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("9_xvvq8")
+theme_override_constants/outline_size = 10
+toggle_mode = true
+button_pressed = true
+action_mode = 0
+button_group = ExtResource("15_83ia6")
+text = "XYZ"
+expand_icon = true
+
 [node name="CameraModeWorldButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
@@ -343,7 +364,7 @@ theme_override_constants/outline_size = 10
 toggle_mode = true
 button_pressed = true
 action_mode = 0
-button_group = SubResource("ButtonGroup_3y634")
+button_group = ExtResource("15_83ia6")
 icon = ExtResource("10_ebi24")
 expand_icon = true
 
@@ -352,9 +373,10 @@ custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 focus_mode = 0
 theme = ExtResource("9_xvvq8")
+disabled = true
 toggle_mode = true
 action_mode = 0
-button_group = SubResource("ButtonGroup_anppk")
+button_group = ExtResource("15_83ia6")
 icon = ExtResource("11_c00mr")
 icon_alignment = 1
 expand_icon = true
@@ -363,7 +385,7 @@ expand_icon = true
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 focus_mode = 0
-theme = ExtResource("12_nxgov")
+theme = ExtResource("9_xvvq8")
 theme_override_constants/outline_size = 10
 disabled = true
 toggle_mode = true
@@ -537,7 +559,6 @@ auto_translate_mode = 1
 title = "Internal CLI"
 initial_position = 2
 size = Vector2i(700, 400)
-visible = false
 min_size = Vector2i(600, 400)
 script = ExtResource("16_unelf")
 
@@ -567,14 +588,21 @@ custom_minimum_size = Vector2(200, 100)
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="LogScrollContainer" type="ScrollContainer" parent="CLIWindow/MarginContainer/TabContainer/Log"]
+[node name="MarginContainer" type="MarginContainer" parent="CLIWindow/MarginContainer/TabContainer/Log"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="LogScrollContainer" type="ScrollContainer" parent="CLIWindow/MarginContainer/TabContainer/Log/MarginContainer"]
 custom_minimum_size = Vector2(200, 100)
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 2
 
-[node name="LogLabel" type="Label" parent="CLIWindow/MarginContainer/TabContainer/Log/LogScrollContainer"]
+[node name="LogLabel" type="Label" parent="CLIWindow/MarginContainer/TabContainer/Log/MarginContainer/LogScrollContainer"]
 custom_minimum_size = Vector2(200, 100)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -587,13 +615,25 @@ custom_minimum_size = Vector2(200, 100)
 layout_mode = 2
 metadata/_tab_index = 1
 
-[node name="ScrollContainer" type="ScrollContainer" parent="CLIWindow/MarginContainer/TabContainer/CLI"]
+[node name="MarginContainer" type="MarginContainer" parent="CLIWindow/MarginContainer/TabContainer/CLI"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CLIWindow/MarginContainer/TabContainer/CLI/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CLIWindow/MarginContainer/TabContainer/CLI/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(200, 100)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="CommandResponseLabel" type="Label" parent="CLIWindow/MarginContainer/TabContainer/CLI/ScrollContainer"]
+[node name="CommandResponseLabel" type="Label" parent="CLIWindow/MarginContainer/TabContainer/CLI/MarginContainer/VBoxContainer/ScrollContainer"]
 clip_contents = true
 custom_minimum_size = Vector2(200, 100)
 layout_mode = 2
@@ -603,9 +643,10 @@ text = "af"
 clip_text = true
 text_overrun_behavior = 1
 
-[node name="CommandEntryEdit" type="LineEdit" parent="CLIWindow/MarginContainer/TabContainer/CLI"]
+[node name="CommandEntryEdit" type="LineEdit" parent="CLIWindow/MarginContainer/TabContainer/CLI/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
+size_flags_vertical = 8
 
 [node name="Report" type="MarginContainer" parent="CLIWindow/MarginContainer/TabContainer"]
 layout_mode = 2
@@ -638,12 +679,22 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="RegenButton" type="Button" parent="CLIWindow/MarginContainer/TabContainer/Report/VBoxContainer/HBoxContainer2/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="CLIWindow/MarginContainer/TabContainer/Report/VBoxContainer/HBoxContainer2/MarginContainer"]
+layout_mode = 2
+
+[node name="ReportRegenButton" type="Button" parent="CLIWindow/MarginContainer/TabContainer/Report/VBoxContainer/HBoxContainer2/MarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(90, 45)
 layout_mode = 2
 focus_mode = 0
 theme = ExtResource("18_3dgka")
 text = "Regen"
+
+[node name="ClipboardButton" type="Button" parent="CLIWindow/MarginContainer/TabContainer/Report/VBoxContainer/HBoxContainer2/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(120, 45)
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("18_3dgka")
+text = "Copy Text"
 
 [node name="NetworkWindow" type="Window" parent="."]
 auto_translate_mode = 1

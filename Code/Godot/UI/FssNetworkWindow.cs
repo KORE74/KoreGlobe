@@ -167,7 +167,7 @@ public partial class FssNetworkWindow : Window
         TcpIpClientConnectButton.Text = FssLanguageStrings.Instance.GetParam("Connect");
 
         MaintainConnectionCheckBox.Text = FssLanguageStrings.Instance.GetParam("MaintainConnection");
-        NetworkStatusTextEdit.Text      = FssLanguageStrings.Instance.GetParam("NetworkStatus");
+        //NetworkStatusTextEdit.Text      = FssLanguageStrings.Instance.GetParam("NetworkStatus");
 
         OkButton.Text     = FssLanguageStrings.Instance.GetParam("Ok");
         CancelButton.Text = FssLanguageStrings.Instance.GetParam("Cancel");

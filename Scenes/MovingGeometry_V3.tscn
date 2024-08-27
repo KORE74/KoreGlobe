@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://cle61uafx4wyg"]
+[gd_scene load_steps=6 format=3 uid="uid://cle61uafx4wyg"]
 
 [ext_resource type="Script" path="res://Code/Godot/TestZeroOffset.cs" id="1_awllb"]
+[ext_resource type="Script" path="res://Code/Godot/Util/FssCameraMoverWorld.cs" id="2_q4a80"]
 [ext_resource type="Script" path="res://Code/Godot/Util/FssCameraMover.cs" id="2_uur7r"]
 [ext_resource type="PackedScene" uid="uid://ck4tngsqwb7jf" path="res://Scenes/ui_top.tscn" id="3_3wlp5"]
 
@@ -24,9 +25,16 @@ transform = Transform3D(1, 0, 0, 0, 0.173648, 0.984808, 0, -0.984808, 0.173648, 
 spot_range = 16.0847
 spot_angle = 30.6739
 
+[node name="WorldCamBase" type="Node3D" parent="Scene"]
+script = ExtResource("2_q4a80")
+
+[node name="WorldCam" type="Camera3D" parent="Scene/WorldCamBase"]
+current = true
+fov = 40.0
+
 [node name="Camera3D" type="Camera3D" parent="Scene"]
 transform = Transform3D(-0.0098958, 0, 0.999951, 0, 1, 0, -0.999951, 0, -0.0098958, 10.3465, -0.263696, 0.306362)
-current = true
+visible = false
 fov = 40.0
 near = 0.001
 far = 12000.0

@@ -40,6 +40,11 @@ public struct FssAttitude
         get { return new FssAttitude { RollClockwiseRads = 0.0, PitchUpRads = 0.0, YawClockwiseRads = 0.0 }; }
     }
 
+    public override string ToString()
+    {
+        return $"RollClockwiseDegs:{RollClockwiseDegs:F2}, PitchUpDegs:{PitchUpDegs:F2}, YawClockwiseDegs:{YawClockwiseDegs:F2}";
+    }
+
     // ------------------------------------------------------------------------
 
     public FssAttitude PlusDeltaForTime(FssAttitudeDelta delta, double elapsedSeconds)

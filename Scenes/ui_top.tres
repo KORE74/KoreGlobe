@@ -1,0 +1,5 @@
+[gd_resource type="ButtonGroup" format=3 uid="uid://f5g8dn2ilgen"]
+
+[resource]
+resource_name = "CamMode"
+allow_unpress = true

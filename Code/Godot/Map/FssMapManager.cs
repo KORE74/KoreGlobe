@@ -29,6 +29,10 @@ public partial class FssMapManager : Node3D
     Node3D ModelNode         = null;
     Node3D ModelResourceNode = null;
 
+    // --------------------------------------------------------------------------------------------
+    // MARK: Node Functions
+    // --------------------------------------------------------------------------------------------
+
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
@@ -91,5 +95,10 @@ public partial class FssMapManager : Node3D
         var config = FssCentralConfig.Instance;
         config.SetParam("MaxMapLvl", CurrMaxMapLvl);
     }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Report 
+    // --------------------------------------------------------------------------------------------
+
 
 }

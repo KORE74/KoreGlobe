@@ -1,0 +1,21 @@
+[gd_resource type="Theme" load_steps=5 format=3 uid="uid://dogj72yxwe87e"]
+
+[sub_resource type="StyleBoxFlat" id="StyleOrangeToggle_Disabled"]
+bg_color = Color(0.3, 0.3, 0.3, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleOrangeToggle_Hover"]
+bg_color = Color(0.8, 0.4, 0.1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleOrangeToggle_Normal"]
+bg_color = Color(0.3, 0.15, 0.1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleOrangeToggle_Pressed"]
+bg_color = Color(0.7, 0.3, 0, 1)
+
+[resource]
+Button/colors/font_pressed_color = Color(1, 1, 1, 1)
+Button/icons/icon = null
+Button/styles/disabled = SubResource("StyleOrangeToggle_Disabled")
+Button/styles/hover = SubResource("StyleOrangeToggle_Hover")
+Button/styles/normal = SubResource("StyleOrangeToggle_Normal")
+Button/styles/pressed = SubResource("StyleOrangeToggle_Pressed")
