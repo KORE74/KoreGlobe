@@ -1,5 +1,7 @@
-using Godot;
 using System;
+using System.Collections.Generic;
+
+using Godot;
 
 #nullable enable
 
@@ -82,9 +84,9 @@ public partial class FssGodotEntity : Node3D
     public void UpdateRoute()
     {
         // Get the route
-        FssPlatformElementRoute? route = FssAppFactory.Instance.EventDriver.PlatformRoute(EntityName);
+        List<FssLLAPoint> routePoints = FssAppFactory.Instance.EventDriver.PlatformGetRoutePoints(EntityName);
 
-        if (route == null)
+        if (routePoints.Count > 0)
         {
             return;
         }

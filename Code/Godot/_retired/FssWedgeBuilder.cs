@@ -8,7 +8,7 @@ public partial class FssWedgeBuilder : Node3D
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        FssCentralLog.AddStartupEntry("WedgeBuilder // _Ready");
+        FssCentralLog.AddEntry("WedgeBuilder // _Ready");
 
         // Fix the position to line up with the sphere
         Position = new Vector3(0f, 0f, 0f);

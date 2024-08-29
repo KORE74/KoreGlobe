@@ -21,6 +21,9 @@ public class FssPlatformElementRoute : FssPlatformElement
     // MARK: Query
     // ---------------------------------------------------------------------------------------------
 
+    public List<FssLLAPoint> Points => RoutePoints;
+
+
     public int         PointCount()     => RoutePoints.Count;
     public FssLLAPoint Point(int index) => RoutePoints[index];
 

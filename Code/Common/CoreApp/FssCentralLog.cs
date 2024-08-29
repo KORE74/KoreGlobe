@@ -13,7 +13,8 @@ using System.Text;
 public static class FssCentralLog
 {
     // Log storage and access
-    private static List<string> LogEntries = new List<string>();
+    private static List<string> LogEntries     = new List<string>();
+    private static List<string> DisplayEntries = new List<string>();
     private static readonly object LogLock = new object();
 
     // Activity flags
@@ -32,14 +33,19 @@ public static class FssCentralLog
 
     public static void AddEntry(string entry)
     {
-        if (!LoggingActive)
-            return;
-
         string timestamp = FssCoreTime.TimestampLocal;
         string formattedEntry = $"{timestamp} : {entry}";
 
         lock (LogLock)
         {
+            // Limit the number of entries in the display list
+            DisplayEntries.Add(formattedEntry);
+            while (DisplayEntries.Count > 200) // Maintain latest 200 entries 
+                DisplayEntries.RemoveAt(0);
+
+            if (!LoggingActive)
+                return;
+
             LogEntries.Add(formattedEntry);
         }
     }
@@ -87,5 +93,13 @@ public static class FssCentralLog
     {
         writeTimer?.Dispose();
         WriteLogEntries(null); // Final write
+    }
+
+    public static List<string> GetLatestLines()
+    {
+        lock (LogLock)
+        {
+            return new List<string>(DisplayEntries);
+        }
     }
 }

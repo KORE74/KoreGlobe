@@ -1,5 +1,6 @@
 
 using System;
+using System.Collections.Generic;
 
 using FssNetworking;
 
@@ -109,8 +110,7 @@ public partial class FssEventDriver
     // MARK: Route Helpers
     // ---------------------------------------------------------------------------------------------
 
-
-    public void PlatformAddRoute(string platName, string elemName)
+    public void PlatformAddRoute(string platName)
     {
         FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
 
@@ -121,6 +121,7 @@ public partial class FssEventDriver
         }
 
         // Look for an existing route with the same name
+        string elemName = $"{platName}_Route";
         FssPlatformElement? element = platform.ElementForName(elemName);
         if (element != null)
         {
@@ -133,7 +134,7 @@ public partial class FssEventDriver
         platform.AddElement(route);
     }
 
-    public void PlatformAddRoutePoint(string platName, string elemName, FssLLAPoint point)
+    public void PlatformAddRoutePoint(string platName, FssLLAPoint point)
     {
         FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
 
@@ -144,6 +145,7 @@ public partial class FssEventDriver
         }
 
         // Get the route
+        string elemName = $"{platName}_Route";
         FssPlatformElementRoute? route = platform.ElementForName(elemName) as FssPlatformElementRoute;
         if (route == null)
         {
@@ -155,7 +157,29 @@ public partial class FssEventDriver
         route.AddPoint(point);
     }
 
-    public void PlatformClearRoute(string platName, string elemName)
+    public List<FssLLAPoint> PlatformGetRoutePoints(string platName)
+    {
+        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
+
+        if (platform == null)
+        {
+            FssCentralLog.AddEntry($"E00003: PlatformGetRoutePoints: Platform {platName} not found.");
+            return new List<FssLLAPoint>();
+        }
+
+        // Get the route
+        string elemName = $"{platName}_Route";
+        FssPlatformElementRoute? route = platform.ElementForName(elemName) as FssPlatformElementRoute;
+        if (route == null)
+        {
+            FssCentralLog.AddEntry($"E00003: PlatformGetRoutePoints: Route {elemName} not found.");
+            return new List<FssLLAPoint>();
+        }
+
+        return route.Points;
+    }
+
+    public void PlatformClearRoute(string platName)
     {
         FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
 
@@ -166,6 +190,7 @@ public partial class FssEventDriver
         }
 
         // Get the route
+        string elemName = $"{platName}_Route";
         FssPlatformElementRoute? route = platform.ElementForName(elemName) as FssPlatformElementRoute;
         if (route == null)
         {
