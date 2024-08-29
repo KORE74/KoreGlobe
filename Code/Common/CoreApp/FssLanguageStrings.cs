@@ -15,7 +15,7 @@ public class FssLanguageStrings
     }
 
     private Dictionary<string, string> ConfigData;
-    private string JSONFilename = "LanguageStrings.json";
+    private string JSONFilename      = "LanguageStrings.json";
     private string ActiveLanguageKey = "ActiveLanguage";
 
     public enum AppLanguage
