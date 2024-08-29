@@ -72,6 +72,9 @@ public partial class FssMapManager : Node3D
 
         // Apply some validation to the max map level
         CurrMaxMapLvl = FssValueUtils.Clamp(CurrMaxMapLvl, 0, FssMapTileCode.MaxMapLvl);
+
+        if (!Directory.Exists(FssMapManager.MapRootPath))
+           FssCentralLog.AddEntry("$FssMapManager.MapRootPath not found: {FssMapManager.MapRootPath}");
     }
 
     // --------------------------------------------------------------------------------------------
@@ -97,7 +100,7 @@ public partial class FssMapManager : Node3D
     }
 
     // --------------------------------------------------------------------------------------------
-    // MARK: Report 
+    // MARK: Report
     // --------------------------------------------------------------------------------------------
 
 

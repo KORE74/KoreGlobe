@@ -99,24 +99,21 @@ icon = ExtResource("5_ks0k1")
 icon_alignment = 1
 expand_icon = true
 
-[node name="Label" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
+[node name="ScenarioTimeLabel" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
-text = "Mode:"
+theme_override_constants/line_spacing = -2
+text = "Scenario Time: 
+XXX Seconds"
+max_lines_visible = 2
 
-[node name="OptionButton" type="OptionButton" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
+[node name="ScenarioNameLabel" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
+custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
-focus_mode = 0
-item_count = 5
-popup/item_0/text = "Real World"
-popup/item_0/id = 0
-popup/item_1/text = "Logical"
-popup/item_1/id = 1
-popup/item_2/text = "InfoGraphic"
-popup/item_2/id = 2
-popup/item_3/text = "Transmitter"
-popup/item_3/id = 3
-popup/item_4/text = "Receiver"
-popup/item_4/id = 4
+theme_override_constants/line_spacing = -2
+text = "Scenario Name: 
+asdads"
+max_lines_visible = 2
 
 [node name="HeaderContainer-RightAlign" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
 layout_direction = 3

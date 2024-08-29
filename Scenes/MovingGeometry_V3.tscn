@@ -31,6 +31,8 @@ script = ExtResource("2_q4a80")
 [node name="WorldCam" type="Camera3D" parent="Scene/WorldCamBase"]
 current = true
 fov = 40.0
+near = 0.01
+far = 12000.0
 
 [node name="Camera3D" type="Camera3D" parent="Scene"]
 transform = Transform3D(-0.0098958, 0, 0.999951, 0, 1, 0, -0.999951, 0, -0.0098958, 10.3465, -0.263696, 0.306362)
@@ -44,3 +46,5 @@ script = ExtResource("2_uur7r")
 environment = SubResource("Environment_r87dp")
 
 [node name="UITop" parent="." instance=ExtResource("3_3wlp5")]
+custom_minimum_size = Vector2(1100, 640)
+anchors_preset = -1

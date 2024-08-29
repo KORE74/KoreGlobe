@@ -152,11 +152,18 @@ public partial class FssSettingWindow : Window
 
     private void SaveControlValues()
     {
-        FssCentralConfig.Instance.SetParam("MapRootPath",   MapPathLineEdit.Text);
-        FssCentralConfig.Instance.SetParam("MeshCachePath", MeshCachePathLineEdit.Text);
-        FssCentralConfig.Instance.SetParam("CapturePath",   CapturePathLineEdit.Text);
-        FssCentralConfig.Instance.SetParam("LogPath",       LogPathLineEdit.Text);
-        FssCentralConfig.Instance.SetParam("DlcPath",       DLCPathLineEdit.Text);
+        // Extract the path from the control and correct any backslash characters
+        string fixedMapRootPath   = FssFileOperations.StandardizePath(MapPathLineEdit.Text);
+        string fixedMeshCachePath = FssFileOperations.StandardizePath(MeshCachePathLineEdit.Text);
+        string fixedCapturePath   = FssFileOperations.StandardizePath(CapturePathLineEdit.Text);
+        string fixedLogPath       = FssFileOperations.StandardizePath(LogPathLineEdit.Text);
+        string fixedDLCPath       = FssFileOperations.StandardizePath(DLCPathLineEdit.Text);
+
+        FssCentralConfig.Instance.SetParam("MapRootPath",   fixedMapRootPath);
+        FssCentralConfig.Instance.SetParam("MeshCachePath", fixedMeshCachePath);
+        FssCentralConfig.Instance.SetParam("CapturePath",   fixedCapturePath);
+        FssCentralConfig.Instance.SetParam("LogPath",       fixedLogPath);
+        FssCentralConfig.Instance.SetParam("DlcPath",       fixedDLCPath);
 
         // Set the active language in FssLanguageStrings, it will pass this on to the config
         FssCentralConfig.Instance.SetParam("ActiveLanguage", FssLanguageStrings.Instance.CurrActiveLanguage());

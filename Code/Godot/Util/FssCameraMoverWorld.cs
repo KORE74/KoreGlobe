@@ -73,9 +73,26 @@ public partial class FssCameraMoverWorld : Node3D
         double translateSpeed = 2500;
         double rotateSpeed    = 2;
         double translateUpSpeed = 100;
-        
+
         double MoveSpeed = (float)(FssValueUtils.LimitToRange(CamPos.AltMslKm / 0.03, 2500, 5000000));
         translateSpeed = MoveSpeed;
+
+
+        if (Input.IsMouseButtonPressed(Godot.MouseButton.Left))
+            GD.Print("Mouse Button Left");
+        if (Input.IsMouseButtonPressed(Godot.MouseButton.Right))
+            GD.Print("Mouse Button Right");
+        if (Input.IsMouseButtonPressed(Godot.MouseButton.Middle))
+            GD.Print("Mouse Button Middle");
+
+        if (Input.IsMouseButtonPressed(Godot.MouseButton.WheelUp))
+            GD.Print("Mouse Button WheelUp");
+        if (Input.IsMouseButtonPressed(Godot.MouseButton.WheelDown))
+            GD.Print("Mouse Button WheelDown");
+
+
+
+
 
         if (Input.IsActionPressed("ui_shift"))
         {
@@ -91,8 +108,8 @@ public partial class FssCameraMoverWorld : Node3D
         }
         else
         {
-            if (Input.IsActionPressed("ui_up"))    translateFwdM -= 1;
-            if (Input.IsActionPressed("ui_down"))  translateFwdM += 1;
+            if (Input.IsActionPressed("ui_up"))    translateFwdM  -= 1;
+            if (Input.IsActionPressed("ui_down"))  translateFwdM  += 1;
             if (Input.IsActionPressed("ui_left"))  translateLeftM += 1;
             if (Input.IsActionPressed("ui_right")) translateLeftM -= 1;
         }
@@ -123,8 +140,8 @@ public partial class FssCameraMoverWorld : Node3D
 
         rotateUpDegs *= 2;
         //rotateUpDegs = FssValueUtils.LimitToRange(rotateUpDegs, -50, 50);
-        camPitch     = FssValueUtils.LimitToRange(camPitch, -80, 0);
         camPitch += (float)rotateUpDegs;
+        camPitch  = FssValueUtils.LimitToRange(camPitch, -80, 0);
 
         //CamNode.Translation = new Vector3(0, 0, 0);
 
@@ -140,6 +157,22 @@ public partial class FssCameraMoverWorld : Node3D
 
 
         // GD.Print($"CamOffset:{CamOffset}");
+    }
+
+    public override void _Input(InputEvent @event)
+    {
+        if (@event is InputEventMouseButton mouseEvent && mouseEvent.Pressed)
+        {
+            switch (mouseEvent.ButtonIndex)
+            {
+                case MouseButton.Left:
+                    GD.Print($"Left button was clicked at {mouseEvent.Position}");
+                    break;
+                case MouseButton.WheelUp:
+                    GD.Print("Wheel up");
+                    break;
+            }
+        }
     }
 
     // ------------------------------------------------------------------------------------------------

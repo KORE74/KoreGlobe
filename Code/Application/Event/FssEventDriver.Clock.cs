@@ -26,6 +26,8 @@ public partial class FssEventDriver
 
     }
 
+    // Usage: FssEventDriver.ClockSeconds();
+
     public int ClockSeconds()
     {
         return (int)FssAppFactory.Instance.SimClock.CurrentTime;

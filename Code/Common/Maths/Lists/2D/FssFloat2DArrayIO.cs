@@ -151,4 +151,35 @@ public static class FssFloat2DArrayIO
         return grid;
     }
 
+    // Write a file back out to something like an ASCII ArcGrid file for later reading.
+    // We don't have the maths/geography libraries to do this accurately, so many of the params are expected to be deafults.
+
+    // Usage: FssFloat2DArrayIO.SaveToArcASIIGridFile(asciiArcArry, <filename>);
+
+    public static void SaveToArcASIIGridFile(
+            FssFloat2DArray array, string filePath,
+            float xllcorner = -1f, float yllcorner = -1f,
+            float cellsize = -1f, float nodataValue = -1f)
+    {
+        using (StreamWriter writer = new StreamWriter(filePath))
+        {
+            writer.WriteLine($"ncols        {array.Width}");
+            writer.WriteLine($"nrows        {array.Height}");
+            writer.WriteLine($"xllcorner    {xllcorner}");
+            writer.WriteLine($"yllcorner    {yllcorner}");
+            writer.WriteLine($"cellsize     {cellsize}");
+            writer.WriteLine($"nodata_value {nodataValue}");
+
+
+            for (int j = 0; j < array.Height; j++)
+            {
+                for (int i = 0; i < array.Width; i++)
+                {
+                    writer.Write(array[i, j] + " ");
+                }
+                writer.WriteLine();
+            }
+        }
+    }
+
 }

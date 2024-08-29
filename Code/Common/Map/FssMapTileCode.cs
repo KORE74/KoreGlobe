@@ -81,6 +81,8 @@ public class FssMapTileCode
     // MARK: Edits
     // --------------------------------------------------------------------------------------------
 
+    // We add the next level to the internal list, the level is used only for validation.
+
     public void AddLevelCode(int x, int y, int level)
     {
         if (x < 0) x = 0;
@@ -90,6 +92,12 @@ public class FssMapTileCode
 
         FssLevelCodeElement l = new FssLevelCodeElement() { LatIndex = y, LonIndex = x };
         CodeList.Add(l);
+    }
+
+    public void AddLevelCode(int x, int y)
+    {
+        int nextMapLvl = MapLvl + 1;
+        AddLevelCode(x, y, nextMapLvl);
     }
 
     public void SetLevelCode(int x, int y, int level)
@@ -141,6 +149,20 @@ public class FssMapTileCode
             }
         }
         return childCodes;
+    }
+
+    // Get the dimensions of the child codes list
+
+    public int ChildCodesWidth()
+    {
+        if (MapLvl >= MaxMapLvl) return 0;
+        return NumTilesHorizPerLvl[MapLvl + 1];
+    }
+
+    public int ChildCodesHeight()
+    {
+        if (MapLvl >= MaxMapLvl) return 0;
+        return NumTilesVertPerLvl[MapLvl + 1];
     }
 
     // --------------------------------------------------------------------------------------------

@@ -14,6 +14,9 @@ public partial class FssUIHeader : PanelContainer
     private Window? SettingWindowNode;
     private Window? NetworkWindowNode;
 
+    private Label ScenarioTimeLabel;
+    private Label ScenarioNameLabel;
+
     float UIPollTimer = 0f;
 
     // Called when the node enters the scene tree for the first time.
@@ -26,6 +29,8 @@ public partial class FssUIHeader : PanelContainer
         SettingButton     = (Button)FindChild("Setting-IconButton");
         NetworkButton     = (Button)FindChild("Network-IconButton");
         ExitButton        = (Button)FindChild("Exit-IconButton");
+        ScenarioTimeLabel = (Label)FindChild("ScenarioTimeLabel");
+        ScenarioNameLabel = (Label)FindChild("ScenarioNameLabel");
 
         CliWindowNode     = GetNode<Window>("../../../../CLIWindow");
         SettingWindowNode = GetNode<Window>("../../../../SettingWindow");
@@ -63,8 +68,18 @@ public partial class FssUIHeader : PanelContainer
             NetworkButton!.ButtonPressed = NetworkWindowNode!.Visible;
             SettingButton!.ButtonPressed = SettingWindowNode!.Visible;
             CliButton!.ButtonPressed     = CliWindowNode!.Visible;
+
+            string strScenarioTime = FssLanguageStrings.Instance.GetParam("ScenarioTime");
+            string strSeconds      = FssLanguageStrings.Instance.GetParam("Seconds");
+            string strScenarioName = FssLanguageStrings.Instance.GetParam("ScenarioName");
+            string strNotDefined   = FssLanguageStrings.Instance.GetParam("NotDefined");
+
+            int simSeconds = FssAppFactory.Instance.EventDriver.ClockSeconds();
+
+            ScenarioTimeLabel!.Text = $"{strScenarioTime}:\n{simSeconds} {strSeconds}";
+            ScenarioNameLabel!.Text = $"{strScenarioName}:\n{strNotDefined}";
         }
-    } 
+    }
 
     // --------------------------------------------------------------------------------------------
     // MARK: UI Interactions

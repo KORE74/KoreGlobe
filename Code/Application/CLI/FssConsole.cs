@@ -114,7 +114,8 @@ public class FssConsole
         commandHandlers.Add(new FssCommandNetworkReport());
         commandHandlers.Add(new FssCommandNetworkInjectIncoming());
 
-
+        // MapServer
+        commandHandlers.Add(new FssCommandElePrep());
 
         // commandHandlers.Add("help", CmdHelp);
         // commandHandlers.Add("version", CmdVersion);

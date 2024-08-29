@@ -428,6 +428,12 @@ public partial class FssMapTileNode : Node3D
             bool childTilesExist         = DoChildTilesExist();
             bool childTilesLoaded        = AreChildTilesLoaded();
 
+            bool mapLibFolderExists      = Directory.Exists(FssMapManager.MapRootPath);
+
+            // If we don't have any map tiles to read, just bail on setting any visibility.
+            if (!mapLibFolderExists)
+                return;
+
             // shouldCreateChildTiles = false; // Debug
 
             // If we should create child tiles, and they don't exist, create them.
@@ -543,8 +549,8 @@ public partial class FssMapTileNode : Node3D
         int resX = TileSizePointsPerLvl[TileCode.MapLvl];
         int resY = TileSizePointsPerLvl[TileCode.MapLvl];
 
-        FssFloat2DArray asciiArcArry = FssFloat2DArrayIO.LoadFromArcASIIGridFile(Filepaths.EleFilepath);
-        FssFloat2DArray croppedArray = FssFloat2DArrayOperations.CropToRange(asciiArcArry, new FssFloatRange(0f, 50000f));
+        FssFloat2DArray asciiArcArray = FssFloat2DArrayIO.LoadFromArcASIIGridFile(Filepaths.EleFilepath);
+        FssFloat2DArray croppedArray  = FssFloat2DArrayOperations.CropToRange(asciiArcArray, new FssFloatRange(0f, 50000f));
         FssFloat2DArray croppedArraySubSample = croppedArray.GetInterpolatedGrid(resX, resY);
 
         TileEleData = croppedArraySubSample;
@@ -560,7 +566,7 @@ public partial class FssMapTileNode : Node3D
             int horizChildTileRes = TileSizePointsPerLvl[TileCode.MapLvl + 1];
             int vertChildTileRes  = TileSizePointsPerLvl[TileCode.MapLvl + 1];
 
-            ChildEleData = croppedArray.GetInterpolatedSubGridCellWithOverlap(horizChildNumTiles, vertChildNumTiles, horizChildTileRes, vertChildTileRes);
+            ChildEleData = asciiArcArray.GetInterpolatedSubGridCellWithOverlap(horizChildNumTiles, vertChildNumTiles, horizChildTileRes, vertChildTileRes);
         }
     }
 
@@ -570,7 +576,11 @@ public partial class FssMapTileNode : Node3D
         {
             Fss2DGridPos tileGridPos = TileCode.GridPos;
 
-            TileEleData = ParentTile.ChildEleData[tileGridPos.PosX, tileGridPos.PosY];
+            // Copy the parent's elevation data - regardless of its resolution, to pass that along to the child tiles
+            FssFloat2DArray RawParentTileEleData = ParentTile.ChildEleData[tileGridPos.PosX, tileGridPos.PosY];
+
+            // Create a subsampled version of the parent tile's elevation data
+            TileEleData = RawParentTileEleData.GetInterpolatedGrid(TileSizePointsPerLvl[TileCode.MapLvl], TileSizePointsPerLvl[TileCode.MapLvl]);
 
             if (TileCode.MapLvl < FssMapTileCode.MaxMapLvl)
             {
@@ -580,7 +590,7 @@ public partial class FssMapTileNode : Node3D
                 int horizChildTileRes = TileSizePointsPerLvl[TileCode.MapLvl + 1];
                 int vertChildTileRes  = TileSizePointsPerLvl[TileCode.MapLvl + 1];
 
-                ChildEleData = TileEleData.GetInterpolatedSubGridCellWithOverlap(horizChildNumTiles, vertChildNumTiles, horizChildTileRes, vertChildTileRes);
+                ChildEleData = RawParentTileEleData.GetInterpolatedSubGridCellWithOverlap(horizChildNumTiles, vertChildNumTiles, 100, 100);
             }
         }
         else

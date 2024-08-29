@@ -28,14 +28,14 @@ public partial class FssAppNode : Node
         {
             _instance = this;
             // Make sure the FssAppNode persists across scene changes
-            SetProcess(true);
-            SetPhysicsProcess(true);
-            SetProcessInput(true);
-            SetProcessUnhandledInput(true);
-            SetProcessUnhandledKeyInput(true);
+            //SetProcess(true);
+            //SetPhysicsProcess(true);
+            //SetProcessInput(true);
+            //SetProcessUnhandledInput(true);
+            //SetProcessUnhandledKeyInput(true);
             //CallDeferred(nameof(RegisterSingleton));
 
-            CallDeferred( nameof(FssAppFactory.Instance.CallStart) );
+            //CallDeferred( nameof(FssAppFactory.Instance.CallStart) );
         }
         else
         {
