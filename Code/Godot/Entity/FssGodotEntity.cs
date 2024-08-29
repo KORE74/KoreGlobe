@@ -73,4 +73,34 @@ public partial class FssGodotEntity : Node3D
         LookAt(entityVecs.PosAhead, entityVecs.VecUp);
     }
 
+    // --------------------------------------------------------------------------------------------
+    // MARK: Update Elements: Route
+    // --------------------------------------------------------------------------------------------
+
+    // Function to check if the entity has a route, and update the game-engine route to match.
+
+    public void UpdateRoute()
+    {
+        // Get the route
+        FssPlatformElementRoute? route = FssAppFactory.Instance.EventDriver.PlatformRoute(EntityName);
+
+        if (route == null)
+        {
+            return;
+        }
+
+        // Update the route
+    }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Update Elements: Contrail
+    // --------------------------------------------------------------------------------------------
+
+    public void UpdateContrail()
+    {
+        //ElementContrail.UpdateElement();
+    }
+
 }
+
+

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable enable
 
-public class FssAntennaPatterns
+public class FssAntennaPatterns : FssPlatformElement
 {
     public string Name { get; set; } = "";
     public FssFloat2DArray SphereMagPattern = new FssFloat2DArray();
