@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
+using System.Text;
 
 // FssCentralLog:
 // - A logfile capability available regardless of the Unity / Godot / Dotnet environment the code is ultimately used in.
@@ -11,23 +12,22 @@ using System.Threading;
 
 public static class FssCentralLog
 {
-    private static string runtimeFilename { get; set; } = $"{FssCoreTime.TimestampLocal}.log";
-    private static List<string> logEntries = new List<string>();
-    private static readonly object lockObject = new object();
-    public static bool LoggingActive { set; get; } = true;
+    // Log storage and access
+    private static List<string> LogEntries = new List<string>();
+    private static readonly object LogLock = new object();
+
+    // Activity flags
+    public  static bool LoggingActive { get; set; } = true;
+    private static bool IsLogReady = false;
+
+    // output file and control
+    private static string runtimeFilename = "invalid.log";
+    private static System.Threading.Timer writeTimer;
 
     static FssCentralLog()
     {
-    }
-
-    public static void AddStartupEntry(string versionStr)
-    {
-        AddEntry($"Startup: Version {versionStr}");
-    }
-
-    public static void UpdatePath(string newPath)
-    {
-        runtimeFilename = FssFileOperations.JoinPaths(newPath, $"{FssCoreTime.TimestampLocal}.log");
+        // Create a timer that triggers write operations every second
+        writeTimer = new System.Threading.Timer(WriteLogEntries, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
     }
 
     public static void AddEntry(string entry)
@@ -35,65 +35,57 @@ public static class FssCentralLog
         if (!LoggingActive)
             return;
 
-        // Try to lock the exclusive access to write our log, wait a maximum of 100ms before abandoning the log.
-        if (Monitor.TryEnter(lockObject, TimeSpan.FromMilliseconds(100)))
+        string timestamp = FssCoreTime.TimestampLocal;
+        string formattedEntry = $"{timestamp} : {entry}";
+
+        lock (LogLock)
         {
-            try
-            {
-                string timestamp = FssCoreTime.TimestampLocal;
-                logEntries.Add($"{timestamp} : {entry}");
-
-                if (logEntries.Count > 100)
-                    logEntries.RemoveAt(0);
-
-                AppendToFile(runtimeFilename, $"{timestamp} : {entry}");
-            }
-            finally
-            {
-                Monitor.Exit(lockObject);
-            }
+            LogEntries.Add(formattedEntry);
         }
     }
 
-    // --------------------------------------------------------------------------------------------------------------------------
-    // MARK: Internal Access of logged lines
-    // --------------------------------------------------------------------------------------------------------------------------
-
-    public static List<string> GetLatestLines()
+    private static void WriteLogEntries(object state)
     {
-        List<string> result = new ();
-
-        lock (lockObject)
-        {
-            foreach (string line in logEntries)
-            {
-                result.Add(line);
-            }
-            logEntries.Clear();
-
-        }
-
-        return result;
-    }
-
-    // --------------------------------------------------------------------------------------------------------------------------
-    // Private functions
-    // --------------------------------------------------------------------------------------------------------------------------
-
-    private static void AppendToFile(string fileName, string entry)
-    {
-        if (!LoggingActive)
+        if (!IsLogReady || !LoggingActive)
             return;
+
+        List<string> entriesToWrite;
+        lock (LogLock)
+        {
+            if (LogEntries.Count == 0)
+                return;
+
+            entriesToWrite = new List<string>(LogEntries);
+            LogEntries.Clear();
+        }
 
         try
         {
-            File.AppendAllText(fileName, entry + Environment.NewLine);
+            File.AppendAllLines(runtimeFilename, entriesToWrite);
         }
         catch (Exception ex)
         {
-            // Alternative logging, e.g., to console or a different file
             Console.WriteLine($"Error writing to log file: {ex.Message}");
-            // Optionally, write to a different file or system log
+            // Add entries back to the queue
+            lock (LogLock)
+            {
+                LogEntries.InsertRange(0, entriesToWrite);
+            }
         }
+    }
+
+    public static void UpdatePath(string newPath)
+    {
+        lock (LogLock)
+        {
+            runtimeFilename = Path.Combine(newPath, $"{FssCoreTime.TimestampLocal}.log");
+            IsLogReady = true;
+        }
+    }
+
+    public static void Shutdown()
+    {
+        writeTimer?.Dispose();
+        WriteLogEntries(null); // Final write
     }
 }

@@ -38,7 +38,7 @@ public partial class FssMapTileNode : Node3D
     private float UIUpdateTimer = 0.0f;
 
     // Property to get the loaded texture
-    public FssMapTileNode ParentTile = null;
+    public FssMapTileNode? ParentTile = null;
     List<FssMapTileNode>  ChildTiles = new();
 
     private MeshInstance3D MeshInstance  = new MeshInstance3D();
