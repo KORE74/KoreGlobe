@@ -19,7 +19,6 @@ public partial class FssCliWindow : Window
     private Button          ReportRegenButton;
     private Button          ClipboardButton;
 
-    private StringBuilder LogSB;
     private System.Timers.Timer LabelUpdateTimer;
 
     // --------------------------------------------------------------------------------------------
@@ -29,7 +28,7 @@ public partial class FssCliWindow : Window
     public override void _Ready()
     {
         // Get references to the Label, LineEdit, and ScrollContainer
-        
+
         // CLI tab
         CommandResponseLabel = (Label)FindChild("CommandResponseLabel");
         CommandEntryEdit     = (LineEdit)FindChild("CommandEntryEdit");
@@ -53,14 +52,14 @@ public partial class FssCliWindow : Window
         ReportRegenButton.Connect("pressed", new Callable(this, "OnReportRegenButtonPressed"));
         ClipboardButton.Connect("pressed", new Callable(this, "OnClipboardButtonPressed"));
 
-        LogSB = new StringBuilder();
+
 
         // Initialize and start the update timer
         LabelUpdateTimer = new System.Timers.Timer(1000); // 1 second interval
         LabelUpdateTimer.Elapsed += OnUpdateTimerElapsed;
         LabelUpdateTimer.Start();
 
-        CallDeferred(nameof(ClearLabel));
+        ClearLabel();
         OnCommandSubmitted("version");
     }
 
@@ -70,7 +69,7 @@ public partial class FssCliWindow : Window
 
     private void UpdateLogLabel()
     {
-        LogLabel.Text = LogSB.ToString();
+       // LogLabel.Text = LogSB.ToString();
     }
 
     private void ScrollToBottom()
@@ -83,14 +82,15 @@ public partial class FssCliWindow : Window
     {
         CallDeferred(nameof(UpdateConsoleLabel));
 
+        StringBuilder logSB = new StringBuilder();
+
         // Update the string builder in the timer, just to take anything off the main thread
         List<string> lines = FssCentralLog.GetLatestLines();
         foreach (string line in lines)
-            LogSB.AppendLine(line);
+            logSB.AppendLine(line);
 
-        CallDeferred(nameof(UpdateLogLabel));
+        //CallDeferred(nameof(UpdateLogLabel));
     }
-
 
     // --------------------------------------------------------------------------------------------
     // MARK: UI Actions - CLI
@@ -153,12 +153,11 @@ public partial class FssCliWindow : Window
         }
     }
 
-
     // --------------------------------------------------------------------------------------------
     // MARK: UI Actions - Report
     // --------------------------------------------------------------------------------------------
 
-    // Create a report for everything in the application, split into sections 
+    // Create a report for everything in the application, split into sections
 
     private void OnReportRegenButtonPressed()
     {
@@ -193,7 +192,7 @@ public partial class FssCliWindow : Window
         sb.AppendLine();
         sb.AppendLine("Texture Report");
         sb.AppendLine("--------------");
-        
+
         sb.Append(FssTextureLoader.Instance.TextureCacheList());
 
         AppReportEdit.Text = sb.ToString();

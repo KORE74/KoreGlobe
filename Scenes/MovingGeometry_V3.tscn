@@ -22,20 +22,23 @@ script = ExtResource("1_awllb")
 
 [node name="SpotLight3D" type="SpotLight3D" parent="Scene"]
 transform = Transform3D(1, 0, 0, 0, 0.173648, 0.984808, 0, -0.984808, 0.173648, 0, 10, 3)
+top_level = true
 spot_range = 16.0847
 spot_angle = 30.6739
 
 [node name="WorldCamBase" type="Node3D" parent="Scene"]
+top_level = true
 script = ExtResource("2_q4a80")
 
 [node name="WorldCam" type="Camera3D" parent="Scene/WorldCamBase"]
 current = true
 fov = 40.0
-near = 0.01
+near = 0.001
 far = 12000.0
 
 [node name="Camera3D" type="Camera3D" parent="Scene"]
 transform = Transform3D(-0.0098958, 0, 0.999951, 0, 1, 0, -0.999951, 0, -0.0098958, 10.3465, -0.263696, 0.306362)
+top_level = true
 visible = false
 fov = 40.0
 near = 0.001

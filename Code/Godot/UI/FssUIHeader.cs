@@ -70,13 +70,13 @@ public partial class FssUIHeader : PanelContainer
             CliButton!.ButtonPressed     = CliWindowNode!.Visible;
 
             string strScenarioTime = FssLanguageStrings.Instance.GetParam("ScenarioTime");
-            string strSeconds      = FssLanguageStrings.Instance.GetParam("Seconds");
+            //string strSeconds      = FssLanguageStrings.Instance.GetParam("Seconds");
             string strScenarioName = FssLanguageStrings.Instance.GetParam("ScenarioName");
             string strNotDefined   = FssLanguageStrings.Instance.GetParam("NotDefined");
 
-            int simSeconds = FssAppFactory.Instance.EventDriver.ClockSeconds();
+            string simclockHMS = FssAppFactory.Instance.EventDriver.SimTimeHMS();
 
-            ScenarioTimeLabel!.Text = $"{strScenarioTime}:\n{simSeconds} {strSeconds}";
+            ScenarioTimeLabel!.Text = $"{strScenarioTime}:\n{simclockHMS}";
             ScenarioNameLabel!.Text = $"{strScenarioName}:\n{strNotDefined}";
         }
     }

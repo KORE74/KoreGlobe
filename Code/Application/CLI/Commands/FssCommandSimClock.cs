@@ -12,6 +12,6 @@ public class FssCommandSimClock : FssCommand
 
     public override string Execute(List<string> parameters)
     {
-        return $"SimClock: {FssAppFactory.Instance.SimClock.CurrentTime:F2}Secs";
+        return $"SimClock: {FssAppFactory.Instance.EventDriver.SimSeconds()}Secs";
     }
 }

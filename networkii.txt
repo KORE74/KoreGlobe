@@ -1,5 +1,4 @@
 
-network ii {"ScenLoad":{"ScenName":"USR:/DBData/MachLoop24/MachLoop24_Scen.SCB","LatDegs":53.0,"LongDegs":-4.0,"EarthModel":"Flat","RxName":"BlackHawk-2","DFModel":""}}>
 
 network ii {"PlatAdd":{"PlatName":"Type26","PlatCategory":"surface","ThreatType":"friendly","Display":true,"PlatClass":"Type26","PlatDisplaySymb":"<platDispSymb>","LatDegs":53.0784,"LongDegs":-4.5008,"AltitudeMtrs":0.0,"RollDegs":0.0,"PitchDegs":0.0,"HeadingDegs":250.0}}
 network ii {"PlatWayPoints":{"PlatName":"Type26","Count":2,"Legs":[{"LatDegs":53.0784,"LongDegs":-4.5008,"AltitudeMtrs":0.0,"GrndSpeedMtrsSec":0.0,"WPType":"Origin"}, {"LatDegs":53.0784,"LongDegs":-6.5008,"AltitudeMtrs":0.0,"GrndSpeedMtrsSec":0.0,"WPType":"Origin"}]}}
@@ -9,5 +8,19 @@ network ii {"PlatWayPoints":{"PlatName":"C-130-1","Count":2,"Legs":[{"LatDegs":5
 
 network ii {"PlatAdd":{"PlatName":"BlackHawk-2","PlatCategory":"airborne","ThreatType":"friendly","Display":true,"PlatClass":"BlackHawk","PlatDisplaySymb":"<platDispSymb>","LatDegs":52.8161,"LongDegs":-4.1237,"AltitudeMtrs":5.0,"RollDegs":0.0,"PitchDegs":0.0,"HeadingDegs":0.0}}
 network ii {"PlatWayPoints":{"PlatName":"BlackHawk-2","Count":3,"Legs":[{"LatDegs":52.8161,"LongDegs":-4.1237,"AltitudeMtrs":5.0,"GrndSpeedMtrsSec":0.0,"WPType":"Origin"},{"LatDegs":52.810158,"LongDegs":-4.121644,"AltitudeMtrs":500.0,"GrndSpeedMtrsSec":10.0,"WPType":"linear"},{"LatDegs":52.77057,"LongDegs":-4.111488,"AltitudeMtrs":500.0,"GrndSpeedMtrsSec":10.0,"WPType":"linear"}]}}
+
+
+
+network ii {"ClockSync":{"ScenTimeHMS":"00:15:03"}}
+
+
+
+network ii {"ScenLoad":{"ScenName":"USR:/DBData/MachLoop24/MachLoop24_Scen.SCB","LatDegs":53.0,"LongDegs":-4.0,"EarthModel":"Flat","RxName":"BlackHawk-2","DFModel":""}}>
+network ii {"ScenStart":{}}
+network ii {"ScenStop":{}}
+network ii {"ScenPause":{"ScenTimeHMS":"00:00:42"}}
+network ii {"ScenCont":{"ScenTimeHMS":"00:00:42"}}
+
+
 
 

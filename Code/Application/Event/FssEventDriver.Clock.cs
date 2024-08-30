@@ -6,44 +6,30 @@ using System;
 
 public partial class FssEventDriver
 {
-    public void ClockStart()
+
+    // ---------------------------------------------------------------------------------------------
+    // MARK: Simulation Clock
+    // ---------------------------------------------------------------------------------------------
+    // different to runtime clock and Time Functions, this is the in-sium time that can be paused etc.
+
+    public void SimClockStart() => FssAppFactory.Instance.ModelRun.Start();
+    public void SimClockStop()  => FssAppFactory.Instance.ModelRun.Stop();
+    public void SimClockReset() => FssAppFactory.Instance.ModelRun.Reset();
+
+    public void SetSimClockSeconds(double secs)
     {
-        FssAppFactory.Instance.ModelRun.Start();
     }
 
-    public void ClockStop()
+    public void SetSimTimeHMS(string hms)
     {
-        FssAppFactory.Instance.ModelRun.Stop();
+        FssAppFactory.Instance.SimClock.SimTimeHMS = hms;
     }
 
-    public void ClockReset()
-    {
-        FssAppFactory.Instance.ModelRun.Reset();
-    }
-
-    public void SetClockSeconds(double secs)
-    {
-
-    }
-
-    // Usage: FssEventDriver.ClockSeconds();
-
-    public int ClockSeconds()
-    {
-        return (int)FssAppFactory.Instance.SimClock.CurrentTime;
-    }
+    public int    SimSeconds() => (int)FssAppFactory.Instance.SimClock.SimTime;
+    public string SimTimeHMS() => FssAppFactory.Instance.SimClock.SimTimeHMS;
 
     // ---------------------------------------------------------------------------------------------
 
-    public void ClockSetRate(double rate)
-    {
-        FssAppFactory.Instance.SimClock.SetSimRate(rate);
-    }
-
-    public double ClockRate()
-    {
-        return FssAppFactory.Instance.SimClock.SimRate;
-    }
-
-
+    public void   ClockSetRate(double rate) => FssAppFactory.Instance.SimClock.SetSimRate(rate);
+    public double ClockRate()               => FssAppFactory.Instance.SimClock.SimRate;
 }

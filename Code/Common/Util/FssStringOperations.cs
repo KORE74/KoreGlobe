@@ -49,5 +49,25 @@ public static class FssStringOperations
 
         return false;
     }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: String to Time
+    // --------------------------------------------------------------------------------------------
+
+    // Convert a string in the format "hh:mm:ss" to seconds
+    // Usage: int seconds = FssStringOperations.TimeHmsToSeconds("01:23:45");
+
+    public static int TimeHmsToSeconds(string timeHms)
+    {
+        string[] parts = timeHms.Split(':');
+        if (parts.Length != 3) return 0;
+
+        int hours = int.Parse(parts[0]);
+        int mins  = int.Parse(parts[1]);
+        int secs  = int.Parse(parts[2]);
+
+        return hours * 3600 + mins * 60 + secs;
+    }
+
 }
 

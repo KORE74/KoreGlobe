@@ -15,7 +15,7 @@ public class FssCommandSimReset : FssCommand
         FssCentralLog.AddEntry("FssCommandSimReset.Execute");
 
         FssAppFactory.Instance.PlatformManager.Reset(); // EventDriver this
-        FssAppFactory.Instance.EventDriver.ClockReset();
+        FssAppFactory.Instance.EventDriver.SimClockReset();
 
         return "PlatformManager Reset (platform positions to start)";
     }

@@ -14,6 +14,9 @@ public partial class FssCameraMoverWorld : Node3D
 
     public Camera3D CamNode;
 
+
+    private Fss1DMappedRange camSpeedForAlt = new Fss1DMappedRange();
+
     // ------------------------------------------------------------------------------------------------
 
     public override void _Ready()
@@ -22,6 +25,12 @@ public partial class FssCameraMoverWorld : Node3D
         Name = "WorldCam";
 
         CamNode = GetNode<Camera3D>("WorldCam");
+
+        camSpeedForAlt.AddEntry(10,          250);
+        camSpeedForAlt.AddEntry(1000,        500);
+        camSpeedForAlt.AddEntry(5000,       2000);
+        camSpeedForAlt.AddEntry(1000000,  200000);
+        camSpeedForAlt.AddEntry(5000000, 2000000);
     }
 
     public override void _Process(double delta)
@@ -70,11 +79,14 @@ public partial class FssCameraMoverWorld : Node3D
         double rotateLeftDegs = 0;
         CamCourse.SpeedKph = 0;
 
-        double translateSpeed = 2500;
-        double rotateSpeed    = 2;
+        double translateSpeed   = 2500;
+        double rotateSpeed      = 2;
         double translateUpSpeed = 100;
 
-        double MoveSpeed = (float)(FssValueUtils.LimitToRange(CamPos.AltMslKm / 0.03, 2500, 5000000));
+        // double MoveSpeed = (float)(FssValueUtils.LimitToRange(CamPos.AltMslKm / 0.03, 2500, 5000000));
+        // translateSpeed = MoveSpeed;
+
+        double MoveSpeed = camSpeedForAlt.GetValue(CamPos.AltMslM);
         translateSpeed = MoveSpeed;
 
 
@@ -123,6 +135,11 @@ public partial class FssCameraMoverWorld : Node3D
         CamPos.AltMslM        += translateUpM   * MoveSpeed;//translateUpSpeed;
         CamCourse.HeadingDegs += rotateLeftDegs * rotateSpeed;
         CamCourse.SpeedKph    += translateFwdM  * MoveSpeed;//translateSpeed;
+
+        GD.Print($"MoveSpeed:{MoveSpeed}");
+
+
+        if (CamPos.AltMslM < 500) CamPos.AltMslM = 500;
 
         if (!FssValueUtils.IsZero(CamCourse.SpeedKph))
         {

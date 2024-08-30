@@ -17,15 +17,15 @@ using System;
 
 public class FssSimTime
 {
-    private DateTime StartTime = DateTime.MinValue; // Set to an obvious zero default value;
-    public bool IsRunning { get; private set; } = false;
-    private DateTime ChunkStartTime = DateTime.MinValue;
-    private TimeSpan AccumulatedTime = TimeSpan.Zero;
-    private double MarkedTime = 0;
+    public bool       IsRunning { get; private set; } = false;
+    public double     SimRate { get; private set; } = 1.0;
 
-    public double SimRate { get; private set; } = 1.0;
+    private DateTime  StartTime       = DateTime.MinValue; // Set to an obvious zero default value;
+    private DateTime  ChunkStartTime  = DateTime.MinValue;
+    private TimeSpan  AccumulatedTime = TimeSpan.Zero;
+    private double    MarkedTime      = 0;
 
-    public double CurrentTime
+    public double SimTime
     {
         get
         {
@@ -40,6 +40,27 @@ public class FssSimTime
             }
         }
         private set { } // This is a read-only property
+    }
+
+    public string SimTimeHMS
+    {
+        get
+        {
+            TimeSpan timeSpan = TimeSpan.FromSeconds(SimTime);
+            return timeSpan.ToString(@"hh\:mm\:ss");
+        }
+        set
+        {
+            // We have a fixed accumulated time, and a start for the current rate. An act of setting the time
+            // fixed the AccumulatedTime to the new value, and the ChunkStartTime to o for the current time.
+
+            // Temp store the running state, so we don't disrupt that
+            bool isRunning = IsRunning;
+
+            if (isRunning) Stop();
+            AccumulatedTime = TimeSpan.FromSeconds(FssStringOperations.TimeHmsToSeconds(value));
+            if (isRunning) Start();
+        }
     }
 
     // --------------------------------------------------------------------------------------------
@@ -104,11 +125,11 @@ public class FssSimTime
 
     public void MarkTime()
     {
-        MarkedTime = CurrentTime;
+        MarkedTime = SimTime;
     }
     public double ElapsedTimeSinceMark()
     {
-        return CurrentTime - MarkedTime;
+        return SimTime - MarkedTime;
     }
 
     // --------------------------------------------------------------------------------------------

@@ -132,11 +132,12 @@ public partial class FssSettingWindow : Window
 
     private void WriteControlValues()
     {
-        MapPathLineEdit.Text       = FssCentralConfig.Instance.GetParam<string>("MapRootPath");
-        MeshCachePathLineEdit.Text = FssCentralConfig.Instance.GetParam<string>("MeshCachePath");
-        CapturePathLineEdit.Text   = FssCentralConfig.Instance.GetParam<string>("CapturePath");
-        LogPathLineEdit.Text       = FssCentralConfig.Instance.GetParam<string>("LogPath");
-        DLCPathLineEdit.Text       = FssCentralConfig.Instance.GetParam<string>("DlcPath");
+        // Read the path values and standardize them before writing into the controls
+        MapPathLineEdit.Text       = FssFileOperations.StandardizePath( FssCentralConfig.Instance.GetParam<string>("MapRootPath") );
+        MeshCachePathLineEdit.Text = FssFileOperations.StandardizePath( FssCentralConfig.Instance.GetParam<string>("MeshCachePath") );
+        CapturePathLineEdit.Text   = FssFileOperations.StandardizePath( FssCentralConfig.Instance.GetParam<string>("CapturePath") );
+        LogPathLineEdit.Text       = FssFileOperations.StandardizePath( FssCentralConfig.Instance.GetParam<string>("LogPath") );
+        DLCPathLineEdit.Text       = FssFileOperations.StandardizePath( FssCentralConfig.Instance.GetParam<string>("DlcPath") );
 
         ActiveLanguageLabel.Text   = FssLanguageStrings.Instance.CurrActiveLanguage();
 
