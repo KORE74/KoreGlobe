@@ -1,5 +1,7 @@
 using System;
 
+using Godot;
+
 // Class to control the running clock of a simulation.
 
 // Public:
@@ -58,7 +60,11 @@ public class FssSimTime
             bool isRunning = IsRunning;
 
             if (isRunning) Stop();
-            AccumulatedTime = TimeSpan.FromSeconds(FssStringOperations.TimeHmsToSeconds(value));
+            int seconds = FssStringOperations.TimeHmsToSeconds(value);
+            
+            GD.Print($"SimTimeHMS: {value} -> {seconds} seconds");
+
+            AccumulatedTime = TimeSpan.FromSeconds(seconds);
             if (isRunning) Start();
         }
     }

@@ -20,8 +20,6 @@ public partial class FssGodotEntity : Node3D
         ElementContrail.InitElement(EntityName);
         ElementContrail.SetModel(EntityName);
         FssZeroOffset.ZeroNode.AddChild(ElementContrail);
-
-
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.

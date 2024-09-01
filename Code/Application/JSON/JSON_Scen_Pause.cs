@@ -6,8 +6,8 @@ namespace FssJSON
 {
     public class ScenPause : JSONMessage
     {
-        [JsonPropertyName("ScenTime")]
-        public string ScenTime { get; set; }
+        [JsonPropertyName("ScenTimeHMS")]
+        public string ScenTimeHMS { get; set; }
 
         public ScenPause()
         {

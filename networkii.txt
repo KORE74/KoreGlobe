@@ -11,6 +11,8 @@ network ii {"PlatWayPoints":{"PlatName":"BlackHawk-2","Count":3,"Legs":[{"LatDeg
 
 
 
+network ii {"PlatDelete": {"PlatName":"C-130-1"}}
+
 network ii {"ClockSync":{"ScenTimeHMS":"00:15:03"}}
 
 

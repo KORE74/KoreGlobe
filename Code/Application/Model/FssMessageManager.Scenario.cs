@@ -29,16 +29,16 @@ public partial class FssMessageManager
 
     private void ProcessMessage_ScenPause(ScenPause scenPauseMsg)
     {
-        FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_ScenPause: ScenTime:{scenPauseMsg.ScenTime}");
+        FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_ScenPause: ScenTime:{scenPauseMsg.ScenTimeHMS}");
         FssAppFactory.Instance.EventDriver.SimClockStop();
-        FssAppFactory.Instance.EventDriver.SetSimTimeHMS(scenPauseMsg.ScenTime);
+        FssAppFactory.Instance.EventDriver.SetSimTimeHMS(scenPauseMsg.ScenTimeHMS);
     }
 
     private void ProcessMessage_ScenCont(ScenCont scenContMsg)
     {
-        FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_ScenCont: ScenTime:{scenContMsg.ScenTime}");
+        FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_ScenCont: ScenTime:{scenContMsg.ScenTimeHMS}");
         FssAppFactory.Instance.EventDriver.SimClockStart();
-        FssAppFactory.Instance.EventDriver.SetSimTimeHMS(scenContMsg.ScenTime);
+        FssAppFactory.Instance.EventDriver.SetSimTimeHMS(scenContMsg.ScenTimeHMS);
     }
 
     private void ProcessMessage_ClockSync(ClockSync clockSyncMsg)

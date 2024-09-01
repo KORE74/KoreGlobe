@@ -59,6 +59,9 @@ public static class FssStringOperations
 
     public static int TimeHmsToSeconds(string timeHms)
     {
+        if (string.IsNullOrEmpty(timeHms)) 
+            return 0;
+
         string[] parts = timeHms.Split(':');
         if (parts.Length != 3) return 0;
 
@@ -66,7 +69,7 @@ public static class FssStringOperations
         int mins  = int.Parse(parts[1]);
         int secs  = int.Parse(parts[2]);
 
-        return hours * 3600 + mins * 60 + secs;
+        return (hours * 3600) + (mins * 60) + secs;
     }
 
 }

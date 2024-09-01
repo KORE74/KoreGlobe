@@ -7,12 +7,28 @@ public class FssPlatformElementRoute : FssPlatformElement
     public List<FssLLAPoint> RoutePoints { set; get; } = new List<FssLLAPoint>();
 
     // ---------------------------------------------------------------------------------------------
+    // MARK: Overrides
+    // ---------------------------------------------------------------------------------------------
+
+    public override string Type => "Route";
+
+    public override string Report()
+    {
+        return $"Route: {RoutePoints.Count} points // Start:{RoutePoints[0]} // End:{RoutePoints[RoutePoints.Count - 1]}";
+    }
+
+    // ---------------------------------------------------------------------------------------------
     // MARK: Update
     // ---------------------------------------------------------------------------------------------
 
     public void AddPoint(FssLLAPoint point)
     {
         RoutePoints.Add(point);
+    }
+
+    public void AddPoints(List<FssLLAPoint> points)
+    {
+        RoutePoints.AddRange(points);
     }
 
     public void Clear() => RoutePoints.Clear();
@@ -27,10 +43,7 @@ public class FssPlatformElementRoute : FssPlatformElement
     public int         PointCount()     => RoutePoints.Count;
     public FssLLAPoint Point(int index) => RoutePoints[index];
 
-    public override string Report()
-    {
-        return $"Route: {RoutePoints.Count} points // Start:{RoutePoints[0]} // End:{RoutePoints[RoutePoints.Count - 1]}";
-    }
+
 
 }
 

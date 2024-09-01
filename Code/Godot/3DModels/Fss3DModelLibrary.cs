@@ -89,7 +89,7 @@ public class Fss3DModelLibrary
 
             ModelResourceNode.Scale    = new Vector3(modelScale, modelScale, modelScale); // Set the model scale
             ModelResourceNode.Position = modelOffset; // Set the model position
-            ModelResourceNode.LookAt(Vector3.Forward, Vector3.Up);
+            //ModelResourceNode.LookAt(Vector3.Forward, Vector3.Up); // Can't look at something until paced in the tree
 
             ModelCache.Add(modelName, ModelResourceNode);
         }
@@ -323,11 +323,3 @@ public class Fss3DModelLibrary
         ModelInfoList.Add(newModelName, ModelInfoList[modelName]);
     }
 }
-
-
-
-
-
-
-
-

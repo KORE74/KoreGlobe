@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 using FssNetworking;
 using FssJSON;
@@ -9,6 +10,11 @@ using FssJSON;
 
 public partial class FssMessageManager
 {
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Elements / Beam
+    // --------------------------------------------------------------------------------------------
+
     private void ProcessMessage_BeamLoad(BeamLoad beamLoadMsg)
     {
         // Extract everything from the message for convenience
@@ -77,6 +83,10 @@ public partial class FssMessageManager
 
     }
 
+    // --------------------------------------------------------------------------------------------
+    // MARK: Elements / Antenna Patterns
+    // --------------------------------------------------------------------------------------------
+
     private void ProcessMessage_RxAntenna(RxAntenna rxAntMsg)
     {
         FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_RxAntenna");
@@ -89,18 +99,32 @@ public partial class FssMessageManager
         FssAppFactory.Instance.EventDriver.PlatformAddAntennaPattern(platName, patternName, patternPolarOffset, patternSize);
     }
 
+    // --------------------------------------------------------------------------------------------
+    // MARK: Elements / Scan Pattern
+    // --------------------------------------------------------------------------------------------
+
     private void ProcessMessage_ScanPattern(ScanPattern scanPatMsg)
     {
         FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_ScanPattern");
-    }
-
-    private void ProcessMessage_PlatWayPoints(PlatWayPoints platWayPtsMsg)
-    {
-        FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_PlatWayPoints: Name:{platWayPtsMsg.PlatName}");
     }
 
     private void ProcessMessage_PlatformElement_AddCircularScan(PlatformElement_AddCircularScan platElemAddCircScanMsg)
     {
         FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_PlatformElement_AddCircularScan: Name:{platElemAddCircScanMsg.PlatName}");
     }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Elements / Waypoints
+    // --------------------------------------------------------------------------------------------
+
+    private void ProcessMessage_PlatWayPoints(PlatWayPoints platWayPtsMsg)
+    {
+        FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_PlatWayPoints: Name:{platWayPtsMsg.PlatName}");
+
+        string platName          = platWayPtsMsg.PlatName;
+        List<FssLLAPoint> points = platWayPtsMsg.Points();
+
+        FssAppFactory.Instance.EventDriver.PlatformAddRoute(platName, points);
+    }
+
 }

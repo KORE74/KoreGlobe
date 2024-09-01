@@ -6,8 +6,8 @@ namespace FssJSON
 {
     public class ScenCont : JSONMessage
     {
-        [JsonPropertyName("ScenTime")]
-        public string ScenTime { get; set; }
+        [JsonPropertyName("ScenTimeHMS")]
+        public string ScenTimeHMS { get; set; } = "00:00:00";
 
         public ScenCont()
         {

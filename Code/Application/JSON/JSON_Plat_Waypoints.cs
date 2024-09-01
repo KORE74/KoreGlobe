@@ -44,6 +44,10 @@ namespace FssJSON
         [JsonPropertyName("Legs")]
         public List<WayPoint> Legs { get; set; }
 
+        // -----------------------
+
+        // Additional accessor methods
+
         public FssLLAPoint GetPoint(int pntIndex)
         {
             if (pntIndex < 0) return new FssLLAPoint();
@@ -60,6 +64,27 @@ namespace FssJSON
 
             return currPos;
         }
+
+        public List<FssLLAPoint> Points()
+        {
+            List<FssLLAPoint> points = new List<FssLLAPoint>();
+
+            foreach (WayPoint leg in Legs)
+            {
+                FssLLAPoint currPos = new FssLLAPoint
+                {
+                    LatDegs = leg.LatDegs,
+                    LonDegs = leg.LongDegs,
+                    AltMslM = leg.AltitudeMtrs
+                };
+
+                points.Add(currPos);
+            }
+
+            return points;
+        }
+
+        // -----------------------
 
         public static PlatWayPoints ParseJSON(string json)
         {

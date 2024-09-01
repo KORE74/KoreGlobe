@@ -30,6 +30,16 @@ public class FssPlatform
         get { Elements ??= new List<FssPlatformElement>(); return Elements; }
     }
 
+    public List<string> ElementNames()
+    {
+        List<string> names = new List<string>();
+
+        foreach (FssPlatformElement element in ElementsList)
+            names.Add(element.Name);
+
+        return names;
+    }
+
     // --------------------------------------------------------------------------------------------
     // #MARK: Basic Element Management
     // --------------------------------------------------------------------------------------------

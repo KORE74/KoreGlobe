@@ -16,6 +16,7 @@ public partial class FssCameraMoverWorld : Node3D
 
 
     private Fss1DMappedRange camSpeedForAlt = new Fss1DMappedRange();
+    private Fss1DMappedRange camVertSpeedForAlt = new Fss1DMappedRange();
 
     // ------------------------------------------------------------------------------------------------
 
@@ -31,6 +32,13 @@ public partial class FssCameraMoverWorld : Node3D
         camSpeedForAlt.AddEntry(5000,       2000);
         camSpeedForAlt.AddEntry(1000000,  200000);
         camSpeedForAlt.AddEntry(5000000, 2000000);
+
+        camVertSpeedForAlt.AddEntry(10,          50);
+        camVertSpeedForAlt.AddEntry(1000,       100);
+        camVertSpeedForAlt.AddEntry(5000,       400);
+        camVertSpeedForAlt.AddEntry(1000000,  40000);
+        camVertSpeedForAlt.AddEntry(5000000, 400000);
+
     }
 
     public override void _Process(double delta)
@@ -88,6 +96,7 @@ public partial class FssCameraMoverWorld : Node3D
 
         double MoveSpeed = camSpeedForAlt.GetValue(CamPos.AltMslM);
         translateSpeed = MoveSpeed;
+        double VertMoveSpeed = camVertSpeedForAlt.GetValue(CamPos.AltMslM);
 
 
         if (Input.IsMouseButtonPressed(Godot.MouseButton.Left))
@@ -132,11 +141,11 @@ public partial class FssCameraMoverWorld : Node3D
         // CamOffset.RangeM += translateFwdM;
 
         // Simple: Apply alt and heading chanegs
-        CamPos.AltMslM        += translateUpM   * MoveSpeed;//translateUpSpeed;
+        CamPos.AltMslM        += translateUpM   * VertMoveSpeed;//translateUpSpeed;
         CamCourse.HeadingDegs += rotateLeftDegs * rotateSpeed;
         CamCourse.SpeedKph    += translateFwdM  * MoveSpeed;//translateSpeed;
 
-        GD.Print($"MoveSpeed:{MoveSpeed}");
+        // GD.Print($"MoveSpeed:{MoveSpeed} // VertMoveSpeed:{VertMoveSpeed}");
 
 
         if (CamPos.AltMslM < 500) CamPos.AltMslM = 500;

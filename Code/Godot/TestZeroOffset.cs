@@ -316,9 +316,13 @@ public partial class TestZeroOffset : Node3D
 
     private void UpdatePlatform(double delta)
     {
+        if (ElementContrail == null) 
+            return;
+
         // Update real world position
         PlatformCourse = PlatformCourse.PlusDeltaForTime(PlatformCourseDelta, delta);
         PlatformPos    = PlatformPos.PlusDeltaForTime(PlatformCourse, delta);
+
 
         if (TimerContrail < FssCoreTime.RuntimeSecs)
         {
@@ -344,11 +348,14 @@ public partial class TestZeroOffset : Node3D
         //     platformV3.PosAhead,
         //     platformV3.PosAbove);
 
-        PlaformBaseNode.LookAtFromPosition(
-            platformV3.Pos,
-            platformV3.PosAhead,
-            platformV3.VecUp,
-            true);
+        if (PlaformBaseNode != null)
+        {
+            PlaformBaseNode.LookAtFromPosition(
+                platformV3.Pos,
+                platformV3.PosAhead,
+                platformV3.VecUp,
+                true);
+        }
     }
 
     // --------------------------------------------------------------------------------------------
