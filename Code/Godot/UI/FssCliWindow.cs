@@ -188,11 +188,16 @@ public partial class FssCliWindow : Window
         sb.AppendLine("------------");
         sb.Append(FssAppFactory.Instance.PlatformManager.FullReport());
 
+        // Godot Entity report
+        sb.AppendLine();
+        sb.AppendLine("Godot Entity Report");
+        sb.AppendLine("-------------------");
+        sb.Append(FssZeroOffset.ZeroNode.GodotEntityManager.FullReport());
+
         // Texture report
         sb.AppendLine();
         sb.AppendLine("Texture Report");
         sb.AppendLine("--------------");
-
         sb.Append(FssTextureLoader.Instance.TextureCacheList());
 
         AppReportEdit.Text = sb.ToString();

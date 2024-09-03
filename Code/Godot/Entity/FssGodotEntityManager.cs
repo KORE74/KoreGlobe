@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 using Godot;
 
@@ -86,6 +87,27 @@ public partial class FssGodotEntityManager : Node3D
             // Match not found, add it.
             if (!matchFound)
             {
+                // Get the model element to represent
+                FssPlatformElement? element = FssAppFactory.Instance.EventDriver.GetElement(platName, currModelElementName);
+
+                if (element == null)
+                    continue;
+
+                // Determine the element type
+                if (element!.Type == "Route")
+                {
+                    // We have it in the model, but not in the entity list. Add it.
+                    FssElementRoute newRoute = new FssElementRoute();
+                    newRoute.Name = $"{platName}-{currModelElementName}";
+                    //newRoute.ElementName = currModelElementName;
+                    newRoute.SetRoutePoints( (element as FssPlatformElementRoute)!.Points );
+
+                    // Add the route to the entity and scene tree
+                    //EntityList.Add(newRoute);
+                    FssZeroOffset.ZeroNode.AddChild(newRoute);
+                }
+
+
                 // FssPlatformElement? element = FssAppFactory.Instance.EventDriver.GetPlatformElement(platName, currModelElement);
 
                 // // We have it in the model, but not in the entity list. Add it.
@@ -95,6 +117,23 @@ public partial class FssGodotEntityManager : Node3D
         }
     }
 
+    // --------------------------------------------------------------------------------------------
+    // MARK: Update - Delete
+    // --------------------------------------------------------------------------------------------
+
+    public string FullReport()
+    {
+        StringBuilder sb = new StringBuilder();
+
+        sb.AppendLine($"Entity Count: {EntityList.Count}");
+
+        foreach (FssGodotEntity currEntity in EntityList)
+        {
+            sb.AppendLine($"Entity: {currEntity.Name}");
+        }
+
+        return sb.ToString();
+    }
 
     // --------------------------------------------------------------------------------------------
     // MARK: Update - Delete

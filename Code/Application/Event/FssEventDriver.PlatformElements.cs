@@ -163,7 +163,7 @@ public partial class FssEventDriver
 
         route = new FssPlatformElementRoute() { Name = elemName };
         route.AddPoints(points);
-        
+
         platform.AddElement(route);
     }
 
@@ -208,7 +208,7 @@ public partial class FssEventDriver
 
     // ---------------------------------------------------------------------------------------------
 
-    private static FssPlatformElement? GetElement(string platName, string elemName)
+    public FssPlatformElement? GetElement(string platName, string elemName)
     {
         if (string.IsNullOrEmpty(platName) || string.IsNullOrEmpty(elemName))
             return null;

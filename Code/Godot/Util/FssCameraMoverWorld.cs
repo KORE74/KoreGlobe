@@ -38,7 +38,6 @@ public partial class FssCameraMoverWorld : Node3D
         camVertSpeedForAlt.AddEntry(5000,       400);
         camVertSpeedForAlt.AddEntry(1000000,  40000);
         camVertSpeedForAlt.AddEntry(5000000, 400000);
-
     }
 
     public override void _Process(double delta)
@@ -185,9 +184,9 @@ public partial class FssCameraMoverWorld : Node3D
         // GD.Print($"CamOffset:{CamOffset}");
     }
 
-    public override void _Input(InputEvent @event)
+    public override void _Input(InputEvent inputEvent)
     {
-        if (@event is InputEventMouseButton mouseEvent && mouseEvent.Pressed)
+        if (inputEvent is InputEventMouseButton mouseEvent && mouseEvent.Pressed)
         {
             switch (mouseEvent.ButtonIndex)
             {

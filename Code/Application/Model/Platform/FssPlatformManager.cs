@@ -271,7 +271,7 @@ public class FssPlatformManager
             sb.AppendLine($"Platform: {currPlat.Name}");
             foreach (FssPlatformElement currElem in currPlat.ElementsList)
             {
-                sb.AppendLine($"- Element: {currElem.Name} Type: {currElem.Type}");
+                sb.AppendLine($"- Element: {currElem.Report()}");
             }
         }
 

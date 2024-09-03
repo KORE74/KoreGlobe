@@ -108,12 +108,12 @@ public struct FssLLBox
 
     // ------------------------------------------------------------------------
 
-    public bool LLAInBounds(FssLLAPoint InputLLA)
+    public bool Contains(FssLLPoint inPos)
     {
-        if (InputLLA.LatDegs < MinLatDegs) return false;
-        if (InputLLA.LatDegs > MaxLatDegs) return false;
-        if (InputLLA.LonDegs < MinLonDegs) return false;
-        if (InputLLA.LonDegs > MaxLonDegs) return false;
+        if (inPos.LatRads < MinLatRads) return false;
+        if (inPos.LatRads > MaxLatRads) return false;
+        if (inPos.LonRads < MinLonRads) return false;
+        if (inPos.LonRads > MaxLonRads) return false;
 
         return true;
     }

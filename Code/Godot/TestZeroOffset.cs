@@ -101,7 +101,7 @@ public partial class TestZeroOffset : Node3D
                 string invJson = FssDlcOperations.InventoryJsonForDLCTitle(currDlcTitle);
                 FssCentralLog.AddEntry($"DLC: {currDlcTitle} JSON: {invJson}");
             }
-            
+
 
             string invJson2 = FssDlcOperations.InventoryJsonForDLCTitle("PlaceholderModels");
             Fss3DModelLibrary.LoadJSONConfigFile(invJson2);
@@ -175,15 +175,15 @@ public partial class TestZeroOffset : Node3D
         // Create the two marker objects
         EarthCoreNode = FssPrimitiveFactory.CreateSphereNode("EarthCoreNode", new Vector3(0f, 0f, 0f), MarkerSize, FssColorUtil.Colors["OffBlue"], WithWire);
         AddChild(EarthCoreNode);
-        ZeroNode = FssPrimitiveFactory.CreateSphereNode("ZeroNode", new Vector3(0f, 0f, 0f), MarkerSize, FssColorUtil.Colors["OffRed"], WithWire);
-        AddChild(ZeroNode);
+        //ZeroNode = FssPrimitiveFactory.CreateSphereNode("ZeroNode", new Vector3(0f, 0f, 0f), MarkerSize, FssColorUtil.Colors["OffRed"], WithWire);
+        //AddChild(ZeroNode);
 
         // Add axis markers to the core and zero nodes
         //FssPrimitiveFactory.AddAxisMarkers(EarthCoreNode, MarkerSize, MarkerSize/4);
         //FssPrimitiveFactory.AddAxisMarkers(ZeroNode,      MarkerSize, MarkerSize/4);
 
         EarthCoreNode.AddChild( FssPrimitiveFactory.AxisMarkerNode(MarkerSize, MarkerSize/4) );
-        ZeroNode.AddChild(      FssPrimitiveFactory.AxisMarkerNode(MarkerSize, MarkerSize/4) );
+        //ZeroNode.AddChild(      FssPrimitiveFactory.AxisMarkerNode(MarkerSize, MarkerSize/4) );
 
         // Add the wedges
         //EarthCoreNode.AddChild(new TestEarthCore((float)FssZeroOffset.GeEarthRadius));
@@ -198,10 +198,10 @@ public partial class TestZeroOffset : Node3D
         EarthCoreNode.AddChild(MapManager);
 
         // Add the platform root node, onto the zero node.
-        EntityRootNode = new Node3D() { Name = "EntityRootNode" };  // This is the root node for all entities
-        ZeroNode.AddChild(EntityRootNode);
+        //EntityRootNode = new Node3D() { Name = "EntityRootNode" };  // This is the root node for all entities
+        //ZeroNode.AddChild(EntityRootNode);
 
-        FssZeroOffset.ZeroNode = ZeroNode;
+        //FssZeroOffset.ZeroNode = ZeroNode;
     }
 
     // --------------------------------------------------------------------------------------------
@@ -316,7 +316,7 @@ public partial class TestZeroOffset : Node3D
 
     private void UpdatePlatform(double delta)
     {
-        if (ElementContrail == null) 
+        if (ElementContrail == null)
             return;
 
         // Update real world position

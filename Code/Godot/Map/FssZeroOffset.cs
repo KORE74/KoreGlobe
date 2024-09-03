@@ -1,11 +1,13 @@
 
 using Godot;
 
+// A static (non-Node3D class for globally managing the zero offset)
+
 public static class FssZeroOffset
 {
     // ZeroNode: A node always at 0,0,0 for objects (platforms) to be parented to.
     // FssZeroOffset.ZeroNode
-    public static Node3D ZeroNode;
+    public static FssZeroNode ZeroNode;
 
     // Real World Earth Center is 0,0,0. We create an offset 0,0,0 for the purposes og focussing the
     // game engine view within the range of its floating point precision.

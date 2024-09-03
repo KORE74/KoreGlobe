@@ -77,6 +77,8 @@ public class FssFloat2DArray
         set => Data[x, y] = value;
     }
 
+
+
     public void SetFractionalValue(float fractionx, float fractiony, float value, double blendFraction = 1.0)
     {
         // If the point has N values in an axis, and the fraction places the point directly between two points, then what action is required?
