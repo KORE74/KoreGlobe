@@ -1,12 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://cle61uafx4wyg"]
+[gd_scene load_steps=7 format=3 uid="uid://cle61uafx4wyg"]
 
 [ext_resource type="Script" path="res://Code/Godot/TestZeroOffset.cs" id="1_awllb"]
 [ext_resource type="Script" path="res://Code/Godot/Util/FssCameraMoverWorld.cs" id="2_q4a80"]
 [ext_resource type="Script" path="res://Code/Godot/Util/FssCameraMover.cs" id="2_uur7r"]
 [ext_resource type="PackedScene" uid="uid://ck4tngsqwb7jf" path="res://Scenes/ui_top.tscn" id="3_3wlp5"]
-[ext_resource type="Script" path="res://Code/Godot/Util/FssZeroNode.cs" id="4_fxn7b"]
-[ext_resource type="PackedScene" uid="uid://b7kcdge5fuau8" path="res://Resources/DLCPrep/MilitaryVehicles/Plane/C-130/C-130_2024-09-02_005.glb" id="5_076e8"]
-[ext_resource type="PackedScene" uid="uid://bg5drl8dwjri7" path="res://Resources/DLCPrep/MilitaryVehicles/Plane/Su34/Su34.glb" id="7_g2ddc"]
+[ext_resource type="Script" path="res://Code/Godot/Map/FssZeroNode.cs" id="4_fxn7b"]
 
 [sub_resource type="Environment" id="Environment_r87dp"]
 background_mode = 1
@@ -54,12 +52,6 @@ environment = SubResource("Environment_r87dp")
 [node name="ZeroNode" type="Node3D" parent="Scene"]
 script = ExtResource("4_fxn7b")
 
-[node name="C-130_2024-09-02_005" parent="Scene" instance=ExtResource("5_076e8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 191.629, 168.881, 202.682)
-
 [node name="UITop" parent="." instance=ExtResource("3_3wlp5")]
 custom_minimum_size = Vector2(1100, 640)
 anchors_preset = -1
-
-[node name="Su34" parent="." instance=ExtResource("7_g2ddc")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 218.821, 176.886, 204.644)
