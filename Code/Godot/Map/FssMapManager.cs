@@ -40,6 +40,7 @@ public partial class FssMapManager : Node3D
         Name = "MapManager";
 
         LoadConfig();
+        CreateDebugMarker();
 
         for (int lonId = 0; lonId < 12; lonId++)
         {
@@ -103,5 +104,15 @@ public partial class FssMapManager : Node3D
     // MARK: Report
     // --------------------------------------------------------------------------------------------
 
+
+    private void CreateDebugMarker()
+    {
+        float markerSize = 0.2f;
+
+        Node3D zeroNodeMarker = FssPrimitiveFactory.CreateSphereNode("Marker", new Vector3(0f, 0f, 0f), markerSize, FssColorUtil.Colors["Blue"], true);
+        AddChild(zeroNodeMarker);
+
+        zeroNodeMarker.AddChild( FssPrimitiveFactory.AxisMarkerNode(markerSize, markerSize/4) );
+    }
 
 }

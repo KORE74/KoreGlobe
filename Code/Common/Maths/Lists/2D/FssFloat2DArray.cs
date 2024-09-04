@@ -370,7 +370,45 @@ public class FssFloat2DArray
     }
 
     // =====================================================================================
-    // Single Value Functions
+    // MARK: 1D array
+    // =====================================================================================
+
+    public FssFloat1DArray GetRow(int row)
+    {
+        FssFloat1DArray rowArray = new FssFloat1DArray(Width);
+        for (int x = 0; x < Width; x++)
+            rowArray[x] = Data[x, row];
+        return rowArray;
+    }
+
+    public void SetRow(int row, FssFloat1DArray rowArray)
+    {
+        if (rowArray.Length != Width)
+            throw new ArgumentException("Length of rowArray must be equal to Width of the array.", nameof(rowArray));
+
+        for (int x = 0; x < Width; x++)
+            Data[x, row] = rowArray[x];
+    }
+
+    public FssFloat1DArray GetCol(int col)
+    {
+        FssFloat1DArray colArray = new FssFloat1DArray(Height);
+        for (int y = 0; y < Height; y++)
+            colArray[y] = Data[col, y];
+        return colArray;
+    }
+
+    public void SetCol(int col, FssFloat1DArray colArray)
+    {
+        if (colArray.Length != Height)
+            throw new ArgumentException("Length of colArray must be equal to Height of the array.", nameof(colArray));
+
+        for (int y = 0; y < Height; y++)
+            Data[col, y] = colArray[y];
+    }
+
+    // =====================================================================================
+    // MARK: Single Value Functions
     // =====================================================================================
 
     // Get value from the grid, based on x,y fractions interpolated around the surrounding

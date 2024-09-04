@@ -3,13 +3,10 @@ using System;
 
 using Godot;
 
-// Class representing the zero anchor position in the game engine world, and a few of the classes that hang off of it.
+// Class representing the zero anchor position in the game engine world.
 
 public partial class FssZeroNode : Node3D
 {
-    // FssZeroOffset.ZeroNode.GodotEntityManager
-    public FssGodotEntityManager GodotEntityManager = new FssGodotEntityManager();
-
     // The root node for all entities, made static so it can be accessed from anywhere.
     public static Node3D EntityRootNode = new Node3D() { Name = "EntityRootNode" };
 
@@ -25,14 +22,14 @@ public partial class FssZeroNode : Node3D
         Name = "ZeroNode";
 
         // Setup the Zero Node.
-        FssZeroOffset.ZeroNode = this;
+        //FssZeroOffset.ZeroNode = this;
 
         // Add the EntityRootNode to the ZeroNode,
-        AddChild(EntityRootNode);
+        //AddChild(EntityRootNode);
 
         CreateDebugMarker();
 
-        AddChild(GodotEntityManager);
+        //AddChild(GodotEntityManager);
     }
 
     // --------------------------------------------------------------------------------------------
@@ -41,7 +38,9 @@ public partial class FssZeroNode : Node3D
 
     private void CreateDebugMarker()
     {
-        Node3D zeroNodeMarker = FssPrimitiveFactory.CreateSphereNode("ZeroNode", new Vector3(0f, 0f, 0f), MarkerSize, FssColorUtil.Colors["OffRed"], true);
+        float markerSize = 0.2f;
+
+        Node3D zeroNodeMarker = FssPrimitiveFactory.CreateSphereNode("Marker", new Vector3(0f, 0f, 0f), MarkerSize, FssColorUtil.Colors["OffRed"], true);
         AddChild(zeroNodeMarker);
 
         zeroNodeMarker.AddChild( FssPrimitiveFactory.AxisMarkerNode(MarkerSize, MarkerSize/4) );

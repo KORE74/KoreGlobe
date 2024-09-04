@@ -1,14 +1,13 @@
-[gd_scene load_steps=7 format=3 uid="uid://cle61uafx4wyg"]
+[gd_scene load_steps=6 format=3 uid="uid://cle61uafx4wyg"]
 
 [ext_resource type="Script" path="res://Code/Godot/TestZeroOffset.cs" id="1_awllb"]
 [ext_resource type="Script" path="res://Code/Godot/Util/FssCameraMoverWorld.cs" id="2_q4a80"]
 [ext_resource type="Script" path="res://Code/Godot/Util/FssCameraMover.cs" id="2_uur7r"]
 [ext_resource type="PackedScene" uid="uid://ck4tngsqwb7jf" path="res://Scenes/ui_top.tscn" id="3_3wlp5"]
-[ext_resource type="Script" path="res://Code/Godot/Map/FssZeroNode.cs" id="4_fxn7b"]
 
 [sub_resource type="Environment" id="Environment_r87dp"]
 background_mode = 1
-background_color = Color(0.381034, 0.494411, 0.658558, 1)
+background_color = Color(0.449993, 0.581307, 0.79351, 1)
 ambient_light_source = 2
 ambient_light_color = Color(0.862832, 0.855605, 0.811735, 1)
 reflected_light_source = 2
@@ -48,9 +47,6 @@ script = ExtResource("2_uur7r")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Scene"]
 environment = SubResource("Environment_r87dp")
-
-[node name="ZeroNode" type="Node3D" parent="Scene"]
-script = ExtResource("4_fxn7b")
 
 [node name="UITop" parent="." instance=ExtResource("3_3wlp5")]
 custom_minimum_size = Vector2(1100, 640)

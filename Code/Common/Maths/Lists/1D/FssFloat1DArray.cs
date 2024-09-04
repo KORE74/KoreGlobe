@@ -141,4 +141,14 @@ public class FssFloat1DArray
 
         return newArray;
     }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: ToString Operations
+    // --------------------------------------------------------------------------------------------
+
+    public string ToString(string format)
+    {
+        return string.Join(", ", Data.Select(x => x.ToString(format)));
+    }
+
 }

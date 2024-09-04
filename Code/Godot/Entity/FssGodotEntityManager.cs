@@ -8,12 +8,23 @@ public partial class FssGodotEntityManager : Node3D
 {
     List<FssGodotEntity> EntityList = new List<FssGodotEntity>();
 
+    public Node3D EntityRootNode;
+    public Node3D ElementRootNode;
+
     float TimerModelCheck = 0.0f;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
         Name = "EntityManager";
+
+        // Setup the Entity Root Node.
+        EntityRootNode = new Node3D() { Name = "EntityRootNode" };
+        AddChild(EntityRootNode);
+
+        // Setup the Element Root Node.
+        ElementRootNode = new Node3D() { Name = "ElementRootNode" };
+        AddChild(ElementRootNode);
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -28,6 +39,50 @@ public partial class FssGodotEntityManager : Node3D
     }
 
     // --------------------------------------------------------------------------------------------
+    // MARK: Entities
+    // --------------------------------------------------------------------------------------------
+    // Entities, mainly platforms, are the moving objects in the simulation. They are parented off
+    // EntityRootNode. We need routines to add, delete list and edit them.
+
+    public bool EntityExists(string entityName)
+    {
+        // Look in the child nodes of the EntityRootNode for the entity.
+        foreach (Node3D currNode in EntityRootNode.GetChildren())
+        {
+            if (currNode.Name == entityName)
+                return true;
+        }
+
+        return false;
+    }
+
+    public void AddEntity(string entityName)
+    {
+        if (!EntityExists(entityName))
+        {
+            FssGodotEntity newEntity = new FssGodotEntity();
+            newEntity.Name = entityName;
+            EntityRootNode.AddChild(newEntity);
+            AddUnlinkedPlatform(entityName);
+        }
+    }
+
+    public void RemoveEntity(string entityName)
+    {
+        foreach (Node3D currNode in EntityRootNode.GetChildren())
+        {
+            if (currNode.Name == entityName)
+            {
+                currNode.QueueFree();
+                RemoveUnlinkedPlatform(entityName);
+                return;
+            }
+        }
+    }
+
+
+
+    // --------------------------------------------------------------------------------------------
     // MARK: Create
     // --------------------------------------------------------------------------------------------
 
@@ -35,6 +90,7 @@ public partial class FssGodotEntityManager : Node3D
     {
         // Get the model
         List<string> platNames = FssAppFactory.Instance.EventDriver.PlatformNames();
+
 
         // Loop through the list of platform names, and the EntityList, match them up.
         foreach (string currModelName in platNames)
@@ -59,6 +115,9 @@ public partial class FssGodotEntityManager : Node3D
                 EntityList.Add(newEntity);
                 AddChild(newEntity);
             }
+
+
+            LookForElementsToPresent(currModelName);
         }
     }
 
@@ -70,6 +129,10 @@ public partial class FssGodotEntityManager : Node3D
     {
         // Get the list of model elements for the platform.
         List<string> modelElementNames = FssAppFactory.Instance.EventDriver.PlatformElementNames(platName);
+
+        // List the unlinked elements for the platform.
+        List<string> unlinkedElementNames = UnlinkedElementNames(platName);
+
 
         // Loop through the list of model elements, and the EntityList, match them up.
         foreach (string currModelElementName in modelElementNames)
@@ -104,7 +167,7 @@ public partial class FssGodotEntityManager : Node3D
 
                     // Add the route to the entity and scene tree
                     //EntityList.Add(newRoute);
-                    FssZeroOffset.ZeroNode.AddChild(newRoute);
+                    ElementRootNode.AddChild(newRoute);
                 }
 
 
@@ -118,7 +181,7 @@ public partial class FssGodotEntityManager : Node3D
     }
 
     // --------------------------------------------------------------------------------------------
-    // MARK: Update - Delete
+    // MARK: Reporting
     // --------------------------------------------------------------------------------------------
 
     public string FullReport()
@@ -168,7 +231,7 @@ public partial class FssGodotEntityManager : Node3D
         string platNamePrefix = $"{platName}-";
 
         // Delete the elements for the platform.
-        Godot.Collections.Array<Node> children = FssZeroOffset.ZeroNode.GetChildren();
+        Godot.Collections.Array<Node> children = ElementRootNode.GetChildren();
         foreach (Node currChild in children)
         {
             string name = currChild.Name;

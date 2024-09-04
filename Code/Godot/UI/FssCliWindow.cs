@@ -192,7 +192,7 @@ public partial class FssCliWindow : Window
         sb.AppendLine();
         sb.AppendLine("Godot Entity Report");
         sb.AppendLine("-------------------");
-        sb.Append(FssZeroOffset.ZeroNode.GodotEntityManager.FullReport());
+        sb.Append(FssGodotFactory.Instance.GodotEntityManager.FullReport());
 
         // Texture report
         sb.AppendLine();
