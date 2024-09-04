@@ -18,7 +18,7 @@ public partial class TestZeroOffset : Node3D
 
     // FssMapManager      MapManager;
     FssElementContrail ElementContrail;
-    FssElementRoute    ElementRoute;
+    FssGodotPlatformElementRoute    ElementRoute;
     FssGodotEntityManager   EntityManager;
     FssCameraMoverWorld WorldCamNode;
 
@@ -279,7 +279,7 @@ public partial class TestZeroOffset : Node3D
     //     ElementContrail.InitElement("TestPlatform");
     //     ZeroNode.AddChild(ElementContrail);
 
-    //     ElementRoute = new FssElementRoute();
+    //     ElementRoute = new FssGodotPlatformElementRoute();
     //     ElementRoute.InitElement("TestPlatform");
     //     ZeroNode.AddChild(ElementRoute);
 

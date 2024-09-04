@@ -80,7 +80,16 @@ public partial class FssGodotEntityManager : Node3D
         }
     }
 
+    public FssGodotEntity? GetEntity(string entityName)
+    {
+        foreach (Node3D currNode in EntityRootNode.GetChildren())
+        {
+            if (currNode.Name == entityName)
+                return currNode as FssGodotEntity;
+        }
 
+        return null;
+    }
 
     // --------------------------------------------------------------------------------------------
     // MARK: Create
@@ -132,18 +141,29 @@ public partial class FssGodotEntityManager : Node3D
 
         // List the unlinked elements for the platform.
         List<string> unlinkedElementNames = UnlinkedElementNames(platName);
-
+        List<string> linkedElementNames   = LinkedElementNames(platName);
 
         // Loop through the list of model elements, and the EntityList, match them up.
         foreach (string currModelElementName in modelElementNames)
         {
             bool matchFound = false;
-            foreach (FssGodotEntity currEntity in EntityList)
+            foreach (string currElemName in unlinkedElementNames)
             {
-                if (currEntity.Name == currModelElementName)
+                if (currElemName == currModelElementName)
                 {
                     matchFound = true;
                     continue; // We have it in the model, and the entity list. No action.
+                }
+            }
+            if (!matchFound)
+            {
+                foreach (string currElemName in linkedElementNames)
+                {
+                    if (currElemName == currModelElementName)
+                    {
+                        matchFound = true;
+                        continue; // We have it in the model, and the entity list. No action.
+                    }
                 }
             }
 
@@ -160,7 +180,7 @@ public partial class FssGodotEntityManager : Node3D
                 if (element!.Type == "Route")
                 {
                     // We have it in the model, but not in the entity list. Add it.
-                    FssElementRoute newRoute = new FssElementRoute();
+                    FssGodotPlatformElementRoute newRoute = new FssGodotPlatformElementRoute();
                     newRoute.Name = $"{platName}-{currModelElementName}";
                     //newRoute.ElementName = currModelElementName;
                     newRoute.SetRoutePoints( (element as FssPlatformElementRoute)!.Points );

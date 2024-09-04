@@ -6,7 +6,7 @@ using System.Collections.Generic;
 // Create a contrail of points for a platform.
 // Node rooted off of the zero point, not moving with the platform.
 
-public partial class FssElementRoute : Node3D
+public partial class FssGodotPlatformElementRoute : FssGodotPlatformElement
 {
     List<FssLLAPoint>    RoutePoints = new List<FssLLAPoint>();
     List<Node3D>         RouteNodes  = new List<Node3D>();
@@ -18,6 +18,8 @@ public partial class FssElementRoute : Node3D
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
+        Name     = "Route";
+        ElemType = "Route";
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.

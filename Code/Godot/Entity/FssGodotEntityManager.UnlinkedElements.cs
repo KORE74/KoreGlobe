@@ -16,9 +16,9 @@ public partial class FssGodotEntityManager : Node3D
 
     public bool UnlinkedPlatformExists(string entityName)
     {
-        foreach (Node3D currNode in FssGodotFactory.Instance.EntityRootNode.GetChildren())
+        foreach (Node3D currNode in EntityRootNode.GetChildren())
         {
-            if (currNode.Name == elementName)
+            if (currNode.Name == entityName)
                 return true;
         }
 
@@ -30,13 +30,13 @@ public partial class FssGodotEntityManager : Node3D
         if (!UnlinkedPlatformExists(entityName))
         {
             Node3D entityNode = new Node3D() { Name = entityName };
-            FssGodotFactory.Instance.EntityRootNode.AddChild(entityNode);
+            EntityRootNode.AddChild(entityNode);
         }
     }
 
     public void RemoveUnlinkedPlatform(string entityName)
     {
-        foreach (Node3D currNode in FssGodotFactory.Instance.EntityRootNode.GetChildren())
+        foreach (Node3D currNode in EntityRootNode.GetChildren())
         {
             if (currNode.Name == entityName)
             {
@@ -48,7 +48,7 @@ public partial class FssGodotEntityManager : Node3D
 
     public Node3D GetUnlinkedPlatform(string entityName)
     {
-        foreach (Node3D currNode in FssGodotFactory.Instance.EntityRootNode.GetChildren())
+        foreach (Node3D currNode in EntityRootNode.GetChildren())
         {
             if (currNode.Name == entityName)
                 return currNode;
@@ -92,7 +92,7 @@ public partial class FssGodotEntityManager : Node3D
             // Determine the element type
             if (element.Type == "Route")
             {
-                FssElementRoute newRoute = new FssElementRoute();
+                FssGodotPlatformElementRoute newRoute = new FssGodotPlatformElementRoute();
                 newRoute.Name = elementName;
                 newRoute.SetRoutePoints( (element as FssPlatformElementRoute)!.Points );
 
