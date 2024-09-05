@@ -14,47 +14,29 @@ public partial class FssGodotEntityManager : Node3D
     // through dedicated routines.
     // We also add a platform layer to the nodes, so they can be managed as a group.
 
-    public bool UnlinkedPlatformExists(string entityName)
+    // Get or Add the Unlinked Platform Node
+    public Node3D UnlinkedPlatform(string entityName)
     {
-        foreach (Node3D currNode in EntityRootNode.GetChildren())
-        {
-            if (currNode.Name == entityName)
-                return true;
-        }
-
-        return false;
-    }
-
-    public void AddUnlinkedPlatform(string entityName)
-    {
-        if (!UnlinkedPlatformExists(entityName))
-        {
-            Node3D entityNode = new Node3D() { Name = entityName };
-            EntityRootNode.AddChild(entityNode);
-        }
-    }
-
-    public void RemoveUnlinkedPlatform(string entityName)
-    {
-        foreach (Node3D currNode in EntityRootNode.GetChildren())
-        {
-            if (currNode.Name == entityName)
-            {
-                currNode.QueueFree();
-                return;
-            }
-        }
-    }
-
-    public Node3D GetUnlinkedPlatform(string entityName)
-    {
+        // Return the existing node if we find it
         foreach (Node3D currNode in EntityRootNode.GetChildren())
         {
             if (currNode.Name == entityName)
                 return currNode;
         }
 
-        return null;
+        // Create and add the node if we don't find it.
+        Node3D entNode = new Node3D() { Name = entityName };
+        EntityRootNode.AddChild(entNode);
+
+        return entNode;
+    }
+
+    public void RemoveUnlinkedPlatform(string entityName)
+    {
+        Node3D? entNode = UnlinkedPlatform(entityName);
+
+        if (entNode != null)
+            entNode.QueueFree();
     }
 
     // --------------------------------------------------------------------------------------------
@@ -65,9 +47,7 @@ public partial class FssGodotEntityManager : Node3D
 
     public bool UnlinkedElementExists(string entityName, string elementName)
     {
-        Node3D? entityNode = GetUnlinkedPlatform(entityName);
-        if (entityNode == null)
-            return false;
+        Node3D entityNode = UnlinkedPlatform(entityName);
 
         foreach (Node3D currNode in entityNode.GetChildren())
         {
@@ -78,35 +58,20 @@ public partial class FssGodotEntityManager : Node3D
         return false;
     }
 
-    public void AddUnlinkedElement(string entityName, string elementName, FssPlatformElement element)
+    public void AddUnlinkedElement(string entityName, FssGodotPlatformElement element)
     {
-        if (!UnlinkedElementExists(entityName, elementName))
+        Node3D entityNode = UnlinkedPlatform(entityName);
+
+        foreach (Node3D currNode in entityNode.GetChildren())
         {
-            Node3D? entityNode = GetUnlinkedPlatform(entityName);
-            if (entityNode == null)
-                return;
-
-            Node3D elementNode = new Node3D() { Name = elementName };
-            entityNode.AddChild(elementNode);
-
-            // Determine the element type
-            if (element.Type == "Route")
-            {
-                FssGodotPlatformElementRoute newRoute = new FssGodotPlatformElementRoute();
-                newRoute.Name = elementName;
-                newRoute.SetRoutePoints( (element as FssPlatformElementRoute)!.Points );
-
-                // Add the route to the entity and scene tree
-                elementNode.AddChild(newRoute);
-            }
+            entityNode.AddChild(element as Node3D);
+            return;
         }
     }
 
     public void RemoveUnlinkedElement(string entityName, string elementName)
     {
-        Node3D? entityNode = GetUnlinkedPlatform(entityName);
-        if (entityNode == null)
-            return;
+        Node3D entityNode = UnlinkedPlatform(entityName);
 
         foreach (Node3D currNode in entityNode.GetChildren())
         {
@@ -120,9 +85,7 @@ public partial class FssGodotEntityManager : Node3D
 
     public Node3D? GetUnlinkedElement(string entityName, string elementName)
     {
-        Node3D? entityNode = GetUnlinkedPlatform(entityName);
-        if (entityNode == null)
-            return null;
+        Node3D entityNode = UnlinkedPlatform(entityName);
 
         foreach (Node3D currNode in entityNode.GetChildren())
         {
@@ -137,9 +100,7 @@ public partial class FssGodotEntityManager : Node3D
     {
         List<string> elementNames = new List<string>();
 
-        Node3D? entityNode = GetUnlinkedPlatform(entityName);
-        if (entityNode == null)
-            return elementNames;
+        Node3D entityNode = UnlinkedPlatform(entityName);
 
         foreach (Node3D currNode in entityNode.GetChildren())
         {

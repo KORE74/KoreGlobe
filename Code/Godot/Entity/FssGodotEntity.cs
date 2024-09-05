@@ -16,12 +16,11 @@ public partial class FssGodotEntity : Node3D
     {
         CreateEntity();
 
-        ElementContrail = new FssElementContrail();
-        ElementContrail.InitElement(EntityName);
-        ElementContrail.SetModel(EntityName);
+        // ElementContrail = new FssElementContrail();
+        // ElementContrail.InitElement(EntityName);
+        // ElementContrail.SetModel(EntityName);
+        // FssGodotFactory.Instance.GodotEntityManager.ElementRootNode.AddChild(ElementContrail);
 
-        //FssZeroOffset.ZeroNode.AddChild(ElementContrail);
-        FssGodotFactory.Instance.GodotEntityManager.ElementRootNode.AddChild(ElementContrail);
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.

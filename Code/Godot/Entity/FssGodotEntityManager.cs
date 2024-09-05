@@ -6,7 +6,7 @@ using Godot;
 
 public partial class FssGodotEntityManager : Node3D
 {
-    List<FssGodotEntity> EntityList = new List<FssGodotEntity>();
+    // List<FssGodotEntity> EntityList = new List<FssGodotEntity>();
 
     public Node3D EntityRootNode;
     public Node3D ElementRootNode;
@@ -23,7 +23,7 @@ public partial class FssGodotEntityManager : Node3D
         AddChild(EntityRootNode);
 
         // Setup the Element Root Node.
-        ElementRootNode = new Node3D() { Name = "ElementRootNode" };
+        ElementRootNode = new Node3D() { Name = "UnlinkedRootNode" };
         AddChild(ElementRootNode);
     }
 
@@ -33,8 +33,8 @@ public partial class FssGodotEntityManager : Node3D
         if (TimerModelCheck < FssCoreTime.RuntimeSecs)
         {
             TimerModelCheck = FssCoreTime.RuntimeSecs + 1f;
-            MatchPlatformNodesToModel();
-            DeleteOrphanedEntities();
+            MatchModelPlatforms();
+            // DeleteOrphanedEntities();
         }
     }
 
@@ -63,7 +63,6 @@ public partial class FssGodotEntityManager : Node3D
             FssGodotEntity newEntity = new FssGodotEntity();
             newEntity.Name = entityName;
             EntityRootNode.AddChild(newEntity);
-            AddUnlinkedPlatform(entityName);
         }
     }
 
@@ -91,114 +90,93 @@ public partial class FssGodotEntityManager : Node3D
         return null;
     }
 
+    public List<string> EntityNames()
+    {
+        List<string> names = new List<string>();
+
+        foreach (Node3D currNode in EntityRootNode.GetChildren())
+            names.Add(currNode.Name);
+
+        return names;
+    }
+
+
     // --------------------------------------------------------------------------------------------
     // MARK: Create
     // --------------------------------------------------------------------------------------------
 
-    public void MatchPlatformNodesToModel()
+    // Create and delete entities to keep uptodate with the model.
+
+    public void MatchModelPlatforms()
     {
         // Get the model
         List<string> platNames = FssAppFactory.Instance.EventDriver.PlatformNames();
+        List<string> godotEntityNames = EntityNames();
 
+        // Compare the two lists, to find the new, the deleted and the consistent
+        List<string> omittedInPresentation = FssStringListOperations.ListOmittedInSecond(platNames, godotEntityNames);
+        List<string> noLongerInModel       = FssStringListOperations.ListOmittedInSecond(godotEntityNames, platNames);
+        List<string> maintainedEnitites    = FssStringListOperations.ListInBoth(platNames, godotEntityNames);
 
         // Loop through the list of platform names, and the EntityList, match them up.
-        foreach (string currModelName in platNames)
-        {
-            bool matchFound = false;
-            foreach (FssGodotEntity currEntity in EntityList)
-            {
-                if (currEntity.Name == currModelName)
-                {
-                    matchFound = true;
-                    continue; // We have it in the model, and the entity list. No action.
-                }
-            }
+        foreach (string currModelName in omittedInPresentation)
+            AddEntity(currModelName);
 
-            // Match not found, add it.
-            if (!matchFound)
-            {
-                // We have it in the model, but not in the entity list. Add it.
-                FssGodotEntity newEntity = new FssGodotEntity();
-                newEntity.Name = currModelName;
-                newEntity.EntityName = currModelName;
-                EntityList.Add(newEntity);
-                AddChild(newEntity);
-            }
+        foreach (string currModelName in noLongerInModel)
+            RemoveEntity(currModelName);
 
-
-            LookForElementsToPresent(currModelName);
-        }
+        foreach (string currModelName in maintainedEnitites)
+            MatchModelPlatformElements(currModelName);
     }
 
     // --------------------------------------------------------------------------------------------
     // MARK: Update - Add Elements
     // --------------------------------------------------------------------------------------------
 
-    private void LookForElementsToPresent(string platName)
+    private void MatchModelPlatformElements(string platName)
     {
-        // Get the list of model elements for the platform.
         List<string> modelElementNames = FssAppFactory.Instance.EventDriver.PlatformElementNames(platName);
 
         // List the unlinked elements for the platform.
         List<string> unlinkedElementNames = UnlinkedElementNames(platName);
         List<string> linkedElementNames   = LinkedElementNames(platName);
 
+        // Join the two lists
+        List<string> allElementNames = new List<string>();
+        allElementNames.AddRange(unlinkedElementNames);
+        allElementNames.AddRange(linkedElementNames);
+
         // Loop through the list of model elements, and the EntityList, match them up.
-        foreach (string currModelElementName in modelElementNames)
+        List<string> omittedInPresentation = FssStringListOperations.ListOmittedInSecond(modelElementNames, allElementNames);
+        List<string> noLongerInModel       = FssStringListOperations.ListOmittedInSecond(allElementNames, modelElementNames);
+        List<string> maintainedEnitites    = FssStringListOperations.ListInBoth(allElementNames, modelElementNames);
+
+        foreach (string currElemName in omittedInPresentation)
         {
-            bool matchFound = false;
-            foreach (string currElemName in unlinkedElementNames)
+            FssPlatformElement? element = FssAppFactory.Instance.EventDriver.GetElement(platName, currElemName);
+            if (element != null)
             {
-                if (currElemName == currModelElementName)
+                if (element is FssPlatformElementRoute)
                 {
-                    matchFound = true;
-                    continue; // We have it in the model, and the entity list. No action.
-                }
-            }
-            if (!matchFound)
-            {
-                foreach (string currElemName in linkedElementNames)
-                {
-                    if (currElemName == currModelElementName)
-                    {
-                        matchFound = true;
-                        continue; // We have it in the model, and the entity list. No action.
-                    }
-                }
-            }
+                    FssPlatformElementRoute r = element as FssPlatformElementRoute;
 
-            // Match not found, add it.
-            if (!matchFound)
-            {
-                // Get the model element to represent
-                FssPlatformElement? element = FssAppFactory.Instance.EventDriver.GetElement(platName, currModelElementName);
-
-                if (element == null)
-                    continue;
-
-                // Determine the element type
-                if (element!.Type == "Route")
-                {
-                    // We have it in the model, but not in the entity list. Add it.
                     FssGodotPlatformElementRoute newRoute = new FssGodotPlatformElementRoute();
-                    newRoute.Name = $"{platName}-{currModelElementName}";
-                    //newRoute.ElementName = currModelElementName;
-                    newRoute.SetRoutePoints( (element as FssPlatformElementRoute)!.Points );
+                    newRoute.Name = currElemName;
+                    newRoute.SetRoutePoints(r.RoutePoints);
 
                     // Add the route to the entity and scene tree
-                    //EntityList.Add(newRoute);
-                    ElementRootNode.AddChild(newRoute);
+                    AddUnlinkedElement(platName, newRoute);
+
+                    FssCentralLog.AddEntry($"Added route element {currElemName} to {platName}");
                 }
-
-
-                // FssPlatformElement? element = FssAppFactory.Instance.EventDriver.GetPlatformElement(platName, currModelElement);
-
-                // // We have it in the model, but not in the entity list. Add it.
-                // FssGodotEntity newEntity = new FssGodotEntity();
-
+                else
+                {
+                    FssCentralLog.AddEntry($"Did not add element {currElemName} to {platName}");
+                }
             }
         }
     }
+
 
     // --------------------------------------------------------------------------------------------
     // MARK: Reporting
@@ -208,11 +186,13 @@ public partial class FssGodotEntityManager : Node3D
     {
         StringBuilder sb = new StringBuilder();
 
-        sb.AppendLine($"Entity Count: {EntityList.Count}");
 
-        foreach (FssGodotEntity currEntity in EntityList)
+        List<string> namesList = EntityNames();
+
+        sb.AppendLine($"Entity Count: {namesList.Count}");
+        foreach (string currName in namesList)
         {
-            sb.AppendLine($"Entity: {currEntity.Name}");
+            sb.AppendLine($"Entity: {currName}");
         }
 
         return sb.ToString();
@@ -222,42 +202,5 @@ public partial class FssGodotEntityManager : Node3D
     // MARK: Update - Delete
     // --------------------------------------------------------------------------------------------
 
-    private void DeleteOrphanedEntities()
-    {
-        List<FssGodotEntity> entitiesToDelete = new List<FssGodotEntity>();
-        foreach (FssGodotEntity currEntity in EntityList)
-        {
-            if (currEntity.Name == "EntityManager")
-                continue;
-
-            if (!FssAppFactory.Instance.EventDriver.DoesPlatformExist(currEntity.Name))
-            {
-                entitiesToDelete.Add(currEntity);
-            }
-        }
-
-        foreach (FssGodotEntity currEntity in entitiesToDelete)
-        {
-            string platName = currEntity.Name;
-
-            EntityList.Remove(currEntity);
-            DeleteElementsForPlatform(platName);
-            currEntity.QueueFree();
-        }
-    }
-
-    private void DeleteElementsForPlatform(string platName)
-    {
-        string platNamePrefix = $"{platName}-";
-
-        // Delete the elements for the platform.
-        Godot.Collections.Array<Node> children = ElementRootNode.GetChildren();
-        foreach (Node currChild in children)
-        {
-            string name = currChild.Name;
-            if (name.Contains(platNamePrefix))
-                currChild.QueueFree();
-        }
-    }
 
 }
