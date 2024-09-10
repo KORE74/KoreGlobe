@@ -18,8 +18,8 @@ public partial class FssGodotPlatformElementRoute : FssGodotPlatformElement
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        Name     = "Route";
-        ElemType = "Route";
+        //Name     = "Route";
+        //ElemType = "Route";
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -35,7 +35,7 @@ public partial class FssGodotPlatformElementRoute : FssGodotPlatformElement
     public void InitElement(string platformName)
     {
         // *this* is a node added to the ZeroPoint
-        Name = $"{platformName}-RouteRoot";
+        Name = $"{platformName}_RouteRoute";
     }
 
     // --------------------------------------------------------------------------------------------

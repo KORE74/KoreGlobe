@@ -19,7 +19,10 @@ public partial class FssMessageManager
         if (!FssAppFactory.Instance.EventDriver.DoesPlatformExist(msg.PlatName))
         {
             FssAppFactory.Instance.EventDriver.AddPlatform(msg.PlatName, msg.PlatClass);
+        }
 
+        if (FssAppFactory.Instance.EventDriver.DoesPlatformExist(msg.PlatName))
+        {
             FssAppFactory.Instance.EventDriver.SetPlatformDetails(
                 msg.PlatName, msg.Pos, msg.Pos, msg.Attitude, msg.Course, FssCourseDelta.Zero);
         }
@@ -62,6 +65,8 @@ public partial class FssMessageManager
         if (FssAppFactory.Instance.EventDriver.DoesPlatformExist(msg.PlatName))
         {
             FssAppFactory.Instance.EventDriver.SetPlatformPosition(msg.PlatName, msg.Pos);
+            FssAppFactory.Instance.EventDriver.SetPlatformCourse(msg.PlatName, msg.Course);
+            FssAppFactory.Instance.EventDriver.SetPlatformAttitude(msg.PlatName, msg.Attitude);
         }
     }
 }

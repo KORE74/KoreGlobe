@@ -9,7 +9,7 @@ public partial class FssGodotEntityManager : Node3D
     // List<FssGodotEntity> EntityList = new List<FssGodotEntity>();
 
     public Node3D EntityRootNode;
-    public Node3D ElementRootNode;
+    public Node3D UnlinkedRootNode;
 
     float TimerModelCheck = 0.0f;
 
@@ -23,8 +23,8 @@ public partial class FssGodotEntityManager : Node3D
         AddChild(EntityRootNode);
 
         // Setup the Element Root Node.
-        ElementRootNode = new Node3D() { Name = "UnlinkedRootNode" };
-        AddChild(ElementRootNode);
+        UnlinkedRootNode = new Node3D() { Name = "UnlinkedRootNode" };
+        AddChild(UnlinkedRootNode);
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -59,11 +59,7 @@ public partial class FssGodotEntityManager : Node3D
     public void AddEntity(string entityName)
     {
         if (!EntityExists(entityName))
-        {
-            FssGodotEntity newEntity = new FssGodotEntity();
-            newEntity.Name = entityName;
-            EntityRootNode.AddChild(newEntity);
-        }
+            EntityRootNode.AddChild( new FssGodotEntity() { EntityName = entityName } );
     }
 
     public void RemoveEntity(string entityName)
@@ -140,6 +136,17 @@ public partial class FssGodotEntityManager : Node3D
         // List the unlinked elements for the platform.
         List<string> unlinkedElementNames = UnlinkedElementNames(platName);
         List<string> linkedElementNames   = LinkedElementNames(platName);
+
+        {
+            // Debug print out all the platforms and element names
+            string allUnlinkedNames = string.Join(", ", unlinkedElementNames);
+            string allLinkedNames   = string.Join(", ", linkedElementNames);
+            string matchDebug = $"MatchModelPlatformElements: {platName} Unlinked: {allUnlinkedNames} Linked: {allLinkedNames}";
+            FssCentralLog.AddEntry(matchDebug);
+
+            string allModelNames = string.Join(", ", modelElementNames);
+            FssCentralLog.AddEntry($"MatchModelPlatformElements: {platName} Model: {allModelNames}");
+        }
 
         // Join the two lists
         List<string> allElementNames = new List<string>();

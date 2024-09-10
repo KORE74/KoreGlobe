@@ -4,41 +4,35 @@
 
 public class FssElevationTile
 {
-    public FssFloat2DArray ElevationData { get; private set; }
-    public FssLLBox        LLBox         { get; private set; }
-    public int             HorizRes      { get; private set; }
-    public int             VertRes       { get; private set; }
-    public double          HorizResDegs  { get; private set; }
-    public double          VertResDegs   { get; private set; }
+    public FssFloat2DArray ElevationData { get; private set; } = new FssFloat2DArray();
+    public FssLLBox        LLBox         { get; private set; } = FssLLBox.ZeroBox;
 
     // --------------------------------------------------------------------------------------------
-    // MARK: Initialization
+    // MARK: Resolution
     // --------------------------------------------------------------------------------------------
 
-    public FssElevationTile(FssFloat2DArray elevationData, FssLLBox llBox, int horizRes, int vertRes)
+    // The lat long box will have a resolution in degrees. The 2D array will have a number of points.
+    // GetRes calculates and returns the lowest number of points per degree in the lat long box.
+
+    public float TileRes()
     {
-        ElevationData = elevationData;
-        LLBox         = llBox;
-        HorizRes      = horizRes;
-        VertRes       = vertRes;
+        int numLatPts = ElevationData.NumRows;
+        int numLonPts = ElevationData.NumCols;
 
-        HorizResDegs = llBox.DeltaLonDegs / horizRes;
-        VertResDegs  = llBox.DeltaLatDegs / vertRes;
-    }
+        float latRes = LLBox.DeltaLatDegs / numLatPts;
+        float lonRes = LLBox.DeltaLonDegs / numLonPts;
 
-    // Empty constructor for subsequent population
-
-    public FssElevationTile(FssLLBox llBox, int horizRes, int vertRes)
-    {
-        ElevationData = new FssFloat2DArray();
-        LLBox         = llBox;
-        HorizRes      = horizRes;
-        VertRes       = vertRes;
-        HorizResDegs  = llBox.DeltaLonDegs / horizRes;
-        VertResDegs   = llBox.DeltaLatDegs / vertRes;
+        return FssValueUtils.Min(latRes, lonRes);
     }
 
     // --------------------------------------------------------------------------------------------
+    // MARK: Elevation for Position
+    // --------------------------------------------------------------------------------------------
+
+    public bool Contains(FssLLPoint pos)
+    {
+        return LLBox.Contains(pos);
+    }
 
     public float? ElevationAtPos(FssLLPoint pos)
     {

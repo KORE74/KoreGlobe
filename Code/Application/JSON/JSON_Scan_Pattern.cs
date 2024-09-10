@@ -18,11 +18,15 @@ namespace FssJSON
         [JsonPropertyName("ScanType")]
         public string ScanType { get; set; } = "UnknownScanType";
 
+
+
         [JsonPropertyName("PeriodSecs")]
         public double PeriodSecs { get; set; } = 0.0;
 
         [JsonPropertyName("SegmentCount")]
         public int SegmentCount { get; set; } = 0;
+
+
 
         [JsonPropertyName("AzMinDegs")]
         public double AzMinDegs { get; set; } = 0.0;
@@ -41,6 +45,8 @@ namespace FssJSON
 
         [JsonPropertyName("ElTrackOffsetDegs")]
         public double ElTrackOffsetDegs { get; set; } = 0.0;
+
+
 
         [JsonPropertyName("Clockwise")]
         public bool Clockwise { get; set; } = false;
@@ -103,5 +109,6 @@ namespace FssJSON
         {
             return ScanType?.IndexOf("Conical", StringComparison.OrdinalIgnoreCase) >= 0;
         }
+
     } // end class
 } // end namespace

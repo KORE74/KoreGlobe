@@ -97,7 +97,7 @@ public partial class FssMessageManager
         else if (msg is PlatformElement_AddCircularScan platElemAddCircScanMsg) { ProcessMessage_PlatformElement_AddCircularScan(platElemAddCircScanMsg); }
         else
         {
-            FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage: Unknown message type: {msgType}");
+            FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage: Unknown message type: {msgType} // {message.msgData}");
         }
 
 

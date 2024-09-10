@@ -21,7 +21,10 @@ public partial class FssMessageManager
         string platName = beamLoadMsg.PlatName;
         double detectionRangeRxMtrs = beamLoadMsg.DetectionRangeRxMtrs;
         double detectionRangeMtrs = beamLoadMsg.DetectionRangeMtrs;
-        FssAzElBox azElBox = beamLoadMsg.AzElBox();
+
+        //FssAzElBox azElBox = beamLoadMsg.AzElBox();
+
+        FssAzElBox azElBox = new FssAzElBox() { MinAzDegs = -10, MaxAzDegs = 10, MinElDegs = -10, MaxElDegs = 10 };
 
         string elemName = FssEventDriver.ElementNameForBeam(
             beamLoadMsg.PlatName,
@@ -124,7 +127,7 @@ public partial class FssMessageManager
         string platName          = platWayPtsMsg.PlatName;
         List<FssLLAPoint> points = platWayPtsMsg.Points();
 
-        FssAppFactory.Instance.EventDriver.PlatformAddRoute(platName, points);
+        FssAppFactory.Instance.EventDriver.PlatformSetRoute(platName, points);
     }
 
 }

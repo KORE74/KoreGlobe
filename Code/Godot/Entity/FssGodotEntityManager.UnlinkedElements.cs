@@ -18,7 +18,7 @@ public partial class FssGodotEntityManager : Node3D
     public Node3D UnlinkedPlatform(string entityName)
     {
         // Return the existing node if we find it
-        foreach (Node3D currNode in EntityRootNode.GetChildren())
+        foreach (Node3D currNode in UnlinkedRootNode.GetChildren())
         {
             if (currNode.Name == entityName)
                 return currNode;
@@ -26,7 +26,7 @@ public partial class FssGodotEntityManager : Node3D
 
         // Create and add the node if we don't find it.
         Node3D entNode = new Node3D() { Name = entityName };
-        EntityRootNode.AddChild(entNode);
+        UnlinkedRootNode.AddChild(entNode);
 
         return entNode;
     }
@@ -61,12 +61,7 @@ public partial class FssGodotEntityManager : Node3D
     public void AddUnlinkedElement(string entityName, FssGodotPlatformElement element)
     {
         Node3D entityNode = UnlinkedPlatform(entityName);
-
-        foreach (Node3D currNode in entityNode.GetChildren())
-        {
-            entityNode.AddChild(element as Node3D);
-            return;
-        }
+        entityNode.AddChild(element);
     }
 
     public void RemoveUnlinkedElement(string entityName, string elementName)

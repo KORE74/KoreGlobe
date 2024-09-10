@@ -30,13 +30,13 @@ public partial class FssEventDriver
 
     public void CreateBaseDirectories()
     {
-        string rootDir = "undefined"; // FssAppFactory.Instance.MapIOManager.ReportRootDir();
+        // string rootDir = "undefined"; // FssAppFactory.Instance.MapIOManager.ReportRootDir();
 
-        // Validity Checks - Map, RootDir, RootDir Exists
-        if (string.IsNullOrEmpty(rootDir)) return;
-        if (!System.IO.Directory.Exists(rootDir)) return;
+        // // Validity Checks - Map, RootDir, RootDir Exists
+        // if (string.IsNullOrEmpty(rootDir)) return;
+        // if (!System.IO.Directory.Exists(rootDir)) return;
 
-        FssMapOperations.CreateBaseDirectories(rootDir);
+        // FssMapOperations.CreateBaseDirectories(rootDir);
     }
 
 }
