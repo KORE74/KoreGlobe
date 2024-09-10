@@ -12,56 +12,95 @@ using FssNetworking;
 public partial class FssEventDriver
 {
     // ---------------------------------------------------------------------------------------------
-    // MARK: Basic Element Management
+    // MARK: Add Beam
     // ---------------------------------------------------------------------------------------------
 
-    public void AddPlatformElement(string platName, string elemName, string platElemType)
-    {
-        // Create a new platform
-        FssPlatformElementOperations.CreatePlatformElement(platName, elemName, platElemType);
-    }
+    // Beams are the basic unit of a scan setting up an angular port, scanpatterns are added to them
 
-    public void DeletePlatformElement(string platName, string elemName)
+    public void PlatformAddBeam(string platName, string elemName)
     {
         FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
 
         if (platform == null)
+        {
+            FssCentralLog.AddEntry($"E00003: PlatformAddScanWedge: Platform {platName} not found.");
             return;
-
-        platform.DeleteElement(elemName);
-    }
-
-    public List<string> PlatformElementNames(string platName)
-    {
-        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
-
-        if (platform == null)
-            return new List<string>();
-
-        return platform.ElementNames();
-    }
-
-    // ---------------------------------------------------------------------------------------------
-
-    public void PlatformAddSizerBox(string platName, string platType)
-    {
-        // Get the platform
-        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
-
-        if (platform == null)
-            return;
-
-        // fixed elemName for the box
-        string elemName = "SizerBox";
-
-        // Get the element
+        }
+        
+        // Clear any pre-existing
         FssPlatformElement? element = platform.ElementForName(elemName);
+        if (element != null)
+            platform.DeleteElement(elemName);
 
-        if (element == null)
-            return;
+        // Create the element
+        FssPlatformElementBeam newBeam = new FssPlatformElementBeam() { EmitName = elemName };
 
-        // Set the element's size
-        return;
+        platform.AddElement(newBeam);
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public void PlatformSetBeamTargeting(string platName, string elemName, bool isTargetting, string targetName)
+    {
+        FssPlatformElement? basicElem = GetElement(platName, elemName);
+        if (basicElem == null)
+        {
+            if (basicElem is FssPlatformElementBeam beam)
+            {
+                beam.Targeted = isTargetting;
+                beam.TargetPlatName = targetName;
+            }
+            else
+            {
+                FssCentralLog.AddEntry($"E00003: PlatformSetBeamTargeting: Element {elemName} is not a beam.");
+            }
+        }
+        else
+        {
+            FssCentralLog.AddEntry($"E00003: PlatformSetBeamTargeting: Element {elemName} not found.");
+        }
+    }
+
+    public void PlatformSetBeamRanges(string platName, string elemName, double rxRangeKms, double txRangeKms)
+    {
+        FssPlatformElement? basicElem = GetElement(platName, elemName);
+        if (basicElem == null)
+        {
+            if (basicElem is FssPlatformElementBeam beam)
+            {
+                beam.DetectionRangeRxKms = rxRangeKms;
+                beam.DetectionRangeTxKms = txRangeKms;
+            }
+            else
+            {
+                FssCentralLog.AddEntry($"E00003: PlatformSetBeamTargeting: Element {elemName} is not a beam.");
+            }
+        }
+        else
+        {
+            FssCentralLog.AddEntry($"E00003: PlatformSetBeamTargeting: Element {elemName} not found.");
+        }
+    }
+
+    public void PlatformSetBeamAngles(string platName, string elemName, FssAttitude portAttitude, FssPolarOffset trackOffset)
+    {
+        FssPlatformElement? basicElem = GetElement(platName, elemName);
+        if (basicElem == null)
+        {
+            if (basicElem is FssPlatformElementBeam beam)
+            {
+                beam.PortAttitude = portAttitude;
+                beam.TrackOffset  = trackOffset;
+            }
+            else
+            {
+                FssCentralLog.AddEntry($"E00003: PlatformSetBeamAngles: Element {elemName} is not a beam.");
+            }
+        }
+        else
+        {
+            FssCentralLog.AddEntry($"E00003: PlatformSetBeamAngles: Element {elemName} not found.");
+        }
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -124,31 +163,4 @@ public partial class FssEventDriver
     }
 
     // ---------------------------------------------------------------------------------------------
-
-    public FssPlatformElement? GetElement(string platName, string elemName)
-    {
-        if (string.IsNullOrEmpty(platName) || string.IsNullOrEmpty(elemName))
-            return null;
-
-        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
-
-        if (platform == null)
-            return null;
-
-        return platform.ElementForName(elemName);
-    }
-
-
-
-    // public void SetPlatformStartLLA(string platName, FssLLALocation loc)
-    // {
-    //     // Get the platform
-    //     FssPlatform? platform = FssAppFactory.Instance.PlatformManager.GetPlatformForName(platName);
-
-    //     if (platform == null)
-    //         return;
-
-    //     // Set the platform's start location
-    //     platform.Motion.InitialLocation = loc;
-    // }
 }

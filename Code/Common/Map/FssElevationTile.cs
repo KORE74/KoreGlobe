@@ -4,8 +4,8 @@
 
 public class FssElevationTile
 {
-    public FssFloat2DArray ElevationData { get; private set; } = new FssFloat2DArray();
-    public FssLLBox        LLBox         { get; private set; } = FssLLBox.ZeroBox;
+    public FssFloat2DArray ElevationData { get; set; } = new FssFloat2DArray();
+    public FssLLBox        LLBox         { get; set; } = FssLLBox.ZeroBox;
 
     // --------------------------------------------------------------------------------------------
     // MARK: Resolution
@@ -16,13 +16,10 @@ public class FssElevationTile
 
     public float TileRes()
     {
-        int numLatPts = ElevationData.NumRows;
-        int numLonPts = ElevationData.NumCols;
+        float latRes = (float)LLBox.DeltaLatDegs / ElevationData.Height;
+        float lonRes = (float)LLBox.DeltaLonDegs / ElevationData.Width;
 
-        float latRes = LLBox.DeltaLatDegs / numLatPts;
-        float lonRes = LLBox.DeltaLonDegs / numLonPts;
-
-        return FssValueUtils.Min(latRes, lonRes);
+        return (latRes < lonRes) ? latRes : lonRes;
     }
 
     // --------------------------------------------------------------------------------------------

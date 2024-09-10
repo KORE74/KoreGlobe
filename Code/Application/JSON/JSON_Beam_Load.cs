@@ -81,6 +81,18 @@ namespace FssJSON
             set { DetectionRangeRxMtrs = (value * FssPosConsts.KmToMetresMultiplier); }
         }
 
+        [JsonIgnore]
+        public FssAttitude PortAttitude
+        {
+            get { return new FssAttitude() { RollClockwiseDegs = PortRollDegs, PitchUpDegs = PortPitchDegs, YawClockwiseDegs = PortYawDegs }; }
+            set
+            {
+                PortRollDegs  = value.RollClockwiseDegs;
+                PortPitchDegs = value.PitchUpDegs;
+                PortYawDegs   = value.YawClockwiseDegs;
+            }
+        }
+
         // ============================================================================================
         // Message Parsing
         // ============================================================================================

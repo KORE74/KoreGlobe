@@ -37,14 +37,16 @@ public class FssElevationSystem
                 pos.LatDegs = startLatDegs + latIdx * deltaLatDegs;
                 pos.LonDegs = startLonDegs + lonIdx * deltaLonDegs;
 
-                GetElevationAtPosition(pos);
-
-                data.SetValue(latIdx, lonIdx, (float)(lat + lon));
+                data[lonIdx, latIdx] = ElevationAtPos(pos) ?? -9999;
             }
         }
+
+        FssElevationTile newTile = new FssElevationTile() { ElevationData = data, LLBox = llBox };
+
+        return newTile;
     }
 
-    public float ElevationAtPos(FssLLPoint pos)
+    public float? ElevationAtPos(FssLLPoint pos)
     {
         // Loop through the TileList, grabbing points from the highest resolution tile that contains the position.
         // Loop aross the points in a tile, populating the requested array.
@@ -54,8 +56,7 @@ public class FssElevationSystem
             if (tile.Contains(pos))
                 return tile.ElevationAtPos(pos);
         }
-
-        return 0;
+        return null;
     }
 
     // --------------------------------------------------------------------------------------------

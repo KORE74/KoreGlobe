@@ -110,5 +110,27 @@ namespace FssJSON
             return ScanType?.IndexOf("Conical", StringComparison.OrdinalIgnoreCase) >= 0;
         }
 
+        // --------------------------------------------------------------------------------
+
+        public FssAzElBox GetAzElBox()
+        {
+            return new FssAzElBox()
+            {
+                MinAzDegs = AzMinDegs,
+                MaxAzDegs = AzMaxDegs,
+                MinElDegs = ElMinDegs,
+                MaxElDegs = ElMaxDegs,
+            };
+        }
+
+        public FssPolarOffset GetTrackOffset()
+        {
+            return new FssPolarOffset()
+            {
+                AzDegs = AzTrackOffsetDegs,
+                ElDegs = ElTrackOffsetDegs,
+            };
+        }
+
     } // end class
 } // end namespace
