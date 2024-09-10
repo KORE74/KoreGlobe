@@ -10,7 +10,6 @@ using FssJSON;
 
 public partial class FssMessageManager
 {
-
     // --------------------------------------------------------------------------------------------
     // MARK: Elements / Beam
     // --------------------------------------------------------------------------------------------
@@ -28,11 +27,7 @@ public partial class FssMessageManager
 
         FssAzElBox azElBox = new FssAzElBox() { MinAzDegs = -10, MaxAzDegs = 10, MinElDegs = -10, MaxElDegs = 10 };
 
-        string elemName = FssEventDriver.ElementNameForBeam(
-            beamLoadMsg.PlatName,
-            beamLoadMsg.EmitName,
-            beamLoadMsg.BeamName
-        );
+        string elemName = FssEventDriver.ElementNameForBeam(beamLoadMsg.PlatName, beamLoadMsg.EmitName, beamLoadMsg.BeamName);
 
         FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_BeamLoad: Name:{elemName}");
 
@@ -44,11 +39,7 @@ public partial class FssMessageManager
 
     private void ProcessMessage_BeamDelete(BeamDelete beamDelMsg)
     {
-        string elemName = FssEventDriver.ElementNameForBeam(
-            beamDelMsg.PlatName,
-            beamDelMsg.EmitName,
-            beamDelMsg.BeamName
-        );
+        string elemName = FssEventDriver.ElementNameForBeam(beamDelMsg.PlatName, beamDelMsg.EmitName, beamDelMsg.BeamName);
 
         FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_BeamDelete: Name:{elemName}");
 
@@ -70,22 +61,14 @@ public partial class FssMessageManager
 
     private void ProcessMessage_BeamEnable(BeamEnable beamEnMsg)
     {
-        string elemName = FssEventDriver.ElementNameForBeam(
-            beamEnMsg.PlatName,
-            beamEnMsg.EmitName,
-            beamEnMsg.BeamName
-        );
+        string elemName = FssEventDriver.ElementNameForBeam(beamEnMsg.PlatName, beamEnMsg.EmitName, beamEnMsg.BeamName);
 
         FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_BeamEnable: Name:{elemName}");
     }
 
     private void ProcessMessage_BeamDisable(BeamDisable beamDisMsg)
     {
-        string elemName = FssEventDriver.ElementNameForBeam(
-            beamDisMsg.PlatName,
-            beamDisMsg.EmitName,
-            beamDisMsg.BeamName
-        );
+        string elemName = FssEventDriver.ElementNameForBeam(beamDisMsg.PlatName, beamDisMsg.EmitName, beamDisMsg.BeamName);
 
         FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_BeamDisable: Name:{elemName}");
 

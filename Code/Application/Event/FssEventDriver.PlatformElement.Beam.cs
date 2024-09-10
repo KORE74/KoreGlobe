@@ -26,7 +26,7 @@ public partial class FssEventDriver
             FssCentralLog.AddEntry($"E00003: PlatformAddScanWedge: Platform {platName} not found.");
             return;
         }
-        
+
         // Clear any pre-existing
         FssPlatformElement? element = platform.ElementForName(elemName);
         if (element != null)
@@ -104,7 +104,53 @@ public partial class FssEventDriver
     }
 
     // ---------------------------------------------------------------------------------------------
-    // MARK: Add scans
+    // MARK: Add Scan Patterns
+    // ---------------------------------------------------------------------------------------------
+
+    public void PlatformAddScanPattern(string platName, string elemName, string patternType)
+    {
+        FssPlatformElement? basicElem = GetElement(platName, elemName);
+        if (basicElem == null)
+        {
+            if (basicElem is FssPlatformElementBeam beam)
+            {
+                FssPlatformElementBeamScanPattern newScanPattern = new FssPlatformElementBeamScanPattern();
+                beam.ScanPattern = newScanPattern;
+            }
+            else
+            {
+                FssCentralLog.AddEntry($"E00003: PlatformAddScanPattern: Element {elemName} is not a beam.");
+            }
+        }
+    }
+
+    public void PlatformSetScanPatternAngles(string platName, string elemName, FssAzElBox azElBox)
+    {
+        FssPlatformElement? basicElem = GetElement(platName, elemName);
+        if (basicElem == null)
+        {
+            if (basicElem is FssPlatformElementBeam beam)
+            {
+                if (beam.ScanPattern != null)
+                {
+                    beam.ScanPattern.AzElBox = azElBox;
+                }
+                else
+                {
+                    FssCentralLog.AddEntry($"E00003: PlatformSetScanPatternAngles: No scan pattern found for {elemName}.");
+                }
+            }
+            else
+            {
+                FssCentralLog.AddEntry($"E00003: PlatformSetScanPatternAngles: Element {elemName} is not a beam.");
+            }
+        }
+        else
+        {
+            FssCentralLog.AddEntry($"E00003: PlatformSetScanPatternAngles: Element {elemName} not found.");
+        }
+    }
+
     // ---------------------------------------------------------------------------------------------
 
     public void PlatformAddScanHemisphere(string platName, string elemName, double DetectionRangeKms)

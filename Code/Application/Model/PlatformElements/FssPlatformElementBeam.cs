@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 public class FssPlatformElementBeam : FssPlatformElement
 {
-    public List<FssPlatformElementBeamScanPattern> ScanPatternList = new List<FssPlatformElementBeamScanPattern>();
+    public FssPlatformElementBeamScanPattern ScanPattern = new FssPlatformElementBeamScanPattern();
 
     public string EmitName { get; set; } = "DefaultEmitName";
     public string BeamName { get; set; } = "DefaultBeamName";
