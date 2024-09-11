@@ -204,16 +204,25 @@ public partial class FssGodotEntityManager : Node3D
             float range = 10;
             FssAzElBox azElBox = new FssAzElBox() { MinAzDegs=-10, MaxAzDegs=10, MinElDegs=-10, MaxElDegs=10 };
 
+            azElBox = beam.AzElBox;
+
             FssGodotPlatformElementWedge newBeam = new FssGodotPlatformElementWedge();
 
             newBeam.TxDistanceM = (float)(beam.DetectionRangeTxM);
             newBeam.RxDistanceM = (float)(beam.DetectionRangeRxM);
+            newBeam.AzElBox = azElBox;
 
             newBeam.Name = currElemName;
 
             //ent.AddElement(newBeam);
 
             AddLinkedElement(platName, newBeam);
+
+
+
+            FssGodotPlatformElementDome newDome = new FssGodotPlatformElementDome();
+            newDome.RxDistanceM = 50000f;
+            AddLinkedElement(platName, newDome);
 
         }
 

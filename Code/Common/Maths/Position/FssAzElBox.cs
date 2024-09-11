@@ -138,7 +138,7 @@ public struct FssAzElBox
         };
     }
 
-    public FssAzElBox InflateBox(double azInflateDegs, double elInflateDegs)
+    public FssAzElBox Inflate(double azInflateDegs, double elInflateDegs)
     {
         return new FssAzElBox
         {
