@@ -59,7 +59,7 @@ public partial class FssGodotEntity : Node3D
 
         if (pos == null || course == null)
         {
-            GD.Print($"E00005: Platform {EntityName} not found.");
+            GD.Print($"EC0-0025: Platform {EntityName} not found.");
             return;
         }
 

@@ -57,13 +57,13 @@ public partial class FssTestModelChildren : Node3D
 
         if (string.IsNullOrEmpty(platformName))
         {
-            FssCentralLog.AddEntry("E00001: Platform name is null or empty.");
+            FssCentralLog.AddEntry("EC0-0023: Platform name is null or empty.");
             return;
         }
 
         if (!FssAppFactory.Instance.EventDriver.DoesPlatformExist(platformName))
         {
-            FssCentralLog.AddEntry($"E00001: Platform {platformName} does not exist.");
+            FssCentralLog.AddEntry($"EC0-0024: Platform {platformName} does not exist.");
             return;
         }
 

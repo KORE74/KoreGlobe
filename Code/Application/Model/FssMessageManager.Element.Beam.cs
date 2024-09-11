@@ -34,7 +34,6 @@ public partial class FssMessageManager
         FssAppFactory.Instance.EventDriver.PlatformAddBeam(beamLoadMsg.PlatName, elemName);
         FssAppFactory.Instance.EventDriver.PlatformSetBeamTargeting(beamLoadMsg.PlatName, elemName, beamLoadMsg.Targeted, beamLoadMsg.TargetPlatName);
         FssAppFactory.Instance.EventDriver.PlatformSetBeamRanges(beamLoadMsg.PlatName, elemName, beamLoadMsg.DetectionRangeMtrs, beamLoadMsg.DetectionRangeRxMtrs);
-
     }
 
     private void ProcessMessage_BeamDelete(BeamDelete beamDelMsg)
@@ -49,7 +48,7 @@ public partial class FssMessageManager
         FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(beamDelMsg.PlatName);
         if (platform == null)
         {
-            FssCentralLog.AddEntry($"E00003: BeamDelete: Platform {beamDelMsg.PlatName} not found.");
+            FssCentralLog.AddEntry($"EC0-0022: BeamDelete: Platform {beamDelMsg.PlatName} not found.");
             return;
         }
 
@@ -87,7 +86,9 @@ public partial class FssMessageManager
         FssAzElBox     patternSize        = rxAntMsg.AzElBox;
         FssPolarOffset patternPolarOffset = rxAntMsg.PolarOffset;
 
-        FssAppFactory.Instance.EventDriver.PlatformAddAntennaPattern(platName, patternName, patternPolarOffset, patternSize);
+        FssAppFactory.Instance.EventDriver.PlatformAddAntennaPattern(platName, patternName);
+
+        //FssAppFactory.Instance.EventDriver.PlatformSetAntennaPatternSize(platName, patternName, patternPolarOffset, patternSize);
     }
 
     // --------------------------------------------------------------------------------------------
@@ -97,6 +98,10 @@ public partial class FssMessageManager
     private void ProcessMessage_ScanPattern(ScanPattern scanPatMsg)
     {
         FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_ScanPattern");
+
+        string elemName = FssEventDriver.ElementNameForBeam(scanPatMsg.PlatName, scanPatMsg.EmitName, scanPatMsg.BeamName);
+
+        FssAppFactory.Instance.EventDriver.PlatformSetBeamAngles(scanPatMsg.PlatName, elemName, scanPatMsg.GetTrackOffset(), scanPatMsg.GetAzElBox());
     }
 
     private void ProcessMessage_PlatformElement_AddCircularScan(PlatformElement_AddCircularScan platElemAddCircScanMsg)

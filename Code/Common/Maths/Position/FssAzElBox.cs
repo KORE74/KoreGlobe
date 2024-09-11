@@ -138,6 +138,17 @@ public struct FssAzElBox
         };
     }
 
+    public FssAzElBox InflateBox(double azInflateDegs, double elInflateDegs)
+    {
+        return new FssAzElBox
+        {
+            MinAzDegs = MinAzDegs - azInflateDegs,
+            MaxAzDegs = MaxAzDegs + azInflateDegs,
+            MinElDegs = MinElDegs - elInflateDegs,
+            MaxElDegs = MaxElDegs + elInflateDegs
+        };
+    }
+
     public FssAzElBox ConsistencyCheck()
     {
         return new FssAzElBox
@@ -147,6 +158,11 @@ public struct FssAzElBox
             MinElRads = (MinElRads < MaxElRads) ? MinElRads : MaxElRads,
             MaxElRads = (MinElRads < MaxElRads) ? MaxElRads : MinElRads
         };
+    }
+
+    public override string ToString()
+    {
+        return $"MinAz:{MinAzDegs:F2}Degs MaxAz:{MaxAzDegs:F2}Degs / MinEl:{MinElDegs:F2}Degs MaxEl:{MaxElDegs:F2}Degs";
     }
 
 }

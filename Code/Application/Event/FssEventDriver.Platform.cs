@@ -17,12 +17,12 @@ public partial class FssEventDriver
     {
         // Create a new platform
         // if (FssAppFactory.Instance.PlatformManager == null)
-        //     FssCentralLog.AddEntry("E00002: ERROR ERROR ERROR: Platform Manager not found in FssAppFactory.Instance");
+        //     FssCentralLog.AddEntry("EC0-0002: ERROR ERROR ERROR: Platform Manager not found in FssAppFactory.Instance");
 
         FssPlatform? newPlat = FssAppFactory.Instance.PlatformManager.Add(platName);
         if (newPlat == null)
         {
-            FssCentralLog.AddEntry($"E00001: Platform {platName} not created, already exists.");
+            FssCentralLog.AddEntry($"EC0-0026: Platform {platName} not created, already exists.");
             return;
         }
         newPlat.Type = "Unknown";
@@ -32,12 +32,12 @@ public partial class FssEventDriver
     {
         // Create a new platform
         // if (FssAppFactory.Instance.PlatformManager == null)
-        //     FssCentralLog.AddEntry("E00002: ERROR ERROR ERROR: Platform Manager not found in FssAppFactory.Instance");
+        //     FssCentralLog.AddEntry("EC0-0002: ERROR ERROR ERROR: Platform Manager not found in FssAppFactory.Instance");
 
         FssPlatform? newPlat = FssAppFactory.Instance.PlatformManager.Add(platName);
         if (newPlat == null)
         {
-            FssCentralLog.AddEntry($"E00001: Platform {platName} not created, already exists.");
+            FssCentralLog.AddEntry($"EC0-0001: Platform {platName} not created, already exists.");
             return;
         }
         newPlat.Type = platType;
@@ -62,7 +62,7 @@ public partial class FssEventDriver
 
         if (platform == null)
         {
-            FssCentralLog.AddEntry($"E00003: Platform {platName} not found.");
+            FssCentralLog.AddEntry($"EC0-0002: Platform {platName} not found.");
             return;
         }
 
@@ -85,7 +85,7 @@ public partial class FssEventDriver
 
         if (platform == null)
         {
-            FssCentralLog.AddEntry($"E00003: Platform {platName} not found.");
+            FssCentralLog.AddEntry($"EC0-0005: Platform {platName} not found.");
             return;
         }
 
@@ -113,7 +113,7 @@ public partial class FssEventDriver
 
         if (platform == null)
         {
-            FssCentralLog.AddEntry($"E00003: Platform {platName} not found.");
+            FssCentralLog.AddEntry($"EC0-0006: Platform {platName} not found.");
             return;
         }
 
@@ -143,7 +143,7 @@ public partial class FssEventDriver
 
         if (platform == null)
         {
-            FssCentralLog.AddEntry($"E00004: Platform {platName} not found.");
+            FssCentralLog.AddEntry($"EC0-0007: Platform {platName} not found.");
             return;
         }
 
@@ -176,7 +176,7 @@ public partial class FssEventDriver
 
         if (platform == null)
         {
-            FssCentralLog.AddEntry($"E00003: Platform {platName} not found.");
+            FssCentralLog.AddEntry($"EC0-0008: Platform {platName} not found.");
             return;
         }
 
@@ -195,7 +195,7 @@ public partial class FssEventDriver
 
         if (platform == null)
         {
-            FssCentralLog.AddEntry($"E00004: Platform {platName} not found.");
+            FssCentralLog.AddEntry($"EC0-0009: Platform {platName} not found.");
             return;
         }
 
@@ -217,7 +217,7 @@ public partial class FssEventDriver
 
         if (platform == null)
         {
-            FssCentralLog.AddEntry($"E00005: Platform {platName} not found.");
+            FssCentralLog.AddEntry($"EC0-0010: Platform {platName} not found.");
             return;
         }
 

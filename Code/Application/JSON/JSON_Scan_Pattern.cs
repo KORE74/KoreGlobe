@@ -76,14 +76,18 @@ namespace FssJSON
         {
             try
             {
-                var options = new JsonSerializerOptions
+                using (JsonDocument doc = JsonDocument.Parse(json))
                 {
-                    PropertyNameCaseInsensitive = true,
-                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                    AllowTrailingCommas = true,
-                };
-
-                return JsonSerializer.Deserialize<ScanPattern>(json, options) ?? new ScanPattern();
+                    if (doc.RootElement.TryGetProperty("ScanPattern", out JsonElement jsonContent))
+                    {
+                        ScanPattern newMsg = JsonSerializer.Deserialize<ScanPattern>(jsonContent.GetRawText());
+                        return newMsg;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
             }
             catch (Exception)
             {

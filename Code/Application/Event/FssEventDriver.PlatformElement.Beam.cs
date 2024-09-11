@@ -23,7 +23,7 @@ public partial class FssEventDriver
 
         if (platform == null)
         {
-            FssCentralLog.AddEntry($"E00003: PlatformAddScanWedge: Platform {platName} not found.");
+            FssCentralLog.AddEntry($"EC0-0011: PlatformAddScanWedge: Platform {platName} not found.");
             return;
         }
 
@@ -33,170 +33,119 @@ public partial class FssEventDriver
             platform.DeleteElement(elemName);
 
         // Create the element
-        FssPlatformElementBeam newBeam = new FssPlatformElementBeam() { EmitName = elemName };
+        FssPlatformElementBeam newBeam = new FssPlatformElementBeam() { EmitName = elemName, Name = elemName };
 
         platform.AddElement(newBeam);
     }
 
     // ---------------------------------------------------------------------------------------------
+    // MARK: Set Beam Components
+    // ---------------------------------------------------------------------------------------------
 
     public void PlatformSetBeamTargeting(string platName, string elemName, bool isTargetting, string targetName)
     {
-        FssPlatformElement? basicElem = GetElement(platName, elemName);
-        if (basicElem == null)
+        FssPlatformElementBeam? beamObj = GetElementBeam(platName, elemName);
+
+        if (beamObj != null)
         {
-            if (basicElem is FssPlatformElementBeam beam)
-            {
-                beam.Targeted = isTargetting;
-                beam.TargetPlatName = targetName;
-            }
-            else
-            {
-                FssCentralLog.AddEntry($"E00003: PlatformSetBeamTargeting: Element {elemName} is not a beam.");
-            }
+            beamObj.Targeted = isTargetting;
+            beamObj.TargetPlatName = targetName;
         }
         else
         {
-            FssCentralLog.AddEntry($"E00003: PlatformSetBeamTargeting: Element {elemName} not found.");
+            FssCentralLog.AddEntry($"EC0-0012: PlatformSetBeamTargeting: Element {elemName} not found.");
         }
     }
 
-    public void PlatformSetBeamRanges(string platName, string elemName, double rxRangeKms, double txRangeKms)
+    public void PlatformSetBeamRanges(string platName, string elemName, double rxRangeM, double txRangeM)
     {
-        FssPlatformElement? basicElem = GetElement(platName, elemName);
-        if (basicElem == null)
+        FssPlatformElementBeam? beamObj = GetElementBeam(platName, elemName);
+        if (beamObj != null)
         {
-            if (basicElem is FssPlatformElementBeam beam)
-            {
-                beam.DetectionRangeRxKms = rxRangeKms;
-                beam.DetectionRangeTxKms = txRangeKms;
-            }
-            else
-            {
-                FssCentralLog.AddEntry($"E00003: PlatformSetBeamTargeting: Element {elemName} is not a beam.");
-            }
+            beamObj.DetectionRangeRxM = rxRangeM;
+            beamObj.DetectionRangeTxM = txRangeM;
         }
         else
         {
-            FssCentralLog.AddEntry($"E00003: PlatformSetBeamTargeting: Element {elemName} not found.");
+            FssCentralLog.AddEntry($"EC0-0013: PlatformSetBeamTargeting: Element {elemName} not found.");
         }
     }
 
-    public void PlatformSetBeamAngles(string platName, string elemName, FssAttitude portAttitude, FssPolarOffset trackOffset)
+    public void PlatformSetBeamPortAngles(string platName, string elemName, FssAttitude portAttitude)
     {
-        FssPlatformElement? basicElem = GetElement(platName, elemName);
-        if (basicElem == null)
+        FssPlatformElementBeam? beamObj = GetElementBeam(platName, elemName);
+        if (beamObj != null)
         {
-            if (basicElem is FssPlatformElementBeam beam)
-            {
-                beam.PortAttitude = portAttitude;
-                beam.TrackOffset  = trackOffset;
-            }
-            else
-            {
-                FssCentralLog.AddEntry($"E00003: PlatformSetBeamAngles: Element {elemName} is not a beam.");
-            }
+            beamObj.PortAttitude = portAttitude;
         }
         else
         {
-            FssCentralLog.AddEntry($"E00003: PlatformSetBeamAngles: Element {elemName} not found.");
+            FssCentralLog.AddEntry($"EC0-0014: PlatformSetBeamAngles: Element {elemName} not found.");
+        }
+    }
+
+    public void PlatformSetBeamAngles(string platName, string elemName, FssPolarOffset trackOffset, FssAzElBox azElBox)
+    {
+        FssPlatformElementBeam? beamObj = GetElementBeam(platName, elemName);
+        if (beamObj != null)
+        {
+            beamObj.TrackOffset  = trackOffset;
+            beamObj.AzElBox      = azElBox;
+        }
+        else
+        {
+            FssCentralLog.AddEntry($"EC0-0015: PlatformSetBeamAngles: Element {elemName} not found.");
+        }
+    }
+
+    public void PlatformSetBeamScanType(string platName, string elemName, string scanType)
+    {
+        FssPlatformElementBeam? beamObj = GetElementBeam(platName, elemName);
+        if (beamObj != null)
+        {
+            if      (scanType == "Cone")    beamObj.ScanShape = FssPlatformElementBeam.ScanPatternShape.Cone;
+            else if (scanType == "Raster")  beamObj.ScanShape = FssPlatformElementBeam.ScanPatternShape.Wedge;
+            else if (scanType == "Dome")    beamObj.ScanShape = FssPlatformElementBeam.ScanPatternShape.Dome;
+            else
+                beamObj.ScanShape = FssPlatformElementBeam.ScanPatternShape.Undefined;
+        }
+        else
+        {
+            FssCentralLog.AddEntry($"EC0-0016: PlatformSetBeamScanType: Element {elemName} not found.");
         }
     }
 
     // ---------------------------------------------------------------------------------------------
-    // MARK: Add Scan Patterns
+    // MARK: Access Beam Element
     // ---------------------------------------------------------------------------------------------
 
-    public void PlatformAddScanPattern(string platName, string elemName, string patternType)
+    // Passing the data out of the EventDriver layer piecemeal in simple data types is currently considered
+    // too repetitive, without concrete benefit.
+
+    public FssPlatformElementBeam? GetElementBeam(string platName, string elemName)
     {
         FssPlatformElement? basicElem = GetElement(platName, elemName);
-        if (basicElem == null)
+        if (basicElem != null)
         {
             if (basicElem is FssPlatformElementBeam beam)
             {
-                FssPlatformElementBeamScanPattern newScanPattern = new FssPlatformElementBeamScanPattern();
-                beam.ScanPattern = newScanPattern;
-            }
-            else
-            {
-                FssCentralLog.AddEntry($"E00003: PlatformAddScanPattern: Element {elemName} is not a beam.");
+                return beam;
             }
         }
-    }
-
-    public void PlatformSetScanPatternAngles(string platName, string elemName, FssAzElBox azElBox)
-    {
-        FssPlatformElement? basicElem = GetElement(platName, elemName);
-        if (basicElem == null)
-        {
-            if (basicElem is FssPlatformElementBeam beam)
-            {
-                if (beam.ScanPattern != null)
-                {
-                    beam.ScanPattern.AzElBox = azElBox;
-                }
-                else
-                {
-                    FssCentralLog.AddEntry($"E00003: PlatformSetScanPatternAngles: No scan pattern found for {elemName}.");
-                }
-            }
-            else
-            {
-                FssCentralLog.AddEntry($"E00003: PlatformSetScanPatternAngles: Element {elemName} is not a beam.");
-            }
-        }
-        else
-        {
-            FssCentralLog.AddEntry($"E00003: PlatformSetScanPatternAngles: Element {elemName} not found.");
-        }
-    }
-
-    // ---------------------------------------------------------------------------------------------
-
-    public void PlatformAddScanHemisphere(string platName, string elemName, double DetectionRangeKms)
-    {
-
-    }
 
 
-    public void PlatformAddScanWedge(string platName, string elemName, double DetectionRangeKms, double DetectionRangeRxMtrs, FssAzElBox azElBox)
-    {
+        // Report the failure.
 
-        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
+        // 1 - list the available elements
+        // 2 - list the requested element
 
-        if (platform == null)
-        {
-            FssCentralLog.AddEntry($"E00003: PlatformAddScanWedge: Platform {platName} not found.");
-            return;
-        }
+        List<string> elemNamesList = PlatformElementNames(platName);
+        string elemNames = string.Join(", ", elemNamesList);
 
-        // Get the element
-        FssPlatformElement? element = platform.ElementForName(elemName);
-        if (element != null)
-            platform.DeleteElement(elemName);
-
-        // Create the element
-        FssPlatformElementOperations.CreatePlatformElement(platName, elemName, "ScanWedge");
+        FssCentralLog.AddEntry($"EC0-0017: GetElementBeam: Element {elemName} not found. Available elements: {elemNames}");
 
 
-    }
-
-
-    public void PlatformAddScanConical(string platName, string elemName, double DetectionRangeKms, string targetName)
-    {
-
-    }
-
-
-    public void PlatformAddAntennaPattern(string platName, string elemName, FssPolarOffset offset, FssAzElBox azElBox)
-    {
-        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
-
-        if (platform == null)
-        {
-            FssCentralLog.AddEntry($"E00003: PlatformAddAntennaPattern: Platform {platName} not found.");
-            return;
-        }
+        return null;
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -208,5 +157,4 @@ public partial class FssEventDriver
         return $"{platName}_{emitName}_{beamName}";
     }
 
-    // ---------------------------------------------------------------------------------------------
 }

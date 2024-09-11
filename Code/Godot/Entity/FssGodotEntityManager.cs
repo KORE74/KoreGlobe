@@ -163,27 +163,62 @@ public partial class FssGodotEntityManager : Node3D
             FssPlatformElement? element = FssAppFactory.Instance.EventDriver.GetElement(platName, currElemName);
             if (element != null)
             {
-                if (element is FssPlatformElementRoute)
-                {
-                    FssPlatformElementRoute r = element as FssPlatformElementRoute;
-
-                    FssGodotPlatformElementRoute newRoute = new FssGodotPlatformElementRoute();
-                    newRoute.Name = currElemName;
-                    newRoute.SetRoutePoints(r.RoutePoints);
-
-                    // Add the route to the entity and scene tree
-                    AddUnlinkedElement(platName, newRoute);
-
-                    FssCentralLog.AddEntry($"Added route element {currElemName} to {platName}");
-                }
-                else
-                {
-                    FssCentralLog.AddEntry($"Did not add element {currElemName} to {platName}");
-                }
+                if (element is FssPlatformElementRoute) AddPlatformElementRoute(platName, currElemName);
+                if (element is FssPlatformElementBeam)  AddPlatformElementBeam(platName, currElemName);
             }
         }
     }
 
+    // --------------------------------------------------------------------------------------------
+
+    public void AddPlatformElementRoute(string platName, string currElemName)
+    {
+        // Get the Route Details
+        FssPlatformElementRoute? route = FssAppFactory.Instance.EventDriver.GetElement(platName, currElemName) as FssPlatformElementRoute;
+
+        FssGodotPlatformElementRoute newRoute = new FssGodotPlatformElementRoute();
+        newRoute.Name = currElemName;
+        newRoute.SetRoutePoints(route.RoutePoints);
+
+        // Add the route to the entity and scene tree
+        AddUnlinkedElement(platName, newRoute);
+
+        FssCentralLog.AddEntry($"Added route element {currElemName} to {platName}");
+
+    }
+
+    // --------------------------------------------------------------------------------------------
+
+    public void AddPlatformElementBeam(string platName, string currElemName)
+    {
+        // Get the Beam details: shape, range, etc.
+        FssPlatformElementBeam? beam = FssAppFactory.Instance.EventDriver.GetElement(platName, currElemName) as FssPlatformElementBeam;
+        FssGodotEntity? ent = GetEntity(platName);
+
+        FssCentralLog.AddEntry($"###################  =====> AddPlatformElementBeam: {platName} {currElemName}");
+
+
+        if ((ent != null) && (beam != null))
+        {
+
+            float range = 10;
+            FssAzElBox azElBox = new FssAzElBox() { MinAzDegs=-10, MaxAzDegs=10, MinElDegs=-10, MaxElDegs=10 };
+
+            FssGodotPlatformElementWedge newBeam = new FssGodotPlatformElementWedge();
+
+            newBeam.TxDistanceM = (float)(beam.DetectionRangeTxM);
+            newBeam.RxDistanceM = (float)(beam.DetectionRangeRxM);
+
+            newBeam.Name = currElemName;
+
+            //ent.AddElement(newBeam);
+
+            AddLinkedElement(platName, newBeam);
+
+        }
+
+
+    }
 
     // --------------------------------------------------------------------------------------------
     // MARK: Reporting
@@ -209,5 +244,6 @@ public partial class FssGodotEntityManager : Node3D
     // MARK: Update - Delete
     // --------------------------------------------------------------------------------------------
 
-
 }
+
+
