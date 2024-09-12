@@ -32,7 +32,7 @@ public partial class FssGodotPlatformElementDome : FssGodotPlatformElement
 
         FssMeshBuilder meshBuilder  = new ();
 
-        int numSegments = 32;
+        int numSegments = 24;
 
         if (true)
         {

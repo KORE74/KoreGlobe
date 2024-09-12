@@ -175,7 +175,13 @@ public struct FssAzElRangeBox
             MinRangeM = (MinRangeM < MaxRangeM) ? MinRangeM : MaxRangeM,
             MaxRangeM = (MinRangeM < MaxRangeM) ? MaxRangeM : MinRangeM
         };
+    }
 
+    // ------------------------------------------------------------------------
+
+    public override string ToString()
+    {
+        return $"Az:{MinAzDegs:F2}degs to {MaxAzDegs:F2}degs, El:{MinElDegs:F2}degs to {MaxElDegs:F2}degs, Range: {MinRangeKm:F2}Km to {MaxRangeKm:F2}Km";
     }
 
 }

@@ -34,6 +34,8 @@ public partial class FssGodotEntityManager : Node3D
         {
             TimerModelCheck = FssCoreTime.RuntimeSecs + 1f;
             MatchModelPlatforms();
+
+            Match3DModels();
             // DeleteOrphanedEntities();
         }
     }
@@ -226,6 +228,19 @@ public partial class FssGodotEntityManager : Node3D
 
         }
 
+
+    }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Reporting
+    // --------------------------------------------------------------------------------------------
+
+    private void Match3DModels()
+    {
+        // Loop through each of the platforms in the model, loop through all of the platform
+        // entities, make sure each one is represented by the right 3D model.
+
+        List<string> platNames = FssAppFactory.Instance.EventDriver.PlatformNames();
 
     }
 

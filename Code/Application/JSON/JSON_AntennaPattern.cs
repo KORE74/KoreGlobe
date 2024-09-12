@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace FssJSON
 {
-    public class RxAntenna : JSONMessage
+    public class AntennaPattern : JSONMessage
     {
         [JsonPropertyName("PlatName")]
         public string PlatName { get; set; } = "UnknownPlatName";
@@ -31,17 +32,18 @@ namespace FssJSON
         public double ElSpanDegs { get; set; } = 0.0;
 
         [JsonPropertyName("AzPointsCount")]
-        public int AzPointsCount { get; set; } = 0;
+        public int AzPointsCount { get; set; } = 1;
 
         [JsonPropertyName("ElPointsCount")]
-        public int ElPointsCount { get; set; } = 0;
+        public int ElPointsCount { get; set; } = 1;
 
         [JsonPropertyName("Pattern")]
-        public double Pattern { get; set; } = 0.0;
+        public List<double> Pattern { get; set; } = new List<double>();
 
         // -----------------------------------------------------
         // Complex accessors
 
+        [JsonIgnore]
         public FssAzElBox AzElBox
         {
             get
@@ -56,6 +58,7 @@ namespace FssJSON
             }
         }
 
+        [JsonIgnore]
         public FssPolarOffset PolarOffset
         {
             get
@@ -71,16 +74,29 @@ namespace FssJSON
 
         // -----------------------------------------------------
 
-        public static RxAntenna ParseJSON(string json)
+        public static AntennaPattern ParseJSON(string json)
         {
-            var options = new JsonSerializerOptions
+            try
             {
-                PropertyNameCaseInsensitive = true,
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                AllowTrailingCommas = true
-            };
-
-            return JsonSerializer.Deserialize<RxAntenna>(json, options) ?? new RxAntenna();
+                using (JsonDocument doc = JsonDocument.Parse(json))
+                {
+                    JsonElement jsonContent;
+                    if (doc.RootElement.TryGetProperty("AntennaPattern", out jsonContent))
+                    {
+                        AntennaPattern newMsg = JsonSerializer.Deserialize<AntennaPattern>(jsonContent.GetRawText());
+                        return newMsg;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
+
     } // end class
 } // end namespace

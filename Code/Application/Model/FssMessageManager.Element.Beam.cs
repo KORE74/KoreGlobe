@@ -74,24 +74,6 @@ public partial class FssMessageManager
     }
 
     // --------------------------------------------------------------------------------------------
-    // MARK: Elements / Antenna Patterns
-    // --------------------------------------------------------------------------------------------
-
-    private void ProcessMessage_RxAntenna(RxAntenna rxAntMsg)
-    {
-        FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_RxAntenna");
-
-        string         platName           = rxAntMsg.PlatName;
-        string         patternName        = rxAntMsg.PortName;
-        FssAzElBox     patternSize        = rxAntMsg.AzElBox;
-        FssPolarOffset patternPolarOffset = rxAntMsg.PolarOffset;
-
-        FssAppFactory.Instance.EventDriver.PlatformAddAntennaPattern(platName, patternName);
-
-        //FssAppFactory.Instance.EventDriver.PlatformSetAntennaPatternSize(platName, patternName, patternPolarOffset, patternSize);
-    }
-
-    // --------------------------------------------------------------------------------------------
     // MARK: Elements / Scan Pattern
     // --------------------------------------------------------------------------------------------
 

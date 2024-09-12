@@ -2,15 +2,32 @@
 
 [sub_resource type="StyleBoxFlat" id="StyleYellowToggle_Disabled"]
 bg_color = Color(0.3, 0.3, 0.3, 1)
+corner_radius_top_left = 3
+corner_radius_bottom_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
 
 [sub_resource type="StyleBoxFlat" id="StyleYellowToggle_Hover"]
 bg_color = Color(0.7, 0.7, 0.2, 1)
+corner_radius_top_left = 3
+corner_radius_bottom_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
 
 [sub_resource type="StyleBoxFlat" id="StyleYellowToggle_Normal"]
 bg_color = Color(0.5, 0.5, 0.2, 1)
+corner_radius_top_left = 3
+corner_radius_bottom_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
 
 [sub_resource type="StyleBoxFlat" id="StyleYellowToggle_Pressed"]
 bg_color = Color(0.8, 0.8, 0, 1)
+corner_radius_top_left = 3
+corner_radius_bottom_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+
 
 [resource]
 Button/colors/font_pressed_color = Color(1, 1, 1, 1)

@@ -48,7 +48,7 @@ public struct FssLLPoint
 
     public override string ToString()
     {
-        return string.Format("({0:F3}, {1:F3})", LatDegs, LonDegs);
+        return string.Format($"({LatDegs:F3}, {LonDegs:F3})");
     }
 
 }

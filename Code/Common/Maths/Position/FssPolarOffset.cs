@@ -114,7 +114,7 @@ public struct FssPolarOffset
 
     public override string ToString()
     {
-        return string.Format("(AzDegs:{0:F2}, ElDegs:{1:F2}, RangeM:{2:F2})", AzDegs, ElDegs, RangeM);
+        return string.Format($"(AzDegs:{AzDegs:F2}, ElDegs:{ElDegs:F2}, RangeM:{RangeM:F2})");
     }
 
 }

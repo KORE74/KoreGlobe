@@ -1,26 +1,31 @@
 [gd_resource type="Theme" load_steps=6 format=3 uid="uid://f7cusn8cepiu"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qtup1"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_focus"]
 bg_color = Color(0.2, 0.6, 0.3, 1)
+corner_radius_bottom_left  = 3
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yle5i"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hover"]
 bg_color = Color(0.2, 0.6, 0.3, 1)
+corner_radius_bottom_left  = 3
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_62i4b"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hoverpressed"]
 bg_color = Color(0.2, 0.6, 0.3, 1)
+corner_radius_bottom_left  = 3
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_apjxs"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_normal"]
 bg_color = Color(0.2, 0.6, 0.3, 1)
+corner_radius_bottom_left  = 3
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rimfn"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pressed"]
 bg_color = Color(0.2, 0.6, 0.3, 1)
+corner_radius_bottom_left  = 3
 
 [resource]
 Button/colors/font_pressed_color = Color(1, 1, 1, 1)
 Button/icons/icon = null
-Button/styles/focus = SubResource("StyleBoxFlat_qtup1")
-Button/styles/hover = SubResource("StyleBoxFlat_yle5i")
-Button/styles/hover_pressed = SubResource("StyleBoxFlat_62i4b")
-Button/styles/normal = SubResource("StyleBoxFlat_apjxs")
-Button/styles/pressed = SubResource("StyleBoxFlat_rimfn")
+Button/styles/focus = SubResource("StyleBoxFlat_focus")
+Button/styles/hover = SubResource("StyleBoxFlat_hover")
+Button/styles/hover_pressed = SubResource("StyleBoxFlat_hoverpressed")
+Button/styles/normal = SubResource("StyleBoxFlat_normal")
+Button/styles/pressed = SubResource("StyleBoxFlat_pressed")
 Button/styles/pressed_mirrored = null

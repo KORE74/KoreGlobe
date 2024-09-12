@@ -29,7 +29,6 @@ public static class FssPosConsts
     public const float  EarthRadiusInnerKm = (float)(EarthRadiusKm - (TileEdgeDepthKm + 1));
     public const float  EarthRadiusInnerM  = (float)(EarthRadiusM - TileEdgeDepthM);
 
-
     // WGS84 Values
     public const double EarthRadiusPolarM   = 6356752;
     public const double EarthRadiusEquatorM = 6378137;

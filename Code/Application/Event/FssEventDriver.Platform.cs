@@ -75,6 +75,32 @@ public partial class FssEventDriver
     }
 
     // ---------------------------------------------------------------------------------------------
+    // #MARK: Platform Type
+    // ---------------------------------------------------------------------------------------------
+
+    public void SetPlatformType(string platName, string platType, string platCategory)
+    {
+        // Get the platform
+        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
+
+        if (platform == null)
+        {
+            FssCentralLog.AddEntry($"EC0-00030: Platform {platName} not found.");
+            return;
+        }
+
+        // Set the platform's type
+        platform.Type     = platType;
+        platform.Category = platCategory;
+    }
+
+    public string? PlatformType(string platName) =>
+        FssAppFactory.Instance.PlatformManager.PlatForName(platName)?.Type;
+
+    public string? PlatformCategory(string platName) =>
+        FssAppFactory.Instance.PlatformManager.PlatForName(platName)?.Category;
+
+    // ---------------------------------------------------------------------------------------------
     // #MARK: Platform Position
     // ---------------------------------------------------------------------------------------------
 
@@ -131,28 +157,6 @@ public partial class FssEventDriver
 
         return platform.Kinetics.CurrPosition;
     }
-
-    // ---------------------------------------------------------------------------------------------
-    // #MARK: Platform Type
-    // ---------------------------------------------------------------------------------------------
-
-    public void SetPlatformType(string platName, string platType)
-    {
-        // Get the platform
-        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
-
-        if (platform == null)
-        {
-            FssCentralLog.AddEntry($"EC0-0007: Platform {platName} not found.");
-            return;
-        }
-
-        // Set the platform's type
-        platform.Type = platType;
-    }
-
-    public string? PlatformType(string platName) =>
-        FssAppFactory.Instance.PlatformManager.PlatForName(platName)?.Type;
 
     // ---------------------------------------------------------------------------------------------
     // #MARK: Platform Attitude

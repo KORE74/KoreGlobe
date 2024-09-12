@@ -23,7 +23,7 @@ public struct FssCourseDelta
     public override string ToString()
     {
         if (IsZero()) return "Zero Delta";
-        
-        return $"SpeedChangeMpMps: {SpeedChangeMpMps}, HeadingChangeClockwiseDegsSec: {HeadingChangeClockwiseDegsSec}";
+
+        return $"SpeedChangeMpMps: {SpeedChangeMpMps:F3}, HeadingChangeClockwiseDegsSec: {HeadingChangeClockwiseDegsSec:F3}";
     }
 }

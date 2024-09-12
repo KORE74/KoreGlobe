@@ -24,4 +24,20 @@ public partial class FssMessageManager
         FssAppFactory.Instance.EventDriver.PlatformSetRoute(platName, points);
     }
 
+    // --------------------------------------------------------------------------------------------
+    // MARK: Elements / Antenna Patterns
+    // --------------------------------------------------------------------------------------------
+
+    private void ProcessMessage_AntennaPattern(AntennaPattern antPatternMsg)
+    {
+        FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_AntennaPattern: PlatName:{antPatternMsg.PlatName}");
+
+        string platName = antPatternMsg.PlatName;
+        string portName = antPatternMsg.PortName;
+
+        FssAppFactory.Instance.EventDriver.PlatformSetAntennaPatternMetadata(platName, portName, antPatternMsg.AzElBox);
+        FssAppFactory.Instance.EventDriver.PlatformSetAntennaPatternData(platName, portName, antPatternMsg.AzPointsCount, antPatternMsg.ElPointsCount, antPatternMsg.Pattern);
+    }
+
+
 }

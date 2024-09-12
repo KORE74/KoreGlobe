@@ -35,4 +35,11 @@ public struct FssAttitudeDelta
     {
         get { return new FssAttitudeDelta { RollRateClockwiseRadsPerSec = 0.0, PitchRateUpRadsPerSec = 0.0, YawRateClockwiseRadsPerSec = 0.0 }; }
     }
+
+    public override string ToString()
+    {
+        return string.Format(
+            $"Roll(Clockwise):{RollRateClockwiseDegsPerSec:F2} deg/s, Pitch(Up):{PitchRateUpDegsPerSec:F2}deg/s, Yaw(Clockwise):{YawRateClockwiseDegsPerSec:F2}deg/s");
+    }
 }
+

@@ -41,7 +41,7 @@ public static class FssXYZPointOperations
             cosAngle = -1.0;
 
         return Math.Acos(cosAngle);
-    }    
+    }
 
     // Get the angle between lines origin-A and origin-B
     public static double AngleBetweenRads(FssXYZPoint origin, FssXYZPoint a, FssXYZPoint b)

@@ -62,4 +62,12 @@ public class FssPlatformElementAntennaPatterns : FssPlatformElement
     {
         AntennaPatterns.Clear();
     }
+
+
+
+    public override string ToString()
+    {
+        return $"AntennaPatterns: {AntennaPatterns.Count}";
+    }
+
 }

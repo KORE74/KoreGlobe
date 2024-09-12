@@ -49,7 +49,7 @@ public struct FssAzElBox
     public double MidAzRads { get { return MinAzRads + HalfArcAzRads; } }
     public double MidAzDegs { get { return MinAzDegs + HalfArcAzDegs; } }
     public double MidElRads { get { return MinElRads + HalfArcElRads; } }
-    public double MidElDegs { get { return MinElDegs + HalfArcElDegs;  } }
+    public double MidElDegs { get { return MinElDegs + HalfArcElDegs; } }
 
     // ------------------------------------------------------------------------
 
@@ -62,8 +62,8 @@ public struct FssAzElBox
 
     public bool IsOffsetInBox(FssPolarOffset offset)
     {
-        bool inAz    = (offset.AzRads >= MinAzRads && offset.AzRads <= MaxAzRads);
-        bool inEl    = (offset.ElRads >= MinElRads && offset.ElRads <= MaxElRads);
+        bool inAz = (offset.AzRads >= MinAzRads && offset.AzRads <= MaxAzRads);
+        bool inEl = (offset.ElRads >= MinElRads && offset.ElRads <= MaxElRads);
         return (inAz && inEl);
     }
 
@@ -94,6 +94,19 @@ public struct FssAzElBox
         };
     }
 
+    // ------------------------------------------------------------------------
+
+    public FssAzElBox Inflate(double azInflateDegs, double elInflateDegs)
+    {
+        return new FssAzElBox
+        {
+            MinAzDegs = MinAzDegs - azInflateDegs,
+            MaxAzDegs = MaxAzDegs + azInflateDegs,
+            MinElDegs = MinElDegs - elInflateDegs,
+            MaxElDegs = MaxElDegs + elInflateDegs
+        };
+    }
+
     public FssAzElBox ExpandBoxByOffset(FssPolarOffset offset)
     {
         return new FssAzElBox
@@ -115,6 +128,8 @@ public struct FssAzElBox
             MaxElRads = Math.Max(MaxElRads, box.MaxElRads)
         };
     }
+
+    // ------------------------------------------------------------------------
 
     public FssAzElBox CentreBoxOnOffset(FssPolarOffset offset)
     {
@@ -138,16 +153,7 @@ public struct FssAzElBox
         };
     }
 
-    public FssAzElBox Inflate(double azInflateDegs, double elInflateDegs)
-    {
-        return new FssAzElBox
-        {
-            MinAzDegs = MinAzDegs - azInflateDegs,
-            MaxAzDegs = MaxAzDegs + azInflateDegs,
-            MinElDegs = MinElDegs - elInflateDegs,
-            MaxElDegs = MaxElDegs + elInflateDegs
-        };
-    }
+    // ------------------------------------------------------------------------
 
     public FssAzElBox ConsistencyCheck()
     {
@@ -159,6 +165,8 @@ public struct FssAzElBox
             MaxElRads = (MinElRads < MaxElRads) ? MaxElRads : MinElRads
         };
     }
+
+    // ------------------------------------------------------------------------
 
     public override string ToString()
     {

@@ -91,7 +91,7 @@ public partial class FssMessageManager
         else if (msg is BeamDelete beamDelMsg)       { ProcessMessage_BeamDelete(beamDelMsg); }
         else if (msg is BeamEnable beamEnMsg)        { ProcessMessage_BeamEnable(beamEnMsg); }
         else if (msg is BeamDisable beamDisMsg)      { ProcessMessage_BeamDisable(beamDisMsg); }
-        else if (msg is RxAntenna rxAntMsg)          { ProcessMessage_RxAntenna(rxAntMsg); }
+        else if (msg is AntennaPattern antMsg)       { ProcessMessage_AntennaPattern(antMsg); }
         else if (msg is ScanPattern scanPatMsg)      { ProcessMessage_ScanPattern(scanPatMsg); }
 
         else if (msg is PlatformElement_AddCircularScan platElemAddCircScanMsg) { ProcessMessage_PlatformElement_AddCircularScan(platElemAddCircScanMsg); }

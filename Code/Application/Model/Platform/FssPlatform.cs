@@ -6,8 +6,9 @@ using System.Text;
 
 public class FssPlatform
 {
-    public string Name { get; set; } = "Unknown-Name";
-    public string Type { get; set; } = "Unknown-Type";
+    public string Name     { get; set; } = "Unknown-Name";
+    public string Type     { get; set; } = "Unknown-Type";
+    public string Category { get; set; } = "Unknown-Category"; // Such as airbourne, ground, etc. Allows us to select a correct icon, or default 3D model.
 
     // Kinetics object defines the initial and current position of the platform. Has to exist in all cases.
     public FssPlatformKinetics Kinetics { get; set; } = new FssPlatformKinetics();
@@ -54,12 +55,15 @@ public class FssPlatform
         ElementsList.Remove(element);
     }
 
+    // Loops in reverse to avoid issues with removing elements from a list while iterating over it
     public void DeleteElement(string name)
     {
-        foreach (FssPlatformElement element in ElementsList)
+        for (int i = ElementsList.Count - 1; i >= 0; i--)
         {
-            if (element.Name == name)
-                ElementsList.Remove(element);
+            if (ElementsList[i].Name == name)
+            {
+                ElementsList.RemoveAt(i);
+            }
         }
     }
 

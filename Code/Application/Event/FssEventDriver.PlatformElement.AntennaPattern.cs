@@ -12,15 +12,36 @@ using FssNetworking;
 public partial class FssEventDriver
 {
     // ---------------------------------------------------------------------------------------------
-    // MARK: Add Beam
+    // MARK: Add Antenna Pattern
     // ---------------------------------------------------------------------------------------------
 
     // Beams are the basic unit of a scan setting up an angular port, scanpatterns are added to them
 
-    public void PlatformAddAntennaPattern(string platName, string elemName)
+    public void PlatformSetAntennaPatternMetadata(string platName, string elemName, FssAzElBox azElBox)
+    {
+        if (GetElementAntennaPattern(platName, elemName) != null)
+        {
+            FssCentralLog.AddEntry($"EC0-0011: PlatformSetAntennaPatternMetadata: Element {elemName} already exists.");
+        }
+
+        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
+
+        if (platform == null)
+        {
+            FssCentralLog.AddEntry($"EC0-0011: PlatformSetAntennaPatternMetadata: Platform {platName} not found.");
+            return;
+        }
+
+        FssPlatformElementAntennaPatterns newElem = new FssPlatformElementAntennaPatterns() { Name = elemName, AzElBox = azElBox };
+
+        platform.AddElement(newElem);
+    }
+
+    public void PlatformSetAntennaPatternData(string platName, string elemName, int azPointsCount, int elPointsCount, List<double> pattern)
     {
 
     }
+
 
     // ---------------------------------------------------------------------------------------------
     // MARK: Set Beam Components
