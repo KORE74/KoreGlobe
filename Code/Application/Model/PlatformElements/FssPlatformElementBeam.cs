@@ -16,8 +16,8 @@ public class FssPlatformElementBeam : FssPlatformElement
     public bool Enabled { get; set; } = false;
 
     // Port (mounting point) angles
-    public FssAttitude PortAttitude { set; get; } = FssAttitude.Zero;
-    public FssPolarOffset TrackOffset { set; get; } = FssPolarOffset.Zero;
+    public FssAttitude    PortAttitude { set; get; } = FssAttitude.Zero;
+    public FssPolarOffset TrackOffset  { set; get; } = FssPolarOffset.Zero;
 
     // Scan area angle
     public FssAzElBox AzElBox { set; get; } = FssAzElBox.Zero;
@@ -31,12 +31,11 @@ public class FssPlatformElementBeam : FssPlatformElement
     public ScanPatternShape ScanShape { set; get; } = ScanPatternShape.Undefined;
 
     // Targetted - is the scan aimed at a target in teh viewer
-    public bool Targeted { get; set; } = false;
+    public bool   Targeted       { get; set; } = false;
     public string TargetPlatName { get; set; } = "DefaultTarget";
 
     // Lookup to a named antenna pattern
     public string AntennaPattern { get; set; } = "DefaultPattern";
-
 
     public override string Report()
     {

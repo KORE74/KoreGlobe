@@ -32,7 +32,7 @@ public partial class FssEventDriver
             return;
         }
 
-        FssPlatformElementAntennaPatterns newElem = new FssPlatformElementAntennaPatterns() { Name = elemName, AzElBox = azElBox };
+        FssPlatformElementAntennaPatterns newElem = new FssPlatformElementAntennaPatterns() { Name = elemName };
 
         platform.AddElement(newElem);
     }
@@ -41,7 +41,6 @@ public partial class FssEventDriver
     {
 
     }
-
 
     // ---------------------------------------------------------------------------------------------
     // MARK: Set Beam Components

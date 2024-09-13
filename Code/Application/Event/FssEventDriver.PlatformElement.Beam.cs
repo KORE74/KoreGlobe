@@ -19,6 +19,8 @@ public partial class FssEventDriver
 
     public void PlatformAddBeam(string platName, string elemName)
     {
+        FssCentralLog.AddEntry($"PlatformAddBeam: {platName} / {elemName}");
+
         FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
 
         if (platform == null)
