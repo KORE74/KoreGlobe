@@ -57,6 +57,27 @@ public class FssFloat2DArray
         Populated = false;
     }
 
+    public FssFloat2DArray(int inSizeX, int inSizeY, List<double> inList)
+    {
+        Width     = inSizeX;
+        Height    = inSizeY;
+        Data      = new float[Width, Height];
+        Populated = false;
+
+        if (inList.Count != Width * Height)
+            throw new ArgumentException("List size must match the size of the array.", nameof(inList));
+
+        int index = 0;
+        for (int y = 0; y < Height; y++)
+        {
+            for (int x = 0; x < Width; x++)
+            {
+                Data[x, y] = (float)inList[index];
+                index++;
+            }
+        }
+    }
+
     // --------------------------------------------------------------------------------------------
     // Attributes
     // --------------------------------------------------------------------------------------------

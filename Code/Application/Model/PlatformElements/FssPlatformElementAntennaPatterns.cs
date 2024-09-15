@@ -1,13 +1,19 @@
 using System;
+using System.Text;
 using System.Collections.Generic;
 
 #nullable enable
 
-public class FssAntennaPatterns : FssPlatformElement
+public class FssAntennaPattern
 {
     public string Name { get; set; } = "";
     public FssFloat2DArray SphereMagPattern = new FssFloat2DArray();
     public FssPolarOffset  PatternOffset    = new FssPolarOffset();
+
+    public override string ToString()
+    {
+        return $"AntennaPattern:{Name} // Offset:{PatternOffset} // SphereMagPattern:{SphereMagPattern}";
+    }
 }
 
 public class FssPlatformElementAntennaPatterns : FssPlatformElement
@@ -15,25 +21,23 @@ public class FssPlatformElementAntennaPatterns : FssPlatformElement
     public string Type {set; get; } = "AntennaPatterns";
 
     // List of receivers
-    public List<FssAntennaPatterns> AntennaPatterns = new List<FssAntennaPatterns>();
+    public List<FssAntennaPattern> AntennaPatterns = new List<FssAntennaPattern>();
 
     // --------------------------------------------------------------------------------------------
+    // #MARK Named pattern mamangement
+    // --------------------------------------------------------------------------------------------
 
-    public List<string> GetAntennaPatternsNames()
+    public List<string> PatternNames()
     {
         List<string> names = new();
-        foreach (FssAntennaPatterns pattern in AntennaPatterns)
+        foreach (FssAntennaPattern pattern in AntennaPatterns)
             names.Add(pattern.Name);
         return names;
     }
 
-    // --------------------------------------------------------------------------------------------
-    // #MARK Basic pattern mamangement
-    // --------------------------------------------------------------------------------------------
-
-    public FssAntennaPatterns? GetAntennaPatterns(string name)
+    public FssAntennaPattern? PatternForName(string name)
     {
-        foreach (FssAntennaPatterns pattern in AntennaPatterns)
+        foreach (FssAntennaPattern pattern in AntennaPatterns)
         {
             if (pattern.Name == name)
                 return pattern;
@@ -41,33 +45,32 @@ public class FssPlatformElementAntennaPatterns : FssPlatformElement
         return null;
     }
 
-    public void AddAntennaPatterns(FssAntennaPatterns pattern)
-    {
-        AntennaPatterns.Add(pattern);
-    }
-
-    public void RemoveAntennaPatterns(FssAntennaPatterns pattern)
-    {
-        AntennaPatterns.Remove(pattern);
-    }
-
     public void RemoveAntennaPatterns(string name)
     {
-        FssAntennaPatterns? pattern = GetAntennaPatterns(name);
+        FssAntennaPattern? pattern = PatternForName(name);
         if (pattern != null)
             AntennaPatterns.Remove(pattern);
     }
 
-    public void ClearAntennaPatterns()
-    {
-        AntennaPatterns.Clear();
-    }
+    // --------------------------------------------------------------------------------------------
+    // #MARK Strightforward list management
+    // --------------------------------------------------------------------------------------------
 
+    public void AddAntennaPatterns(FssAntennaPattern pattern) => AntennaPatterns.Add(pattern);
+    public void RemoveAntennaPatterns(FssAntennaPattern pattern) => AntennaPatterns.Remove(pattern);
+    public void ClearAntennaPatterns() => AntennaPatterns.Clear();
 
+    // --------------------------------------------------------------------------------------------
 
     public override string ToString()
     {
-        return $"AntennaPatterns: {AntennaPatterns.Count}";
-    }
+        StringBuilder sb = new();
 
+        sb.Append($"Type: {Type}\n");
+        sb.Append($"AntennaPatterns: {AntennaPatterns.Count}\n");
+        foreach (FssAntennaPattern pattern in AntennaPatterns)
+            sb.Append($"{pattern}\n");
+
+        return sb.ToString();
+    }
 }

@@ -39,7 +39,16 @@ public partial class FssEventDriver
 
     public void PlatformSetAntennaPatternData(string platName, string elemName, int azPointsCount, int elPointsCount, List<double> pattern)
     {
+        FssPlatformElementAntennaPatterns? elem = GetElementAntennaPattern(platName, elemName);
 
+        if (elem == null)
+        {
+            FssCentralLog.AddEntry($"EC0-0011: PlatformSetAntennaPatternData: Element {elemName} not found.");
+            return;
+        }
+
+        // Assign the new data to the element
+        elem.SphereMagPattern = new FssFloat2DArray(azPointsCount, elPointsCount, pattern);
     }
 
     // ---------------------------------------------------------------------------------------------

@@ -165,8 +165,10 @@ public partial class FssGodotEntityManager : Node3D
             FssPlatformElement? element = FssAppFactory.Instance.EventDriver.GetElement(platName, currElemName);
             if (element != null)
             {
-                if (element is FssPlatformElementRoute) AddPlatformElementRoute(platName, currElemName);
-                if (element is FssPlatformElementBeam)  AddPlatformElementBeam(platName, currElemName);
+                if (element is FssPlatformElementRoute)           AddPlatformElementRoute(platName, currElemName);
+                if (element is FssPlatformElementBeam)            AddPlatformElementBeam(platName, currElemName);
+                //if (element is FssPlatformElementDome)            AddPlatformElementDome(platName, currElemName);
+                if (element is FssPlatformElementAntennaPatterns) AddPlatformElementAntennaPatterns(platName, currElemName);
             }
         }
     }
@@ -225,10 +227,44 @@ public partial class FssGodotEntityManager : Node3D
             FssGodotPlatformElementDome newDome = new FssGodotPlatformElementDome();
             newDome.RxDistanceM = 50000f;
             AddLinkedElement(platName, newDome);
-
         }
 
+    }
 
+    // --------------------------------------------------------------------------------------------
+
+    public void AddPlatformElementAntennaPatterns(string platName, string currElemName)
+    {
+        FssCentralLog.AddEntry($"AddPlatformElementAntennaPatterns: {platName} {currElemName}");
+
+        // Get the Antenna Pattern details
+        FssPlatformElementAntennaPatterns? antPat = FssAppFactory.Instance.EventDriver.GetElement(platName, currElemName) as FssPlatformElementAntennaPatterns;
+
+        // Get the godot platform we'll attach the element to
+        FssGodotEntity? ent = GetEntity(platName);
+
+        if ((ent != null) && (antPat != null))
+        {
+            FssGodotPlatformElementAntennaPatterns newAntPat = new FssGodotPlatformElementAntennaPatterns();
+            newAntPat.Name = currElemName;
+
+            // Add the element to the entity and scene tree
+            AddLinkedElement(platName, newAntPat);
+
+            // transfer the named pattern into the godot element - creating the mesh
+            List<string> patternNames = antPat.PatternNames();
+
+            FssCentralLog.AddEntry($"======> AddPlatformElementAntennaPatterns: {platName} {currElemName} Patterns: {string.Join(", ", patternNames)}");
+
+            foreach (string currPatternName in patternNames)
+            {
+                FssAntennaPattern? pattern = antPat.PatternForName(currPatternName);
+                if (pattern != null)
+                {
+                    newAntPat.AddPattern(pattern);
+                }
+            }
+        }
     }
 
     // --------------------------------------------------------------------------------------------
