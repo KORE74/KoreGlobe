@@ -167,8 +167,10 @@ public partial class FssGodotEntityManager : Node3D
             {
                 if (element is FssPlatformElementRoute)           AddPlatformElementRoute(platName, currElemName);
                 if (element is FssPlatformElementBeam)            AddPlatformElementBeam(platName, currElemName);
-                //if (element is FssPlatformElementDome)            AddPlatformElementDome(platName, currElemName);
                 if (element is FssPlatformElementAntennaPatterns) AddPlatformElementAntennaPatterns(platName, currElemName);
+
+                // Contrail
+                // if (element is FssPlatformElementDome)            AddPlatformElementDome(platName, currElemName);
             }
         }
     }
@@ -199,12 +201,10 @@ public partial class FssGodotEntityManager : Node3D
         FssPlatformElementBeam? beam = FssAppFactory.Instance.EventDriver.GetElement(platName, currElemName) as FssPlatformElementBeam;
         FssGodotEntity? ent = GetEntity(platName);
 
-        FssCentralLog.AddEntry($"###################  =====> AddPlatformElementBeam: {platName} {currElemName}");
-
+        FssCentralLog.AddEntry($"################### =====> AddPlatformElementBeam: {platName} {currElemName}");
 
         if ((ent != null) && (beam != null))
         {
-
             float range = 10;
             FssAzElBox azElBox = new FssAzElBox() { MinAzDegs=-10, MaxAzDegs=10, MinElDegs=-10, MaxElDegs=10 };
 
@@ -258,7 +258,7 @@ public partial class FssGodotEntityManager : Node3D
 
             foreach (string currPatternName in patternNames)
             {
-                FssAntennaPattern? pattern = antPat.PatternForName(currPatternName);
+                FssAntennaPattern? pattern = antPat.PatternForPortName(currPatternName);
                 if (pattern != null)
                 {
                     newAntPat.AddPattern(pattern);

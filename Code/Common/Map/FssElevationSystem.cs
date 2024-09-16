@@ -21,7 +21,7 @@ public class FssElevationSystem
 
     public FssElevationTile CreateTile(FssLLBox llBox, int latRes, int lonRes)
     {
-        FssFloat2DArray data = new FssFloat2DArray(latRes, lonRes);
+        FssFloat2DArray data = new FssFloat2DArray(lonRes, latRes);
 
         double startLatDegs = llBox.MinLatDegs;
         double startLonDegs = llBox.MinLonDegs;
@@ -49,7 +49,9 @@ public class FssElevationSystem
     public float? ElevationAtPos(FssLLPoint pos)
     {
         // Loop through the TileList, grabbing points from the highest resolution tile that contains the position.
-        // Loop aross the points in a tile, populating the requested array.
+        // Loop across the points in a tile, populating the requested array.
+
+        if (TileList.Count == 0) return null;
 
         foreach (FssElevationTile tile in TileList)
         {
@@ -74,6 +76,13 @@ public class FssElevationSystem
     // MARK: Load / Save Arc ASCII Files
     // --------------------------------------------------------------------------------------------
 
+    public void LoadArcASCIIFileToTile(string filename, FssLLBox llBox)
+    {
+        FssElevationTile? newTile = ArcASCIIToTile(filename, llBox);
+        if (newTile != null)
+            TileList.Add(newTile);
+    }
+
     public static FssElevationTile? ArcASCIIToTile(string filename, FssLLBox llBox)
     {
         // Check the file exists
@@ -87,6 +96,24 @@ public class FssElevationSystem
 
         return newTile;
     }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Report
+    // --------------------------------------------------------------------------------------------
+
+    public string Report()
+    {
+        string report = "Elevation System Report\n";
+
+        foreach (FssElevationTile tile in TileList)
+        {
+            report += tile.Report() + "\n";
+        }
+
+        return report;
+    }
+
+
 
     // // --------------------------------------------------------------------------------------------
     // // Constants

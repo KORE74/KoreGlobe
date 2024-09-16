@@ -85,7 +85,7 @@ public partial class FssEventDriver
 
         if (platform == null)
         {
-            FssCentralLog.AddEntry($"EC0-00030: Platform {platName} not found.");
+            FssCentralLog.AddEntry($"EC0-0031: Platform {platName} not found.");
             return;
         }
 

@@ -39,7 +39,7 @@ public partial class FssGodotPlatformElementAntennaPatterns : FssGodotPlatformEl
 
     public void AddPattern(FssAntennaPattern pattern)
     {
-        FssCentralLog.AddEntry($"======> FssGodotPlatformElementAntennaPatterns: AddPattern: {pattern.Name}");
+        FssCentralLog.AddEntry($"======> FssGodotPlatformElementAntennaPatterns: AddPattern: {pattern.PortName}");
 
         //AntennaPattern = pattern;
 
@@ -47,7 +47,7 @@ public partial class FssGodotPlatformElementAntennaPatterns : FssGodotPlatformEl
         //Node3D childNode = new Node3D() { Name = pattern.Name };
 
         // Create the mesh for the pattern
-        Node3D? patternNode = CreateSinglePatternMesh(pattern.Name, pattern.SphereMagPattern, pattern.PatternOffset);
+        Node3D? patternNode = CreateSinglePatternMesh(pattern.PortName, pattern.SphereMagPattern, pattern.PatternOffset);
 
         AddChild(patternNode);
 

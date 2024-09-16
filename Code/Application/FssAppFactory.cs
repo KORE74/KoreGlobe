@@ -22,6 +22,7 @@ public class FssAppFactory
     public FssSimTime         SimClock         { get; private set; }
     public FssModelRun        ModelRun         { get; private set; }
     public FssMessageManager  MessageManager   { get; private set; }
+    public FssElevationSystem EleSystem        { get; private set; }
 
     // --------------------------------------------------------------------------------------------
 
@@ -82,6 +83,8 @@ public class FssAppFactory
         SimClock         = new FssSimTime();
         ModelRun         = new FssModelRun();
         MessageManager   = new FssMessageManager();
+        EleSystem        = new FssElevationSystem();
+
 
         // Link the objects
         //ConsoleInterface.EventDriver = EventDriver;

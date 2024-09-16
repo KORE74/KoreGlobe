@@ -17,44 +17,59 @@ public partial class FssEventDriver
 
     // Beams are the basic unit of a scan setting up an angular port, scanpatterns are added to them
 
+    // The elem name passed in here is the portname from the message, we ue that to create a new antenna pattern element within the wider
+    // AntennaPattern*s* element.
+
+    private static string constElemName = "ElemAntennaPatterns";
+
     public void PlatformSetAntennaPatternMetadata(string platName, string elemName, FssAzElBox azElBox)
     {
-        if (GetElementAntennaPattern(platName, elemName) != null)
+        FssPlatformElementAntennaPatterns? elem = GetElementAntennaPattern(platName, constElemName);
+        if (elem != null)
         {
-            FssCentralLog.AddEntry($"EC0-0011: PlatformSetAntennaPatternMetadata: Element {elemName} already exists.");
+            FssCentralLog.AddEntry($"EC0-0030: PlatformSetAntennaPatternMetadata: Element {elemName} already exists.");
         }
 
         FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
 
         if (platform == null)
         {
-            FssCentralLog.AddEntry($"EC0-0011: PlatformSetAntennaPatternMetadata: Platform {platName} not found.");
+            FssCentralLog.AddEntry($"EC0-0029: PlatformSetAntennaPatternMetadata: Platform {platName} not found.");
             return;
         }
 
-        FssPlatformElementAntennaPatterns newElem = new FssPlatformElementAntennaPatterns() { Name = elemName };
-
+        // Add the element to the platform
+        FssPlatformElementAntennaPatterns newElem = new FssPlatformElementAntennaPatterns() { Name = constElemName };
         platform.AddElement(newElem);
+
+        // Add the pattern to the element
+        FssAntennaPattern newPattern = new FssAntennaPattern() { PortName = elemName };
+        newElem.AddAntennaPattern(newPattern);
     }
+
+    // ---------------------------------------------------------------------------------------------
 
     public void PlatformSetAntennaPatternData(string platName, string elemName, int azPointsCount, int elPointsCount, List<double> pattern)
     {
-        FssPlatformElementAntennaPatterns? elem = GetElementAntennaPattern(platName, elemName);
-
+        // Access the AP element
+        FssPlatformElementAntennaPatterns? elem = GetElementAntennaPattern(platName, constElemName);
         if (elem == null)
         {
-            FssCentralLog.AddEntry($"EC0-0011: PlatformSetAntennaPatternData: Element {elemName} not found.");
+            FssCentralLog.AddEntry($"EC0-0027: PlatformSetAntennaPatternData: Element {elemName} not found.");
             return;
         }
 
-        // Assign the new data to the element
-        elem.SphereMagPattern = new FssFloat2DArray(azPointsCount, elPointsCount, pattern);
+        // Assign port on the element
+        FssAntennaPattern? ap = elem.PatternForPortName(elemName);
+        if (ap == null)
+        {
+            FssCentralLog.AddEntry($"EC0-0028: PlatformSetAntennaPatternData: Pattern {elemName} not found.");
+            return;
+        }
+
+        // Set further values on the pattern
+        ap.SphereMagPattern = new FssFloat2DArray(azPointsCount, elPointsCount, pattern);
     }
-
-    // ---------------------------------------------------------------------------------------------
-    // MARK: Set Beam Components
-    // ---------------------------------------------------------------------------------------------
-
 
     // ---------------------------------------------------------------------------------------------
     // MARK: Access AP Element

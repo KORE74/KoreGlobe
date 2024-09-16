@@ -14,6 +14,40 @@ public static class FssElevationTileIO
 
     public const string ElevationTileExtension = ".fssElevTile";
 
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Text File Read Write
+    // --------------------------------------------------------------------------------------------
+
+    // FssElevationTileIO.WriteToTextFile
+
+    public static void WriteToTextFile(FssElevationTile tile, string filePath)
+    {
+        try
+        {
+            string content = WriteToString(tile);
+            File.WriteAllText(filePath, content);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error writing to text file: {ex.Message}");
+        }
+    }
+
+    public static FssElevationTile? ReadFromTextFile(string filePath)
+    {
+        try
+        {
+            string content = File.ReadAllText(filePath);
+            return ReadFromString(content);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error reading from text file: {ex.Message}");
+            return null;
+        }
+    }
+
     // --------------------------------------------------------------------------------------------
     // MARK: Text Read Write
     // --------------------------------------------------------------------------------------------

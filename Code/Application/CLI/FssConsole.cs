@@ -116,6 +116,9 @@ public class FssConsole
 
         // MapServer
         commandHandlers.Add(new FssCommandElePrep());
+        commandHandlers.Add(new FssCommandEleLoadArc());
+        commandHandlers.Add(new FssCommandEleSaveTile());
+
 
         // commandHandlers.Add("help", CmdHelp);
         // commandHandlers.Add("version", CmdVersion);
@@ -156,7 +159,10 @@ public class FssConsole
         {
             // Get the string a space-delimit the parts
             string inputLine = InputQueue.RetrieveString();
-            var inputParts = inputLine.Trim().Split(' ').ToList();
+            //var inputParts = inputLine.Trim().Split(' ').ToList();
+
+            // Split the input line into parts, removing any empty entries
+            var inputParts = inputLine.Trim().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList();
 
             // Check for internal commands - true if executed.
             if (RunInternalCommand(inputParts))

@@ -1,0 +1,8 @@
+
+ele loadarc c:/util/_temp/ele_global_50km_3.asc -180 90 180 -90
+
+ele savetile c:/util/_temp/ele_global_1deg.eletile   -180.0 90.0 180.0 -90.0     360 180
+
+
+
+

@@ -48,6 +48,13 @@ public class FssElevationTile
         return ElevationData.InterpolatedValue((float)fracLon, (float)fracLat);
     }
 
+    // --------------------------------------------------------------------------------------------
+    // MARK: Report
+    // --------------------------------------------------------------------------------------------
 
+    public string Report()
+    {
+        return $"LLBox: {LLBox} / Res: {TileRes()} / GridSize:{ElevationData.Width}x{ElevationData.Height}";
+    }
 
 }

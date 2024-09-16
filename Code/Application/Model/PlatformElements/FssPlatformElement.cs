@@ -4,10 +4,10 @@ using System;
 
 public class FssPlatformElement
 {
-    public string Name {set; get; } = "Unnamed";
+    public string Name { set; get; } = "Unnamed";
 
     // Overridable type for the element
-    public virtual string Type {set; get; } = "Unknown";
+    public virtual string Type { set; get; } = "Unknown";
 
     // Do we add the routes here?
 
