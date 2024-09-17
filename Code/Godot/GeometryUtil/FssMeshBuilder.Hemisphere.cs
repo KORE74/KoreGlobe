@@ -9,8 +9,8 @@ public partial class FssMeshBuilder
 {
     public void AddHemisphere(Vector3 center, float radius, int numSegments)
     {
-        int vertSegments = (int)Mathf.Round((float)numSegments / 4f);
-        float vertAngInc = 90f / (float)vertSegments;
+        int vertSegments  = (int)Mathf.Round((float)numSegments / 4f);
+        float vertAngInc  =  90f / (float)vertSegments;
         float horizAngInc = 360f / (float)numSegments;
 
         // Hold the indices of the MeshData.Vertices for this hemisphere

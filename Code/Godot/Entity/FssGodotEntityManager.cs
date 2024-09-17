@@ -251,6 +251,11 @@ public partial class FssGodotEntityManager : Node3D
             // Add the element to the entity and scene tree
             AddLinkedElement(platName, newAntPat);
 
+            TestMalleableSphere x = new TestMalleableSphere();
+            //FssGodotEntity? ent = GetEntity(entityName);
+            ent.AddChild(x);
+
+
             // transfer the named pattern into the godot element - creating the mesh
             List<string> patternNames = antPat.PatternNames();
 

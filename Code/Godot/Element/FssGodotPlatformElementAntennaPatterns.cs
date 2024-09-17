@@ -64,7 +64,7 @@ public partial class FssGodotPlatformElementAntennaPatterns : FssGodotPlatformEl
         FssMeshBuilder meshBuilder  = new ();
 
         data = new FssFloat2DArray(36, 18);
-        data.SetRandomVals(1, 2);
+        data.SetRandomVals(1f, 1.1f);
 
         // Create the geometry for the AP
         meshBuilder.AddMalleableSphere(Vector3.Zero, data, colorRange);
@@ -76,7 +76,7 @@ public partial class FssGodotPlatformElementAntennaPatterns : FssGodotPlatformEl
         meshInstance.MaterialOverride = matVertexColor;
 
         // Add the mesh to the current Node3D
-        MeshInstance3D meshInstanceW   = new() { Name = "Wireframe" };
+        MeshInstance3D meshInstanceW   = new() { Name = "AP-Wireframe" };
         meshInstanceW.Mesh             = meshData;
         meshInstanceW.MaterialOverride = matWire;
 
@@ -84,9 +84,6 @@ public partial class FssGodotPlatformElementAntennaPatterns : FssGodotPlatformEl
         Node3D patternNode = new Node3D() { Name = name };
         patternNode.AddChild(meshInstance);
         patternNode.AddChild(meshInstanceW);
-
-        patternNode.AddChild( new Node3D() { Name = "AP-Target" } );
-
 
         // Place the AP at the offset position and pointed away from the AC
         Vector3 offsetPos = FssGodotGeometryOperations.ToVector3( offset.ToXYZ() );

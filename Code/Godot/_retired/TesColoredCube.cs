@@ -1,6 +1,9 @@
 using Godot;
 using System;
 
+
+// Usage: AddChild (new TesColoredCube());
+
 public partial class TesColoredCube : Node3D
 {
     public override void _Ready()
