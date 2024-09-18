@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 #nullable enable
 
+// ------------------------------------------------------------------------------------------------
+
 public class FssAntennaPattern
 {
     public string          PortName { get; set; } = "";
@@ -15,6 +17,8 @@ public class FssAntennaPattern
         return $"PortName:{PortName} // Offset:{PatternOffset} // SphereMagPattern:{SphereMagPattern}";
     }
 }
+
+// ------------------------------------------------------------------------------------------------
 
 public class FssPlatformElementAntennaPatterns : FssPlatformElement
 {
@@ -61,12 +65,26 @@ public class FssPlatformElementAntennaPatterns : FssPlatformElement
     public void ClearAntennaPattern() => PatternList.Clear();
 
     // --------------------------------------------------------------------------------------------
+    // #MARK Report
+    // --------------------------------------------------------------------------------------------
+
+    public override string Report()
+    {
+        StringBuilder sb = new();
+
+        sb.Append($"Type: {Type} // Name: {Name}\n");
+        sb.Append($"AntennaPatterns: {PatternList.Count}\n");
+        foreach (FssAntennaPattern pattern in PatternList)
+            sb.Append($"{pattern}\n");
+
+        return sb.ToString();
+    }
 
     public override string ToString()
     {
         StringBuilder sb = new();
 
-        sb.Append($"Type: {Type}\n");
+        sb.Append($"Type: {Type} // Name: {Name}\n");
         sb.Append($"AntennaPatterns: {PatternList.Count}\n");
         foreach (FssAntennaPattern pattern in PatternList)
             sb.Append($"{pattern}\n");

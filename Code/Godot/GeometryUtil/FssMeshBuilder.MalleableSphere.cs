@@ -20,8 +20,8 @@ public partial class FssMeshBuilder
         float minRadius = radiusList.MinVal();
 
         // Hold the indices of the MeshData.Vertices for this sphere
-        List<int> sphereVertexIndices = new List<int>();
-        List<Color> sphereVertexColors = new List<Color>();
+        List<int>   sphereVertexIndices = new List<int>();
+        List<Color> sphereVertexColors  = new List<Color>();
 
         // Define the points on the sphere surface
         for (int i = 0; i < vertSegments+1; i++)
@@ -56,10 +56,9 @@ public partial class FssMeshBuilder
                 float uvYFraction = (float)i / (float)vertSegments;
                 AddUV(new Vector2(uvXFraction, uvYFraction));
 
-                // Calculate and add the color
+                // Calculate the fraction through the range, and add the color for that fraction
                 float radiusFraction = (radius - minRadius) / (maxRadius - minRadius);
-                //AddColor(colorRange.GetColor(radiusFraction));
-                AddColor(new Color(1f, 0.2f, 0.2f, 1.0f));
+                AddColor(colorRange.GetColor(radiusFraction));
 
                 // Add the index to the sphereVertexIndices - to calculate the triangles later
                 sphereVertexIndices.Add(index);

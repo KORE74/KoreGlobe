@@ -1,4 +1,4 @@
-
+using System.Text;
 
 using Godot;
 
@@ -28,10 +28,7 @@ public partial class FssGodotPlatformElementAntennaPatterns : FssGodotPlatformEl
     // private void CreateAP()
     // {
     //     // TBD Set Rotation
-
-
     // }
-
 
     // --------------------------------------------------------------------------------------------
     // MARK: Set Antenna Pattern
@@ -39,7 +36,7 @@ public partial class FssGodotPlatformElementAntennaPatterns : FssGodotPlatformEl
 
     public void AddPattern(FssAntennaPattern pattern)
     {
-        FssCentralLog.AddEntry($"======> FssGodotPlatformElementAntennaPatterns: AddPattern: {pattern.PortName}");
+        FssCentralLog.AddEntry($"======> FssGodotPlatformElementAntennaPatterns: AddPattern:{pattern}");
 
         //AntennaPattern = pattern;
 
@@ -51,44 +48,57 @@ public partial class FssGodotPlatformElementAntennaPatterns : FssGodotPlatformEl
 
         AddChild(patternNode);
 
-    }
+        float rotateUpToHorizontalDegs = (float)FssValueUtils.DegsToRads(90);
+        float zrot = (float)FssValueUtils.DegsToRads(pattern.PatternOffset.AzDegs);
 
+        Vector3 rotationElements = new Vector3(rotateUpToHorizontalDegs, 0, zrot);
+
+        // rotateUpDegs *= 2;
+        // //rotateUpDegs = FssValueUtils.LimitToRange(rotateUpDegs, -50, 50);
+        // camPitch += (float)rotateUpDegs;
+        // camPitch  = FssValueUtils.LimitToRange(camPitch, -80, 0);
+
+        // // Rotate the pattern, first to the "ahead" for the platform node, then to the offset
+        // patternNode.RotateX((float)FssValueUtils.DegsToRads(90));
+        // //patternNode.RotateZ((float)FssValueUtils.DegsToRads(pattern.PatternOffset.AzDegs));
+        // patternNode.RotateZ((float)FssValueUtils.DegsToRads(zrot));
+
+        patternNode.Rotation = rotationElements;
+    }
 
     public Node3D? CreateSinglePatternMesh(string name, FssFloat2DArray data, FssPolarOffset offset)
     {
-        // Setup materials and colors
-        var matWire        = FssMaterialFactory.WireframeMaterial(FssColorUtil.Colors["White"]);
-        var matVertexColor = FssMaterialFactory.VertexColorMaterial();
         FssColorRange colorRange = FssColorRange.RedYellowGreen();
 
-        FssMeshBuilder meshBuilder  = new ();
+        FssFloat2DArray radiusList = new FssFloat2DArray(32, 16);
+        radiusList = FssFloat2DArray.AntennaPattern_001(32, 16);
+        FssFloat2DArray scaledRadiusList = radiusList.ScaleToRange(0, 0.03f);
 
-        data = new FssFloat2DArray(36, 18);
-        data.SetRandomVals(1f, 1.1f);
+        FssMeshBuilder meshBuilder = new();
+        meshBuilder.AddMalleableSphere(new Vector3(0, 0, 0), scaledRadiusList, colorRange);
 
-        // Create the geometry for the AP
-        meshBuilder.AddMalleableSphere(Vector3.Zero, data, colorRange);
-        ArrayMesh meshData = meshBuilder.Build2("AP", false);
+        var matWire        = FssMaterialFactory.WireframeMaterial(FssColorUtil.Colors["Black"]);
+        var matVertexColor = FssMaterialFactory.VertexColorMaterial();
 
-        // Add the mesh to the current Node3D
-        MeshInstance3D meshInstance   = new() { Name = "AP-Mesh" };
-        meshInstance.Mesh             = meshData;
-        meshInstance.MaterialOverride = matVertexColor;
+        ArrayMesh meshData = meshBuilder.Build("AP", false);
 
-        // Add the mesh to the current Node3D
+        // Colored - Add the mesh to the current Node3D
+        MeshInstance3D meshInstance    = new() { Name = "AP-Mesh" };
+        meshInstance.Mesh              = meshData;
+        meshInstance.MaterialOverride  = matVertexColor;
+
+        // Wirefrme - Add the mesh to the current Node3D
         MeshInstance3D meshInstanceW   = new() { Name = "AP-Wireframe" };
         meshInstanceW.Mesh             = meshData;
         meshInstanceW.MaterialOverride = matWire;
 
-        // Attach the meshes to the current Node3D
         Node3D patternNode = new Node3D() { Name = name };
         patternNode.AddChild(meshInstance);
         patternNode.AddChild(meshInstanceW);
 
-        // Place the AP at the offset position and pointed away from the AC
-        Vector3 offsetPos = FssGodotGeometryOperations.ToVector3( offset.ToXYZ() );
-        meshInstance.Position  = offsetPos;
-        meshInstanceW.Position = offsetPos;
+        // Offset the mesh against the pattern in the -y axis. This pans-out when it is rotated to the offset.
+        meshInstance.Translate(new Vector3(0, -0.05f, 0));
+        meshInstanceW.Translate(new Vector3(0, -0.05f, 0));
 
         return patternNode;
     }

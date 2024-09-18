@@ -13,13 +13,17 @@ public partial class FssCliWindow : Window
     // Log tab
     private ScrollContainer ScrollContainer;
     private Label           LogLabel;
+    private string          LogLines = "";
 
     // Report tab
-    private CodeEdit        AppReportEdit;
-    private Button          ReportRegenButton;
+    private CodeEdit        ReportEdit;
+    private Button          AppReportButton;
+    private Button          DataReportButton;
     private Button          ClipboardButton;
 
     private System.Timers.Timer LabelUpdateTimer;
+
+    float TimerUIUpdate = 0.0f;
 
     // --------------------------------------------------------------------------------------------
     // MARK: Node Functions
@@ -38,10 +42,10 @@ public partial class FssCliWindow : Window
         LogLabel             = (Label)FindChild("LogLabel");
 
         // Report tab
-        AppReportEdit        = (CodeEdit)FindChild("AppReportEdit");
-        ReportRegenButton    = (Button)FindChild("ReportRegenButton");
+        ReportEdit           = (CodeEdit)FindChild("ReportEdit");
+        AppReportButton      = (Button)FindChild("AppReportButton");
+        DataReportButton     = (Button)FindChild("DataReportButton");
         ClipboardButton      = (Button)FindChild("ClipboardButton");
-
 
         // Connect the text_submitted signal of the LineEdit to the OnCommandSubmitted function
         CommandEntryEdit.Connect("text_submitted", new Callable(this, "OnCommandSubmitted"));
@@ -49,10 +53,9 @@ public partial class FssCliWindow : Window
         // Connect the close_requested signal to the OnCloseRequested function
         Connect("close_requested", new Callable(this, "OnCloseRequested"));
 
-        ReportRegenButton.Connect("pressed", new Callable(this, "OnReportRegenButtonPressed"));
+        AppReportButton.Connect("pressed", new Callable(this, "OnAppReportButtonPressed"));
+        DataReportButton.Connect("pressed", new Callable(this, "OnDataReportButtonPressed"));
         ClipboardButton.Connect("pressed", new Callable(this, "OnClipboardButtonPressed"));
-
-
 
         // Initialize and start the update timer
         LabelUpdateTimer = new System.Timers.Timer(1000); // 1 second interval
@@ -63,14 +66,32 @@ public partial class FssCliWindow : Window
         OnCommandSubmitted("version");
     }
 
+    // Called every frame. 'delta' is the elapsed time since the previous frame.
+    public override void _Process(double delta)
+    {
+        if (TimerUIUpdate < FssCoreTime.RuntimeSecs)
+        {
+            TimerUIUpdate = FssCoreTime.RuntimeSecs + 2f; // Update the timer to the next whole second
+            UpdateUIText();
+        }
+    }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Localisation
+    // --------------------------------------------------------------------------------------------
+
+    private void UpdateUIText()
+    {
+        Title                    = FssLanguageStrings.Instance.GetParam("CommandLineAndLogging");
+
+        AppReportButton.Text     = FssLanguageStrings.Instance.GetParam("AppReport");
+        DataReportButton.Text    = FssLanguageStrings.Instance.GetParam("DataReport");
+        ClipboardButton.Text     = FssLanguageStrings.Instance.GetParam("CopyToClipboard");
+    }
+
     // --------------------------------------------------------------------------------------------
     // MARK: UI Actions - Log
     // --------------------------------------------------------------------------------------------
-
-    private void UpdateLogLabel()
-    {
-       // LogLabel.Text = LogSB.ToString();
-    }
 
     private void ScrollToBottom()
     {
@@ -89,7 +110,14 @@ public partial class FssCliWindow : Window
         foreach (string line in lines)
             logSB.AppendLine(line);
 
-        //CallDeferred(nameof(UpdateLogLabel));
+        // Update the label on the main thread
+        LogLines = logSB.ToString();
+        CallDeferred(nameof(UpdateLogLabel));
+    }
+
+    private void UpdateLogLabel()
+    {
+        LogLabel.Text = LogLines;
     }
 
     // --------------------------------------------------------------------------------------------
@@ -159,7 +187,7 @@ public partial class FssCliWindow : Window
 
     // Create a report for everything in the application, split into sections
 
-    private void OnReportRegenButtonPressed()
+    private void OnAppReportButtonPressed()
     {
         StringBuilder sb = new StringBuilder();
 
@@ -182,17 +210,6 @@ public partial class FssCliWindow : Window
         sb.AppendLine("----------");
         sb.Append(FssDlcOperations.DlcReport());
 
-        // Model report
-        sb.AppendLine();
-        sb.AppendLine("Model Report");
-        sb.AppendLine("------------");
-        sb.Append(FssAppFactory.Instance.PlatformManager.FullReport());
-
-        // Godot Entity report
-        sb.AppendLine();
-        sb.AppendLine("Godot Entity Report");
-        sb.AppendLine("-------------------");
-        sb.Append(FssGodotFactory.Instance.GodotEntityManager.FullReport());
 
         // Texture report
         sb.AppendLine();
@@ -200,13 +217,38 @@ public partial class FssCliWindow : Window
         sb.AppendLine("--------------");
         sb.Append(FssTextureLoader.Instance.TextureCacheList());
 
-        AppReportEdit.Text = sb.ToString();
+        ReportEdit.Text = sb.ToString();
+    }
 
+    private void OnDataReportButtonPressed()
+    {
+        StringBuilder sb = new StringBuilder();
+
+        sb.AppendLine("Application Report");
+        sb.AppendLine("===================");
+
+        // Add the time and version info
+        sb.AppendLine($"Time: {DateTime.Now}");
+        sb.AppendLine($"Version: {FssGlobals.VersionString}");
+
+        // Model report
+        sb.AppendLine();
+        sb.AppendLine("Model Report");
+        sb.AppendLine("------------");
+        sb.Append(FssAppFactory.Instance.PlatformManager.FullReport());
+
+        // Godot Entity report
+        //sb.AppendLine();
+        //sb.AppendLine("Godot Entity Report");
+        //sb.AppendLine("-------------------");
+        //sb.Append(FssGodotFactory.Instance.GodotEntityManager.FullReport());
+
+        ReportEdit.Text = sb.ToString();
     }
 
     private void OnClipboardButtonPressed()
     {
-        DisplayServer.ClipboardSet(AppReportEdit.Text);
+        DisplayServer.ClipboardSet(ReportEdit.Text);
     }
 
     // --------------------------------------------------------------------------------------------

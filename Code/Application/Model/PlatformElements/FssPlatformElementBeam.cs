@@ -37,6 +37,10 @@ public class FssPlatformElementBeam : FssPlatformElement
     // Lookup to a named antenna pattern
     public string AntennaPattern { get; set; } = "DefaultPattern";
 
+    // --------------------------------------------------------------------------------------------
+    // #MARK Report
+    // --------------------------------------------------------------------------------------------
+
     public override string Report()
     {
         StringBuilder sb = new StringBuilder();

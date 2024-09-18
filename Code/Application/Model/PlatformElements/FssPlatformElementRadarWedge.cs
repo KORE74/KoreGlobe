@@ -10,4 +10,8 @@ public class FssPlatformElementRadarWedge : FssPlatformElement
     public double EmitterDetectionRange { get; set; } = 0.0;
     public FssAzElBox emitterBox = FssAzElBox.Zero;
 
+    // --------------------------------------------------------------------------------------------
+    // #MARK Report
+    // --------------------------------------------------------------------------------------------
+
 }

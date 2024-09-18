@@ -10,4 +10,9 @@ public class FssPlatformElementRadarDome : FssPlatformElement
 
     public double DetectionRange { get; set; } = 0.0;
     public double EmitterDetectionRange { get; set; } = 0.0;
+
+    // --------------------------------------------------------------------------------------------
+    // #MARK Report
+    // --------------------------------------------------------------------------------------------
+
 }

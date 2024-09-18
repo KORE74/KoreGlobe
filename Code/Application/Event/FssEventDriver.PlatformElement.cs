@@ -21,6 +21,18 @@ public partial class FssEventDriver
         FssPlatformElementOperations.CreatePlatformElement(platName, elemName, platElemType);
     }
 
+    public void AddPlatformElement(string platName, string elemName, FssPlatformElement element)
+    {
+        // Get the platform
+        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
+
+        if (platform == null)
+            return;
+
+        // Add the element to the platform
+        platform.AddElement(element);
+    }
+
     public void DeletePlatformElement(string platName, string elemName)
     {
         FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);

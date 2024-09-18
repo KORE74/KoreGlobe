@@ -6,11 +6,11 @@ public class FssPlatformElementRoute : FssPlatformElement
     // A simple route being a list of FssLLAPoint values.
     public List<FssLLAPoint> RoutePoints { set; get; } = new List<FssLLAPoint>();
 
-    // ---------------------------------------------------------------------------------------------
-    // MARK: Overrides
-    // ---------------------------------------------------------------------------------------------
-
     public override string Type => "Route";
+
+    // --------------------------------------------------------------------------------------------
+    // #MARK Report
+    // --------------------------------------------------------------------------------------------
 
     public override string Report()
     {

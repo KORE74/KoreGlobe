@@ -9,8 +9,6 @@ public partial class TestMalleableSphere : Node3D
         FssColorRange colorRange = FssColorRange.RedYellowGreen();
 
         FssFloat2DArray radiusList = new FssFloat2DArray(32, 16);
-        radiusList.SetRandomVals(1.01f, 1.05f);
-
         radiusList = FssFloat2DArray.AntennaPattern_001(32, 16);
 
         FssMeshBuilder meshBuilder = new();
@@ -18,7 +16,6 @@ public partial class TestMalleableSphere : Node3D
 
         var matWire        = FssMaterialFactory.WireframeMaterial(FssColorUtil.Colors["White"]);
         var matVertexColor = FssMaterialFactory.VertexColorMaterial();
-        var matBlue        = FssMaterialFactory.SimpleColoredMaterial(new Color(0.0f, 0.5f, 1.0f, 1.0f));
 
         ArrayMesh meshData = meshBuilder.Build("Sphere", false);
 

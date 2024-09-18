@@ -30,13 +30,14 @@ public partial class FssMessageManager
 
     private void ProcessMessage_AntennaPattern(AntennaPattern antPatternMsg)
     {
-        FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_AntennaPattern: PlatName:{antPatternMsg.PlatName}");
+        string sizeStr = $"Size:{antPatternMsg.AzPointCount}x{antPatternMsg.ElPointCount} ArrayCount:{antPatternMsg.Pattern.Count}";
+        FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_AntennaPattern: PlatName:{antPatternMsg.PlatName} // {sizeStr}");
 
         string platName = antPatternMsg.PlatName;
         string portName = antPatternMsg.PortName;
 
-        FssAppFactory.Instance.EventDriver.PlatformSetAntennaPatternMetadata(platName, portName, antPatternMsg.AzElBox);
-        FssAppFactory.Instance.EventDriver.PlatformSetAntennaPatternData(platName, portName, antPatternMsg.AzPointsCount, antPatternMsg.ElPointsCount, antPatternMsg.Pattern);
+        FssAppFactory.Instance.EventDriver.PlatformSetAntennaPatternMetadata(platName, portName, antPatternMsg.AzElBox, antPatternMsg.PolarOffset);
+        FssAppFactory.Instance.EventDriver.PlatformSetAntennaPatternData(platName, portName, antPatternMsg.AzPointCount, antPatternMsg.ElPointCount, antPatternMsg.Pattern);
     }
 
 

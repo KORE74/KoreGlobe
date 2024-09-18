@@ -972,7 +972,6 @@ auto_translate_mode = 1
 title = "Internal CLI"
 initial_position = 2
 size = Vector2i(700, 400)
-visible = false
 min_size = Vector2i(600, 400)
 script = ExtResource("16_unelf")
 
@@ -993,17 +992,17 @@ theme_override_constants/margin_bottom = 10
 layout_mode = 2
 theme_override_constants/outline_size = 0
 theme_override_constants/side_margin = 10
-current_tab = 2
+current_tab = 0
 tab_focus_mode = 0
 
 [node name="Log" type="VBoxContainer" parent="CLIWindow/MarginContainer/TabContainer"]
-visible = false
 custom_minimum_size = Vector2(200, 100)
 layout_mode = 2
 metadata/_tab_index = 0
 
 [node name="MarginContainer" type="MarginContainer" parent="CLIWindow/MarginContainer/TabContainer/Log"]
 layout_mode = 2
+size_flags_vertical = 3
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
@@ -1063,6 +1062,7 @@ layout_mode = 2
 size_flags_vertical = 8
 
 [node name="Report" type="MarginContainer" parent="CLIWindow/MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 
@@ -1073,7 +1073,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="AppReportEdit" type="CodeEdit" parent="CLIWindow/MarginContainer/TabContainer/Report/VBoxContainer/HBoxContainer"]
+[node name="ReportEdit" type="CodeEdit" parent="CLIWindow/MarginContainer/TabContainer/Report/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 scroll_smooth = true
@@ -1096,12 +1096,19 @@ theme_override_constants/margin_bottom = 10
 [node name="HBoxContainer" type="HBoxContainer" parent="CLIWindow/MarginContainer/TabContainer/Report/VBoxContainer/HBoxContainer2/MarginContainer"]
 layout_mode = 2
 
-[node name="ReportRegenButton" type="Button" parent="CLIWindow/MarginContainer/TabContainer/Report/VBoxContainer/HBoxContainer2/MarginContainer/HBoxContainer"]
+[node name="AppReportButton" type="Button" parent="CLIWindow/MarginContainer/TabContainer/Report/VBoxContainer/HBoxContainer2/MarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(90, 45)
 layout_mode = 2
 focus_mode = 0
 theme = SubResource("Theme_m36wi")
-text = "Regen"
+text = "App Report"
+
+[node name="DataReportButton" type="Button" parent="CLIWindow/MarginContainer/TabContainer/Report/VBoxContainer/HBoxContainer2/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(90, 45)
+layout_mode = 2
+focus_mode = 0
+theme = SubResource("Theme_m36wi")
+text = "Data Report"
 
 [node name="ClipboardButton" type="Button" parent="CLIWindow/MarginContainer/TabContainer/Report/VBoxContainer/HBoxContainer2/MarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(120, 45)
@@ -1289,12 +1296,14 @@ theme_override_constants/separation = 5
 [node name="CancelButton" type="Button" parent="NetworkWindow/MarginContainer/VBoxContainer/RowFinal"]
 custom_minimum_size = Vector2(70, 45)
 layout_mode = 2
+focus_mode = 0
 theme = SubResource("Theme_sf8tp")
 text = "Cancel"
 
 [node name="OkButton" type="Button" parent="NetworkWindow/MarginContainer/VBoxContainer/RowFinal"]
 custom_minimum_size = Vector2(70, 45)
 layout_mode = 2
+focus_mode = 0
 theme = SubResource("Theme_sf8tp")
 text = "OK"
 

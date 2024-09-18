@@ -174,6 +174,45 @@ public class FssFloat2DArray
         return MaxVal() - MinVal();
     }
 
+    // Get the range of values in the grid, get the range of new values, and scale the grid to fit the new range.
+
+    public FssFloat2DArray ScaleToRange(float newMin, float newMax)
+    {
+        float oldMin = MinVal();
+        float oldMax = MaxVal();
+        float oldRange = oldMax - oldMin;
+        float newRange = newMax - newMin;
+
+        FssFloat2DArray scaledArray = new FssFloat2DArray(Width, Height);
+
+        for (int y = 0; y < Height; y++)
+        {
+            for (int x = 0; x < Width; x++)
+            {
+                float oldVal = Data[x, y];
+                float newVal = ((oldVal - oldMin) / oldRange) * newRange + newMin;
+                scaledArray[x, y] = newVal;
+            }
+        }
+        return scaledArray;
+    }
+
+    public FssFloat2DArray ScaleToMax(float newMax)
+    {
+        float oldMax = MaxVal();
+        FssFloat2DArray scaledArray = new FssFloat2DArray(Width, Height);
+
+        for (int y = 0; y < Height; y++)
+        {
+            for (int x = 0; x < Width; x++)
+            {
+                float oldVal = Data[x, y];
+                float newVal = (oldVal / oldMax) * newMax;
+                scaledArray[x, y] = newVal;
+            }
+        }
+        return scaledArray;
+    }
 
     // --------------------------------------------------------------------------------------------
     // MARK: Multi-assignment

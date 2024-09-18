@@ -31,11 +31,11 @@ namespace FssJSON
         [JsonPropertyName("ElSpanDegs")]
         public double ElSpanDegs { get; set; } = 0.0;
 
-        [JsonPropertyName("AzPointsCount")]
-        public int AzPointsCount { get; set; } = 1;
+        [JsonPropertyName("AzPointCount")]
+        public int AzPointCount { get; set; } = 1;
 
-        [JsonPropertyName("ElPointsCount")]
-        public int ElPointsCount { get; set; } = 1;
+        [JsonPropertyName("ElPointCount")]
+        public int ElPointCount { get; set; } = 1;
 
         [JsonPropertyName("Pattern")]
         public List<double> Pattern { get; set; } = new List<double>();
