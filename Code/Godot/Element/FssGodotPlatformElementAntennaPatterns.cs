@@ -72,7 +72,10 @@ public partial class FssGodotPlatformElementAntennaPatterns : FssGodotPlatformEl
 
         FssFloat2DArray radiusList = new FssFloat2DArray(32, 16);
         radiusList = FssFloat2DArray.AntennaPattern_001(32, 16);
+        FssFloat2DArray radiusList2 = radiusList.GetInterpolatedGrid(32, 16);
         FssFloat2DArray scaledRadiusList = radiusList.ScaleToRange(0, 0.03f);
+
+        FssFloat2DArrayIO.SaveToCSVFile(radiusList2, $"c:/util/ap{name}.csv", 2);
 
         FssMeshBuilder meshBuilder = new();
         meshBuilder.AddMalleableSphere(new Vector3(0, 0, 0), scaledRadiusList, colorRange);

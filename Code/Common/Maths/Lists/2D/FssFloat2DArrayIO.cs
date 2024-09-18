@@ -19,7 +19,7 @@ public static class FssFloat2DArrayIO
         {
             for (int j = 0; j < array.Width; j++)
             {
-                csvBuilder.Append(array[i, j].ToString(format, System.Globalization.CultureInfo.InvariantCulture));
+                csvBuilder.Append(array[j, i].ToString(format, System.Globalization.CultureInfo.InvariantCulture));
                 if (j < array.Height - 1)
                     csvBuilder.Append(", ");
             }
