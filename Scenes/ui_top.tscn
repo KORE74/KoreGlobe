@@ -608,7 +608,7 @@ layout_mode = 2
 theme_override_constants/separation = 5
 
 [node name="PanelPlatformResize" type="Panel" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/VBoxContainer"]
-custom_minimum_size = Vector2(400, 60)
+custom_minimum_size = Vector2(340, 60)
 layout_direction = 2
 layout_mode = 2
 size_flags_horizontal = 0
@@ -617,10 +617,9 @@ theme_override_styles/panel = ExtResource("1_ndm6o")
 
 [node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/VBoxContainer/PanelPlatformResize"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
+anchors_preset = 9
 anchor_bottom = 1.0
-grow_horizontal = 2
+offset_right = 337.0
 grow_vertical = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
@@ -629,6 +628,7 @@ theme_override_constants/margin_bottom = 5
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/VBoxContainer/PanelPlatformResize/MarginContainer"]
 layout_mode = 2
+size_flags_horizontal = 0
 size_flags_vertical = 0
 theme_override_constants/separation = 5
 
@@ -649,11 +649,11 @@ theme_type_variation = &"FlatButton"
 text = "INFO"
 
 [node name="Container" type="Container" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/VBoxContainer/PanelPlatformResize/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(5, 0)
+custom_minimum_size = Vector2(2, 0)
 layout_mode = 2
 
 [node name="InfographicScaleSlider" type="HSlider" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/VBoxContainer/PanelPlatformResize/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(200, 50)
+custom_minimum_size = Vector2(150, 50)
 layout_mode = 2
 focus_mode = 0
 min_value = 1.0
@@ -972,6 +972,7 @@ auto_translate_mode = 1
 title = "Internal CLI"
 initial_position = 2
 size = Vector2i(700, 400)
+visible = false
 min_size = Vector2i(600, 400)
 script = ExtResource("16_unelf")
 

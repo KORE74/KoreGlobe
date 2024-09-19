@@ -638,9 +638,9 @@ public class FssFloat2DArray
             retGrid.SetRow(y, val);
         }
 
-        //retGrid = FssFloat2DArray.FlipYAxis(retGrid);
+        FssFloat2DArray retGrid2 = retGrid.GetInterpolatedGrid(inSizeX, inSizeY);
 
-        return retGrid;
+        return retGrid2;
     }
 
 }

@@ -20,10 +20,10 @@ public static class FssFloat2DArrayIO
             for (int j = 0; j < array.Width; j++)
             {
                 csvBuilder.Append(array[j, i].ToString(format, System.Globalization.CultureInfo.InvariantCulture));
-                if (j < array.Height - 1)
+                //if (j < array.Width - 1)
                     csvBuilder.Append(", ");
             }
-            csvBuilder.AppendLine();
+            //csvBuilder.AppendLine();
         }
         return csvBuilder.ToString();
     }

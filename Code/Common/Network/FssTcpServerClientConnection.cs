@@ -24,6 +24,7 @@ namespace FssNetworking
 
         // Splits messages based on a sentinel character between messages
         private FssMsgSplitter IncomingMsgSplitter;
+        private FssMsgSplitter2 IncomingMsgSplitter2;
 
         // ----------------------------------------------------------------------------------------
 
@@ -36,7 +37,8 @@ namespace FssNetworking
             NumMsgsHandled = 0;
 
             char sentinelCharacter = '\u0003';
-            IncomingMsgSplitter = new FssMsgSplitter(sentinelCharacter);
+            IncomingMsgSplitter  = new FssMsgSplitter(sentinelCharacter);
+            IncomingMsgSplitter2 = new FssMsgSplitter2(sentinelCharacter);
 
             client = null;
             stream = null;
@@ -164,7 +166,7 @@ namespace FssNetworking
                         lastUpdateTime = DateTime.Now;
 
                         // Read data from the client stream.
-                        byte[] buffer = new byte[1024];
+                        byte[] buffer = new byte[50000];
                         int bytesRead = stream.Read(buffer, 0, buffer.Length);
 
                         if (bytesRead == 0)
@@ -177,20 +179,23 @@ namespace FssNetworking
                         {
                             // Read the raw incoming data
                             string data = Encoding.ASCII.GetString(buffer, 0, bytesRead);
-                            FssMessageText rawMsg = new FssMessageText() { connectionName = Name, msgData = data};
 
-                            // Add the incoming data to a raw buffer, outputting messages based on a splitter character
-                            IncomingMsgSplitter.AddRawMessage(rawMsg);
+                            IncomingMsgSplitter2.AddRawMessage(data);
+
+                            // FssMessageText rawMsg = new FssMessageText() { connectionName = Name, msgData = data};
+
+                            // // Add the incoming data to a raw buffer, outputting messages based on a splitter character
+                            // IncomingMsgSplitter.AddRawMessage(rawMsg);
                         }
                     }
                 }
 
                 // When messages arrive close together, there can be multiple-per-input, so we need to "while"
                 // to ensure they all get sent onto the main application.
-                while (IncomingMsgSplitter.HasMessage())
+                while (IncomingMsgSplitter2.HasMessage())
                 {
                     // create a new message object to add to the incoming message queue.
-                    QueueIncomingMessage(IncomingMsgSplitter.NextMsg());
+                    QueueIncomingMessage(IncomingMsgSplitter2.NextMsg());
                     if (NumMsgsHandled<10000) NumMsgsHandled++;
                 }
 

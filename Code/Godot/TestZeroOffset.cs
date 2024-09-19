@@ -91,7 +91,7 @@ public partial class TestZeroOffset : Node3D
 
         if (DLCTesting)
         {
-            FssDlcOperations.CreateDlc();
+            //FssDlcOperations.CreateDlc();
 
             List<string> dlcList = FssDlcOperations.ListLoadableDlcPaths();
 

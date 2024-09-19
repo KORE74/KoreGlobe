@@ -68,6 +68,11 @@ namespace FssNetworking
 
         public FssMessageText NextMsg()
         {
+            if (OutBuffers.Count == 0)
+            {
+                throw new InvalidOperationException("No messages available.");
+            }
+
             FssMessageText n = OutBuffers[0];
             OutBuffers.RemoveAt(0); // Adding at last, reading and removing at first
             return n;
