@@ -23,6 +23,10 @@ public partial class FssMessageManager
 
         if (FssAppFactory.Instance.EventDriver.DoesPlatformExist(msg.PlatName))
         {
+            // Name (like tail number), Class (like F-16), Category (like aircraft)
+            FssAppFactory.Instance.EventDriver.SetPlatformType(
+                msg.PlatName, msg.PlatClass , msg.PlatCategory);
+
             FssAppFactory.Instance.EventDriver.SetPlatformDetails(
                 msg.PlatName, msg.Pos, msg.Pos, msg.Attitude, msg.Course, FssCourseDelta.Zero);
         }
