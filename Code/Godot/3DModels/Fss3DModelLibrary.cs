@@ -12,16 +12,16 @@ using System.Text.Json;
 // using System.Linq;
 
 // The FssDlcOperations class deals with the creation/loading and managing or DLC .PCK files.
-// The Fss3DModelLibrary class deals with the supply of 3D model Nodes to the application, along with the 
+// The Fss3DModelLibrary class deals with the supply of 3D model Nodes to the application, along with the
 // model informatino around scaling, bounding boxes, etc.
 
 public class Fss3DModelLibrary
 {
     // List of model information, and attributes under general C# control.
-    private static Dictionary<string, Fss3DModelInfo> ModelInfoList = new Dictionary<string, Fss3DModelInfo>();
+    private Dictionary<string, Fss3DModelInfo> ModelInfoList = new Dictionary<string, Fss3DModelInfo>();
 
     // Named list of specific 3D model objects for Godot scene tree.
-    private static Dictionary<string, Node> ModelCache = new Dictionary<string, Node>();
+    private Dictionary<string, Node> ModelCache = new Dictionary<string, Node>();
 
     // ------------------------------------------------------------------------------------------------
     // MARK: Load / Save JSON Config
@@ -29,7 +29,7 @@ public class Fss3DModelLibrary
 
     // usage: Fss3DModelLibrary.TestLoadModel();
 
-    public static void TestLoadModel(Node parent)
+    public void TestLoadModel(Node parent)
     {
         string ModelPathG = "C:/Util/Godot/Globe4-3DModels/Prep/Ship/GenericSupportShip/GenericSupportShip.glb";
         string ModelPathF = "C:/Util/Godot/Globe4-3DModels/Prep/Ship/GenericSupportShip/GenericSupportShip.fbx";
@@ -50,13 +50,12 @@ public class Fss3DModelLibrary
         }
     }
 
-
     // ------------------------------------------------------------------------------------------------
     // MARK: Supply Model
     // ------------------------------------------------------------------------------------------------
 
     // Usage: Node modelNode = Fss3DModelLibrary.PrepModel("GenericSupportShip");
-    public static Node PrepModel(string modelName)
+    public Node PrepModel(string modelName)
     {
         // If the model is already loaded, return it
         if (ModelCache.ContainsKey(modelName))
@@ -64,7 +63,7 @@ public class Fss3DModelLibrary
             return ModelCache[modelName];
         }
 
-        // If the name is not in the ModelInfoList, we don't know about it, so return null 
+        // If the name is not in the ModelInfoList, we don't know about it, so return null
         if (!ModelInfoList.ContainsKey(modelName))
         {
             GD.PrintErr($"Model does not exist: {modelName}");
@@ -108,7 +107,7 @@ public class Fss3DModelLibrary
     // See: FssDLCOperations.InventoryJsonForDLCTitle()
 
     // Usage: Fss3DModelLibrary.LoadJSONConfigFile(jsonString);
-    public static void LoadJSONConfigFile(string jsonString)
+    public void LoadJSONConfigFile(string jsonString)
     {
         var modelList = JsonSerializer.Deserialize<List<Fss3DModelInfo>>(jsonString);
 
@@ -131,7 +130,7 @@ public class Fss3DModelLibrary
     // ------------------------------------------------------------------------------------------------
 
     // Usage: string JSONString = Fss3DModelLibrary.SerializeJSONConfig(ModelInfoList.Values.ToList());
-    public static string SerializeJSONConfig(List<Fss3DModelInfo> modelList)
+    public string SerializeJSONConfig(List<Fss3DModelInfo> modelList)
     {
         // Serialize the model list to JSON
         return JsonSerializer.Serialize(modelList);
@@ -140,7 +139,7 @@ public class Fss3DModelLibrary
     // To allow us to read the JSON config from multiple sources, we pass the already read string to this
     // function to decode it and add it to the model list.
     // Use standard .Net JSON parser.
-    public static void DeserializeJSONConfig(string jsonString)
+    public void DeserializeJSONConfig(string jsonString)
     {
         var modelList = JsonSerializer.Deserialize<List<Fss3DModelInfo>>(jsonString);
 
@@ -173,7 +172,7 @@ public class Fss3DModelLibrary
     // MARK: Content Report
     // ------------------------------------------------------------------------------------------------
 
-    public static string ReportContent()
+    public string ReportContent()
     {
         StringBuilder report = new StringBuilder();
 

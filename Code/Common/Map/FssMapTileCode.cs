@@ -53,6 +53,8 @@ public class FssMapTileCode
 
     public Fss2DGridPos GridPos => new Fss2DGridPos(HorizCount, VertCount, HorizIndex, VertIndex);
 
+    public FssLLBox LLBox => LLBoxForCode(this);
+
     // --------------------------------------------------------------------------------------------
     // MARK: Constructor
     // --------------------------------------------------------------------------------------------

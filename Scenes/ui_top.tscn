@@ -475,6 +475,16 @@ custom_minimum_size = Vector2(0, 45)
 layout_mode = 2
 theme_override_constants/separation = 5
 
+[node name="Setting-IconButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("3_454jl")
+toggle_mode = true
+icon = ExtResource("5_ks0k1")
+icon_alignment = 1
+expand_icon = true
+
 [node name="Network-IconButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
@@ -484,13 +494,14 @@ toggle_mode = true
 icon = ExtResource("4_2axux")
 expand_icon = true
 
-[node name="Setting-IconButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
+[node name="CLI-IconButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
+clip_contents = true
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 focus_mode = 0
 theme = ExtResource("3_454jl")
 toggle_mode = true
-icon = ExtResource("5_ks0k1")
+icon = ExtResource("8_4gj75")
 icon_alignment = 1
 expand_icon = true
 
@@ -526,17 +537,6 @@ layout_mode = 2
 focus_mode = 0
 theme = ExtResource("6_i4rcs")
 icon = ExtResource("7_mru6u")
-icon_alignment = 1
-expand_icon = true
-
-[node name="CLI-IconButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign/HeaderContainer-RightAlign"]
-clip_contents = true
-custom_minimum_size = Vector2(45, 45)
-layout_mode = 2
-focus_mode = 0
-theme = ExtResource("3_454jl")
-toggle_mode = true
-icon = ExtResource("8_4gj75")
 icon_alignment = 1
 expand_icon = true
 
@@ -608,6 +608,7 @@ layout_mode = 2
 theme_override_constants/separation = 5
 
 [node name="PanelPlatformResize" type="Panel" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/VBoxContainer"]
+visible = false
 custom_minimum_size = Vector2(340, 60)
 layout_direction = 2
 layout_mode = 2
@@ -670,6 +671,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="PanelRxTxShown" type="Panel" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer/VBoxContainer"]
+visible = false
 custom_minimum_size = Vector2(115, 60)
 layout_mode = 2
 size_flags_horizontal = 0

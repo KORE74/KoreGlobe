@@ -43,7 +43,7 @@ public partial class FssMapTileNode : Node3D
 
     private MeshInstance3D MeshInstance  = new MeshInstance3D();
     private MeshInstance3D MeshInstanceW = new MeshInstance3D();
-    private Label3D TileCodeLabel;
+    private Label3D        TileCodeLabel;
 
     // Flag set when the tile (or its children) should be visible. Gates the main visibility processing.
     public bool ActiveVisibility              = false;
@@ -57,12 +57,12 @@ public partial class FssMapTileNode : Node3D
 
     // --------------------------------------------------------------------------------------------
 
-    public static readonly int[]   TileSizePointsPerLvl   = { 15,   20,     20,     20,      20,         20 };
-    public static readonly float[] LabelSizePerLvl        = { 0.1f, 0.005f, 0.002f, 0.0002f, 0.00003f,   0.000005f };
+    public static readonly int[]   TileSizePointsPerLvl   = { 15,    20,     20,     20,      20,         20 };
+    public static readonly float[] LabelSizePerLvl        = { 0.05f, 0.008f, 0.002f, 0.0002f, 0.00003f,   0.000005f };
 
-    public static readonly float[] childTileDisplayForLvl = { 0.8f, 0.15f,  0.04f,  0.0045f, 0.00120f, 0.0000005f};
-    public static readonly float[] CreateChildTilesForLvl = { 1.0f, 0.25f,  0.08f,  0.0050f, 0.00140f, 0.0000005f};
-    public static readonly float[] DeleteChildTilesForLvl = { 1.2f, 0.40f,  0.16f,  0.0080f, 0.00180f, 0.0000005f};
+    public static readonly float[] childTileDisplayForLvl = { 0.8f,  0.15f,  0.04f,  0.0045f, 0.00120f, 0.0000005f};
+    public static readonly float[] CreateChildTilesForLvl = { 1.0f,  0.25f,  0.08f,  0.0050f, 0.00140f, 0.0000005f};
+    public static readonly float[] DeleteChildTilesForLvl = { 1.2f,  0.40f,  0.16f,  0.0080f, 0.00180f, 0.0000005f};
 
     // --------------------------------------------------------------------------------------------
     // MARK: Constructor
@@ -262,11 +262,17 @@ public partial class FssMapTileNode : Node3D
 
     private void LabelTile(FssMapTileCode tileCode)
     {
-        float KPixelSize = LabelSizePerLvl[tileCode.MapLvl];
-        TileCodeLabel = FssLabel3DFactory.CreateLabel($"{tileCode.ToString()}", KPixelSize);
-
-        FssLLBox tileBounds = FssMapTileCode.LLBoxForCode(tileCode);
+        FssLLBox tileBounds = tileCode.LLBox;
         FssLLPoint posLL = tileBounds.CenterPoint;
+
+        string tileCodeBoxStr;
+        if      (TileCode.MapLvl <= 2) tileCodeBoxStr = $"[{tileBounds.MinLatDegs:F0}, {tileBounds.MinLonDegs:F0}]...\n...[{tileBounds.MaxLatDegs:F0}, {tileBounds.MaxLonDegs:F0}]";
+        else if (TileCode.MapLvl < 4)  tileCodeBoxStr = $"[{tileBounds.MinLatDegs:F2}, {tileBounds.MinLonDegs:F2}]...\n...[{tileBounds.MaxLatDegs:F2}, {tileBounds.MaxLonDegs:F2}]";
+        else                           tileCodeBoxStr = $"[{tileBounds.MinLatDegs:F4}, {tileBounds.MinLonDegs:F4}]...\n...[{tileBounds.MaxLatDegs:F4}, {tileBounds.MaxLonDegs:F4}]";
+
+        float KPixelSize = LabelSizePerLvl[tileCode.MapLvl];
+        TileCodeLabel = FssLabel3DFactory.CreateLabel($"{tileCode.ToString()}\n{tileCodeBoxStr}", KPixelSize);
+
 
         // Determine the positions and orientation
         FssLLAPoint pos  = new FssLLAPoint() { LatDegs = posLL.LatDegs,        LonDegs = posLL.LonDegs, AltMslM = 2000};

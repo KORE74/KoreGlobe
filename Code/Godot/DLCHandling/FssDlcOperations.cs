@@ -36,7 +36,7 @@ public static class FssDlcOperations
     public static void EnsureDlcFolderExists()
     {
         // Base path for the DLCs
-        string execDir = FssFileOperations.StandardizePath(OS.GetExecutablePath().GetBaseDir());
+        string execDir     = FssFileOperations.StandardizePath(OS.GetExecutablePath().GetBaseDir());
         string fullDlcPath = FssFileOperations.JoinPaths(execDir, dlcDirectory);
 
         // Create the DLC directory if it doesn't exist
@@ -68,7 +68,7 @@ public static class FssDlcOperations
         // Determine the prefix we need
         string dlcPrefix = FssGodotFileOperations.JoinPaths(DlcPrepDir, DlcTitle);
 
-        // Get the listing of all the files in the DLC Prep area. Any with a matching prefix 
+        // Get the listing of all the files in the DLC Prep area. Any with a matching prefix
         // have the prefix removed and added to the output list.
 
         List<string> dlcFullListing = FssGodotFileOperations.ListFiles(DlcPrepDir, FssGodotFileOperations.ListContent.Both);
@@ -84,15 +84,15 @@ public static class FssDlcOperations
 
     public static void CreateDlc()
     {
-         string dlcExportFolder = FssCentralConfig.Instance.GetParam<string>("DlcPath");
-       
+        string dlcExportFolder = FssCentralConfig.Instance.GetParam<string>("DlcPath");
+
         // List the potential DLCs to export
         List<string> DLCsToExport = DlcExportTitles();
 
         foreach (string dlcName in DLCsToExport)
         {
             string dlcPckName = $"{dlcName}.pck";
-            
+
             // PCK File
             string dlcPckFilename = FssGodotFileOperations.JoinPaths(dlcExportFolder, dlcPckName);
             if (File.Exists(dlcPckFilename))

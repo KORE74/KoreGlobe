@@ -210,6 +210,11 @@ public partial class FssCliWindow : Window
         sb.AppendLine("----------");
         sb.Append(FssDlcOperations.DlcReport());
 
+        // Add a report for the 3D models
+        sb.AppendLine();
+        sb.AppendLine("3D Model Report");
+        sb.AppendLine("---------------");
+        sb.Append(FssGodotFactory.Instance.ModelLibrary.ReportContent());
 
         // Texture report
         sb.AppendLine();
@@ -224,8 +229,8 @@ public partial class FssCliWindow : Window
     {
         StringBuilder sb = new StringBuilder();
 
-        sb.AppendLine("Application Report");
-        sb.AppendLine("===================");
+        sb.AppendLine("Data Report");
+        sb.AppendLine("===========");
 
         // Add the time and version info
         sb.AppendLine($"Time: {DateTime.Now}");
