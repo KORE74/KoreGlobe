@@ -21,7 +21,7 @@ public class Fss3DModelLibrary
     private Dictionary<string, Fss3DModelInfo> ModelInfoList = new Dictionary<string, Fss3DModelInfo>();
 
     // Named list of specific 3D model objects for Godot scene tree.
-    private Dictionary<string, Node> ModelCache = new Dictionary<string, Node>();
+    private Dictionary<string, Node3D> ModelCache = new Dictionary<string, Node3D>();
 
     // ------------------------------------------------------------------------------------------------
     // MARK: Load / Save JSON Config
@@ -55,7 +55,7 @@ public class Fss3DModelLibrary
     // ------------------------------------------------------------------------------------------------
 
     // Usage: Node modelNode = Fss3DModelLibrary.PrepModel("GenericSupportShip");
-    public Node PrepModel(string modelName)
+    public Node3D PrepModel(string modelName)
     {
         // If the model is already loaded, return it
         if (ModelCache.ContainsKey(modelName))
@@ -82,7 +82,7 @@ public class Fss3DModelLibrary
         if (importedModel != null)
         {
             // Instance the model
-            Node modelInstance       = importedModel.Instantiate();
+            Node3D modelInstance     = (Node3D)importedModel.Instantiate();
             Node3D ModelResourceNode = modelInstance as Node3D;
             ModelResourceNode.Name   = modelName;
 
