@@ -90,6 +90,7 @@ public partial class FssGodotEntityManager : Node3D
         // Get the platform node
         FssGodotEntity? ent = GetEntity(platName);
 
+
         if (ent != null)
         {
             // Get the bounding box node name
@@ -105,12 +106,14 @@ public partial class FssGodotEntityManager : Node3D
             }
 
             // Create the bounding box
-            FssXYZBox aabb = new FssXYZBox() { Height = 2, Width = 4, Length = 6 };
+            FssXYZBox rwAABB = new FssXYZBox() { Height = 200, Width = 400, Length = 600 };
+            rwAABB = ent.ModelInfo.RwAABB;
+            FssXYZBox geAABB = rwAABB.Scale(FssZeroOffset.RwToGeDistanceMultiplierM);
 
             // Create a new bounding box node, using our LineMesh class
             FssLineMesh3D bbMesh = new FssLineMesh3D();
             bbMesh.Name = bbNodeName;
-            bbMesh.AddBox(aabb, new Color(1, 1, 0, 1));
+            bbMesh.AddBox(geAABB, new Color(1, 1, 0, 1));
 
             // Add the bounding box to the entity
             ent.AddChild(bbMesh);

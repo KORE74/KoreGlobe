@@ -26,7 +26,7 @@ public class Fss3DModelInfo
         {
             Name         = "Default",
             FilePath     = "Default.glb",
-            RwAABB       = FssXYZBox.Zero,
+            RwAABB       = new FssXYZBox() { Center = FssXYZPoint.Zero, Width = 50, Height = 20, Length = 40 },
             CenterOffset = new Vector3(0, 0, 0),
             Scale        = 1.0f
         };

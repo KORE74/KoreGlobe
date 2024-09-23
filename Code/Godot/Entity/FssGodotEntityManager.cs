@@ -249,8 +249,14 @@ public partial class FssGodotEntityManager : Node3D
             FssGodotPlatformElementAntennaPatterns newAntPat = new FssGodotPlatformElementAntennaPatterns();
             newAntPat.Name = currElemName;
 
+            // Get the size and distance to the AP to fit with the platform.
+            double rwLongestAABBOffset = ent.ModelInfo.RwAABB.LongestOffset();
+            double geApOffsetDist = FssZeroOffset.RwToGeDistanceMultiplierM * (rwLongestAABBOffset * 1.5);
+            double geApMaxAmplitude = geApOffsetDist * 0.4;
+
             // Add the element to the entity and scene tree
             AddLinkedElement(platName, newAntPat);
+            newAntPat.SetSizeAndDistance((float)geApOffsetDist, (float)geApMaxAmplitude);
 
             // transfer the named pattern into the godot element - creating the mesh
             List<string> patternNames = antPat.PatternNames();

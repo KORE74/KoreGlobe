@@ -1,4 +1,4 @@
-
+using System;
 
 public class FssXYZBox : FssXYZ
 {
@@ -51,13 +51,11 @@ public class FssXYZBox : FssXYZ
     // MARK: Box Edits
     // --------------------------------------------------------------------------------------------
 
-    public void Scale(double scale)
-    {
-        Width  *= scale;
-        Height *= scale;
-        Length *= scale;
+    // Scale the box by a factor - Treat the box as immutable and return a new box.
 
-        Center *= scale;
+    public FssXYZBox Scale(double scale)
+    {
+        return new FssXYZBox(Center, Width * scale, Height * scale, Length * scale);
     }
 
     // --------------------------------------------------------------------------------------------
@@ -66,10 +64,16 @@ public class FssXYZBox : FssXYZ
 
     public double OffsetForwards  { get { return (Length / 2) - Center.Z; } }
     public double OffsetBackwards { get { return (Length / 2) + Center.Z; } }
-    public double OffsetLeft      { get { return (Width / 2) - Center.X; } }
-    public double OffsetRight     { get { return (Width / 2) + Center.X; } }
+    public double OffsetLeft      { get { return (Width / 2)  - Center.X; } }
+    public double OffsetRight     { get { return (Width / 2)  + Center.X; } }
     public double OffsetUp        { get { return (Height / 2) - Center.Y; } }
     public double OffsetDown      { get { return (Height / 2) + Center.Y; } }
+
+    public double LongestOffset()
+    {
+        double longestDimension = Math.Max(Width, Math.Max(Height, Length));
+        return longestDimension / 2;
+    }
 
     // --------------------------------------------------------------------------------------------
     // MARK: Corner methods

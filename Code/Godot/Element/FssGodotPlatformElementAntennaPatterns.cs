@@ -10,6 +10,9 @@ public partial class FssGodotPlatformElementAntennaPatterns : FssGodotPlatformEl
     // public FssPolarOffset  PortPolarOffset = new FssPolarOffset();
     // public FssFloat2DArray AntennaPattern  = new FssFloat2DArray();
 
+    private float GeOffsetDistance   = 100f * (float)FssZeroOffset.RwToGeDistanceMultiplierM;
+    private float GePatternMagnitude = 20f  * (float)FssZeroOffset.RwToGeDistanceMultiplierM;
+
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
@@ -33,6 +36,12 @@ public partial class FssGodotPlatformElementAntennaPatterns : FssGodotPlatformEl
     // --------------------------------------------------------------------------------------------
     // MARK: Set Antenna Pattern
     // --------------------------------------------------------------------------------------------
+
+    public void SetSizeAndDistance(float sizeM, float distanceM)
+    {
+        GePatternMagnitude = sizeM; //     * (float)FssZeroOffset.RwToGeDistanceMultiplierM;
+        GeOffsetDistance   = distanceM; // * (float)FssZeroOffset.RwToGeDistanceMultiplierM;
+    }
 
     public void AddPattern(FssAntennaPattern pattern)
     {
@@ -75,7 +84,9 @@ public partial class FssGodotPlatformElementAntennaPatterns : FssGodotPlatformEl
         // FssFloat2DArray radiusList2 = radiusList.ScaleToRange(0, 1f);
         // FssFloat2DArrayIO.SaveToCSVFile(radiusList2, $"c:/util/ap{name}.csv", 2);
 
-        FssFloat2DArray scaledRadiusList = data.ScaleToRange(0, 0.03f);
+        GD.Print($"CreateSinglePatternMesh: Offset:{GeOffsetDistance} // Scale:{GePatternMagnitude}");
+
+        FssFloat2DArray scaledRadiusList = data.ScaleToRange(0, GePatternMagnitude);
 
         FssMeshBuilder meshBuilder = new();
         meshBuilder.AddMalleableSphere(new Vector3(0, 0, 0), scaledRadiusList, colorRange);
@@ -100,8 +111,8 @@ public partial class FssGodotPlatformElementAntennaPatterns : FssGodotPlatformEl
         patternNode.AddChild(meshInstanceW);
 
         // Offset the mesh against the pattern in the -y axis. This pans-out when it is rotated to the offset.
-        meshInstance.Translate(new Vector3(0, -0.05f, 0));
-        meshInstanceW.Translate(new Vector3(0, -0.05f, 0));
+        meshInstance.Translate(new Vector3(0, GeOffsetDistance, 0));
+        meshInstanceW.Translate(new Vector3(0, GeOffsetDistance, 0));
 
         return patternNode;
     }

@@ -9,6 +9,9 @@ public partial class FssGodotEntity : Node3D
 {
     public string EntityName { get; set; }
 
+    // Setup default model info, so we always have something to work with.
+    public Fss3DModelInfo ModelInfo { get; set; } = Fss3DModelInfo.Default();
+
     private FssElementContrail ElementContrail;
 
     // Called when the node enters the scene tree for the first time.
