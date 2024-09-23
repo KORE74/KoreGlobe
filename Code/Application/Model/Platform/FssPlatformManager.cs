@@ -7,7 +7,7 @@ using FssJSON;
 #nullable enable
 
 // Class to provide the top level management of platforms in the system.
-public class FssPlatformManager
+public partial class FssPlatformManager
 {
     private List<FssPlatform> PlatfomList = new();
 
@@ -23,15 +23,8 @@ public class FssPlatformManager
 
     // Considering the platform list by index
 
-    public int NumPlatforms()
-    {
-        return PlatfomList.Count;
-    }
-
-    public void DeleteAllPlatforms()
-    {
-        PlatfomList.Clear();
-    }
+    public int  NumPlatforms()       => PlatfomList.Count;
+    public void DeleteAllPlatforms() => PlatfomList.Clear();
 
     // --------------------------------------------------------------------------------------------
 

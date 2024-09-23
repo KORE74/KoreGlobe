@@ -45,15 +45,8 @@ public class FssPlatform
     // #MARK: Basic Element Management
     // --------------------------------------------------------------------------------------------
 
-    public void AddElement(FssPlatformElement element)
-    {
-        ElementsList.Add(element);
-    }
-
-    public void DeleteElement(FssPlatformElement element)
-    {
-        ElementsList.Remove(element);
-    }
+    public void AddElement(FssPlatformElement element) => ElementsList.Add(element);
+    public void DeleteElement(FssPlatformElement element) => ElementsList.Remove(element);
 
     // Loops in reverse to avoid issues with removing elements from a list while iterating over it
     public void DeleteElement(string name)

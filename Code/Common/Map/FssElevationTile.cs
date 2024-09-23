@@ -31,11 +31,11 @@ public class FssElevationTile
         return LLBox.Contains(pos);
     }
 
-    public float? ElevationAtPos(FssLLPoint pos)
+    public float ElevationAtPos(FssLLPoint pos)
     {
         // Check if the position is within the bounds of the tile.
         if (!LLBox.Contains(pos))
-            return null;
+            return FssElevationSystem.InvalidEle;
 
         // Calculate the fractional position within the tile, then use that to access the value.
         double fracLat = (pos.LatDegs - LLBox.MinLatDegs) / LLBox.DeltaLatDegs;

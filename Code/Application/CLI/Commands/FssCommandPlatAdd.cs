@@ -32,6 +32,9 @@ public class FssCommandPlatAdd : FssCommand
         FssAppFactory.Instance.EventDriver.AddPlatform(platName);
         retString += $"Platform {platName} added.";
 
+        // Set the default platform details - adding it with no location will create rendering div0's etc.
+        FssAppFactory.Instance.EventDriver.DefaultPlatformDetails(platName);
+
         FssCentralLog.AddEntry($"FssCommandPlatAdd.Execute -> {retString}");
         return retString;
     }

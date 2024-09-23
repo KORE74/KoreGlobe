@@ -2,11 +2,11 @@
 
 public class FssXYZBox : FssXYZ
 {
-    public FssXYZPoint Center { get; set; }
+    public FssXYZPoint Center { get; set; } = FssXYZPoint.Zero;
 
-    public double Width  { get; set; }
-    public double Height { get; set; }
-    public double Length  { get; set; }
+    public double Width    { get; set; } = 0;
+    public double Height   { get; set; } = 0;
+    public double Length   { get; set; } = 0;
 
     public enum EnumFace   { Top, Bottom, Left, Right, Front, Back }
     public enum EnumCorner { TopLeftFront, TopRightFront, BottomLeftFront, BottomRightFront, TopLeftBack, TopRightBack, BottomLeftBack, BottomRightBack }
@@ -56,7 +56,7 @@ public class FssXYZBox : FssXYZ
         Width  *= scale;
         Height *= scale;
         Length *= scale;
-    
+
         Center *= scale;
     }
 

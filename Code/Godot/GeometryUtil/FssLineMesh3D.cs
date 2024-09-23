@@ -43,7 +43,7 @@ public partial class FssLineMesh3D : Node3D
     }
 
     // --------------------------------------------------------------------------------------------
-    // MARK: LineMesh3D Functions
+    // MARK: Core LineMesh3D Functions
     // --------------------------------------------------------------------------------------------
 
     // Function to add a line between two points with a specified color
@@ -61,8 +61,6 @@ public partial class FssLineMesh3D : Node3D
         _meshNeedsUpdate = true;
     }
 
-    // --------------------------------------------------------------------------------------------
-    // MARK: Internal Mesh Generation
     // --------------------------------------------------------------------------------------------
 
     // Function to rebuild the mesh when new lines are added
@@ -90,6 +88,62 @@ public partial class FssLineMesh3D : Node3D
 
         _meshNeedsUpdate = false;
     }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Additional Line funcs
+    // --------------------------------------------------------------------------------------------
+
+    //public void AddLine(Vector3 p1, Vector3 p2, Color color)         => AddLine(p1, p2, color);
+    public void AddLine(FssXYZPoint p1, FssXYZPoint p2, Color color) => AddLine(FssGodotGeometryOperations.ToVector3(p1), FssGodotGeometryOperations.ToVector3(p2), color);
+    public void AddLine(FssXYZLine l1, Color color)                  => AddLine(l1.P1, l1.P2, color);
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Add box - Next level complexity
+    // --------------------------------------------------------------------------------------------
+
+    public void AddBox(FssXYZBox xyzBox, Color color)
+    {
+        AddLine(xyzBox.Edge(FssXYZBox.EnumEdge.TopFront),    color);
+        AddLine(xyzBox.Edge(FssXYZBox.EnumEdge.TopBack),     color);
+        AddLine(xyzBox.Edge(FssXYZBox.EnumEdge.TopLeft),     color);
+        AddLine(xyzBox.Edge(FssXYZBox.EnumEdge.TopRight),    color);
+
+        AddLine(xyzBox.Edge(FssXYZBox.EnumEdge.FrontLeft),   color);
+        AddLine(xyzBox.Edge(FssXYZBox.EnumEdge.FrontRight),  color);
+        AddLine(xyzBox.Edge(FssXYZBox.EnumEdge.BackLeft),    color);
+        AddLine(xyzBox.Edge(FssXYZBox.EnumEdge.BackRight),   color);
+
+        AddLine(xyzBox.Edge(FssXYZBox.EnumEdge.BottomFront), color);
+        AddLine(xyzBox.Edge(FssXYZBox.EnumEdge.BottomBack),  color);
+        AddLine(xyzBox.Edge(FssXYZBox.EnumEdge.BottomLeft),  color);
+        AddLine(xyzBox.Edge(FssXYZBox.EnumEdge.BottomRight), color);
+    }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Add Arrow
+    // --------------------------------------------------------------------------------------------
+
+    // Specify a line from tip to tail, and a color for the arrow. The arrow head will be 1/3rd of
+    // its length, with a line on each side at 45 degrees.
+
+    public void AddArrow(FssXYZLine line, Color color)
+    {
+        FssXYZPoint tip  = line.P1;
+        FssXYZPoint tail = line.P2;
+
+        FssXYZPoint direction     = line.Direction;
+        FssXYZPoint unitDirection = direction.Normalize();
+
+        // FssXYZPoint arrowHead      = FssXYZPoint.Scale(unitDirection, line.Length / 3);
+        // FssXYZPoint arrowHeadLeft  = FssXYZPoint.Rotate(arrowHead, 45);
+        // FssXYZPoint arrowHeadRight = FssXYZPoint.Rotate(arrowHead, -45);
+
+        AddLine(tail, tip, color);
+        // AddLine(tip, FssXYZPoint.Sum(tip, arrowHead), color);
+        // AddLine(tip, FssXYZPoint.Sum(tip, arrowHeadLeft), color);
+        // AddLine(tip, FssXYZPoint.Sum(tip, arrowHeadRight), color);
+    }
+
 
     // --------------------------------------------------------------------------------------------
     // MARK: Internal Test Functions

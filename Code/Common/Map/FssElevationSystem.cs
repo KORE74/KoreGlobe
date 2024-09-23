@@ -8,6 +8,10 @@ public class FssElevationSystem
 {
     // public string RootDir = "";
 
+    // FssElevationSystem.InvalidEle
+    public static float InvalidEle      = -9999f;
+    public static float InvalidEleCheck = -9990f; // For checking < or > comparisons
+
     private List<FssElevationTile> TileList = new List<FssElevationTile>();
 
     // public FssMapTileArray MapTiles;
@@ -30,6 +34,7 @@ public class FssElevationSystem
 
         FssLLPoint pos = new FssLLPoint(0, 0);
 
+        // Loop through each of the lat and long positions of the destination tile
         for (int latIdx = 0; latIdx < latRes; latIdx++)
         {
             for (int lonIdx = 0; lonIdx < lonRes; lonIdx++)
@@ -37,7 +42,8 @@ public class FssElevationSystem
                 pos.LatDegs = startLatDegs + latIdx * deltaLatDegs;
                 pos.LonDegs = startLonDegs + lonIdx * deltaLonDegs;
 
-                data[lonIdx, latIdx] = ElevationAtPos(pos) ?? -9999;
+                // Query the ordered source tile list for the elevation for the new position
+                data[lonIdx, latIdx] = ElevationAtPos(pos);
             }
         }
 
@@ -46,19 +52,19 @@ public class FssElevationSystem
         return newTile;
     }
 
-    public float? ElevationAtPos(FssLLPoint pos)
+    public float ElevationAtPos(FssLLPoint pos)
     {
         // Loop through the TileList, grabbing points from the highest resolution tile that contains the position.
         // Loop across the points in a tile, populating the requested array.
 
-        if (TileList.Count == 0) return null;
+        if (TileList.Count == 0) return InvalidEle;
 
         foreach (FssElevationTile tile in TileList)
         {
             if (tile.Contains(pos))
                 return tile.ElevationAtPos(pos);
         }
-        return null;
+        return InvalidEle;
     }
 
     // --------------------------------------------------------------------------------------------
@@ -76,11 +82,13 @@ public class FssElevationSystem
     // MARK: Load / Save Arc ASCII Files
     // --------------------------------------------------------------------------------------------
 
-    public void LoadArcASCIIFileToTile(string filename, FssLLBox llBox)
+    public FssElevationTile? LoadArcASCIIFileToTile(string filename, FssLLBox llBox)
     {
         FssElevationTile? newTile = ArcASCIIToTile(filename, llBox);
         if (newTile != null)
             TileList.Add(newTile);
+
+        return newTile;
     }
 
     public static FssElevationTile? ArcASCIIToTile(string filename, FssLLBox llBox)
@@ -103,66 +111,13 @@ public class FssElevationSystem
 
     public string Report()
     {
-        string report = "Elevation System Report\n";
+        string report = $"Elevation System Report: {TileList.Count} Tile(s)\n";
 
         foreach (FssElevationTile tile in TileList)
         {
             report += tile.Report() + "\n";
         }
-
         return report;
     }
-
-
-
-    // // --------------------------------------------------------------------------------------------
-    // // Constants
-    // // --------------------------------------------------------------------------------------------
-
-    // public static string[] ConstDataTypes  = { "Ele", "SatImg" };
-    // public static string[] ConstPathPerLvl = { "L0_30x30Degs/", "L1_5x5Degs/", "L2_1x1Degs/", "L3_0p2x0p2Degs/", "L4_0p04x0p04Degs/" };
-
-    // // --------------------------------------------------------------------------------------------
-
-    // public FssElevationSystem()
-    // {
-    //     MapTiles = new FssMapTileArray(FssLLBox.GlobalBox, 0, new FssFloat2DArray(10, 10));
-    // }
-
-    // // --------------------------------------------------------------------------------------------
-
-    // public void SetRootDir(string rootDir)
-    // {
-    //     // Check the root dir is valid
-    //     if (string.IsNullOrEmpty(rootDir)) return;
-    //     if (!System.IO.Directory.Exists(rootDir)) return;
-
-    //     RootDir = rootDir;
-    // }
-
-    // --------------------------------------------------------------------------------------------
-
-
-    /*
-    public void CreateTile(string tilecode, int lonRes)
-    {
-        FssMapTileCode tile = new FssMapTileCode(tileCode);
-
-        // Create the tile directory
-        string tileDir = System.IO.Path.Combine(RootDir, tile.FullCode);
-        if (!System.IO.Directory.Exists(tileDir))
-            System.IO.Directory.CreateDirectory(tileDir);
-
-        // Create the tile data directories
-        foreach (string currType in ConstDataTypes)
-        {
-            string dataTypePath = System.IO.Path.Combine(tileDir, currType);
-            if (!System.IO.Directory.Exists(dataTypePath))
-                System.IO.Directory.CreateDirectory(dataTypePath);
-        }
-    }
-
-
-    */
 
 }

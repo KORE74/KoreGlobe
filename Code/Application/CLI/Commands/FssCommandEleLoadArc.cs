@@ -61,7 +61,11 @@ public class FssCommandEleLoadArc : FssCommand
         {
             sb.AppendLine($"Valid operation: Progressing...");
 
-            FssAppFactory.Instance.EleSystem.LoadArcASCIIFileToTile(inEleFilename, llBox);
+            FssElevationTile? newTile = FssAppFactory.Instance.EleSystem.LoadArcASCIIFileToTile(inEleFilename, llBox);
+
+            float testEleVal = newTile.ElevationData[1,1];
+
+            sb.AppendLine($"ele[1,1] = {testEleVal}");
         }
 
         // -------------------------------------------------

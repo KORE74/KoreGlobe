@@ -20,7 +20,7 @@ boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/show_image=false
 boot_splash/image="res://Resources/SplashScreen/Splash-001-Halfsize.png"
 boot_splash/fullsize=false
-config/icon="res://icon2.svg"
+config/icon="res://icon.svg"
 
 [dotnet]
 

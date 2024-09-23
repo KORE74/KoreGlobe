@@ -1,4 +1,4 @@
-[gd_scene load_steps=67 format=3 uid="uid://ck4tngsqwb7jf"]
+[gd_scene load_steps=66 format=3 uid="uid://ck4tngsqwb7jf"]
 
 [ext_resource type="StyleBox" uid="uid://l27fuiuspgfw" path="res://Themes/Panel.tres" id="1_ndm6o"]
 [ext_resource type="Script" path="res://Code/Godot/UI/FssUIHeader.cs" id="2_iuuet"]
@@ -157,8 +157,6 @@ Button/styles/hover = SubResource("StyleOrangeToggle_Hover")
 Button/styles/hover_pressed = SubResource("StyleOrangeToggle_HoverPressed")
 Button/styles/normal = SubResource("StyleOrangeToggle_Normal")
 Button/styles/pressed = SubResource("StyleOrangeToggle_Pressed")
-
-[sub_resource type="ButtonGroup" id="ButtonGroup_lkqfi"]
 
 [sub_resource type="Shortcut" id="Shortcut_2ktqs"]
 
@@ -510,7 +508,7 @@ custom_minimum_size = Vector2(5, 0)
 layout_mode = 2
 
 [node name="ScenarioTimeLabel" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
-custom_minimum_size = Vector2(200, 0)
+custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 theme_override_constants/line_spacing = -2
 text = "Scenario Time: 
@@ -763,18 +761,6 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_constants/separation = 5
 
-[node name="CameraModeXYZButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
-custom_minimum_size = Vector2(45, 45)
-layout_mode = 2
-focus_mode = 0
-theme = ExtResource("9_22suo")
-theme_override_constants/outline_size = 10
-toggle_mode = true
-action_mode = 0
-button_group = ExtResource("15_83ia6")
-text = "XYZ"
-expand_icon = true
-
 [node name="CameraModeWorldButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
@@ -782,6 +768,7 @@ focus_mode = 0
 theme = ExtResource("9_22suo")
 theme_override_constants/outline_size = 10
 toggle_mode = true
+button_pressed = true
 action_mode = 0
 button_group = ExtResource("15_83ia6")
 icon = ExtResource("10_ebi24")
@@ -792,7 +779,6 @@ custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 focus_mode = 0
 theme = ExtResource("9_22suo")
-disabled = true
 toggle_mode = true
 action_mode = 0
 button_group = ExtResource("15_83ia6")
@@ -806,10 +792,9 @@ layout_mode = 2
 focus_mode = 0
 theme = ExtResource("9_22suo")
 theme_override_constants/outline_size = 10
-disabled = true
 toggle_mode = true
 action_mode = 0
-button_group = SubResource("ButtonGroup_lkqfi")
+button_group = ExtResource("15_83ia6")
 icon = ExtResource("13_pe2s4")
 expand_icon = true
 
@@ -851,7 +836,7 @@ expand_icon = true
 [node name="NearTargetLabel" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer/PanelContainer-NearCamTarget/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
 custom_minimum_size = Vector2(130, 45)
 layout_mode = 2
-text = "Platform 1"
+text = "- - -"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -902,7 +887,8 @@ expand_icon = true
 [node name="FarTargetLabel" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer/PanelContainer-FarCamTarget/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
 custom_minimum_size = Vector2(130, 45)
 layout_mode = 2
-text = "Platform 1"
+text = "- - -
+"
 horizontal_alignment = 1
 vertical_alignment = 1
 

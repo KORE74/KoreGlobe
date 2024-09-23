@@ -118,6 +118,8 @@ public class FssConsole
         commandHandlers.Add(new FssCommandElePrep());
         commandHandlers.Add(new FssCommandEleLoadArc());
         commandHandlers.Add(new FssCommandEleSaveTile());
+        commandHandlers.Add(new FssCommandEleForPos());
+        commandHandlers.Add(new FssCommandEleReport());
 
 
         // commandHandlers.Add("help", CmdHelp);

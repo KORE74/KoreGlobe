@@ -10,16 +10,16 @@ public class FssXYZLine : FssXYZ
     public FssXYZPoint P2 { get; }
 
     // --------------------------------------------------------------------------------------------
-    // Read only / derived attributes
+    // MARK: Read only / derived attributes
     // --------------------------------------------------------------------------------------------
 
-    public double Length { get { return P1.DistanceTo(P2); } }
-    public FssXYZPoint Direction { get { return FssXYZPoint.Diff(P1, P2); } }
+    public double Length                   { get { return P1.DistanceTo(P2); } }
+    public FssXYZPoint Direction           { get { return FssXYZPoint.Diff(P1, P2); } }
     public FssXYZPoint DirectionUnitVector { get { return FssXYZPoint.Scale(Direction, 1 / Length); } }
-    public FssXYZPoint MidPoint { get { return FssXYZPoint.Scale(FssXYZPoint.Sum(P1, P2), 0.5); } }
+    public FssXYZPoint MidPoint            { get { return FssXYZPoint.Scale(FssXYZPoint.Sum(P1, P2), 0.5); } }
 
     // --------------------------------------------------------------------------------------------
-    // Constructor
+    // MARK: Constructor
     // --------------------------------------------------------------------------------------------
 
     public FssXYZLine(FssXYZPoint inP1, FssXYZPoint inP2)
@@ -28,7 +28,10 @@ public class FssXYZLine : FssXYZ
         P2 = inP2;
     }
 
+    // --------------------------------------------------------------------------------------------
     // Normalize - set the line as a unit vector from P1 to P2, where P1 is Zero.
+    // --------------------------------------------------------------------------------------------
+
     public FssXYZLine Normalize()
     {
         var direction = this.Direction;

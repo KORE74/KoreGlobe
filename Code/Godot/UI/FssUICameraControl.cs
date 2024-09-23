@@ -18,7 +18,7 @@ public partial class FssUICameraControl : Control
     Label  FarTargetLabel;
     Button FarTargetPrevButton;
 
-    float    TimerUIUpdate = 0.0f;
+    float  TimerUIUpdate = 0.0f;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -37,6 +37,13 @@ public partial class FssUICameraControl : Control
         FarTargetNextButton      = (Button)FindChild("FarTargetNextButton");
         FarTargetLabel           = (Label)FindChild("FarTargetLabel");
         FarTargetPrevButton      = (Button)FindChild("FarTargetPrevButton");
+
+
+        NearTargetNextButton.Connect("pressed", new Callable(this, "OnNearTargetNextButtonPressed"));
+        NearTargetPrevButton.Connect("pressed", new Callable(this, "OnNearTargetPrevButtonPressed"));
+
+        FarTargetNextButton.Connect("pressed", new Callable(this, "OnFarTargetNextButtonPressed"));
+        FarTargetPrevButton.Connect("pressed", new Callable(this, "OnFarTargetPrevButtonPressed"));
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -46,10 +53,12 @@ public partial class FssUICameraControl : Control
         {
             TimerUIUpdate = FssCoreTime.RuntimeSecs + 1f;
             UpdateUIText();
+            UpdatePlatformLabels();
+            UpdateCameraModeButtonStates();
         }
     }
 
-        // --------------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
     // MARK: Localisation
     // --------------------------------------------------------------------------------------------
 
@@ -59,4 +68,70 @@ public partial class FssUICameraControl : Control
         NearTargetPanelLabel.Text = FssLanguageStrings.Instance.GetParam("NearTargetPanel");
         FarTargetPanelLabel.Text  = FssLanguageStrings.Instance.GetParam("FarTargetPanel");
     }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: UI Updates
+    // --------------------------------------------------------------------------------------------
+
+    private void UpdatePlatformLabels()
+    {
+        NearTargetLabel.Text = FssAppFactory.Instance.EventDriver.NearPlatformName();
+        FarTargetLabel.Text  = FssAppFactory.Instance.EventDriver.FarPlatformName();
+
+        bool nearEnabled = FssAppFactory.Instance.EventDriver.NearPlatformValid();
+        NearTargetNextButton.Disabled = !nearEnabled;
+        NearTargetPrevButton.Disabled = !nearEnabled;
+
+        bool farEnabled = FssAppFactory.Instance.EventDriver.FarPlatformValid();
+        FarTargetNextButton.Disabled = !farEnabled;
+        FarTargetPrevButton.Disabled = !farEnabled;
+    }
+
+    private void UpdateCameraModeButtonStates()
+    {
+        bool worldEnabled = true;
+        bool chaseEnabled = (FssAppFactory.Instance.EventDriver.NumPlatforms() >= 1);
+        bool alignEnabled = (FssAppFactory.Instance.EventDriver.NumPlatforms() >= 2);
+
+        CameraModeWorldButton.Disabled    = !worldEnabled;
+        CameraModeChaseCamButton.Disabled = !chaseEnabled;
+        CameraModeAlignCamButton.Disabled = !alignEnabled;
+    }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: UI Actions
+    // --------------------------------------------------------------------------------------------
+
+    private void OnNearTargetNextButtonPressed()
+    {
+        GD.Print("OnNearTargetNextButtonPressed");
+
+        FssAppFactory.Instance.EventDriver.NearPlatformNext();
+        UpdatePlatformLabels();
+    }
+
+    private void OnNearTargetPrevButtonPressed()
+    {
+        GD.Print("OnNearTargetPrevButtonPressed");
+
+        FssAppFactory.Instance.EventDriver.NearPlatformPrev();
+        UpdatePlatformLabels();
+    }
+
+    private void OnFarTargetNextButtonPressed()
+    {
+        GD.Print("OnFarTargetNextButtonPressed");
+
+        FssAppFactory.Instance.EventDriver.FarPlatformNext();
+        UpdatePlatformLabels();
+    }
+
+    private void OnFarTargetPrevButtonPressed()
+    {
+        GD.Print("OnFarTargetPrevButtonPressed");
+
+        FssAppFactory.Instance.EventDriver.FarPlatformPrev();
+        UpdatePlatformLabels();
+    }
+
 }
