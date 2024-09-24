@@ -1,0 +1,25 @@
+
+// FssUIState: A collection of states in the UI
+
+public enum FssCamMode
+{
+    WorldCam,
+    ChaseCam,
+    AlignCam
+}
+
+public class FssUIState
+{
+    public FssCamMode CameraMode { get; set; }
+
+    public FssUIState()
+    {
+        CameraMode = FssCamMode.WorldCam;
+    }
+
+    public bool IsCamModeWorld()    => CameraMode == FssCamMode.WorldCam;
+    public bool IsCamModeChaseCam() => CameraMode == FssCamMode.ChaseCam;
+    public bool IsCamModeAlignCam() => CameraMode == FssCamMode.AlignCam;
+
+
+}

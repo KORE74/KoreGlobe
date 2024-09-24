@@ -111,8 +111,8 @@ public partial class FssGodotPlatformElementAntennaPatterns : FssGodotPlatformEl
         patternNode.AddChild(meshInstanceW);
 
         // Offset the mesh against the pattern in the -y axis. This pans-out when it is rotated to the offset.
-        meshInstance.Translate(new Vector3(0, GeOffsetDistance, 0));
-        meshInstanceW.Translate(new Vector3(0, GeOffsetDistance, 0));
+        meshInstance.Translate(new Vector3(0, -GeOffsetDistance, 0));
+        meshInstanceW.Translate(new Vector3(0, -GeOffsetDistance, 0));
 
         return patternNode;
     }

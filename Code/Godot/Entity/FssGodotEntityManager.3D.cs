@@ -90,7 +90,6 @@ public partial class FssGodotEntityManager : Node3D
         // Get the platform node
         FssGodotEntity? ent = GetEntity(platName);
 
-
         if (ent != null)
         {
             // Get the bounding box node name

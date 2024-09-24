@@ -38,6 +38,9 @@ public partial class FssUICameraControl : Control
         FarTargetLabel           = (Label)FindChild("FarTargetLabel");
         FarTargetPrevButton      = (Button)FindChild("FarTargetPrevButton");
 
+        CameraModeWorldButton.Connect("pressed", new Callable(this, "OnCameraModeWorldButtonPressed"));
+        CameraModeChaseCamButton.Connect("pressed", new Callable(this, "OnCameraModeChaseCamButtonPressed"));
+        CameraModeAlignCamButton.Connect("pressed", new Callable(this, "OnCameraModeAlignCamButtonPressed"));
 
         NearTargetNextButton.Connect("pressed", new Callable(this, "OnNearTargetNextButtonPressed"));
         NearTargetPrevButton.Connect("pressed", new Callable(this, "OnNearTargetPrevButtonPressed"));
@@ -96,10 +99,39 @@ public partial class FssUICameraControl : Control
         CameraModeWorldButton.Disabled    = !worldEnabled;
         CameraModeChaseCamButton.Disabled = !chaseEnabled;
         CameraModeAlignCamButton.Disabled = !alignEnabled;
+
+        CameraModeWorldButton.SetPressedNoSignal(FssGodotFactory.Instance.UIState.IsCamModeWorld());
+        CameraModeChaseCamButton.SetPressedNoSignal(FssGodotFactory.Instance.UIState.IsCamModeChaseCam());
+        CameraModeAlignCamButton.SetPressedNoSignal(FssGodotFactory.Instance.UIState.IsCamModeAlignCam());
     }
 
     // --------------------------------------------------------------------------------------------
-    // MARK: UI Actions
+    // MARK: UI Actions - Modes
+    // --------------------------------------------------------------------------------------------
+
+    private void OnCameraModeWorldButtonPressed()
+    {
+        GD.Print("OnCameraModeWorldButtonPressed");
+
+        FssGodotFactory.Instance.UIState.CameraMode = FssCamMode.WorldCam;
+    }
+
+    private void OnCameraModeChaseCamButtonPressed()
+    {
+        GD.Print("OnCameraModeChaseCamButtonPressed");
+
+        FssGodotFactory.Instance.UIState.CameraMode = FssCamMode.ChaseCam;
+    }
+
+    private void OnCameraModeAlignCamButtonPressed()
+    {
+        GD.Print("OnCameraModeAlignCamButtonPressed");
+
+        FssGodotFactory.Instance.UIState.CameraMode = FssCamMode.AlignCam;
+    }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: UI Actions - Near / Far Targets
     // --------------------------------------------------------------------------------------------
 
     private void OnNearTargetNextButtonPressed()

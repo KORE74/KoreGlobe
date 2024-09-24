@@ -117,7 +117,10 @@ public partial class FssGodotEntityManager : Node3D
 
         // Loop through the list of platform names, and the EntityList, match them up.
         foreach (string currModelName in omittedInPresentation)
+        {
             AddEntity(currModelName);
+            AddChaseCam(currModelName);
+        }
 
         foreach (string currModelName in noLongerInModel)
             RemoveEntity(currModelName);
@@ -229,7 +232,6 @@ public partial class FssGodotEntityManager : Node3D
             newDome.RxDistanceM = 50000f;
             AddLinkedElement(platName, newDome);
         }
-
     }
 
     // --------------------------------------------------------------------------------------------
@@ -251,12 +253,12 @@ public partial class FssGodotEntityManager : Node3D
 
             // Get the size and distance to the AP to fit with the platform.
             double rwLongestAABBOffset = ent.ModelInfo.RwAABB.LongestOffset();
-            double geApOffsetDist = FssZeroOffset.RwToGeDistanceMultiplierM * (rwLongestAABBOffset * 1.5);
-            double geApMaxAmplitude = geApOffsetDist * 0.4;
+            double geApOffsetDist      = FssZeroOffset.RwToGeDistanceMultiplierM * (rwLongestAABBOffset * 3);
+            double geApMaxAmplitude    = geApOffsetDist * 0.25;
 
             // Add the element to the entity and scene tree
             AddLinkedElement(platName, newAntPat);
-            newAntPat.SetSizeAndDistance((float)geApOffsetDist, (float)geApMaxAmplitude);
+            newAntPat.SetSizeAndDistance((float)geApMaxAmplitude, (float)geApOffsetDist);
 
             // transfer the named pattern into the godot element - creating the mesh
             List<string> patternNames = antPat.PatternNames();

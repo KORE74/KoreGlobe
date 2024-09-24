@@ -17,6 +17,7 @@ public class FssGodotFactory
     public FssGodotEntityManager GodotEntityManager { get; private set; } = null;
     public FssTextureLoader      TextureLoader      { get; private set; } = null;
     public Fss3DModelLibrary     ModelLibrary       { get; private set; } = null;
+    public FssUIState            UIState            { get; private set; } = null;
 
     // Singleton pattern
     private static readonly object  lockObject        = new object();
@@ -88,6 +89,7 @@ public class FssGodotFactory
 
                 TextureLoader = new FssTextureLoader();
                 ModelLibrary  = new Fss3DModelLibrary();
+                UIState       = new FssUIState();
 
                 IsInitialised = true;
             }

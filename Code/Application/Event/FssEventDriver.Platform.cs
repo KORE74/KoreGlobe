@@ -285,8 +285,28 @@ public partial class FssEventDriver
     public string NearPlatformName() => FssAppFactory.Instance.PlatformManager.NearPlatformName();
     public string FarPlatformName()  => FssAppFactory.Instance.PlatformManager.FarPlatformName();
 
-    public void NearPlatformNext()   => FssAppFactory.Instance.PlatformManager.NearPlatformNext();
-    public void NearPlatformPrev()   => FssAppFactory.Instance.PlatformManager.NearPlatformPrev();
+    public void NearPlatformNext()
+    {
+        FssAppFactory.Instance.PlatformManager.NearPlatformNext();
+
+        // move the chase cam if in the right mode
+        if (FssGodotFactory.Instance.UIState.IsCamModeChaseCam())
+        {
+            FssGodotFactory.Instance.GodotEntityManager.EnableChaseCam(NearPlatformName());
+        }
+    }
+
+    public void NearPlatformPrev()
+    {
+        FssAppFactory.Instance.PlatformManager.NearPlatformPrev();
+
+        // move the chase cam if in the right mode
+        if (FssGodotFactory.Instance.UIState.IsCamModeChaseCam())
+        {
+            FssGodotFactory.Instance.GodotEntityManager.EnableChaseCam(NearPlatformName());
+        }
+    }
+
     public void FarPlatformNext()    => FssAppFactory.Instance.PlatformManager.FarPlatformNext();
     public void FarPlatformPrev()    => FssAppFactory.Instance.PlatformManager.FarPlatformPrev();
 
