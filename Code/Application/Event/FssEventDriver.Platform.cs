@@ -279,6 +279,10 @@ public partial class FssEventDriver
     // #MARK: Platform Near/Far UI
     // ---------------------------------------------------------------------------------------------
 
+    // Usage:
+    // - FssAppFactory.Instance.EventDriver.NearPlatformValid();
+    // - FssAppFactory.Instance.EventDriver.NearPlatformName();
+
     public bool NearPlatformValid()  => FssAppFactory.Instance.PlatformManager.NearPlatformValid();
     public bool FarPlatformValid()   => FssAppFactory.Instance.PlatformManager.FarPlatformValid();
 

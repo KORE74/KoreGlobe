@@ -6,8 +6,6 @@ public partial class FssCameraMoverWorld : Node3D
     public FssLLAPoint CamPos    = new FssLLAPoint() { LatDegs = 50, LonDegs = -1, AltMslM = 5000 };
     public FssCourse   CamCourse = new FssCourse()   { HeadingDegs = 180, SpeedKph = 0 };
 
-    public FssPolarOffset CamOffset = new FssPolarOffset(10, 0, 0);
-
     public float camPitch = 0;
 
     private float TimerCamReport = 0;
@@ -25,7 +23,11 @@ public partial class FssCameraMoverWorld : Node3D
         // Initialization code if needed
         Name = "WorldCam";
 
-        CamNode = GetNode<Camera3D>("WorldCam");
+        CamNode = new Camera3D() { Name = "WorldCam" };
+        AddChild(CamNode);
+        CamNode.Near = 0.001f;
+        CamNode.Far  = 4000f;
+        CamNode.Fov  = 40f;
 
         camSpeedForAlt.AddEntry(10,          250);
         camSpeedForAlt.AddEntry(1000,        500);
@@ -79,6 +81,11 @@ public partial class FssCameraMoverWorld : Node3D
 
     private void UpdateInputs()
     {
+
+        // exit if the camera is not current
+        if (CamNode == null) return;
+        if (!CamNode.IsCurrent()) return;
+
         double translateFwdM  = 0;
         double translateLeftM = 0;
         double translateUpM   = 0;
@@ -134,11 +141,6 @@ public partial class FssCameraMoverWorld : Node3D
             if (Input.IsActionPressed("ui_right")) translateLeftM -= 1;
         }
 
-        // Create a polar offset to apply to the camera position
-        // CamOffset.AzDegs += rotateLeftDegs;
-        // CamOffset.ElDegs += rotateUpDegs;
-        // CamOffset.RangeM += translateFwdM;
-
         // Simple: Apply alt and heading chanegs
         CamPos.AltMslM        += translateUpM   * VertMoveSpeed;//translateUpSpeed;
         CamCourse.HeadingDegs += rotateLeftDegs * rotateSpeed;
@@ -179,9 +181,6 @@ public partial class FssCameraMoverWorld : Node3D
                 FssMapManager.LoadRefLLA = FssGeoConvOperations.GeToRw(Position);
             }
         }
-
-
-        // GD.Print($"CamOffset:{CamOffset}");
     }
 
     public override void _Input(InputEvent inputEvent)

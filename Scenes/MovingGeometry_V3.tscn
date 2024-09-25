@@ -1,7 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://cle61uafx4wyg"]
+[gd_scene load_steps=4 format=3 uid="uid://cle61uafx4wyg"]
 
 [ext_resource type="Script" path="res://Code/Godot/TestZeroOffset.cs" id="1_awllb"]
-[ext_resource type="Script" path="res://Code/Godot/Util/FssCameraMoverWorld.cs" id="2_q4a80"]
 [ext_resource type="PackedScene" uid="uid://ck4tngsqwb7jf" path="res://Scenes/ui_top.tscn" id="3_3wlp5"]
 
 [sub_resource type="Environment" id="Environment_r87dp"]
@@ -10,38 +9,19 @@ background_color = Color(0.449993, 0.581307, 0.79351, 1)
 ambient_light_source = 2
 ambient_light_color = Color(0.862832, 0.855605, 0.811735, 1)
 reflected_light_source = 2
-glow_enabled = true
+ssao_enabled = true
+ssil_enabled = true
+sdfgi_enabled = true
+fog_light_color = Color(0.365943, 0.677669, 0.940654, 1)
+volumetric_fog_albedo = Color(0.599442, 0.763254, 0.970563, 1)
 
 [node name="Root" type="Node3D"]
 top_level = true
-
-[node name="Scene" type="Node3D" parent="."]
-top_level = true
 script = ExtResource("1_awllb")
-
-[node name="SpotLight3D" type="SpotLight3D" parent="Scene"]
-transform = Transform3D(1, 0, 0, 0, 0.173648, 0.984808, 0, -0.984808, 0.173648, 0, 10, 3)
-top_level = true
-spot_range = 16.0847
-spot_angle = 30.6739
-
-[node name="WorldCamBase" type="Node3D" parent="Scene"]
-top_level = true
-script = ExtResource("2_q4a80")
-
-[node name="WorldCam" type="Camera3D" parent="Scene/WorldCamBase"]
-current = true
-fov = 40.0
-near = 0.001
-far = 12000.0
-
-[node name="Camera3D" type="Camera3D" parent="Scene/WorldCamBase/WorldCam"]
-near = 0.001
-far = 10000.0
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="Scene"]
-environment = SubResource("Environment_r87dp")
 
 [node name="UITop" parent="." instance=ExtResource("3_3wlp5")]
 custom_minimum_size = Vector2(1100, 640)
 anchors_preset = -1
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_r87dp")

@@ -105,13 +105,17 @@ public partial class FssSettingWindow : Window
 
         MaxMapLvlSlider.Connect("value_changed", new Callable(this, "OnMaxMapLvlSliderValueChanged"));
 
-
-
         // Connect the close_requested signal to the OnCloseRequested function
         Connect("close_requested", new Callable(this, "OnCancelButtonPressed"));
 
         UpdateUIText();
         WriteControlValues();
+
+        // NOTE: Doesn't work. Kept as a reminder to try again later
+        // Get the viewport and set the MSAA
+        // GD.Print("Setting MSAA");
+        // Viewport viewport = GetViewport();
+        // viewport.SetMsaa3D(Viewport.Msaa.Msaa8X);
     }
 
     // --------------------------------------------------------------------------------------------
@@ -211,7 +215,7 @@ public partial class FssSettingWindow : Window
     }
 
     // --------------------------------------------------------------------------------------------
-    // MARK: UI Interactions
+    // MARK: UI Interactions - Dialog Buttons
     // --------------------------------------------------------------------------------------------
 
     public void OnOkButtonPressed()
@@ -229,6 +233,10 @@ public partial class FssSettingWindow : Window
         Visible = false;
     }
 
+    // --------------------------------------------------------------------------------------------
+    // MARK: UI Interactions - Language
+    // --------------------------------------------------------------------------------------------
+
     public void OnNextLanguageButtonPressed()
     {
         FssCentralLog.AddEntry("FssSettingWindow.OnNextLanguageButtonPressed");
@@ -244,6 +252,10 @@ public partial class FssSettingWindow : Window
         FssLanguageStrings.Instance.PrevActiveLanguage();
         ActiveLanguageLabel.Text = FssLanguageStrings.Instance.CurrActiveLanguage();
     }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: UI Interactions - Map Info
+    // --------------------------------------------------------------------------------------------
 
     public void OnMaxMapLvlSliderValueChanged(float value)
     {
@@ -268,6 +280,10 @@ public partial class FssSettingWindow : Window
     {
         FssCentralLog.AddEntry("FssSettingWindow.OnToggleLogButtonPressed");
     }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: UI Interactions - DLC
+    // --------------------------------------------------------------------------------------------
 
     public void OnDLCRefreshButtonPressed()
     {

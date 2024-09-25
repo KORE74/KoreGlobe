@@ -40,6 +40,26 @@ public partial class FssCameraPolarOffset : Node3D
         CamNode.Position = new Vector3(0, CamOffsetDist, 0);
     }
 
+    // Process inputs
+    public override void _Input(InputEvent @event)
+    {
+        float distanceDelta        = CamOffsetDist;
+        float angleDeltaDegsPerSec = 1f;
+
+        if (Input.IsActionPressed("ui_shift"))
+        {
+            if (Input.IsActionPressed("ui_up"))    CamRotation.Z += angleDeltaDegsPerSec;
+            if (Input.IsActionPressed("ui_down") ) CamRotation.Z -= angleDeltaDegsPerSec;
+        }
+        else
+        {
+            if (Input.IsActionPressed("ui_up"))    CamOffsetDist -= distanceDelta;
+            if (Input.IsActionPressed("ui_down"))  CamOffsetDist += distanceDelta;
+            if (Input.IsActionPressed("ui_left"))  CamRotation.Y += angleDeltaDegsPerSec;
+            if (Input.IsActionPressed("ui_right")) CamRotation.Y -= angleDeltaDegsPerSec;
+        }
+    }
+
     // --------------------------------------------------------------------------------------------
     // MARK: Update - ChaseCam
     // --------------------------------------------------------------------------------------------

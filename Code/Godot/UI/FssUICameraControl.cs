@@ -114,6 +114,8 @@ public partial class FssUICameraControl : Control
         GD.Print("OnCameraModeWorldButtonPressed");
 
         FssGodotFactory.Instance.UIState.CameraMode = FssCamMode.WorldCam;
+
+        TestZeroOffset.WorldCamNode.CamNode.Current = true;
     }
 
     private void OnCameraModeChaseCamButtonPressed()
@@ -121,6 +123,7 @@ public partial class FssUICameraControl : Control
         GD.Print("OnCameraModeChaseCamButtonPressed");
 
         FssGodotFactory.Instance.UIState.CameraMode = FssCamMode.ChaseCam;
+        FssGodotFactory.Instance.UIState.UpdateDisplayedChaseCam();
     }
 
     private void OnCameraModeAlignCamButtonPressed()
@@ -139,6 +142,7 @@ public partial class FssUICameraControl : Control
         GD.Print("OnNearTargetNextButtonPressed");
 
         FssAppFactory.Instance.EventDriver.NearPlatformNext();
+        FssGodotFactory.Instance.UIState.UpdateDisplayedChaseCam();
         UpdatePlatformLabels();
     }
 
@@ -147,6 +151,7 @@ public partial class FssUICameraControl : Control
         GD.Print("OnNearTargetPrevButtonPressed");
 
         FssAppFactory.Instance.EventDriver.NearPlatformPrev();
+        FssGodotFactory.Instance.UIState.UpdateDisplayedChaseCam();
         UpdatePlatformLabels();
     }
 

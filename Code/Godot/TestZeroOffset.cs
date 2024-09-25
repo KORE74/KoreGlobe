@@ -4,27 +4,18 @@ using System.Collections.Generic;
 
 public partial class TestZeroOffset : Node3D
 {
-    // The two control nodes
-    // Node3D EarthCoreNode;
-    // Node3D ZeroNode;
-    // Node3D EntityRootNode;
-
     Node3D PlaformBaseNode;
     Node3D ModelResourceNode;
 
-    Node3D TestNode;
-    Node3D TestNodeAhead;
-    Node3D TestNodeAbove;
-
     // FssMapManager      MapManager;
-    FssElementContrail ElementContrail;
+    FssElementContrail            ElementContrail;
     FssGodotPlatformElementRoute    ElementRoute;
-    FssGodotEntityManager   EntityManager;
-    FssCameraMoverWorld WorldCamNode;
+    FssGodotEntityManager        EntityManager;
 
-    Material matColorRed;
-    Material matColorBlue;
-    Material matWire;
+
+    // TestZeroOffset.WorldCamNode.CamNode
+
+    public static FssCameraMoverWorld WorldCamNode;
 
     private float MarkerSize  = 0.2f;
     private bool  WithWire = true;
@@ -71,10 +62,10 @@ public partial class TestZeroOffset : Node3D
             RadiusM = FssPosConsts.EarthRadiusM };
         FssZeroOffset.SetLLA(zeroPos);
 
-        // Init materials
-        matColorRed  = FssMaterialFactory.SimpleColoredMaterial(new Color(0.9f, 0.3f, 0.3f, 1f));
-        matColorBlue = FssMaterialFactory.SimpleColoredMaterial(new Color(0.3f, 0.3f, 0.9f, 1f));
-        matWire      = FssMaterialFactory.WireframeMaterial(FssColorUtil.Colors["White"]);
+
+        WorldCamNode = new FssCameraMoverWorld() { Name = "WorldCamBase" };
+        AddChild(WorldCamNode);
+        WorldCamNode.CamNode.Current = true;
 
         FssZeroOffset.ReportConsts();
 
