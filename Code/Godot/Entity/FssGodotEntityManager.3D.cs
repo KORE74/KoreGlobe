@@ -4,6 +4,8 @@ using System.Text;
 
 using Godot;
 
+#nullable enable
+
 public partial class FssGodotEntityManager : Node3D
 {
 
@@ -14,7 +16,34 @@ public partial class FssGodotEntityManager : Node3D
 
     private void MatchModelPlatform3DModel(string platName)
     {
-        MatchBoundingBox(platName);
+        // Get the platform, and platform type, from the mode model side
+        string? platformType = FssAppFactory.Instance.EventDriver.PlatformType(platName);
+        if (platformType == null)
+            platformType = "default";
+
+
+
+
+        MatchBoundingBox(platName, platformType);
+
+
+
+        string modelNodeName = "model";
+
+        FssGodotEntity? ent = GetEntity(platName);
+        Node3D? modelNode = ent.GetNodeOrNull<Node3D>(modelNodeName);
+
+        if (modelNode == null)
+        {
+            modelNode = FssGodotFactory.Instance.ModelLibrary.PrepModel(platformType);
+
+            modelNode.Name = modelNodeName;
+            ent.AddChild(modelNode);
+        }
+
+
+
+
 
     //     // 1 - GetEntity the top level object of the model and presentation sides
 
@@ -82,7 +111,10 @@ public partial class FssGodotEntityManager : Node3D
     //     }
     }
 
-    private void MatchBoundingBox(string platName)
+
+
+
+    private void MatchBoundingBox(string platName, string platformType)
     {
         // The name of the bounding box node
         string bbNodeName = "aabb";
@@ -90,7 +122,23 @@ public partial class FssGodotEntityManager : Node3D
         // Get the platform node
         FssGodotEntity? ent = GetEntity(platName);
 
-        if (ent != null)
+        // Get the AABB for the model
+        FssXYZBox? rwAABB = FssGodotFactory.Instance.ModelLibrary.AABBForModel(platformType);
+
+
+        if (rwAABB == null)
+        {
+            FssCentralLog.AddEntry($"MatchBoundingBox: {platformType} => rwAABB is null");
+
+            List<string> modelNames = FssGodotFactory.Instance.ModelLibrary.ModelNamesList();
+            string modelNamesStr = string.Join(", ", modelNames);
+
+            FssCentralLog.AddEntry($"Known models: {modelNamesStr}");
+        }
+        else
+            FssCentralLog.AddEntry($"MatchBoundingBox: {platformType} => rwAABB:{rwAABB}");
+
+        if ((ent != null) && (rwAABB != null))
         {
             // Get the bounding box node name
             //Node3D? bbNode = ent.FindNode(bbNodeName) as Node3D;
@@ -105,9 +153,11 @@ public partial class FssGodotEntityManager : Node3D
             }
 
             // Create the bounding box
-            FssXYZBox rwAABB = new FssXYZBox() { Height = 200, Width = 400, Length = 600 };
-            rwAABB = ent.ModelInfo.RwAABB;
+            //FssXYZBox rwAABB = new FssXYZBox() { Height = 200, Width = 400, Length = 600 };
+            //rwAABB = ent.ModelInfo.RwAABB;
             FssXYZBox geAABB = rwAABB.Scale(FssZeroOffset.RwToGeDistanceMultiplierM);
+
+            GD.Print($"MatchBoundingBox: {platformType} => geAABB:{geAABB}");
 
             // Create a new bounding box node, using our LineMesh class
             FssLineMesh3D bbMesh = new FssLineMesh3D();

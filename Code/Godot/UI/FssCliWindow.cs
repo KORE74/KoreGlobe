@@ -176,7 +176,7 @@ public partial class FssCliWindow : Window
         while (FssAppFactory.Instance.ConsoleInterface.HasOutput())
         {
             string newContent = FssAppFactory.Instance.ConsoleInterface.GetOutput();
-            GD.Print($"CLIWindow UpdateLabelFromConsole: {newContent}");
+            //GD.Print($"CLIWindow UpdateLabelFromConsole: {newContent}");
             UpdateLabel(newContent);
         }
     }
@@ -267,10 +267,6 @@ public partial class FssCliWindow : Window
         Hide();
     }
 
-    public void ToggleVisibility()
-    {
-        Visible = !Visible;
-        GD.Print("ToggleVisible");
-    }
+    public void ToggleVisibility() => Visible = !Visible;
 
 }

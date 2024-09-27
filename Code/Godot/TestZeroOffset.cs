@@ -52,8 +52,8 @@ public partial class TestZeroOffset : Node3D
         FssGodotFactory.Instance.CreateObjects(this);
 
         // Randomize the zero point in each run so we don't bake-in assumptions.
-        double randomLat = FssValueUtils.RandomInRange(50, 52);
-        double randomLon = FssValueUtils.RandomInRange(-4, -2);
+        double randomLat = FssValueUtils.RandomInRange(45, 60);
+        double randomLon = FssValueUtils.RandomInRange(-8, -0);
 
         // Init the real world zero pos
         FssLLAPoint zeroPos = new FssLLAPoint() {

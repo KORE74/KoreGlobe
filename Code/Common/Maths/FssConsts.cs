@@ -18,3 +18,4 @@ public static class FssConsts
     public const float  ArbitraryMinFloat   = 0.00001f; // Used to check for values too close to 0.
 }
 
+// FssConsts.DegsToRadsMultiplier

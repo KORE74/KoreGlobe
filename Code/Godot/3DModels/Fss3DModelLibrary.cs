@@ -13,7 +13,9 @@ using System.Text.Json;
 
 // The FssDlcOperations class deals with the creation/loading and managing or DLC .PCK files.
 // The Fss3DModelLibrary class deals with the supply of 3D model Nodes to the application, along with the
-// model informatino around scaling, bounding boxes, etc.
+// model information around scaling, bounding boxes, etc.
+
+#nullable enable
 
 public class Fss3DModelLibrary
 {
@@ -57,11 +59,14 @@ public class Fss3DModelLibrary
     // Usage: Node modelNode = Fss3DModelLibrary.PrepModel("GenericSupportShip");
     public Node3D PrepModel(string modelName)
     {
-        // If the model is already loaded, return it
-        if (ModelCache.ContainsKey(modelName))
-        {
-            return ModelCache[modelName];
-        }
+        // // If the model is already loaded, return it
+        // if (ModelCache.ContainsKey(modelName))
+        // {
+        //     return ModelCache[modelName];
+        // }
+
+        GD.Print("======> 0");
+
 
         // If the name is not in the ModelInfoList, we don't know about it, so return null
         if (!ModelInfoList.ContainsKey(modelName))
@@ -75,12 +80,33 @@ public class Fss3DModelLibrary
         float modelScale    = ModelInfoList[modelName].Scale;
         Vector3 modelOffset = ModelInfoList[modelName].CenterOffset;
 
+        modelResPath = "res://Resources/DLC/MilitaryVehicles/Plane/C-130/C-130_2024-09-02_005.glb";
+        modelResPath = "res://Resources/TestRes/C-130_2024-09-02_005.glb";
+        modelResPath = "res://Resources/DLC/MilitaryVehicles/Plane/Yak130/Yak130.glb";
+
+        modelScale = 0.0001f;
+
+
         // Access the model resource
         PackedScene importedModel = (PackedScene)ResourceLoader.Load(modelResPath);
+        //var importedModel = (Node)ResourceLoader.Load(modelResPath);
+
+
+        // Load the .glb model as a resource
+        var glbResource = ResourceLoader.Load(modelResPath);
+
+        if (glbResource != null)
+        {
+            GD.Print($"======> 1.5 // LOADED modelResPath:{modelResPath}");
+        }
+
+        GD.Print($"======> 1 // modelResPath:{modelResPath}");
 
         // If the model resource is not null, instantiate it
         if (importedModel != null)
         {
+            GD.Print("======> 2 - ");
+
             // Instance the model
             Node3D modelInstance     = (Node3D)importedModel.Instantiate();
             Node3D ModelResourceNode = modelInstance as Node3D;
@@ -88,9 +114,16 @@ public class Fss3DModelLibrary
 
             ModelResourceNode.Scale    = new Vector3(modelScale, modelScale, modelScale); // Set the model scale
             ModelResourceNode.Position = modelOffset; // Set the model position
+
+            ModelResourceNode.RotationDegrees = new Vector3(0, (float)(180 * FssConsts.DegsToRadsMultiplier), 0); // Set the model rotation
             //ModelResourceNode.LookAt(Vector3.Forward, Vector3.Up); // Can't look at something until paced in the tree
 
             ModelCache.Add(modelName, ModelResourceNode);
+
+            GD.Print("======> 3 - ");
+
+            return ModelResourceNode;
+
         }
         else
         {
@@ -189,6 +222,30 @@ public class Fss3DModelLibrary
         }
 
         return report.ToString();
+    }
+
+    // ------------------------------------------------------------------------------------------------
+    // MARK: Names
+    // ------------------------------------------------------------------------------------------------
+
+    public List<string> ModelNamesList()
+    {
+        return new List<string>(ModelInfoList.Keys);
+    }
+
+    // ------------------------------------------------------------------------------------------------
+    // MARK: AABB
+    // ------------------------------------------------------------------------------------------------
+
+    public FssXYZBox? AABBForModel(string modelName)
+    {
+        if (!ModelInfoList.ContainsKey(modelName))
+        {
+            GD.PrintErr($"Model does not exist: {modelName}");
+            return null;
+        }
+
+        return ModelInfoList[modelName].RwAABB;
     }
 
     // ------------------------------------------------------------------------------------------------

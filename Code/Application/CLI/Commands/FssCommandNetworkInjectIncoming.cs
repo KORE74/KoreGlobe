@@ -25,6 +25,13 @@ public class FssCommandNetworkInjectIncoming : FssCommand
 
         FssAppFactory.Instance.EventDriver.NetworkInjectIncoming(message);
 
+        // trim the message to 100 characters
+        if (message.Length > 100)
+        {
+            message = message.Substring(0, 100);
+            message += "...";
+        }
+
         return $"Message injected: {message}";
     }
 }

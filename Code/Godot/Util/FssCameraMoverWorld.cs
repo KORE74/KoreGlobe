@@ -101,21 +101,25 @@ public partial class FssCameraMoverWorld : Node3D
         // translateSpeed = MoveSpeed;
 
         double MoveSpeed = camSpeedForAlt.GetValue(CamPos.AltMslM);
-        translateSpeed = MoveSpeed;
+        translateSpeed       = MoveSpeed;
         double VertMoveSpeed = camVertSpeedForAlt.GetValue(CamPos.AltMslM);
 
 
         if (Input.IsMouseButtonPressed(Godot.MouseButton.Left))
-            GD.Print("Mouse Button Left");
-        if (Input.IsMouseButtonPressed(Godot.MouseButton.Right))
-            GD.Print("Mouse Button Right");
-        if (Input.IsMouseButtonPressed(Godot.MouseButton.Middle))
-            GD.Print("Mouse Button Middle");
+        {
+            MoveSpeed = MoveSpeed / 20;
+            translateSpeed = MoveSpeed;
+        }
+        //     GD.Print("Mouse Button Left");
+        // if (Input.IsMouseButtonPressed(Godot.MouseButton.Right))
+        //     GD.Print("Mouse Button Right");
+        // if (Input.IsMouseButtonPressed(Godot.MouseButton.Middle))
+        //     GD.Print("Mouse Button Middle");
 
-        if (Input.IsMouseButtonPressed(Godot.MouseButton.WheelUp))
-            GD.Print("Mouse Button WheelUp");
-        if (Input.IsMouseButtonPressed(Godot.MouseButton.WheelDown))
-            GD.Print("Mouse Button WheelDown");
+        // if (Input.IsMouseButtonPressed(Godot.MouseButton.WheelUp))
+        //     GD.Print("Mouse Button WheelUp");
+        // if (Input.IsMouseButtonPressed(Godot.MouseButton.WheelDown))
+        //     GD.Print("Mouse Button WheelDown");
 
 
 
