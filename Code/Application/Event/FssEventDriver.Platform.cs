@@ -320,28 +320,32 @@ public partial class FssEventDriver
     {
         FssCentralLog.AddEntry("Creating Test Platform Entities");
 
-        FssLLAPoint loc1 = new FssLLAPoint() { LatDegs = 52.8, LonDegs = -4.2, AltMslM = 10.1 };
-        FssLLAPoint loc2 = new FssLLAPoint() { LatDegs = 52.9, LonDegs =  0.3, AltMslM = 10.2 };
-        FssLLAPoint loc3 = new FssLLAPoint() { LatDegs = 52.7, LonDegs =  8.1, AltMslM = 10.15 };
+        FssLLAPoint loc1 = new FssLLAPoint() { LatDegs = 52.1, LonDegs = -4.2, AltMslM = 5000 };
+        FssLLAPoint loc2 = new FssLLAPoint() { LatDegs = 52.5, LonDegs =  0.3, AltMslM = 2000 };
+        FssLLAPoint loc3 = new FssLLAPoint() { LatDegs = 52.9, LonDegs =  8.1, AltMslM = 1000 };
 
         FssCourse course1 = new FssCourse() { HeadingDegs = 270, SpeedKph = 800.08 };
         FssCourse course2 = new FssCourse() { HeadingDegs = 180, SpeedKph = 800.08 };
         FssCourse course3 = new FssCourse() { HeadingDegs =  90, SpeedKph = 800.08 };
 
+        FssCourseDelta courseDelta1 = new FssCourseDelta() { HeadingChangeClockwiseDegsSec =  5, SpeedChangeMpMps = 0 };
+        FssCourseDelta courseDelta2 = new FssCourseDelta() { HeadingChangeClockwiseDegsSec = -8, SpeedChangeMpMps = 0 };
+        FssCourseDelta courseDelta3 = new FssCourseDelta() { HeadingChangeClockwiseDegsSec = 10, SpeedChangeMpMps = 0 };
+
         AddPlatform("TEST-001", "F16");
         SetPlatformStartLLA("TEST-001", loc1);
         SetPlatformCourse("TEST-001", course1);
-        SetPlatformCourseDelta("TEST-001", new FssCourseDelta() { HeadingChangeClockwiseDegsSec = 5, SpeedChangeMpMps = 0 });
+        SetPlatformCourseDelta("TEST-001", courseDelta1);
 
         AddPlatform("TEST-002", "F18");
         SetPlatformStartLLA("TEST-002", loc2);
         SetPlatformCourse("TEST-002", course2);
-        SetPlatformCourseDelta("TEST-002", new FssCourseDelta() { HeadingChangeClockwiseDegsSec = -8, SpeedChangeMpMps = 0 });
+        SetPlatformCourseDelta("TEST-002", courseDelta2);
 
         AddPlatform("TEST-003", "Tornado");
         SetPlatformStartLLA("TEST-003", loc3);
         SetPlatformCourse("TEST-003", course3);
-        SetPlatformCourseDelta("TEST-003", new FssCourseDelta() { HeadingChangeClockwiseDegsSec = 10, SpeedChangeMpMps = 0 });
+        SetPlatformCourseDelta("TEST-003", courseDelta3);
     }
 
     // ---------------------------------------------------------------------------------------------

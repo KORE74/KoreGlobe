@@ -45,7 +45,7 @@ public partial class FssGodotEntity : Node3D
         // Create a marker for the entity
         Node3D marker = new Node3D() { Name = "AxisMarker" };
         AddChild(marker);
-        FssPrimitiveFactory.AddAxisMarkers(marker, 0.03f, 0.01f);
+        FssPrimitiveFactory.AddAxisMarkers(marker, 0.003f, 0.001f);
     }
 
     // --------------------------------------------------------------------------------------------
