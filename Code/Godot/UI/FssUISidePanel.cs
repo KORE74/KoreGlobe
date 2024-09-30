@@ -62,8 +62,8 @@ public partial class FssUISidePanel : HBoxContainer
         RxTxButton.Connect("pressed", new Callable(this, "OnRxTxButtonPressed"));
 
         // Scale Controls
-        RWScaleToggleButton.Connect("pressed", new Callable(this, "OnRWScaleToggleButtonPressed"));
-        InfographicScaleButton.Connect("pressed", new Callable(this, "OnInfographicScaleButtonPressed"));
+        RWScaleToggleButton.Connect(   "pressed",       new Callable(this, "OnRWScaleToggleButtonPressed"));
+        InfographicScaleButton.Connect("pressed",       new Callable(this, "OnInfographicScaleButtonPressed"));
         InfographicScaleSlider.Connect("value_changed", new Callable(this, "OnInfographicScaleSliderValueChanged"));
 
         // RxTx Controls
@@ -78,11 +78,17 @@ public partial class FssUISidePanel : HBoxContainer
 
         if (UIPollTimer < FssCoreTime.RuntimeSecs)
         {
-            UIPollTimer = FssCoreTime.RuntimeSecs + 0.2f; // Update the timer to the next whole second
+            UIPollTimer = FssCoreTime.RuntimeSecs + 0.5f; // Update the timer to the next whole second
 
             // Update each window visibility to the button state - in case we have alternative ways to close the window
             PlatformScaleButton!.ButtonPressed = PanelPlatformScale!.Visible;
             RxTxButton!.ButtonPressed          = PanelBeamRxTx!.Visible;
+
+            GD.Print($"FssGodotFactory.Instance.UIState.IsRwScale:{FssGodotFactory.Instance.UIState.IsRwScale}");
+
+            RWScaleToggleButton.ButtonPressed    =  FssGodotFactory.Instance.UIState.IsRwScale;
+            InfographicScaleButton.ButtonPressed = !FssGodotFactory.Instance.UIState.IsRwScale;
+            InfographicScaleLabel.Text           = $"{FssGodotFactory.Instance.UIState.InfographicScale:F0}";
 
             // Update the performance label
             float averageCallsPerSecond = UpdateCallCount();
@@ -152,20 +158,35 @@ public partial class FssUISidePanel : HBoxContainer
     // Called when the "RWScaleToggleButton" button is pressed
     public void OnRWScaleToggleButtonPressed()
     {
-        FssCentralLog.AddEntry("FssUIHeader.OnRWScaleToggleButtonPressed");
+        GD.Print("FssUIHeader.OnRWScaleToggleButtonPressed");
+
+        if (!FssGodotFactory.Instance.UIState.IsRwScale)
+            FssGodotFactory.Instance.UIState.IsRwScale = true;
+
+        RWScaleToggleButton.ButtonPressed    =  FssGodotFactory.Instance.UIState.IsRwScale;
+        InfographicScaleButton.ButtonPressed = !FssGodotFactory.Instance.UIState.IsRwScale;
     }
 
     // Called when the "InfographicScaleButton" button is pressed
     public void OnInfographicScaleButtonPressed()
     {
-        FssCentralLog.AddEntry("FssUIHeader.OnInfographicScaleButtonPressed");
+        GD.Print("FssUIHeader.OnInfographicScaleButtonPressed");
+
+        if (FssGodotFactory.Instance.UIState.IsRwScale)
+            FssGodotFactory.Instance.UIState.IsRwScale = false;
+
+        RWScaleToggleButton.ButtonPressed    =  FssGodotFactory.Instance.UIState.IsRwScale;
+        InfographicScaleButton.ButtonPressed = !FssGodotFactory.Instance.UIState.IsRwScale;
+
     }
 
     // Called when the "InfographicScaleSlider" value is changed
     public void OnInfographicScaleSliderValueChanged(float value)
     {
         FssCentralLog.AddEntry("FssUIHeader.OnInfographicScaleSliderValueChanged");
-        InfographicScaleLabel!.Text = $"Scale: {value:F2}";
+        //InfographicScaleLabel!.Text = $"{value:F0}";
+
+        FssGodotFactory.Instance.UIState.InfographicScale = value;
     }
 
     // --------------------------------------------------------------------------------------------

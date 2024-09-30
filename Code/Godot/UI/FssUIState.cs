@@ -10,7 +10,9 @@ public enum FssCamMode
 
 public class FssUIState
 {
-    public FssCamMode CameraMode { get; set; }
+    public FssCamMode CameraMode       { get; set; }
+    public bool       IsRwScale        { get; set; }
+    public float      InfographicScale { get; set; }
 
     public FssUIState()
     {

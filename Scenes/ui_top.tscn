@@ -610,7 +610,6 @@ layout_mode = 2
 theme_override_constants/separation = 5
 
 [node name="PanelPlatformScale" type="Panel" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer-SidePanel/VBoxContainer"]
-visible = false
 custom_minimum_size = Vector2(340, 60)
 layout_direction = 2
 layout_mode = 2
@@ -640,15 +639,16 @@ custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 focus_mode = 0
 theme = SubResource("Theme_g2sdr")
+toggle_mode = true
 icon = ExtResource("11_mvn6c")
 expand_icon = true
 
-[node name="InfographicToggleButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer-SidePanel/VBoxContainer/PanelPlatformScale/MarginContainer/HBoxContainer"]
+[node name="InfographicScaleButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer-SidePanel/VBoxContainer/PanelPlatformScale/MarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 focus_mode = 0
 theme = SubResource("Theme_g2sdr")
-theme_type_variation = &"FlatButton"
+toggle_mode = true
 text = "INFO"
 
 [node name="Container" type="Container" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer-SidePanel/VBoxContainer/PanelPlatformScale/MarginContainer/HBoxContainer"]
