@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.IO;
 using System.Collections.Generic;
 
 public partial class TestZeroOffset : Node3D
@@ -77,35 +78,43 @@ public partial class TestZeroOffset : Node3D
 
         //Fss3DModelLibrary.TestLoadModel(ZeroNode);
 
-        bool DLCTesting = true;
+        // Read the manually included sets of assets
+        string jsonMilitary     = FssGodotFileOperations.LoadFromFile("res://Resources/Assets/MilitaryVehicles/Inventory.json");
+        string jsonCivilian     = FssGodotFileOperations.LoadFromFile("res://Resources/Assets/CivilianVehicles/Inventory.json");
+        string jsonPlaceholders = FssGodotFileOperations.LoadFromFile("res://Resources/Assets/PlaceholderModels/Inventory.json");
+        FssGodotFactory.Instance.ModelLibrary.LoadJSONConfigFile(jsonMilitary);
+        FssGodotFactory.Instance.ModelLibrary.LoadJSONConfigFile(jsonCivilian);
+        FssGodotFactory.Instance.ModelLibrary.LoadJSONConfigFile(jsonPlaceholders);
 
-        if (DLCTesting)
-        {
-            //FssDlcOperations.CreateDlc();
+        // bool DLCTesting = true;
 
-            List<string> dlcList = FssDlcOperations.ListLoadableDlcPaths();
+        // if (DLCTesting)
+        // {
+        //     //FssDlcOperations.CreateDlc();
 
-            foreach (string dlc in dlcList)
-                FssDlcOperations.LoadDlc(dlc);
+        //     List<string> dlcList = FssDlcOperations.ListLoadableDlcPaths();
 
-            FssCentralLog.AddEntry( FssDlcOperations.DlcReport() );
+        //     foreach (string dlc in dlcList)
+        //         FssDlcOperations.LoadDlc(dlc);
 
-            // Find the JSON files in each DLC and report on them
-            List<string> dlcTitlesList = FssDlcOperations.ListLoadedDlcTitles();
-            foreach (string currDlcTitle in dlcTitlesList)
-            {
-                string invJson = FssDlcOperations.InventoryJsonForDLCTitle(currDlcTitle);
-                FssCentralLog.AddEntry($"DLC: {currDlcTitle} JSON: {invJson}");
-            }
+        //     FssCentralLog.AddEntry( FssDlcOperations.DlcReport() );
 
-            string invJson2 = FssDlcOperations.InventoryJsonForDLCTitle("PlaceholderModels");
-            FssGodotFactory.Instance.ModelLibrary.LoadJSONConfigFile(invJson2);
+        //     // Find the JSON files in each DLC and report on them
+        //     List<string> dlcTitlesList = FssDlcOperations.ListLoadedDlcTitles();
+        //     foreach (string currDlcTitle in dlcTitlesList)
+        //     {
+        //         string invJson = FssDlcOperations.InventoryJsonForDLCTitle(currDlcTitle);
+        //         FssCentralLog.AddEntry($"DLC: {currDlcTitle} JSON: {invJson}");
+        //     }
 
-            string invJson3 = FssDlcOperations.InventoryJsonForDLCTitle("MilitaryVehicles");
-            FssGodotFactory.Instance.ModelLibrary.LoadJSONConfigFile(invJson3);
+        //     string invJson2 = FssDlcOperations.InventoryJsonForDLCTitle("PlaceholderModels");
+        //     FssGodotFactory.Instance.ModelLibrary.LoadJSONConfigFile(invJson2);
 
-            FssCentralLog.AddEntry( FssGodotFactory.Instance.ModelLibrary.ReportContent() );
-        }
+        //     string invJson3 = FssDlcOperations.InventoryJsonForDLCTitle("MilitaryVehicles");
+        //     FssGodotFactory.Instance.ModelLibrary.LoadJSONConfigFile(invJson3);
+
+        //     FssCentralLog.AddEntry( FssGodotFactory.Instance.ModelLibrary.ReportContent() );
+        // }
     }
 
 }

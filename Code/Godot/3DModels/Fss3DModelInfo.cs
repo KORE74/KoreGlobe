@@ -9,6 +9,7 @@ public class Fss3DModelInfo
     public string    FilePath     { get; set; }
     public FssXYZBox RwAABB       { get; set; }
     public Vector3   CenterOffset { get; set; }
+    public Vector3   RotateDegs   { get; set; }
     public float     Scale        { get; set; }
 
     // --------------------------------------------------------------------------------------------
@@ -28,6 +29,7 @@ public class Fss3DModelInfo
             FilePath     = "Default.glb",
             RwAABB       = new FssXYZBox() { Center = FssXYZPoint.Zero, Width = 50, Height = 20, Length = 40 },
             CenterOffset = new Vector3(0, 0, 0),
+            RotateDegs   = new Vector3(0, 0, 0),
             Scale        = 1.0f
         };
     }

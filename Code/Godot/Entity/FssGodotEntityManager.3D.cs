@@ -169,6 +169,46 @@ public partial class FssGodotEntityManager : Node3D
         }
     }
 
+    // --------------------------------------------------------------------------------------------
+
+    // Set the model scale.
+    // 1 - get the "model" node. Then get its only child, which is the model itself.
+    // 2 - Get the scale modifier, multiply it by the 3D Library scale factor, and apply it to the node.
+    //      - We have the platform name and type to assist in lookup up elements.
+
+    void SetModelScale(string platName, string platformType, float scaleModifier)
+    {
+
+        // Get the entity
+        FssGodotEntity? ent = GetEntity(platName);
+        if (ent == null)
+        {
+            FssCentralLog.AddEntry($"SetModelScale: Entity {platName} not found.");
+            return;
+        }
+        // Get the model node
+        Node3D? modelNode = ent.GetNodeOrNull<Node3D>("model");
+        if (modelNode == null)
+        {
+            FssCentralLog.AddEntry($"SetModelScale: Model node not found for {platName}.");
+            return;
+        }
+
+        // Get the 3D Library entry for the type
+        Fss3DModelInfo? modelInfo = FssGodotFactory.Instance.ModelLibrary.GetModelInfo(platformType);
+        if (modelInfo == null)
+        {
+            FssCentralLog.AddEntry($"SetModelScale: Model info not found for {platformType}.");
+            return;
+        }
+
+        // Apply the scale to the model node
+        float adjscale  = modelInfo.Scale * scaleModifier;
+        modelNode.Scale = new Vector3(adjscale, adjscale, adjscale);
+    }
+
+
+
 }
 
 

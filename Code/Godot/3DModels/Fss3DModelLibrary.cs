@@ -79,12 +79,17 @@ public class Fss3DModelLibrary
         string modelResPath = ModelInfoList[modelName].FilePath;
         float modelScale    = ModelInfoList[modelName].Scale;
         Vector3 modelOffset = ModelInfoList[modelName].CenterOffset;
+        Vector3 modelRotate = ModelInfoList[modelName].RotateDegs;
 
-        modelResPath = "res://Resources/DLC/MilitaryVehicles/Plane/C-130/C-130_2024-09-02_005.glb";
-        modelResPath = "res://Resources/TestRes/C-130_2024-09-02_005.glb";
-        modelResPath = "res://Resources/DLC/MilitaryVehicles/Plane/Yak130/Yak130.glb";
+        //modelResPath = "res://Resources/Assets/MilitaryVehicles/Plane/C-130/C-130_2024-09-02_005.glb";
+        //modelResPath = "res://Resources/TestRes/C-130_2024-09-02_005.glb";
+        //modelResPath = "res://Resources/DLC/MilitaryVehicles/Plane/Yak130/Yak130.glb";
 
-        modelScale = 0.0001f;
+        GD.Print($"======> 0.5 // modelResPath:{modelResPath}");
+
+
+        modelScale = 1f * (float)FssZeroOffset.RwToGeDistanceMultiplierM;
+        modelRotate = new Vector3(0, 180, 0);
 
 
         // Access the model resource
@@ -107,23 +112,28 @@ public class Fss3DModelLibrary
         {
             GD.Print("======> 2 - ");
 
+            // Create a "container" node, allowing the model to be scaled and rotated as a node attached to this one.
+            // Allows this node to be re-parented without losing those modifications.
+            Node3D modelContainerNode = new Node3D() { Name = "model" };
+
             // Instance the model
             Node3D modelInstance     = (Node3D)importedModel.Instantiate();
             Node3D ModelResourceNode = modelInstance as Node3D;
             ModelResourceNode.Name   = modelName;
 
+            // Add the model to the container
+            modelContainerNode.AddChild(ModelResourceNode);
+
+            // Apply the adjustments to the model
             ModelResourceNode.Scale    = new Vector3(modelScale, modelScale, modelScale); // Set the model scale
             ModelResourceNode.Position = modelOffset; // Set the model position
+            ModelResourceNode.RotationDegrees = modelRotate;
 
-            ModelResourceNode.RotationDegrees = new Vector3(0, (float)(180 * FssConsts.DegsToRadsMultiplier), 0); // Set the model rotation
-            //ModelResourceNode.LookAt(Vector3.Forward, Vector3.Up); // Can't look at something until paced in the tree
-
-            ModelCache.Add(modelName, ModelResourceNode);
+            ModelCache.Add(modelName, modelContainerNode);
 
             GD.Print("======> 3 - ");
 
-            return ModelResourceNode;
-
+            return modelContainerNode;
         }
         else
         {

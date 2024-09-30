@@ -13,6 +13,7 @@ public partial class FssCameraPolarOffset : Node3D
 
     // Camera node - offset by an amount in a fixed axis, atop the rotation of this node.
     public Camera3D CamNode;
+    private Fss1DMappedRange CamFOVForDist = new Fss1DMappedRange();
 
     // UI Update
     private float TimerReport = 0.0f;
@@ -27,6 +28,9 @@ public partial class FssCameraPolarOffset : Node3D
         // Initialization code if needed
         CamNode = new Camera3D() { Name = "CamNode" };
         AddChild(CamNode);
+
+        CamFOVForDist.AddEntry( 0.001f,  5f);
+        CamFOVForDist.AddEntry( 0.100f, 50f);
 
         CamNode.Near = 0.001f;
         CamNode.Far  = 4000f;
@@ -44,21 +48,17 @@ public partial class FssCameraPolarOffset : Node3D
 
     public override void _Process(double delta)
     {
+        // Keep the delta time ticking along, in case we need to update the camera. Will remove potential jumps.
         GeDeltaTime = (float)delta;
+
+        // Only process the camera if the camera is active
         if (CamNode == null) return;
         if (!CamNode.Current) return;
 
-        // UpdateInputs();
-
-        // Apply position and rotation
-        // CamNode.Position = new Vector3(0, 0, CamOffsetDist);
-        // this.Rotation    = new Vector3(CamRotation.X, camAzAngleDegs, CamRotation.Z);
-
-        // this.RotateX(-30);
-        // this.RotateY(30);
-
+        // We have the Az El and Distance. Apply these with the right sign and Vector3.
         this.RotationDegrees = new Vector3(-camElAngleDegs, -camAzAngleDegs, 0);
         CamNode.Position = new Vector3(0, 0, CamOffsetDist);
+        CamNode.Fov = (float)CamFOVForDist.GetValue(CamOffsetDist);
 
         // output the camera position and rotation every 2 seconds
         if (TimerReport < FssCoreTime.RuntimeSecs)
@@ -69,9 +69,12 @@ public partial class FssCameraPolarOffset : Node3D
     }
 
     // Process inputs
+    // Update CamOffsetDist and CamRotation, to be used in _Process
     public override void _Input(InputEvent @event)
     {
-        // Update CamOffsetDist and CamRotation
+        // Only update the camera if the camera is active
+        if (CamNode == null) return;
+        if (!CamNode.Current) return;
 
         float distanceDelta = (float)(600 * FssZeroOffset.RwToGeDistanceMultiplierM) * GeDeltaTime;
         float angDeltaDegsPerFrame = 90f * GeDeltaTime;

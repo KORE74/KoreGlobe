@@ -1,0 +1,74 @@
+[
+  {
+    "Name": "C-130",
+    "FilePath": "res://Resources/Assets/MilitaryVehicles/Plane/C-130/C-130_2024-09-02_005.glb",
+    "RwAABB": {
+      "Centre": { "X": 0, "Y": 0, "Z": 0 },
+      "Width": 40.41,
+      "Height": 11.66,
+      "Length": 29.8
+    },
+    "RotateDegs": { "X": 0, "Y": 180, "z": 0 },
+    "Scale": 1
+  },
+  {
+    "Name": "F16",
+    "FilePath": "res://Resources/Assets/MilitaryVehicles/Plane/F16/F16_v001.glb",
+    "RwAABB": {
+      "Centre": { "X": 0, "Y": 0, "Z": 0 },
+      "Width": 10,
+      "Height": 5,
+      "Length": 15
+    },
+    "RotateDegs": { "X": 0, "Y": 180, "z": 0 },
+    "Scale": 1
+  },
+  {
+    "Name": "F18",
+    "FilePath": "res://Resources/Assets/MilitaryVehicles/Plane/F18/FA-18F_v02.glb",
+    "RwAABB": {
+      "Centre": { "X": 0, "Y": 0, "Z": 0 },
+      "Width": 8.4,
+      "Height": 4.7,
+      "Length": 17.1
+    },
+    "RotateDegs": { "X": 0, "Y": 180, "z": 0 },
+    "Scale": 1
+  },
+  {
+    "Name": "Su34",
+    "FilePath": "res://Resources/Assets/MilitaryVehicles/Plane/Su34/Su34.glb",
+    "RwAABB": {
+      "Centre": { "X": 0, "Y": 0, "Z": 0 },
+      "Width": 14.7,
+      "Height": 6.1,
+      "Length": 23.3
+    },
+    "RotateDegs": { "X": 0, "Y": 180, "z": 0 },
+    "Scale": 1
+  },
+  {
+    "Name": "Tornado",
+    "FilePath": "res://Resources/Assets/MilitaryVehicles/Plane/Tornado/Tornado.glb",
+    "RwAABB": {
+      "Centre": { "X": 0, "Y": 0, "Z": 0 },
+      "Width": 10,
+      "Height": 4,
+      "Length": 13
+    },
+    "RotateDegs": { "X": 0, "Y": 180, "z": 0 },
+    "Scale": 0.05
+  },
+  {
+    "Name": "MQ9Reaper",
+    "FilePath": "res://Resources/Assets/MilitaryVehicles/UAV/MQ9-Reaper/MQ9-Reaper.glb",
+    "RwAABB": {
+      "Centre": { "X": 0, "Y": 0, "Z": 0 },
+      "Width": 20,
+      "Height": 3.8,
+      "Length": 11
+    },
+    "RotateDegs": { "X": 0, "Y": 180, "z": 0 },
+    "Scale": 10
+  }
+]

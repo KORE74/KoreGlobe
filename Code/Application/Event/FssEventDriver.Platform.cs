@@ -320,32 +320,52 @@ public partial class FssEventDriver
     {
         FssCentralLog.AddEntry("Creating Test Platform Entities");
 
-        FssLLAPoint loc1 = new FssLLAPoint() { LatDegs = 52.1, LonDegs = -4.2, AltMslM = 5000 };
-        FssLLAPoint loc2 = new FssLLAPoint() { LatDegs = 52.5, LonDegs =  0.3, AltMslM = 2000 };
-        FssLLAPoint loc3 = new FssLLAPoint() { LatDegs = 52.9, LonDegs =  8.1, AltMslM = 1000 };
+        FssLLAPoint loc1 = new FssLLAPoint() { LatDegs = 52.1, LonDegs =    -4.2, AltMslM = 5000 };
+        FssLLAPoint loc2 = new FssLLAPoint() { LatDegs = 52.5, LonDegs =     0.3, AltMslM = 2000 };
+        FssLLAPoint loc3 = new FssLLAPoint() { LatDegs = 52.9, LonDegs =     8.1, AltMslM = 1000 };
+        FssLLAPoint loc4 = new FssLLAPoint() { LatDegs = 32.5, LonDegs =  -117.2, AltMslM = 8000 };
 
         FssCourse course1 = new FssCourse() { HeadingDegs = 270, SpeedKph = 800.08 };
         FssCourse course2 = new FssCourse() { HeadingDegs = 180, SpeedKph = 800.08 };
         FssCourse course3 = new FssCourse() { HeadingDegs =  90, SpeedKph = 800.08 };
+        FssCourse course4 = new FssCourse() { HeadingDegs =  30, SpeedKph = 200.00 };
 
-        FssCourseDelta courseDelta1 = new FssCourseDelta() { HeadingChangeClockwiseDegsSec =  5, SpeedChangeMpMps = 0 };
-        FssCourseDelta courseDelta2 = new FssCourseDelta() { HeadingChangeClockwiseDegsSec = -8, SpeedChangeMpMps = 0 };
-        FssCourseDelta courseDelta3 = new FssCourseDelta() { HeadingChangeClockwiseDegsSec = 10, SpeedChangeMpMps = 0 };
+        FssCourseDelta courseDelta1 = new FssCourseDelta() { HeadingChangeClockwiseDegsSec =  2, SpeedChangeMpMps = 0 };
+        FssCourseDelta courseDelta2 = new FssCourseDelta() { HeadingChangeClockwiseDegsSec = -3, SpeedChangeMpMps = 0 };
+        FssCourseDelta courseDelta3 = new FssCourseDelta() { HeadingChangeClockwiseDegsSec =  4, SpeedChangeMpMps = 0 };
+        FssCourseDelta courseDelta4 = new FssCourseDelta() { HeadingChangeClockwiseDegsSec =  0.1, SpeedChangeMpMps = 0 };
 
-        AddPlatform("TEST-001", "F16");
-        SetPlatformStartLLA("TEST-001", loc1);
-        SetPlatformCourse("TEST-001", course1);
-        SetPlatformCourseDelta("TEST-001", courseDelta1);
+        AddPlatform("TEST-F16", "F16");
+        SetPlatformStartLLA("TEST-F16", loc1);
+        SetPlatformCourse("TEST-F16", course1);
+        SetPlatformCourseDelta("TEST-F16", courseDelta1);
 
-        AddPlatform("TEST-002", "F18");
-        SetPlatformStartLLA("TEST-002", loc2);
-        SetPlatformCourse("TEST-002", course2);
-        SetPlatformCourseDelta("TEST-002", courseDelta2);
+        // AddPlatform("TEST-F18", "F18");
+        // SetPlatformStartLLA("TEST-F18", loc2);
+        // SetPlatformCourse("TEST-F18", course2);
+        // SetPlatformCourseDelta("TEST-F18", courseDelta2);
 
-        AddPlatform("TEST-003", "Tornado");
-        SetPlatformStartLLA("TEST-003", loc3);
-        SetPlatformCourse("TEST-003", course3);
-        SetPlatformCourseDelta("TEST-003", courseDelta3);
+        AddPlatform("TEST-Torn", "Su34");
+        SetPlatformStartLLA("TEST-Torn", loc3);
+        SetPlatformCourse("TEST-Torn", course3);
+        SetPlatformCourseDelta("TEST-Torn", courseDelta3);
+
+        // AddPlatform("TEST-MQ9", "MQ9Reaper");
+        // SetPlatformStartLLA("TEST-MQ9", loc4);
+        // SetPlatformCourse("TEST-MQ9", course4);
+        // SetPlatformCourseDelta("TEST-MQ9", courseDelta4);
+
+        // {
+        //     FssLLAPoint    loc         = new FssLLAPoint()    { LatDegs = 52.8, LonDegs =    -4.28, AltMslM = 0 };
+        //     FssCourse      course      = new FssCourse()      { HeadingDegs = 1850, SpeedKph = 10 };
+        //     FssCourseDelta courseDelta = new FssCourseDelta() { HeadingChangeClockwiseDegsSec =  0, SpeedChangeMpMps = 0 };
+
+        //     AddPlatform("TEST-Ship1", "SupportShip");
+        //     SetPlatformStartLLA("TEST-Ship1", loc);
+        //     SetPlatformCourse("TEST-Ship1", course);
+        //     SetPlatformCourseDelta("TEST-Ship1", courseDelta);
+        // }
+
     }
 
     // ---------------------------------------------------------------------------------------------
