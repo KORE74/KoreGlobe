@@ -23,6 +23,8 @@ public static partial class FssValueUtils
 
     public static double LimitToRange(double val, double rangemin, double rangemax)
     {
+        if (rangemin > rangemax) (rangemin, rangemax) = (rangemax, rangemin);
+
         return (val < rangemin) ? rangemin : ((val > rangemax) ? rangemax : val);
     }
 

@@ -178,6 +178,8 @@ public partial class FssGodotEntityManager : Node3D
 
     void SetModelScale(string platName, string platformType, float scaleModifier)
     {
+        // Adjust the scale of the model
+        scaleModifier = FssValueUtils.ScaleVal(scaleModifier,  1f, 10f,  1f, 500f);
 
         // Get the entity
         FssGodotEntity? ent = GetEntity(platName);

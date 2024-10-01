@@ -10,9 +10,16 @@ public enum FssCamMode
 
 public class FssUIState
 {
-    public FssCamMode CameraMode       { get; set; }
-    public bool       IsRwScale        { get; set; }
-    public float      InfographicScale { get; set; }
+    public FssCamMode CameraMode          { get; set; } = FssCamMode.WorldCam;
+    public bool       IsRwScale           { get; set; } = true;
+    public float      InfographicScale    { get; set; } = 1;
+
+    public bool       ShowRoutes          { get; set; } = true;
+    public bool       ShowEmitters        { get; set; } = true;
+    public bool       ShowAntennaPatterns { get; set; } = true;
+
+    public bool       ShowRx              { get; set; } = true;
+    public bool       ShowTx              { get; set; } = true;
 
     public FssUIState()
     {
@@ -23,7 +30,7 @@ public class FssUIState
     public bool IsCamModeChaseCam() => CameraMode == FssCamMode.ChaseCam;
     public bool IsCamModeAlignCam() => CameraMode == FssCamMode.AlignCam;
 
-    // Usage: FssAppFactory.Instance.UIState.UpdateDisplayedChaseCam()
+    // Usage: FssGodotFactory.Instance.UIState.UpdateDisplayedChaseCam()
 
     public void UpdateDisplayedChaseCam()
     {

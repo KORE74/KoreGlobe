@@ -21,15 +21,21 @@ public static partial class FssValueUtils
 
     public static float LimitToRange(float val, float rangemin, float rangemax)
     {
+        // Fix the min max range
+        if (rangemin > rangemax) (rangemin, rangemax) = (rangemax, rangemin);
         return (val < rangemin) ? rangemin : ((val > rangemax) ? rangemax : val);
     }
 
     public static float WrapToRange(float val, float rangemin, float rangemax)
     {
+        if (rangemin > rangemax) (rangemin, rangemax) = (rangemax, rangemin);
+
         float diff = rangemax - rangemin;
         float wrappedvalue = Modulo(val - rangemin, diff);
         return wrappedvalue + rangemin;
     }
+
+    public static float Clamp(float val, float minval, float maxval) => LimitToRange(val, minval, maxval);
 
     // ------------------------------------------------------------------------
 

@@ -8,11 +8,13 @@ public partial class FssUISidePanel : HBoxContainer
 {
     // Top Level Elements
     private Button PlatformScaleButton;
+    private Button ShowElementsButton;
     private Button RxTxButton;
     private Label  PerformanceLabel;
 
     // forms we would show/hide
     private Panel PanelPlatformScale;
+    private Panel PanelShowElements;
     private Panel PanelBeamRxTx;
 
     // Scale Controls
@@ -20,6 +22,10 @@ public partial class FssUISidePanel : HBoxContainer
     private Button InfographicScaleButton;
     private Slider InfographicScaleSlider;
     private Label  InfographicScaleLabel;
+
+    private Button ShowRoutesButton;
+    private Button ShowEmittersButton;
+    private Button ShowAntennaPatternsButton;
 
     // RxTx Controls
     private Button ShowTxButton;
@@ -37,11 +43,13 @@ public partial class FssUISidePanel : HBoxContainer
 
         // Get the top level objects
         PlatformScaleButton = (Button)FindChild("PlatformScaleButton");
+        ShowElementsButton  = (Button)FindChild("ShowElementsButton");
         RxTxButton          = (Button)FindChild("RxTxButton");
         PerformanceLabel    = (Label)FindChild("PerformanceLabel");
 
         // Get the forms we would show/hide
         PanelPlatformScale  = (Panel)FindChild("PanelPlatformScale");
+        PanelShowElements   = (Panel)FindChild("PanelShowElements");
         PanelBeamRxTx       = (Panel)FindChild("PanelBeamRxTx");
 
         // get the scale controls
@@ -50,21 +58,34 @@ public partial class FssUISidePanel : HBoxContainer
         InfographicScaleSlider = (Slider)FindChild("InfographicScaleSlider");
         InfographicScaleLabel  = (Label)FindChild("InfographicScaleLabel");
 
+        // get the show elements controls
+        ShowRoutesButton          = (Button)FindChild("ShowRoutesButton");
+        ShowEmittersButton        = (Button)FindChild("ShowEmittersButton");
+        ShowAntennaPatternsButton = (Button)FindChild("ShowAntennaPatternsButton");
+
         // get the RxTx controls
         ShowTxButton = (Button)FindChild("ShowTxButton");
         ShowRxButton = (Button)FindChild("ShowRxButton");
+
+        DebugCheck();
 
         // -------------------
         // Find the button and window controls
 
         // Top level (Panel display toggle)
         PlatformScaleButton.Connect("pressed", new Callable(this, "OnPlatformScaleButtonPressed"));
+        ShowElementsButton.Connect( "pressed", new Callable(this, "OnShowElementsButtonPressed"));
         RxTxButton.Connect("pressed", new Callable(this, "OnRxTxButtonPressed"));
 
         // Scale Controls
         RWScaleToggleButton.Connect(   "pressed",       new Callable(this, "OnRWScaleToggleButtonPressed"));
         InfographicScaleButton.Connect("pressed",       new Callable(this, "OnInfographicScaleButtonPressed"));
         InfographicScaleSlider.Connect("value_changed", new Callable(this, "OnInfographicScaleSliderValueChanged"));
+
+        // Show Elements Controls
+        ShowRoutesButton.Connect(          "pressed", new Callable(this, "OnShowRoutesButtonPressed"));
+        ShowEmittersButton.Connect(        "pressed", new Callable(this, "OnShowEmittersButtonPressed"));
+        ShowAntennaPatternsButton.Connect( "pressed", new Callable(this, "OnShowAntennaPatternsButtonPressed"));
 
         // RxTx Controls
         ShowTxButton.Connect("pressed", new Callable(this, "OnShowTxButtonPressed"));
@@ -74,27 +95,71 @@ public partial class FssUISidePanel : HBoxContainer
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
+        // Update the performance label
         currentSecondCallCount++;
+        float averageCallsPerSecond = UpdateCallCount();
 
         if (UIPollTimer < FssCoreTime.RuntimeSecs)
         {
-            UIPollTimer = FssCoreTime.RuntimeSecs + 0.5f; // Update the timer to the next whole second
+            UIPollTimer = FssCoreTime.RuntimeSecs + 1f; // Update the timer to the next whole second
 
             // Update each window visibility to the button state - in case we have alternative ways to close the window
             PlatformScaleButton!.ButtonPressed = PanelPlatformScale!.Visible;
+            ShowElementsButton!.ButtonPressed  = PanelShowElements!.Visible;
             RxTxButton!.ButtonPressed          = PanelBeamRxTx!.Visible;
 
-            GD.Print($"FssGodotFactory.Instance.UIState.IsRwScale:{FssGodotFactory.Instance.UIState.IsRwScale}");
+            //GD.Print($"FssGodotFactory.Instance.UIState.InfographicScale:{FssGodotFactory.Instance.UIState.InfographicScale}");
 
+            // Manage the toggle buttons
             RWScaleToggleButton.ButtonPressed    =  FssGodotFactory.Instance.UIState.IsRwScale;
             InfographicScaleButton.ButtonPressed = !FssGodotFactory.Instance.UIState.IsRwScale;
-            InfographicScaleLabel.Text           = $"{FssGodotFactory.Instance.UIState.InfographicScale:F0}";
 
-            // Update the performance label
-            float averageCallsPerSecond = UpdateCallCount();
+            // Fix the number to the range and update the slider and label
+            FssGodotFactory.Instance.UIState.InfographicScale = FssValueUtils.Clamp(FssGodotFactory.Instance.UIState.InfographicScale, 1f, 10f);
+            InfographicScaleSlider.Value = FssGodotFactory.Instance.UIState.InfographicScale;
+            InfographicScaleLabel.Text   = $"{FssGodotFactory.Instance.UIState.InfographicScale:F0}";
+
+            // Manage the Show Elements buttons
+            ShowRoutesButton.ButtonPressed          = FssGodotFactory.Instance.UIState.ShowRoutes;
+            ShowEmittersButton.ButtonPressed        = FssGodotFactory.Instance.UIState.ShowEmitters;
+            ShowAntennaPatternsButton.ButtonPressed = FssGodotFactory.Instance.UIState.ShowAntennaPatterns;
+
+            // Manage the RxTx buttons
+            ShowTxButton.ButtonPressed = FssGodotFactory.Instance.UIState.ShowTx;
+            ShowRxButton.ButtonPressed = FssGodotFactory.Instance.UIState.ShowRx;
+
             PerformanceLabel.Text = $"{averageCallsPerSecond:F0}\nUPS";
         }
     }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Debug Check
+    // --------------------------------------------------------------------------------------------
+
+    private void DebugCheck()
+    {
+        if (PlatformScaleButton == null) GD.PrintErr("PlatformScaleButton null");
+        if (ShowElementsButton == null)  GD.PrintErr("ShowElementsButton null");
+        if (RxTxButton == null)          GD.PrintErr("RxTxButton null");
+        if (PerformanceLabel == null)    GD.PrintErr("PerformanceLabel null");
+
+        if (PanelPlatformScale == null)  GD.PrintErr("PanelPlatformScale null");
+        if (PanelShowElements == null)   GD.PrintErr("PanelShowElements null");
+        if (PanelBeamRxTx == null)       GD.PrintErr("PanelBeamRxTx null");
+
+        if (RWScaleToggleButton == null)    GD.PrintErr("RWScaleToggleButton null");
+        if (InfographicScaleButton == null) GD.PrintErr("InfographicScaleButton null");
+        if (InfographicScaleSlider == null) GD.PrintErr("InfographicScaleSlider null");
+        if (InfographicScaleLabel == null)  GD.PrintErr("InfographicScaleLabel null");
+
+        if (ShowRoutesButton == null)          GD.PrintErr("ShowRoutesButton null");
+        if (ShowEmittersButton == null)        GD.PrintErr("ShowEmittersButton null");
+        if (ShowAntennaPatternsButton == null) GD.PrintErr("ShowAntennaPatternsButton null");
+
+        if (ShowTxButton == null) GD.PrintErr("ShowTxButton null");
+        if (ShowRxButton == null) GD.PrintErr("ShowRxButton null");
+    }
+
 
     // --------------------------------------------------------------------------------------------
     // MARK: Perfomance Counter
@@ -144,6 +209,12 @@ public partial class FssUISidePanel : HBoxContainer
         PanelPlatformScale!.Visible = PlatformScaleButton!.ButtonPressed;
     }
 
+    public void OnShowElementsButtonPressed()
+    {
+        FssCentralLog.AddEntry("FssUIHeader.OnShowElementsButtonPressed");
+        PanelShowElements!.Visible = ShowElementsButton!.ButtonPressed;
+    }
+
     // Called when the "RxTxButton" button is pressed
     public void OnRxTxButtonPressed()
     {
@@ -177,16 +248,43 @@ public partial class FssUISidePanel : HBoxContainer
 
         RWScaleToggleButton.ButtonPressed    =  FssGodotFactory.Instance.UIState.IsRwScale;
         InfographicScaleButton.ButtonPressed = !FssGodotFactory.Instance.UIState.IsRwScale;
-
     }
 
     // Called when the "InfographicScaleSlider" value is changed
     public void OnInfographicScaleSliderValueChanged(float value)
     {
         FssCentralLog.AddEntry("FssUIHeader.OnInfographicScaleSliderValueChanged");
-        //InfographicScaleLabel!.Text = $"{value:F0}";
 
         FssGodotFactory.Instance.UIState.InfographicScale = value;
+        InfographicScaleLabel.Text = $"{FssGodotFactory.Instance.UIState.InfographicScale:F0}";
+    }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: UI - Show Elements
+    // --------------------------------------------------------------------------------------------
+
+    // Called when the "ShowRoutesButton" button is pressed
+    public void OnShowRoutesButtonPressed()
+    {
+        FssCentralLog.AddEntry("FssUIHeader.OnShowRoutesButtonPressed");
+
+        FssGodotFactory.Instance.UIState.ShowRoutes = ShowRoutesButton.ButtonPressed;
+    }
+
+    // Called when the "ShowEmittersButton" button is pressed
+    public void OnShowEmittersButtonPressed()
+    {
+        FssCentralLog.AddEntry("FssUIHeader.OnShowEmittersButtonPressed");
+
+        FssGodotFactory.Instance.UIState.ShowEmitters = ShowEmittersButton.ButtonPressed;
+    }
+
+    // Called when the "ShowAntennaPatternsButton" button is pressed
+    public void OnShowAntennaPatternsButtonPressed()
+    {
+        FssCentralLog.AddEntry("FssUIHeader.OnShowAntennaPatternsButtonPressed");
+
+        FssGodotFactory.Instance.UIState.ShowAntennaPatterns = ShowAntennaPatternsButton.ButtonPressed;
     }
 
     // --------------------------------------------------------------------------------------------
@@ -197,12 +295,16 @@ public partial class FssUISidePanel : HBoxContainer
     public void OnShowTxButtonPressed()
     {
         FssCentralLog.AddEntry("FssUIHeader.OnShowTxButtonPressed");
+
+        FssGodotFactory.Instance.UIState.ShowTx = ShowTxButton.ButtonPressed;
     }
 
     // Called when the "ShowRxButton" button is pressed
     public void OnShowRxButtonPressed()
     {
         FssCentralLog.AddEntry("FssUIHeader.OnShowRxButtonPressed");
+
+        FssGodotFactory.Instance.UIState.ShowRx = ShowRxButton.ButtonPressed;
     }
 
 }

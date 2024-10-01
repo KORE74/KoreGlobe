@@ -129,6 +129,17 @@ public partial class FssGodotEntityManager : Node3D
         {
             MatchModelPlatformElements(currModelName);
             MatchModelPlatform3DModel(currModelName);
+
+            // Set the scale of the model
+            float scaleModifier = 1f;
+            if (!FssGodotFactory.Instance.UIState.IsRwScale)
+            {
+                SetModelScale(currModelName, "default", FssGodotFactory.Instance.UIState.InfographicScale);
+                scaleModifier = FssValueUtils.Clamp(FssGodotFactory.Instance.UIState.InfographicScale, 1f, 10f);
+            }
+            string platformType = FssAppFactory.Instance.EventDriver.PlatformType(currModelName) ?? "default";
+
+            SetModelScale(currModelName, platformType, scaleModifier);
         }
     }
 
@@ -178,8 +189,22 @@ public partial class FssGodotEntityManager : Node3D
                 // if (element is FssPlatformElementDome)            AddPlatformElementDome(platName, currElemName);
             }
         }
+
+        // Process each of the maintained elements - updating for differences in the model data.
+        foreach (string currElemName in maintainedEnitites)
+        {
+            FssPlatformElement? element = FssAppFactory.Instance.EventDriver.GetElement(platName, currElemName);
+            if (element != null)
+            {
+                if (element is FssPlatformElementRoute)           UpdatePlatformElementRoute(platName, currElemName);
+                if (element is FssPlatformElementBeam)            UpdatePlatformElementBeam(platName, currElemName);
+                if (element is FssPlatformElementAntennaPatterns) UpdatePlatformElementAntennaPatterns(platName, currElemName);
+            }
+        }
     }
 
+    // --------------------------------------------------------------------------------------------
+    // MARK: Routes
     // --------------------------------------------------------------------------------------------
 
     public void AddPlatformElementRoute(string platName, string currElemName)
@@ -197,6 +222,22 @@ public partial class FssGodotEntityManager : Node3D
         FssCentralLog.AddEntry($"Added route element {currElemName} to {platName}");
     }
 
+    public void UpdatePlatformElementRoute(string platName, string currElemName)
+    {
+        // Get the Route Details
+        FssPlatformElementRoute? route = FssAppFactory.Instance.EventDriver.GetElement(platName, currElemName) as FssPlatformElementRoute;
+
+        // Get the godot route we'll update
+        FssGodotPlatformElementRoute? routeNode = GetLinkedElement(platName, currElemName) as FssGodotPlatformElementRoute;
+
+        if ((route != null) && (routeNode != null))
+        {
+            routeNode.SetRoutePoints(route.RoutePoints);
+        }
+    }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Beams
     // --------------------------------------------------------------------------------------------
 
     public void AddPlatformElementBeam(string platName, string currElemName)
@@ -234,6 +275,32 @@ public partial class FssGodotEntityManager : Node3D
         }
     }
 
+
+    public void UpdatePlatformElementBeam(string platName, string currElemName)
+    {
+        // Get the Beam details: shape, range, etc.
+        FssPlatformElementBeam? beam = FssAppFactory.Instance.EventDriver.GetElement(platName, currElemName) as FssPlatformElementBeam;
+        FssGodotEntity? ent = GetEntity(platName);
+
+        FssCentralLog.AddEntry($"################### =====> UpdatePlatformElementBeam: {platName} {currElemName}");
+
+        if ((ent != null) && (beam != null))
+        {
+            FssGodotPlatformElementWedge? beamNode = GetLinkedElement(platName, currElemName) as FssGodotPlatformElementWedge;
+
+            if (beamNode != null)
+            {
+                FssAzElBox azElBox = beam.AzElBox;
+
+                beamNode.TxDistanceM = (float)(beam.DetectionRangeTxM);
+                beamNode.RxDistanceM = (float)(beam.DetectionRangeRxM);
+                beamNode.AzElBox = azElBox;
+            }
+        }
+    }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Antenna Patterns
     // --------------------------------------------------------------------------------------------
 
     public void AddPlatformElementAntennaPatterns(string platName, string currElemName)
@@ -274,6 +341,10 @@ public partial class FssGodotEntityManager : Node3D
                 }
             }
         }
+    }
+
+    public void UpdatePlatformElementAntennaPatterns(string platName, string currElemName)
+    {
     }
 
     // --------------------------------------------------------------------------------------------

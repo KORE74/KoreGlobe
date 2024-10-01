@@ -1,4 +1,4 @@
-[gd_scene load_steps=67 format=3 uid="uid://ck4tngsqwb7jf"]
+[gd_scene load_steps=71 format=3 uid="uid://ck4tngsqwb7jf"]
 
 [ext_resource type="StyleBox" uid="uid://l27fuiuspgfw" path="res://Themes/Panel.tres" id="1_ndm6o"]
 [ext_resource type="Script" path="res://Code/Godot/UI/FssUIHeader.cs" id="2_iuuet"]
@@ -17,13 +17,17 @@
 [ext_resource type="Texture2D" uid="uid://buqwf6wctolbe" path="res://Resources/Icons/Plane.png" id="11_c00mr"]
 [ext_resource type="Texture2D" uid="uid://bkkco3s7nxvm4" path="res://Resources/Icons/Icon-121.png" id="11_mvn6c"]
 [ext_resource type="Texture2D" uid="uid://cxiwflv00jomg" path="res://Resources/Icons/Tx.png" id="12_nesio"]
+[ext_resource type="Texture2D" uid="uid://c4p7rgb11mjnc" path="res://Resources/Icons/MiscItems.png" id="12_sn5rd"]
 [ext_resource type="Texture2D" uid="uid://dgq7if4l4dpys" path="res://Resources/Icons/Align.png" id="13_pe2s4"]
 [ext_resource type="Texture2D" uid="uid://m864onf3rcm7" path="res://Resources/Icons/Rx.png" id="13_v6tb6"]
 [ext_resource type="Texture2D" uid="uid://cvkgx537okkdr" path="res://Resources/Icons/arrow_left.png" id="14_w6k6m"]
 [ext_resource type="Texture2D" uid="uid://msmhfxb7v8b" path="res://Resources/Icons/arrow_right.png" id="15_7rjg6"]
 [ext_resource type="ButtonGroup" uid="uid://th4gb4ncypks" path="res://Scenes/ButtonGroup_CamMode.tres" id="15_83ia6"]
+[ext_resource type="Texture2D" uid="uid://c1xxalkcx80gl" path="res://Resources/Icons/Route.png" id="16_bti36"]
 [ext_resource type="Script" path="res://Code/Godot/UI/FssCliWindow.cs" id="16_unelf"]
+[ext_resource type="Texture2D" uid="uid://mrdgerfksx30" path="res://Resources/Icons/Wedge.png" id="17_e1lpa"]
 [ext_resource type="Script" path="res://Code/Godot/UI/FssNetworkWindow.cs" id="17_xs6g5"]
+[ext_resource type="Texture2D" uid="uid://vvyqgv7km88t" path="res://Resources/Icons/AP.png" id="18_2f4bt"]
 [ext_resource type="Script" path="res://Code/Godot/UI/FssSettingWindow.cs" id="18_sk1xa"]
 [ext_resource type="Script" path="res://Code/Godot/UI/FssPlatformSelectWindow.cs" id="21_6xmyp"]
 
@@ -521,7 +525,7 @@ custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 theme_override_constants/line_spacing = -2
 text = "Scenario Name: 
-asdads"
+Undefined"
 max_lines_visible = 2
 
 [node name="HeaderContainer-RightAlign" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign"]
@@ -584,6 +588,18 @@ icon = ExtResource("10_8ih3r")
 icon_alignment = 1
 expand_icon = true
 
+[node name="ShowElementsButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer-SidePanel/Panel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+focus_mode = 0
+theme = SubResource("Theme_qp6qt")
+toggle_mode = true
+icon = ExtResource("12_sn5rd")
+icon_alignment = 1
+expand_icon = true
+
 [node name="RxTxButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer-SidePanel/Panel/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
@@ -610,6 +626,7 @@ layout_mode = 2
 theme_override_constants/separation = 5
 
 [node name="PanelPlatformScale" type="Panel" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer-SidePanel/VBoxContainer"]
+visible = false
 custom_minimum_size = Vector2(340, 60)
 layout_direction = 2
 layout_mode = 2
@@ -672,12 +689,68 @@ text = "10"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="PanelShowElements" type="Panel" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer-SidePanel/VBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(170, 60)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_styles/panel = ExtResource("1_ndm6o")
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer-SidePanel/VBoxContainer/PanelShowElements"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer-SidePanel/VBoxContainer/PanelShowElements/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="ShowRoutesButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer-SidePanel/VBoxContainer/PanelShowElements/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_vertical = 0
+focus_mode = 0
+theme = SubResource("Theme_g2sdr")
+toggle_mode = true
+icon = ExtResource("16_bti36")
+icon_alignment = 1
+expand_icon = true
+
+[node name="ShowEmittersButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer-SidePanel/VBoxContainer/PanelShowElements/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_vertical = 0
+focus_mode = 0
+theme = SubResource("Theme_g2sdr")
+toggle_mode = true
+icon = ExtResource("17_e1lpa")
+icon_alignment = 1
+expand_icon = true
+
+[node name="ShowAntennaPatternsButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer-SidePanel/VBoxContainer/PanelShowElements/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_vertical = 0
+focus_mode = 0
+theme = SubResource("Theme_g2sdr")
+toggle_mode = true
+icon = ExtResource("18_2f4bt")
+icon_alignment = 1
+expand_icon = true
+
 [node name="PanelBeamRxTx" type="Panel" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer-SidePanel/VBoxContainer"]
 visible = false
 custom_minimum_size = Vector2(115, 60)
 layout_mode = 2
 size_flags_horizontal = 0
-size_flags_vertical = 0
 theme_override_styles/panel = ExtResource("1_ndm6o")
 
 [node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer-SidePanel/VBoxContainer/PanelBeamRxTx"]

@@ -8,6 +8,7 @@ public static partial class FssValueUtils
 
     static public int Clamp(int val, int min, int max)
     {
+        if (min > max) (min, max) = (max, min);
         return (val < min) ? min : (val > max) ? max : val;
     }
 
