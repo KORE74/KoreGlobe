@@ -71,14 +71,23 @@ namespace FssJSON
 
             foreach (WayPoint leg in Legs)
             {
-                FssLLAPoint currPos = new FssLLAPoint
-                {
-                    LatDegs = leg.LatDegs,
-                    LonDegs = leg.LongDegs,
-                    AltMslM = leg.AltitudeMtrs
-                };
+                // Get the type of waypoint. Some are "unknown" which we need to filter out.
+                bool isLegValid = false;
+                if      (leg.WPType.Equals("origin", StringComparison.OrdinalIgnoreCase)) isLegValid = true;
+                else if (leg.WPType.Equals("linear", StringComparison.OrdinalIgnoreCase)) isLegValid = true;
+                else if (leg.WPType.Equals("arc",    StringComparison.OrdinalIgnoreCase)) isLegValid = true;
 
-                points.Add(currPos);
+                if (isLegValid)
+                {
+                    FssLLAPoint currPos = new FssLLAPoint
+                    {
+                        LatDegs = leg.LatDegs,
+                        LonDegs = leg.LongDegs,
+                        AltMslM = leg.AltitudeMtrs
+                    };
+
+                    points.Add(currPos);
+                }
             }
 
             return points;

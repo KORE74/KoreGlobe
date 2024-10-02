@@ -9,6 +9,8 @@ public partial class FssGodotPlatformElementDome : FssGodotPlatformElement
     public float RxDistanceM = 1.0f;
     public float TxDistanceM = 1.0f;
 
+    FssLineMesh3D LineMesh = new FssLineMesh3D();
+
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
@@ -26,9 +28,12 @@ public partial class FssGodotPlatformElementDome : FssGodotPlatformElement
 
     private void CreateDome()
     {
-        var matTransRed  = FssMaterialFactory.TransparentColoredMaterial(new Color(0.7f, 0.2f, 0.2f, 0.4f));
-        var matTransBlue = FssMaterialFactory.TransparentColoredMaterial(new Color(0.2f, 0.2f, 0.7f, 0.4f));
-        var matWire      = FssMaterialFactory.WireframeMaterial(FssColorUtil.Colors["White"]);
+        Color domeColor = new Color(0.8f, 0.2f, 0.2f, 0.4f);
+        Color domeWireColor = new Color(domeColor);
+        domeWireColor.A = 1.0f;
+
+        var matDome = FssMaterialFactory.TransparentColoredMaterial(domeColor);
+        var matWire = FssMaterialFactory.WireframeMaterial(domeWireColor);
 
         FssMeshBuilder meshBuilder  = new ();
 
@@ -45,7 +50,7 @@ public partial class FssGodotPlatformElementDome : FssGodotPlatformElement
             // Add the mesh to the current Node3D
             MeshInstance3D rxMeshInstance   = new();
             rxMeshInstance.Mesh             = meshData;
-            rxMeshInstance.MaterialOverride = matTransRed;
+            rxMeshInstance.MaterialOverride = matDome;
 
             // Add the mesh to the current Node3D
             MeshInstance3D rxMeshInstanceW   = new();
@@ -53,9 +58,11 @@ public partial class FssGodotPlatformElementDome : FssGodotPlatformElement
             rxMeshInstanceW.MaterialOverride = matWire;
 
             AddChild(rxMeshInstance);
-            AddChild(rxMeshInstanceW);
-        }
+            //AddChild(rxMeshInstanceW);
 
+            LineMesh.AddHemisphere(Vector3.Zero, rxDist, numSegments);
+            AddChild(LineMesh);
+        }
 
 
 

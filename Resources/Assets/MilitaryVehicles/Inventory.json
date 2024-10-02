@@ -69,6 +69,6 @@
       "Length": 11
     },
     "RotateDegs": { "X": 0, "Y": 180, "z": 0 },
-    "Scale": 10
+    "Scale": 1.4
   }
 ]

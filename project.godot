@@ -20,6 +20,7 @@ boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/show_image=false
 boot_splash/image="res://Resources/SplashScreen/Splash-001-Halfsize.png"
 boot_splash/fullsize=false
+boot_splash/use_filter=false
 config/icon="res://icon.svg"
 
 [dotnet]
@@ -43,7 +44,14 @@ ui_alt={
 ]
 }
 
+[physics]
+
+common/enable_object_picking=false
+
 [rendering]
 
+rendering_device/fallback_to_d3d12=false
+driver/threads/thread_model=2
 textures/default_filters/use_nearest_mipmap_filter=true
+textures/default_filters/anisotropic_filtering_level=0
 anti_aliasing/quality/msaa_3d=2

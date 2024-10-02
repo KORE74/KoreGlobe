@@ -29,8 +29,8 @@ public partial class FssZeroNode : Node3D
 
         CreateDebugMarker();
 
-        FssLineMesh3D lineCube = new FssLineMesh3D();
-        AddChild(lineCube);
+        //FssLineMesh3D lineCube = new FssLineMesh3D();
+        //AddChild(lineCube);
 
 
         //AddChild(GodotEntityManager);

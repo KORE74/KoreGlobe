@@ -66,7 +66,6 @@ public partial class FssGodotEntity : Node3D
             return;
         }
 
-
         FssEntityV3 entityVecs = FssGeoConvOperations.RwToGeStruct((FssLLAPoint)pos, (FssCourse)course);
 
         //GD.Print($"Name: {EntityName} PosLLA:{pos} Ahead:{entityVecs.PosAhead} up:{entityVecs.VecUp}");

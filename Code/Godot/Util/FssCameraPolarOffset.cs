@@ -94,6 +94,17 @@ public partial class FssCameraPolarOffset : Node3D
     }
 
     // --------------------------------------------------------------------------------------------
+
+    // Set the camera to a specific position
+
+    public void SetCameraPosition(float rwCamDist, float rwCamAzDegs, float rwCamElDegs)
+    {
+        CamOffsetDist  = (float)(rwCamDist * FssZeroOffset.RwToGeDistanceMultiplierM);
+        camAzAngleDegs = rwCamAzDegs;
+        camElAngleDegs = rwCamElDegs;
+    }
+
+    // --------------------------------------------------------------------------------------------
     // MARK: Update - ChaseCam
     // --------------------------------------------------------------------------------------------
 

@@ -176,7 +176,7 @@ public partial class FssGodotEntityManager : Node3D
     // 2 - Get the scale modifier, multiply it by the 3D Library scale factor, and apply it to the node.
     //      - We have the platform name and type to assist in lookup up elements.
 
-    void SetModelScale(string platName, string platformType, float scaleModifier)
+    void SetModelScale(string platName, string platformType, bool applyRwScaling, float scaleModifier)
     {
         // Adjust the scale of the model
         scaleModifier = FssValueUtils.ScaleVal(scaleModifier,  1f, 10f,  1f, 500f);
@@ -204,12 +204,21 @@ public partial class FssGodotEntityManager : Node3D
             return;
         }
 
-        // Apply the scale to the model node
-        float adjscale  = modelInfo.Scale * scaleModifier;
-        modelNode.Scale = new Vector3(adjscale, adjscale, adjscale);
+        // If we are to apply the natural platform scaling
+        if (applyRwScaling)
+        {
+            // Apply the scale to the model node
+            modelNode.Scale = new Vector3(modelInfo.Scale, modelInfo.Scale, modelInfo.Scale);
+        }
+        else
+        {
+            // Apply a scaling such that a "scale of 1" makes any platform's longest axis 100m.
+            float basicInfographicScale = 100f / (float)modelInfo.RwAABB.LongestDimension;
+
+            float adjscale = modelInfo.Scale * scaleModifier * basicInfographicScale;
+            modelNode.Scale = new Vector3(adjscale, adjscale, adjscale);
+        }
     }
-
-
 
 }
 

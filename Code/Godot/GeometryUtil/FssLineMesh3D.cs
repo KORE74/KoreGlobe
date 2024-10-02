@@ -31,7 +31,7 @@ public partial class FssLineMesh3D : Node3D
         _meshInstance.MaterialOverride = GetSharedVertexColorMaterial();
 
         // Debug Call: Create a cube with colored edges
-        CreateCube();
+        //CreateCube();
     }
 
     public override void _Process(double delta)

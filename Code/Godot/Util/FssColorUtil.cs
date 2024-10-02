@@ -34,6 +34,24 @@ public static class FssColorUtil
     }
 
     // --------------------------------------------------------------------------------------------
+    // MARK: String To Color
+    // --------------------------------------------------------------------------------------------
+
+    // Take a string, and reduce it down to an index value into the GeometryColors list.
+    // Allows us to select/re-select a consistent color for a defined string.
+
+    // Usage: Color colObject = FssColorUtil.StringToColor("ObjName");
+
+    public static Color StringToColor(string input)
+    {
+        // Get the hash code of the input string
+        int hash = input.GetHashCode();
+
+        // Use the hash code to select a color from the GeometryColors list
+        return GeometryColors[Mathf.Abs(hash) % GeometryColors.Count];
+    }
+
+    // --------------------------------------------------------------------------------------------
     // #MARK: Internal static list of named colors
     // --------------------------------------------------------------------------------------------
 
@@ -111,5 +129,22 @@ public static class FssColorUtil
         { "OffGold",     new Color(0.8f, 0.7f, 0.0f) }
     };
 
-
+    public static readonly List<Color> GeometryColors = new List<Color>
+    {
+        Colors["Red"],
+        Colors["Green"],
+        Colors["Blue"],
+        Colors["Yellow"],
+        Colors["Magenta"],
+        Colors["Cyan"],
+        Colors["OffYellow"],
+        Colors["OffGreen"],
+        Colors["OffBlue"],
+        Colors["OffRed"],
+        Colors["OffPurple"],
+        Colors["OffCyan"],
+        Colors["OffOrange"],
+        Colors["OffPink"],
+        Colors["OffBrown"]
+    };
 }

@@ -75,6 +75,8 @@ public class FssXYZBox : FssXYZ
         return longestDimension / 2;
     }
 
+    public double LongestDimension { get { return Math.Max(Width, Math.Max(Height, Length)); } }
+
     // --------------------------------------------------------------------------------------------
     // MARK: Corner methods
     // --------------------------------------------------------------------------------------------

@@ -115,6 +115,10 @@ public partial class FssGodotEntityManager : Node3D
         List<string> noLongerInModel       = FssStringListOperations.ListOmittedInSecond(godotEntityNames, platNames);
         List<string> maintainedEnitites    = FssStringListOperations.ListInBoth(platNames, godotEntityNames);
 
+        bool  addInfographicScale = FssGodotFactory.Instance.UIState.IsRwScale;
+        float scaleModifier       = FssValueUtils.Clamp(FssGodotFactory.Instance.UIState.InfographicScale, 1f, 10f);
+
+
         // Loop through the list of platform names, and the EntityList, match them up.
         foreach (string currModelName in omittedInPresentation)
         {
@@ -131,15 +135,9 @@ public partial class FssGodotEntityManager : Node3D
             MatchModelPlatform3DModel(currModelName);
 
             // Set the scale of the model
-            float scaleModifier = 1f;
-            if (!FssGodotFactory.Instance.UIState.IsRwScale)
-            {
-                SetModelScale(currModelName, "default", FssGodotFactory.Instance.UIState.InfographicScale);
-                scaleModifier = FssValueUtils.Clamp(FssGodotFactory.Instance.UIState.InfographicScale, 1f, 10f);
-            }
             string platformType = FssAppFactory.Instance.EventDriver.PlatformType(currModelName) ?? "default";
 
-            SetModelScale(currModelName, platformType, scaleModifier);
+            SetModelScale(currModelName, platformType, addInfographicScale, scaleModifier);
         }
     }
 
@@ -267,6 +265,8 @@ public partial class FssGodotEntityManager : Node3D
 
             AddLinkedElement(platName, newBeam);
 
+            // rotate to accomodate the -ve Z axis
+            newBeam.Rotation = new Vector3(0, (float)FssValueUtils.DegsToRads(180), 0);
 
 
             FssGodotPlatformElementDome newDome = new FssGodotPlatformElementDome();

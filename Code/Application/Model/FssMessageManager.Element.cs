@@ -21,6 +21,8 @@ public partial class FssMessageManager
         string platName          = platWayPtsMsg.PlatName;
         List<FssLLAPoint> points = platWayPtsMsg.Points();
 
+
+
         FssAppFactory.Instance.EventDriver.PlatformSetRoute(platName, points);
     }
 

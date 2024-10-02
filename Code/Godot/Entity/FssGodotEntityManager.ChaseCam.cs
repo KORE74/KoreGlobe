@@ -6,8 +6,6 @@ using Godot;
 
 public partial class FssGodotEntityManager : Node3D
 {
-
-
     // --------------------------------------------------------------------------------------------
     // MARK: Update - ChaseCam
     // --------------------------------------------------------------------------------------------
@@ -22,6 +20,9 @@ public partial class FssGodotEntityManager : Node3D
             chaseCam.Name = "ChaseCam";
 
             ent.AddChild(chaseCam);
+
+            // Setup the default view
+            chaseCam.SetCameraPosition(300, 20, 20);
         }
     }
 
@@ -38,9 +39,7 @@ public partial class FssGodotEntityManager : Node3D
                 chaseCam.CamNode.Current = true;
             }
         }
-
     }
-
 }
 
 
