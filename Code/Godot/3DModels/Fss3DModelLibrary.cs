@@ -88,8 +88,8 @@ public class Fss3DModelLibrary
         GD.Print($"======> 0.5 // modelResPath:{modelResPath}");
 
 
-        modelScale = 1f * (float)FssZeroOffset.RwToGeDistanceMultiplierM;
-        modelRotate = new Vector3(0, 180, 0);
+        modelScale *= (float)FssZeroOffset.RwToGeDistanceMultiplierM;
+        modelRotate.Y += 180;
 
 
         // Access the model resource

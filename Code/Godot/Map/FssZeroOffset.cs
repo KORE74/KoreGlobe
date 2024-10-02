@@ -35,6 +35,9 @@ public static class FssZeroOffset
 
     // --------------------------------------------------------------------------------------------
 
+    // Set the zero point for the game engine.
+    // Usage: FssZeroOffset.SetLLA(pos);
+
     public static void SetLLA(FssLLAPoint rwLLA)
     {
         RwZeroPointLLA = rwLLA;

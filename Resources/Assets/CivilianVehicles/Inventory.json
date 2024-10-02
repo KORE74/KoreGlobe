@@ -8,7 +8,7 @@
       "Height": 50,
       "Length": 120
     },
-    "RotateDegs": { "X": 0, "Y": 0, "z": 0 },
+    "RotateDegs": { "X": 0, "Y": 0, "Z": 0 },
     "Scale": 1
   },
   {
@@ -16,12 +16,12 @@
     "FilePath": "res://Resources/Assets/CivilianVehicles/Ship/GenericRescueShip/GenericRescueShip.glb",
     "RwAABB": {
       "Centre": { "X": 0, "Y": 0, "Z": 0 },
-      "Width": 20,
-      "Height": 40,
-      "Length": 80
+      "Width": 14,
+      "Height": 20,
+      "Length": 60
     },
-    "RotateDegs": { "X": 0, "Y": 0, "z": 0 },
-    "Scale": 1
+    "RotateDegs": { "X": 0, "Y": 90, "Z": 0 },
+    "Scale": 1.2
   },
   {
     "Name": "LuxuryYacht",
@@ -29,10 +29,10 @@
     "RwAABB": {
       "Centre": { "X": 0, "Y": 0, "Z": 0 },
       "Width": 10,
-      "Height": 25,
-      "Length": 60
+      "Height": 20,
+      "Length": 42
     },
-    "RotateDegs": { "X": 0, "Y": 0, "z": 0 },
+    "RotateDegs": { "X": 0, "Y": 0, "Z": 0 },
     "Scale": 1
   },
   {
@@ -40,12 +40,12 @@
     "FilePath": "res://Resources/Assets/CivilianVehicles/Ship/GenericSmallShip/GenericSmallShip.glb",
     "RwAABB": {
       "Centre": { "X": 0, "Y": 0, "Z": 0 },
-      "Width": 8,
-      "Height": 10,
-      "Length": 25
+      "Width": 5,
+      "Height": 4,
+      "Length": 16
     },
-    "RotateDegs": { "X": 0, "Y": 0, "z": 0 },
-    "Scale": 1
+    "RotateDegs": { "X": 0, "Y": 0, "Z": 0 },
+    "Scale": 0.45
   },
   {
     "Name": "SupportShip",
@@ -56,7 +56,7 @@
       "Height": 25,
       "Length": 60
     },
-    "RotateDegs": { "X": 0, "Y": 0, "z": 0 },
-    "Scale": 0.5
+    "RotateDegs": { "X": 0, "Y": 0, "Z": 0 },
+    "Scale": 0.65
   }
 ]

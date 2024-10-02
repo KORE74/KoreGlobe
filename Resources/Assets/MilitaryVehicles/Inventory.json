@@ -8,7 +8,7 @@
       "Height": 11.66,
       "Length": 29.8
     },
-    "RotateDegs": { "X": 0, "Y": 180, "z": 0 },
+    "RotateDegs": { "X": 0, "Y": 180, "Z": 0 },
     "Scale": 1
   },
   {
@@ -20,7 +20,7 @@
       "Height": 5,
       "Length": 15
     },
-    "RotateDegs": { "X": 0, "Y": 180, "z": 0 },
+    "RotateDegs": { "X": 0, "Y": 180, "Z": 0 },
     "Scale": 1
   },
   {
@@ -28,11 +28,11 @@
     "FilePath": "res://Resources/Assets/MilitaryVehicles/Plane/F18/FA-18F_v02.glb",
     "RwAABB": {
       "Centre": { "X": 0, "Y": 0, "Z": 0 },
-      "Width": 8.4,
+      "Width": 12.3,
       "Height": 4.7,
       "Length": 17.1
     },
-    "RotateDegs": { "X": 0, "Y": 180, "z": 0 },
+    "RotateDegs": { "X": 0, "Y": 180, "Z": 0 },
     "Scale": 1
   },
   {
@@ -44,7 +44,7 @@
       "Height": 6.1,
       "Length": 23.3
     },
-    "RotateDegs": { "X": 0, "Y": 180, "z": 0 },
+    "RotateDegs": { "X": 0, "Y": 180, "Z": 0 },
     "Scale": 1
   },
   {
@@ -56,8 +56,8 @@
       "Height": 4,
       "Length": 13
     },
-    "RotateDegs": { "X": 0, "Y": 180, "z": 0 },
-    "Scale": 0.05
+    "RotateDegs": { "X": 0, "Y": 180, "Z": 0 },
+    "Scale": 1
   },
   {
     "Name": "MQ9Reaper",
@@ -68,7 +68,7 @@
       "Height": 3.8,
       "Length": 11
     },
-    "RotateDegs": { "X": 0, "Y": 180, "z": 0 },
-    "Scale": 1.4
+    "RotateDegs": { "X": 0, "Y": 180, "Z": 0 },
+    "Scale": 1.2
   }
 ]

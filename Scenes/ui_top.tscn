@@ -554,7 +554,7 @@ theme_override_constants/separation = 5
 script = ExtResource("9_bt000")
 
 [node name="Panel" type="Panel" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer-SidePanel"]
-custom_minimum_size = Vector2(60, 300)
+custom_minimum_size = Vector2(55, 230)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
@@ -577,10 +577,10 @@ layout_mode = 2
 theme_override_constants/separation = 5
 
 [node name="PlatformScaleButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer-SidePanel/Panel/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
+size_flags_horizontal = 0
+size_flags_vertical = 0
 focus_mode = 0
 theme = SubResource("Theme_qp6qt")
 toggle_mode = true
@@ -589,10 +589,10 @@ icon_alignment = 1
 expand_icon = true
 
 [node name="ShowElementsButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer-SidePanel/Panel/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
+size_flags_horizontal = 0
+size_flags_vertical = 0
 focus_mode = 0
 theme = SubResource("Theme_qp6qt")
 toggle_mode = true
@@ -601,10 +601,10 @@ icon_alignment = 1
 expand_icon = true
 
 [node name="RxTxButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer-SidePanel/Panel/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
+size_flags_horizontal = 0
+size_flags_vertical = 0
 focus_mode = 0
 theme = SubResource("Theme_qp6qt")
 toggle_mode = true
@@ -627,7 +627,7 @@ theme_override_constants/separation = 5
 
 [node name="PanelPlatformScale" type="Panel" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer-SidePanel/VBoxContainer"]
 visible = false
-custom_minimum_size = Vector2(340, 60)
+custom_minimum_size = Vector2(340, 55)
 layout_direction = 2
 layout_mode = 2
 size_flags_horizontal = 0
@@ -652,7 +652,7 @@ size_flags_vertical = 0
 theme_override_constants/separation = 5
 
 [node name="RWScaleToggleButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer-SidePanel/VBoxContainer/PanelPlatformScale/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 focus_mode = 0
 theme = SubResource("Theme_g2sdr")
@@ -661,7 +661,7 @@ icon = ExtResource("11_mvn6c")
 expand_icon = true
 
 [node name="InfographicScaleButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer-SidePanel/VBoxContainer/PanelPlatformScale/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 focus_mode = 0
 theme = SubResource("Theme_g2sdr")
@@ -673,7 +673,7 @@ custom_minimum_size = Vector2(2, 0)
 layout_mode = 2
 
 [node name="InfographicScaleSlider" type="HSlider" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer-SidePanel/VBoxContainer/PanelPlatformScale/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(150, 50)
+custom_minimum_size = Vector2(150, 45)
 layout_mode = 2
 focus_mode = 0
 min_value = 1.0
@@ -683,7 +683,7 @@ tick_count = 10
 ticks_on_borders = true
 
 [node name="InfographicScaleLabel" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer-SidePanel/VBoxContainer/PanelPlatformScale/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 text = "10"
 horizontal_alignment = 1
@@ -691,7 +691,7 @@ vertical_alignment = 1
 
 [node name="PanelShowElements" type="Panel" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer-SidePanel/VBoxContainer"]
 visible = false
-custom_minimum_size = Vector2(170, 60)
+custom_minimum_size = Vector2(155, 55)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
@@ -714,7 +714,7 @@ layout_mode = 2
 theme_override_constants/separation = 5
 
 [node name="ShowRoutesButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer-SidePanel/VBoxContainer/PanelShowElements/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 size_flags_vertical = 0
 focus_mode = 0
@@ -725,7 +725,7 @@ icon_alignment = 1
 expand_icon = true
 
 [node name="ShowEmittersButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer-SidePanel/VBoxContainer/PanelShowElements/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 size_flags_vertical = 0
 focus_mode = 0
@@ -736,7 +736,7 @@ icon_alignment = 1
 expand_icon = true
 
 [node name="ShowAntennaPatternsButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer-SidePanel/VBoxContainer/PanelShowElements/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 size_flags_vertical = 0
 focus_mode = 0
@@ -747,8 +747,7 @@ icon_alignment = 1
 expand_icon = true
 
 [node name="PanelBeamRxTx" type="Panel" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer-SidePanel/VBoxContainer"]
-visible = false
-custom_minimum_size = Vector2(115, 60)
+custom_minimum_size = Vector2(105, 55)
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_styles/panel = ExtResource("1_ndm6o")
@@ -770,7 +769,7 @@ layout_mode = 2
 theme_override_constants/separation = 5
 
 [node name="ShowTxButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer-SidePanel/VBoxContainer/PanelBeamRxTx/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 size_flags_vertical = 0
 focus_mode = 0
@@ -781,7 +780,7 @@ icon_alignment = 1
 expand_icon = true
 
 [node name="ShowRxButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer-SidePanel/VBoxContainer/PanelBeamRxTx/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 size_flags_vertical = 0
 focus_mode = 0

@@ -52,6 +52,16 @@ public partial class FssCameraMoverWorld : Node3D
 
             // GD.Print($"CamPos:{CamPos}");
 
+
+            if (false)
+            {
+                FssLLAPoint pos = new FssLLAPoint();
+                pos.LatDegs = CamPos.LatDegs;
+                pos.LonDegs = CamPos.LonDegs;
+                pos.AltMslM = 0;
+
+                FssZeroOffset.SetLLA(pos);
+            }
         }
 
         // Turn the position CamPos into a GE positino and place the camera

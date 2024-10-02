@@ -10,7 +10,7 @@ network ii {"PlatAdd":{"PlatName":"F18-Test","PlatCategory":"airborne","ThreatTy
 network ii {"PlatAdd":{"PlatName":"Su34-Test","PlatCategory":"airborne","ThreatType":"friendly","Display":true,"PlatClass":"Su34","PlatDisplaySymb":"<platDispSymb>","LatDegs":54.355877,"LongDegs":-5.56842,"AltitudeMtrs":6000.0,"RollDegs":0.0,"PitchDegs":0.0,"HeadingDegs":5.0}}
 
 
-network ii {"PlatAdd":{"PlatName":"MQ9-Test","PlatCategory":"airborne","ThreatType":"friendly","Display":true,"PlatClass":"MQ9Reaper","PlatDisplaySymb":"<platDispSymb>","LatDegs":52.355877,"LongDegs":-5.26842,"AltitudeMtrs":6000.0,"RollDegs":0.0,"PitchDegs":0.0,"HeadingDegs":5.0}}
+network ii {"PlatAdd":{"PlatName":"MQ9-Test","PlatCategory":"airborne","ThreatType":"friendly","Display":true,"PlatClass":"MQ9Reaper","PlatDisplaySymb":"<platDispSymb>","LatDegs":53.355877,"LongDegs":-5.26842,"AltitudeMtrs":6000.0,"RollDegs":0.0,"PitchDegs":0.0,"HeadingDegs":5.0}}
 
 
 network ii {"PlatAdd":{"PlatName":"Tornado-Test","PlatCategory":"airborne","ThreatType":"friendly","Display":true,"PlatClass":"Tornado","PlatDisplaySymb":"<platDispSymb>","LatDegs":52.455877,"LongDegs":-5.66842,"AltitudeMtrs":3000.0,"RollDegs":0.0,"PitchDegs":0.0,"HeadingDegs":5.0}}
@@ -22,10 +22,10 @@ network ii {"PlatAdd":{"PlatName":"Tornado-Test","PlatCategory":"airborne","Thre
 
 network ii {"PlatAdd":{"PlatName":"SupportShip","PlatCategory":"surface","ThreatType":"friendly","Display":true,"PlatClass":"SupportShip","PlatDisplaySymb":"<platDispSymb>","LatDegs":52.31,"LongDegs":-4.59,"AltitudeMtrs":0.0,"RollDegs":0.0,"PitchDegs":0.0,"HeadingDegs":5.0}}
 
-network ii {"PlatAdd":{"PlatName":"RescueShip","PlatCategory":"surface","ThreatType":"friendly","Display":true,"PlatClass":"RescueShip","PlatDisplaySymb":"<platDispSymb>","LatDegs":52.355877,"LongDegs":-4.501,"AltitudeMtrs":0.0,"RollDegs":0.0,"PitchDegs":0.0,"HeadingDegs":5.0}}
+network ii {"PlatAdd":{"PlatName":"RescueShip","PlatCategory":"surface","ThreatType":"friendly","Display":true,"PlatClass":"RescueShip","PlatDisplaySymb":"<platDispSymb>","LatDegs":53.8,"LongDegs":-3.85,"AltitudeMtrs":0.0,"RollDegs":0.0,"PitchDegs":0.0,"HeadingDegs":5.0}}
 
 
-network ii {"PlatAdd":{"PlatName":"LuxuryYacht","PlatCategory":"surface","ThreatType":"friendly","Display":true,"PlatClass":"LuxuryYacht","PlatDisplaySymb":"<platDispSymb>","LatDegs":52.355877,"LongDegs":-4.502,"AltitudeMtrs":0.0,"RollDegs":0.0,"PitchDegs":0.0,"HeadingDegs":5.0}}
+network ii {"PlatAdd":{"PlatName":"LuxuryYacht","PlatCategory":"surface","ThreatType":"friendly","Display":true,"PlatClass":"LuxuryYacht","PlatDisplaySymb":"<platDispSymb>","LatDegs":53.6,"LongDegs":-5.4,"AltitudeMtrs":0.0,"RollDegs":0.0,"PitchDegs":0.0,"HeadingDegs":5.0}}
 
 network ii {"PlatAdd":{"PlatName":"SmallShip","PlatCategory":"surface","ThreatType":"friendly","Display":true,"PlatClass":"SmallShip","PlatDisplaySymb":"<platDispSymb>","LatDegs":52.355877,"LongDegs":-4.503,"AltitudeMtrs":0.0,"RollDegs":0.0,"PitchDegs":0.0,"HeadingDegs":5.0}}
 

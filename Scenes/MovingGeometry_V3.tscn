@@ -8,12 +8,12 @@ background_mode = 1
 background_color = Color(0.449993, 0.581307, 0.79351, 1)
 ambient_light_source = 2
 ambient_light_color = Color(0.862832, 0.855605, 0.811735, 1)
-tonemap_exposure = 2.0
+reflected_light_source = 2
+ssao_enabled = true
+ssil_enabled = true
 sdfgi_enabled = true
 fog_light_color = Color(0.365943, 0.677669, 0.940654, 1)
-volumetric_fog_density = 0.0971
 volumetric_fog_albedo = Color(0.599442, 0.763254, 0.970563, 1)
-volumetric_fog_length = 154.35
 
 [node name="Root" type="Node3D"]
 top_level = true
