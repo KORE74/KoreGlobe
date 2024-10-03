@@ -7,16 +7,15 @@ using Godot;
 
 public partial class FssLineMesh3D : Node3D
 {
-    public void AddHemisphere(Vector3 center, float radius, int numSegments)
+    public void AddHemisphere(Vector3 center, float radius, int numSegments, Color lineCol)
     {
         int vertSegments  = (int)Mathf.Round((float)numSegments / 4f);
         float vertAngInc  =  90f / (float)vertSegments;
         float horizAngInc = 360f / (float)numSegments;
 
         // Hold the indices of the MeshData.Vertices for this hemisphere
-        List<int> hemisphereVertexIndices = new List<int>();
-
-        List<Vector3> hemisphereVertices = new List<Vector3>();
+        List<int>     hemisphereVertexIndices = new List<int>();
+        List<Vector3> hemisphereVertices      = new List<Vector3>();
 
         // Define the points on the hemisphere surface
         for (int i = 0; i < vertSegments + 1; i++)
@@ -51,23 +50,8 @@ public partial class FssLineMesh3D : Node3D
                 int index3 = hemisphereVertexIndices[nextRowStart + i];
                 int index4 = hemisphereVertexIndices[nextRowStart + (i + 1) % numSegments];
 
-
-
-
-                // AddTriangle(index1, index4, index2);
-                // AddTriangle(index1, index3, index4);
-
-                AddLine(
-                    hemisphereVertices[index1],
-                    hemisphereVertices[index2],
-                    Color.Color8(255, 0, 0, 255)
-                );
-
-                AddLine(
-                    hemisphereVertices[index1],
-                    hemisphereVertices[index3],
-                    Color.Color8(0, 255, 0, 255)
-                );
+                AddLine(hemisphereVertices[index1], hemisphereVertices[index2], lineCol);
+                AddLine(hemisphereVertices[index1], hemisphereVertices[index3], lineCol);
             }
         }
     }
