@@ -145,6 +145,8 @@ public static partial class FssValueUtils
     // ------------------------------------------------------------------------
     // Useful way to test floating point numbers.
 
+    // Usage: FssValueUtils.EqualsWithinTolerance(val, val2, 0.3);
+
     public static bool EqualsWithinTolerance(double val, double matchval, double tolerance = FssConsts.ArbitraryMinDouble)
     {
         return Math.Abs(val - matchval) <= tolerance;

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 // Design Decisions:
 // - The LLA Point code uses a struct rather than an immutable class, as the constructor options with flexible units
-//   are simply too useful. We rely on the struct's pass by value to avoid issues with mutability. 
+//   are simply too useful. We rely on the struct's pass by value to avoid issues with mutability.
 
 public static class FssLLAPointOperations
 {
@@ -24,11 +24,45 @@ public static class FssLLAPointOperations
 
     // --------------------------------------------------------------------------------------------
 
+    // Usage: List<FssLLAPoint> pointList = FssLLAPointOperations.DividedRhumbLine(fromPoint, toPoint, 10)
+
+    public static List<FssLLAPoint> DividedRhumbLine(FssLLAPoint fromPoint, FssLLAPoint toPoint, int returnedListCount)
+    {
+        // Ensure the list count is at least 2, as the list needs to include both endpoints.
+        if (returnedListCount < 2)
+        {
+            throw new ArgumentException("returnedListCount must be 2 or greater.");
+        }
+
+        List<FssLLAPoint> result = new List<FssLLAPoint>();
+
+        // Add the first point (fromPoint)
+        result.Add(fromPoint);
+
+        // Calculate the step fraction for each interpolation point
+        double stepFraction = 1.0 / (returnedListCount - 1);
+
+        // Interpolate points along the rhumb line
+        for (int i = 1; i < returnedListCount - 1; i++)
+        {
+            double fraction = i * stepFraction;
+            FssLLAPoint interpolatedPoint = RhumbLineInterpolation(fromPoint, toPoint, fraction);
+            result.Add(interpolatedPoint);
+        }
+
+        // Add the last point (toPoint)
+        result.Add(toPoint);
+
+        return result;
+    }
+
+    // --------------------------------------------------------------------------------------------
+
     public static FssLLAPoint StraightLineInterpolation(FssLLAPoint fromPoint, FssLLAPoint toPoint, double fraction)
     {
         FssXYZPoint fromXYZ = fromPoint.ToXYZ();
         FssXYZPoint toXYZ   = toPoint.ToXYZ();
-        FssXYZPoint interpXYZ = FssXYZPointOperations.Lerp(fromXYZ, toXYZ, fraction);    
+        FssXYZPoint interpXYZ = FssXYZPointOperations.Lerp(fromXYZ, toXYZ, fraction);
 
         return FssLLAPoint.FromXYZ(interpXYZ);
     }
@@ -44,7 +78,7 @@ public static class FssLLAPointOperations
         double lon2 = toPoint.LonRads;
 
         // Compute spherical interpolation
-        double delta = 2 * Math.Asin(Math.Sqrt(Math.Pow(Math.Sin((lat2 - lat1) / 2), 2) + 
+        double delta = 2 * Math.Asin(Math.Sqrt(Math.Pow(Math.Sin((lat2 - lat1) / 2), 2) +
                                               Math.Cos(lat1) * Math.Cos(lat2) * Math.Pow(Math.Sin((lon2 - lon1) / 2), 2)));
         double A = Math.Sin((1 - fraction) * delta) / Math.Sin(delta);
         double B = Math.Sin(fraction * delta) / Math.Sin(delta);
@@ -66,5 +100,5 @@ public static class FssLLAPointOperations
         return new FssLLAPoint() { LatDegs = newLatDegs, LonDegs = newLonDegs, AltMslM = newAlt };
     }
 
-    
+
 }
