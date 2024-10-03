@@ -94,4 +94,17 @@ public class FssColorRange
         colorRange.AddEntry(1f, Colors.Green);
         return colorRange;
     }
+
+    public static FssColorRange BlueGreenYellowOrangeRed()
+    {
+        FssColorRange colorRange = new FssColorRange();
+        colorRange.AddEntry(0f, Colors.Blue);
+        colorRange.AddEntry(0.2f, Colors.Green);
+        colorRange.AddEntry(0.4f, Colors.Yellow);
+        colorRange.AddEntry(0.6f, Colors.Orange);
+        colorRange.AddEntry(1f, Colors.Red);
+        return colorRange;
+    }
+
+
 }

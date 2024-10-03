@@ -44,11 +44,16 @@ public static class FssColorUtil
 
     public static Color StringToColor(string input)
     {
-        // Get the hash code of the input string
-        int hash = input.GetHashCode();
+        int sum = 0;
+        foreach (char c in input)
+        {
+            // get the ascii value for the character
+            sum += (int)c;
+        }
 
-        // Use the hash code to select a color from the GeometryColors list
-        return GeometryColors[Mathf.Abs(hash) % GeometryColors.Count];
+        int index = sum % GeometryColors.Count;
+
+        return GeometryColors[index];
     }
 
     // --------------------------------------------------------------------------------------------
@@ -131,20 +136,22 @@ public static class FssColorUtil
 
     public static readonly List<Color> GeometryColors = new List<Color>
     {
-        Colors["Red"],
-        Colors["Green"],
-        Colors["Blue"],
-        Colors["Yellow"],
-        Colors["Magenta"],
-        Colors["Cyan"],
-        Colors["OffYellow"],
-        Colors["OffGreen"],
+        Colors["MidRed"],
+        Colors["MidBlue"],
+        Colors["MidYellow"],
+        Colors["DarkMagenta"],
+        Colors["MidCyan"],
+        Colors["DarkCyan"],
+        Colors["Brown"],
         Colors["OffBlue"],
         Colors["OffRed"],
         Colors["OffPurple"],
         Colors["OffCyan"],
         Colors["OffOrange"],
         Colors["OffPink"],
-        Colors["OffBrown"]
+        Colors["OffBrown"],
+        Colors["OffIndigo"],
+        Colors["Olive"],
+        Colors["Maroon"]
     };
 }
