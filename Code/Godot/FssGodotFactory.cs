@@ -7,17 +7,19 @@ using System.Collections.Generic;
 
 using Godot;
 
+#nullable enable
+
 public class FssGodotFactory
 {
-    public Node3D                SceneRootNode      { get; private set; } = null;
-    public FssZeroNode           ZeroNode           { get; private set; } = null;
-    public FssMapManager         EarthCoreNode      { get; private set; } = null;
-    //public Node3D                EntityRootNode     { get; private set; } = null;
+    public Node3D                SceneRootNode      { get; private set; }
+    public FssZeroNode           ZeroNode           { get; private set; }
+    public FssMapManager         EarthCoreNode      { get; private set; }
+    //public Node3D                EntityRootNode     { get; private set; }
 
-    public FssGodotEntityManager GodotEntityManager { get; private set; } = null;
-    public FssTextureLoader      TextureLoader      { get; private set; } = null;
-    public Fss3DModelLibrary     ModelLibrary       { get; private set; } = null;
-    public FssUIState            UIState            { get; private set; } = null;
+    public FssGodotEntityManager GodotEntityManager { get; private set; }
+    public FssTextureLoader      TextureLoader      { get; private set; }
+    public Fss3DModelLibrary     ModelLibrary       { get; private set; }
+    public FssUIState            UIState            { get; private set; }
 
     // Singleton pattern
     private static readonly object  lockObject        = new object();

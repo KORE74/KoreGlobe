@@ -16,8 +16,6 @@ public partial class FssGodotPlatformElementWedge : FssGodotPlatformElement
     MeshInstance3D RxMeshInstance;
     MeshInstance3D TxMeshInstance;
 
-    public string ElementName = "Wedge";
-
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
@@ -35,8 +33,8 @@ public partial class FssGodotPlatformElementWedge : FssGodotPlatformElement
 
     private void CreateWedge()
     {
-        Color elementColorRx = FssColorUtil.StringToColor(ElementName + "Rx");
-        Color elementColorTx = FssColorUtil.StringToColor(ElementName + "Tx");
+        Color elementColorRx = FssColorUtil.StringToColor(Name + "Rx");
+        Color elementColorTx = FssColorUtil.StringToColor(Name + "Tx");
         elementColorRx.A = 0.4f;
         elementColorTx.A = 0.4f;
 

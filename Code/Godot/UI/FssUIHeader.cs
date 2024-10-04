@@ -14,8 +14,8 @@ public partial class FssUIHeader : PanelContainer
     private Window? SettingWindowNode;
     private Window? NetworkWindowNode;
 
-    private Label ScenarioTimeLabel;
-    private Label ScenarioNameLabel;
+    private Label? ScenarioTimeLabel;
+    private Label? ScenarioNameLabel;
 
     float UIPollTimer = 0f;
 
@@ -76,8 +76,20 @@ public partial class FssUIHeader : PanelContainer
 
             string simclockHMS = FssAppFactory.Instance.EventDriver.SimTimeHMS();
 
+            string displayScenarioName = strNotDefined;
+            if (!string.IsNullOrEmpty(FssGodotFactory.Instance.UIState.ScenarioName))
+                displayScenarioName = FssGodotFactory.Instance.UIState.ScenarioName;
+
+            // If the length of the scenario name is greater than 30 characters, truncate the middle and add "..."
+            if (displayScenarioName.Length > 30)
+            {
+                string frontSubStr = displayScenarioName.Substring(0, 15);
+                string backSubStr  = displayScenarioName.Substring(displayScenarioName.Length - 15, 15);
+                displayScenarioName = $"{frontSubStr}...{backSubStr}";
+            }
+
             ScenarioTimeLabel!.Text = $"{strScenarioTime}:\n{simclockHMS}";
-            ScenarioNameLabel!.Text = $"{strScenarioName}:\n{strNotDefined}";
+            ScenarioNameLabel!.Text = $"{strScenarioName}:\n{displayScenarioName}";
         }
     }
 

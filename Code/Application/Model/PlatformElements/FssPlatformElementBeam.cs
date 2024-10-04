@@ -38,7 +38,24 @@ public class FssPlatformElementBeam : FssPlatformElement
     public string AntennaPattern { get; set; } = "DefaultPattern";
 
     // --------------------------------------------------------------------------------------------
-    // #MARK Report
+    // MARK: Complex Accessors
+    // --------------------------------------------------------------------------------------------
+
+    public void SetScanPattern(string scanPatternStr)
+    {
+        // Case insensitive compare
+        ScanShape = scanPatternStr.ToLower().Trim() switch
+        {
+            "concical" => ScanPatternShape.Cone,
+            "raster"   => ScanPatternShape.Wedge,
+            "circular" => ScanPatternShape.Dome,
+            "circle"   => ScanPatternShape.Dome,
+            _          => ScanPatternShape.Undefined
+        };
+    }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Report
     // --------------------------------------------------------------------------------------------
 
     public override string Report()

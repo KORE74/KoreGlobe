@@ -10,6 +10,8 @@ public enum FssCamMode
 
 public class FssUIState
 {
+    public string     ScenarioName        { get; set; } = "DefaultScenario";
+
     public FssCamMode CameraMode          { get; set; } = FssCamMode.WorldCam;
     public bool       IsRwScale           { get; set; } = true;
     public float      InfographicScale    { get; set; } = 1;

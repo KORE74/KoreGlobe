@@ -19,6 +19,10 @@ public partial class FssCameraPolarOffset : Node3D
     private float TimerReport = 0.0f;
     private float GeDeltaTime = 0f;
 
+    // mouse drag state
+    private bool MouseDragging = false;
+    private Vector2 MouseDragStart = new Vector2();
+
     // --------------------------------------------------------------------------------------------
     // MARK: Node3D - Ready / Process
     // --------------------------------------------------------------------------------------------
@@ -70,14 +74,62 @@ public partial class FssCameraPolarOffset : Node3D
 
     // Process inputs
     // Update CamOffsetDist and CamRotation, to be used in _Process
-    public override void _Input(InputEvent @event)
+    public override void _Input(InputEvent inputEvent)
     {
         // Only update the camera if the camera is active
         if (CamNode == null) return;
         if (!CamNode.Current) return;
 
-        float distanceDelta = (float)(600 * FssZeroOffset.RwToGeDistanceMultiplierM) * GeDeltaTime;
-        float angDeltaDegsPerFrame = 90f * GeDeltaTime;
+        //float distanceDelta = (float)(600 * FssZeroOffset.RwToGeDistanceMultiplierM) * GeDeltaTime;
+
+        float distanceDelta           = CamOffsetDist * GeDeltaTime * 0.8f;
+        float distanceDeltaMouseWheel = distanceDelta * 2.5f;
+        float angDeltaDegsPerFrame    = 90f * GeDeltaTime;
+
+        // Mouse Wheel - - - - -
+
+        if (inputEvent is InputEventMouseButton mouseWheelEvent)
+        {
+            if (Input.IsActionPressed("ui_shift")) distanceDeltaMouseWheel *= 5f;
+            if (Input.IsActionPressed("ui_ctrl"))  distanceDeltaMouseWheel /= 5f;
+
+            switch (mouseWheelEvent.ButtonIndex)
+            {
+                case MouseButton.WheelUp: // Zoom in
+                    GD.Print($"Wheel up // {CamOffsetDist} // {distanceDelta} // {GeDeltaTime}");
+                    CamOffsetDist -= distanceDeltaMouseWheel;
+                    break;
+                case MouseButton.WheelDown: // Zoom out
+                    GD.Print("Wheel down");
+                    CamOffsetDist += distanceDeltaMouseWheel;
+                    break;
+            }
+        }
+
+        // Mouse Drag - - - - -
+
+        if (inputEvent is InputEventMouseButton mouseEvent && mouseEvent.ButtonIndex == MouseButton.Left)
+        {
+            if (!MouseDragging &&  mouseEvent.Pressed) { MouseDragging = true; MouseDragStart = mouseEvent.Position; }
+            if (                  !mouseEvent.Pressed) { MouseDragging = false; }
+        }
+        else
+        {
+            if (inputEvent is InputEventMouseMotion motionEvent && MouseDragging)
+            {
+                Vector2 dragPosition = motionEvent.Position;
+                Vector2 dragMovement = dragPosition - MouseDragStart;
+
+                float drawMovementScale = 200f;
+                if (Input.IsActionPressed("ui_shift")) drawMovementScale /= 3f;
+                if (Input.IsActionPressed("ui_ctrl"))  drawMovementScale *= 3f; // Multiply the scaling divisor
+
+                camElAngleDegs += dragMovement.Y / drawMovementScale;
+                camAzAngleDegs += dragMovement.X / drawMovementScale;
+            }
+        }
+
+        // Keyboard - - - - -
 
         if (Input.IsActionPressed("ui_shift"))
         {

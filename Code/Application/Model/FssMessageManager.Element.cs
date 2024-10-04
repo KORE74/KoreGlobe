@@ -39,8 +39,28 @@ public partial class FssMessageManager
         string portName = antPatternMsg.PortName;
 
         FssAppFactory.Instance.EventDriver.PlatformSetAntennaPatternMetadata(platName, portName, antPatternMsg.AzElBox, antPatternMsg.PolarOffset);
-        FssAppFactory.Instance.EventDriver.PlatformSetAntennaPatternData(platName, portName, antPatternMsg.AzPointCount, antPatternMsg.ElPointCount, antPatternMsg.Pattern);
-    }
 
+        int azPointCount   = antPatternMsg.AzPointCount;
+        int elPointCount   = antPatternMsg.ElPointCount;
+        int dataPointCount = antPatternMsg.Pattern.Count;
+
+        // check AP and assign unaffected.
+        if (azPointCount * elPointCount == dataPointCount)
+        {
+            FssAppFactory.Instance.EventDriver.PlatformSetAntennaPatternData(platName, portName, antPatternMsg.AzPointCount, antPatternMsg.ElPointCount, antPatternMsg.Pattern);
+        }
+        else if ( (azPointCount+1) * (elPointCount+1) == dataPointCount)
+        {
+            FssAppFactory.Instance.EventDriver.PlatformSetAntennaPatternData(
+                platName, portName,
+                antPatternMsg.AzPointCount + 1,
+                antPatternMsg.ElPointCount + 1,
+                antPatternMsg.Pattern);
+        }
+        else
+        {
+            FssCentralLog.AddEntry("ProcessMessage_AntennaPattern: Size Issue");
+        }
+    }
 
 }

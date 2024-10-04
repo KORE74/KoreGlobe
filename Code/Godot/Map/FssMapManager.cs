@@ -55,6 +55,9 @@ public partial class FssMapManager : Node3D
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
+        // Update this GE position, to keep up with the zero node movement
+
+
     }
 
     // --------------------------------------------------------------------------------------------

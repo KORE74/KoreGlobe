@@ -70,7 +70,6 @@ public partial class FssMessageManager
         string elemName = FssEventDriver.ElementNameForBeam(beamDisMsg.PlatName, beamDisMsg.EmitName, beamDisMsg.BeamName);
 
         FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_BeamDisable: Name:{elemName}");
-
     }
 
     // --------------------------------------------------------------------------------------------
@@ -84,6 +83,9 @@ public partial class FssMessageManager
         string elemName = FssEventDriver.ElementNameForBeam(scanPatMsg.PlatName, scanPatMsg.EmitName, scanPatMsg.BeamName);
 
         FssAppFactory.Instance.EventDriver.PlatformSetBeamAngles(scanPatMsg.PlatName, elemName, scanPatMsg.GetTrackOffset(), scanPatMsg.GetAzElBox());
+        FssAppFactory.Instance.EventDriver.PlatformSetBeamScanType(scanPatMsg.PlatName, elemName, scanPatMsg.ScanType);
+
+
     }
 
     private void ProcessMessage_PlatformElement_AddCircularScan(PlatformElement_AddCircularScan platElemAddCircScanMsg)

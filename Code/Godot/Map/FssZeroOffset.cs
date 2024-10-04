@@ -56,6 +56,11 @@ public static class FssZeroOffset
         return RwZeroPointXYZ.XYZTo(RwXYZ);
     }
 
+    public static FssXYZPoint RwZeroPointOffset(FssLLAPoint RwLLA)
+    {
+        return RwZeroPointXYZ.XYZTo(RwLLA.ToXYZ());
+    }
+
     // To convert from an RW XYZ to a GE XYZ, we need to:
     // 1 - Subtract the zero point offset to get the offset XYZ.
     // 2 - Invert the Z axis to match the Godot engine orientation.

@@ -120,6 +120,26 @@ public partial class FssLineMesh3D : Node3D
     }
 
     // --------------------------------------------------------------------------------------------
+
+    // Add a line on the front-top edge of the box, so we can check orientation
+
+    public void AddBoxWithLeadingEdge(FssXYZBox xyzBox, Color color)
+    {
+        // Add all the edges of the box using AddBox
+        AddBox(xyzBox, color);
+
+        // inset the box in width and length, after figuring out a fraction of the width
+        double insetFraction = 0.1;
+        double insetWidth = xyzBox.Width * insetFraction;
+
+        // Inset the box - width and length, so we have a top-front line to get and draw
+        FssXYZBox insetBox = xyzBox.Inset(insetWidth, 0, insetWidth);
+
+        // Get the top-front edge of the inset box and add it to the box
+        AddLine(insetBox.Edge(FssXYZBox.EnumEdge.TopFront), color);
+    }
+
+    // --------------------------------------------------------------------------------------------
     // MARK: Add Arrow
     // --------------------------------------------------------------------------------------------
 
@@ -128,22 +148,27 @@ public partial class FssLineMesh3D : Node3D
 
     public void AddArrow(FssXYZLine line, Color color)
     {
-        FssXYZPoint tip  = line.P1;
+        FssXYZPoint tip = line.P1;
         FssXYZPoint tail = line.P2;
 
-        FssXYZPoint direction     = line.Direction;
+        // Calculate direction and unit direction of the line
+        FssXYZPoint direction = tip - tail;
         FssXYZPoint unitDirection = direction.Normalize();
 
-        // FssXYZPoint arrowHead      = FssXYZPoint.Scale(unitDirection, line.Length / 3);
-        // FssXYZPoint arrowHeadLeft  = FssXYZPoint.Rotate(arrowHead, 45);
-        // FssXYZPoint arrowHeadRight = FssXYZPoint.Rotate(arrowHead, -45);
+        // Calculate the arrow head length (1/3rd of the arrow line length)
+        double arrowHeadLength = direction.Magnitude / 3.0;
 
+        // Calculate arrowhead points to the left and right of the tip
+        // We'll use a cross product-like approach to generate perpendicular vectors.
+        // For simplicity, I'm assuming Y is the "up" direction to create two different directions.
+        FssXYZPoint arrowHeadLeft  = new FssXYZPoint(-unitDirection.Z, 0, unitDirection.X).Normalize() * arrowHeadLength;
+        FssXYZPoint arrowHeadRight = new FssXYZPoint(unitDirection.Z, 0, -unitDirection.X).Normalize() * arrowHeadLength;
+
+        // Draw the main arrow line and the two arrowhead lines
         AddLine(tail, tip, color);
-        // AddLine(tip, FssXYZPoint.Sum(tip, arrowHead), color);
-        // AddLine(tip, FssXYZPoint.Sum(tip, arrowHeadLeft), color);
-        // AddLine(tip, FssXYZPoint.Sum(tip, arrowHeadRight), color);
+        AddLine(tip, tip + arrowHeadLeft, color);
+        AddLine(tip, tip + arrowHeadRight, color);
     }
-
 
     // --------------------------------------------------------------------------------------------
     // MARK: Internal Test Functions

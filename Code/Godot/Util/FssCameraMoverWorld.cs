@@ -16,6 +16,10 @@ public partial class FssCameraMoverWorld : Node3D
     private Fss1DMappedRange camSpeedForAlt = new Fss1DMappedRange();
     private Fss1DMappedRange camVertSpeedForAlt = new Fss1DMappedRange();
 
+    // mouse drag state
+    private bool MouseDragging = false;
+    private Vector2 MouseDragStart = new Vector2();
+
     // ------------------------------------------------------------------------------------------------
 
     public override void _Ready()
@@ -44,7 +48,7 @@ public partial class FssCameraMoverWorld : Node3D
 
     public override void _Process(double delta)
     {
-        UpdateInputs();
+        //UpdateInputs();
 
         if (TimerCamReport < FssCoreTime.RuntimeSecs)
         {
@@ -91,7 +95,6 @@ public partial class FssCameraMoverWorld : Node3D
 
     private void UpdateInputs()
     {
-
         // exit if the camera is not current
         if (CamNode == null) return;
         if (!CamNode.IsCurrent()) return;
@@ -199,18 +202,118 @@ public partial class FssCameraMoverWorld : Node3D
 
     public override void _Input(InputEvent inputEvent)
     {
-        if (inputEvent is InputEventMouseButton mouseEvent && mouseEvent.Pressed)
+        // exit if the camera is not current
+        if (CamNode == null) return;
+        if (!CamNode.IsCurrent()) return;
+
+        // Available move amounts for this call
+        double translateFwdM  = 0;
+        double translateLeftM = 0;
+        double translateUpM   = 0;
+        double rotateUpDegs   = 0;
+        double rotateLeftDegs = 0;
+
+        // scaling factors for movement
+        double translateSpeed   = 2500;
+        double rotateSpeed      = 2;
+        double translateUpSpeed = 100;
+        double MoveSpeed     = camSpeedForAlt.GetValue(CamPos.AltMslM);
+        translateSpeed       = MoveSpeed;
+        double VertMoveSpeed = camVertSpeedForAlt.GetValue(CamPos.AltMslM);
+
+        // Mouse Drag - - - - -
+
+        if (inputEvent is InputEventMouseButton dragEvent && dragEvent.ButtonIndex == MouseButton.Left)
         {
-            switch (mouseEvent.ButtonIndex)
+            if (!MouseDragging &&  dragEvent.Pressed) { MouseDragging = true; MouseDragStart = dragEvent.Position; }
+            if (                  !dragEvent.Pressed) { MouseDragging = false; }
+        }
+        else
+        {
+            if (inputEvent is InputEventMouseMotion motionEvent && MouseDragging)
             {
-                case MouseButton.Left:
-                    GD.Print($"Left button was clicked at {mouseEvent.Position}");
-                    break;
-                case MouseButton.WheelUp:
-                    GD.Print("Wheel up");
-                    break;
+                Vector2 dragPosition = motionEvent.Position;
+                Vector2 dragMovement = dragPosition - MouseDragStart;
+
+                float drawMovementScale = 200f;
+                if (Input.IsActionPressed("ui_shift")) drawMovementScale *= 3f;
+                if (Input.IsActionPressed("ui_ctrl"))  drawMovementScale /= 3f;
+
+                translateFwdM  += dragMovement.Y / drawMovementScale;
+                translateLeftM += dragMovement.X / drawMovementScale;
             }
         }
+
+        // Keyboard - - - - -
+
+
+
+        if (Input.IsActionPressed("ui_shift"))
+        {
+            if (Input.IsActionPressed("ui_up"))    translateUpM   += 1;
+            if (Input.IsActionPressed("ui_down") ) translateUpM   -= 1;
+        }
+        else if (Input.IsActionPressed("ui_alt"))
+        {
+            if (Input.IsActionPressed("ui_up"))    rotateUpDegs   += 1f;
+            if (Input.IsActionPressed("ui_down"))  rotateUpDegs   -= 1f;
+            if (Input.IsActionPressed("ui_left"))  rotateLeftDegs -= 1f;
+            if (Input.IsActionPressed("ui_right")) rotateLeftDegs += 1f;
+        }
+        else
+        {
+            if (Input.IsActionPressed("ui_up"))    translateFwdM  -= 1;
+            if (Input.IsActionPressed("ui_down"))  translateFwdM  += 1;
+            if (Input.IsActionPressed("ui_left"))  translateLeftM += 1;
+            if (Input.IsActionPressed("ui_right")) translateLeftM -= 1;
+        }
+
+        // Simple: Apply alt and heading chanegs
+        CamPos.AltMslM        += translateUpM   * VertMoveSpeed;//translateUpSpeed;
+        CamCourse.HeadingDegs += rotateLeftDegs * rotateSpeed;
+        CamCourse.SpeedKph    += translateFwdM  * MoveSpeed;//translateSpeed;
+
+        // GD.Print($"MoveSpeed:{MoveSpeed} // VertMoveSpeed:{VertMoveSpeed}");
+
+
+        // Limit movements - - - - -
+
+
+
+        if (CamPos.AltMslM < 500) CamPos.AltMslM = 500;
+
+        if (!FssValueUtils.IsZero(CamCourse.SpeedKph))
+        {
+            CamPos = CamPos.PlusRangeBearing(CamCourse.OffsetForTime(1));
+        }
+
+        // Translation means setting up a temp course 90 degree off, and adding that.
+        if (translateLeftM != 0)
+        {
+            FssCourse tempCourse = new FssCourse(translateLeftM * translateSpeed, CamCourse.HeadingDegs + 90);
+            CamPos = CamPos.PlusRangeBearing(tempCourse.OffsetForTime(1));
+        }
+
+        //FssMapManager.LoadRefLLA = CamPos;
+
+        rotateUpDegs *= 2;
+        //rotateUpDegs = FssValueUtils.LimitToRange(rotateUpDegs, -50, 50);
+        camPitch += (float)rotateUpDegs;
+        camPitch  = FssValueUtils.LimitToRange(camPitch, -80, 0);
+
+        //CamNode.Translation = new Vector3(0, 0, 0);
+
+        // if the camera is present and current, Use the position to drive the map update.
+        if (CamNode != null)
+        {
+            if (CamNode.IsCurrent())
+            {
+                CamNode.RotationDegrees = new Vector3(camPitch, 0, 0);
+                FssMapManager.LoadRefLLA = FssGeoConvOperations.GeToRw(Position);
+            }
+        }
+
+
     }
 
     // ------------------------------------------------------------------------------------------------

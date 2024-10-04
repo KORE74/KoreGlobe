@@ -6,6 +6,8 @@ using System;
 using System.IO;
 using System.Text;
 
+#nullable enable
+
 public static class FssElevationTileIO
 {
     // --------------------------------------------------------------------------------------------

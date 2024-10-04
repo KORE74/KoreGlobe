@@ -68,6 +68,8 @@ public static class FssXYZPointOperations
 
     // --------------------------------------------------------------------------------------------
 
+    // Usage: FssXYZPoint c = FssXYZPointOperations.Lerp(from, to, 0.1);
+
     public static FssXYZPoint Lerp(FssXYZPoint fromPoint, FssXYZPoint toPoint, double fraction)
     {
         // Handle edge cases

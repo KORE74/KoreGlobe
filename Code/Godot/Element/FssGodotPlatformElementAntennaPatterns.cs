@@ -2,6 +2,8 @@ using System.Text;
 
 using Godot;
 
+#nullable enable
+
 // Create a horizontally oriented dome with a given AzEl range.
 
 public partial class FssGodotPlatformElementAntennaPatterns : FssGodotPlatformElement
@@ -11,7 +13,7 @@ public partial class FssGodotPlatformElementAntennaPatterns : FssGodotPlatformEl
     // public FssFloat2DArray AntennaPattern  = new FssFloat2DArray();
 
     private float GeOffsetDistance   = 100f * (float)FssZeroOffset.RwToGeDistanceMultiplierM;
-    private float GePatternMagnitude = 20f  * (float)FssZeroOffset.RwToGeDistanceMultiplierM;
+    private float GePatternMagnitude =  20f * (float)FssZeroOffset.RwToGeDistanceMultiplierM;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -77,7 +79,8 @@ public partial class FssGodotPlatformElementAntennaPatterns : FssGodotPlatformEl
 
     public Node3D? CreateSinglePatternMesh(string name, FssFloat2DArray data, FssPolarOffset offset)
     {
-        FssColorRange colorRange = FssColorRange.RedYellowGreen();
+        //FssColorRange colorRange = FssColorRange.RedYellowGreen();
+        FssColorRange colorRange = FssColorRange.BlueGreenYellowOrangeRed();
 
         // FssFloat2DArray radiusList = new FssFloat2DArray(32, 16);
         // radiusList = FssFloat2DArray.AntennaPattern_001(36, 18);

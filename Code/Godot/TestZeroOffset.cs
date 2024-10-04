@@ -36,6 +36,7 @@ public partial class TestZeroOffset : Node3D
     private FssCourse      PlatformCourse;
     private FssCourseDelta PlatformCourseDelta;
 
+    private float Timer5Sec = 0.0f;
 
     private float TimerContrail = 0.0f;
 
@@ -57,11 +58,11 @@ public partial class TestZeroOffset : Node3D
         double randomLon = FssValueUtils.RandomInRange(-8, -0);
 
         // Init the real world zero pos
-        FssLLAPoint zeroPos = new FssLLAPoint() {
+        FssLLAPoint randomPos = new FssLLAPoint() {
             LatDegs = randomLat,
             LonDegs = randomLon,
             RadiusM = FssPosConsts.EarthRadiusM };
-        FssZeroOffset.SetLLA(zeroPos);
+        FssZeroOffset.SetLLA(randomPos);
 
 
         WorldCamNode = new FssCameraMoverWorld() { Name = "WorldCamBase" };
@@ -69,8 +70,8 @@ public partial class TestZeroOffset : Node3D
         WorldCamNode.CamNode.Current = true;
 
         FssZeroOffset.ReportConsts();
-
         // Create Nodes
+
         // CreateCoreNode();
 
         FssGodotFactory.Instance.ZeroNode.Position      = FssZeroOffset.GeZeroPoint();
@@ -117,4 +118,30 @@ public partial class TestZeroOffset : Node3D
         // }
     }
 
+
+    // Called every frame. 'delta' is the elapsed time since the previous frame.
+    public override void _Process(double delta)
+    {
+        // trigger every 5 seconds
+        // if (FssCoreTime.RuntimeIntSecs > Timer5Sec)
+        // {
+        //     Timer5Sec = FssCoreTime.RuntimeIntSecs + 5;
+
+        //     // Randomize the zero point in each run so we don't bake-in assumptions.
+        //     double randomLat = FssValueUtils.RandomInRange(45, 60);
+        //     double randomLon = FssValueUtils.RandomInRange(-8, -0);
+
+        //     // Init the real world zero pos
+        //     FssLLAPoint randomPos = new FssLLAPoint() {
+        //         LatDegs = randomLat,
+        //         LonDegs = randomLon,
+        //         RadiusM = FssPosConsts.EarthRadiusM };
+        //     FssZeroOffset.SetLLA(randomPos);
+
+
+        //     FssGodotFactory.Instance.ZeroNode.Position      = FssZeroOffset.GeZeroPoint();
+        //     FssGodotFactory.Instance.EarthCoreNode.Position = FssZeroOffset.GeCorePoint();
+
+        // }
+    }
 }

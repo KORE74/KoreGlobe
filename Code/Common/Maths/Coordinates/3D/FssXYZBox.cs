@@ -140,4 +140,15 @@ public class FssXYZBox : FssXYZ
         return $"Center:{Center}, Width:{Width:F2}, Height:{Height:F2}, Length:{Length:F2}";
     }
 
+    // --------------------------------------------------------------------------------------------
+    // MARK: Inset
+    // --------------------------------------------------------------------------------------------
+
+    // Inset the box by a given amount - in each dimension.
+
+    public FssXYZBox Inset(double insetWidth, double insetHeight, double insetLength)
+    {
+        return new FssXYZBox(Center, Width - insetWidth, Height - insetHeight, Length - insetLength);
+    }
+
 }

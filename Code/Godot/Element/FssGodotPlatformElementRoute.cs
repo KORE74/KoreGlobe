@@ -3,9 +3,6 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-// Create a contrail of points for a platform.
-// Node rooted off of the zero point, not moving with the platform.
-
 public partial class FssGodotPlatformElementRoute : FssGodotPlatformElement
 {
     List<FssLLAPoint>    RoutePoints = new List<FssLLAPoint>();
@@ -52,19 +49,48 @@ public partial class FssGodotPlatformElementRoute : FssGodotPlatformElement
         // - - - - - - - - - - - - - - - - - - - - - - - - -
         // Create the nodes
 
-        int numNodes = routePoints.Count;
-        int numLinks = RoutePoints.Count - 1;
+        int numNodes = RoutePoints.Count;
 
         for (int i = 0; i < numNodes-1; i++)
         {
-            Vector3 startPos = FssGeoConvOperations.RwToOffsetGe(RoutePoints[i]);
-            Vector3 endPos   = FssGeoConvOperations.RwToOffsetGe(RoutePoints[i+1]);
+            FssLLAPoint startLLA = RoutePoints[i];
+            FssLLAPoint endLLA   = RoutePoints[i+1];
 
+            // lift any point off the zero point, so it doesn't clash with terrain
+            if (FssValueUtils.EqualsWithinTolerance(startLLA.AltMslM, 0, 0.5)) startLLA.AltMslM = 2;
+            if (FssValueUtils.EqualsWithinTolerance(  endLLA.AltMslM, 0, 0.5))   endLLA.AltMslM = 2;
+
+            Vector3     startPos = FssGeoConvOperations.RwToOffsetGe(startLLA);
+            Vector3     endPos   = FssGeoConvOperations.RwToOffsetGe(endLLA);
+
+            // Drop the start point line:
             FssLLAPoint botLLA = RoutePoints[i];
             botLLA.AltMslM = -1000;
             Vector3 topPos = startPos;
             Vector3 botPos = FssGeoConvOperations.RwToOffsetGe(botLLA);
             LineMesh.AddLine(topPos, botPos, FssColorUtil.Colors["Gray"]);
+
+            // Anything over a threshold, divide up into sublines to interpolate along
+            double legDistM = startLLA.StraightLineDistanceToM(endLLA);
+            double distLimitM = 10000;
+            if (legDistM > distLimitM)
+            {
+                int numSubLines = (int)(legDistM / distLimitM);
+                if (numSubLines < 4) numSubLines = 4;
+
+                List<FssLLAPoint> pointList = FssLLAPointOperations.DividedRhumbLine(startLLA, endLLA, numSubLines);
+
+                for (int subLegCount=0; subLegCount < pointList.Count-1; subLegCount++)
+                {
+                    Vector3 subStartPos = FssGeoConvOperations.RwToOffsetGe(pointList[subLegCount]);
+                    Vector3 subEndPos   = FssGeoConvOperations.RwToOffsetGe(pointList[subLegCount+1]);
+                    LineMesh.AddLine(subStartPos, subEndPos, FssColorUtil.Colors["Green"]);
+                }
+            }
+            else // else draw the straight line to the end point
+            {
+                LineMesh.AddLine(startPos, endPos, FssColorUtil.Colors["Green"]);
+            }
 
             // if last point, add the dropdown line to the end point too
             if (i == numNodes-2)
@@ -75,8 +101,6 @@ public partial class FssGodotPlatformElementRoute : FssGodotPlatformElement
                 botPos = FssGeoConvOperations.RwToOffsetGe(botLLA);
                 LineMesh.AddLine(topPos, botPos, FssColorUtil.Colors["Gray"]);
             }
-
-            LineMesh.AddLine(startPos, endPos, FssColorUtil.Colors["Green"]);
         }
         AddChild(LineMesh);
     }

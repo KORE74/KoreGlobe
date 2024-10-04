@@ -747,6 +747,7 @@ icon_alignment = 1
 expand_icon = true
 
 [node name="PanelBeamRxTx" type="Panel" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer-SidePanel/VBoxContainer"]
+visible = false
 custom_minimum_size = Vector2(105, 55)
 layout_mode = 2
 size_flags_horizontal = 0

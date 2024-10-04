@@ -162,7 +162,7 @@ public partial class FssGodotEntityManager : Node3D
             // Create a new bounding box node, using our LineMesh class
             FssLineMesh3D bbMesh = new FssLineMesh3D();
             bbMesh.Name = bbNodeName;
-            bbMesh.AddBox(geAABB, new Color(1, 1, 0, 1));
+            bbMesh.AddBoxWithLeadingEdge(geAABB, new Color(1, 1, 0, 1));
 
             // Add the bounding box to the entity
             ent.AddChild(bbMesh);
@@ -179,7 +179,7 @@ public partial class FssGodotEntityManager : Node3D
     void SetModelScale(string platName, string platformType, bool applyRwScaling, float scaleModifier)
     {
         // Adjust the scale of the model
-        scaleModifier = FssValueUtils.ScaleVal(scaleModifier,  1f, 10f,  1f, 500f);
+        scaleModifier = FssValueUtils.ScaleVal(scaleModifier,  1f, 10f,  15f, 500f);
 
         // Get the entity
         FssGodotEntity? ent = GetEntity(platName);
@@ -219,6 +219,7 @@ public partial class FssGodotEntityManager : Node3D
             modelNode.Scale = new Vector3(adjscale, adjscale, adjscale);
         }
     }
+
 
 }
 

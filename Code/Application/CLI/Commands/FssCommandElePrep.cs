@@ -7,7 +7,7 @@ using System.Text;
 // CLI Usage: ele prep <inEleFilename> <inTileCode> <inOutDir> <action>
 // CLI Usage: ele prep c:/Util/GlobeLibrary_MapPrep/Europe/W005N50_UkCentral/Ele_BF_BF_50m.asc BF_BF C:/Util/_temp yes
 
-
+#nullable enable
 
 public class FssCommandElePrep : FssCommand
 {

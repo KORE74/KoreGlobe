@@ -12,6 +12,7 @@ public partial class FssMessageManager
     private void ProcessMessage_ScenLoad(ScenLoad scenLoadMsg)
     {
         FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_ScenLoad: Name:{scenLoadMsg.ScenName} ScenPos:{scenLoadMsg.ScenPos}");
+        FssGodotFactory.Instance.UIState.ScenarioName = scenLoadMsg.ScenName;
     }
 
     private void ProcessMessage_ScenStart(ScenStart scenStartMsg)

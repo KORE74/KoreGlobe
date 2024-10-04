@@ -9,7 +9,7 @@ public partial class FssGodotPlatformElementDome : FssGodotPlatformElement
     public float RxDistanceM = 1.0f;
     public float TxDistanceM = 1.0f;
 
-    FssLineMesh3D LineMesh = new FssLineMesh3D();
+    FssLineMesh3D LineMesh;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -28,16 +28,16 @@ public partial class FssGodotPlatformElementDome : FssGodotPlatformElement
 
     private void CreateDome()
     {
-        Color domeColor = new Color(0.8f, 0.2f, 0.2f, 0.4f);
-        Color domeWireColor = new Color(domeColor);
-        domeWireColor.A = 1.0f;
-
+        Color domeColor = FssColorUtil.StringToColor(Name);
+        domeColor.A = 0.4f;
         var matDome = FssMaterialFactory.TransparentColoredMaterial(domeColor);
-        var matWire = FssMaterialFactory.WireframeMaterial(domeWireColor);
+
+        Color wireColor = FssColorUtil.StringToColor(Name);
+        wireColor.A = 1.0f;
 
         FssMeshBuilder meshBuilder  = new ();
 
-        int numSegments = 24;
+        int numSegments = 20;
 
         if (true)
         {
@@ -48,23 +48,15 @@ public partial class FssGodotPlatformElementDome : FssGodotPlatformElement
             ArrayMesh meshData = meshBuilder.Build2("Dome", false);
 
             // Add the mesh to the current Node3D
-            MeshInstance3D rxMeshInstance   = new();
+            MeshInstance3D rxMeshInstance   = new() { Name = $"{Name}Dome" };
             rxMeshInstance.Mesh             = meshData;
             rxMeshInstance.MaterialOverride = matDome;
-
-            // Add the mesh to the current Node3D
-            MeshInstance3D rxMeshInstanceW   = new();
-            rxMeshInstanceW.Mesh             = meshData;
-            rxMeshInstanceW.MaterialOverride = matWire;
-
             AddChild(rxMeshInstance);
-            //AddChild(rxMeshInstanceW);
 
-            LineMesh.AddHemisphere(Vector3.Zero, rxDist, numSegments);
+            LineMesh = new FssLineMesh3D() { Name = $"{Name}Wire" };
+            LineMesh.AddHemisphere(Vector3.Zero, rxDist, numSegments, wireColor);
             AddChild(LineMesh);
         }
-
-
 
     }
 }

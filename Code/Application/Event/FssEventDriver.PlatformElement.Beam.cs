@@ -105,11 +105,7 @@ public partial class FssEventDriver
         FssPlatformElementBeam? beamObj = GetElementBeam(platName, elemName);
         if (beamObj != null)
         {
-            if      (scanType == "Cone")    beamObj.ScanShape = FssPlatformElementBeam.ScanPatternShape.Cone;
-            else if (scanType == "Raster")  beamObj.ScanShape = FssPlatformElementBeam.ScanPatternShape.Wedge;
-            else if (scanType == "Dome")    beamObj.ScanShape = FssPlatformElementBeam.ScanPatternShape.Dome;
-            else
-                beamObj.ScanShape = FssPlatformElementBeam.ScanPatternShape.Undefined;
+            beamObj.SetScanPattern(scanType);
         }
         else
         {

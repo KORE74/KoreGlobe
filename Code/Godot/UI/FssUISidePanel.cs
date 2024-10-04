@@ -7,29 +7,29 @@ using System.Collections.Generic;
 public partial class FssUISidePanel : HBoxContainer
 {
     // Top Level Elements
-    private Button PlatformScaleButton;
-    private Button ShowElementsButton;
-    private Button RxTxButton;
-    private Label  PerformanceLabel;
+    private Button? PlatformScaleButton;
+    private Button? ShowElementsButton;
+    private Button? RxTxButton;
+    private Label?  PerformanceLabel;
 
     // forms we would show/hide
-    private Panel PanelPlatformScale;
-    private Panel PanelShowElements;
-    private Panel PanelBeamRxTx;
+    private Panel? PanelPlatformScale;
+    private Panel? PanelShowElements;
+    private Panel? PanelBeamRxTx;
 
     // Scale Controls
-    private Button RWScaleToggleButton;
-    private Button InfographicScaleButton;
-    private Slider InfographicScaleSlider;
-    private Label  InfographicScaleLabel;
+    private Button? RWScaleToggleButton;
+    private Button? InfographicScaleButton;
+    private Slider? InfographicScaleSlider;
+    private Label?  InfographicScaleLabel;
 
-    private Button ShowRoutesButton;
-    private Button ShowEmittersButton;
-    private Button ShowAntennaPatternsButton;
+    private Button? ShowRoutesButton;
+    private Button? ShowEmittersButton;
+    private Button? ShowAntennaPatternsButton;
 
     // RxTx Controls
-    private Button ShowTxButton;
-    private Button ShowRxButton;
+    private Button? ShowTxButton;
+    private Button? ShowRxButton;
 
     float UIPollTimer = 0f;
     private List<int> callCounts = new List<int>();
@@ -111,24 +111,24 @@ public partial class FssUISidePanel : HBoxContainer
             //GD.Print($"FssGodotFactory.Instance.UIState.InfographicScale:{FssGodotFactory.Instance.UIState.InfographicScale}");
 
             // Manage the toggle buttons
-            RWScaleToggleButton.ButtonPressed    =  FssGodotFactory.Instance.UIState.IsRwScale;
-            InfographicScaleButton.ButtonPressed = !FssGodotFactory.Instance.UIState.IsRwScale;
+            RWScaleToggleButton!.ButtonPressed    =  FssGodotFactory.Instance.UIState.IsRwScale;
+            InfographicScaleButton!.ButtonPressed = !FssGodotFactory.Instance.UIState.IsRwScale;
 
             // Fix the number to the range and update the slider and label
             FssGodotFactory.Instance.UIState.InfographicScale = FssValueUtils.Clamp(FssGodotFactory.Instance.UIState.InfographicScale, 1f, 10f);
-            InfographicScaleSlider.Value = FssGodotFactory.Instance.UIState.InfographicScale;
-            InfographicScaleLabel.Text   = $"{FssGodotFactory.Instance.UIState.InfographicScale:F0}";
+            InfographicScaleSlider!.Value = FssGodotFactory.Instance.UIState.InfographicScale;
+            InfographicScaleLabel!.Text   = $"{FssGodotFactory.Instance.UIState.InfographicScale:F0}";
 
             // Manage the Show Elements buttons
-            ShowRoutesButton.ButtonPressed          = FssGodotFactory.Instance.UIState.ShowRoutes;
-            ShowEmittersButton.ButtonPressed        = FssGodotFactory.Instance.UIState.ShowEmitters;
-            ShowAntennaPatternsButton.ButtonPressed = FssGodotFactory.Instance.UIState.ShowAntennaPatterns;
+            ShowRoutesButton!.ButtonPressed          = FssGodotFactory.Instance.UIState.ShowRoutes;
+            ShowEmittersButton!.ButtonPressed        = FssGodotFactory.Instance.UIState.ShowEmitters;
+            ShowAntennaPatternsButton!.ButtonPressed = FssGodotFactory.Instance.UIState.ShowAntennaPatterns;
 
             // Manage the RxTx buttons
-            ShowTxButton.ButtonPressed = FssGodotFactory.Instance.UIState.ShowTx;
-            ShowRxButton.ButtonPressed = FssGodotFactory.Instance.UIState.ShowRx;
+            ShowTxButton!.ButtonPressed = FssGodotFactory.Instance.UIState.ShowTx;
+            ShowRxButton!.ButtonPressed = FssGodotFactory.Instance.UIState.ShowRx;
 
-            PerformanceLabel.Text = $"{averageCallsPerSecond:F0}\nUPS";
+            PerformanceLabel!.Text = $"{averageCallsPerSecond:F0}\nUPS";
         }
     }
 
@@ -234,8 +234,8 @@ public partial class FssUISidePanel : HBoxContainer
         if (!FssGodotFactory.Instance.UIState.IsRwScale)
             FssGodotFactory.Instance.UIState.IsRwScale = true;
 
-        RWScaleToggleButton.ButtonPressed    =  FssGodotFactory.Instance.UIState.IsRwScale;
-        InfographicScaleButton.ButtonPressed = !FssGodotFactory.Instance.UIState.IsRwScale;
+        RWScaleToggleButton!.ButtonPressed    =  FssGodotFactory.Instance.UIState.IsRwScale;
+        InfographicScaleButton!.ButtonPressed = !FssGodotFactory.Instance.UIState.IsRwScale;
     }
 
     // Called when the "InfographicScaleButton" button is pressed
@@ -246,8 +246,8 @@ public partial class FssUISidePanel : HBoxContainer
         if (FssGodotFactory.Instance.UIState.IsRwScale)
             FssGodotFactory.Instance.UIState.IsRwScale = false;
 
-        RWScaleToggleButton.ButtonPressed    =  FssGodotFactory.Instance.UIState.IsRwScale;
-        InfographicScaleButton.ButtonPressed = !FssGodotFactory.Instance.UIState.IsRwScale;
+        RWScaleToggleButton!.ButtonPressed    =  FssGodotFactory.Instance.UIState.IsRwScale;
+        InfographicScaleButton!.ButtonPressed = !FssGodotFactory.Instance.UIState.IsRwScale;
     }
 
     // Called when the "InfographicScaleSlider" value is changed
@@ -256,7 +256,7 @@ public partial class FssUISidePanel : HBoxContainer
         FssCentralLog.AddEntry("FssUIHeader.OnInfographicScaleSliderValueChanged");
 
         FssGodotFactory.Instance.UIState.InfographicScale = value;
-        InfographicScaleLabel.Text = $"{FssGodotFactory.Instance.UIState.InfographicScale:F0}";
+        InfographicScaleLabel!.Text = $"{FssGodotFactory.Instance.UIState.InfographicScale:F0}";
     }
 
     // --------------------------------------------------------------------------------------------
@@ -268,7 +268,7 @@ public partial class FssUISidePanel : HBoxContainer
     {
         FssCentralLog.AddEntry("FssUIHeader.OnShowRoutesButtonPressed");
 
-        FssGodotFactory.Instance.UIState.ShowRoutes = ShowRoutesButton.ButtonPressed;
+        FssGodotFactory.Instance.UIState.ShowRoutes = ShowRoutesButton!.ButtonPressed;
     }
 
     // Called when the "ShowEmittersButton" button is pressed
@@ -276,7 +276,7 @@ public partial class FssUISidePanel : HBoxContainer
     {
         FssCentralLog.AddEntry("FssUIHeader.OnShowEmittersButtonPressed");
 
-        FssGodotFactory.Instance.UIState.ShowEmitters = ShowEmittersButton.ButtonPressed;
+        FssGodotFactory.Instance.UIState.ShowEmitters = ShowEmittersButton!.ButtonPressed;
     }
 
     // Called when the "ShowAntennaPatternsButton" button is pressed
@@ -284,7 +284,7 @@ public partial class FssUISidePanel : HBoxContainer
     {
         FssCentralLog.AddEntry("FssUIHeader.OnShowAntennaPatternsButtonPressed");
 
-        FssGodotFactory.Instance.UIState.ShowAntennaPatterns = ShowAntennaPatternsButton.ButtonPressed;
+        FssGodotFactory.Instance.UIState.ShowAntennaPatterns = ShowAntennaPatternsButton!.ButtonPressed;
     }
 
     // --------------------------------------------------------------------------------------------
@@ -296,7 +296,7 @@ public partial class FssUISidePanel : HBoxContainer
     {
         FssCentralLog.AddEntry("FssUIHeader.OnShowTxButtonPressed");
 
-        FssGodotFactory.Instance.UIState.ShowTx = ShowTxButton.ButtonPressed;
+        FssGodotFactory.Instance.UIState.ShowTx = ShowTxButton!.ButtonPressed;
     }
 
     // Called when the "ShowRxButton" button is pressed
@@ -304,7 +304,7 @@ public partial class FssUISidePanel : HBoxContainer
     {
         FssCentralLog.AddEntry("FssUIHeader.OnShowRxButtonPressed");
 
-        FssGodotFactory.Instance.UIState.ShowRx = ShowRxButton.ButtonPressed;
+        FssGodotFactory.Instance.UIState.ShowRx = ShowRxButton!.ButtonPressed;
     }
 
 }

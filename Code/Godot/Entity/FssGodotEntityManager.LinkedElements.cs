@@ -4,6 +4,8 @@ using System.Text;
 
 using Godot;
 
+#nullable enable
+
 public partial class FssGodotEntityManager : Node3D
 {
     // --------------------------------------------------------------------------------------------
@@ -34,7 +36,7 @@ public partial class FssGodotEntityManager : Node3D
         if (!LinkedElementExists(entityName, elementName))
         {
             FssGodotEntity? ent = GetEntity(entityName);
-            
+
             if (ent == null)
                 return;
 
@@ -80,10 +82,10 @@ public partial class FssGodotEntityManager : Node3D
         FssGodotEntity? ent = GetEntity(entityName);
         if (ent == null)
             return elementNames;
-        
+
         foreach (Node3D currNode in ent.GetChildren())
             elementNames.Add(currNode.Name);
-        
+
         return elementNames;
     }
 

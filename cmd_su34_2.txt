@@ -1,0 +1,5 @@
+
+
+network ii {"PlatWayPoints":{"PlatName":"Su34-Alpha","Count":5,"Legs":[{"LatDegs":52.4214,"LongDegs":-4.195,"AltitudeMtrs":3000.0,"GrndSpeedMtrsSec":0.0,"WPType":"Origin"},{"LatDegs":0.0,"LongDegs":86.0,"AltitudeMtrs":0.0,"GrndSpeedMtrsSec":0.0,"WPType":"unknown"},{"LatDegs":52.8872,"LongDegs":-3.9739,"AltitudeMtrs":3000.0,"GrndSpeedMtrsSec":100.0,"WPType":"linear"},{"LatDegs":52.891962,"LongDegs":-3.711042,"AltitudeMtrs":3000.0,"GrndSpeedMtrsSec":100.0,"WPType":"linear"},{"LatDegs":52.543411,"LongDegs":-3.288572,"AltitudeMtrs":3000.0,"GrndSpeedMtrsSec":100.0,"WPType":"linear"}]}}
+
+

@@ -4,6 +4,8 @@ using System.Text;
 
 using Godot;
 
+#nullable enable
+
 public partial class FssGodotEntityManager : Node3D
 {
     // List<FssGodotEntity> EntityList = new List<FssGodotEntity>();
@@ -248,33 +250,41 @@ public partial class FssGodotEntityManager : Node3D
 
         if ((ent != null) && (beam != null))
         {
-            float range = 10;
-            FssAzElBox azElBox = new FssAzElBox() { MinAzDegs=-10, MaxAzDegs=10, MinElDegs=-10, MaxElDegs=10 };
+            // Get the shape: important to determine the type of element to create
 
-            azElBox = beam.AzElBox;
+            if (beam.ScanShape == FssPlatformElementBeam.ScanPatternShape.Wedge)
+            {
+                FssAzElBox azElBox = new FssAzElBox() { MinAzDegs=-10, MaxAzDegs=10, MinElDegs=-10, MaxElDegs=10 };
 
-            FssGodotPlatformElementWedge newBeam = new FssGodotPlatformElementWedge();
+                FssGodotPlatformElementWedge newBeam = new FssGodotPlatformElementWedge();
 
-            newBeam.TxDistanceM = (float)(beam.DetectionRangeTxM);
-            newBeam.RxDistanceM = (float)(beam.DetectionRangeRxM);
-            newBeam.AzElBox = azElBox;
+                newBeam.Name        = currElemName;
+                newBeam.AzElBox     = beam.AzElBox;
+                newBeam.TxDistanceM = (float)(beam.DetectionRangeTxM);
+                newBeam.RxDistanceM = (float)(beam.DetectionRangeRxM);
 
-            newBeam.Name = currElemName;
+                AddLinkedElement(platName, newBeam);
 
-            //ent.AddElement(newBeam);
+                // rotate (after adding to parent) to accomodate the -ve Z axis
+                newBeam.Rotation = new Vector3(0, (float)FssValueUtils.DegsToRads(180), 0);
+            }
 
-            AddLinkedElement(platName, newBeam);
+            if (beam.ScanShape == FssPlatformElementBeam.ScanPatternShape.Dome)
+            {
+                FssGodotPlatformElementDome newDome = new FssGodotPlatformElementDome();
+                newDome.Name        = currElemName;
+                newDome.TxDistanceM = (float)(beam.DetectionRangeTxM);
+                newDome.RxDistanceM = (float)(beam.DetectionRangeRxM);
+                AddLinkedElement(platName, newDome);
+            }
 
-            // rotate to accomodate the -ve Z axis
-            newBeam.Rotation = new Vector3(0, (float)FssValueUtils.DegsToRads(180), 0);
 
 
-            FssGodotPlatformElementDome newDome = new FssGodotPlatformElementDome();
-            newDome.RxDistanceM = 50000f;
-            AddLinkedElement(platName, newDome);
+            // FssGodotPlatformElementDome newDome = new FssGodotPlatformElementDome();
+            // newDome.RxDistanceM = 50000f;
+            // AddLinkedElement(platName, newDome);
         }
     }
-
 
     public void UpdatePlatformElementBeam(string platName, string currElemName)
     {
@@ -345,6 +355,16 @@ public partial class FssGodotEntityManager : Node3D
 
     public void UpdatePlatformElementAntennaPatterns(string platName, string currElemName)
     {
+        // Get the godot platform we'll attach the element to
+        FssGodotEntity? ent = GetEntity(platName);
+
+        // Get the Antenna Pattern details
+        FssPlatformElementAntennaPatterns? antPat = FssAppFactory.Instance.EventDriver.GetElement(platName, currElemName) as FssPlatformElementAntennaPatterns;
+
+        // Get the linked element node for APs
+        FssGodotPlatformElementAntennaPatterns? antPatNode = GetLinkedElement(platName, currElemName) as FssGodotPlatformElementAntennaPatterns;
+
+
     }
 
     // --------------------------------------------------------------------------------------------

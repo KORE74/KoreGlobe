@@ -4,6 +4,8 @@ using System.Text;
 
 using Godot;
 
+#nullable enable
+
 public partial class FssGodotEntityManager : Node3D
 {
     // --------------------------------------------------------------------------------------------
