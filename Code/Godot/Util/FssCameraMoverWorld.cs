@@ -70,135 +70,9 @@ public partial class FssCameraMoverWorld : Node3D
 
         // Turn the position CamPos into a GE positino and place the camera
         UpdateCameraPosition();
-
-        // if (direction.Length() > 0)
-        // {
-        //     // Normalize the direction vector to prevent faster diagonal movement
-        //     direction = direction.Normalized();
-
-        //     // Transform the direction from local space to global space
-        //     Vector3 forward = -Transform.Basis.Z;
-        //     Vector3 right   =  Transform.Basis.X;
-        //     Vector3 up      =  Transform.Basis.Y;
-        //     Vector3 globalDirection = (forward * direction.Z) + (right * direction.X) + (up * direction.Y);
-
-        //     // Move the object
-        //     Position += globalDirection * MoveSpeed * (float)(delta);
-        // }
-        // if (rotation.Length() > 0)
-        // {
-        //     Rotation += rotation * RotateSpeed * (float)(delta);
-        // }
     }
 
-// ------------------------------------------------------------------------------------------------
-
-    private void UpdateInputs()
-    {
-        // exit if the camera is not current
-        if (CamNode == null) return;
-        if (!CamNode.IsCurrent()) return;
-
-        double translateFwdM  = 0;
-        double translateLeftM = 0;
-        double translateUpM   = 0;
-        double rotateUpDegs   = 0;
-        double rotateLeftDegs = 0;
-        CamCourse.SpeedKph = 0;
-
-        double translateSpeed   = 2500;
-        double rotateSpeed      = 2;
-        double translateUpSpeed = 100;
-
-        // double MoveSpeed = (float)(FssValueUtils.LimitToRange(CamPos.AltMslKm / 0.03, 2500, 5000000));
-        // translateSpeed = MoveSpeed;
-
-        double MoveSpeed = camSpeedForAlt.GetValue(CamPos.AltMslM);
-        translateSpeed       = MoveSpeed;
-        double VertMoveSpeed = camVertSpeedForAlt.GetValue(CamPos.AltMslM);
-
-
-        if (Input.IsMouseButtonPressed(Godot.MouseButton.Left))
-        {
-            MoveSpeed = MoveSpeed / 20;
-            translateSpeed = MoveSpeed;
-        }
-        //     GD.Print("Mouse Button Left");
-        // if (Input.IsMouseButtonPressed(Godot.MouseButton.Right))
-        //     GD.Print("Mouse Button Right");
-        // if (Input.IsMouseButtonPressed(Godot.MouseButton.Middle))
-        //     GD.Print("Mouse Button Middle");
-
-        // if (Input.IsMouseButtonPressed(Godot.MouseButton.WheelUp))
-        //     GD.Print("Mouse Button WheelUp");
-        // if (Input.IsMouseButtonPressed(Godot.MouseButton.WheelDown))
-        //     GD.Print("Mouse Button WheelDown");
-
-
-
-
-
-        if (Input.IsActionPressed("ui_shift"))
-        {
-            if (Input.IsActionPressed("ui_up"))    translateUpM   += 1;
-            if (Input.IsActionPressed("ui_down") ) translateUpM   -= 1;
-        }
-        else if (Input.IsActionPressed("ui_alt"))
-        {
-            if (Input.IsActionPressed("ui_up"))    rotateUpDegs   += 1f;
-            if (Input.IsActionPressed("ui_down"))  rotateUpDegs   -= 1f;
-            if (Input.IsActionPressed("ui_left"))  rotateLeftDegs -= 1f;
-            if (Input.IsActionPressed("ui_right")) rotateLeftDegs += 1f;
-        }
-        else
-        {
-            if (Input.IsActionPressed("ui_up"))    translateFwdM  -= 1;
-            if (Input.IsActionPressed("ui_down"))  translateFwdM  += 1;
-            if (Input.IsActionPressed("ui_left"))  translateLeftM += 1;
-            if (Input.IsActionPressed("ui_right")) translateLeftM -= 1;
-        }
-
-        // Simple: Apply alt and heading chanegs
-        CamPos.AltMslM        += translateUpM   * VertMoveSpeed;//translateUpSpeed;
-        CamCourse.HeadingDegs += rotateLeftDegs * rotateSpeed;
-        CamCourse.SpeedKph    += translateFwdM  * MoveSpeed;//translateSpeed;
-
-        // GD.Print($"MoveSpeed:{MoveSpeed} // VertMoveSpeed:{VertMoveSpeed}");
-
-
-        if (CamPos.AltMslM < 500) CamPos.AltMslM = 500;
-
-        if (!FssValueUtils.IsZero(CamCourse.SpeedKph))
-        {
-            CamPos = CamPos.PlusRangeBearing(CamCourse.OffsetForTime(1));
-        }
-
-        // Translation means setting up a temp course 90 degree off, and adding that.
-        if (translateLeftM != 0)
-        {
-            FssCourse tempCourse = new FssCourse(translateLeftM * translateSpeed, CamCourse.HeadingDegs + 90);
-            CamPos = CamPos.PlusRangeBearing(tempCourse.OffsetForTime(1));
-        }
-
-        //FssMapManager.LoadRefLLA = CamPos;
-
-        rotateUpDegs *= 2;
-        //rotateUpDegs = FssValueUtils.LimitToRange(rotateUpDegs, -50, 50);
-        camPitch += (float)rotateUpDegs;
-        camPitch  = FssValueUtils.LimitToRange(camPitch, -80, 0);
-
-        //CamNode.Translation = new Vector3(0, 0, 0);
-
-        // if the camera is present and current, Use the position to drive the map update.
-        if (CamNode != null)
-        {
-            if (CamNode.IsCurrent())
-            {
-                CamNode.RotationDegrees = new Vector3(camPitch, 0, 0);
-                FssMapManager.LoadRefLLA = FssGeoConvOperations.GeToRw(Position);
-            }
-        }
-    }
+    // ------------------------------------------------------------------------------------------------
 
     public override void _Input(InputEvent inputEvent)
     {
@@ -220,6 +94,8 @@ public partial class FssCameraMoverWorld : Node3D
         double MoveSpeed     = camSpeedForAlt.GetValue(CamPos.AltMslM);
         translateSpeed       = MoveSpeed;
         double VertMoveSpeed = camVertSpeedForAlt.GetValue(CamPos.AltMslM);
+
+        CamCourse.SpeedKph = 0;
 
         // Mouse Drag - - - - -
 
@@ -246,8 +122,6 @@ public partial class FssCameraMoverWorld : Node3D
 
         // Keyboard - - - - -
 
-
-
         if (Input.IsActionPressed("ui_shift"))
         {
             if (Input.IsActionPressed("ui_up"))    translateUpM   += 1;
@@ -275,10 +149,7 @@ public partial class FssCameraMoverWorld : Node3D
 
         // GD.Print($"MoveSpeed:{MoveSpeed} // VertMoveSpeed:{VertMoveSpeed}");
 
-
         // Limit movements - - - - -
-
-
 
         if (CamPos.AltMslM < 500) CamPos.AltMslM = 500;
 
@@ -312,8 +183,6 @@ public partial class FssCameraMoverWorld : Node3D
                 FssMapManager.LoadRefLLA = FssGeoConvOperations.GeToRw(Position);
             }
         }
-
-
     }
 
     // ------------------------------------------------------------------------------------------------
