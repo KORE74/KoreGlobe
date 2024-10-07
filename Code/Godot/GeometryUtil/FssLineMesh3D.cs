@@ -63,6 +63,24 @@ public partial class FssLineMesh3D : Node3D
 
     // --------------------------------------------------------------------------------------------
 
+    // Function to add a dotted line, for some added value beyond the colored solid lines.
+
+    public void AddDottedLine(Vector3 p1, Vector3 p2, Color color, float segmentLength = 0.1f)
+    {
+        Vector3 direction = p2 - p1;
+        float distance = direction.Length();
+        direction = direction.Normalized();
+
+        for (float i = 0; i < distance; i += 2 * segmentLength)
+        {
+            Vector3 start = p1 + direction * i;
+            Vector3 end = p1 + direction * Mathf.Min(i + segmentLength, distance);
+            AddLine(start, end, color);
+        }
+    }
+
+    // --------------------------------------------------------------------------------------------
+
     // Function to rebuild the mesh when new lines are added
     private void UpdateMesh()
     {

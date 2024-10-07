@@ -12,9 +12,6 @@ public class FssPlatformElementBeam : FssPlatformElement
     public string EmitName { get; set; } = "DefaultEmitName";
     public string BeamName { get; set; } = "DefaultBeamName";
 
-    // Is the pattern on display
-    public bool Enabled { get; set; } = false;
-
     // Port (mounting point) angles
     public FssAttitude    PortAttitude { set; get; } = FssAttitude.Zero;
     public FssPolarOffset TrackOffset  { set; get; } = FssPolarOffset.Zero;

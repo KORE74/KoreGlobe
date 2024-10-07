@@ -54,8 +54,8 @@ namespace FssJSON
         [JsonPropertyName("Up")]
         public bool Up { get; set; } = false;
 
-        [JsonPropertyName("UniDir")]
-        public bool UniDir { get; set; } = false;
+        [JsonPropertyName("UniDirectional")]
+        public bool UniDirectional { get; set; } = false;
 
         [JsonPropertyName("Reversed")]
         public bool Reversed { get; set; } = false;

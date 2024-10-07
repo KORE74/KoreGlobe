@@ -51,15 +51,24 @@ public partial class FssGodotPlatformElementWedge : FssGodotPlatformElement
 
         // ---------------------
 
-        FssAzElBox rxAzElBox = AzElBox;
-        FssAzElBox txAzElBox = AzElBox;
+        // Limit the display distance we'll use to something practically viewable.
+        double truncateDistM = 500000; // 500km
+        bool rxTruncated = false;
+        bool txTruncated = false;
 
-        float rxDist = (float)(RxDistanceM * FssZeroOffset.RwToGeDistanceMultiplierM);
-        float txDist = (float)(TxDistanceM * FssZeroOffset.RwToGeDistanceMultiplierM);
+        double RxDistanceMToUse = FssValueUtils.LimitToRange(RxDistanceM, 1000, truncateDistM);
+        double TxDistanceMToUse = FssValueUtils.LimitToRange(TxDistanceM, 1000, truncateDistM);
 
-        rxMeshBuilder.AddPyramidByAzElDist(rxAzElBox, rxDist);
-        txMeshBuilder.AddPyramidByAzElDist(txAzElBox, txDist);
+        if (RxDistanceM > truncateDistM) rxTruncated = true;
+        if (TxDistanceM > truncateDistM) txTruncated = true;
 
+        // Convert diatance to GameEngine units
+        float rxDist = (float)(RxDistanceMToUse * FssZeroOffset.RwToGeDistanceMultiplierM);
+        float txDist = (float)(TxDistanceMToUse * FssZeroOffset.RwToGeDistanceMultiplierM);
+
+        // Create the pyramid shapes in the mesh builder
+        rxMeshBuilder.AddPyramidByAzElDist(AzElBox, rxDist);
+        txMeshBuilder.AddPyramidByAzElDist(AzElBox, txDist);
         ArrayMesh rxMeshData = rxMeshBuilder.Build2("RxWedge", false);
         ArrayMesh txMeshData = txMeshBuilder.Build2("TxWedge", false);
 
@@ -77,9 +86,14 @@ public partial class FssGodotPlatformElementWedge : FssGodotPlatformElement
 
         // ---------------------
 
-        RxLineMesh.AddPyramidByAzElDist(rxAzElBox, rxDist, wireColorRx);
-        TxLineMesh.AddPyramidByAzElDist(txAzElBox, txDist, wireColorTx);
+        FssLineMesh3D.PyramidStyle rxDrawStyle = FssLineMesh3D.PyramidStyle.Pyramid;
+        FssLineMesh3D.PyramidStyle txDrawStyle = FssLineMesh3D.PyramidStyle.Pyramid;
+        if (rxTruncated) rxDrawStyle = FssLineMesh3D.PyramidStyle.CroppedPyramid;
+        if (txTruncated) txDrawStyle = FssLineMesh3D.PyramidStyle.CroppedPyramid;
 
+        // Create and add the wireframe shapes in the line mesh builder
+        RxLineMesh.AddPyramidByAzElDist(AzElBox, rxDist, wireColorRx, rxDrawStyle);
+        TxLineMesh.AddPyramidByAzElDist(AzElBox, txDist, wireColorTx, txDrawStyle);
         AddChild(RxLineMesh);
         AddChild(TxLineMesh);
     }

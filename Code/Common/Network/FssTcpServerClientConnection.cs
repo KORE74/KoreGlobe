@@ -26,6 +26,8 @@ namespace FssNetworking
         private FssMsgSplitter IncomingMsgSplitter;
         private FssMsgSplitter2 IncomingMsgSplitter2;
 
+        private byte[] ReadBuffer = new byte[250000];
+
         // ----------------------------------------------------------------------------------------
 
         public FssTcpServerClientConnection()
@@ -166,8 +168,8 @@ namespace FssNetworking
                         lastUpdateTime = DateTime.Now;
 
                         // Read data from the client stream.
-                        byte[] buffer = new byte[50000];
-                        int bytesRead = stream.Read(buffer, 0, buffer.Length);
+                        //byte[] buffer = new byte[50000];
+                        int bytesRead = stream.Read(ReadBuffer, 0, ReadBuffer.Length);
 
                         if (bytesRead == 0)
                         {
@@ -178,7 +180,7 @@ namespace FssNetworking
                         else
                         {
                             // Read the raw incoming data
-                            string data = Encoding.ASCII.GetString(buffer, 0, bytesRead);
+                            string data = Encoding.ASCII.GetString(ReadBuffer, 0, bytesRead);
 
                             IncomingMsgSplitter2.AddRawMessage(data);
 

@@ -106,12 +106,31 @@ public partial class FssEventDriver
         if (beamObj != null)
         {
             beamObj.SetScanPattern(scanType);
+            FssCentralLog.AddEntry($"PlatformSetBeamScanType: Element {elemName} // scanType // {beamObj.ScanShape}");
         }
         else
         {
             FssCentralLog.AddEntry($"EC0-0016: PlatformSetBeamScanType: Element {elemName} not found.");
         }
     }
+
+    // ---------------------------------------------------------------------------------------------
+    // MARK: Beam Enable
+    // ---------------------------------------------------------------------------------------------
+
+    public void PlatformEnableBeam(string platName, string elemName, bool enable)
+    {
+        FssPlatformElementBeam? beamObj = GetElementBeam(platName, elemName);
+        if (beamObj != null)
+        {
+            beamObj.Enabled = enable;
+        }
+        else
+        {
+            FssCentralLog.AddEntry($"EC0-0016: PlatformEnableBeam: Element {elemName} not found.");
+        }
+    }
+
 
     // ---------------------------------------------------------------------------------------------
     // MARK: Access Beam Element

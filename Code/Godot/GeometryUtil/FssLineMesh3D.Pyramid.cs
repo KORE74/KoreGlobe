@@ -7,6 +7,8 @@ using Godot;
 
 public partial class FssLineMesh3D : Node3D
 {
+    public enum PyramidStyle { Pyramid, CroppedPyramid };
+
     // Add a pyramid the the top point at the origin, and a base by height and width in the positive Z direction, distance baseDist from the origin
 
     public void AddPyramidByPoint(float baseDist, float baseWidth, float baseHeight, Color lineColor)
@@ -34,7 +36,7 @@ public partial class FssLineMesh3D : Node3D
         AddLine(apex, basePoints[3], lineColor);
     }
 
-    public void AddPyramidByAzElDist(FssAzElBox azElBox, float baseDist, Color lineColor)
+    public void AddPyramidByAzElDist(FssAzElBox azElBox, float baseDist, Color lineColor, PyramidStyle drawStyle = PyramidStyle.Pyramid)
     {
         Vector3 apex = new Vector3(0, 0, 0); // Apex of the pyramid
 
@@ -51,11 +53,25 @@ public partial class FssLineMesh3D : Node3D
         basePoints.Add(new Vector3( azOffset,  elOffset, baseDist));
         basePoints.Add(new Vector3(-azOffset,  elOffset, baseDist));
 
-        // Add the Base Points
-        AddLine(basePoints[0], basePoints[1], lineColor);
-        AddLine(basePoints[1], basePoints[2], lineColor);
-        AddLine(basePoints[2], basePoints[3], lineColor);
-        AddLine(basePoints[3], basePoints[0], lineColor);
+
+        if (drawStyle == PyramidStyle.Pyramid)
+        {
+            // Add the Base Points
+            AddLine(basePoints[0], basePoints[1], lineColor);
+            AddLine(basePoints[1], basePoints[2], lineColor);
+            AddLine(basePoints[2], basePoints[3], lineColor);
+            AddLine(basePoints[3], basePoints[0], lineColor);
+        }
+        if (drawStyle == PyramidStyle.CroppedPyramid)
+        {
+            float pointsep = baseDist / 50f;
+
+            // Add the Base Points
+            AddDottedLine(basePoints[0], basePoints[1], lineColor, pointsep);
+            AddDottedLine(basePoints[1], basePoints[2], lineColor, pointsep);
+            AddDottedLine(basePoints[2], basePoints[3], lineColor, pointsep);
+            AddDottedLine(basePoints[3], basePoints[0], lineColor, pointsep);
+        }
 
         // Add the Apex to Base Lines
         AddLine(apex, basePoints[0], lineColor);

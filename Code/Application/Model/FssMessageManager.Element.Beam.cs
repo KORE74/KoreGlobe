@@ -60,14 +60,38 @@ public partial class FssMessageManager
 
     private void ProcessMessage_BeamEnable(BeamEnable beamEnMsg)
     {
+        // Get the platform
+        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(beamEnMsg.PlatName);
+        if (platform == null)
+        {
+            FssCentralLog.AddEntry($"EC0-0022: BeamEnable: Platform {beamEnMsg.PlatName} not found.");
+            return;
+        }
+
+        // Get the element
         string elemName = FssEventDriver.ElementNameForBeam(beamEnMsg.PlatName, beamEnMsg.EmitName, beamEnMsg.BeamName);
+        FssPlatformElement? element = platform.ElementForName(elemName);
+        if (element != null)
+            element!.Enabled = true;
 
         FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_BeamEnable: Name:{elemName}");
     }
 
     private void ProcessMessage_BeamDisable(BeamDisable beamDisMsg)
     {
+        // Get the platform
+        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(beamDisMsg.PlatName);
+        if (platform == null)
+        {
+            FssCentralLog.AddEntry($"EC0-0022: BeamDisable: Platform {beamDisMsg.PlatName} not found.");
+            return;
+        }
+
+        // Get the element
         string elemName = FssEventDriver.ElementNameForBeam(beamDisMsg.PlatName, beamDisMsg.EmitName, beamDisMsg.BeamName);
+        FssPlatformElement? element = platform.ElementForName(elemName);
+        if (element != null)
+            element!.Enabled = true;
 
         FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_BeamDisable: Name:{elemName}");
     }

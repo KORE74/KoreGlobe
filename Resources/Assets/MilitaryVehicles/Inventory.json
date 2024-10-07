@@ -70,5 +70,17 @@
     },
     "RotateDegs": { "X": 0, "Y": 180, "Z": 0 },
     "Scale": 1.2
+  },
+  {
+    "Name": "Type26",
+    "FilePath": "res://Resources/Assets/MilitaryVehicles/Ship/Type26/Type26_slim.glb",
+    "RwAABB": {
+      "Centre": { "X": 0, "Y": 0, "Z": 0 },
+      "Width": 20.8,
+      "Height": 50,
+      "Length": 150
+    },
+    "RotateDegs": { "X": 0, "Y": 180, "Z": 0 },
+    "Scale": 1.0
   }
 ]

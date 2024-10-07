@@ -29,6 +29,7 @@ network ii {"PlatAdd":{"PlatName":"LuxuryYacht","PlatCategory":"surface","Threat
 
 network ii {"PlatAdd":{"PlatName":"SmallShip","PlatCategory":"surface","ThreatType":"friendly","Display":true,"PlatClass":"SmallShip","PlatDisplaySymb":"<platDispSymb>","LatDegs":52.355877,"LongDegs":-4.503,"AltitudeMtrs":0.0,"RollDegs":0.0,"PitchDegs":0.0,"HeadingDegs":5.0}}
 
+network ii {"PlatAdd":{"PlatName":"HMS Glasgow","PlatCategory":"surface","ThreatType":"friendly","Display":true,"PlatClass":"Type26","PlatDisplaySymb":"<platDispSymb>","LatDegs":51.33,"LongDegs":-6.4,"AltitudeMtrs":0.0,"RollDegs":0.0,"PitchDegs":0.0,"HeadingDegs":340.0}}
 
 
 

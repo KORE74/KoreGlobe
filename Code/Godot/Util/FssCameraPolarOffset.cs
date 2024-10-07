@@ -120,12 +120,15 @@ public partial class FssCameraPolarOffset : Node3D
                 Vector2 dragPosition = motionEvent.Position;
                 Vector2 dragMovement = dragPosition - MouseDragStart;
 
-                float drawMovementScale = 200f;
-                if (Input.IsActionPressed("ui_shift")) drawMovementScale /= 3f;
-                if (Input.IsActionPressed("ui_ctrl"))  drawMovementScale *= 3f; // Multiply the scaling divisor
+                float drawMovementScale = 0.03f;
+                if (Input.IsActionPressed("ui_shift")) drawMovementScale *= 3f;
+                if (Input.IsActionPressed("ui_ctrl"))  drawMovementScale /= 3f; // Multiply the scaling divisor
 
-                camElAngleDegs += dragMovement.Y / drawMovementScale;
-                camAzAngleDegs += dragMovement.X / drawMovementScale;
+                camElAngleDegs += dragMovement.Y * drawMovementScale;
+                camAzAngleDegs += dragMovement.X * drawMovementScale;
+
+                // Reset the drag start position: Not doing this makes the offset act more as a veolicty than a position.
+                MouseDragStart = dragPosition;
             }
         }
 

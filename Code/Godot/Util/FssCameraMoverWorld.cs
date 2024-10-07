@@ -91,7 +91,7 @@ public partial class FssCameraMoverWorld : Node3D
         double translateSpeed   = 2500;
         double rotateSpeed      = 2;
         double translateUpSpeed = 100;
-        double MoveSpeed     = camSpeedForAlt.GetValue(CamPos.AltMslM);
+        double MoveSpeed     = camSpeedForAlt.GetValue(CamPos.AltMslM) * 2;
         translateSpeed       = MoveSpeed;
         double VertMoveSpeed = camVertSpeedForAlt.GetValue(CamPos.AltMslM);
 
@@ -111,12 +111,35 @@ public partial class FssCameraMoverWorld : Node3D
                 Vector2 dragPosition = motionEvent.Position;
                 Vector2 dragMovement = dragPosition - MouseDragStart;
 
-                float drawMovementScale = 200f;
-                if (Input.IsActionPressed("ui_shift")) drawMovementScale *= 3f;
-                if (Input.IsActionPressed("ui_ctrl"))  drawMovementScale /= 3f;
+                // ALT = rotate
+                if (Input.IsActionPressed("ui_alt"))
+                {
+                    // ALT-SHIFT = Elevate
+                    if (Input.IsActionPressed("ui_shift"))
+                    {
+                        translateUpM += dragMovement.Y / 50f;
+                    }
+                    else
+                    {
+                        float rotateScale = 0.02f;
 
-                translateFwdM  += dragMovement.Y / drawMovementScale;
-                translateLeftM += dragMovement.X / drawMovementScale;
+                        rotateUpDegs   += dragMovement.Y * rotateScale;
+                        rotateLeftDegs -= dragMovement.X * rotateScale;
+                    }
+                }
+                else
+                {
+                    float drawMovementScale = 150f;
+                    if (Input.IsActionPressed("ui_shift")) drawMovementScale /= 3f;
+                    if (Input.IsActionPressed("ui_ctrl"))  drawMovementScale *= 2f;
+
+                    translateFwdM  -= dragMovement.Y / drawMovementScale;
+                    translateLeftM += dragMovement.X / drawMovementScale;
+
+                }
+
+                // Reset the drag start position: Not doing this makes the offset act more as a veolicty than a position.
+                MouseDragStart = dragPosition;
             }
         }
 

@@ -9,7 +9,7 @@ public class FssPlatformElement
     // Overridable type for the element
     public virtual string Type { set; get; } = "Unknown";
 
-    // Do we add the routes here?
+    public bool Enabled { get; set; } = false;
 
     // A virtual functino for all element child classes to output a one-line report of their contents.
     public virtual string Report()
