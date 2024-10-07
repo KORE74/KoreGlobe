@@ -1009,6 +1009,7 @@ layout_mode = 2
 focus_mode = 0
 item_count = 4
 popup/item_0/text = "sadfsadfa"
+popup/item_0/id = 0
 popup/item_1/text = "sadfsadf"
 popup/item_1/id = 1
 popup/item_2/text = "sadfs"
@@ -1674,6 +1675,7 @@ layout_mode = 2
 focus_mode = 0
 item_count = 1
 popup/item_0/text = "plat1"
+popup/item_0/id = 0
 
 [node name="PlatformTabs" type="TabContainer" parent="PlatformDetailsWindow/MarginContainer/Platform"]
 layout_mode = 2

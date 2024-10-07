@@ -123,25 +123,25 @@ public partial class TestZeroOffset : Node3D
     public override void _Process(double delta)
     {
         // trigger every 5 seconds
-        // if (FssCoreTime.RuntimeIntSecs > Timer5Sec)
-        // {
-        //     Timer5Sec = FssCoreTime.RuntimeIntSecs + 5;
+        if (FssCoreTime.RuntimeIntSecs > Timer5Sec)
+        {
+            Timer5Sec = FssCoreTime.RuntimeIntSecs + 5;
 
-        //     // Randomize the zero point in each run so we don't bake-in assumptions.
-        //     double randomLat = FssValueUtils.RandomInRange(45, 60);
-        //     double randomLon = FssValueUtils.RandomInRange(-8, -0);
+            // Randomize the zero point in each run so we don't bake-in assumptions.
+            double randomLat = FssValueUtils.RandomInRange(45, 60);
+            double randomLon = FssValueUtils.RandomInRange(-8, -0);
 
-        //     // Init the real world zero pos
-        //     FssLLAPoint randomPos = new FssLLAPoint() {
-        //         LatDegs = randomLat,
-        //         LonDegs = randomLon,
-        //         RadiusM = FssPosConsts.EarthRadiusM };
-        //     FssZeroOffset.SetLLA(randomPos);
+            // Init the real world zero pos
+            FssLLAPoint randomPos = new FssLLAPoint() {
+                LatDegs = randomLat,
+                LonDegs = randomLon,
+                RadiusM = FssPosConsts.EarthRadiusM };
+            FssZeroOffset.SetLLA(randomPos);
 
 
-        //     FssGodotFactory.Instance.ZeroNode.Position      = FssZeroOffset.GeZeroPoint();
-        //     FssGodotFactory.Instance.EarthCoreNode.Position = FssZeroOffset.GeCorePoint();
+            FssGodotFactory.Instance.ZeroNode.Position      = FssZeroOffset.GeZeroPoint();
+            FssGodotFactory.Instance.EarthCoreNode.Position = FssZeroOffset.GeCorePoint();
 
-        // }
+        }
     }
 }

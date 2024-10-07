@@ -49,7 +49,19 @@ public partial class FssGodotPlatformElementRoute : FssGodotPlatformElement
         // - - - - - - - - - - - - - - - - - - - - - - - - -
         // Create the nodes
 
+        LineMesh.Clear();
+
+        AddChild(LineMesh);
+    }
+
+    // Update called to keep the route in place with the zero point.
+    // Iterate through the points, creating new segments as needed and moving old ones to the latest position.
+    public void UpdateRoute()
+    {
         int numNodes = RoutePoints.Count;
+
+        LineMesh.Clear();
+
 
         for (int i = 0; i < numNodes-1; i++)
         {
@@ -102,34 +114,7 @@ public partial class FssGodotPlatformElementRoute : FssGodotPlatformElement
                 LineMesh.AddLine(topPos, botPos, FssColorUtil.Colors["Gray"]);
             }
         }
-        AddChild(LineMesh);
-    }
 
-    // Update called to keep the route in place with the zero point.
-    // Iterate through the points, creating new segments as needed and moving old ones to the latest position.
-    public void UpdateRoute()
-    {
-
-        int numNodes  = RouteNodes.Count;
-        int numLinks  = RouteLinks.Count;
-
-        // Now we have the balance, loop through the points and update the nodes
-        for (int i = 0; i < numNodes; i++)
-        {
-            // Update the node position
-            RouteNodes[i].Position = FssGeoConvOperations.RwToOffsetGe(RoutePoints[i]);
-        }
-
-        for (int i=0; i<numLinks; i++)
-        {
-            FssEntityV3 platformV3 = FssGeoConvOperations.RwToGeStruct(RoutePoints[i], RoutePoints[i+1]);
-
-            RouteLinks[i].LookAtFromPosition(
-                platformV3.Pos,
-                platformV3.PosAhead,
-                platformV3.VecUp,
-                true);
-        }
     }
 
 }
