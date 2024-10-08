@@ -19,4 +19,31 @@ public partial class FssEventDriver
         //FssAppFactory.Instance.NetworkHub.EndAllThread();
     }
 
+    // ---------------------------------------------------------------------------------------------
+    // MARK: Sidebar view settings
+    // ---------------------------------------------------------------------------------------------
+
+    // Usage: FssAppFactory.Instance.EventDriver.SidebarSetBeamVisibility(true, true);
+
+    public void SidebarSetBeamVisibility(bool rxVisible, bool txVisible)
+    {
+        // Set the UI State values
+        FssGodotFactory.Instance.UIState.ShowRx = rxVisible;
+        FssGodotFactory.Instance.UIState.ShowTx = txVisible;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    // Usage: FssAppFactory.Instance.EventDriver.SidebarSetRouteVisibility(true);
+    //        FssAppFactory.Instance.EventDriver.SidebarSetEmitterVisibility(true);
+    //        FssAppFactory.Instance.EventDriver.SidebarSetAntennaPatternVisibility(true);
+
+
+    public void SidebarSetRouteVisibility(bool routeVisible)                   => FssGodotFactory.Instance.UIState.ShowRoutes          = routeVisible;
+    public void SidebarSetEmitterVisibility(bool emitterVisible)               => FssGodotFactory.Instance.UIState.ShowEmitters        = emitterVisible;
+    public void SidebarSetAntennaPatternVisibility(bool antennaPatternVisible) => FssGodotFactory.Instance.UIState.ShowAntennaPatterns = antennaPatternVisible;
+
+    // ---------------------------------------------------------------------------------------------
+
 }
+

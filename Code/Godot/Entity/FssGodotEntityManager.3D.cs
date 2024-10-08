@@ -8,8 +8,6 @@ using Godot;
 
 public partial class FssGodotEntityManager : Node3D
 {
-
-
     // --------------------------------------------------------------------------------------------
     // MARK: Update - 3D Model
     // --------------------------------------------------------------------------------------------
@@ -179,7 +177,8 @@ public partial class FssGodotEntityManager : Node3D
     void SetModelScale(string platName, string platformType, bool applyRwScaling, float scaleModifier)
     {
         // Adjust the scale of the model
-        scaleModifier = FssValueUtils.ScaleVal(scaleModifier,  1f, 10f,  15f, 500f);
+        //scaleModifier = FssValueUtils.ScaleVal(scaleModifier,  1f, 10f,  1f, 400f);
+        scaleModifier = (float)InfographicScaleRange.GetValue(scaleModifier);
 
         // Get the entity
         FssGodotEntity? ent = GetEntity(platName);

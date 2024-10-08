@@ -296,7 +296,7 @@ public partial class FssUISidePanel : HBoxContainer
     {
         FssCentralLog.AddEntry("FssUIHeader.OnShowTxButtonPressed");
 
-        FssGodotFactory.Instance.UIState.ShowTx = ShowTxButton!.ButtonPressed;
+        FssAppFactory.Instance.EventDriver.SidebarSetBeamVisibility(ShowRxButton!.ButtonPressed, ShowTxButton!.ButtonPressed);
     }
 
     // Called when the "ShowRxButton" button is pressed
@@ -304,7 +304,7 @@ public partial class FssUISidePanel : HBoxContainer
     {
         FssCentralLog.AddEntry("FssUIHeader.OnShowRxButtonPressed");
 
-        FssGodotFactory.Instance.UIState.ShowRx = ShowRxButton!.ButtonPressed;
+        FssAppFactory.Instance.EventDriver.SidebarSetBeamVisibility(ShowRxButton!.ButtonPressed, ShowTxButton!.ButtonPressed);
     }
 
 }

@@ -72,8 +72,8 @@ namespace FssJSON
         [JsonIgnore]
         public FssCourseDelta CourseDelta
         {
-            get { return new FssCourseDelta() { SpeedChangeMpMps = 0, HeadingChangeClockwiseDegsSec = TurnRateDegsSec }; }
-            set { TurnRateDegsSec = value.HeadingChangeClockwiseDegsSec; }
+            get { return new FssCourseDelta() { SpeedChangeMpMps = 0, HeadingChangeClockwiseDegsSec = -TurnRateDegsSec }; }
+            set { TurnRateDegsSec = -value.HeadingChangeClockwiseDegsSec; }
         }
 
         public static PlatUpdate ParseJSON(string json)

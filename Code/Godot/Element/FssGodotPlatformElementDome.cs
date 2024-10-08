@@ -59,4 +59,16 @@ public partial class FssGodotPlatformElementDome : FssGodotPlatformElement
         }
 
     }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Visibility
+    // --------------------------------------------------------------------------------------------
+
+    public void SetVisibility(bool isVisible)
+    {
+        foreach (Node3D child in GetChildren())
+        {
+            child.Visible = isVisible;
+        }
+    }
 }

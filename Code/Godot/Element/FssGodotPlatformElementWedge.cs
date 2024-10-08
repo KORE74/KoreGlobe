@@ -10,11 +10,19 @@ public partial class FssGodotPlatformElementWedge : FssGodotPlatformElement
     public float RxDistanceM = 1.0f;
     public float TxDistanceM = 1.1f;
 
-    FssLineMesh3D RxLineMesh = new FssLineMesh3D();
-    FssLineMesh3D TxLineMesh = new FssLineMesh3D();
+    FssLineMesh3D RxLineMesh   = new FssLineMesh3D();
+    FssLineMesh3D TxLineMesh   = new FssLineMesh3D();
+    FssLineMesh3D FullLineMesh = new FssLineMesh3D();
 
     MeshInstance3D RxMeshInstance;
     MeshInstance3D TxMeshInstance;
+
+    private bool RxVisible = true;
+    private bool TxVisible = true;
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Node3D Functions
+    // --------------------------------------------------------------------------------------------
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -34,7 +42,7 @@ public partial class FssGodotPlatformElementWedge : FssGodotPlatformElement
     private void CreateWedge()
     {
         Color elementColorRx = FssColorUtil.StringToColor(Name + "Rx");
-        Color elementColorTx = FssColorUtil.StringToColor(Name + "Tx");
+        Color elementColorTx = elementColorRx; // FssColorUtil.StringToColor(Name + "Tx");
         elementColorRx.A = 0.4f;
         elementColorTx.A = 0.4f;
 
@@ -46,8 +54,8 @@ public partial class FssGodotPlatformElementWedge : FssGodotPlatformElement
         var matWedgeRx = FssMaterialFactory.TransparentColoredMaterial(elementColorRx);
         var matWedgeTx = FssMaterialFactory.TransparentColoredMaterial(elementColorTx);
 
-        FssMeshBuilder rxMeshBuilder  = new ();
-        FssMeshBuilder txMeshBuilder  = new ();
+        FssMeshBuilder rxMeshBuilder   = new ();
+        FssMeshBuilder txMeshBuilder   = new ();
 
         // ---------------------
 
@@ -96,5 +104,30 @@ public partial class FssGodotPlatformElementWedge : FssGodotPlatformElement
         TxLineMesh.AddPyramidByAzElDist(AzElBox, txDist, wireColorTx, txDrawStyle);
         AddChild(RxLineMesh);
         AddChild(TxLineMesh);
+
+        FullLineMesh.AddPyramidByAzElDist(AzElBox, rxDist, wireColorRx, rxDrawStyle);
+        FullLineMesh.AddPyramidByAzElDist(AzElBox, txDist, wireColorTx, txDrawStyle);
+        AddChild(FullLineMesh);
     }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Visibility
+    // --------------------------------------------------------------------------------------------
+
+    public void SetVisibility(bool rxVisible, bool txVisible)
+    {
+        RxVisible = rxVisible;
+        TxVisible = txVisible;
+
+        // Update the mesh (volume) visibility
+        RxMeshInstance.Visible = rxVisible;
+        TxMeshInstance.Visible = txVisible;
+
+        // Update the wireframe visibility
+        RxLineMesh.Visible   = RxVisible && !TxVisible;
+        TxLineMesh.Visible   = TxVisible && !RxVisible;
+        FullLineMesh.Visible = RxVisible && TxVisible;
+    }
+
+
 }

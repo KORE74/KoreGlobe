@@ -15,6 +15,12 @@ public partial class FssGodotEntityManager : Node3D
 
     float TimerModelCheck = 0.0f;
 
+    private Fss1DMappedRange InfographicScaleRange = new Fss1DMappedRange();
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Node3D Functions
+    // --------------------------------------------------------------------------------------------
+
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
@@ -27,6 +33,14 @@ public partial class FssGodotEntityManager : Node3D
         // Setup the Element Root Node.
         UnlinkedRootNode = new Node3D() { Name = "UnlinkedRootNode" };
         AddChild(UnlinkedRootNode);
+
+
+
+        // Setup the Infographic Scale Range
+        InfographicScaleRange.AddEntry(1,          1);
+        InfographicScaleRange.AddEntry(4,         16);
+        InfographicScaleRange.AddEntry(8,        100);
+        InfographicScaleRange.AddEntry(10,       400);
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -233,6 +247,8 @@ public partial class FssGodotEntityManager : Node3D
         if ((route != null) && (routeNode != null))
         {
             routeNode.SetRoutePoints(route.RoutePoints);
+
+            routeNode.SetVisibility(FssGodotFactory.Instance.UIState.ShowRoutes);
         }
     }
 
@@ -296,15 +312,28 @@ public partial class FssGodotEntityManager : Node3D
 
         if ((ent != null) && (beam != null))
         {
-            FssGodotPlatformElementWedge? beamNode = GetLinkedElement(platName, currElemName) as FssGodotPlatformElementWedge;
 
-            if (beamNode != null)
+            if (beam.ScanShape == FssPlatformElementBeam.ScanPatternShape.Wedge)
             {
-                FssAzElBox azElBox = beam.AzElBox;
+                FssGodotPlatformElementWedge? beamNode = GetLinkedElement(platName, currElemName) as FssGodotPlatformElementWedge;
+                if (beamNode != null)
+                {
+                    FssAzElBox azElBox = beam.AzElBox;
 
-                beamNode.TxDistanceM = (float)(beam.DetectionRangeTxM);
-                beamNode.RxDistanceM = (float)(beam.DetectionRangeRxM);
-                beamNode.AzElBox = azElBox;
+                    beamNode.TxDistanceM = (float)(beam.DetectionRangeTxM);
+                    beamNode.RxDistanceM = (float)(beam.DetectionRangeRxM);
+                    beamNode.AzElBox = azElBox;
+
+                    beamNode.SetVisibility(FssGodotFactory.Instance.UIState.ShowRx, FssGodotFactory.Instance.UIState.ShowTx);
+                }
+            }
+            if (beam.ScanShape == FssPlatformElementBeam.ScanPatternShape.Dome)
+            {
+                FssGodotPlatformElementDome? beamNode = GetLinkedElement(platName, currElemName) as FssGodotPlatformElementDome;
+                if (beamNode != null)
+                {
+                    beamNode.SetVisibility(FssGodotFactory.Instance.UIState.ShowRx);
+                }
             }
         }
     }

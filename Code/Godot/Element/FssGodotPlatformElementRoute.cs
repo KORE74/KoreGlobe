@@ -13,6 +13,10 @@ public partial class FssGodotPlatformElementRoute : FssGodotPlatformElement
 
     private static float BaseNodeSize = (float)(150 * FssZeroOffset.RwToGeDistanceMultiplierM);
 
+    // --------------------------------------------------------------------------------------------
+    // MARK: Node3D Routines
+    // --------------------------------------------------------------------------------------------
+
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
@@ -114,7 +118,17 @@ public partial class FssGodotPlatformElementRoute : FssGodotPlatformElement
                 LineMesh.AddLine(topPos, botPos, FssColorUtil.Colors["Gray"]);
             }
         }
+    }
 
+    // --------------------------------------------------------------------------------------------
+    // MARK: Set Visibility
+    // --------------------------------------------------------------------------------------------
+
+    public void SetVisibility(bool visible)
+    {
+        Visible = visible;
+
+        LineMesh.Visible = visible;
     }
 
 }

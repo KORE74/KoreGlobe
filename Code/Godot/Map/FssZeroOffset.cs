@@ -16,7 +16,7 @@ public static class FssZeroOffset
     public static FssXYZPoint RwZeroPointXYZ = new FssXYZPoint(0, 0, 0);
 
     // Game engine earth radius and conversion around it.
-    public static double GeEarthRadius = 150;
+    public static double GeEarthRadius = 1000;
     public static double RwToGeDistanceMultiplierM = GeEarthRadius / FssPosConsts.EarthRadiusM;
     public static double GeToRwDistanceMultiplierM = 1 / RwToGeDistanceMultiplierM;
 
