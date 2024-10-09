@@ -1,4 +1,4 @@
-[gd_scene load_steps=71 format=3 uid="uid://ck4tngsqwb7jf"]
+[gd_scene load_steps=72 format=3 uid="uid://ck4tngsqwb7jf"]
 
 [ext_resource type="StyleBox" uid="uid://l27fuiuspgfw" path="res://Themes/Panel.tres" id="1_ndm6o"]
 [ext_resource type="Script" path="res://Code/Godot/UI/FssUIHeader.cs" id="2_iuuet"]
@@ -11,6 +11,7 @@
 [ext_resource type="Theme" uid="uid://dmowlcnw0dkpk" path="res://Themes/Buttons/YellowButton.tres" id="9_22suo"]
 [ext_resource type="Script" path="res://Code/Godot/UI/FssUISidePanel.cs" id="9_bt000"]
 [ext_resource type="Script" path="res://Code/Godot/UI/FssUICameraControl.cs" id="9_ro3fa"]
+[ext_resource type="Texture2D" uid="uid://bvu8py6iycrsp" path="res://Resources/Icons/Help.png" id="9_ugbx8"]
 [ext_resource type="Texture2D" uid="uid://cgdps8gwwaqcw" path="res://Resources/Icons/Resize.png" id="10_8ih3r"]
 [ext_resource type="Texture2D" uid="uid://dec5v78k63oif" path="res://Resources/Icons/White_Globe.png" id="10_ebi24"]
 [ext_resource type="Texture2D" uid="uid://dlli6iu3nldby" path="res://Resources/Icons/RxTx.png" id="11_3m4p4"]
@@ -540,6 +541,17 @@ layout_mode = 2
 focus_mode = 0
 theme = ExtResource("6_i4rcs")
 icon = ExtResource("7_mru6u")
+icon_alignment = 1
+expand_icon = true
+
+[node name="HelpButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/HeaderContainer/MarginContainer-HeaderInset/HeaderContainer-LeftAlign/HeaderContainer-RightAlign"]
+clip_contents = true
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("3_454jl")
+toggle_mode = true
+icon = ExtResource("9_ugbx8")
 icon_alignment = 1
 expand_icon = true
 
@@ -1777,3 +1789,72 @@ custom_minimum_size = Vector2(90, 45)
 layout_mode = 2
 focus_mode = 0
 text = "Select"
+
+[node name="HelpWindow" type="Window" parent="."]
+title = "Help"
+initial_position = 1
+size = Vector2i(520, 340)
+visible = false
+
+[node name="MarginContainer" type="MarginContainer" parent="HelpWindow"]
+offset_top = 108.0
+offset_right = 200.0
+offset_bottom = 108.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HelpWindow"]
+offset_right = 200.0
+offset_bottom = 50.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 5
+
+[node name="World Camera" type="HBoxContainer" parent="HelpWindow/VBoxContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="HelpWindow/VBoxContainer/World Camera"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 0
+texture = ExtResource("10_ebi24")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="HelpWindow/VBoxContainer/World Camera"]
+layout_mode = 2
+text = "World Camera Info:
+<MouseDrag>: Moves Camera in Lat/Long
+<Alt>+<MouseDrag>: Moves camera Azimuth & Elevation
+<Shift>+<Alt>+<MouseDrag>: Moves camera Altitude
+
+<Shift>: Generally and Accelerator of movement
+<Ctrl>: Generally a dampener of movement
+
+
+"
+
+[node name="Chase Camera" type="HBoxContainer" parent="HelpWindow/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="TextureRect" type="TextureRect" parent="HelpWindow/VBoxContainer/Chase Camera"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource("11_c00mr")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="Label" type="Label" parent="HelpWindow/VBoxContainer/Chase Camera"]
+layout_mode = 2
+text = "Chase Camera Info:
+<MouseWheel>: Zoom towards/away from target
+<MouseDrag>: Moves camera in Azimuth & Elevation
+"

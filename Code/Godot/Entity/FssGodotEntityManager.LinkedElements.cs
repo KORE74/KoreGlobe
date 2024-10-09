@@ -21,7 +21,7 @@ public partial class FssGodotEntityManager : Node3D
         if (ent == null)
             return false;
 
-        foreach (Node3D currNode in ent.GetChildren())
+        foreach (Node3D currNode in ent.AttitudeNode.GetChildren())
         {
             if (currNode.Name == elementName)
                 return true;
@@ -40,7 +40,7 @@ public partial class FssGodotEntityManager : Node3D
             if (ent == null)
                 return;
 
-            ent.AddChild(element);
+            ent.AttitudeNode.AddChild(element);
         }
     }
 
@@ -50,7 +50,7 @@ public partial class FssGodotEntityManager : Node3D
         if (ent == null)
             return;
 
-        foreach (Node3D currNode in ent.GetChildren())
+        foreach (Node3D currNode in ent.AttitudeNode.GetChildren())
         {
             if (currNode.Name == elementName)
             {
@@ -66,7 +66,7 @@ public partial class FssGodotEntityManager : Node3D
         if (ent == null)
             return null;
 
-        foreach (Node3D currNode in ent.GetChildren())
+        foreach (Node3D currNode in ent.AttitudeNode.GetChildren())
         {
             if (currNode.Name == elementName)
                 return currNode;
@@ -83,7 +83,7 @@ public partial class FssGodotEntityManager : Node3D
         if (ent == null)
             return elementNames;
 
-        foreach (Node3D currNode in ent.GetChildren())
+        foreach (Node3D currNode in ent.AttitudeNode.GetChildren())
             elementNames.Add(currNode.Name);
 
         return elementNames;

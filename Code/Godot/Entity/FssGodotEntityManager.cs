@@ -227,13 +227,20 @@ public partial class FssGodotEntityManager : Node3D
         FssPlatformElementRoute? route = FssAppFactory.Instance.EventDriver.GetElement(platName, currElemName) as FssPlatformElementRoute;
 
         FssGodotPlatformElementRoute newRoute = new FssGodotPlatformElementRoute();
-        newRoute.Name = currElemName;
-        newRoute.SetRoutePoints(route.RoutePoints);
 
-        // Add the route to the entity and scene tree
-        AddUnlinkedElement(platName, newRoute);
+        if ((route != null) && (newRoute != null))
+        {
+            newRoute.Name = currElemName;
+            newRoute.SetRoutePoints(route!.RoutePoints);
 
-        FssCentralLog.AddEntry($"Added route element {currElemName} to {platName}");
+            // Update visibility based on the UI state
+            newRoute.SetVisibility(FssGodotFactory.Instance.UIState.ShowRoutes);
+
+            // Add the route to the entity and scene tree
+            AddUnlinkedElement(platName, newRoute);
+
+            FssCentralLog.AddEntry($"Added route element {currElemName} to {platName}");
+        }
     }
 
     public void UpdatePlatformElementRoute(string platName, string currElemName)
@@ -242,13 +249,13 @@ public partial class FssGodotEntityManager : Node3D
         FssPlatformElementRoute? route = FssAppFactory.Instance.EventDriver.GetElement(platName, currElemName) as FssPlatformElementRoute;
 
         // Get the godot route we'll update
-        FssGodotPlatformElementRoute? routeNode = GetLinkedElement(platName, currElemName) as FssGodotPlatformElementRoute;
+        FssGodotPlatformElementRoute? routeNode = GetUnlinkedElement(platName, currElemName) as FssGodotPlatformElementRoute;
 
         if ((route != null) && (routeNode != null))
         {
-            routeNode.SetRoutePoints(route.RoutePoints);
-
-            routeNode.SetVisibility(FssGodotFactory.Instance.UIState.ShowRoutes);
+            // Update visibility based on the UI state
+            routeNode!.SetVisibility(FssGodotFactory.Instance.UIState.ShowRoutes);
+            routeNode!.SetRoutePoints(route.RoutePoints);
         }
     }
 
@@ -261,8 +268,6 @@ public partial class FssGodotEntityManager : Node3D
         // Get the Beam details: shape, range, etc.
         FssPlatformElementBeam? beam = FssAppFactory.Instance.EventDriver.GetElement(platName, currElemName) as FssPlatformElementBeam;
         FssGodotEntity? ent = GetEntity(platName);
-
-        FssCentralLog.AddEntry($"################### =====> AddPlatformElementBeam: {platName} {currElemName}");
 
         if ((ent != null) && (beam != null))
         {
@@ -324,7 +329,7 @@ public partial class FssGodotEntityManager : Node3D
                     beamNode.RxDistanceM = (float)(beam.DetectionRangeRxM);
                     beamNode.AzElBox = azElBox;
 
-                    beamNode.SetVisibility(FssGodotFactory.Instance.UIState.ShowRx, FssGodotFactory.Instance.UIState.ShowTx);
+                    beamNode.SetVisibility(FssGodotFactory.Instance.UIState.ShowEmitters, FssGodotFactory.Instance.UIState.ShowRx, FssGodotFactory.Instance.UIState.ShowTx);
                 }
             }
             if (beam.ScanShape == FssPlatformElementBeam.ScanPatternShape.Dome)
@@ -332,7 +337,7 @@ public partial class FssGodotEntityManager : Node3D
                 FssGodotPlatformElementDome? beamNode = GetLinkedElement(platName, currElemName) as FssGodotPlatformElementDome;
                 if (beamNode != null)
                 {
-                    beamNode.SetVisibility(FssGodotFactory.Instance.UIState.ShowRx);
+                    beamNode.SetVisibility(FssGodotFactory.Instance.UIState.ShowEmitters, FssGodotFactory.Instance.UIState.ShowRx);
                 }
             }
         }

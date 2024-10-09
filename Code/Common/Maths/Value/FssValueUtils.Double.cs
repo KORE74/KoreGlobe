@@ -135,6 +135,19 @@ public static partial class FssValueUtils
 
     // ------------------------------------------------------------------------
 
+    // Function to move from the current to the commanded value, but not exceed the maxDelta.
+
+    // Usage: FssValueUtils.AdjustWithinBounds(5, 10, 3) // Returns 8
+
+    public static double AdjustWithinBounds(double currentValue, double commandedValue, double maxDelta)
+    {
+        double diff = commandedValue - currentValue;
+        double delta = Math.Sign(diff) * Math.Min(Math.Abs(diff), maxDelta);
+        return currentValue + delta;
+    }
+
+    // ------------------------------------------------------------------------
+
     public static double Interpolate(double inrangemin, double inrangemax, double fraction)
     {
         // fraction = LimitToRange(fraction, 0, 1); // Deactivating the limit check, so extrapolations are also available to the caller.

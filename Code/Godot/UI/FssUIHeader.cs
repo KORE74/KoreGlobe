@@ -8,11 +8,13 @@ public partial class FssUIHeader : PanelContainer
     private Button? CliButton;
     private Button? SettingButton;
     private Button? NetworkButton;
+    private Button? HelpButton;
     private Button? ExitButton;
 
     private Window? CliWindowNode;
     private Window? SettingWindowNode;
     private Window? NetworkWindowNode;
+    private Window? HelpWindowNode;
 
     private Label? ScenarioTimeLabel;
     private Label? ScenarioNameLabel;
@@ -28,6 +30,7 @@ public partial class FssUIHeader : PanelContainer
         CliButton         = (Button)FindChild("CLI-IconButton");
         SettingButton     = (Button)FindChild("Setting-IconButton");
         NetworkButton     = (Button)FindChild("Network-IconButton");
+        HelpButton        = (Button)FindChild("HelpButton");
         ExitButton        = (Button)FindChild("Exit-IconButton");
         ScenarioTimeLabel = (Label)FindChild("ScenarioTimeLabel");
         ScenarioNameLabel = (Label)FindChild("ScenarioNameLabel");
@@ -35,14 +38,15 @@ public partial class FssUIHeader : PanelContainer
         CliWindowNode     = GetNode<Window>("../../../../CLIWindow");
         SettingWindowNode = GetNode<Window>("../../../../SettingWindow");
         NetworkWindowNode = GetNode<Window>("../../../../NetworkWindow");
+        HelpWindowNode    = GetNode<Window>("../../../../HelpWindow");
 
         // Check if any of the read items are null
-        if (CliButton == null || SettingButton == null || NetworkButton == null || ExitButton == null)
+        if (CliButton == null || SettingButton == null || NetworkButton == null || ExitButton == null || HelpButton == null)
         {
             FssCentralLog.AddEntry("One or more buttons not found");
             return;
         }
-        if (CliWindowNode == null || SettingWindowNode == null || NetworkWindowNode == null)
+        if (CliWindowNode == null || SettingWindowNode == null || NetworkWindowNode == null || HelpWindowNode == null)
         {
             FssCentralLog.AddEntry("One or more windows not found");
             return;
@@ -54,6 +58,7 @@ public partial class FssUIHeader : PanelContainer
         CliButton.Connect("pressed", new Callable(this, "OnCLIButtonPressed"));
         SettingButton.Connect("pressed", new Callable(this, "OnSettingButtonPressed"));
         NetworkButton.Connect("pressed", new Callable(this, "OnNetworkButtonPressed"));
+        HelpButton.Connect("pressed", new Callable(this, "OnHelpButtonPressed"));
         ExitButton.Connect("pressed", new Callable(this, "OnExitButtonPressed"));
     }
 
@@ -117,6 +122,12 @@ public partial class FssUIHeader : PanelContainer
     {
         FssCentralLog.AddEntry("FssUIHeader.OnSettingButtonPressed");
         SettingWindowNode!.Visible = SettingButton!.ButtonPressed;
+    }
+
+    public void OnHelpButtonPressed()
+    {
+        FssCentralLog.AddEntry("FssUIHeader.OnHelpButtonPressed");
+        HelpWindowNode!.Visible = HelpButton!.ButtonPressed;
     }
 
     public void OnNetworkButtonPressed()

@@ -22,11 +22,16 @@ public partial class FssGodotPlatformElementRoute : FssGodotPlatformElement
     {
         //Name     = "Route";
         //ElemType = "Route";
+
+        // Add the child on create - every subsequent calls change it, but not its presence.
+        AddChild(LineMesh);
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
+        if (!Visible) return;
+
         UpdateRoute();
     }
 
@@ -46,49 +51,46 @@ public partial class FssGodotPlatformElementRoute : FssGodotPlatformElement
 
     public void SetRoutePoints(List<FssLLAPoint> routePoints)
     {
+        RoutePoints.Clear();
+
         // Create a copy of the list to avoid external modifications affecting the internal state
         foreach (FssLLAPoint point in routePoints)
             RoutePoints.Add(point);
-
-        // - - - - - - - - - - - - - - - - - - - - - - - - -
-        // Create the nodes
-
-        LineMesh.Clear();
-
-        AddChild(LineMesh);
     }
 
     // Update called to keep the route in place with the zero point.
     // Iterate through the points, creating new segments as needed and moving old ones to the latest position.
     public void UpdateRoute()
     {
-        int numNodes = RoutePoints.Count;
-
         LineMesh.Clear();
 
+        double distLimitM = 10000; // 10km distance limit
 
-        for (int i = 0; i < numNodes-1; i++)
+        // Loop over the index values of each of point, and consider a +1 point for the end of the line
+        int numNodes = RoutePoints.Count;
+        for (int i = 0; i <= numNodes-2; i++)
         {
             FssLLAPoint startLLA = RoutePoints[i];
             FssLLAPoint endLLA   = RoutePoints[i+1];
 
             // lift any point off the zero point, so it doesn't clash with terrain
-            if (FssValueUtils.EqualsWithinTolerance(startLLA.AltMslM, 0, 0.5)) startLLA.AltMslM = 2;
-            if (FssValueUtils.EqualsWithinTolerance(  endLLA.AltMslM, 0, 0.5))   endLLA.AltMslM = 2;
+            if (FssValueUtils.EqualsWithinTolerance(startLLA.AltMslM, -0.5, 0.5)) startLLA.AltMslM = 2;
+            if (FssValueUtils.EqualsWithinTolerance(  endLLA.AltMslM, -0.5, 0.5))   endLLA.AltMslM = 2;
 
-            Vector3     startPos = FssGeoConvOperations.RwToOffsetGe(startLLA);
-            Vector3     endPos   = FssGeoConvOperations.RwToOffsetGe(endLLA);
+            // get the route positions in GE units, offset from ZeroPoint
+            Vector3 startPos = FssGeoConvOperations.RwToOffsetGe(startLLA);
+            Vector3 endPos   = FssGeoConvOperations.RwToOffsetGe(endLLA);
 
-            // Drop the start point line:
+            // Drop the start point line - so we see in anchored to a point in th ground.
             FssLLAPoint botLLA = RoutePoints[i];
             botLLA.AltMslM = -1000;
             Vector3 topPos = startPos;
             Vector3 botPos = FssGeoConvOperations.RwToOffsetGe(botLLA);
             LineMesh.AddLine(topPos, botPos, FssColorUtil.Colors["Gray"]);
 
-            // Anything over a threshold, divide up into sublines to interpolate along
+            // Anything over a distance threshold, divide up into sublines to interpolate along
+            // (otherwise long routes don't respect Earth curvature, a sea-routes will cut through ground)
             double legDistM = startLLA.StraightLineDistanceToM(endLLA);
-            double distLimitM = 10000;
             if (legDistM > distLimitM)
             {
                 int numSubLines = (int)(legDistM / distLimitM);
@@ -103,12 +105,12 @@ public partial class FssGodotPlatformElementRoute : FssGodotPlatformElement
                     LineMesh.AddLine(subStartPos, subEndPos, FssColorUtil.Colors["Green"]);
                 }
             }
-            else // else draw the straight line to the end point
+            else // else draw the straight line to the end point, when the distance is short
             {
                 LineMesh.AddLine(startPos, endPos, FssColorUtil.Colors["Green"]);
             }
 
-            // if last point, add the dropdown line to the end point too
+            // if last point, add the dropdown line to the end point
             if (i == numNodes-2)
             {
                 botLLA = RoutePoints[i+1];
@@ -127,7 +129,6 @@ public partial class FssGodotPlatformElementRoute : FssGodotPlatformElement
     public void SetVisibility(bool visible)
     {
         Visible = visible;
-
         LineMesh.Visible = visible;
     }
 

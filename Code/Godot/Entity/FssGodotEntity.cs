@@ -12,18 +12,27 @@ public partial class FssGodotEntity : Node3D
     // Setup default model info, so we always have something to work with.
     public Fss3DModelInfo ModelInfo { get; set; } = Fss3DModelInfo.Default();
 
+    public Node3D AttitudeNode = new Node3D() { Name = "Attitude" };
+
     private FssElementContrail ElementContrail;
+
+    private FssAttitude CurrentAttitude = new FssAttitude();
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Node Functions
+    // --------------------------------------------------------------------------------------------
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
         CreateEntity();
 
+        AddChild(AttitudeNode);
+
         // ElementContrail = new FssElementContrail();
         // ElementContrail.InitElement(EntityName);
         // ElementContrail.SetModel(EntityName);
         // FssGodotFactory.Instance.GodotEntityManager.ElementRootNode.AddChild(ElementContrail);
-
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -31,7 +40,6 @@ public partial class FssGodotEntity : Node3D
     {
         UpdateEntityPosition();
     }
-
 
     // --------------------------------------------------------------------------------------------
     // MARK: Create
@@ -74,6 +82,38 @@ public partial class FssGodotEntity : Node3D
         //LookAtFromPosition(entityVecs.Pos, entityVecs.PosAhead, entityVecs.VecUp, true);
 
         LookAt(entityVecs.PosAhead, entityVecs.VecUp);
+
+        FssAttitude? att = FssAppFactory.Instance.EventDriver.GetPlatformAttitude(EntityName);
+        if (att != null)
+            UpdateAttitude((FssAttitude)att);
+    }
+
+    public void UpdateAttitude(FssAttitude attitude)
+    {
+        CurrentAttitude.PitchUpDegs = FssValueUtils.AdjustWithinBounds(
+            CurrentAttitude.PitchUpDegs,
+            attitude.PitchUpDegs,
+            1);
+
+        CurrentAttitude.RollClockwiseDegs = FssValueUtils.AdjustWithinBounds(
+            CurrentAttitude.RollClockwiseDegs,
+            attitude.RollClockwiseDegs,
+            1);
+
+        CurrentAttitude.YawClockwiseDegs = FssValueUtils.AdjustWithinBounds(
+            CurrentAttitude.YawClockwiseDegs,
+            attitude.YawClockwiseDegs,
+            1);
+
+        double pitchUpRads       = CurrentAttitude.PitchUpRads;
+        double rollClockwiseRads = CurrentAttitude.RollClockwiseRads;
+        double yawClockwiseRads  = CurrentAttitude.YawClockwiseRads;
+
+        float gePitchRads = (float)pitchUpRads;
+        float geRollRads  = (float)rollClockwiseRads;
+        float geYawRads   = (float)yawClockwiseRads;
+
+        AttitudeNode.Rotation = new Vector3(gePitchRads, geYawRads, geRollRads);
     }
 
     // --------------------------------------------------------------------------------------------

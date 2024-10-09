@@ -57,18 +57,17 @@ public partial class FssGodotPlatformElementDome : FssGodotPlatformElement
             LineMesh.AddHemisphere(Vector3.Zero, rxDist, numSegments, wireColor);
             AddChild(LineMesh);
         }
-
     }
 
     // --------------------------------------------------------------------------------------------
     // MARK: Visibility
     // --------------------------------------------------------------------------------------------
 
-    public void SetVisibility(bool isVisible)
+    public void SetVisibility(bool beamsVisible, bool isVisible)
     {
         foreach (Node3D child in GetChildren())
         {
-            child.Visible = isVisible;
+            child.Visible = (isVisible & beamsVisible);
         }
     }
 }

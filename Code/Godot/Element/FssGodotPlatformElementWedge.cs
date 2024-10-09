@@ -114,14 +114,14 @@ public partial class FssGodotPlatformElementWedge : FssGodotPlatformElement
     // MARK: Visibility
     // --------------------------------------------------------------------------------------------
 
-    public void SetVisibility(bool rxVisible, bool txVisible)
+    public void SetVisibility(bool beamsVisible, bool rxVisible, bool txVisible)
     {
-        RxVisible = rxVisible;
-        TxVisible = txVisible;
+        RxVisible = rxVisible & beamsVisible;
+        TxVisible = txVisible & beamsVisible;
 
         // Update the mesh (volume) visibility
-        RxMeshInstance.Visible = rxVisible;
-        TxMeshInstance.Visible = txVisible;
+        RxMeshInstance.Visible = RxVisible;
+        TxMeshInstance.Visible = TxVisible;
 
         // Update the wireframe visibility
         RxLineMesh.Visible   = RxVisible && !TxVisible;

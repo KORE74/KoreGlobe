@@ -9,6 +9,7 @@ public class FssPlatformKinetics
 {
     public FssLLAPoint StartPosition { set; get; } = FssLLAPoint.Zero;
     public FssAttitude StartAttitude { set; get; } = FssAttitude.Zero;
+    public FssCourse   StartCourse   { set; get; } = FssCourse.Zero;
 
     // --------------------------------------------------------------------------------------------
 
@@ -41,6 +42,7 @@ public class FssPlatformKinetics
     {
         CurrPosition = StartPosition;
         CurrAttitude = StartAttitude;
+        CurrCourse   = StartCourse;
     }
 
     public void UpdateForDuration(float elapsedSeconds)

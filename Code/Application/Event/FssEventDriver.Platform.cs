@@ -62,10 +62,11 @@ public partial class FssEventDriver
         FssCourse      course      = new FssCourse() { SpeedKph = 0.0, HeadingDegs = 0.0 };
         FssCourseDelta courseDelta = new FssCourseDelta() { SpeedChangeMpMps = 0.0, HeadingChangeClockwiseDegsSec = 0.0 };
 
-        SetPlatformDetails(platName, startPos, currPos, att, course, courseDelta);
+        SetPlatformStartDetails(platName, startPos, att, course);
+        SetPlatformCurrDetails(platName, currPos, att, course, courseDelta);
     }
 
-    public void SetPlatformDetails(string platName, FssLLAPoint startPos, FssLLAPoint currPos, FssAttitude att, FssCourse course, FssCourseDelta courseDelta)
+    public void SetPlatformStartDetails(string platName, FssLLAPoint startPos, FssAttitude startAtt, FssCourse startCourse)
     {
         // Get the platform
         FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
@@ -77,9 +78,25 @@ public partial class FssEventDriver
         }
 
         // Set the platform's details
-        platform.Kinetics.StartPosition   = startPos;
+        platform.Kinetics.StartPosition = startPos;
+        platform.Kinetics.StartAttitude = startAtt;
+        platform.Kinetics.StartCourse   = startCourse;
+    }
+
+    public void SetPlatformCurrDetails(string platName, FssLLAPoint currPos, FssAttitude currAtt, FssCourse course, FssCourseDelta courseDelta)
+    {
+        // Get the platform
+        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
+
+        if (platform == null)
+        {
+            FssCentralLog.AddEntry($"EC0-0002: Platform {platName} not found.");
+            return;
+        }
+
+        // Set the platform's details
         platform.Kinetics.CurrPosition    = currPos;
-        platform.Kinetics.CurrAttitude    = att;
+        platform.Kinetics.CurrAttitude    = currAtt;
         platform.Kinetics.CurrCourse      = course;
         platform.Kinetics.CurrCourseDelta = courseDelta;
     }

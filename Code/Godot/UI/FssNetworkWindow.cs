@@ -30,15 +30,18 @@ public partial class FssNetworkWindow : Window
 
     float TimerUIUpdate = 0.0f;
 
+    // --------------------------------------------------------------------------------------------
+    // MARK: Node Functions
+    // --------------------------------------------------------------------------------------------
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        UdpIpAddrLabel = (Label)FindChild("UdpIpAddrLabel");
-        UdpIpPortLabel = (Label)FindChild("UdpIpPortLabel");
-        UdpIpAddrEdit  = (LineEdit)FindChild("UdpIpAddrEdit");
-        UdpIpPortEdit  = (LineEdit)FindChild("UdpIpPortEdit");
-        UdpIpConnectButton = (Button)FindChild("UdpIpConnectButton");
+        UdpIpAddrLabel       = (Label)FindChild("UdpIpAddrLabel");
+        UdpIpPortLabel       = (Label)FindChild("UdpIpPortLabel");
+        UdpIpAddrEdit        = (LineEdit)FindChild("UdpIpAddrEdit");
+        UdpIpPortEdit        = (LineEdit)FindChild("UdpIpPortEdit");
+        UdpIpConnectButton   = (Button)FindChild("UdpIpConnectButton");
 
         TcpIpServerAddrLabel = (Label)FindChild("TcpIpServerAddrLabel");
         TcpIpServerPortLabel = (Label)FindChild("TcpIpServerPortLabel");
@@ -75,6 +78,7 @@ public partial class FssNetworkWindow : Window
 
         UpdateUIText();
         PopulateDialogControls();
+        MaintainConnections();
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -87,6 +91,45 @@ public partial class FssNetworkWindow : Window
             NetworkStatusTextEdit.Text = FssAppFactory.Instance.EventDriver.NetworkReport();
 
             UpdateUIText();
+        }
+    }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: MaintainConnections
+    // --------------------------------------------------------------------------------------------
+
+    // Function called on startup to perform the maintain connections process
+
+    public void MaintainConnections()
+    {
+        var config = FssCentralConfig.Instance;
+
+        bool maintainConnections = config.GetParam<bool>("MaintainConnections", false);
+        MaintainConnectionCheckBox.SetPressedNoSignal( maintainConnections );
+
+        if (maintainConnections)
+        {
+            bool udpConnectionOn       = config.GetParam<bool>("MaintainConnections_UDP", false);
+            bool tcpServerConnectionOn = config.GetParam<bool>("MaintainConnections_TCPServer", false);
+            bool tcpClientConnectionOn = config.GetParam<bool>("MaintainConnections_TCPClient", false);
+
+            if (udpConnectionOn)
+            {
+                UdpIpConnectButton.SetPressedNoSignal( true );
+                OnUdpIpConnectButtonPressed();
+            }
+
+            if (tcpServerConnectionOn)
+            {
+                TcpIpServerConnectButton.SetPressedNoSignal( true );
+                OnTcpIpServerConnectButtonPressed();
+            }
+
+            if (tcpClientConnectionOn)
+            {
+                TcpIpClientConnectButton.SetPressedNoSignal( true );
+                OnTcpIpClientConnectButtonPressed();
+            }
         }
     }
 
@@ -105,17 +148,6 @@ public partial class FssNetworkWindow : Window
 
         TcpIpClientAddrEdit.Text  = config.GetParam<string>("TcpIpClientAddr", "127.0.0.1");
         TcpIpClientPortEdit.Text  = config.GetParam<int>("TcpIpClientPort", 10003).ToString();
-
-        bool maintainConnections = config.GetParam<bool>("MaintainConnections", false);
-        MaintainConnectionCheckBox.SetPressedNoSignal( maintainConnections );
-
-        if (maintainConnections)
-        {
-            UdpIpConnectButton.SetPressedNoSignal( config.GetParam<bool>("MaintainConnections_UDP", false) );
-            TcpIpServerConnectButton.SetPressedNoSignal( config.GetParam<bool>("MaintainConnections_TCPServer", false) );
-            TcpIpClientConnectButton.SetPressedNoSignal( config.GetParam<bool>("MaintainConnections_TCPClient", false) );
-        }
-
     }
 
     private void SaveControlValues()

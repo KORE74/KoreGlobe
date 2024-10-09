@@ -36,7 +36,7 @@ public partial class FssGodotEntityManager : Node3D
             modelNode = FssGodotFactory.Instance.ModelLibrary.PrepModel(platformType);
 
             modelNode.Name = modelNodeName;
-            ent.AddChild(modelNode);
+            ent.AttitudeNode.AddChild(modelNode);
         }
 
 
@@ -163,7 +163,7 @@ public partial class FssGodotEntityManager : Node3D
             bbMesh.AddBoxWithLeadingEdge(geAABB, new Color(1, 1, 0, 1));
 
             // Add the bounding box to the entity
-            ent.AddChild(bbMesh);
+            ent.AttitudeNode.AddChild(bbMesh);
         }
     }
 
