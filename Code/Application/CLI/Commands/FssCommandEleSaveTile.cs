@@ -14,7 +14,7 @@ public class FssCommandEleSaveTile : FssCommand
         Signature.Add("savetile");
     }
 
-    public override string HelpString => $"{SignatureString} <Ele Tile Filename> <min lat degs> <min lon degs> <max lat degs> <max lon degs> <lon res> <lat res>";
+    public override string HelpString => $"{SignatureString} <Ele Tile Filename>  <BL <min lat degs><min lon degs>>  <TR <max lat degs> <max lon degs>>  <lon res> <lat res>";
 
     public override string Execute(List<string> parameters)
     {

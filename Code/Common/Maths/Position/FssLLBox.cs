@@ -137,5 +137,11 @@ public struct FssLLBox
     {
         return $"[{MinLatDegs:F3}, {MinLonDegs:F3}, {MaxLatDegs:F3}, {MaxLonDegs:F3}]";
     }
+
+    public string ToStringVerbose()
+    {
+        return $"[MinLat:{MinLatDegs:F3}Degs, MinLon:{MinLonDegs:F3}Degs, MaxLat:{MaxLatDegs:F3}Degs, MaxLon:{MaxLonDegs:F3}Degs]";
+    }
+
 }
 

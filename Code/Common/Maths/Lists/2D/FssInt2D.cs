@@ -1,5 +1,7 @@
 
-public class FssIntSize
+// FssInt2D: A class to store a positive 2D integer size.
+
+public struct FssInt2D
 {
     public int X
     {
@@ -13,7 +15,7 @@ public class FssIntSize
         set => Y = value < 0 ? 0 : value;
     }
 
-    public FssIntSize(int x, int y)
+    public FssInt2D(int x, int y)
     {
         X = x;
         Y = y;
@@ -24,3 +26,4 @@ public class FssIntSize
         return $"({X}, {Y})";
     }
 }
+

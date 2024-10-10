@@ -231,7 +231,7 @@ public class FssFloat2DArray
     }
 
     // --------------------------------------------------------------------------------------------
-    // MARK: Grid arrangement
+    // MARK: Flip Grid
     // --------------------------------------------------------------------------------------------
 
     public static FssFloat2DArray FlipYAxis(FssFloat2DArray array)
@@ -245,7 +245,6 @@ public class FssFloat2DArray
                 flippedArray[i, j] = array[i, array.Height - 1 - j];
             }
         }
-
         return flippedArray;
     }
 
@@ -260,10 +259,8 @@ public class FssFloat2DArray
                 flippedArray[i, j] = array[array.Width - 1 - i, j];
             }
         }
-
         return flippedArray;
     }
-
 
     // --------------------------------------------------------------------------------------------
     // MARK: Multi set/get functions

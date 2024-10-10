@@ -549,6 +549,8 @@ public partial class FssMapTileNode : Node3D
     }
 
     // --------------------------------------------------------------------------------------------
+    // MARK: Elevation
+    // --------------------------------------------------------------------------------------------
 
     private void LoadTileEle()
     {
@@ -604,6 +606,10 @@ public partial class FssMapTileNode : Node3D
             TileEleData = new FssFloat2DArray(TileSizePointsPerLvl[TileCode.MapLvl], TileSizePointsPerLvl[TileCode.MapLvl]);
         }
     }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Mesh
+    // --------------------------------------------------------------------------------------------
 
     private void CreateMesh()
     {

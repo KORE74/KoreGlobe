@@ -26,33 +26,6 @@ public class Fss3DModelLibrary
     private Dictionary<string, Node3D> ModelCache = new Dictionary<string, Node3D>();
 
     // ------------------------------------------------------------------------------------------------
-    // MARK: Load / Save JSON Config
-    // ------------------------------------------------------------------------------------------------
-
-    // usage: Fss3DModelLibrary.TestLoadModel();
-
-    public void TestLoadModel(Node parent)
-    {
-        string ModelPathG = "C:/Util/Godot/Globe4-3DModels/Prep/Ship/GenericSupportShip/GenericSupportShip.glb";
-        string ModelPathF = "C:/Util/Godot/Globe4-3DModels/Prep/Ship/GenericSupportShip/GenericSupportShip.fbx";
-        string ModelPathR = "res://Resources/Models/Plane/Plane_Paper/PaperPlanes_v002.glb";
-
-        PackedScene importedModel = (PackedScene)ResourceLoader.Load(ModelPathR);
-
-        if (importedModel != null)
-        {
-            // Instance the model. Add the model to the scene
-            Node modelInstance = importedModel.Instantiate();
-            parent.AddChild(modelInstance);
-            GD.Print($"====== Loaded model: {ModelPathR}");
-        }
-        else
-        {
-            GD.PrintErr($"====== Failed to load model: {ModelPathR}");
-        }
-    }
-
-    // ------------------------------------------------------------------------------------------------
     // MARK: Supply Model
     // ------------------------------------------------------------------------------------------------
 
@@ -88,6 +61,7 @@ public class Fss3DModelLibrary
         GD.Print($"======> 0.5 // modelResPath:{modelResPath}");
 
 
+        // Flip for the Godot negative z-axis
         modelScale *= (float)FssZeroOffset.RwToGeDistanceMultiplierM;
         modelRotate.Y += 180;
 
@@ -129,7 +103,7 @@ public class Fss3DModelLibrary
             ModelResourceNode.Position = modelOffset; // Set the model position
             ModelResourceNode.RotationDegrees = modelRotate;
 
-            ModelCache.Add(modelName, modelContainerNode);
+            //ModelCache.Add(modelName, modelContainerNode);
 
             GD.Print("======> 3 - ");
 
@@ -139,7 +113,7 @@ public class Fss3DModelLibrary
         {
             FssCentralLog.AddEntry($"Failed to load model. name:{modelName} // Path:{modelResPath}");
         }
-        return ModelCache[modelName];
+        return null; //ModelCache[modelName];
     }
 
     // ------------------------------------------------------------------------------------------------

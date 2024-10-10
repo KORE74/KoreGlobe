@@ -33,8 +33,8 @@ public class FssCommandEleForPos : FssCommand
         }
         // return sb.ToString();
 
-        int inLonRes = int.Parse(parameters[0]);
-        int inLatRes = int.Parse(parameters[1]);
+        int inLatRes = int.Parse(parameters[0]);
+        int inLonRes = int.Parse(parameters[1]);
 
         bool validOperation = true;
 
@@ -56,7 +56,12 @@ public class FssCommandEleForPos : FssCommand
             FssLLPoint pos = new FssLLPoint() { LatDegs = inLatRes, LonDegs = inLonRes };
             float newEle = FssAppFactory.Instance.EleSystem.ElevationAtPos(pos);
 
+            string eleWithReport = FssAppFactory.Instance.EleSystem.ElevationAtPosWithReport(pos);
+
+
             sb.AppendLine($"Elevation at position: {pos} = {newEle:F2}");
+            sb.AppendLine(eleWithReport);
+
         }
 
         // -------------------------------------------------

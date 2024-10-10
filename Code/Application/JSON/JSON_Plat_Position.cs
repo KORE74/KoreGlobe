@@ -27,6 +27,11 @@ namespace FssJSON
         [JsonPropertyName("YawDegs")]
         public double YawDegs { get; set; }
 
+        // ----------------------------------------------------------------------------------------
+
+        // Note: We currently receive a Yaw value that is actually the heading, so this is a fudge that
+        // will ultimately need to be resolved.
+
         [JsonIgnore]
         public FssLLAPoint Pos
         {
@@ -37,7 +42,7 @@ namespace FssJSON
         [JsonIgnore]
         public FssAttitude Attitude
         {
-            get { return new FssAttitude() { RollClockwiseDegs = RollDegs, PitchUpDegs = PitchDegs, YawClockwiseDegs = YawDegs }; }
+            get { return new FssAttitude() { RollClockwiseDegs = RollDegs, PitchUpDegs = PitchDegs, YawClockwiseDegs = 0 }; }
             set { RollDegs = value.RollClockwiseDegs; PitchDegs = value.PitchUpDegs; YawDegs = value.YawClockwiseDegs; }
         }
 
@@ -47,6 +52,8 @@ namespace FssJSON
             get { return new FssCourse() { HeadingDegs = YawDegs, SpeedMps = 0 }; }
             set { YawDegs = value.HeadingDegs; }
         }
+
+        // ----------------------------------------------------------------------------------------
 
         public static PlatPosition ParseJSON(string json)
         {

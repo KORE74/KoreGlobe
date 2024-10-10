@@ -77,8 +77,6 @@ public partial class TestZeroOffset : Node3D
         FssGodotFactory.Instance.ZeroNode.Position      = FssZeroOffset.GeZeroPoint();
         FssGodotFactory.Instance.EarthCoreNode.Position = FssZeroOffset.GeCorePoint();
 
-        //Fss3DModelLibrary.TestLoadModel(ZeroNode);
-
         // Read the manually included sets of assets
         string jsonMilitary     = FssGodotFileOperations.LoadFromFile("res://Resources/Assets/MilitaryVehicles/Inventory.json");
         string jsonCivilian     = FssGodotFileOperations.LoadFromFile("res://Resources/Assets/CivilianVehicles/Inventory.json");

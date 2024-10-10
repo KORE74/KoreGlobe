@@ -4,6 +4,7 @@ public struct FssCourse
 {
     public double SpeedMps; // Metres per second
     public double HeadingRads;
+    public double ClimbRateMps;
 
     // ------------------------------------------------------------------------
 
@@ -21,15 +22,16 @@ public struct FssCourse
 
     // ------------------------------------------------------------------------
 
-    public FssCourse(double inSpeedKph, double inHeadingDegs)
+    public FssCourse(double inSpeedKph, double inHeadingDegs, double inClimbRateMtrSec)
     {
-        SpeedMps    = inSpeedKph * FssPosConsts.KPHtoMPSMultiplier;
-        HeadingRads = FssValueUtils.NormalizeAngle2Pi(inHeadingDegs * FssConsts.DegsToRadsMultiplier);
+        SpeedMps     = inSpeedKph * FssPosConsts.KPHtoMPSMultiplier;
+        HeadingRads  = FssValueUtils.NormalizeAngle2Pi(inHeadingDegs * FssConsts.DegsToRadsMultiplier);
+        ClimbRateMps = inClimbRateMtrSec;
     }
 
     public static FssCourse Zero
     {
-        get { return new FssCourse { SpeedMps = 0.0, HeadingRads = 0.0 }; }
+        get { return new FssCourse { SpeedMps = 0.0, HeadingRads = 0.0, ClimbRateMps = 0.0 }; }
     }
 
     // ------------------------------------------------------------------------
@@ -60,7 +62,7 @@ public struct FssCourse
     {
         double newSpeedMps = SpeedMps + delta.SpeedChangeMpMps * elapsedSeconds;
         double newHeadingDegs = HeadingDegs + (delta.HeadingChangeClockwiseDegsSec * -1.0 * elapsedSeconds);
-        return new FssCourse(newSpeedMps * FssPosConsts.MPStoKPHMultiplier, newHeadingDegs);
+        return new FssCourse(newSpeedMps * FssPosConsts.MPStoKPHMultiplier, newHeadingDegs, ClimbRateMps);
     }
 
     // ------------------------------------------------------------------------
@@ -77,7 +79,7 @@ public struct FssCourse
     {
         string speedStr = (IsStationary()) ? "Stationary" : $"Speed:{SpeedKph:F2}Kph";
 
-        return $"{speedStr}, Heading:{HeadingDegs:F2}Degs";
+        return $"{speedStr}, Heading:{HeadingDegs:F2}Degs, ClimbRate:{ClimbRateMps:F2}Mps";
     }
 }
 

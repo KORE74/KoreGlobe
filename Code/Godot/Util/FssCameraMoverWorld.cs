@@ -184,7 +184,7 @@ public partial class FssCameraMoverWorld : Node3D
         // Translation means setting up a temp course 90 degree off, and adding that.
         if (translateLeftM != 0)
         {
-            FssCourse tempCourse = new FssCourse(translateLeftM * translateSpeed, CamCourse.HeadingDegs + 90);
+            FssCourse tempCourse = new FssCourse(translateLeftM * translateSpeed, CamCourse.HeadingDegs + 90, 0);
             CamPos = CamPos.PlusRangeBearing(tempCourse.OffsetForTime(1));
         }
 

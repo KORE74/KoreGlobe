@@ -90,20 +90,9 @@ public partial class FssGodotEntity : Node3D
 
     public void UpdateAttitude(FssAttitude attitude)
     {
-        CurrentAttitude.PitchUpDegs = FssValueUtils.AdjustWithinBounds(
-            CurrentAttitude.PitchUpDegs,
-            attitude.PitchUpDegs,
-            1);
-
-        CurrentAttitude.RollClockwiseDegs = FssValueUtils.AdjustWithinBounds(
-            CurrentAttitude.RollClockwiseDegs,
-            attitude.RollClockwiseDegs,
-            1);
-
-        CurrentAttitude.YawClockwiseDegs = FssValueUtils.AdjustWithinBounds(
-            CurrentAttitude.YawClockwiseDegs,
-            attitude.YawClockwiseDegs,
-            1);
+        CurrentAttitude.PitchUpDegs       = FssValueUtils.AdjustWithinBounds(CurrentAttitude.PitchUpDegs,       attitude.PitchUpDegs, 1);
+        CurrentAttitude.RollClockwiseDegs = FssValueUtils.AdjustWithinBounds(CurrentAttitude.RollClockwiseDegs, attitude.RollClockwiseDegs, 1);
+        CurrentAttitude.YawClockwiseDegs  = FssValueUtils.AdjustWithinBounds(CurrentAttitude.YawClockwiseDegs,  attitude.YawClockwiseDegs, 1);
 
         double pitchUpRads       = CurrentAttitude.PitchUpRads;
         double rollClockwiseRads = CurrentAttitude.RollClockwiseRads;

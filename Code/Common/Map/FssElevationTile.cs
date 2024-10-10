@@ -54,7 +54,7 @@ public class FssElevationTile
 
     public string Report()
     {
-        return $"LLBox: {LLBox} / Res: {TileRes()} / GridSize:{ElevationData.Width}x{ElevationData.Height}";
+        return $"LLBox: {LLBox.ToStringVerbose()} / Res: {TileRes()} / GridSize:{ElevationData.Width}x{ElevationData.Height}";
     }
 
 }

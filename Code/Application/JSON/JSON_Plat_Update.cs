@@ -65,7 +65,7 @@ namespace FssJSON
         [JsonIgnore]
         public FssCourse Course
         {
-            get { return new FssCourse() { HeadingDegs = HeadingDegs, SpeedMps = GrndSpeedMtrSec }; }
+            get { return new FssCourse() { HeadingDegs = HeadingDegs, SpeedMps = GrndSpeedMtrSec, ClimbRateMps = ClimbRateMtrSec }; }
             set { HeadingDegs = value.HeadingDegs; GrndSpeedMtrSec = value.SpeedMps; }
         }
 

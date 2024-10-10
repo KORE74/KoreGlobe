@@ -17,7 +17,7 @@ public class FssCommandEleLoadArc : FssCommand
         Signature.Add("loadarc");
     }
 
-    public override string HelpString => $"{SignatureString} <ASCII Arc Filename> <min lat degs> <min lon degs> <max lon degs> <max lat degs> ";
+    public override string HelpString => $"{SignatureString} <ASCII Arc Filename> <min lat degs> <min lon degs> <max lat degs> <max lon degs> ";
 
     public override string Execute(List<string> parameters)
     {

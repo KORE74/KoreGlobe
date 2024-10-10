@@ -59,7 +59,7 @@ public partial class FssEventDriver
         FssLLAPoint    startPos    = new FssLLAPoint() { LatDegs = 0.0, LonDegs = 0.0, AltMslM = 100.0 };
         FssLLAPoint    currPos     = new FssLLAPoint() { LatDegs = 0.0, LonDegs = 0.0, AltMslM = 100.0 };
         FssAttitude    att         = new FssAttitude() { PitchUpDegs = 0.0, RollClockwiseDegs = 0.0, YawClockwiseDegs = 0.0 };
-        FssCourse      course      = new FssCourse() { SpeedKph = 0.0, HeadingDegs = 0.0 };
+        FssCourse      course      = new FssCourse() { SpeedKph = 0.0, HeadingDegs = 0.0, ClimbRateMps = 0.0 };
         FssCourseDelta courseDelta = new FssCourseDelta() { SpeedChangeMpMps = 0.0, HeadingChangeClockwiseDegsSec = 0.0 };
 
         SetPlatformStartDetails(platName, startPos, att, course);

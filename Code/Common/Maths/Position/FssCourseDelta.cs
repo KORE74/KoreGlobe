@@ -2,9 +2,8 @@ using System;
 
 public struct FssCourseDelta
 {
-    public double SpeedChangeMpMps; // Metres per second
+    public double SpeedChangeMpMps; // Metres per metres per second
     public double HeadingChangeClockwiseDegsSec;
-
 
     public static FssCourseDelta Zero
     {
