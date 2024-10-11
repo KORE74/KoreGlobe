@@ -134,7 +134,7 @@ public class FssElevationSystem
         FssFloat2DArray flippedData = FssFloat2DArray.FlipXAxis(data);
 
         // Create the tile
-        FssElevationTile newTile = new FssElevationTile() { ElevationData = flippedData, LLBox = llBox };
+        FssElevationTile newTile = new FssElevationTile() { ElevationData = data, LLBox = llBox };
 
         return newTile;
     }

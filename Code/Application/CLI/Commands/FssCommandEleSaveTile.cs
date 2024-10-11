@@ -65,6 +65,8 @@ public class FssCommandEleSaveTile : FssCommand
         {
             sb.AppendLine($"Valid operation: Progressing...");
 
+            sb.AppendLine($"Creating new tile: {llBox} {inLatRes} {inLonRes}");
+
             FssElevationTile newTile = FssAppFactory.Instance.EleSystem.CreateTile(llBox, inLatRes, inLonRes);
 
             FssElevationTileIO.WriteToTextFile(newTile, inEleFilename);
