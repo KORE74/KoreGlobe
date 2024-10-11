@@ -48,23 +48,14 @@ public partial class FssCameraMoverWorld : Node3D
 
     public override void _Process(double delta)
     {
-        //UpdateInputs();
-
         if (TimerCamReport < FssCoreTime.RuntimeSecs)
         {
-            TimerCamReport = FssCoreTime.RuntimeSecs + 3f;
+            TimerCamReport = FssCoreTime.RuntimeSecs + 1f;
 
-            // GD.Print($"CamPos:{CamPos}");
-
-
-            if (false)
+            if (CamNode.Current)
             {
-                FssLLAPoint pos = new FssLLAPoint();
-                pos.LatDegs = CamPos.LatDegs;
-                pos.LonDegs = CamPos.LonDegs;
-                pos.AltMslM = 0;
-
-                FssZeroOffset.SetLLA(pos);
+                FssZeroNode.SetZeroNodePosition(CamPos.LatDegs, CamPos.LonDegs);
+                GD.Print($"ZERO NODE UPDATE: WorldCam CurrentPosition:{CamPos}");
             }
         }
 
@@ -228,6 +219,5 @@ public partial class FssCameraMoverWorld : Node3D
             platformV3.PosAhead,
             platformV3.VecUp,
             true);
-
     }
 }

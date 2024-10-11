@@ -27,6 +27,8 @@ public class FssGodotFactory
     private static bool             IsInitialised     = false;
     private static bool             IsCreating        = false;
 
+    //public FssMapManager MapManager => EarthCoreNode;
+
     // --------------------------------------------------------------------------------------------
     // MARK: Singleton Pattern
     // --------------------------------------------------------------------------------------------

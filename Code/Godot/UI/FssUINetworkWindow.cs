@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class FssNetworkWindow : Window
+public partial class FssUINetworkWindow : Window
 {
     Label    UdpIpAddrLabel;
     Label    UdpIpPortLabel;
@@ -211,7 +211,7 @@ public partial class FssNetworkWindow : Window
 
     public void OnOkButtonPressed()
     {
-        FssCentralLog.AddEntry("FssNetworkWindow.OnOkButtonPressed");
+        FssCentralLog.AddEntry("FssUINetworkWindow.OnOkButtonPressed");
         Visible = false;
 
         // Save the control values to the config file
@@ -220,7 +220,7 @@ public partial class FssNetworkWindow : Window
     }
     public void OnCancelButtonPressed()
     {
-        FssCentralLog.AddEntry("FssNetworkWindow.OnCancelButtonPressed");
+        FssCentralLog.AddEntry("FssUINetworkWindow.OnCancelButtonPressed");
         Visible = false;
 
         // Update the controls from values in the config file
@@ -236,7 +236,7 @@ public partial class FssNetworkWindow : Window
         // first check the status is now pressed
         if ( UdpIpConnectButton.IsPressed() )
         {
-            FssCentralLog.AddEntry("FssNetworkWindow.OnUdpIpConnectButtonPressed");
+            FssCentralLog.AddEntry("FssUINetworkWindow.OnUdpIpConnectButtonPressed");
 
             string ipAddr = UdpIpAddrEdit.Text;
             int   port   = int.Parse(UdpIpPortEdit.Text);
@@ -245,10 +245,10 @@ public partial class FssNetworkWindow : Window
         }
         else // Else disconnect
         {
-            FssCentralLog.AddEntry("FssNetworkWindow.OnUdpIpConnectButtonPressed - Disconnect");
+            FssCentralLog.AddEntry("FssUINetworkWindow.OnUdpIpConnectButtonPressed - Disconnect");
             FssAppFactory.Instance.EventDriver.NetworkDisconnect("UdpReceiver");
         }
-        FssCentralLog.AddEntry("FssNetworkWindow.OnUdpIpConnectButtonPressed");
+        FssCentralLog.AddEntry("FssUINetworkWindow.OnUdpIpConnectButtonPressed");
     }
 
     public void OnTcpIpServerConnectButtonPressed()
@@ -256,7 +256,7 @@ public partial class FssNetworkWindow : Window
         // first check the status is now pressed
         if (TcpIpServerConnectButton.IsPressed())
         {
-            FssCentralLog.AddEntry("FssNetworkWindow.OnTcpIpServerConnectButtonPressed");
+            FssCentralLog.AddEntry("FssUINetworkWindow.OnTcpIpServerConnectButtonPressed");
 
             string ipAddr = TcpIpServerAddrEdit.Text;
             int   port   = int.Parse(TcpIpSerfverPortEdit.Text);
@@ -265,7 +265,7 @@ public partial class FssNetworkWindow : Window
         }
         else // Else disconnect
         {
-            FssCentralLog.AddEntry("FssNetworkWindow.OnTcpIpServerConnectButtonPressed - Disconnect");
+            FssCentralLog.AddEntry("FssUINetworkWindow.OnTcpIpServerConnectButtonPressed - Disconnect");
             FssAppFactory.Instance.EventDriver.NetworkDisconnect("TcpServer");
         }
     }
@@ -275,7 +275,7 @@ public partial class FssNetworkWindow : Window
         // first check the status is now pressed
         if (TcpIpClientConnectButton.IsPressed())
         {
-            FssCentralLog.AddEntry("FssNetworkWindow.OnTcpIpClientConnectButtonPressed");
+            FssCentralLog.AddEntry("FssUINetworkWindow.OnTcpIpClientConnectButtonPressed");
 
             string ipAddr = TcpIpClientAddrEdit.Text;
             int   port   = int.Parse(TcpIpClientPortEdit.Text);
@@ -284,7 +284,7 @@ public partial class FssNetworkWindow : Window
         }
         else // Else disconnect
         {
-            FssCentralLog.AddEntry("FssNetworkWindow.OnTcpIpClientConnectButtonPressed - Disconnect");
+            FssCentralLog.AddEntry("FssUINetworkWindow.OnTcpIpClientConnectButtonPressed - Disconnect");
             FssAppFactory.Instance.EventDriver.NetworkDisconnect("TcpClient");
         }
     }

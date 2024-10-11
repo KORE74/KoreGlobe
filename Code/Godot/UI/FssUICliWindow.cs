@@ -4,7 +4,7 @@ using System.Timers;
 using System.Text;
 using System.Collections.Generic;
 
-public partial class FssCliWindow : Window
+public partial class FssUICliWindow : Window
 {
     // CLI tab
     private Label           CommandResponseLabel;

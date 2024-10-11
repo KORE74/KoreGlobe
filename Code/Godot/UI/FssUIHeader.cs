@@ -121,7 +121,17 @@ public partial class FssUIHeader : PanelContainer
     public void OnSettingButtonPressed()
     {
         FssCentralLog.AddEntry("FssUIHeader.OnSettingButtonPressed");
-        SettingWindowNode!.Visible = SettingButton!.ButtonPressed;
+        if (SettingButton!.ButtonPressed)
+        {
+            FssUISettingWindow settingWindow = (FssUISettingWindow)SettingWindowNode!;
+            settingWindow.RefreshContent();
+
+            SettingWindowNode!.Visible = true;
+        }
+        else
+        {
+            SettingWindowNode!.Visible = false;
+        }
     }
 
     public void OnHelpButtonPressed()

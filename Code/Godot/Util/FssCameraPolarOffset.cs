@@ -72,6 +72,10 @@ public partial class FssCameraPolarOffset : Node3D
         }
     }
 
+    // --------------------------------------------------------------------------------------------
+    // MARK: Inputs
+    // --------------------------------------------------------------------------------------------
+
     // Process inputs
     // Update CamOffsetDist and CamRotation, to be used in _Process
     public override void _Input(InputEvent inputEvent)
@@ -157,6 +161,15 @@ public partial class FssCameraPolarOffset : Node3D
         CamOffsetDist  = (float)(rwCamDist * FssZeroOffset.RwToGeDistanceMultiplierM);
         camAzAngleDegs = rwCamAzDegs;
         camElAngleDegs = rwCamElDegs;
+    }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Query State
+    // --------------------------------------------------------------------------------------------
+
+    public bool IsCurrent()
+    {
+        return CamNode.Current;
     }
 
     // --------------------------------------------------------------------------------------------

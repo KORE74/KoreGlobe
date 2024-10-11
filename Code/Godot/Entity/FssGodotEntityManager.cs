@@ -10,8 +10,8 @@ public partial class FssGodotEntityManager : Node3D
 {
     // List<FssGodotEntity> EntityList = new List<FssGodotEntity>();
 
-    public Node3D EntityRootNode;
-    public Node3D UnlinkedRootNode;
+    public Node3D EntityRootNode   = new Node3D() { Name = "EntityRootNode" };
+    public Node3D UnlinkedRootNode = new Node3D() { Name = "UnlinkedRootNode" };
 
     float TimerModelCheck = 0.0f;
 
@@ -26,15 +26,9 @@ public partial class FssGodotEntityManager : Node3D
     {
         Name = "EntityManager";
 
-        // Setup the Entity Root Node.
-        EntityRootNode = new Node3D() { Name = "EntityRootNode" };
+        // Setup the Root Nodes.
         AddChild(EntityRootNode);
-
-        // Setup the Element Root Node.
-        UnlinkedRootNode = new Node3D() { Name = "UnlinkedRootNode" };
         AddChild(UnlinkedRootNode);
-
-
 
         // Setup the Infographic Scale Range
         InfographicScaleRange.AddEntry(1,          1);
@@ -113,7 +107,6 @@ public partial class FssGodotEntityManager : Node3D
         return names;
     }
 
-
     // --------------------------------------------------------------------------------------------
     // MARK: Create
     // --------------------------------------------------------------------------------------------
@@ -139,7 +132,7 @@ public partial class FssGodotEntityManager : Node3D
         foreach (string currModelName in omittedInPresentation)
         {
             AddEntity(currModelName);
-            AddChaseCam(currModelName);
+            // AddChaseCam(currModelName);
         }
 
         foreach (string currModelName in noLongerInModel)

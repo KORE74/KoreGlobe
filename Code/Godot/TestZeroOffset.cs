@@ -9,9 +9,9 @@ public partial class TestZeroOffset : Node3D
     Node3D ModelResourceNode;
 
     // FssMapManager      MapManager;
-    FssElementContrail            ElementContrail;
-    FssGodotPlatformElementRoute    ElementRoute;
-    FssGodotEntityManager        EntityManager;
+    //FssElementContrail            ElementContrail;
+    //FssGodotPlatformElementRoute  ElementRoute;
+    //FssGodotEntityManager         EntityManager;
 
 
     // TestZeroOffset.WorldCamNode.CamNode
@@ -32,13 +32,13 @@ public partial class TestZeroOffset : Node3D
 
 
 
-    private FssLLAPoint    PlatformPos;
-    private FssCourse      PlatformCourse;
-    private FssCourseDelta PlatformCourseDelta;
+    //private FssLLAPoint    PlatformPos;
+    //private FssCourse      PlatformCourse;
+    //private FssCourseDelta PlatformCourseDelta;
 
     private float Timer5Sec = 0.0f;
 
-    private float TimerContrail = 0.0f;
+    //private float TimerContrail = 0.0f;
 
     // private FssCyclicIdGenerator IdGen = new FssCyclicIdGenerator(250);
     // private string randomString = FssRandomStringGenerator.GenerateRandomString(5);
@@ -56,14 +56,8 @@ public partial class TestZeroOffset : Node3D
         // Randomize the zero point in each run so we don't bake-in assumptions.
         double randomLat = FssValueUtils.RandomInRange(45, 60);
         double randomLon = FssValueUtils.RandomInRange(-8, -0);
-
-        // Init the real world zero pos
-        FssLLAPoint randomPos = new FssLLAPoint() {
-            LatDegs = randomLat,
-            LonDegs = randomLon,
-            RadiusM = FssPosConsts.EarthRadiusM };
-        FssZeroOffset.SetLLA(randomPos);
-
+        FssZeroNode.SetZeroNodePosition(randomLat, randomLon);
+        GD.Print($"ZERO NODE UPDATE: Initialise CurrentPosition:{randomLat:F2}, {randomLon:F2}");
 
         WorldCamNode = new FssCameraMoverWorld() { Name = "WorldCamBase" };
         AddChild(WorldCamNode);
@@ -73,9 +67,6 @@ public partial class TestZeroOffset : Node3D
         // Create Nodes
 
         // CreateCoreNode();
-
-        FssGodotFactory.Instance.ZeroNode.Position      = FssZeroOffset.GeZeroPoint();
-        FssGodotFactory.Instance.EarthCoreNode.Position = FssZeroOffset.GeCorePoint();
 
         // Read the manually included sets of assets
         string jsonMilitary     = FssGodotFileOperations.LoadFromFile("res://Resources/Assets/MilitaryVehicles/Inventory.json");
@@ -129,17 +120,7 @@ public partial class TestZeroOffset : Node3D
             double randomLat = FssValueUtils.RandomInRange(45, 60);
             double randomLon = FssValueUtils.RandomInRange(-8, -0);
 
-            // Init the real world zero pos
-            FssLLAPoint randomPos = new FssLLAPoint() {
-                LatDegs = randomLat,
-                LonDegs = randomLon,
-                RadiusM = FssPosConsts.EarthRadiusM };
-            FssZeroOffset.SetLLA(randomPos);
-
-
-            FssGodotFactory.Instance.ZeroNode.Position      = FssZeroOffset.GeZeroPoint();
-            FssGodotFactory.Instance.EarthCoreNode.Position = FssZeroOffset.GeCorePoint();
-
+            // FssZeroNode.SetZeroNodePosition(randomLat, randomLon);
         }
     }
 }

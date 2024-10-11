@@ -9,5 +9,7 @@ ele savetile c:/util/_temp/Lvl2_Ele/BF_BF/Ele_BF_BF_AD.arr  54 -2  55 -1  200 20
 ele savetile c:/util/_temp/Lvl2_Ele/BF_BF/Ele_BF_BF_AE.arr  54 -1  55  0  200 200
 
 
+ele loadarc c:/util/_temp/ele_global_50km_3.asc                                             -90 -180   90 180
 
+ele savetile c:/util/_temp/Lvl2_Ele/BF_BF/Ele_BF_BF_AA.arr  -90 -180  90 180  200 200
 

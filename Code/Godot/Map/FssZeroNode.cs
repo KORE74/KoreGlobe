@@ -10,7 +10,9 @@ public partial class FssZeroNode : Node3D
     // The root node for all entities, made static so it can be accessed from anywhere.
     public static Node3D EntityRootNode = new Node3D() { Name = "EntityRootNode" };
 
-    private float MarkerSize  = 0.2f;
+    private static FssLLAPoint ZeroPosToApply = new FssLLAPoint() { LatDegs = 0, LonDegs = 0, RadiusM = FssPosConsts.EarthRadiusM };
+
+    private float Timer1Hz = 0.0f;
 
     // --------------------------------------------------------------------------------------------
     // MARK: Node Functions
@@ -27,14 +29,60 @@ public partial class FssZeroNode : Node3D
         // Add the EntityRootNode to the ZeroNode,
         //AddChild(EntityRootNode);
 
-        CreateDebugMarker();
+        //CreateDebugMarker();
 
         //FssLineMesh3D lineCube = new FssLineMesh3D();
         //AddChild(lineCube);
 
 
         //AddChild(GodotEntityManager);
+
+        CallDeferred("SetZeroNodePositionDeferred");
     }
+
+    public override void _Process(double delta)
+    {
+        if (Timer1Hz < FssCoreTime.RuntimeSecs)
+        {
+            Timer1Hz = FssCoreTime.RuntimeSecs + 10.0f;
+            CallDeferred("SetZeroNodePositionDeferred");
+        }
+    }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: ZeroNode Position
+    // --------------------------------------------------------------------------------------------
+
+    // Usage: FssZeroNode.SetZeroNodePosition(pos);
+    public static void SetZeroNodePosition(FssLLAPoint pos)
+    {
+        ZeroPosToApply = pos;
+    }
+
+    // Usage: FssZeroNode.SetZeroNodePosition(53.0, -6.0);
+    public static void SetZeroNodePosition(double lat, double lon)
+    {
+        // Set the position of the ZeroNode.
+        FssLLAPoint pos = new FssLLAPoint() {
+            LatDegs = lat,
+            LonDegs = lon,
+            RadiusM = FssPosConsts.EarthRadiusM };
+
+        ZeroPosToApply = pos;
+    }
+
+
+    // Usage: FssZeroNode.SetZeroNodePosition(pos);
+    public static void SetZeroNodePositionDeferred()
+    {
+        // Set the position of the ZeroNode.
+        FssZeroOffset.SetLLA(ZeroPosToApply);
+
+        // Update the cnsequent positions of the ZeroNode and EarthCoreNode.
+        FssGodotFactory.Instance.ZeroNode.Position      = FssZeroOffset.GeZeroPoint();
+        FssGodotFactory.Instance.EarthCoreNode.Position = FssZeroOffset.GeCorePoint();
+    }
+
 
     // --------------------------------------------------------------------------------------------
     // MARK: Helpers
@@ -42,11 +90,11 @@ public partial class FssZeroNode : Node3D
 
     private void CreateDebugMarker()
     {
-        float markerSize = 0.2f;
+        float markerSize  = 2f;
 
-        Node3D zeroNodeMarker = FssPrimitiveFactory.CreateSphereNode("Marker", new Vector3(0f, 0f, 0f), MarkerSize, FssColorUtil.Colors["OffRed"], true);
+        Node3D zeroNodeMarker = FssPrimitiveFactory.CreateSphereNode("Marker", new Vector3(0f, 0f, 0f), markerSize, FssColorUtil.Colors["OffRed"], true);
         AddChild(zeroNodeMarker);
 
-        zeroNodeMarker.AddChild( FssPrimitiveFactory.AxisMarkerNode(MarkerSize, MarkerSize/4) );
+        zeroNodeMarker.AddChild( FssPrimitiveFactory.AxisMarkerNode(markerSize, markerSize/4) );
     }
 }

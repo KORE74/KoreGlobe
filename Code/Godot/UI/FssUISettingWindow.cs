@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class FssSettingWindow : Window
+public partial class FssUISettingWindow : Window
 {
     // Map Control Section
     Label    MapPathLabel;
@@ -90,7 +90,7 @@ public partial class FssSettingWindow : Window
         // If any of the controls are null, we have a code-vs-UI mismatch, so report this.
         if (MapPathLabel == null || MapPathLineEdit == null || CapturePathLabel == null || CapturePathLineEdit == null || OkButton == null || CancelButton == null)
         {
-            FssCentralLog.AddEntry("FssSettingWindow: One or more controls not found");
+            FssCentralLog.AddEntry("FssUISettingWindow: One or more controls not found");
             return;
         }
 
@@ -134,6 +134,11 @@ public partial class FssSettingWindow : Window
     // MARK: Data Read and Write
     // --------------------------------------------------------------------------------------------
 
+    public void RefreshContent()
+    {
+        WriteControlValues();
+    }
+
     private void WriteControlValues()
     {
         // Read the path values and standardize them before writing into the controls
@@ -169,6 +174,9 @@ public partial class FssSettingWindow : Window
         FssCentralConfig.Instance.SetParam("CapturePath",   fixedCapturePath);
         FssCentralConfig.Instance.SetParam("LogPath",       fixedLogPath);
         FssCentralConfig.Instance.SetParam("DlcPath",       fixedDLCPath);
+
+        // Assign (and write to config) the new max map level
+        FssMapManager.SetMaxMapLvl((int)MaxMapLvlSlider.Value);
 
         // Set the active language in FssLanguageStrings, it will pass this on to the config
         FssCentralConfig.Instance.SetParam("ActiveLanguage", FssLanguageStrings.Instance.CurrActiveLanguage());
@@ -220,14 +228,14 @@ public partial class FssSettingWindow : Window
 
     public void OnOkButtonPressed()
     {
-        FssCentralLog.AddEntry("FssSettingWindow.OnOkButtonPressed");
+        FssCentralLog.AddEntry("FssUISettingWindow.OnOkButtonPressed");
         SaveControlValues();
         Visible = false;
     }
 
     public void OnCancelButtonPressed()
     {
-        FssCentralLog.AddEntry("FssSettingWindow.OnCancelButtonPressed");
+        FssCentralLog.AddEntry("FssUISettingWindow.OnCancelButtonPressed");
 
         WriteControlValues();
         Visible = false;
@@ -239,7 +247,7 @@ public partial class FssSettingWindow : Window
 
     public void OnNextLanguageButtonPressed()
     {
-        FssCentralLog.AddEntry("FssSettingWindow.OnNextLanguageButtonPressed");
+        FssCentralLog.AddEntry("FssUISettingWindow.OnNextLanguageButtonPressed");
 
         FssLanguageStrings.Instance.NextActiveLanguage();
         ActiveLanguageLabel.Text = FssLanguageStrings.Instance.CurrActiveLanguage();
@@ -247,7 +255,7 @@ public partial class FssSettingWindow : Window
 
     public void OnPrevLanguageButtonPressed()
     {
-        FssCentralLog.AddEntry("FssSettingWindow.OnPrevLanguageButtonPressed");
+        FssCentralLog.AddEntry("FssUISettingWindow.OnPrevLanguageButtonPressed");
 
         FssLanguageStrings.Instance.PrevActiveLanguage();
         ActiveLanguageLabel.Text = FssLanguageStrings.Instance.CurrActiveLanguage();
@@ -259,10 +267,7 @@ public partial class FssSettingWindow : Window
 
     public void OnMaxMapLvlSliderValueChanged(float value)
     {
-        FssCentralLog.AddEntry($"FssSettingWindow.OnMaxMapLvlSliderValueChanged: {value}");
-
-        // Assign (and write to config) the new max map level
-        FssMapManager.SetMaxMapLvl((int)value);
+        FssCentralLog.AddEntry($"FssUISettingWindow.OnMaxMapLvlSliderValueChanged: {value}");
 
         // Update the label
         MaxMapLvlValueLabel.Text = value.ToString();
@@ -270,7 +275,7 @@ public partial class FssSettingWindow : Window
 
     public void OnToggleTileDetailsButtonPressed()
     {
-        FssCentralLog.AddEntry($"FssSettingWindow.OnToggleTileDetailsButtonPressed: {ToggleTileDetailsButton.IsPressed()}");
+        FssCentralLog.AddEntry($"FssUISettingWindow.OnToggleTileDetailsButtonPressed: {ToggleTileDetailsButton.IsPressed()}");
 
         // Save the debug flag to config
         FssMapManager.SetDebug(ToggleTileDetailsButton.IsPressed());
@@ -278,7 +283,7 @@ public partial class FssSettingWindow : Window
 
     public void OnToggleLogButtonPressed()
     {
-        FssCentralLog.AddEntry("FssSettingWindow.OnToggleLogButtonPressed");
+        FssCentralLog.AddEntry("FssUISettingWindow.OnToggleLogButtonPressed");
     }
 
     // --------------------------------------------------------------------------------------------

@@ -57,8 +57,8 @@ public partial class FssMapTileNode : Node3D
 
     // --------------------------------------------------------------------------------------------
 
-    public static readonly int[]   TileSizePointsPerLvl   = { 15,    20,     20,     20,      20,         20 };
-    public static readonly float[] LabelSizePerLvl        = { 0.05f, 0.008f, 0.002f, 0.0002f, 0.00003f,   0.000005f };
+    public static readonly int[]   TileSizePointsPerLvl   = { 40,    40,     40,     40,      40,         40 };
+    public static readonly float[] LabelSizePerLvl        = { 0.70f, 0.10f,  0.030f, 0.0012f, 0.00013f,   0.000015f };
 
     public static readonly float[] childTileDisplayForLvl = { 0.8f,  0.15f,  0.04f,  0.0045f, 0.00120f, 0.0000005f};
     public static readonly float[] CreateChildTilesForLvl = { 1.0f,  0.25f,  0.08f,  0.0050f, 0.00140f, 0.0000005f};
@@ -115,6 +115,13 @@ public partial class FssMapTileNode : Node3D
 
                 if (ActiveVisibility) UpdateVisbilityRules();
             }
+
+            bool showDebug = FssMapManager.ShowDebug && VisibleState;
+            if (TileCodeLabel != null)
+                TileCodeLabel.Visible = showDebug;
+
+            if (MeshInstanceW != null)
+                MeshInstanceW.Visible = showDebug;
         }
     }
 
@@ -266,9 +273,9 @@ public partial class FssMapTileNode : Node3D
         FssLLPoint posLL = tileBounds.CenterPoint;
 
         string tileCodeBoxStr;
-        if      (TileCode.MapLvl <= 2) tileCodeBoxStr = $"[{tileBounds.MinLatDegs:F0}, {tileBounds.MinLonDegs:F0}]...\n...[{tileBounds.MaxLatDegs:F0}, {tileBounds.MaxLonDegs:F0}]";
-        else if (TileCode.MapLvl < 4)  tileCodeBoxStr = $"[{tileBounds.MinLatDegs:F2}, {tileBounds.MinLonDegs:F2}]...\n...[{tileBounds.MaxLatDegs:F2}, {tileBounds.MaxLonDegs:F2}]";
-        else                           tileCodeBoxStr = $"[{tileBounds.MinLatDegs:F4}, {tileBounds.MinLonDegs:F4}]...\n...[{tileBounds.MaxLatDegs:F4}, {tileBounds.MaxLonDegs:F4}]";
+        if      (TileCode.MapLvl <= 2) tileCodeBoxStr = $"...[{tileBounds.MaxLatDegs:F0}, {tileBounds.MaxLonDegs:F0}]\n[{tileBounds.MinLatDegs:F0}, {tileBounds.MinLonDegs:F0}]...";
+        else if (TileCode.MapLvl < 4)  tileCodeBoxStr = $"...[{tileBounds.MaxLatDegs:F2}, {tileBounds.MaxLonDegs:F2}]\n[{tileBounds.MinLatDegs:F2}, {tileBounds.MinLonDegs:F2}]...";
+        else                           tileCodeBoxStr = $"...[{tileBounds.MaxLatDegs:F4}, {tileBounds.MaxLonDegs:F4}]\n[{tileBounds.MinLatDegs:F4}, {tileBounds.MinLonDegs:F4}]...";
 
         float KPixelSize = LabelSizePerLvl[tileCode.MapLvl];
         TileCodeLabel = FssLabel3DFactory.CreateLabel($"{tileCode.ToString()}\n{tileCodeBoxStr}", KPixelSize);

@@ -16,7 +16,11 @@ public partial class FssGodotEntity : Node3D
 
     private FssElementContrail ElementContrail;
 
-    private FssAttitude CurrentAttitude = new FssAttitude();
+    private FssAttitude          CurrentAttitude = new FssAttitude();
+    private FssLLAPoint          CurrentPosition = new FssLLAPoint();
+    private FssCameraPolarOffset ChaseCam        = new FssCameraPolarOffset();
+
+    private float Timer1Hz = 0.0f;
 
     // --------------------------------------------------------------------------------------------
     // MARK: Node Functions
@@ -39,6 +43,12 @@ public partial class FssGodotEntity : Node3D
     public override void _Process(double delta)
     {
         UpdateEntityPosition();
+
+        if (Timer1Hz < FssCoreTime.RuntimeSecs)
+        {
+            Timer1Hz = FssCoreTime.RuntimeSecs + 1.0f;
+            UpdateZeroNode();
+        }
     }
 
     // --------------------------------------------------------------------------------------------
@@ -54,11 +64,41 @@ public partial class FssGodotEntity : Node3D
         Node3D marker = new Node3D() { Name = "AxisMarker" };
         AddChild(marker);
         //FssPrimitiveFactory.AddAxisMarkers(marker, 0.003f, 0.001f);
+
+        // Setup the chase camera and default position
+        ChaseCam.Name = "ChaseCam";
+        AddChild(ChaseCam);
+        ChaseCam.SetCameraPosition(300, 20, 20); // 300m, 20 degs up, 20 degs right
     }
 
     // --------------------------------------------------------------------------------------------
-    // MARK: Update
+    // MARK: Chase Cam
     // --------------------------------------------------------------------------------------------
+
+    public void EnableChaseCam()
+    {
+        ChaseCam.CamNode.Current = true;
+    }
+
+    // Report the current state of the camer
+
+    public void UpdateZeroNode()
+    {
+        GD.Print("EntityName:{EntityName}");
+
+        // Only drive the zero node to match the entity position if the chase cam is the current camera
+        if (ChaseCam.IsCurrent())
+        {
+            FssZeroNode.SetZeroNodePosition(CurrentPosition);
+            GD.Print($"ZERO NODE UPDATE: EntityName:{EntityName} CurrentPosition:{CurrentPosition}");
+        }
+    }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Position and Attitude
+    // --------------------------------------------------------------------------------------------
+
+    // Note that position here is a polar offset for the rotating chase cam
 
     public void UpdateEntityPosition()
     {
@@ -67,6 +107,9 @@ public partial class FssGodotEntity : Node3D
 
         FssLLAPoint? pos    = FssAppFactory.Instance.EventDriver.GetPlatformPosition(EntityName);
         FssCourse?   course = FssAppFactory.Instance.EventDriver.PlatformCurrCourse(EntityName);
+
+        if (pos != null)
+            CurrentPosition = (FssLLAPoint)pos;
 
         if (pos == null || course == null)
         {

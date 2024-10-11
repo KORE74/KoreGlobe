@@ -12,21 +12,21 @@ public partial class FssGodotEntityManager : Node3D
     // MARK: Update - ChaseCam
     // --------------------------------------------------------------------------------------------
 
-    private void AddChaseCam(string platName)
-    {
-        FssGodotEntity? ent = GetEntity(platName);
+//     private void AddChaseCam(string platName)
+//     {
+//         FssGodotEntity? ent = GetEntity(platName);
 
-        if (ent != null)
-        {
-            FssCameraPolarOffset chaseCam = new FssCameraPolarOffset();
-            chaseCam.Name = "ChaseCam";
+//         if (ent != null)
+//         {
+//             FssCameraPolarOffset chaseCam = new FssCameraPolarOffset();
+//             chaseCam.Name = "ChaseCam";
 
-            ent.AddChild(chaseCam);
+//             ent.AddChild(chaseCam);
 
-            // Setup the default view
-            chaseCam.SetCameraPosition(300, 20, 20);
-        }
-    }
+//             // Setup the default view
+//             chaseCam.SetCameraPosition(300, 20, 20);
+//         }
+//     }
 
     public void EnableChaseCam(string platName)
     {
@@ -34,12 +34,14 @@ public partial class FssGodotEntityManager : Node3D
 
         if (ent != null)
         {
-            FssCameraPolarOffset? chaseCam = ent.GetNodeOrNull<FssCameraPolarOffset>("FssCameraPolarOffset");
+            ent.EnableChaseCam();
 
-            if (chaseCam != null)
-            {
-                chaseCam.CamNode.Current = true;
-            }
+            // FssCameraPolarOffset? chaseCam = ent.GetNodeOrNull<FssCameraPolarOffset>("FssCameraPolarOffset");
+
+            // if (chaseCam != null)
+            // {
+            //     chaseCam.CamNode.Current = true;
+            // }
         }
     }
 }
