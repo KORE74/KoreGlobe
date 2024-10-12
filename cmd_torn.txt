@@ -6,4 +6,4 @@ network ii {"ScanPattern":{"PlatName":"Tornado Alpha","EmitName":"TornNoseRadar"
 
 network ii {"BeamEnable":{"PlatName":"Tornado Alpha","EmitName":"TornNoseRadar","BeamName":"NavRadar"}}
 
-{"PlatUpdate":{"PlatName":"Tornado Alpha","LatDegs":54.00,"LongDegs":-4.00,"AltitudeMtrs":2000.0,"RollDegs":-0.0,"PitchDegs":-0.0,"YawDegs":0.0,"HeadingDegs":220,"GrndSpeedMtrSec":120.0,"ClimbRateMtrSec":0.0,"RollRateDegsSec":0.0,"PitchRateDegsSec":-0.0,"YawRateDegsSec":-0.0,"TurnRateDegsSec":-0.0}}
+network ii {"PlatUpdate":{"PlatName":"Tornado Alpha","LatDegs":54.00,"LongDegs":-4.00,"AltitudeMtrs":2000.0,"RollDegs":-0.0,"PitchDegs":-0.0,"YawDegs":0.0,"HeadingDegs":220,"GrndSpeedMtrSec":120.0,"ClimbRateMtrSec":0.0,"RollRateDegsSec":0.0,"PitchRateDegsSec":-0.0,"YawRateDegsSec":-0.0,"TurnRateDegsSec":-0.0}}

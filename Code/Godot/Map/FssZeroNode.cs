@@ -29,7 +29,7 @@ public partial class FssZeroNode : Node3D
         // Add the EntityRootNode to the ZeroNode,
         //AddChild(EntityRootNode);
 
-        //CreateDebugMarker();
+        CreateDebugMarker();
 
         //FssLineMesh3D lineCube = new FssLineMesh3D();
         //AddChild(lineCube);
@@ -37,15 +37,17 @@ public partial class FssZeroNode : Node3D
 
         //AddChild(GodotEntityManager);
 
-        CallDeferred("SetZeroNodePositionDeferred");
+        //CallDeferred("SetZeroNodePositionDeferred");
     }
 
     public override void _Process(double delta)
     {
         if (Timer1Hz < FssCoreTime.RuntimeSecs)
         {
-            Timer1Hz = FssCoreTime.RuntimeSecs + 10.0f;
-            CallDeferred("SetZeroNodePositionDeferred");
+            Timer1Hz = FssCoreTime.RuntimeSecs + 1.0f;
+            // CallDeferred("SetZeroNodePositionDeferred");
+
+            SetZeroNodePositionDeferred();
         }
     }
 

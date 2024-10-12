@@ -13,7 +13,7 @@ public partial class FssCameraMoverWorld : Node3D
     public Camera3D CamNode;
 
 
-    private Fss1DMappedRange camSpeedForAlt = new Fss1DMappedRange();
+    private Fss1DMappedRange camSpeedForAlt     = new Fss1DMappedRange();
     private Fss1DMappedRange camVertSpeedForAlt = new Fss1DMappedRange();
 
     // mouse drag state
@@ -126,7 +126,6 @@ public partial class FssCameraMoverWorld : Node3D
 
                     translateFwdM  -= dragMovement.Y / drawMovementScale;
                     translateLeftM += dragMovement.X / drawMovementScale;
-
                 }
 
                 // Reset the drag start position: Not doing this makes the offset act more as a veolicty than a position.
