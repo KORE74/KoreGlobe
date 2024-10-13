@@ -1,11 +1,12 @@
-using Godot;
 using System;
+using System.Text;
+
+using Godot;
 
 public partial class FssCameraMoverWorld : Node3D
 {
     public FssLLAPoint CamPos    = new FssLLAPoint() { LatDegs = 50, LonDegs = -1, AltMslM = 5000 };
     public FssCourse   CamCourse = new FssCourse()   { HeadingDegs = 180, SpeedKph = 0 };
-
     public float camPitch = 0;
 
     private float TimerCamReport = 0;
@@ -20,6 +21,8 @@ public partial class FssCameraMoverWorld : Node3D
     private bool MouseDragging = false;
     private Vector2 MouseDragStart = new Vector2();
 
+    // ------------------------------------------------------------------------------------------------
+    // MARK: Node Functions
     // ------------------------------------------------------------------------------------------------
 
     public override void _Ready()
@@ -63,6 +66,8 @@ public partial class FssCameraMoverWorld : Node3D
         UpdateCameraPosition();
     }
 
+    // ------------------------------------------------------------------------------------------------
+    // MARK: Input
     // ------------------------------------------------------------------------------------------------
 
     public override void _Input(InputEvent inputEvent)
@@ -199,6 +204,8 @@ public partial class FssCameraMoverWorld : Node3D
     }
 
     // ------------------------------------------------------------------------------------------------
+    // MARK: Update
+    // ------------------------------------------------------------------------------------------------
 
     // The world view camera is anchored on the earth center node, and not impacted by the zero position offset.
 
@@ -219,4 +226,49 @@ public partial class FssCameraMoverWorld : Node3D
             platformV3.VecUp,
             true);
     }
+
+    // ------------------------------------------------------------------------------------------------
+    // MARK: Set Get
+    // ------------------------------------------------------------------------------------------------
+
+    // Turn the Camera position fields (one by one) into a string we can save and restore.
+
+    public string CamPosToString()
+    {
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append($"[{CamPos.LatDegs:F3},{CamPos.LonDegs:F3},{CamPos.AltMslM:F0}]");
+        sb.Append($"[{CamCourse.HeadingDegs:F0},{CamCourse.SpeedKph:F0}]");
+        sb.Append($"[{camPitch:F2}]");
+
+        return sb.ToString();
+    }
+
+    public void CamPosFromString(string str)
+    {
+        string[] parts = str.Split(new[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
+        if (parts.Length != 3) return;
+
+        string[] posParts = parts[0].Split(',');
+        if (posParts.Length == 3)
+        {
+            CamPos.LatDegs = double.Parse(posParts[0]);
+            CamPos.LonDegs = double.Parse(posParts[1]);
+            CamPos.AltMslM = double.Parse(posParts[2]);
+        }
+
+        string[] courseParts = parts[1].Split(',');
+        if (courseParts.Length == 2)
+        {
+            CamCourse.HeadingDegs = double.Parse(courseParts[0]);
+            CamCourse.SpeedKph    = double.Parse(courseParts[1]);
+        }
+
+        string[] pitchParts = parts[2].Split(',');
+        if (pitchParts.Length == 1)
+        {
+            camPitch = float.Parse(pitchParts[0]);
+        }
+    }
+
 }

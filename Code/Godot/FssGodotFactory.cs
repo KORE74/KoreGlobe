@@ -15,6 +15,8 @@ public class FssGodotFactory
     public FssZeroNode           ZeroNode           { get; private set; }
     public FssMapManager         EarthCoreNode      { get; private set; }
     //public Node3D                EntityRootNode     { get; private set; }
+    // public FssCameraMoverWorld   WorldCamNode       { get; private set; }
+
 
     public FssGodotEntityManager GodotEntityManager { get; private set; }
     public FssTextureLoader      TextureLoader      { get; private set; }
