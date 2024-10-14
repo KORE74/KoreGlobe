@@ -73,9 +73,9 @@ public partial class FssZeroNode : Node3D
         ZeroPosToApply = pos;
     }
 
+    // Internal function to actually apply the new zero offset position, of the node's own timeline.
 
-    // Usage: FssZeroNode.SetZeroNodePosition(pos);
-    public static void SetZeroNodePositionDeferred()
+    private void SetZeroNodePositionDeferred()
     {
         // Set the position of the ZeroNode.
         FssZeroOffset.SetLLA(ZeroPosToApply);
@@ -84,7 +84,6 @@ public partial class FssZeroNode : Node3D
         FssGodotFactory.Instance.ZeroNode.Position      = FssZeroOffset.GeZeroPoint();
         FssGodotFactory.Instance.EarthCoreNode.Position = FssZeroOffset.GeCorePoint();
     }
-
 
     // --------------------------------------------------------------------------------------------
     // MARK: Helpers

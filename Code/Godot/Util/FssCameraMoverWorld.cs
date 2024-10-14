@@ -84,14 +84,44 @@ public partial class FssCameraMoverWorld : Node3D
         double rotateLeftDegs = 0;
 
         // scaling factors for movement
-        double translateSpeed   = 2500;
-        double rotateSpeed      = 2;
-        double translateUpSpeed = 100;
-        double MoveSpeed     = camSpeedForAlt.GetValue(CamPos.AltMslM) * 2;
-        translateSpeed       = MoveSpeed;
-        double VertMoveSpeed = camVertSpeedForAlt.GetValue(CamPos.AltMslM);
+        double translateSpeed = 2500;
+        double rotateSpeed    = 2;
+        double MoveSpeed      = camSpeedForAlt.GetValue(CamPos.AltMslM) * 2;
+        translateSpeed        = MoveSpeed;
+        double VertMoveSpeed  = camVertSpeedForAlt.GetValue(CamPos.AltMslM);
 
         CamCourse.SpeedKph = 0;
+
+
+        // Mouse Wheel - - - - -
+
+        bool applyPolar = false;
+
+
+        //float distanceDelta           = CamOffsetDist * GeDeltaTime * 0.8f;
+        float distanceDeltaMouseWheel = (float)(CamPos.AltMslM * 0.5f);
+        //float angDeltaDegsPerFrame    = 90f * GeDeltaTime;
+
+        if (inputEvent is InputEventMouseButton mouseWheelEvent)
+        {
+            if (Input.IsActionPressed("ui_shift")) distanceDeltaMouseWheel *= 5f;
+            if (Input.IsActionPressed("ui_ctrl"))  distanceDeltaMouseWheel /= 5f;
+
+            switch (mouseWheelEvent.ButtonIndex)
+            {
+                case MouseButton.WheelUp: // Zoom in
+                    GD.Print($"Wheel up"); // {CamOffsetDist} // {distanceDelta} // {GeDeltaTime}");
+                    applyPolar = true;
+                    break;
+                case MouseButton.WheelDown: // Zoom out
+                    GD.Print("Wheel down");
+                    applyPolar = true;
+                    distanceDeltaMouseWheel *= -1;
+                    //distanceDeltaMouseWheel += distanceDeltaMouseWheel;
+                    break;
+            }
+        }
+        FssPolarOffset polar = new FssPolarOffset() { AzDegs = CamCourse.HeadingDegs, ElDegs = camPitch, RangeM = distanceDeltaMouseWheel };
 
         // Mouse Drag - - - - -
 
@@ -185,12 +215,21 @@ public partial class FssCameraMoverWorld : Node3D
 
         //FssMapManager.LoadRefLLA = CamPos;
 
+        if (applyPolar)
+        {
+            CamPos = CamPos.PlusPolarOffset(polar);
+        }
+
         rotateUpDegs *= 2;
         //rotateUpDegs = FssValueUtils.LimitToRange(rotateUpDegs, -50, 50);
         camPitch += (float)rotateUpDegs;
         camPitch  = FssValueUtils.LimitToRange(camPitch, -80, 0);
 
         //CamNode.Translation = new Vector3(0, 0, 0);
+
+
+        // Limit the camera altitude
+        if (CamPos.AltMslM > 5000000) CamPos.AltMslM = 5000000;
 
         // if the camera is present and current, Use the position to drive the map update.
         if (CamNode != null)

@@ -120,4 +120,14 @@ public partial class FssGodotPlatformElementAntennaPatterns : FssGodotPlatformEl
         return patternNode;
     }
 
+    // --------------------------------------------------------------------------------------------
+    // MARK: Visibility
+    // --------------------------------------------------------------------------------------------
+
+    public void SetVisibility(bool visible)
+    {
+        Visible = visible;
+    }
+
+
 }

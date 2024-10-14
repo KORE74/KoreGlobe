@@ -53,6 +53,10 @@ public struct FssAzElBox
 
     // ------------------------------------------------------------------------
 
+    public FssPolarDirection Center { get { return new FssPolarDirection(MidAzRads, MidElRads); } }
+
+    // ------------------------------------------------------------------------
+
     public static FssAzElBox Zero
     {
         get { return new FssAzElBox { MinAzRads = 0.0, MaxAzRads = 0.0, MinElRads = 0.0, MaxElRads = 0.0 }; }

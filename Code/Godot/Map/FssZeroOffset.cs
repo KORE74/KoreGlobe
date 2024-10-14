@@ -43,9 +43,6 @@ public static class FssZeroOffset
         RwZeroPointLLA = rwLLA;
         RwZeroPointXYZ = rwLLA.ToXYZ();
 
-        RwZeroPointLLA = rwLLA;
-        RwZeroPointXYZ = rwLLA.ToXYZ();
-
         //GD.Print($"FssZeroOffset.SetLLA: RwZeroPointLLA:{RwZeroPointLLA} RwZeroPointXYZ:{RwZeroPointXYZ}");
     }
 

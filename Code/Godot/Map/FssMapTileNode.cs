@@ -507,6 +507,10 @@ public partial class FssMapTileNode : Node3D
         RwTileCenterXYZ = tileBoxLLACentre.ToXYZ();
     }
 
+    // --------------------------------------------------------------------------------------------
+    // MARK: Image Methods
+    // --------------------------------------------------------------------------------------------
+
     private void LoadTileImage()
     {
         FssTextureLoader? TL = FssTextureLoader.Instance;
@@ -556,7 +560,7 @@ public partial class FssMapTileNode : Node3D
     }
 
     // --------------------------------------------------------------------------------------------
-    // MARK: Elevation
+    // MARK: Elevation Methods
     // --------------------------------------------------------------------------------------------
 
     private void LoadTileEle()
@@ -566,23 +570,26 @@ public partial class FssMapTileNode : Node3D
 
         FssFloat2DArray asciiArcArray = FssFloat2DArrayIO.LoadFromArcASIIGridFile(Filepaths.EleFilepath);
         FssFloat2DArray croppedArray  = FssFloat2DArrayOperations.CropToRange(asciiArcArray, new FssFloatRange(0f, 50000f));
-        FssFloat2DArray croppedArraySubSample = croppedArray.GetInterpolatedGrid(resX, resY);
 
-        TileEleData = croppedArraySubSample;
+        CreateDefaultChildEleData(croppedArray);
+
+        //FssFloat2DArray croppedArraySubSample = croppedArray.GetInterpolatedGrid(resX, resY);
+
+        TileEleData = croppedArray.GetInterpolatedGrid(resX, resY);
 
         // Speculatively create the child tile subsampled data before we lose the read file.
         // Get the grid size for the child tiles
 
-        if (TileCode.MapLvl < FssMapTileCode.MaxMapLvl)
-        {
-            int horizChildNumTiles = FssMapTileCode.NumTilesVertPerLvl[TileCode.MapLvl + 1];
-            int vertChildNumTiles  = FssMapTileCode.NumTilesHorizPerLvl[TileCode.MapLvl + 1];
+        // if (TileCode.MapLvl < FssMapTileCode.MaxMapLvl)
+        // {
+        //     int horizChildNumTiles = FssMapTileCode.NumTilesVertPerLvl[TileCode.MapLvl + 1];
+        //     int vertChildNumTiles  = FssMapTileCode.NumTilesHorizPerLvl[TileCode.MapLvl + 1];
 
-            int horizChildTileRes = TileSizePointsPerLvl[TileCode.MapLvl + 1];
-            int vertChildTileRes  = TileSizePointsPerLvl[TileCode.MapLvl + 1];
+        //     int horizChildTileRes = TileSizePointsPerLvl[TileCode.MapLvl + 1];
+        //     int vertChildTileRes  = TileSizePointsPerLvl[TileCode.MapLvl + 1];
 
-            ChildEleData = asciiArcArray.GetInterpolatedSubGridCellWithOverlap(horizChildNumTiles, vertChildNumTiles, horizChildTileRes, vertChildTileRes);
-        }
+        //     ChildEleData = asciiArcArray.GetInterpolatedSubGridCellWithOverlap(horizChildNumTiles, vertChildNumTiles, horizChildTileRes, vertChildTileRes);
+        // }
     }
 
     private void SubsampleParentTileEle()
@@ -594,25 +601,42 @@ public partial class FssMapTileNode : Node3D
             // Copy the parent's elevation data - regardless of its resolution, to pass that along to the child tiles
             FssFloat2DArray RawParentTileEleData = ParentTile.ChildEleData[tileGridPos.PosX, tileGridPos.PosY];
 
+            CreateDefaultChildEleData(RawParentTileEleData);
+
             // Create a subsampled version of the parent tile's elevation data
             TileEleData = RawParentTileEleData.GetInterpolatedGrid(TileSizePointsPerLvl[TileCode.MapLvl], TileSizePointsPerLvl[TileCode.MapLvl]);
 
-            if (TileCode.MapLvl < FssMapTileCode.MaxMapLvl)
-            {
-                int horizChildNumTiles = FssMapTileCode.NumTilesVertPerLvl[TileCode.MapLvl + 1];
-                int vertChildNumTiles  = FssMapTileCode.NumTilesHorizPerLvl[TileCode.MapLvl + 1];
+            // if (TileCode.MapLvl < FssMapTileCode.MaxMapLvl)
+            // {
+            //     int horizChildNumTiles = FssMapTileCode.NumTilesVertPerLvl[TileCode.MapLvl + 1];
+            //     int vertChildNumTiles  = FssMapTileCode.NumTilesHorizPerLvl[TileCode.MapLvl + 1];
 
-                int horizChildTileRes = TileSizePointsPerLvl[TileCode.MapLvl + 1];
-                int vertChildTileRes  = TileSizePointsPerLvl[TileCode.MapLvl + 1];
+            //     int horizChildTileRes = TileSizePointsPerLvl[TileCode.MapLvl + 1];
+            //     int vertChildTileRes  = TileSizePointsPerLvl[TileCode.MapLvl + 1];
 
-                ChildEleData = RawParentTileEleData.GetInterpolatedSubGridCellWithOverlap(horizChildNumTiles, vertChildNumTiles, 100, 100);
-            }
+            //     ChildEleData = RawParentTileEleData.GetInterpolatedSubGridCellWithOverlap(horizChildNumTiles, vertChildNumTiles, 100, 100);
+            // }
         }
         else
         {
             TileEleData = new FssFloat2DArray(TileSizePointsPerLvl[TileCode.MapLvl], TileSizePointsPerLvl[TileCode.MapLvl]);
         }
     }
+
+    private void CreateDefaultChildEleData(FssFloat2DArray eleData)
+    {
+        if (TileCode.MapLvl < FssMapTileCode.MaxMapLvl)
+        {
+            int horizChildNumTiles = FssMapTileCode.NumTilesVertPerLvl[TileCode.MapLvl + 1];
+            int vertChildNumTiles  = FssMapTileCode.NumTilesHorizPerLvl[TileCode.MapLvl + 1];
+
+            int horizChildTileRes = TileSizePointsPerLvl[TileCode.MapLvl + 1];
+            int vertChildTileRes  = TileSizePointsPerLvl[TileCode.MapLvl + 1];
+
+            ChildEleData = eleData.GetInterpolatedSubGridCellWithOverlap(horizChildNumTiles, vertChildNumTiles, 200, 200);
+        }
+    }
+
 
     // --------------------------------------------------------------------------------------------
     // MARK: Mesh

@@ -16,6 +16,9 @@ public class FssPlatformElementBeam : FssPlatformElement
     public FssAttitude    PortAttitude { set; get; } = FssAttitude.Zero;
     public FssPolarOffset TrackOffset  { set; get; } = FssPolarOffset.Zero;
 
+    // Time related values
+    public float PeriodSecs { get; set; } = 0.0f;
+
     // Scan area angle
     public FssAzElBox AzElBox { set; get; } = FssAzElBox.Zero;
 

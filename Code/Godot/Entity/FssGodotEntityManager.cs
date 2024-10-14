@@ -286,11 +286,13 @@ public partial class FssGodotEntityManager : Node3D
             if (beam.ScanShape == FssPlatformElementBeam.ScanPatternShape.Dome)
             {
                 FssGodotPlatformElementDome newDome = new FssGodotPlatformElementDome();
-                newDome.Name        = currElemName;
-                newDome.TxDistanceM = (float)(beam.DetectionRangeTxM);
-                newDome.RxDistanceM = (float)(beam.DetectionRangeRxM);
+                newDome.Name             = currElemName;
+                newDome.TxDistanceM      = (float)(beam.DetectionRangeTxM);
+                newDome.RxDistanceM      = (float)(beam.DetectionRangeRxM);
+                newDome.RotateDegsPerSec = 360f / beam.PeriodSecs;
                 AddLinkedElement(platName, newDome);
             }
+
 
 
 
@@ -390,6 +392,12 @@ public partial class FssGodotEntityManager : Node3D
 
         // Get the linked element node for APs
         FssGodotPlatformElementAntennaPatterns? antPatNode = GetLinkedElement(platName, currElemName) as FssGodotPlatformElementAntennaPatterns;
+
+        if ((ent != null) && (antPat != null) && (antPatNode != null))
+        {
+            // Update the visibility of the APs based on the UI state
+            antPatNode.SetVisibility(FssGodotFactory.Instance.UIState.ShowAntennaPatterns);
+        }
 
 
     }

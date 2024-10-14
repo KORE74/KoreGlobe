@@ -19,12 +19,12 @@ public static class FssPlatformElementOperations
 
         switch(platElemType)
         {
-            case "Dome":
-                newElem = new FssPlatformElementRadarDome();
-                break;
-            case "Wedge":
-                newElem = new FssPlatformElementRadarWedge();
-                break;
+            // case "Dome":
+            //     newElem = new FssPlatformElementRadarDome();
+            //     break;
+            // case "Wedge":
+            //     newElem = new FssPlatformElementRadarWedge();
+            //     break;
             case "RecieverPatterns":
                 newElem = new FssPlatformElementAntennaPatterns();
                 break;

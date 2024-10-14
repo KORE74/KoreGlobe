@@ -8,8 +8,8 @@ using Godot;
 public partial class FssMeshBuilder
 {
     public void AddShellSegment(
-        float azimuthMin, float azimuthMax,
-        float elevationMin, float elevationMax,
+        float azimuthMinDegs, float azimuthMaxDegs,
+        float elevationMinDegs, float elevationMaxDegs,
         float distanceMin, float distanceMax,
         int resolutionAz, int resolutionEl)
     {
@@ -30,13 +30,16 @@ public partial class FssMeshBuilder
         // Generate points for the inside and outside surfaces, and the edges
         for (int y = 0; y <= resolutionEl; y++)
         {
-            float elevation = Mathf.Lerp(elevationMin, elevationMax, (float)y / resolutionEl);
+            float currElDegs = Mathf.Lerp(elevationMinDegs, elevationMaxDegs, (float)y / resolutionEl);
             for (int x = 0; x <= resolutionAz; x++)
             {
-                float azimuth = Mathf.Lerp(azimuthMin, azimuthMax, (float)x / resolutionAz);
+                float currAzDegs = Mathf.Lerp(azimuthMinDegs, azimuthMaxDegs, (float)x / resolutionAz);
 
-                Vector3 insidePoint  = FssGeoConvOperations.RwToGe(distanceMin, azimuth, elevation);
-                Vector3 outsidePoint = FssGeoConvOperations.RwToGe(distanceMax, azimuth, elevation);
+                float currAzRads = (float)FssValueUtils.DegsToRads(currAzDegs);
+                float currElRads = (float)FssValueUtils.DegsToRads(currElDegs);
+
+                Vector3 outsidePoint = FssGodotGeometryOperations.Vector3FromPolar(Vector3.Zero, currAzRads, currElRads, distanceMax);
+                Vector3 insidePoint  = FssGodotGeometryOperations.Vector3FromPolar(Vector3.Zero, currAzRads, currElRads, distanceMin);
 
                 insidePoints[x, y]  = insidePoint;
                 outsidePoints[x, y] = outsidePoint;

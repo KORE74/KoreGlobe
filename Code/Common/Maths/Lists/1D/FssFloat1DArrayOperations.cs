@@ -5,7 +5,7 @@ using System.Linq;
 public static class FssFloat1DArrayOperations
 {
     // --------------------------------------------------------------------------------------------
-    // Value Ranges
+    // MARK: Value Ranges
     // --------------------------------------------------------------------------------------------
 
     public static FssFloatRange FindValueRange(FssFloat1DArray array)

@@ -48,6 +48,9 @@ public partial class FssGodotEntity : Node3D
         {
             Timer1Hz = FssCoreTime.RuntimeSecs + 1.0f;
             UpdateZeroNode();
+
+            if (ChaseCam.IsCurrent())
+                FssMapManager.LoadRefLLA = CurrentPosition;
         }
     }
 

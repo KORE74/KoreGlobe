@@ -107,7 +107,7 @@ public partial class FssMessageManager
         string elemName = FssEventDriver.ElementNameForBeam(scanPatMsg.PlatName, scanPatMsg.EmitName, scanPatMsg.BeamName);
 
         FssAppFactory.Instance.EventDriver.PlatformSetBeamAngles(scanPatMsg.PlatName, elemName, scanPatMsg.GetTrackOffset(), scanPatMsg.GetAzElBox());
-        FssAppFactory.Instance.EventDriver.PlatformSetBeamScanType(scanPatMsg.PlatName, elemName, scanPatMsg.ScanType);
+        FssAppFactory.Instance.EventDriver.PlatformSetBeamScanType(scanPatMsg.PlatName, elemName, scanPatMsg.ScanType, scanPatMsg.PeriodSecs);
 
 
     }

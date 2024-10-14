@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 // FssValueUtils: A static class for common (double precision) math routines, useful as helper routines for higher-level functionality.
 
@@ -181,5 +182,19 @@ public static partial class FssValueUtils
     {
         return ScaleVal(random.NextDouble(), 0, 1, minVal, maxVal);
     }
+
+    // ------------------------------------------------------------------------
+
+    // Create a list of floats from start to end
+    public static List<double> CreateRangeList(int length, double start, double end)
+    {
+        List<double> rangeList = new List<double>();
+
+        for (int i = 0; i < length; i++)
+            rangeList[i] = start + (end - start) * i / (length - 1);
+
+        return rangeList;
+    }
+
 
 }

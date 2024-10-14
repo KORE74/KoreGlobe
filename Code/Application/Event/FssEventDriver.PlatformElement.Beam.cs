@@ -100,12 +100,13 @@ public partial class FssEventDriver
         }
     }
 
-    public void PlatformSetBeamScanType(string platName, string elemName, string scanType)
+    public void PlatformSetBeamScanType(string platName, string elemName, string scanType, double periodSecs)
     {
         FssPlatformElementBeam? beamObj = GetElementBeam(platName, elemName);
         if (beamObj != null)
         {
             beamObj.SetScanPattern(scanType);
+            beamObj.PeriodSecs = (float)periodSecs;
             FssCentralLog.AddEntry($"PlatformSetBeamScanType: Element {elemName} // scanType // {beamObj.ScanShape}");
         }
         else
