@@ -54,6 +54,13 @@ public class FssPlatformElementBeam : FssPlatformElement
         };
     }
 
+    public ScanPatternShape GetScanPatternShape()
+    {
+        if (Targeted) return ScanPatternShape.Cone;
+
+        return ScanShape;
+    }
+
     // --------------------------------------------------------------------------------------------
     // MARK: Report
     // --------------------------------------------------------------------------------------------

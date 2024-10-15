@@ -8,7 +8,6 @@
 [ext_resource type="Theme" uid="uid://cjc7bspblebt3" path="res://Themes/Buttons/RedButton.tres" id="6_i4rcs"]
 [ext_resource type="Texture2D" uid="uid://bpjmofp0dir0d" path="res://Resources/Icons/White_Close.png" id="7_mru6u"]
 [ext_resource type="Texture2D" uid="uid://8km4gxg0fgok" path="res://Resources/Icons/White_Log.png" id="8_4gj75"]
-[ext_resource type="Theme" uid="uid://dmowlcnw0dkpk" path="res://Themes/Buttons/YellowButton.tres" id="9_22suo"]
 [ext_resource type="Script" path="res://Code/Godot/UI/FssUISidePanel.cs" id="9_bt000"]
 [ext_resource type="Script" path="res://Code/Godot/UI/FssUICameraControl.cs" id="9_ro3fa"]
 [ext_resource type="Texture2D" uid="uid://bvu8py6iycrsp" path="res://Resources/Icons/Help.png" id="9_ugbx8"]
@@ -31,6 +30,7 @@
 [ext_resource type="Texture2D" uid="uid://vvyqgv7km88t" path="res://Resources/Icons/AP.png" id="18_2f4bt"]
 [ext_resource type="Script" path="res://Code/Godot/UI/FssUISettingWindow.cs" id="18_sk1xa"]
 [ext_resource type="Script" path="res://Code/Godot/UI/FssPlatformSelectWindow.cs" id="21_6xmyp"]
+[ext_resource type="Theme" uid="uid://dmowlcnw0dkpk" path="res://Themes/Buttons/YellowButton.tres" id="23_4wdls"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBlueToggle_Disabled"]
 content_margin_left = 10.0
@@ -854,7 +854,7 @@ theme_override_constants/separation = 5
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 focus_mode = 0
-theme = ExtResource("9_22suo")
+theme = ExtResource("23_4wdls")
 theme_override_constants/outline_size = 10
 toggle_mode = true
 button_pressed = true
@@ -867,7 +867,7 @@ expand_icon = true
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 focus_mode = 0
-theme = ExtResource("9_22suo")
+theme = ExtResource("23_4wdls")
 toggle_mode = true
 action_mode = 0
 button_group = ExtResource("15_83ia6")
@@ -879,7 +879,7 @@ expand_icon = true
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 focus_mode = 0
-theme = ExtResource("9_22suo")
+theme = ExtResource("23_4wdls")
 theme_override_constants/outline_size = 10
 toggle_mode = true
 action_mode = 0

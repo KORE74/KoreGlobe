@@ -13,13 +13,15 @@ public partial class FssGodotPlatformElementCone : FssGodotPlatformElement
     public float ConeLengthM = 1.0f;
 
     FssLineMesh3D LineMesh   = new FssLineMesh3D();
-    MeshInstance3D MeshInstance;
 
     Color ConeColor;
     Color WireColor;
     StandardMaterial3D MatCone;
 
     FssPolarOffset DirectionPolar = new FssPolarOffset();
+
+    private Node3D RotatorNode = new Node3D();
+    private MeshInstance3D ConeNode;
 
     private bool IsVisible = true;
 
@@ -37,6 +39,7 @@ public partial class FssGodotPlatformElementCone : FssGodotPlatformElement
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
+        PlatformPositionLookup();
     }
 
     // --------------------------------------------------------------------------------------------
@@ -68,7 +71,11 @@ public partial class FssGodotPlatformElementCone : FssGodotPlatformElement
         DirectionPolar.AzDegs = sourceToTargetPolar.AzDegs - sourceHeadingDegs;
         DirectionPolar.RangeM = ConeLengthM;
 
+        float geAzimuithDegs = (float)FssValueUtils.DegsToRads(DirectionPolar.AzDegs) * -1f;
+        float geElevationDegs = (float)FssValueUtils.DegsToRads(DirectionPolar.ElDegs);
 
+        // Set the rotation of the rotator node
+        RotatorNode.Rotation = new Vector3(geElevationDegs, geAzimuithDegs, 0);
 
         // if (pos != null)
         //     return (FssLLAPoint)pos;
@@ -91,10 +98,32 @@ public partial class FssGodotPlatformElementCone : FssGodotPlatformElement
 
     private void CreateCone()
     {
-        FssMeshBuilder meshBuilder  = new FssMeshBuilder();
+        FssMeshBuilder meshBuilder = new FssMeshBuilder();
+
+        float coneLen   = ConeLengthM * (float)FssZeroOffset.RwToGeDistanceMultiplierM;
+        float coneWidth = 100.0f      * (float)FssZeroOffset.RwToGeDistanceMultiplierM;
 
         // Create the cone
-        meshBuilder.AddCone(100, ConeLengthM, 32);
+        meshBuilder.AddCone(coneWidth, coneLen, 32);
+        ArrayMesh meshData = meshBuilder.Build2("Cone", false);
+
+        // Create the mesh and add it.
+        ConeNode = new MeshInstance3D() { Name = $"{Name}-Cone" };
+        ConeNode.Mesh             = meshData;
+        ConeNode.MaterialOverride = MatCone;
+
+        FssLineMesh3D LineMesh = new FssLineMesh3D() { Name = $"{Name}-Wire" };
+        LineMesh.AddCone(coneWidth, coneLen, 32, WireColor);
+
+        // Create the rotator Node to align the cone and add it
+        RotatorNode = new Node3D() { Name = $"{Name}-Rotator" };
+        AddChild(RotatorNode);
+
+        // Add the mesh to the current Node3D
+        RotatorNode.AddChild(ConeNode);
+        RotatorNode.AddChild(LineMesh);
+
+
     }
 
     // --------------------------------------------------------------------------------------------

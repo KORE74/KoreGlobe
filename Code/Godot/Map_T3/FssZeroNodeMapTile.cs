@@ -6,6 +6,7 @@ using Godot;
 // ZeroNode map tile: A tile placed at an offset from the zeronode.
 public partial class FssZeroNodeMapTile : Node3D
 {
+    // Main tile data, the az-el box and the 2D elevation array we stretch across it.
     public FssAzElBox      RwAzElBox = FssAzElBox.Zero;
     public FssFloat2DArray RwEleData = new FssFloat2DArray();
 
@@ -21,6 +22,7 @@ public partial class FssZeroNodeMapTile : Node3D
         int pointCountEl = RwEleData.Height;
         List<double> azListRads = FssValueUtils.CreateRangeList(pointCountAz, RwAzElBox.MinAzRads, RwAzElBox.MaxAzRads);
         List<double> elListRads = FssValueUtils.CreateRangeList(pointCountEl, RwAzElBox.MinElRads, RwAzElBox.MaxElRads);
+        Vector3[,] v3Data = new Vector3[pointCountAz, pointCountEl];
 
         for (int i = 0; i < pointCountAz; i++)
         {
@@ -37,15 +39,17 @@ public partial class FssZeroNodeMapTile : Node3D
                 FssXYZPoint centerOffset = rwXYZCenter.XYZTo(rwXYZCenter);
 
                 // Convert the Real-World position to the Game Engine position.
-                Vector3 gePos = new Vector3(
+                v3Data[i, j] = new Vector3(
                     (float)(centerOffset.X * FssZeroOffset.RwToGeDistanceMultiplierM),
                     (float)(centerOffset.Y * FssZeroOffset.RwToGeDistanceMultiplierM),
                     (float)(centerOffset.Z * FssZeroOffset.RwToGeDistanceMultiplierM));
             }
         }
+
+        // Create the game-engine mesh from the V3s
+        FssMeshBuilder meshBuilder = new FssMeshBuilder();
+        meshBuilder.AddSurface(v3Data, false);
     }
 }
-
-
 
 

@@ -266,7 +266,9 @@ public partial class FssGodotEntityManager : Node3D
         {
             // Get the shape: important to determine the type of element to create
 
-            if (beam.ScanShape == FssPlatformElementBeam.ScanPatternShape.Wedge)
+            FssPlatformElementBeam.ScanPatternShape shape = beam.GetScanPatternShape();
+
+            if (shape == FssPlatformElementBeam.ScanPatternShape.Wedge)
             {
                 FssAzElBox azElBox = new FssAzElBox() { MinAzDegs=-10, MaxAzDegs=10, MinElDegs=-10, MaxElDegs=10 };
 
@@ -283,7 +285,7 @@ public partial class FssGodotEntityManager : Node3D
                 newBeam.Rotation = new Vector3(0, (float)FssValueUtils.DegsToRads(180), 0);
             }
 
-            if (beam.ScanShape == FssPlatformElementBeam.ScanPatternShape.Dome)
+            if (shape == FssPlatformElementBeam.ScanPatternShape.Dome)
             {
                 FssGodotPlatformElementDome newDome = new FssGodotPlatformElementDome();
                 newDome.Name             = currElemName;
@@ -293,8 +295,19 @@ public partial class FssGodotEntityManager : Node3D
                 AddLinkedElement(platName, newDome);
             }
 
+            if (shape == FssPlatformElementBeam.ScanPatternShape.Cone)
+            {
+                FssGodotPlatformElementCone newCone = new FssGodotPlatformElementCone();
+                newCone.Name = currElemName;
+                newCone.ConeLengthM = (float)(beam.DetectionRangeTxM);
+                newCone.ConeAzDegs = 0.5f;
+                newCone.SourcePlatformName = platName;
+                newCone.TargetPlatformName = beam.TargetPlatName;
+                AddLinkedElement(platName, newCone);
 
-
+                // rotate (after adding to parent) to accomodate the -ve Z axis
+                newCone.Rotation = new Vector3(0, (float)FssValueUtils.DegsToRads(180), 0);
+            }
 
             // FssGodotPlatformElementDome newDome = new FssGodotPlatformElementDome();
             // newDome.RxDistanceM = 50000f;

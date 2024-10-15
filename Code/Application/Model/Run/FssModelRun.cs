@@ -75,7 +75,7 @@ public class FssModelRun
             Update();
             // Assuming the update should happen at regular intervals
             // Sleep for a while to create the cyclic update
-            Thread.Sleep(100); // Adjust the interval as needed
+            Thread.Sleep(20); // Adjust the interval as needed - running the model at 50Hz for now.
             running = FssAppFactory.Instance.SimClock.IsRunning;
         }
     }

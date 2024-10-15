@@ -50,7 +50,7 @@ public partial class FssEventDriver
 
         if (beamObj != null)
         {
-            beamObj.Targeted = isTargetting;
+            beamObj.Targeted       = isTargetting;
             beamObj.TargetPlatName = targetName;
         }
         else

@@ -27,11 +27,11 @@ public struct FssPolarDirection
     // --------------------------------------------------------------------------------------------
 
     // Note: Constructor takes radians
-    public FssPolarDirection(double azRads, double elRads, AngleWrapMode range = AngleWrapMode.ZeroToTwoPi)
+    public FssPolarDirection(double azRads, double elRads, AngleWrapMode wrapMode = AngleWrapMode.ZeroToTwoPi)
     {
         this.WrapMode = wrapMode;
-        this.AzRads = WrapAngle(azRads, range);
-        this.ElRads = WrapAngle(elRads, range);
+        this.AzRads = WrapAngle(azRads, wrapMode);
+        this.ElRads = WrapAngle(elRads, wrapMode);
     }
 
     // Static property for a zero offset
@@ -63,9 +63,9 @@ public struct FssPolarDirection
     // #MARK: Helper Functions
     // --------------------------------------------------------------------------------------------
 
-    private static double WrapAngle(double angleRads, AngleWrapMode range)
+    private static double WrapAngle(double angleRads, AngleWrapMode wrapMode)
     {
-        switch (range)
+        switch (wrapMode)
         {
             case AngleWrapMode.ZeroToTwoPi:
                 angleRads = angleRads % (2 * Math.PI);

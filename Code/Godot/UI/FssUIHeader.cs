@@ -15,6 +15,7 @@ public partial class FssUIHeader : PanelContainer
     private Window? SettingWindowNode;
     private Window? NetworkWindowNode;
     private Window? HelpWindowNode;
+    private Window? ClearDataNode;
 
     private Label? ScenarioTimeLabel;
     private Label? ScenarioNameLabel;
