@@ -10,6 +10,19 @@ public partial class FssZeroNodeMapTile : Node3D
     public FssAzElBox      RwAzElBox = FssAzElBox.Zero;
     public FssFloat2DArray RwEleData = new FssFloat2DArray();
 
+
+    private ArrayMesh TileMeshData;
+    private Color WireColor;
+    private StandardMaterial3D SurfaceMat;
+
+
+    public void CreateMaterials()
+    {
+        // Create the material for the mesh.
+        WireColor = FssColorUtil.StringToColor("default");
+        SurfaceMat = FssMaterialFactory.TransparentColoredMaterial(WireColor);
+    }
+
     public void CreateMesh()
     {
         FssPolarDirection azElCenter = RwAzElBox.Center;
@@ -24,6 +37,8 @@ public partial class FssZeroNodeMapTile : Node3D
         List<double> elListRads = FssValueUtils.CreateRangeList(pointCountEl, RwAzElBox.MinElRads, RwAzElBox.MaxElRads);
         Vector3[,] v3Data = new Vector3[pointCountAz, pointCountEl];
 
+        double radiusFudgeM = 1000;
+
         for (int i = 0; i < pointCountAz; i++)
         {
             for (int j = 0; j < pointCountEl; j++)
@@ -31,7 +46,7 @@ public partial class FssZeroNodeMapTile : Node3D
                 // Find the Real-World (RW) position for each point in the mesh.
                 double azRads = azListRads[i];
                 double elRads = elListRads[j];
-                double ele    = rwRadius + RwEleData[i, j];
+                double ele    = rwRadius + RwEleData[i, j] + radiusFudgeM;
                 FssLLAPoint rwLLAPointPos = new FssLLAPoint() { LatRads = elRads, LonRads = azRads, RadiusM = ele };
                 FssXYZPoint rwXYZPointPos = rwLLACenter.ToXYZ();
 
@@ -49,6 +64,9 @@ public partial class FssZeroNodeMapTile : Node3D
         // Create the game-engine mesh from the V3s
         FssMeshBuilder meshBuilder = new FssMeshBuilder();
         meshBuilder.AddSurface(v3Data, false);
+
+        TileMeshData = meshBuilder.BuildWithUV("Surface");
+
     }
 }
 
