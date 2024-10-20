@@ -57,8 +57,8 @@ public partial class FssMapTileNode : Node3D
 
     // --------------------------------------------------------------------------------------------
 
-    public static readonly int[]   TileSizePointsPerLvl   = { 40,    40,     40,     40,      40,         40 };
-    public static readonly float[] LabelSizePerLvl        = { 0.70f, 0.10f,  0.030f, 0.0012f, 0.00013f,   0.000015f };
+    public static readonly int[]   TileSizePointsPerLvl   = { 40,    40,     40,     40,      40,       40 };
+    public static readonly float[] LabelSizePerLvl        = { 0.70f, 0.10f,  0.030f, 0.0012f, 0.00013f, 0.000015f };
 
     public static readonly float[] childTileDisplayForLvl = { 0.8f,  0.15f,  0.04f,  0.0045f, 0.00120f, 0.0000005f};
     public static readonly float[] CreateChildTilesForLvl = { 1.0f,  0.25f,  0.08f,  0.0050f, 0.00140f, 0.0000005f};

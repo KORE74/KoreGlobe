@@ -1,9 +1,0 @@
-network ii {"PlatAdd":{"PlatName":"Tornado Alpha","PlatCategory":"surface","ThreatType":"friendly","Display":true,"PlatClass":"Tornado","PlatDisplaySymb":"<platDispSymb>","LatDegs":54.00,"LongDegs":-4.00,"AltitudeMtrs":2000.0,"RollDegs":0.0,"PitchDegs":0.0,"HeadingDegs":220.0}}
-
-network ii {"BeamLoad":{"PlatName":"Tornado Alpha","EmitName":"TornNoseRadar","ELNOT":"","BeamName":"NavRadar","Signal":"pulsed","Channel":1,"ERPdBW":90.0,"FreqMinHz":5000000000.0,"FreqMaxHz":5000000000.0,"PortRollDegs":0.0,"PortPitchDegs":0.0,"PortYawDegs":0.0,"Targeted":false,"TargetPlatName":"","DetectionRangeMtrs":120000.0,"DetectionRangeRxMtrs":150000,"AntennaPatternName":"SinX","HasHW":true}}
-
-network ii {"ScanPattern":{"PlatName":"Tornado Alpha","EmitName":"TornNoseRadar","BeamName":"NavRadar","ScanType":"raster","PeriodSecs":0.5,"SegmentCount":1,"AzMinDegs":-22.5,"AzMaxDegs":22.5,"ElMinDegs":-7.5,"ElMaxDegs":7.5,"AzTrackOffsetDegs":0.0,"ElTrackOffsetDegs":0.0,"Clockwise":false,"Up":false,"UniDirectional":true,"Reversed":false,"MinorScanType":"none","MinorScanPeriodSecs":0.005,"MinorScanUniDir":true,"MinorScanUp":false}}
-
-network ii {"BeamEnable":{"PlatName":"Tornado Alpha","EmitName":"TornNoseRadar","BeamName":"NavRadar"}}
-
-network ii {"PlatUpdate":{"PlatName":"Tornado Alpha","LatDegs":54.00,"LongDegs":-4.00,"AltitudeMtrs":2000.0,"RollDegs":-0.0,"PitchDegs":-0.0,"YawDegs":0.0,"HeadingDegs":220,"GrndSpeedMtrSec":120.0,"ClimbRateMtrSec":0.0,"RollRateDegsSec":0.0,"PitchRateDegsSec":-0.0,"YawRateDegsSec":-0.0,"TurnRateDegsSec":-0.0}}

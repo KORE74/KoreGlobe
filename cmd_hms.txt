@@ -1,9 +1,0 @@
-network ii {"PlatAdd":{"PlatName":"HMS Glasgow","PlatCategory":"surface","ThreatType":"friendly","Display":true,"PlatClass":"Type26","PlatDisplaySymb":"<platDispSymb>","LatDegs":51.33,"LongDegs":-6.4,"AltitudeMtrs":0.0,"RollDegs":0.0,"PitchDegs":0.0,"HeadingDegs":340.0}}
-
-network ii {"BeamLoad":{"PlatName":"HMS Glasgow","EmitName":"InjectShipRadar","ELNOT":"","BeamName":"NavRadar","Signal":"pulsed","Channel":1,"ERPdBW":90.0,"FreqMinHz":5000000000.0,"FreqMaxHz":5000000000.0,"PortRollDegs":0.0,"PortPitchDegs":0.0,"PortYawDegs":0.0,"Targeted":false,"TargetPlatName":"","DetectionRangeMtrs":120000.0,"DetectionRangeRxMtrs":150000,"AntennaPatternName":"SinX","HasHW":true}}
-
-network ii {"ScanPattern":{"PlatName":"HMS Glasgow","EmitName":"InjectShipRadar","BeamName":"NavRadar","ScanType":"circular","PeriodSecs":0.5,"SegmentCount":1,"AzMinDegs":-22.5,"AzMaxDegs":22.5,"ElMinDegs":-7.5,"ElMaxDegs":7.5,"AzTrackOffsetDegs":0.0,"ElTrackOffsetDegs":0.0,"Clockwise":false,"Up":false,"UniDirectional":true,"Reversed":false,"MinorScanType":"none","MinorScanPeriodSecs":0.005,"MinorScanUniDir":true,"MinorScanUp":false}}
-
-network ii {"BeamEnable":{"PlatName":"HMS Glasgow","EmitName":"InjectShipRadar","BeamName":"NavRadar"}}
-
-network ii {"PlatWayPoints":{"PlatName":"HMS Glasgow","Count":5,"Legs":[{"LatDegs":51.33,"LongDegs":-6.4,"AltitudeMtrs":0.0,"GrndSpeedMtrsSec":10.0,"WPType":"Origin"},{"LatDegs":52.14,"LongDegs":-5.7,"AltitudeMtrs":0.0,"GrndSpeedMtrsSec":10.0,"WPType":"unknown"},{"LatDegs":52.12,"LongDegs":-5.34,"AltitudeMtrs":0.0,"GrndSpeedMtrsSec":10.0,"WPType":"linear"},{"LatDegs":54.36,"LongDegs":-5.02,"AltitudeMtrs":0.0,"GrndSpeedMtrsSec":10.0,"WPType":"linear"},{"LatDegs":55.43,"LongDegs":-6.14,"AltitudeMtrs":0.0,"GrndSpeedMtrsSec":0.0,"WPType":"linear"}]}}

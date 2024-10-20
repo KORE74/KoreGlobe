@@ -23,16 +23,6 @@ namespace FssJSON
                 case "AppShutdown":    return AppShutdown.ParseJSON(msgText);
                 case "NullMsg":        return NullMsg.ParseJSON(msgText);
 
-                // Camera Control
-                case "PlatFocus":      return PlatFocus.ParseJSON(msgText);
-
-                // Platform
-                case "PlatUpdate":     return PlatUpdate.ParseJSON(msgText);
-                case "PlatPosition":   return PlatPosition.ParseJSON(msgText);
-                case "PlatAdd":        return PlatAdd.ParseJSON(msgText);
-                case "PlatDelete":     return PlatDelete.ParseJSON(msgText);
-                case "PlatWayPoints":  return PlatWayPoints.ParseJSON(msgText);
-
                 // Scenario / Time Control
                 case "ScenLoad":       return ScenLoad.ParseJSON(msgText);
                 case "ScenStart":      return ScenStart.ParseJSON(msgText);
@@ -41,16 +31,11 @@ namespace FssJSON
                 case "ScenCont":       return ScenCont.ParseJSON(msgText);
                 case "ClockSync":      return ClockSync.ParseJSON(msgText);
 
-                // Geometry - Emitter
-                case "BeamLoad":       return BeamLoad.ParseJSON(msgText);
-                case "BeamDelete":     return BeamDelete.ParseJSON(msgText);
-                case "BeamEnable":     return BeamEnable.ParseJSON(msgText);
-                case "BeamDisable":    return BeamDisable.ParseJSON(msgText);
-                case "AntennaPattern": return AntennaPattern.ParseJSON(msgText);
-                case "ScanPattern":    return ScanPattern.ParseJSON(msgText);
-
-                // Desbug / Sample Messages
-                case "PlatformElement_AddCircularScan": return PlatformElement_AddCircularScan.ParseJSON(msgText);
+                // Platform
+                case "EntityMotionDelta": return EntityMotionDelta.ParseJSON(msgText);
+                case "EntityPosition":    return EntityPosition.ParseJSON(msgText);
+                case "EntityAdd":         return EntityAdd.ParseJSON(msgText);
+                case "EntityDelete":      return EntityDelete.ParseJSON(msgText);
 
                 default:
                     return null;

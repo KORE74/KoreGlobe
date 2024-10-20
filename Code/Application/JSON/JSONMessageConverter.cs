@@ -23,34 +23,34 @@ namespace FssJSON
             writer.WriteStartObject();
             writer.WriteString("LatDegs", value.LatDegs.ToString("0.####"));
             writer.WriteString("LonDegs", value.LonDegs.ToString("0.####"));
-            writer.WriteString("AltMslM", value.AltMslM.ToString("0.####"));
+            writer.WriteString("AltMslM", value.AltMslM.ToString("0.##"));
             writer.WriteEndObject();
         }
     }
 
     // --------------------------------------------------------------------------------------------
 
-    public class FssCourseConverter : JsonConverter<FssCourse>
-    {
-        public override FssCourse Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        {
-            var jsonObject = JsonDocument.ParseValue(ref reader).RootElement;
+    // public class FssCourseConverter : JsonConverter<FssCourse>
+    // {
+    //     public override FssCourse Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    //     {
+    //         var jsonObject = JsonDocument.ParseValue(ref reader).RootElement;
 
-            return new FssCourse
-            {
-                HeadingDegs = jsonObject.GetProperty("HeadingDegs").GetDouble(),
-                SpeedKph = jsonObject.GetProperty("SpeedKph").GetDouble()
-            };
-        }
+    //         return new FssCourse
+    //         {
+    //             HeadingDegs = jsonObject.GetProperty("HeadingDegs").GetDouble(),
+    //             SpeedKph = jsonObject.GetProperty("SpeedKph").GetDouble()
+    //         };
+    //     }
 
-        public override void Write(Utf8JsonWriter writer, FssCourse value, JsonSerializerOptions options)
-        {
-            writer.WriteStartObject();
-            writer.WriteNumber("HeadingDegs", value.HeadingDegs);
-            writer.WriteNumber("SpeedKph", value.SpeedKph);
-            writer.WriteEndObject();
-        }
-    }
+    //     public override void Write(Utf8JsonWriter writer, FssCourse value, JsonSerializerOptions options)
+    //     {
+    //         writer.WriteStartObject();
+    //         writer.WriteNumber("HeadingDegs", value.HeadingDegs);
+    //         writer.WriteNumber("SpeedKph", value.SpeedKph);
+    //         writer.WriteEndObject();
+    //     }
+    // }
 
     // --------------------------------------------------------------------------------------------
 
