@@ -17,7 +17,7 @@ public class FssAppFactory
 
     public FssConsole         ConsoleInterface { get; private set; }
     public FssEventDriver     EventDriver      { get; private set; }
-    public FssPlatformManager PlatformManager  { get; private set; }
+    public FssEntityManager   EntityManager    { get; private set; }
     public FssNetworkHub      NetworkHub       { get; private set; }
     public FssSimTime         SimClock         { get; private set; }
     public FssModelRun        ModelRun         { get; private set; }
@@ -76,7 +76,7 @@ public class FssAppFactory
 
         ConsoleInterface = new FssConsole();
         EventDriver      = new FssEventDriver();
-        PlatformManager  = new FssPlatformManager();
+        EntityManager    = new FssEntityManager();
         NetworkHub       = new FssNetworkHub();
         //MapIOManager     = new FssMapIOManager();
         //EleManager       = new FssEleManager();

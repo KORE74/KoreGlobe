@@ -28,192 +28,112 @@ public partial class FssEventDriver
         newPlat.Type = "Unknown";
     }
 
-    public void AddPlatform(string platName, string platType)
-    {
-        // Create a new platform
-        // if (FssAppFactory.Instance.PlatformManager == null)
-        //     FssCentralLog.AddEntry("EC0-0002: ERROR ERROR ERROR: Platform Manager not found in FssAppFactory.Instance");
+    // public void AddPlatform(string platName, string platType)
+    // {
+    //     // Create a new platform
+    //     // if (FssAppFactory.Instance.PlatformManager == null)
+    //     //     FssCentralLog.AddEntry("EC0-0002: ERROR ERROR ERROR: Platform Manager not found in FssAppFactory.Instance");
 
-        FssPlatform? newPlat = FssAppFactory.Instance.PlatformManager.Add(platName);
-        if (newPlat == null)
-        {
-            FssCentralLog.AddEntry($"EC0-0001: Platform {platName} not created, already exists.");
-            return;
-        }
-        newPlat.Type = platType;
+    //     FssPlatform? newPlat = FssAppFactory.Instance.PlatformManager.Add(platName);
+    //     if (newPlat == null)
+    //     {
+    //         FssCentralLog.AddEntry($"EC0-0001: Platform {platName} not created, already exists.");
+    //         return;
+    //     }
+    //     newPlat.Type = platType;
 
-        DefaultPlatformDetails(platName);
-    }
+    //     DefaultPlatformDetails(platName);
+    // }
 
-    public bool DoesPlatformExist(string platName) => FssAppFactory.Instance.PlatformManager.DoesPlatExist(platName);
-    public void DeletePlatform(string platName)    => FssAppFactory.Instance.PlatformManager.Delete(platName);
-    public void DeleteAllPlatforms()               => FssAppFactory.Instance.PlatformManager.DeleteAllPlatforms();
-    public int  NumPlatforms()                     => FssAppFactory.Instance.PlatformManager.NumPlatforms();
+    public bool DoesEntityExist(string name) => FssAppFactory.Instance.EntityManager.DoesEntityExist(name);
+    public void DeleteEntity(string name)    => FssAppFactory.Instance.EntityManager.Delete(name);
+    public void DeleteAllEntities()          => FssAppFactory.Instance.EntityManager.DeleteAllEntities();
+    public int  NumEntities()                => FssAppFactory.Instance.EntityManager.NumEntities();
 
     // ---------------------------------------------------------------------------------------------
     // #MARK: Platform Full Details
     // ---------------------------------------------------------------------------------------------
 
-    public void DefaultPlatformDetails(string platName)
+    public void DefaultEntityDetails(string entName)
     {
         FssLLAPoint    startPos    = new FssLLAPoint() { LatDegs = 0.0, LonDegs = 0.0, AltMslM = 100.0 };
         FssLLAPoint    currPos     = new FssLLAPoint() { LatDegs = 0.0, LonDegs = 0.0, AltMslM = 100.0 };
         FssAttitude    att         = new FssAttitude() { PitchUpDegs = 0.0, RollClockwiseDegs = 0.0, YawClockwiseDegs = 0.0 };
-        FssCourse      course      = new FssCourse() { SpeedKph = 0.0, HeadingDegs = 0.0, ClimbRateMps = 0.0 };
+        FssCourse      course      = new FssCourse()   { SpeedKph = 0.0, HeadingDegs = 0.0, ClimbRateMps = 0.0 };
         FssCourseDelta courseDelta = new FssCourseDelta() { SpeedChangeMpMps = 0.0, HeadingChangeClockwiseDegsSec = 0.0 };
 
-        SetPlatformStartDetails(platName, startPos, att, course);
-        SetPlatformCurrDetails(platName, currPos, att, course, courseDelta);
+        SetEntityStartDetails(entName, startPos, att, course);
+        SetEntityCurrDetails(entName, currPos, att, course, courseDelta);
     }
 
-    public void SetPlatformStartDetails(string platName, FssLLAPoint startPos, FssAttitude startAtt, FssCourse startCourse)
+    public void SetEntityStartDetails(string entName, FssLLAPoint startPos, FssAttitude startAtt, FssCourse startCourse)
     {
-        // Get the platform
-        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
+        // Get the entity
+        FssEntity? ent = FssAppFactory.Instance.EntityManager.EntityForName(entName);
 
-        if (platform == null)
+        if (ent == null)
         {
-            FssCentralLog.AddEntry($"EC0-0002: Platform {platName} not found.");
+            FssCentralLog.AddEntry($"EC0-0002: Platform {entName} not found.");
             return;
         }
 
         // Set the platform's details
-        platform.Kinetics.StartPosition = startPos;
-        platform.Kinetics.StartAttitude = startAtt;
-        platform.Kinetics.StartCourse   = startCourse;
+        ent.Kinetics.StartPosition = startPos;
+        ent.Kinetics.StartAttitude = startAtt;
+        ent.Kinetics.StartCourse   = startCourse;
     }
 
-    public void SetPlatformCurrDetails(string platName, FssLLAPoint currPos, FssAttitude currAtt, FssCourse course, FssCourseDelta courseDelta)
+    public void SetEntityCurrDetails(string entName, FssLLAPoint currPos, FssAttitude currAtt, FssCourse course, FssCourseDelta courseDelta)
     {
-        // Get the platform
-        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
+        // Get the entity
+        FssEntity? ent = FssAppFactory.Instance.EntityManager.EntityForName(entName);
 
-        if (platform == null)
+        if (ent == null)
         {
-            FssCentralLog.AddEntry($"EC0-0002: Platform {platName} not found.");
+            FssCentralLog.AddEntry($"EC0-0002: Platform {entName} not found.");
             return;
         }
 
         // Set the platform's details
-        platform.Kinetics.CurrPosition    = currPos;
-        platform.Kinetics.CurrAttitude    = currAtt;
-        platform.Kinetics.CurrCourse      = course;
-        platform.Kinetics.CurrCourseDelta = courseDelta;
+        ent.Kinetics.CurrPosition    = currPos;
+        ent.Kinetics.CurrAttitude    = currAtt;
+        ent.Kinetics.CurrCourse      = course;
+        ent.Kinetics.CurrCourseDelta = courseDelta;
     }
-
-    // ---------------------------------------------------------------------------------------------
-    // #MARK: Platform Type
-    // ---------------------------------------------------------------------------------------------
-
-    public void SetPlatformType(string platName, string platType, string platCategory)
-    {
-        // Get the platform
-        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
-
-        if (platform == null)
-        {
-            FssCentralLog.AddEntry($"EC0-0031: Platform {platName} not found.");
-            return;
-        }
-
-        // Set the platform's type
-        platform.Type     = platType;
-        platform.Category = platCategory;
-    }
-
-    public string? PlatformType(string platName) =>
-        FssAppFactory.Instance.PlatformManager.PlatForName(platName)?.Type;
-
-    public string? PlatformCategory(string platName) =>
-        FssAppFactory.Instance.PlatformManager.PlatForName(platName)?.Category;
 
     // ---------------------------------------------------------------------------------------------
     // #MARK: Platform Position
     // ---------------------------------------------------------------------------------------------
 
-    public void SetPlatformStartLLA(string platName, FssLLAPoint newpos)
+    public void SetEntityStartLLA(string entName, FssLLAPoint newpos)
     {
-        // Get the platform
-        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
-
-        if (platform == null)
-        {
-            FssCentralLog.AddEntry($"EC0-0005: Platform {platName} not found.");
-            return;
-        }
-
-        // Set the platform's start location
-        platform.Kinetics.StartPosition = newpos;
+        var entity = FssAppFactory.Instance.EntityManager.EntityForName(entName);
+        if (entity != null)
+            entity.Kinetics.StartPosition = newpos;
     }
 
-    public FssLLAPoint? PlatformStartLLA(string platName)
+    public void SetEntityCurrLLA(string entName, FssLLAPoint newpos)
     {
-        // Get the platform
-        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
-
-        if (platform == null)
-            return null;
-
-        return platform.Kinetics.StartPosition;
+        var entity = FssAppFactory.Instance.EntityManager.EntityForName(entName);
+        if (entity != null)
+            entity.Kinetics.CurrPosition = newpos;
     }
 
-    // ---------------------------------------------------------------------------------------------
-
-    public void SetPlatformPosition(string platName, FssLLAPoint newpos)
-    {
-        // Get the platform
-        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
-
-        if (platform == null)
-        {
-            FssCentralLog.AddEntry($"EC0-0006: Platform {platName} not found.");
-            return;
-        }
-
-        // Set the platform's position
-        platform.Kinetics.CurrPosition = newpos;
-    }
-
-    public FssLLAPoint? GetPlatformPosition(string platName)
-    {
-        // Get the platform
-        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
-
-        if (platform == null)
-            return null;
-
-        return platform.Kinetics.CurrPosition;
-    }
+    public FssLLAPoint? EntityStartLLA(string entName) => FssAppFactory.Instance.EntityManager.EntityForName(entName)?.Kinetics.StartPosition;
+    public FssLLAPoint? EntityCurrLLA(string entName)  => FssAppFactory.Instance.EntityManager.EntityForName(entName)?.Kinetics.CurrPosition;
 
     // ---------------------------------------------------------------------------------------------
     // #MARK: Platform Attitude
     // ---------------------------------------------------------------------------------------------
 
-    public FssAttitude? GetPlatformAttitude(string platName)
+    public void SetPlatformAttitude(string entName, FssAttitude newatt)
     {
-        // Get the platform
-        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
-
-        if (platform == null)
-            return null;
-
-        return platform.Kinetics.CurrAttitude;
+        var entity = FssAppFactory.Instance.EntityManager.EntityForName(entName);
+        if (entity != null)
+            entity.Kinetics.CurrAttitude = newatt;
     }
 
-    public void SetPlatformAttitude(string platName, FssAttitude newatt)
-    {
-        // Get the platform
-        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
-
-        if (platform == null)
-        {
-            FssCentralLog.AddEntry($"EC0-0008: Platform {platName} not found.");
-            return;
-        }
-
-        // Set the platform's attitude
-        platform.Kinetics.CurrAttitude = newatt;
-    }
+    public FssAttitude? PlatformCurrAttitude(string entName) => FssAppFactory.Instance.EntityManager.EntityForName(entName)?.Kinetics.CurrAttitude;
 
     // ---------------------------------------------------------------------------------------------
     // #MARK: Platform Course

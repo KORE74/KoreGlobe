@@ -6,37 +6,37 @@ using System;
 
 public static class FssPlatformElementOperations
 {
-    public static FssPlatformElement? CreatePlatformElement(string platName, string elemName, string platElemType)
-    {
-        FssPlatformElement? newElem = null;
+    // public static FssPlatformElement? CreatePlatformElement(string platName, string elemName, string platElemType)
+    // {
+    //     FssPlatformElement? newElem = null;
 
-        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
-        if (platform == null)
-            return newElem;
+    //     FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
+    //     if (platform == null)
+    //         return newElem;
 
-        if (platform.DoesElementExist(elemName))
-            return newElem;
+    //     if (platform.DoesElementExist(elemName))
+    //         return newElem;
 
-        switch(platElemType)
-        {
-            // case "Dome":
-            //     newElem = new FssPlatformElementRadarDome();
-            //     break;
-            // case "Wedge":
-            //     newElem = new FssPlatformElementRadarWedge();
-            //     break;
-            case "RecieverPatterns":
-                newElem = new FssPlatformElementAntennaPatterns();
-                break;
-            default:
-                break;
-        }
+    //     switch(platElemType)
+    //     {
+    //         // case "Dome":
+    //         //     newElem = new FssPlatformElementRadarDome();
+    //         //     break;
+    //         // case "Wedge":
+    //         //     newElem = new FssPlatformElementRadarWedge();
+    //         //     break;
+    //         case "RecieverPatterns":
+    //             newElem = new FssPlatformElementAntennaPatterns();
+    //             break;
+    //         default:
+    //             break;
+    //     }
 
-        if (newElem != null)
-            platform.AddElement(newElem);
+    //     if (newElem != null)
+    //         platform.AddElement(newElem);
 
-        return newElem;
-    }
+    //     return newElem;
+    // }
 
     // ---------------------------------------------------------------------------------------------
     // MARK: Element Access Operations

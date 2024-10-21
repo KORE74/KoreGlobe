@@ -12,7 +12,7 @@ namespace FssJSON
         // ----------------------------------------------------------------------------------------
 
         [JsonPropertyName("Name")]
-        public string PlatName { get; set; }
+        public string Name { get; set; }
 
         // ----------------------------------------------------------------------------------------
         // MARK: Constructors
