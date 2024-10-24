@@ -30,12 +30,12 @@ public class FssUIState
 
     // Usage: FssGodotFactory.Instance.UIState.UpdateDisplayedChaseCam()
 
-    public void UpdateDisplayedChaseCam()
-    {
-        if (IsCamModeChaseCam() && FssAppFactory.Instance.EventDriver.NearPlatformValid())
-        {
-            FssGodotFactory.Instance.GodotEntityManager.EnableChaseCam(FssAppFactory.Instance.EventDriver.NearPlatformName());
-        }
-    }
+    // public void UpdateDisplayedChaseCam()
+    // {
+    //     if (IsCamModeChaseCam() && FssAppFactory.Instance.EventDriver.NearPlatformValid())
+    //     {
+    //         FssGodotFactory.Instance.GodotEntityManager.EnableChaseCam(FssAppFactory.Instance.EventDriver.NearPlatformName());
+    //     }
+    // }
 
 }

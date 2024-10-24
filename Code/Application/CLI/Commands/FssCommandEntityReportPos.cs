@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 
-// FssCommandVersion
-
 public class FssCommandEntityReportPos : FssCommand
 {
     public FssCommandEntityReportPos()
@@ -20,11 +18,11 @@ public class FssCommandEntityReportPos : FssCommand
             return "FssCommandEntityAdd.Execute -> insufficient parameters";
         }
 
-        string entName  = parameters[0];
+        string entName = parameters[0];
 
         if (FssAppFactory.Instance.EventDriver.DoesEntityExist(entName))
         {
-            FssLLAPoint? lla = FssAppFactory.Instance.EventDriver.GetPlatformPosition(entName);
+            FssLLAPoint? lla = FssAppFactory.Instance.EventDriver.EntityCurrLLA(entName);
             if (lla != null)
             {
                 return $"Platform {entName} Position: {lla}";

@@ -25,19 +25,19 @@ public partial class FssEventDriver
 
     // Usage: FssAppFactory.Instance.EventDriver.SidebarSetBeamVisibility(true, true);
 
-    public void SidebarSetBeamVisibility(bool rxVisible, bool txVisible)
-    {
-        // Set the UI State values
-        FssGodotFactory.Instance.UIState.ShowRx = rxVisible;
-        FssGodotFactory.Instance.UIState.ShowTx = txVisible;
-    }
+    // public void SidebarSetBeamVisibility(bool rxVisible, bool txVisible)
+    // {
+    //     // Set the UI State values
+    //     FssGodotFactory.Instance.UIState.ShowRx = rxVisible;
+    //     FssGodotFactory.Instance.UIState.ShowTx = txVisible;
+    // }
 
     // ---------------------------------------------------------------------------------------------
 
     // Usage: FssAppFactory.Instance.EventDriver.SidebarSetRouteVisibility(true);
 
 
-    public void SidebarSetRouteVisibility(bool routeVisible)                   => FssGodotFactory.Instance.UIState.ShowRoutes          = routeVisible;
+    // public void SidebarSetRouteVisibility(bool routeVisible)                   => FssGodotFactory.Instance.UIState.ShowRoutes          = routeVisible;
 
     // ---------------------------------------------------------------------------------------------
 

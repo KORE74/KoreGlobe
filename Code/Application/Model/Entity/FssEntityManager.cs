@@ -99,13 +99,13 @@ public partial class FssEntityManager
     // --------------------------------------------------------------------------------------------
     // Id being the 1-based user presented version of the list index
 
-    public string EntityNameForId(int platId)
+    public string EntityNameForId(int entityId)
     {
-        int platIndex = platId - 1;
-        if (platIndex < 0 || platIndex >= EntityList.Count)
+        int entityIndex = entityId - 1;
+        if (entityIndex < 0 || entityIndex >= EntityList.Count)
             return "- - -";
 
-        return EntityList[platIndex].Name;
+        return EntityList[entityIndex].Name;
     }
 
     public string EntityIdForName(string entityname)
@@ -120,7 +120,7 @@ public partial class FssEntityManager
 
     public int EntityIdNext(int currPlatId)
     {
-        int numPlats = FssAppFactory.Instance.EntityManager.NumPlatforms();
+        int numPlats = FssAppFactory.Instance.EntityManager.NumEntities();
         int minId    = (numPlats > 0) ? 1 : 0;
         int maxId    = (numPlats > 0) ? numPlats: 0;
 
@@ -132,7 +132,7 @@ public partial class FssEntityManager
 
     public int EntityIdPrev(int currPlatId)
     {
-        int numPlats = FssAppFactory.Instance.EntityManager.NumPlatforms();
+        int numPlats = FssAppFactory.Instance.EntityManager.NumEntities();
         int minId    = (numPlats > 0) ? 1 : 0;
         int maxId    = (numPlats > 0) ? numPlats: 0;
 

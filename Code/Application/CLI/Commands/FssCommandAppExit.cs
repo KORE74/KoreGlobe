@@ -24,7 +24,7 @@ public class FssCommandAppExit : FssCommand
         FssAppFactory.Instance.EventDriver.ExitApplication();
 
         // Call the Godot exit function -- Maybe not the right place?
-        FssAppNode.Instance.ExitApplication();
+        //FssAppNode.Instance.ExitApplication();
 
         return "Exiting the application";
     }

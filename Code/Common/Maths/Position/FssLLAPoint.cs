@@ -314,7 +314,7 @@ public struct FssLLAPoint
     public FssLLAPoint PlusDeltaForTime(FssCourse course, double timeSecs)
     {
         // Turn the course into a range bearing distance (for the time duration) that we can apply)
-        double distM = course.SpeedMps * timeSecs;
+        double distM = course.GroundSpeedMps * timeSecs;
         FssRangeBearing rb = new FssRangeBearing() { RangeM = distM, BearingRads = course.HeadingRads };
         FssLLAPoint retPnt = PlusRangeBearing(rb);
 

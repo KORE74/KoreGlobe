@@ -9,8 +9,6 @@ using FssJSON;
 
 public partial class FssMessageManager
 {
-    // --------------------------------------------------------------------------------------------
-
     private void ProcessMessage_EntityAdd(EntityAdd msg)
     {
         FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_EntityAdd: {msg.Name}");

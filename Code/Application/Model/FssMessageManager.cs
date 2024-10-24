@@ -76,26 +76,22 @@ public partial class FssMessageManager
         // Convert the message to a JSON object
         JSONMessage msg = IncomingMessageHandler.ProcessMessage(msgType, message.msgData);
 
-        if      (msg is EntityAdd platAddMsg)          { ProcessMessage_PlatAdd(platAddMsg); }
-        else if (msg is EntityDelete platDelMsg)       { ProcessMessage_PlatDelete(platDelMsg); }
-        else if (msg is EntityPosition platPosMsg)     { ProcessMessage_PlatPosition(platPosMsg); }
-        else if (msg is EntityUpdate platUpdMsg)       { ProcessMessage_PlatUpdate(platUpdMsg); }
-        else if (msg is EntityWayPoints platWayPtsMsg) { ProcessMessage_PlatWayPoints(platWayPtsMsg); }
-        else if (msg is ScenLoad scenLoadMsg)        { ProcessMessage_ScenLoad(scenLoadMsg); }
-        else if (msg is ScenStart scenStartMsg)      { ProcessMessage_ScenStart(scenStartMsg); }
-        else if (msg is ScenStop scenStopMsg)        { ProcessMessage_ScenStop(scenStopMsg); }
-        else if (msg is ScenPause scenPauseMsg)      { ProcessMessage_ScenPause(scenPauseMsg); }
-        else if (msg is ScenCont scenContMsg)        { ProcessMessage_ScenCont(scenContMsg); }
-        else if (msg is ClockSync clockSyncMsg)      { ProcessMessage_ClockSync(clockSyncMsg); }
+        if      (msg is EntityAdd entityAddMsg)          { ProcessMessage_EntityAdd(entityAddMsg); }
+        else if (msg is EntityDelete entityDelMsg)       { ProcessMessage_EntityDelete(entityDelMsg); }
+        else if (msg is EntityPosition entityPosMsg)     { ProcessMessage_EntityPosition(entityPosMsg); }
+        else if (msg is EntityUpdate entityUpdMsg)       { ProcessMessage_EntityUpdate(entityUpdMsg); }
+        else if (msg is EntityWayPoints entityWayPtsMsg) { ProcessMessage_EntityWayPoints(entityWayPtsMsg); }
+        else if (msg is ScenLoad scenLoadMsg)            { ProcessMessage_ScenLoad(scenLoadMsg); }
+        else if (msg is ScenStart scenStartMsg)          { ProcessMessage_ScenStart(scenStartMsg); }
+        else if (msg is ScenStop scenStopMsg)            { ProcessMessage_ScenStop(scenStopMsg); }
+        else if (msg is ScenPause scenPauseMsg)          { ProcessMessage_ScenPause(scenPauseMsg); }
+        else if (msg is ScenCont scenContMsg)            { ProcessMessage_ScenCont(scenContMsg); }
+        else if (msg is ClockSync clockSyncMsg)          { ProcessMessage_ClockSync(clockSyncMsg); }
 
         else
         {
             FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage: Unknown message type: {msgType} // {message.msgData}");
         }
-
-
-
     }
-
 }
 

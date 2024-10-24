@@ -30,12 +30,12 @@ public class FssCommandEntityPosition : FssCommand
         {
             FssLLAPoint newLLA = new FssLLAPoint { LatDegs = latDegs, LonDegs = longDegs, AltMslM = altMslM };
 
-            FssAppFactory.Instance.EventDriver.SetPlatformPosition(entName, newLLA);
-            retString = $"Platform {entName} Updated: Course: {newLLA}.";
+            FssAppFactory.Instance.EventDriver.SetEntityCurrLLA(entName, newLLA);
+            retString = $"Entity {entName} Updated: Course: {newLLA}.";
         }
         else
         {
-            retString = $"Platform {entName} not found.";
+            retString = $"Entity {entName} not found.";
         }
 
         FssCentralLog.AddEntry($"FssCommandEntityPosition.Execute -> {retString}");

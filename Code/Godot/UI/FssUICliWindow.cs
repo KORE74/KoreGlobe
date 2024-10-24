@@ -240,7 +240,7 @@ public partial class FssUICliWindow : Window
         sb.AppendLine();
         sb.AppendLine("Model Report");
         sb.AppendLine("------------");
-        sb.Append(FssAppFactory.Instance.PlatformManager.FullReport());
+        sb.Append(FssAppFactory.Instance.EntityManager.FullReport());
 
         // Godot Entity report
         //sb.AppendLine();

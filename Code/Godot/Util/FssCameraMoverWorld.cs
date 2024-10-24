@@ -6,7 +6,7 @@ using Godot;
 public partial class FssCameraMoverWorld : Node3D
 {
     public FssLLAPoint CamPos    = new FssLLAPoint() { LatDegs = 50, LonDegs = -1, AltMslM = 5000 };
-    public FssCourse   CamCourse = new FssCourse()   { HeadingDegs = 180, SpeedKph = 0 };
+    public FssCourse   CamCourse = new FssCourse()   { HeadingDegs = 180, GroundSpeedKph = 0 };
     public float camPitch = 0;
 
     private float TimerCamReport = 0;
@@ -90,7 +90,7 @@ public partial class FssCameraMoverWorld : Node3D
         translateSpeed        = MoveSpeed;
         double VertMoveSpeed  = camVertSpeedForAlt.GetValue(CamPos.AltMslM);
 
-        CamCourse.SpeedKph = 0;
+        CamCourse.GroundSpeedKph = 0;
 
 
         // Mouse Wheel - - - - -
@@ -193,7 +193,7 @@ public partial class FssCameraMoverWorld : Node3D
         // Simple: Apply alt and heading chanegs
         CamPos.AltMslM        += translateUpM   * VertMoveSpeed;//translateUpSpeed;
         CamCourse.HeadingDegs += rotateLeftDegs * rotateSpeed;
-        CamCourse.SpeedKph    += translateFwdM  * MoveSpeed;//translateSpeed;
+        CamCourse.GroundSpeedKph    += translateFwdM  * MoveSpeed;//translateSpeed;
 
         // GD.Print($"MoveSpeed:{MoveSpeed} // VertMoveSpeed:{VertMoveSpeed}");
 
@@ -201,7 +201,7 @@ public partial class FssCameraMoverWorld : Node3D
 
         if (CamPos.AltMslM < 500) CamPos.AltMslM = 500;
 
-        if (!FssValueUtils.IsZero(CamCourse.SpeedKph))
+        if (!FssValueUtils.IsZero(CamCourse.GroundSpeedKph))
         {
             CamPos = CamPos.PlusRangeBearing(CamCourse.OffsetForTime(1));
         }
@@ -277,7 +277,7 @@ public partial class FssCameraMoverWorld : Node3D
         StringBuilder sb = new StringBuilder();
 
         sb.Append($"[{CamPos.LatDegs:F3},{CamPos.LonDegs:F3},{CamPos.AltMslM:F0}]");
-        sb.Append($"[{CamCourse.HeadingDegs:F0},{CamCourse.SpeedKph:F0}]");
+        sb.Append($"[{CamCourse.HeadingDegs:F0},{CamCourse.GroundSpeedKph:F0}]");
         sb.Append($"[{camPitch:F2}]");
 
         return sb.ToString();
@@ -300,7 +300,7 @@ public partial class FssCameraMoverWorld : Node3D
         if (courseParts.Length == 2)
         {
             CamCourse.HeadingDegs = double.Parse(courseParts[0]);
-            CamCourse.SpeedKph    = double.Parse(courseParts[1]);
+            CamCourse.GroundSpeedKph    = double.Parse(courseParts[1]);
         }
 
         string[] pitchParts = parts[2].Split(',');
