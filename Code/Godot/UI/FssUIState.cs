@@ -17,11 +17,7 @@ public class FssUIState
     public float      InfographicScale    { get; set; } = 1;
 
     public bool       ShowRoutes          { get; set; } = true;
-    public bool       ShowEmitters        { get; set; } = true;
-    public bool       ShowAntennaPatterns { get; set; } = true;
 
-    public bool       ShowRx              { get; set; } = true;
-    public bool       ShowTx              { get; set; } = true;
 
     public FssUIState()
     {

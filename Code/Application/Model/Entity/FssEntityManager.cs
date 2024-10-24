@@ -120,7 +120,7 @@ public partial class FssEntityManager
 
     public int EntityIdNext(int currPlatId)
     {
-        int numPlats = FssAppFactory.Instance.PlatformManager.NumPlatforms();
+        int numPlats = FssAppFactory.Instance.EntityManager.NumPlatforms();
         int minId    = (numPlats > 0) ? 1 : 0;
         int maxId    = (numPlats > 0) ? numPlats: 0;
 
@@ -132,7 +132,7 @@ public partial class FssEntityManager
 
     public int EntityIdPrev(int currPlatId)
     {
-        int numPlats = FssAppFactory.Instance.PlatformManager.NumPlatforms();
+        int numPlats = FssAppFactory.Instance.EntityManager.NumPlatforms();
         int minId    = (numPlats > 0) ? 1 : 0;
         int maxId    = (numPlats > 0) ? numPlats: 0;
 
@@ -163,17 +163,17 @@ public partial class FssEntityManager
 
     public bool DoesElementExist(string entityname, string elemname)
     {
-        FssEntity? plat = PlatForName(entityname);
+        FssEntity? plat = EntityForName(entityname);
         if (plat == null)
             return false;
 
         return plat.DoesElementExist(elemname);
     }
 
-    public bool AddElement(string entityname, FssEntityElement newElem)
+    public bool AddElement(string entityname, FssElement newElem)
     {
         // Return false if we don't find the platform
-        FssEntity? plat = PlatForName(entityname);
+        FssEntity? plat = EntityForName(entityname);
         if (plat == null)
             return false;
 
@@ -183,16 +183,16 @@ public partial class FssEntityManager
 
     public void DeleteElement(string entityname, string elemname)
     {
-        FssEntity? plat = PlatForName(entityname);
+        FssEntity? plat = EntityForName(entityname);
         if (plat == null)
             return;
 
         plat.DeleteElement(elemname);
     }
 
-    public FssEntityElement? ElementForName(string entityname, string elemname)
+    public FssElement? ElementForName(string entityname, string elemname)
     {
-        FssEntity? plat = PlatForName(entityname);
+        FssEntity? plat = EntityForName(entityname);
         if (plat == null)
             return null;
 
@@ -227,7 +227,7 @@ public partial class FssEntityManager
         {
             report += $"Platform: {currPlat.Name}\n";
 
-            foreach (FssEntityElement currElem in currPlat.ElementsList)
+            foreach (FssElement currElem in currPlat.ElementsList)
             {
                 report += $"- Element: {currElem.Name} Type: {currElem.Type}\n";
             }
@@ -262,7 +262,7 @@ public partial class FssEntityManager
         foreach (FssEntity currPlat in EntityList)
         {
             sb.AppendLine($"Platform: {currPlat.Name}");
-            foreach (FssEntityElement currElem in currPlat.ElementsList)
+            foreach (FssElement currElem in currPlat.ElementsList)
             {
                 sb.AppendLine($"- Element: {currElem.Report()}");
             }

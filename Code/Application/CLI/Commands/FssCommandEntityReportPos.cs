@@ -22,7 +22,7 @@ public class FssCommandEntityReportPos : FssCommand
 
         string entName  = parameters[0];
 
-        if (FssAppFactory.Instance.EventDriver.DoesPlatformExist(entName))
+        if (FssAppFactory.Instance.EventDriver.DoesEntityExist(entName))
         {
             FssLLAPoint? lla = FssAppFactory.Instance.EventDriver.GetPlatformPosition(entName);
             if (lla != null)

@@ -26,7 +26,7 @@ public class FssCommandEntityPosition : FssCommand
 
         string retString = "";
 
-        if (FssAppFactory.Instance.EventDriver.DoesPlatformExist(entName))
+        if (FssAppFactory.Instance.EventDriver.DoesEntityExist(entName))
         {
             FssLLAPoint newLLA = new FssLLAPoint { LatDegs = latDegs, LonDegs = longDegs, AltMslM = altMslM };
 

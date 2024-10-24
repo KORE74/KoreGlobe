@@ -15,95 +15,72 @@ public partial class FssEventDriver
     // MARK: Basic Element Management
     // ---------------------------------------------------------------------------------------------
 
-    public void AddPlatformElement(string platName, string elemName, string platElemType)
+    public void AddElement(string entityName, string elemName, string elemType)
     {
-        // Create a new platform
-        FssPlatformElementOperations.CreatePlatformElement(platName, elemName, platElemType);
+        // Create a new ent
+        //FssElementOperations.CreateElement(entityName, elemName, elemType);
     }
 
-    public void AddPlatformElement(string platName, string elemName, FssPlatformElement element)
+    public void AddElement(string entityName, string elemName, FssElement element)
     {
-        // Get the platform
-        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
+        // Get the ent
+        FssEntity? ent = FssAppFactory.Instance.EntityManager.EntityForName(entityName);
 
-        if (platform == null)
+        if (ent == null)
             return;
 
-        // Add the element to the platform
-        platform.AddElement(element);
+        // Add the element to the ent
+        ent.AddElement(element);
     }
 
-    public void DeletePlatformElement(string platName, string elemName)
+    public void DeleteElement(string entityName, string elemName)
     {
-        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
+        FssEntity? ent = FssAppFactory.Instance.EntityManager.EntityForName(entityName);
 
-        if (platform == null)
+        if (ent == null)
             return;
 
-        platform.DeleteElement(elemName);
+        ent.DeleteElement(elemName);
     }
 
-    public List<string> PlatformElementNames(string platName)
+    public List<string> ElementNamesForEntity(string entityName)
     {
-        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
+        FssEntity? ent = FssAppFactory.Instance.EntityManager.EntityForName(entityName);
 
-        if (platform == null)
+        if (ent == null)
             return new List<string>();
 
-        return platform.ElementNames();
-    }
-
-    // ---------------------------------------------------------------------------------------------
-
-    public void PlatformAddSizerBox(string platName, string platType)
-    {
-        // Get the platform
-        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
-
-        if (platform == null)
-            return;
-
-        // fixed elemName for the box
-        string elemName = "SizerBox";
-
-        // Get the element
-        FssPlatformElement? element = platform.ElementForName(elemName);
-
-        if (element == null)
-            return;
-
-        // Set the element's size
-        return;
+        return ent.ElementNames();
     }
 
     // ---------------------------------------------------------------------------------------------
     // MARK: Element Name Helpers
     // ---------------------------------------------------------------------------------------------
 
-    public FssPlatformElement? GetElement(string platName, string elemName)
+    public FssElement? GetElement(string entityName, string elemName)
     {
-        if (string.IsNullOrEmpty(platName) || string.IsNullOrEmpty(elemName))
+        if (string.IsNullOrEmpty(entityName) || string.IsNullOrEmpty(elemName))
             return null;
 
-        FssPlatform? platform = FssAppFactory.Instance.PlatformManager.PlatForName(platName);
+        FssEntity? ent = FssAppFactory.Instance.EntityManager.EntityForName(entityName);
 
-        if (platform == null)
+        if (ent == null)
             return null;
 
-        return platform.ElementForName(elemName);
+        return ent.ElementForName(elemName);
     }
 
 
 
-    // public void SetPlatformStartLLA(string platName, FssLLALocation loc)
+    // public void SetPlatformStartLLA(string entityName, FssLLALocation loc)
     // {
-    //     // Get the platform
-    //     FssPlatform? platform = FssAppFactory.Instance.PlatformManager.GetPlatformForName(platName);
+    //     // Get the ent
+    //     FssEntity? ent = FssAppFactory.Instance.PlatformManager.GetPlatformForName(entityName);
 
-    //     if (platform == null)
+    //     if (ent == null)
     //         return;
 
-    //     // Set the platform's start location
-    //     platform.Motion.InitialLocation = loc;
+    //     // Set the ent's start location
+    //     ent.Motion.InitialLocation = loc;
     // }
 }

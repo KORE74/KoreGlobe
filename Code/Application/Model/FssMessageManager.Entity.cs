@@ -13,7 +13,7 @@ public partial class FssMessageManager
 
     private void ProcessMessage_EntityAdd(EntityAdd msg)
     {
-        FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_PlatAdd: {msg.Name}");
+        FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_EntityAdd: {msg.Name}");
 
         // Check if the platform already exists
         if (!FssAppFactory.Instance.EventDriver.DoesEntityExist(msg.Name))
@@ -24,9 +24,9 @@ public partial class FssMessageManager
 
     // --------------------------------------------------------------------------------------------
 
-    private void ProcessMessage_PlatDelete(EntityDelete msg)
+    private void ProcessMessage_EntityDelete(EntityDelete msg)
     {
-        FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_PlatDelete: {msg.Name}");
+        FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_EntityDelete: {msg.Name}");
 
         // Check if the platform exists
         if (FssAppFactory.Instance.EventDriver.DoesEntityExist(msg.Name))
@@ -37,31 +37,31 @@ public partial class FssMessageManager
 
     // --------------------------------------------------------------------------------------------
 
-    private void ProcessMessage_PlatUpdate(EntityPosition msg)
-    {
-        FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_PlatUpdate: {msg.Name}");
+    // private void ProcessMessage_PlatUpdate(EntityPosition msg)
+    // {
+    //     FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_PlatUpdate: {msg.Name}");
 
-        // Check if the platform exists
-        if (FssAppFactory.Instance.EventDriver.DoesEntityExist(msg.Name))
-        {
-            FssAppFactory.Instance.EventDriver.SetPlatformCurrDetails(
-                msg.Name, msg.Pos, msg.Attitude, msg.Course, msg.CourseDelta);
-        }
-    }
+    //     // Check if the platform exists
+    //     if (FssAppFactory.Instance.EventDriver.DoesEntityExist(msg.Name))
+    //     {
+    //         FssAppFactory.Instance.EventDriver.SetPlatformCurrDetails(
+    //             msg.Name, msg.Pos, msg.Attitude, msg.Course, msg.CourseDelta);
+    //     }
+    // }
 
-    // --------------------------------------------------------------------------------------------
+    // // --------------------------------------------------------------------------------------------
 
-    private void ProcessMessage_PlatPosition(PlatPosition msg)
-    {
-        FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_PlatPosition: {msg.PlatName}");
+    // private void ProcessMessage_PlatPosition(PlatPosition msg)
+    // {
+    //     FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_PlatPosition: {msg.PlatName}");
 
-        // Check if the platform exists
-        if (FssAppFactory.Instance.EventDriver.DoesPlatformExist(msg.PlatName))
-        {
-            FssAppFactory.Instance.EventDriver.SetPlatformPosition(msg.PlatName, msg.Pos);
-            FssAppFactory.Instance.EventDriver.SetPlatformCourse(msg.PlatName, msg.Course);
-            FssAppFactory.Instance.EventDriver.SetPlatformAttitude(msg.PlatName, msg.Attitude);
-        }
-    }
+    //     // Check if the platform exists
+    //     if (FssAppFactory.Instance.EventDriver.DoesEntityExist(msg.PlatName))
+    //     {
+    //         FssAppFactory.Instance.EventDriver.SetPlatformPosition(msg.PlatName, msg.Pos);
+    //         FssAppFactory.Instance.EventDriver.SetPlatformCourse(msg.PlatName, msg.Course);
+    //         FssAppFactory.Instance.EventDriver.SetPlatformAttitude(msg.PlatName, msg.Attitude);
+    //     }
+    // }
 }
 

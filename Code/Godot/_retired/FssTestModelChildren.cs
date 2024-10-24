@@ -61,7 +61,7 @@
 //             return;
 //         }
 
-//         if (!FssAppFactory.Instance.EventDriver.DoesPlatformExist(platformName))
+//         if (!FssAppFactory.Instance.EventDriver.DoesEntityExist(platformName))
 //         {
 //             FssCentralLog.AddEntry($"EC0-0024: Platform {platformName} does not exist.");
 //             return;

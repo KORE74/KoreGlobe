@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-// FssCommandPlatCourseDelta
+// FssCommandEntityCourse
 
 public class FssCommandEntityCourse : FssCommand
 {
@@ -16,7 +16,7 @@ public class FssCommandEntityCourse : FssCommand
     {
         if (parameters.Count < 1)
         {
-            return "FssCommandPlatCourseDelta.Execute -> insufficient parameters";
+            return "FssCommandEntityCourse.Execute -> insufficient parameters";
         }
 
         string entName                       = parameters[0];
@@ -25,21 +25,21 @@ public class FssCommandEntityCourse : FssCommand
 
         string retString = "";
 
-        if (FssAppFactory.Instance.EventDriver.DoesPlatformExist(entName))
+        if (FssAppFactory.Instance.EventDriver.DoesEntityExist(entName))
         {
             FssCourseDelta newCourseDelta = new FssCourseDelta() {
                     SpeedChangeMpMps = speedChangeMpMps,
                     HeadingChangeClockwiseDegsSec = headingChangeClockwiseDegsSec };
 
-            FssAppFactory.Instance.EventDriver.SetPlatformCourseDelta(entName, newCourseDelta);
-            retString = $"Platform {entName} Updated: Course: {newCourseDelta}.";
+            FssAppFactory.Instance.EventDriver.SetEntityCourseDelta(entName, newCourseDelta);
+            retString = $"Entity {entName} Updated: Course: {newCourseDelta}.";
         }
         else
         {
-            retString = $"Platform {entName} not found.";
+            retString = $"Entity {entName} not found.";
         }
 
-        FssCentralLog.AddEntry($"FssCommandPlatCourse.Execute -> {retString}");
+        FssCentralLog.AddEntry($"FssCommandEntityCourse.Execute -> {retString}");
         return retString;
     }
 }

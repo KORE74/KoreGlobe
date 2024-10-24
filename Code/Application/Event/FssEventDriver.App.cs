@@ -35,13 +35,9 @@ public partial class FssEventDriver
     // ---------------------------------------------------------------------------------------------
 
     // Usage: FssAppFactory.Instance.EventDriver.SidebarSetRouteVisibility(true);
-    //        FssAppFactory.Instance.EventDriver.SidebarSetEmitterVisibility(true);
-    //        FssAppFactory.Instance.EventDriver.SidebarSetAntennaPatternVisibility(true);
 
 
     public void SidebarSetRouteVisibility(bool routeVisible)                   => FssGodotFactory.Instance.UIState.ShowRoutes          = routeVisible;
-    public void SidebarSetEmitterVisibility(bool emitterVisible)               => FssGodotFactory.Instance.UIState.ShowEmitters        = emitterVisible;
-    public void SidebarSetAntennaPatternVisibility(bool antennaPatternVisible) => FssGodotFactory.Instance.UIState.ShowAntennaPatterns = antennaPatternVisible;
 
     // ---------------------------------------------------------------------------------------------
 

@@ -517,7 +517,7 @@ layout_mode = 2
 custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
 theme_override_constants/line_spacing = -2
-text = "Scenario Time: 
+text = "Scenario Time:
 Undefined"
 max_lines_visible = 2
 
@@ -525,7 +525,7 @@ max_lines_visible = 2
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 theme_override_constants/line_spacing = -2
-text = "Scenario Name: 
+text = "Scenario Name:
 Undefined"
 max_lines_visible = 2
 
@@ -733,28 +733,6 @@ focus_mode = 0
 theme = SubResource("Theme_g2sdr")
 toggle_mode = true
 icon = ExtResource("16_bti36")
-icon_alignment = 1
-expand_icon = true
-
-[node name="ShowEmittersButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer-SidePanel/VBoxContainer/PanelShowElements/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(45, 45)
-layout_mode = 2
-size_flags_vertical = 0
-focus_mode = 0
-theme = SubResource("Theme_g2sdr")
-toggle_mode = true
-icon = ExtResource("17_e1lpa")
-icon_alignment = 1
-expand_icon = true
-
-[node name="ShowAntennaPatternsButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/HBoxContainer-SidePanel/VBoxContainer/PanelShowElements/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(45, 45)
-layout_mode = 2
-size_flags_vertical = 0
-focus_mode = 0
-theme = SubResource("Theme_g2sdr")
-toggle_mode = true
-icon = ExtResource("18_2f4bt")
 icon_alignment = 1
 expand_icon = true
 

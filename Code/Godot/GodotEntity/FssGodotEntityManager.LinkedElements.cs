@@ -26,7 +26,6 @@ public partial class FssGodotEntityManager : Node3D
             if (currNode.Name == elementName)
                 return true;
         }
-
         return false;
     }
 
@@ -71,7 +70,6 @@ public partial class FssGodotEntityManager : Node3D
             if (currNode.Name == elementName)
                 return currNode;
         }
-
         return null;
     }
 

@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 
-// FssCommandPlatDelete
-
 public class FssCommandEntityDelete : FssCommand
 {
 
@@ -24,17 +22,17 @@ public class FssCommandEntityDelete : FssCommand
         string retString = "";
 
         // Delete the platform
-        if (FssAppFactory.Instance.EventDriver.DoesPlatformExist(entName))
+        if (FssAppFactory.Instance.EventDriver.DoesEntityExist(entName))
         {
-            FssAppFactory.Instance.EventDriver.DeletePlatform(entName);
-            retString = $"Platform {entName} deleted.";
+            FssAppFactory.Instance.EventDriver.DeleteEntity(entName);
+            retString = $"Entity {entName} deleted.";
         }
         else
         {
-            retString = $"Platform {entName} not found.";
+            retString = $"Entity {entName} not found.";
         }
 
-        FssCentralLog.AddEntry($"FssCommandPlatDelete.Execute -> {retString}");
+        FssCentralLog.AddEntry($"FssCommandEntityDelete.Execute -> {retString}");
         return retString;
     }
 }

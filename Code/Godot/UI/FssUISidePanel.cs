@@ -24,8 +24,6 @@ public partial class FssUISidePanel : HBoxContainer
     private Label?  InfographicScaleLabel;
 
     private Button? ShowRoutesButton;
-    private Button? ShowEmittersButton;
-    private Button? ShowAntennaPatternsButton;
 
     // RxTx Controls
     private Button? ShowTxButton;
@@ -60,8 +58,6 @@ public partial class FssUISidePanel : HBoxContainer
 
         // get the show elements controls
         ShowRoutesButton          = (Button)FindChild("ShowRoutesButton");
-        ShowEmittersButton        = (Button)FindChild("ShowEmittersButton");
-        ShowAntennaPatternsButton = (Button)FindChild("ShowAntennaPatternsButton");
 
         // get the RxTx controls
         ShowTxButton = (Button)FindChild("ShowTxButton");
@@ -84,8 +80,6 @@ public partial class FssUISidePanel : HBoxContainer
 
         // Show Elements Controls
         ShowRoutesButton.Connect(          "pressed", new Callable(this, "OnShowRoutesButtonPressed"));
-        ShowEmittersButton.Connect(        "pressed", new Callable(this, "OnShowEmittersButtonPressed"));
-        ShowAntennaPatternsButton.Connect( "pressed", new Callable(this, "OnShowAntennaPatternsButtonPressed"));
 
         // RxTx Controls
         ShowTxButton.Connect("pressed", new Callable(this, "OnShowTxButtonPressed"));
@@ -121,12 +115,6 @@ public partial class FssUISidePanel : HBoxContainer
 
             // Manage the Show Elements buttons
             ShowRoutesButton!.ButtonPressed          = FssGodotFactory.Instance.UIState.ShowRoutes;
-            ShowEmittersButton!.ButtonPressed        = FssGodotFactory.Instance.UIState.ShowEmitters;
-            ShowAntennaPatternsButton!.ButtonPressed = FssGodotFactory.Instance.UIState.ShowAntennaPatterns;
-
-            // Manage the RxTx buttons
-            ShowTxButton!.ButtonPressed = FssGodotFactory.Instance.UIState.ShowTx;
-            ShowRxButton!.ButtonPressed = FssGodotFactory.Instance.UIState.ShowRx;
 
             PerformanceLabel!.Text = $"{averageCallsPerSecond:F0}\nUPS";
         }
@@ -145,7 +133,6 @@ public partial class FssUISidePanel : HBoxContainer
 
         if (PanelPlatformScale == null)  GD.PrintErr("PanelPlatformScale null");
         if (PanelShowElements == null)   GD.PrintErr("PanelShowElements null");
-        if (PanelBeamRxTx == null)       GD.PrintErr("PanelBeamRxTx null");
 
         if (RWScaleToggleButton == null)    GD.PrintErr("RWScaleToggleButton null");
         if (InfographicScaleButton == null) GD.PrintErr("InfographicScaleButton null");
@@ -153,11 +140,7 @@ public partial class FssUISidePanel : HBoxContainer
         if (InfographicScaleLabel == null)  GD.PrintErr("InfographicScaleLabel null");
 
         if (ShowRoutesButton == null)          GD.PrintErr("ShowRoutesButton null");
-        if (ShowEmittersButton == null)        GD.PrintErr("ShowEmittersButton null");
-        if (ShowAntennaPatternsButton == null) GD.PrintErr("ShowAntennaPatternsButton null");
 
-        if (ShowTxButton == null) GD.PrintErr("ShowTxButton null");
-        if (ShowRxButton == null) GD.PrintErr("ShowRxButton null");
     }
 
 
@@ -269,42 +252,6 @@ public partial class FssUISidePanel : HBoxContainer
         FssCentralLog.AddEntry("FssUIHeader.OnShowRoutesButtonPressed");
 
         FssGodotFactory.Instance.UIState.ShowRoutes = ShowRoutesButton!.ButtonPressed;
-    }
-
-    // Called when the "ShowEmittersButton" button is pressed
-    public void OnShowEmittersButtonPressed()
-    {
-        FssCentralLog.AddEntry("FssUIHeader.OnShowEmittersButtonPressed");
-
-        FssGodotFactory.Instance.UIState.ShowEmitters = ShowEmittersButton!.ButtonPressed;
-    }
-
-    // Called when the "ShowAntennaPatternsButton" button is pressed
-    public void OnShowAntennaPatternsButtonPressed()
-    {
-        FssCentralLog.AddEntry("FssUIHeader.OnShowAntennaPatternsButtonPressed");
-
-        FssGodotFactory.Instance.UIState.ShowAntennaPatterns = ShowAntennaPatternsButton!.ButtonPressed;
-    }
-
-    // --------------------------------------------------------------------------------------------
-    // MARK: UI - RxTx
-    // --------------------------------------------------------------------------------------------
-
-    // Called when the "ShowTxButton" button is pressed
-    public void OnShowTxButtonPressed()
-    {
-        FssCentralLog.AddEntry("FssUIHeader.OnShowTxButtonPressed");
-
-        FssAppFactory.Instance.EventDriver.SidebarSetBeamVisibility(ShowRxButton!.ButtonPressed, ShowTxButton!.ButtonPressed);
-    }
-
-    // Called when the "ShowRxButton" button is pressed
-    public void OnShowRxButtonPressed()
-    {
-        FssCentralLog.AddEntry("FssUIHeader.OnShowRxButtonPressed");
-
-        FssAppFactory.Instance.EventDriver.SidebarSetBeamVisibility(ShowRxButton!.ButtonPressed, ShowTxButton!.ButtonPressed);
     }
 
 }

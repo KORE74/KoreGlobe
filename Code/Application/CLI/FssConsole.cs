@@ -83,7 +83,7 @@ public class FssConsole
 
         // General app control commands
         commandHandlers.Add(new FssCommandVersion());
-        commandHandlers.Add(new FssCommandExit());
+        commandHandlers.Add(new FssCommandAppExit());
 
         // Sim control
         commandHandlers.Add(new FssCommandSimClock());
@@ -94,21 +94,21 @@ public class FssConsole
         commandHandlers.Add(new FssCommandSimResume());
 
         // Platform Rreport
-        commandHandlers.Add(new FssCommandPlatReportElem());
-        commandHandlers.Add(new FssCommandPlatReportPos());
+        //commandHandlers.Add(new FssCommandPlatReportElem());
+        //commandHandlers.Add(new FssCommandPlatReportPos());
 
         //commandHandlers.Add(new FssCommandModelJsonRead());
         //commandHandlers.Add(new FssCommandModelJsonWrite());
 
         // Platform control
-        commandHandlers.Add(new FssCommandPlatTestScenario());
-        commandHandlers.Add(new FssCommandPlatAdd());
-        commandHandlers.Add(new FssCommandPlatDelete());
+        //commandHandlers.Add(new FssCommandPlatTestScenario());
+        commandHandlers.Add(new FssCommandEntityAdd());
+        commandHandlers.Add(new FssCommandEntityDelete());
 
         // Platform details
-        commandHandlers.Add(new FssCommandPlatPosition());
-        commandHandlers.Add(new FssCommandPlatCourse());
-        commandHandlers.Add(new FssCommandPlatCourseDelta());
+        commandHandlers.Add(new FssCommandEntityPosition());
+        commandHandlers.Add(new FssCommandEntityCourse());
+        commandHandlers.Add(new FssCommandEntityCourseDelta());
 
         // Network
         commandHandlers.Add(new FssCommandNetworkReport());

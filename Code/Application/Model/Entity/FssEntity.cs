@@ -83,7 +83,7 @@ public class FssEntity
     public string PositionReport()
     {
         StringBuilder sb = new StringBuilder();
-        sb.AppendLine($"Entity: {Name} Type: {Type}");
+        sb.AppendLine($"Entity: {Name}");
         sb.AppendLine($"- InitialLocation: {Kinetics.StartPosition}");
         sb.AppendLine($"- CurrPosition: {Kinetics.CurrPosition}");
         sb.AppendLine($"- CurrAttitude: {Kinetics.CurrAttitude}");
@@ -97,7 +97,7 @@ public class FssEntity
     public string ElementReport()
     {
         StringBuilder sb = new StringBuilder();
-        sb.AppendLine($"Entity: {Name} Type: {Type}");
+        //sb.AppendLine($"Entity: {Name} Type: {Type}");
         sb.AppendLine($"- Elements: {ElementsList.Count}");
 
         foreach (FssElement element in ElementsList)

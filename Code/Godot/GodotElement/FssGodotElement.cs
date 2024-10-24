@@ -1,10 +1,10 @@
 
 using Godot;
 
-// A FssGodotPlatformElement corresponds to a FssPlatformElement, but has the Godot Node3D as a base class
+// A FssGodotPlatformElement corresponds to a FssElement, but has the Godot Node3D as a base class
 // and is dedicated to display functionality in the Godot scene graph.
 
-// "Elements" are specifically data driven, and managed to match data in the FssPlatformElement class structure.
+// "Elements" are specifically data driven, and managed to match data in the FssElement class structure.
 
 public partial class FssGodotPlatformElement : Node3D
 {

@@ -13,7 +13,7 @@ public class FssModelRun
 
         if (!running)
         {
-            FssAppFactory.Instance.PlatformManager.Reset();
+            FssAppFactory.Instance.EntityManager.Reset();
             FssAppFactory.Instance.SimClock.Start();
             FssAppFactory.Instance.SimClock.MarkTime();
 
@@ -84,6 +84,6 @@ public class FssModelRun
     {
         // Call the model to update
         // Assuming the model update logic is handled within this method
-        FssAppFactory.Instance.PlatformManager.UpdateKinetics();
+        FssAppFactory.Instance.EntityManager.UpdateKinetics();
     }
 }

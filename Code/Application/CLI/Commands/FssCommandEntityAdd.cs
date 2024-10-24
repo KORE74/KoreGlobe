@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 
-// FssCommandPlatAdd
 
 public class FssCommandEntityAdd : FssCommand
 {
@@ -19,21 +18,18 @@ public class FssCommandEntityAdd : FssCommand
             return "FssCommandEntityAdd.Execute -> insufficient parameters";
         }
 
-        string entName  = parameters[0];
+        string entName = parameters[0];
         string retString = "";
 
-        // Commands exist to perform their task, delete any pre-existing platform by the name
-        if (FssAppFactory.Instance.EventDriver.DoesPlatformExist(entName))
+        if (!FssAppFactory.Instance.EventDriver.DoesEntityExist(entName))
         {
-            FssAppFactory.Instance.EventDriver.DeletePlatform(entName);
-            retString += $"Platform {entName} deleted. ";
+            FssAppFactory.Instance.EventDriver.AddEntity(entName);
+            retString += $"Entity {entName} added.";
         }
-
-        FssAppFactory.Instance.EventDriver.AddPlatform(entName);
-        retString += $"Platform {entName} added.";
-
-        // Set the default platform details - adding it with no location will create rendering div0's etc.
-        FssAppFactory.Instance.EventDriver.DefaultPlatformDetails(entName);
+        else
+        {
+            retString = $"Entity {entName} already exists. Not Changed.";
+        }
 
         FssCentralLog.AddEntry($"FssCommandEntityAdd.Execute -> {retString}");
         return retString;

@@ -90,7 +90,6 @@ public class FssAppFactory
         //ConsoleInterface.EventDriver = EventDriver;
         //EventDriver.ConsoleInterface = ConsoleInterface;
 
-        //EventDriver.SetupTestPlatforms();
 
         CallStart();
 
