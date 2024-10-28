@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public static class FssFloat1DArrayOperations
+public static partial class FssFloat1DArrayOperations
 {
     // --------------------------------------------------------------------------------------------
     // MARK: Value Ranges
