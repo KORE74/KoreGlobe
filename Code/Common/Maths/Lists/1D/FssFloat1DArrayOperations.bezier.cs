@@ -8,6 +8,9 @@ public static partial class FssFloat1DArrayOperations
     // MARK: Bezer functions
     // --------------------------------------------------------------------------------------------
 
+    // CalculatePoint: Calculate the point on the Bezier curve at time t. Example uses include finding
+    // the position of a XY point on a curve at a given time.
+
     public static float CalculatePoint(float t, FssFloat1DArray controlPoints)
     {
         switch (controlPoints.Length)
@@ -23,6 +26,9 @@ public static partial class FssFloat1DArrayOperations
         }
     }
 
+    // CalculateFirstDerivative: Calculate the first derivative of the Bezier curve at time t. Example uses
+    // include finding the velocity of a XY point on a curve at a given time.
+
     public static FssFloat1DArray CalculateFirstDerivative(float t, FssFloat1DArray controlPoints)
     {
         switch (controlPoints.Length)
@@ -37,6 +43,9 @@ public static partial class FssFloat1DArrayOperations
                 throw new InvalidOperationException("Unsupported number of control points.");
         }
     }
+
+    // CalculateSecondDerivative: Calculate the second derivative of the Bezier curve at time t. Example uses
+    // include finding the acceleration of a XY point on a curve at a given time.
 
     public static FssFloat1DArray CalculateSecondDerivative(float t, FssFloat1DArray controlPoints)
     {

@@ -35,6 +35,17 @@ public partial class FssMessageManager
 
     // --------------------------------------------------------------------------------------------
 
+    private void ProcessMessage_EntityPosition(EntityPosition msg)
+    {
+        FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_EntityPosition: {msg.Name}");
+
+        // Check if the platform exists
+        if (FssAppFactory.Instance.EventDriver.DoesEntityExist(msg.Name))
+        {
+            FssAppFactory.Instance.EventDriver.SetEntityCurrLLA(msg.Name, msg.Pos);
+        }
+    }
+
     // private void ProcessMessage_PlatUpdate(EntityPosition msg)
     // {
     //     FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_PlatUpdate: {msg.Name}");

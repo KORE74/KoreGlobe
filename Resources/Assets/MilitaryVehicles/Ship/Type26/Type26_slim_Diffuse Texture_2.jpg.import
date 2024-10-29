@@ -2,14 +2,11 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c7jqx88ase70n"
+uid="uid://bw86ryb5synaa"
 path.s3tc="res://.godot/imported/Type26_slim_Diffuse Texture_2.jpg-7eaefdfe9bbf7411d9e436ca39614b1d.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
-}
-generator_parameters={
-"md5": "723abf01fa8f20cf72ad7965e94880d9"
 }
 
 [deps]

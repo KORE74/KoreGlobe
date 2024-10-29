@@ -9,13 +9,13 @@ using System.Collections.Generic;
 
 public class FssRoute
 {
-    public List<FSSRouteLegPointToPoint> Legs;
+    public List<FssRouteLeg> Legs;
 
     // --------------------------------------------------------------------------------------------
     // Constructors
     // --------------------------------------------------------------------------------------------
 
-    public FssRoute(List<FSSRouteLegPointToPoint> legs)
+    public FssRoute(List<FssRouteLeg> legs)
     {
         Legs = legs;
     }
@@ -27,7 +27,7 @@ public class FssRoute
     public double GetDistanceM()
     {
         double distanceM = 0;
-        foreach (FSSRouteLegPointToPoint leg in Legs)
+        foreach (FssRouteLeg leg in Legs)
         {
             distanceM += leg.GetDistanceM();
         }
@@ -37,29 +37,29 @@ public class FssRoute
     public double GetDurationS()
     {
         double durationS = 0;
-        foreach (FSSRouteLegPointToPoint leg in Legs)
+        foreach (FssRouteLeg leg in Legs)
         {
             durationS += leg.GetDurationS();
         }
         return durationS;
     }
 
-    public FssLLAPoint CurrentPosition(double timeS)
+    public FssLLAPoint PositionAtTime(double routeTimeS)
     {
-        double timeRemainingS = timeS;
-        foreach (FSSRouteLegPointToPoint leg in Legs)
+        double timeRemainingS = routeTimeS;
+        foreach (FssRouteLeg leg in Legs)
         {
             if (timeRemainingS < leg.GetDurationS())
             {
-                return leg.CurrentPosition(timeRemainingS);
+                return leg.PositionAtTime(timeRemainingS);
             }
             timeRemainingS -= leg.GetDurationS();
         }
         return Legs[Legs.Count - 1].EndPoint;
     }
 
-    public FssAttitude CurrentAttitude(double timeS)
-    {   
+    public FssAttitude CurrentAttitude(double routeTimeS)
+    {
         // This is a placeholder for now. We will implement this later.
         return new FssAttitude(0, 0, 0);
     }
