@@ -102,6 +102,39 @@ public partial class FssEventDriver
     }
 
     // ---------------------------------------------------------------------------------------------
+    // #MARK: Entity Attributes
+    // ---------------------------------------------------------------------------------------------
+
+    // String based attributes that can be added to record types, model types, status etc
+
+    public void SetEntityAttrib(string entityName, string key, string value)
+    {
+        // Get the entity
+        FssEntity? ent = FssAppFactory.Instance.EntityManager.EntityForName(entityName);
+
+        if (ent == null)
+        {
+            FssCentralLog.AddEntry($"EC0-0002: Entity {entityName} not found.");
+            return;
+        }
+
+        // Set the Entity's attribute
+        ent.Attribs.Set(key, value);
+    }
+
+    public string EntityAttrib(string entityName, string key)
+    {
+        // Get the entity
+        FssEntity? ent = FssAppFactory.Instance.EntityManager.EntityForName(entityName);
+
+        if (ent == null)
+            return string.Empty;
+
+        // Get the Entity's attribute
+        return ent.Attribs.Get(key);
+    }
+
+    // ---------------------------------------------------------------------------------------------
     // #MARK: Entity Position
     // ---------------------------------------------------------------------------------------------
 

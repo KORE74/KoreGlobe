@@ -270,7 +270,7 @@ public partial class FssMapTileNode : Node3D
     private void LabelTile(FssMapTileCode tileCode)
     {
         FssLLBox tileBounds = tileCode.LLBox;
-        FssLLPoint posLL = tileBounds.CenterPoint;
+        FssLLPoint posLL    = tileBounds.CenterPoint;
 
         string tileCodeBoxStr;
         if      (TileCode.MapLvl <= 2) tileCodeBoxStr = $"...[{tileBounds.MaxLatDegs:F0}, {tileBounds.MaxLonDegs:F0}]\n[{tileBounds.MinLatDegs:F0}, {tileBounds.MinLonDegs:F0}]...";
@@ -430,13 +430,18 @@ public partial class FssMapTileNode : Node3D
         if (ActiveVisibility)
         {
             // To allow for different game-engine deisplay radii, we do everything in terms of a fraction of the displayed Earth's radius.
-            float distanceFraction = (float)( FssMapManager.LoadRefXYZ.DistanceTo(RwTileCenterXYZ) / FssPosConsts.EarthRadiusM );
+
+            double distanceToTileCentreM = FssMapManager.LoadRefXYZ.DistanceTo(RwTileCenterXYZ);
+            float distanceFraction = (float)( distanceToTileCentreM / FssPosConsts.EarthRadiusM );
+
+            double camDistToHorizon = FssLLAPointOperations.DistanceToHorizonM(FssMapManager.LoadRefLLA.AltMslM);
 
             int maxMapLvl = FssMapManager.CurrMaxMapLvl;
 
             // The logic could get complex, so factored it all out into a set of statement flags.
-            bool shouldDisplayChildTiles = distanceFraction < childTileDisplayForLvl[TileCode.MapLvl];
-            bool shouldCreateChildTiles  = (distanceFraction < CreateChildTilesForLvl[TileCode.MapLvl]) && (TileCode.MapLvl < maxMapLvl);
+            bool tileOverHorizon         = distanceToTileCentreM > camDistToHorizon * 2;
+            bool shouldDisplayChildTiles = !tileOverHorizon && (distanceFraction < childTileDisplayForLvl[TileCode.MapLvl]);
+            bool shouldCreateChildTiles  = !tileOverHorizon && ((distanceFraction < CreateChildTilesForLvl[TileCode.MapLvl]) && (TileCode.MapLvl < maxMapLvl));
             bool shouldDeleteChildTiles  = distanceFraction > DeleteChildTilesForLvl[TileCode.MapLvl];
             bool childTilesExist         = DoChildTilesExist();
             bool childTilesLoaded        = AreChildTilesLoaded();

@@ -1,4 +1,4 @@
-[gd_scene load_steps=70 format=3 uid="uid://ck4tngsqwb7jf"]
+[gd_scene load_steps=69 format=3 uid="uid://ck4tngsqwb7jf"]
 
 [ext_resource type="StyleBox" uid="uid://l27fuiuspgfw" path="res://Themes/Panel.tres" id="1_ndm6o"]
 [ext_resource type="Script" path="res://Code/Godot/UI/FssUIHeader.cs" id="2_iuuet"]
@@ -27,7 +27,6 @@
 [ext_resource type="Script" path="res://Code/Godot/UI/FssUICliWindow.cs" id="16_unelf"]
 [ext_resource type="Script" path="res://Code/Godot/UI/FssUINetworkWindow.cs" id="17_xs6g5"]
 [ext_resource type="Script" path="res://Code/Godot/UI/FssUISettingWindow.cs" id="18_sk1xa"]
-[ext_resource type="Script" path="res://Code/Godot/UI/FssPlatformSelectWindow.cs" id="21_6xmyp"]
 [ext_resource type="Theme" uid="uid://dmowlcnw0dkpk" path="res://Themes/Buttons/YellowButton.tres" id="23_4wdls"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBlueToggle_Disabled"]
@@ -1726,7 +1725,6 @@ transient = true
 exclusive = true
 unresizable = true
 popup_window = true
-script = ExtResource("21_6xmyp")
 
 [node name="MarginContainer" type="MarginContainer" parent="PlatformSelectWindow"]
 anchors_preset = 15

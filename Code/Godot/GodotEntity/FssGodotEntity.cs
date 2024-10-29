@@ -108,8 +108,8 @@ public partial class FssGodotEntity : Node3D
         // Update the position and orientation of the entity.
         // This is done by the parent node.
 
-        FssLLAPoint? pos    = FssAppFactory.Instance.EventDriver.GetPlatformPosition(EntityName);
-        FssCourse?   course = FssAppFactory.Instance.EventDriver.PlatformCurrCourse(EntityName);
+        FssLLAPoint? pos    = FssAppFactory.Instance.EventDriver.EntityCurrLLA(EntityName);
+        FssCourse?   course = FssAppFactory.Instance.EventDriver.EntityCurrCourse(EntityName);
 
         if (pos != null)
             CurrentPosition = (FssLLAPoint)pos;
@@ -129,7 +129,7 @@ public partial class FssGodotEntity : Node3D
 
         LookAt(entityVecs.PosAhead, entityVecs.VecUp);
 
-        FssAttitude? att = FssAppFactory.Instance.EventDriver.GetPlatformAttitude(EntityName);
+        FssAttitude? att = FssAppFactory.Instance.EventDriver.EntityCurrAttitude(EntityName);
         if (att != null)
             UpdateAttitude((FssAttitude)att);
     }
@@ -160,12 +160,12 @@ public partial class FssGodotEntity : Node3D
     public void UpdateRoute()
     {
         // Get the route
-        List<FssLLAPoint> routePoints = FssAppFactory.Instance.EventDriver.PlatformGetRoutePoints(EntityName);
+        //List<FssLLAPoint> routePoints = FssAppFactory.Instance.EventDriver.PlatformGetRoutePoints(EntityName);
 
-        if (routePoints.Count > 0)
-        {
-            return;
-        }
+        // if (routePoints.Count > 0)
+        // {
+        //     return;
+        // }
 
         // Update the route
     }

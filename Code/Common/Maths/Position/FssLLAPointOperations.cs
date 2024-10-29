@@ -10,6 +10,19 @@ using System.Collections.Generic;
 
 public static class FssLLAPointOperations
 {
+    public static double DistanceToHorizonM(double altMslM)
+    {
+        // The Earth's radius is 6371 km, or 6371000 m.
+        double earthRadiusM = FssPosConsts.EarthRadiusM;
+
+        // Calculate the distance to the horizon using the correct formula
+        double distanceM = Math.Sqrt(2 * earthRadiusM * altMslM + altMslM * altMslM);
+
+        return distanceM;
+    }
+
+    // --------------------------------------------------------------------------------------------
+
     public static FssLLAPoint RhumbLineInterpolation(FssLLAPoint fromPoint, FssLLAPoint toPoint, double fraction)
     {
         // This is a simple linear interpolation of the lat and lon, and a weighted average of the altitudes.

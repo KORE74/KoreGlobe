@@ -116,13 +116,13 @@ public partial class FssGodotEntityManager : Node3D
     public void MatchModelPlatforms()
     {
         // Get the model
-        List<string> platNames = FssAppFactory.Instance.EventDriver.PlatformNames();
+        List<string> modelEntityNames  = FssAppFactory.Instance.EventDriver.EntityNames();
         List<string> godotEntityNames = EntityNames();
 
         // Compare the two lists, to find the new, the deleted and the consistent
-        List<string> omittedInPresentation = FssStringListOperations.ListOmittedInSecond(platNames, godotEntityNames);
-        List<string> noLongerInModel       = FssStringListOperations.ListOmittedInSecond(godotEntityNames, platNames);
-        List<string> maintainedEnitites    = FssStringListOperations.ListInBoth(platNames, godotEntityNames);
+        List<string> omittedInPresentation = FssStringListOperations.ListOmittedInSecond(modelEntityNames, godotEntityNames);
+        List<string> noLongerInModel       = FssStringListOperations.ListOmittedInSecond(godotEntityNames, modelEntityNames);
+        List<string> maintainedEnitites    = FssStringListOperations.ListInBoth(modelEntityNames, godotEntityNames);
 
         bool  addInfographicScale = FssGodotFactory.Instance.UIState.IsRwScale;
         float scaleModifier       = FssValueUtils.Clamp(FssGodotFactory.Instance.UIState.InfographicScale, 1f, 10f);
@@ -140,11 +140,11 @@ public partial class FssGodotEntityManager : Node3D
 
         foreach (string currModelName in maintainedEnitites)
         {
-            MatchModelPlatformElements(currModelName);
+            // MatchModelPlatformElements(currModelName);
             MatchModelPlatform3DModel(currModelName);
 
             // Set the scale of the model
-            string platformType = FssAppFactory.Instance.EventDriver.PlatformType(currModelName) ?? "default";
+            string platformType = FssAppFactory.Instance.EventDriver.EntityAttrib(currModelName, "type") ?? "default";
 
             SetModelScale(currModelName, platformType, addInfographicScale, scaleModifier);
         }
@@ -161,40 +161,40 @@ public partial class FssGodotEntityManager : Node3D
 
     public void AddPlatformElementRoute(string platName, string currElemName)
     {
-        // Get the Route Details
-        FssPlatformElementRoute? route = FssAppFactory.Instance.EventDriver.GetElement(platName, currElemName) as FssPlatformElementRoute;
+        // // Get the Route Details
+        // FssPlatformElementRoute? route = FssAppFactory.Instance.EventDriver.GetElement(platName, currElemName) as FssPlatformElementRoute;
 
-        FssGodotPlatformElementRoute newRoute = new FssGodotPlatformElementRoute();
+        // FssGodotPlatformElementRoute newRoute = new FssGodotPlatformElementRoute();
 
-        if ((route != null) && (newRoute != null))
-        {
-            newRoute.Name = currElemName;
-            newRoute.SetRoutePoints(route!.RoutePoints);
+        // if ((route != null) && (newRoute != null))
+        // {
+        //     newRoute.Name = currElemName;
+        //     newRoute.SetRoutePoints(route!.RoutePoints);
 
-            // Update visibility based on the UI state
-            newRoute.SetVisibility(FssGodotFactory.Instance.UIState.ShowRoutes);
+        //     // Update visibility based on the UI state
+        //     newRoute.SetVisibility(FssGodotFactory.Instance.UIState.ShowRoutes);
 
-            // Add the route to the entity and scene tree
-            AddUnlinkedElement(platName, newRoute);
+        //     // Add the route to the entity and scene tree
+        //     AddUnlinkedElement(platName, newRoute);
 
-            FssCentralLog.AddEntry($"Added route element {currElemName} to {platName}");
-        }
+        //     FssCentralLog.AddEntry($"Added route element {currElemName} to {platName}");
+        // }
     }
 
     public void UpdatePlatformElementRoute(string platName, string currElemName)
     {
-        // Get the Route Details
-        FssPlatformElementRoute? route = FssAppFactory.Instance.EventDriver.GetElement(platName, currElemName) as FssPlatformElementRoute;
+        // // Get the Route Details
+        // FssPlatformElementRoute? route = FssAppFactory.Instance.EventDriver.GetElement(platName, currElemName) as FssPlatformElementRoute;
 
-        // Get the godot route we'll update
-        FssGodotPlatformElementRoute? routeNode = GetUnlinkedElement(platName, currElemName) as FssGodotPlatformElementRoute;
+        // // Get the godot route we'll update
+        // FssGodotPlatformElementRoute? routeNode = GetUnlinkedElement(platName, currElemName) as FssGodotPlatformElementRoute;
 
-        if ((route != null) && (routeNode != null))
-        {
-            // Update visibility based on the UI state
-            routeNode!.SetVisibility(FssGodotFactory.Instance.UIState.ShowRoutes);
-            routeNode!.SetRoutePoints(route.RoutePoints);
-        }
+        // if ((route != null) && (routeNode != null))
+        // {
+        //     // Update visibility based on the UI state
+        //     routeNode!.SetVisibility(FssGodotFactory.Instance.UIState.ShowRoutes);
+        //     routeNode!.SetRoutePoints(route.RoutePoints);
+        // }
     }
 
     // --------------------------------------------------------------------------------------------

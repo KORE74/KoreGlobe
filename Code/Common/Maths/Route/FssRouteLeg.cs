@@ -21,7 +21,6 @@ public class FssRouteLeg
     public double GetDistanceM() => 0;
     public double GetDurationS() => 0;
 
-
     // Time based Operations - time is only relevant for the leg, zero being the start point.
     public FssLLAPoint      PositionAtTime(double legtimeS)      => FssLLAPoint.Zero;
     public FssAttitude      AttitudeAtTime(double legtimeS)      => FssAttitude.Zero;

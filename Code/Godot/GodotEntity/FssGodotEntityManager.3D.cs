@@ -15,34 +15,34 @@ public partial class FssGodotEntityManager : Node3D
     private void MatchModelPlatform3DModel(string platName)
     {
         // Get the platform, and platform type, from the mode model side
-        string? platformType = FssAppFactory.Instance.EventDriver.PlatformType(platName);
-        if (platformType == null)
-            platformType = "default";
+        //string? platformType = FssAppFactory.Instance.EventDriver.PlatformType(platName);
+        // if (platformType == null)
+        //     platformType = "default";
 
 
 
 
-        MatchBoundingBox(platName, platformType);
+        // MatchBoundingBox(platName, platformType);
 
 
 
-        string modelNodeName = "model";
+        // string modelNodeName = "model";
 
-        FssGodotEntity? ent = GetEntity(platName);
+        // FssGodotEntity? ent = GetEntity(platName);
 
-        if (ent != null)
-        {
-            Node3D? modelNode = ent.AttitudeNode.GetNodeOrNull<Node3D>(modelNodeName);
+        // if (ent != null)
+        // {
+        //     Node3D? modelNode = ent.AttitudeNode.GetNodeOrNull<Node3D>(modelNodeName);
 
-            if (modelNode == null)
-            {
-                modelNode = FssGodotFactory.Instance.ModelLibrary.PrepModel(platformType);
+        //     if (modelNode == null)
+        //     {
+        //         modelNode = FssGodotFactory.Instance.ModelLibrary.PrepModel(platformType);
 
-                modelNode.Name = modelNodeName;
-                ent.AttitudeNode.AddChild(modelNode);
-            }
+        //         modelNode.Name = modelNodeName;
+        //         ent.AttitudeNode.AddChild(modelNode);
+        //     }
 
-        }
+        // }
     }
 
     private void MatchBoundingBox(string platName, string platformType)

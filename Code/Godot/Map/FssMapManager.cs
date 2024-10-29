@@ -25,9 +25,11 @@ public partial class FssMapManager : Node3D
 
     // Debug
     private FssLLAPoint pos  = new FssLLAPoint() { LatDegs = 41, LonDegs = 6, AltMslM = 0 };
-    private FssCourse Course = new FssCourse() { HeadingDegs = 90, SpeedMps = 1 };
+    private FssCourse Course = new FssCourse() { HeadingDegs = 90, GroundSpeedMps = 1 };
     Node3D ModelNode         = null;
     Node3D ModelResourceNode = null;
+
+    float Timer1Hz = 0.0f;
 
     // --------------------------------------------------------------------------------------------
     // MARK: Node Functions
@@ -57,6 +59,16 @@ public partial class FssMapManager : Node3D
     {
         // Update this GE position, to keep up with the zero node movement
 
+        if (Timer1Hz < FssCoreTime.RuntimeSecs)
+        {
+            Timer1Hz = FssCoreTime.RuntimeSecs + 1.0f;
+
+            // Get the camera altitude and distance to horizon
+            double horizonDistM = FssLLAPointOperations.DistanceToHorizonM(FssMapManager.LoadRefLLA.AltMslM);
+
+            // debug print the number of tiles
+            GD.Print($"Tile Count: {GetChildNodeCount(this)} // Horizon: {horizonDistM:F0}m");
+        }
 
     }
 
@@ -107,6 +119,19 @@ public partial class FssMapManager : Node3D
     // MARK: Report
     // --------------------------------------------------------------------------------------------
 
+    public int GetChildNodeCount(Node node)
+    {
+        int count = 0;
+
+        // Iterate over all the children of the current node.
+        foreach (Node child in node.GetChildren())
+        {
+            count += 1; // Count the child itself
+            count += GetChildNodeCount(child); // Recursively count the child's children
+        }
+
+        return count;
+    }
 
     private void CreateDebugMarker()
     {

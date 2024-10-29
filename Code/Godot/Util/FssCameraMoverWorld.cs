@@ -199,7 +199,7 @@ public partial class FssCameraMoverWorld : Node3D
 
         // Limit movements - - - - -
 
-        if (CamPos.AltMslM < 500) CamPos.AltMslM = 500;
+        if (CamPos.AltMslM < 50) CamPos.AltMslM = 50;
 
         if (!FssValueUtils.IsZero(CamCourse.GroundSpeedKph))
         {

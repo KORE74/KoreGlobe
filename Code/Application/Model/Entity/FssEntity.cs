@@ -6,10 +6,14 @@ using System.Text;
 
 public class FssEntity
 {
-    public string Name     { get; set; } = "Unknown-Name";
+    public string Name { get; set; } = "Unknown-Name";
 
     // Kinetics object defines the initial and current position of the platform. Has to exist in all cases.
     public FssEntityKinetics Kinetics { get; set; } = new FssEntityKinetics();
+
+    // Attributes object is a dictionary of key-value pairs that can be used to store extra information about the entity.
+    // E.g. Model names, callsigns, iff status and so on.
+    public FssAttributeDictionary Attribs { get; set; } = new FssAttributeDictionary();
 
     //private FssPlatformRoute? Route { get; set; } = null;
 
@@ -24,24 +28,12 @@ public class FssEntity
     //     get { Route ??= new FssPlatformRoute(); return Route; }
     // }
 
-    public List<FssElement> ElementsList
-    {
-        get { Elements ??= new List<FssElement>(); return Elements; }
-    }
-
-    public List<string> ElementNames()
-    {
-        List<string> names = new List<string>();
-
-        foreach (FssElement element in ElementsList)
-            names.Add(element.Name);
-
-        return names;
-    }
 
     // --------------------------------------------------------------------------------------------
     // #MARK: Basic Element Management
     // --------------------------------------------------------------------------------------------
+
+    // Beyond simple access and management, element content is handled by the element or caller.
 
     public void AddElement(FssElement element) => ElementsList.Add(element);
     public void DeleteElement(FssElement element) => ElementsList.Remove(element);
@@ -56,6 +48,21 @@ public class FssEntity
                 ElementsList.RemoveAt(i);
             }
         }
+    }
+
+    public List<FssElement> ElementsList
+    {
+        get { Elements ??= new List<FssElement>(); return Elements; }
+    }
+
+    public List<string> ElementNames()
+    {
+        List<string> names = new List<string>();
+
+        foreach (FssElement element in ElementsList)
+            names.Add(element.Name);
+
+        return names;
     }
 
     public FssElement? ElementForName(string name)
