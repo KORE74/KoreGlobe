@@ -16,9 +16,9 @@ public struct FssLLALocation
     public enum HeightType { MSL, AGL, AGLMSL, AGLMSLAVG };
     public HeightType HeightTypeValue { get; set; } = HeightType.MSL;
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
     // Additional simple accessors - adding units
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public double LatDegs
     {
@@ -51,9 +51,9 @@ public struct FssLLALocation
         return string.Format($"({LatDegs:F2}, {LonDegs:F2}, {HeightM:F2})");
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
     // #MARK: Constructors - different options and units
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     // Note that fields can be set:
     //   FssLLAPoint pos = new FssLLAPoint() { latDegs = X, LonDegs = Y, AltMslM = Z };

@@ -10,6 +10,7 @@ public static class FssZeroOffset
 
     // Real World Earth Center is 0,0,0. We create an offset 0,0,0 for the purposes og focussing the
     // game engine view within the range of its floating point precision.
+    // FssZeroOffset.RwZeroPointLLA
     public static FssLLAPoint RwZeroPointLLA = new FssLLAPoint();
 
     // Offset "FROM real-world Earth center TO game engine center". We use the inverse of this to place the earth center.

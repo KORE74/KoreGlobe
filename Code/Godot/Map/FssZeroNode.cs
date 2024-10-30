@@ -14,6 +14,9 @@ public partial class FssZeroNode : Node3D
 
     private float Timer1Hz = 0.0f;
 
+    // Usage: FssZeroNode.ZeroNodeUpdated
+    public static bool ZeroNodeUpdated = false;
+
     // --------------------------------------------------------------------------------------------
     // MARK: Node Functions
     // --------------------------------------------------------------------------------------------
@@ -42,12 +45,15 @@ public partial class FssZeroNode : Node3D
 
     public override void _Process(double delta)
     {
+        ZeroNodeUpdated = false;
+
         if (Timer1Hz < FssCoreTime.RuntimeSecs)
         {
             Timer1Hz = FssCoreTime.RuntimeSecs + 1.0f;
             // CallDeferred("SetZeroNodePositionDeferred");
 
             SetZeroNodePositionDeferred();
+            ZeroNodeUpdated = true;
         }
     }
 

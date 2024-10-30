@@ -6,7 +6,7 @@ public struct FssCourse
     public double HeadingRads;
     public double ClimbRateMps;
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public double GroundSpeedKph
     {
@@ -20,7 +20,7 @@ public struct FssCourse
         set { HeadingRads = (value % 360.0) * FssConsts.DegsToRadsMultiplier; }
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public FssCourse(double inSpeedKph, double inHeadingDegs, double inClimbRateMtrSec)
     {
@@ -34,14 +34,14 @@ public struct FssCourse
         get { return new FssCourse { GroundSpeedMps = 0.0, HeadingRads = 0.0, ClimbRateMps = 0.0 }; }
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public bool IsStationary()
     {
         return (GroundSpeedMps < 0.001) && (ClimbRateMps < 0.001);
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public FssRangeBearing OffsetForTime(double elapsedSeconds)
     {
@@ -65,7 +65,7 @@ public struct FssCourse
         return new FssCourse(newSpeedMps * FssPosConsts.MPStoKPHMultiplier, newHeadingDegs, ClimbRateMps);
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public FssPolarOffset ToPolarOffset(double elapsedSeconds)
     {
@@ -73,7 +73,7 @@ public struct FssCourse
         return new FssPolarOffset(rangeM, HeadingRads, 0);
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public override string ToString()
     {

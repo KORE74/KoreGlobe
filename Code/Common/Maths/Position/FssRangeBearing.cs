@@ -5,7 +5,7 @@ public struct FssRangeBearing
     public double RangeM { get; set; }
     public double BearingRads { get; set; }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public double RangeKm // Alt above EarthRadius
     {
@@ -19,7 +19,7 @@ public struct FssRangeBearing
         set { BearingRads = value * FssConsts.DegsToRadsMultiplier; }
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public FssRangeBearing(double inRangeM, double inBearingRads)
     {

@@ -19,9 +19,13 @@ volumetric_fog_albedo = Color(0.599442, 0.763254, 0.970563, 1)
 top_level = true
 script = ExtResource("1_awllb")
 
-[node name="UITop" parent="." instance=ExtResource("3_3wlp5")]
+[node name="UI" parent="." instance=ExtResource("3_3wlp5")]
 custom_minimum_size = Vector2(1100, 640)
 anchors_preset = -1
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="ZeroNode" type="Node3D" parent="."]
+
+[node name="Services" type="Node" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Services"]
 environment = SubResource("Environment_r87dp")

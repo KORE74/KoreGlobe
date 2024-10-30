@@ -434,7 +434,9 @@ public partial class FssMapTileNode : Node3D
             double distanceToTileCentreM = FssMapManager.LoadRefXYZ.DistanceTo(RwTileCenterXYZ);
             float distanceFraction = (float)( distanceToTileCentreM / FssPosConsts.EarthRadiusM );
 
-            double camDistToHorizon = FssLLAPointOperations.DistanceToHorizonM(FssMapManager.LoadRefLLA.AltMslM);
+            double camDistToHorizon = FssMapManager.LoadRefLLA.DistanceToHorizonM();
+
+
 
             int maxMapLvl = FssMapManager.CurrMaxMapLvl;
 

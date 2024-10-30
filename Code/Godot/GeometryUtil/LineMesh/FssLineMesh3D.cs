@@ -46,6 +46,12 @@ public partial class FssLineMesh3D : Node3D
     // MARK: AddLine Functions
     // --------------------------------------------------------------------------------------------
 
+    // Function to add a line between two points
+    public void AddLine(Vector3 p1, Vector3 p2)
+    {
+        AddLine(p1, p2, Color.Color8(255, 255, 255));
+    }
+
     // Function to add a line between two points with a specified color
     public void AddLine(Vector3 p1, Vector3 p2, Color linecolor)
     {
@@ -57,6 +63,9 @@ public partial class FssLineMesh3D : Node3D
         _lines.Add((p1, p2, p1Color, p2Color));
         _meshNeedsUpdate = true;
     }
+
+    public void AddLine(FssXYZPoint p1, FssXYZPoint p2, Color color) => AddLine(FssGodotGeometryOperations.ToVector3(p1), FssGodotGeometryOperations.ToVector3(p2), color);
+    public void AddLine(FssXYZLine l1, Color color)                  => AddLine(l1.P1, l1.P2, color);
 
     // --------------------------------------------------------------------------------------------
 

@@ -64,7 +64,7 @@ public partial class FssMapManager : Node3D
             Timer1Hz = FssCoreTime.RuntimeSecs + 1.0f;
 
             // Get the camera altitude and distance to horizon
-            double horizonDistM = FssLLAPointOperations.DistanceToHorizonM(FssMapManager.LoadRefLLA.AltMslM);
+            double horizonDistM = FssMapManager.LoadRefLLA.DistanceToHorizonM();
 
             // debug print the number of tiles
             GD.Print($"Tile Count: {GetChildNodeCount(this)} // Horizon: {horizonDistM:F0}m");

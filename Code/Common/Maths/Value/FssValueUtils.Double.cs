@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public static partial class FssValueUtils
 {
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
     // Function to essentially allow the % operator on double precision numbers.
 
     public static double Modulo(double value, double rangesize)
@@ -18,7 +18,7 @@ public static partial class FssValueUtils
         return wrappedvalue;
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     // FssValueUtils.LimitToRange(5, 0, 10) // Returns 5
 
@@ -41,7 +41,7 @@ public static partial class FssValueUtils
         return wrappedvalue + rangemin;
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     // Determine the difference between two values that wrap (ie longitude or angle values).
 
@@ -80,7 +80,7 @@ public static partial class FssValueUtils
         return diff;
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     // Take an input fraction (0..1) and return the index of the value in the range minval..maxval
     // that corresponds to that fraction.
@@ -105,14 +105,14 @@ public static partial class FssValueUtils
         return retInc;
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public static bool IsInRange(double val, double rangemin, double rangemax)
     {
         return val >= rangemin && val <= rangemax;
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
     // Uses a y=mx+c mechanism to convert a value between an input and output range.
 
     public static double ScaleVal(double inval, double inrangemin, double inrangemax, double outrangemin, double outrangemax)
@@ -134,7 +134,7 @@ public static partial class FssValueUtils
         return LimitToRange(outval, outrangemin, outrangemax);
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     // Function to move from the current to the commanded value, but not exceed the maxDelta.
 
@@ -147,7 +147,7 @@ public static partial class FssValueUtils
         return currentValue + delta;
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public static double Interpolate(double inrangemin, double inrangemax, double fraction)
     {
@@ -156,7 +156,7 @@ public static partial class FssValueUtils
         return inrangemin + (diffVal * fraction);
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
     // Useful way to test floating point numbers.
 
     // Usage: FssValueUtils.EqualsWithinTolerance(val, val2, 0.3);
@@ -172,7 +172,7 @@ public static partial class FssValueUtils
         return EqualsWithinTolerance(val, 0, tolerance);
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     // Generates a random float value between minVal and maxVal (inclusive)
 
@@ -183,7 +183,7 @@ public static partial class FssValueUtils
         return ScaleVal(random.NextDouble(), 0, 1, minVal, maxVal);
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     // Create a list of floats from start to end
     public static List<double> CreateRangeList(int length, double start, double end)

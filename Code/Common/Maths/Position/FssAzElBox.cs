@@ -7,7 +7,7 @@ public struct FssAzElBox
     public double MinElRads { get; set; }
     public double MaxElRads { get; set; }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public double MinAzDegs
     {
@@ -30,39 +30,39 @@ public struct FssAzElBox
         set { MaxElRads = value * FssConsts.DegsToRadsMultiplier; }
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public double ArcAzRads { get { return (MaxAzRads - MinAzRads); } }
     public double ArcAzDegs { get { return (MaxAzRads - MinAzRads) * FssConsts.RadsToDegsMultiplier; } }
     public double ArcElRads { get { return (MaxElRads - MinElRads); } }
     public double ArcElDegs { get { return (MaxElRads - MinElRads) * FssConsts.RadsToDegsMultiplier; } }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public double HalfArcAzRads { get { return ArcAzRads / 2.0; } }
     public double HalfArcAzDegs { get { return ArcAzDegs / 2.0; } }
     public double HalfArcElRads { get { return ArcElRads / 2.0; } }
     public double HalfArcElDegs { get { return ArcElDegs / 2.0; } }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public double MidAzRads { get { return MinAzRads + HalfArcAzRads; } }
     public double MidAzDegs { get { return MinAzDegs + HalfArcAzDegs; } }
     public double MidElRads { get { return MinElRads + HalfArcElRads; } }
     public double MidElDegs { get { return MinElDegs + HalfArcElDegs; } }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public FssPolarDirection Center { get { return new FssPolarDirection(MidAzRads, MidElRads); } }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public static FssAzElBox Zero
     {
         get { return new FssAzElBox { MinAzRads = 0.0, MaxAzRads = 0.0, MinElRads = 0.0, MaxElRads = 0.0 }; }
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public bool IsOffsetInBox(FssPolarOffset offset)
     {
@@ -71,7 +71,7 @@ public struct FssAzElBox
         return (inAz && inEl);
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public static FssAzElBox BoxFromOffset(FssPolarOffset offset)
     {
@@ -98,7 +98,7 @@ public struct FssAzElBox
         };
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public FssAzElBox Inflate(double azInflateDegs, double elInflateDegs)
     {
@@ -133,7 +133,7 @@ public struct FssAzElBox
         };
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public FssAzElBox CentreBoxOnOffset(FssPolarOffset offset)
     {
@@ -157,7 +157,7 @@ public struct FssAzElBox
         };
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public FssAzElBox ConsistencyCheck()
     {
@@ -170,7 +170,7 @@ public struct FssAzElBox
         };
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public override string ToString()
     {

@@ -4,7 +4,7 @@ using System;
 
 public static partial class FssValueUtils
 {
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
     // Function to essentially allow the % operator on float precision numbers.
 
     public static float Modulo(float value, float rangesize)
@@ -17,7 +17,7 @@ public static partial class FssValueUtils
         return wrappedvalue;
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public static float LimitToRange(float val, float rangemin, float rangemax)
     {
@@ -37,7 +37,7 @@ public static partial class FssValueUtils
 
     public static float Clamp(float val, float minval, float maxval) => LimitToRange(val, minval, maxval);
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     // Determine the difference between two values that wrap (ie longitude or angle values).
     // The difference is always the shortest distance between the two values, taking into account
@@ -77,7 +77,7 @@ public static partial class FssValueUtils
         return diff;
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public static float ScaleVal(float inval, float inrangemin, float inrangemax, float outrangemin, float outrangemax)
     {
@@ -98,7 +98,7 @@ public static partial class FssValueUtils
         return LimitToRange(outval, outrangemin, outrangemax);
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     // Take an input fraction (0..1) and return the index of the value in the range minval..maxval
     // that corresponds to that fraction.
@@ -123,14 +123,14 @@ public static partial class FssValueUtils
         return retInc;
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public static bool IsInRange(float val, float rangemin, float rangemax)
     {
         return val >= rangemin && val <= rangemax;
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public static float Interpolate(float inrangemin, float inrangemax, float fraction)
     {
@@ -139,7 +139,7 @@ public static partial class FssValueUtils
         return inrangemin + (diffVal * fraction);
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
     // Useful way to test floating point numbers.
 
     public static bool EqualsWithinTolerance(float val, float matchval, float tolerance = FssConsts.ArbitraryMinFloat)

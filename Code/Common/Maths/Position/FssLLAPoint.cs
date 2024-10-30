@@ -18,9 +18,9 @@ public struct FssLLAPoint
     public double LonRads { get; set; }
     public double RadiusM { get; set; } // Alt above EarthCentre
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
     // Additional simple accessors - adding units
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public double LatDegs
     {
@@ -53,9 +53,9 @@ public struct FssLLAPoint
         return string.Format($"(LatDegs:{LatDegs:F2}, LonDegs:{LonDegs:F2}, AltMslM:{AltMslM:F2})");
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
     // #MARK: Constructors - different options and units
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     // Note that fields can be set:
     //   FssLLAPoint pos = new FssLLAPoint() { latDegs = X, LonDegs = Y, AltMslM = Z };
@@ -100,9 +100,9 @@ public struct FssLLAPoint
         return new FssLLAPoint(LatRads, LonRads, retElev);
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
     // #MARK: Conversion
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public FssXYZPoint ToXYZ()
     {
@@ -122,9 +122,9 @@ public struct FssLLAPoint
         return new FssLLAPoint(latRads, lonRads, radius);
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
     // #MARK: Distance
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     // Nullable default parameter allows it to assume the altitude for the calculation
     // is the average of the two points, unless a value (such a zero "do calc at ground
@@ -170,20 +170,9 @@ public struct FssLLAPoint
         return startXYZ.DistanceTo(destXYZ);
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
     // #MARK: Elevation
-    // ------------------------------------------------------------------------
-
-    // I'm at an altitude above the ground, what angle down is the horizon?
-    // Useful for aiming the camera.
-
-    public double HorizonElevationRads()
-    {
-        double horizonDistanceM = Math.Sqrt( (RadiusM * RadiusM) - (FssPosConsts.EarthRadiusM * FssPosConsts.EarthRadiusM) );
-        double horizonAngleRads = Math.Atan(horizonDistanceM / RadiusM);
-
-        return horizonAngleRads;
-    }
+    // --------------------------------------------------------------------------------------------
 
     // The elevation to a distant point. Useful in aiming a camera.
 
@@ -225,9 +214,43 @@ public struct FssLLAPoint
         return this; // Return the modified object
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
+    // #MARK: Horizon
+    // --------------------------------------------------------------------------------------------
+
+    // Calculate the distance to the horizon from an altitude above mean sea level.
+    public double DistanceToHorizonM()
+    {
+        // Earth's radius in meters (mean radius)
+        double earthRadiusM = FssPosConsts.EarthRadiusM;
+        double altMslM = this.AltMslM;
+
+        // Calculate the distance to the horizon using the formula:
+        // distanceM = sqrt(2 * earthRadiusM * altMslM + altMslM^2)
+        double distanceM = Math.Sqrt(2 * earthRadiusM * altMslM + altMslM * altMslM);
+
+        return distanceM;
+    }
+
+    // Calculate the angle below horizontal (dip angle) to the horizon.
+    // This is useful for aiming cameras or sensors from an altitude.
+    public double HorizonElevationRads()
+    {
+        // Calculate altitude above mean sea level
+        double altMslM = RadiusM - FssPosConsts.EarthRadiusM;
+
+        // Use the existing method to compute the horizon distance
+        double horizonDistanceM = DistanceToHorizonM();
+
+        // Calculate the dip angle (in radians)
+        double horizonAngleRads = Math.Atan(horizonDistanceM / RadiusM);
+
+        return horizonAngleRads;
+    }
+
+    // --------------------------------------------------------------------------------------------
     // #MARK: Azimuth
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public double BearingToRads(FssLLAPoint destPos)
     {
@@ -251,9 +274,9 @@ public struct FssLLAPoint
         return bearingRads;
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
     // #MARK: Range Bearing
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     // Use haversine formula to calculate distance
 
@@ -309,7 +332,7 @@ public struct FssLLAPoint
         return new FssLLAPoint(NewLatRads, NewLonRads, this.RadiusM);
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public FssLLAPoint PlusDeltaForTime(FssCourse course, double timeSecs)
     {
@@ -325,9 +348,9 @@ public struct FssLLAPoint
         return retPnt;
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
     // #MARK: Polar Offset
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public FssPolarOffset StraightLinePolarOffsetTo(FssLLAPoint destPos)
     {

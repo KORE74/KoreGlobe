@@ -14,9 +14,8 @@ public class FssGodotFactory
     public Node3D                SceneRootNode      { get; private set; }
     public FssZeroNode           ZeroNode           { get; private set; }
     public FssMapManager         EarthCoreNode      { get; private set; }
-    //public Node3D                EntityRootNode     { get; private set; }
+    // public Node3D                EntityRootNode     { get; private set; }
     // public FssCameraMoverWorld   WorldCamNode       { get; private set; }
-
 
     public FssGodotEntityManager GodotEntityManager { get; private set; }
     public FssTextureLoader      TextureLoader      { get; private set; }
@@ -29,7 +28,7 @@ public class FssGodotFactory
     private static bool             IsInitialised     = false;
     private static bool             IsCreating        = false;
 
-    //public FssMapManager MapManager => EarthCoreNode;
+    // public FssMapManager MapManager => EarthCoreNode;
 
     // --------------------------------------------------------------------------------------------
     // MARK: Singleton Pattern

@@ -15,7 +15,6 @@ public struct FssLLABox
     public double MinRadiusM { get; set; }
     public double MaxRadiusM { get; set; }
 
-
     public double MinLatDegs
     {
         get { return MinLatRads * FssConsts.RadsToDegsMultiplier; }
@@ -38,7 +37,7 @@ public struct FssLLABox
         set { MaxLonRads = value * FssConsts.DegsToRadsMultiplier; }
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public double ArcLatRads
     {
@@ -57,14 +56,14 @@ public struct FssLLABox
         get { return MaxLonDegs - MinLonDegs; }
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public double AltRangeM
     {
         get { return MaxRadiusM - MinRadiusM; }
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public FssLLAPoint PosTopLeft
     {
@@ -90,7 +89,7 @@ public struct FssLLABox
         set { MinLatRads = value.LatRads; MaxLonRads = value.LonRads; }
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public bool LLAInBounds(FssLLAPoint InputLLA)
     {
@@ -104,7 +103,7 @@ public struct FssLLABox
         return true;
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public FssLLAPoint CenterPoint()
     {
@@ -116,7 +115,7 @@ public struct FssLLABox
         };
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public FssLLABox ShiftBox(double adjustLatDegs, double adjustLonDegs, double adjustAltM)
     {
@@ -131,7 +130,7 @@ public struct FssLLABox
         };
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public string BoxToString()
     {

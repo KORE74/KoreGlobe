@@ -9,7 +9,7 @@ public struct FssAzElRangeBox
     public double MinRangeM { get; set; }
     public double MaxRangeM { get; set; }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public double MinAzDegs
     {
@@ -43,28 +43,28 @@ public struct FssAzElRangeBox
         get { return MaxRangeM * FssPosConsts.MetresToKmMultiplier; }
         set { MaxRangeM = value * FssPosConsts.KmToMetresMultiplier; }
     }
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public double ArcAzRads { get { return (MaxAzRads - MinAzRads); } }
     public double ArcAzDegs { get { return (MaxAzRads - MinAzRads) * FssConsts.RadsToDegsMultiplier; } }
     public double ArcElRads { get { return (MaxElRads - MinElRads); } }
     public double ArcElDegs { get { return (MaxElRads - MinElRads) * FssConsts.RadsToDegsMultiplier; } }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public double HalfArcAzRads { get { return ArcAzRads / 2.0; } }
     public double HalfArcAzDegs { get { return ArcAzDegs / 2.0; } }
     public double HalfArcElRads { get { return ArcElRads / 2.0; } }
     public double HalfArcElDegs { get { return ArcElDegs / 2.0; } }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public double MidAzRads { get { return MinAzRads + HalfArcAzRads; } }
     public double MidAzDegs { get { return MinAzDegs + HalfArcAzDegs; } }
     public double MidElRads { get { return MinElRads + HalfArcElRads; } }
     public double MidElDegs { get { return MinElDegs + HalfArcElDegs;  } }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public double DepthM { get { return (MaxRangeM - MinRangeM); } }
     public double DepthKm { get { return (MaxRangeM - MinRangeM) * FssPosConsts.MetresToKmMultiplier; } }
@@ -72,7 +72,7 @@ public struct FssAzElRangeBox
     public double HalfDepthM { get { return (MaxRangeM - MinRangeM) / 2.0; } }
     public double HalfDepthKm { get { return (MaxRangeKm - MinRangeKm) / 2.0; } }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public bool IsOffsetInBox(FssPolarOffset offset)
     {
@@ -82,7 +82,7 @@ public struct FssAzElRangeBox
         return (inAz && inEl && inRange);
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public static FssAzElRangeBox BoxFromOffset(FssPolarOffset offset)
     {
@@ -177,7 +177,7 @@ public struct FssAzElRangeBox
         };
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public override string ToString()
     {

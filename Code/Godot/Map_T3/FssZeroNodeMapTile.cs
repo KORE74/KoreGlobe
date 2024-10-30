@@ -10,16 +10,38 @@ public partial class FssZeroNodeMapTile : Node3D
     public FssAzElBox      RwAzElBox = FssAzElBox.Zero;
     public FssFloat2DArray RwEleData = new FssFloat2DArray();
 
-
-    private ArrayMesh TileMeshData;
-    private Color WireColor;
+    private ArrayMesh          TileMeshData;
+    private Color              WireColor;
     private StandardMaterial3D SurfaceMat;
 
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Node3D Functions
+    // --------------------------------------------------------------------------------------------
+
+    // Called when the node enters the scene tree for the first time.
+    public override void _Ready()
+    {
+        CreateMaterials();
+        CreateMesh();
+        CreateMeshInstance();
+    }
+
+    // Called every frame. 'delta' is the elapsed time since the previous frame.
+    public override void _Process(double delta)
+    {
+        if (FssZeroNode.ZeroNodeUpdated)
+            UpdateTilePosition();
+    }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Tile Creation
+    // --------------------------------------------------------------------------------------------
 
     public void CreateMaterials()
     {
         // Create the material for the mesh.
-        WireColor = FssColorUtil.StringToColor("default");
+        WireColor  = FssColorUtil.StringToColor("default");
         SurfaceMat = FssMaterialFactory.TransparentColoredMaterial(WireColor);
     }
 
@@ -66,7 +88,36 @@ public partial class FssZeroNodeMapTile : Node3D
         meshBuilder.AddSurface(v3Data, false);
 
         TileMeshData = meshBuilder.BuildWithUV("Surface");
+    }
 
+    public void CreateMeshInstance()
+    {
+        // Create the mesh instance and add it to the scene.
+        MeshInstance3D tileMeshInstance = new MeshInstance3D();
+        tileMeshInstance.Mesh = TileMeshData;
+        tileMeshInstance.MaterialOverride = SurfaceMat;
+        AddChild(tileMeshInstance);
+    }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Tile Update
+    // --------------------------------------------------------------------------------------------
+
+    public void UpdateTilePosition()
+    {
+        // // Update the tile position based on the zero node offset.
+        // FssPolarDirection azElCenter = RwAzElBox.Center;
+        // FssLLAPoint rwLLACenter = new FssLLAPoint() { LatDegs = azElCenter.ElDegs, LonDegs = azElCenter.AzDegs, RadiusM = FssPosConsts.EarthRadiusM };
+        // FssXYZPoint rwXYZCenter = rwLLACenter.ToXYZ();
+
+        // // Find the offset from the tile center.
+        // FssXYZPoint centerOffset = rwXYZCenter.XYZTo(FssZeroOffset.RwZeroPointLLA.ToXYZ());
+
+        // // Update the tile position.
+        // Translation = new Vector3(
+        //     (float)(centerOffset.X * FssZeroOffset.RwToGeDistanceMultiplierM),
+        //     (float)(centerOffset.Y * FssZeroOffset.RwToGeDistanceMultiplierM),
+        //     (float)(centerOffset.Z * FssZeroOffset.RwToGeDistanceMultiplierM));
     }
 }
 

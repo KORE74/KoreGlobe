@@ -6,7 +6,7 @@ public struct FssAttitude
     public double PitchUpRads { get; set; }       // +/- rads up from straight ahead
     public double YawClockwiseRads { get; set; }  // +/- rads clockwise from straight ahead
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public double RollClockwiseDegs // +/- degs clockwise from straight ahead
     {
@@ -26,7 +26,7 @@ public struct FssAttitude
         set { YawClockwiseRads = value * FssConsts.DegsToRadsMultiplier; }
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public FssAttitude(double r, double p, double y)
     {
@@ -45,7 +45,7 @@ public struct FssAttitude
         return $"RollClockwiseDegs:{RollClockwiseDegs:F2}, PitchUpDegs:{PitchUpDegs:F2}, YawClockwiseDegs:{YawClockwiseDegs:F2}";
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public FssAttitude PlusDeltaForTime(FssAttitudeDelta delta, double elapsedSeconds)
     {
@@ -58,7 +58,7 @@ public struct FssAttitude
         return retAtt;
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public FssPolarOffset ToPolarOffset(double distance)
     {

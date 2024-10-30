@@ -24,11 +24,11 @@ namespace FssJSON
         [JsonPropertyName("DFModel")]
         public string DFModel { get; set; }
 
-        // ------------------------------------------------------------------------
+        // --------------------------------------------------------------------------------------------
 
         public FssLLAPoint ScenPos { get { return new FssLLAPoint() { LatDegs = Lat, LonDegs = Long }; } }
 
-        // ------------------------------------------------------------------------
+        // --------------------------------------------------------------------------------------------
 
         public static ScenLoad ParseJSON(string json)
         {

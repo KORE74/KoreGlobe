@@ -34,12 +34,12 @@ public struct FssLLBox
         set { MaxLonRads = value * FssConsts.DegsToRadsMultiplier; }
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public double MidLatDegs => (MinLatDegs + MaxLatDegs) / 2.0;
     public double MidLonDegs => (MinLonDegs + MaxLonDegs) / 2.0;
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public double DeltaLatRads
     {
@@ -62,7 +62,7 @@ public struct FssLLBox
         set { MaxLonDegs = MinLonDegs + value; }
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public FssLLAPoint PosTopLeft
     {
@@ -88,11 +88,11 @@ public struct FssLLBox
         set { MinLatRads = value.LatRads; MaxLonRads = value.LonRads; }
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public FssLLPoint CenterPoint => new FssLLPoint() { LatDegs = (MinLatDegs + MaxLatDegs) / 2.0, LonDegs = (MinLonDegs + MaxLonDegs) / 2.0 };
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public FssLLBox(double tlLatRads, double tlLonRads, double latHeightRads, double lonWidthRads)
     {
@@ -106,7 +106,7 @@ public struct FssLLBox
 
     public static FssLLBox ZeroBox => new FssLLBox(0.0, 0.0, 0.0, 0.0);
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public bool Contains(FssLLPoint inPos)
     {
@@ -118,7 +118,7 @@ public struct FssLLBox
         return true;
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public FssLLBox ShiftBox(double adjustLatDegs, double adjustLonDegs, double adjustAltM)
     {
@@ -131,7 +131,7 @@ public struct FssLLBox
         };
     }
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------
 
     public override string ToString()
     {
