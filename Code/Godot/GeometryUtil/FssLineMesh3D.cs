@@ -8,7 +8,7 @@ public partial class FssLineMesh3D : Node3D
     private bool           _meshNeedsUpdate = false;
 
     // List to store line segments along with their colors
-    private List<(Vector3, Vector3, Color)> _lines = new List<(Vector3, Vector3, Color)>();
+    private List<(Vector3, Vector3, Color, Color)> _lines = new List<(Vector3, Vector3, Color, Color)>();
 
     // Static shader and material shared among all instances
     private static Shader         _vertexColorShader   = null;
@@ -43,27 +43,22 @@ public partial class FssLineMesh3D : Node3D
     }
 
     // --------------------------------------------------------------------------------------------
-    // MARK: Core LineMesh3D Functions
+    // MARK: AddLine Functions
     // --------------------------------------------------------------------------------------------
 
     // Function to add a line between two points with a specified color
-    public void AddLine(Vector3 p1, Vector3 p2, Color color)
+    public void AddLine(Vector3 p1, Vector3 p2, Color linecolor)
     {
-        _lines.Add((p1, p2, color));
-        _meshNeedsUpdate = true;
+        AddLine(p1, p2, linecolor, linecolor);
     }
 
-    // Function to clear all lines from the mesh
-
-    public void Clear()
+    public void AddLine(Vector3 p1, Vector3 p2, Color p1Color, Color p2Color)
     {
-        _lines.Clear();
+        _lines.Add((p1, p2, p1Color, p2Color));
         _meshNeedsUpdate = true;
     }
 
     // --------------------------------------------------------------------------------------------
-
-    // Function to add a dotted line, for some added value beyond the colored solid lines.
 
     public void AddDottedLine(Vector3 p1, Vector3 p2, Color color, float segmentLength = 0.1f)
     {
@@ -80,23 +75,38 @@ public partial class FssLineMesh3D : Node3D
     }
 
     // --------------------------------------------------------------------------------------------
+    // MARK: Additional External Setup
+    // --------------------------------------------------------------------------------------------
+
+    // Function to clear all lines from the mesh
+    public void Clear()
+    {
+        _lines.Clear();
+        _meshNeedsUpdate = true;
+    }
+
+    // --------------------------------------------------------------------------------------------
 
     // Function to rebuild the mesh when new lines are added
     private void UpdateMesh()
     {
+        if (!_meshNeedsUpdate)
+            return;
+
         _surfaceTool.Clear();
         _surfaceTool.Begin(Mesh.PrimitiveType.Lines);
 
         foreach (var line in _lines)
         {
-            Vector3 p1 = line.Item1;
-            Vector3 p2 = line.Item2;
-            Color color = line.Item3;
+            Vector3 p1      = line.Item1;
+            Vector3 p2      = line.Item2;
+            Color   p1color = line.Item3;
+            Color   p2color = line.Item4;
 
-            _surfaceTool.SetColor(color);
+            _surfaceTool.SetColor(p1color);
             _surfaceTool.AddVertex(p1);
 
-            _surfaceTool.SetColor(color);
+            _surfaceTool.SetColor(p2color);
             _surfaceTool.AddVertex(p2);
         }
 
@@ -106,14 +116,6 @@ public partial class FssLineMesh3D : Node3D
 
         _meshNeedsUpdate = false;
     }
-
-    // --------------------------------------------------------------------------------------------
-    // MARK: Additional Line funcs
-    // --------------------------------------------------------------------------------------------
-
-    //public void AddLine(Vector3 p1, Vector3 p2, Color color)         => AddLine(p1, p2, color);
-    public void AddLine(FssXYZPoint p1, FssXYZPoint p2, Color color) => AddLine(FssGodotGeometryOperations.ToVector3(p1), FssGodotGeometryOperations.ToVector3(p2), color);
-    public void AddLine(FssXYZLine l1, Color color)                  => AddLine(l1.P1, l1.P2, color);
 
     // --------------------------------------------------------------------------------------------
     // MARK: Add box - Next level complexity
@@ -155,37 +157,6 @@ public partial class FssLineMesh3D : Node3D
 
         // Get the top-front edge of the inset box and add it to the box
         AddLine(insetBox.Edge(FssXYZBox.EnumEdge.TopFront), color);
-    }
-
-    // --------------------------------------------------------------------------------------------
-    // MARK: Add Arrow
-    // --------------------------------------------------------------------------------------------
-
-    // Specify a line from tip to tail, and a color for the arrow. The arrow head will be 1/3rd of
-    // its length, with a line on each side at 45 degrees.
-
-    public void AddArrow(FssXYZLine line, Color color)
-    {
-        FssXYZPoint tip = line.P1;
-        FssXYZPoint tail = line.P2;
-
-        // Calculate direction and unit direction of the line
-        FssXYZPoint direction = tip - tail;
-        FssXYZPoint unitDirection = direction.Normalize();
-
-        // Calculate the arrow head length (1/3rd of the arrow line length)
-        double arrowHeadLength = direction.Magnitude / 3.0;
-
-        // Calculate arrowhead points to the left and right of the tip
-        // We'll use a cross product-like approach to generate perpendicular vectors.
-        // For simplicity, I'm assuming Y is the "up" direction to create two different directions.
-        FssXYZPoint arrowHeadLeft  = new FssXYZPoint(-unitDirection.Z, 0, unitDirection.X).Normalize() * arrowHeadLength;
-        FssXYZPoint arrowHeadRight = new FssXYZPoint(unitDirection.Z, 0, -unitDirection.X).Normalize() * arrowHeadLength;
-
-        // Draw the main arrow line and the two arrowhead lines
-        AddLine(tail, tip, color);
-        AddLine(tip, tip + arrowHeadLeft, color);
-        AddLine(tip, tip + arrowHeadRight, color);
     }
 
     // --------------------------------------------------------------------------------------------
