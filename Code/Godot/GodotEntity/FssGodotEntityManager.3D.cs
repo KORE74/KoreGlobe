@@ -15,7 +15,7 @@ public partial class FssGodotEntityManager : Node3D
     private void MatchModelPlatform3DModel(string platName)
     {
         // Get the platform, and platform type, from the mode model side
-        //string? platformType = FssAppFactory.Instance.EventDriver.PlatformType(platName);
+        //string? platformType = FssEventDriver.PlatformType(platName);
         // if (platformType == null)
         //     platformType = "default";
 

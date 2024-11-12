@@ -11,17 +11,19 @@ using Godot;
 
 public class FssAppFactory
 {
-    // FssAppFactory.Instance.ConsoleInterface.
-
     // --------------------------------------------------------------------------------------------
 
-    public FssConsole         ConsoleInterface { get; private set; }
-    public FssEventDriver     EventDriver      { get; private set; }
-    public FssEntityManager   EntityManager    { get; private set; }
+    // IO
     public FssNetworkHub      NetworkHub       { get; private set; }
-    public FssSimTime         SimClock         { get; private set; }
-    public FssModelRun        ModelRun         { get; private set; }
+    public FssConsole         ConsoleInterface { get; private set; }
     public FssMessageManager  MessageManager   { get; private set; }
+
+    // Model . Simulation
+    public FssModelRun        ModelRun         { get; private set; } // Overall Run Status
+    public FssSimTime         SimClock         { get; private set; } // Clock
+    public FssEntityManager   EntityManager    { get; private set; } // platform data
+
+    // Utilities
     public FssElevationSystem EleSystem        { get; private set; }
 
     // --------------------------------------------------------------------------------------------
@@ -74,25 +76,17 @@ public class FssAppFactory
         FssCentralLog.AddEntry("Creating FssAppFactory objects");
         GD.Print("FssAppFactory");
 
-        ConsoleInterface = new FssConsole();
-        EventDriver      = new FssEventDriver();
-        EntityManager    = new FssEntityManager();
         NetworkHub       = new FssNetworkHub();
-        //MapIOManager     = new FssMapIOManager();
-        //EleManager       = new FssEleManager();
-        SimClock         = new FssSimTime();
-        ModelRun         = new FssModelRun();
+        ConsoleInterface = new FssConsole();
         MessageManager   = new FssMessageManager();
+
+        ModelRun         = new FssModelRun();
+        SimClock         = new FssSimTime();
+        EntityManager    = new FssEntityManager();
+
         EleSystem        = new FssElevationSystem();
 
-
-        // Link the objects
-        //ConsoleInterface.EventDriver = EventDriver;
-        //EventDriver.ConsoleInterface = ConsoleInterface;
-
-
         CallStart();
-
     }
 
     // point to start the services, called after the main constructors

@@ -64,6 +64,13 @@ public struct FssLLBox
 
     // --------------------------------------------------------------------------------------------
 
+    public double HalfDeltaLonRads => DeltaLonRads / 2.0;
+    public double HalfDeltaLatRads => DeltaLatRads / 2.0;
+    public double HalfDeltaLonDegs => DeltaLonDegs / 2.0;
+    public double HalfDeltaLatDegs => DeltaLatDegs / 2.0;
+
+    // --------------------------------------------------------------------------------------------
+
     public FssLLAPoint PosTopLeft
     {
         get { return new FssLLAPoint() { LatRads = MaxLatRads, LonRads = MinLonRads }; }
@@ -104,7 +111,7 @@ public struct FssLLBox
 
     public static FssLLBox GlobalBox => new FssLLBox(-Math.PI / 2.0, -Math.PI, Math.PI, 2.0 * Math.PI);
 
-    public static FssLLBox ZeroBox => new FssLLBox(0.0, 0.0, 0.0, 0.0);
+    public static FssLLBox Zero => new FssLLBox(0.0, 0.0, 0.0, 0.0);
 
     // --------------------------------------------------------------------------------------------
 

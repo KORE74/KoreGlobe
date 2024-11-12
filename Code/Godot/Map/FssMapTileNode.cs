@@ -94,9 +94,9 @@ public partial class FssMapTileNode : Node3D
     public override void _Process(double delta)
     {
         // Slow the tile processing down to a random 10hz
-        if (UIUpdateTimer < FssCoreTime.RuntimeSecs)
+        if (UIUpdateTimer < FssCentralTime.RuntimeSecs)
         {
-            UIUpdateTimer = FssCoreTime.RuntimeSecs + RandomLoopList.GetNext();
+            UIUpdateTimer = FssCentralTime.RuntimeSecs + RandomLoopList.GetNext();
 
             if (TileCode.ToString() == "BF_CF_AA")
             {

@@ -6,13 +6,13 @@ using FssNetworking;
 // Design Decisions:
 // - The FssEventDriver is the top level class that manages data. Commands and Tasks interact with the business logic through this point.
 
-public partial class FssEventDriver
+public static partial class FssEventDriver
 {
     // ---------------------------------------------------------------------------------------------
     // Command Execution
     // ---------------------------------------------------------------------------------------------
 
-    public void ExitApplication()
+    public static void ExitApplication()
     {
         FssAppFactory.Instance.ConsoleInterface.Stop();
         FssAppFactory.Instance.NetworkHub.endAllConnections();
@@ -23,7 +23,7 @@ public partial class FssEventDriver
     // MARK: Sidebar view settings
     // ---------------------------------------------------------------------------------------------
 
-    // Usage: FssAppFactory.Instance.EventDriver.SidebarSetBeamVisibility(true, true);
+    // Usage: FssEventDriver.SidebarSetBeamVisibility(true, true);
 
     // public void SidebarSetBeamVisibility(bool rxVisible, bool txVisible)
     // {
@@ -34,7 +34,7 @@ public partial class FssEventDriver
 
     // ---------------------------------------------------------------------------------------------
 
-    // Usage: FssAppFactory.Instance.EventDriver.SidebarSetRouteVisibility(true);
+    // Usage: FssEventDriver.SidebarSetRouteVisibility(true);
 
 
     // public void SidebarSetRouteVisibility(bool routeVisible)                   => FssGodotFactory.Instance.UIState.ShowRoutes          = routeVisible;

@@ -32,10 +32,10 @@ public partial class FssMessageManager
         while (ThreadRunning)
         {
             // Check for new messages
-            while (FssAppFactory.Instance.EventDriver.HasIncomingMessage())
+            while (FssEventDriver.HasIncomingMessage())
             {
                 // Get the message - still in text format
-                FssMessageText? nullableMessage = FssAppFactory.Instance.EventDriver.GetIncomingMessage();
+                FssMessageText? nullableMessage = FssEventDriver.GetIncomingMessage();
 
                 if (nullableMessage != null)
                 {

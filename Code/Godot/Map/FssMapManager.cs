@@ -59,9 +59,9 @@ public partial class FssMapManager : Node3D
     {
         // Update this GE position, to keep up with the zero node movement
 
-        if (Timer1Hz < FssCoreTime.RuntimeSecs)
+        if (Timer1Hz < FssCentralTime.RuntimeSecs)
         {
-            Timer1Hz = FssCoreTime.RuntimeSecs + 1.0f;
+            Timer1Hz = FssCentralTime.RuntimeSecs + 1.0f;
 
             // Get the camera altitude and distance to horizon
             double horizonDistM = FssMapManager.LoadRefLLA.DistanceToHorizonM();

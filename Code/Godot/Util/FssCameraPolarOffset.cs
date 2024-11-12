@@ -65,9 +65,9 @@ public partial class FssCameraPolarOffset : Node3D
         CamNode.Fov = (float)CamFOVForDist.GetValue(CamOffsetDist);
 
         // output the camera position and rotation every 2 seconds
-        if (TimerReport < FssCoreTime.RuntimeSecs)
+        if (TimerReport < FssCentralTime.RuntimeSecs)
         {
-            TimerReport = FssCoreTime.RuntimeSecs + 1.0f;
+            TimerReport = FssCentralTime.RuntimeSecs + 1.0f;
             GD.Print($"CamOffsetDist:{CamOffsetDist:F4} // camAzAngleDegs:{camAzAngleDegs:F4} // camAzAngleDegs:{camElAngleDegs:F4} // CamNode.Position:{CamNode.Position}, CamNode.Rotation:{CamNode.Rotation}");
         }
     }

@@ -84,11 +84,11 @@ public partial class FssUINetworkWindow : Window
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
-        if (TimerUIUpdate < FssCoreTime.RuntimeSecs)
+        if (TimerUIUpdate < FssCentralTime.RuntimeSecs)
         {
-            TimerUIUpdate = FssCoreTime.RuntimeSecs + 2f; // Update the timer to the next whole second
+            TimerUIUpdate = FssCentralTime.RuntimeSecs + 2f; // Update the timer to the next whole second
 
-            NetworkStatusTextEdit.Text = FssAppFactory.Instance.EventDriver.NetworkReport();
+            NetworkStatusTextEdit.Text = FssEventDriver.NetworkReport();
 
             UpdateUIText();
         }
@@ -241,12 +241,12 @@ public partial class FssUINetworkWindow : Window
             string ipAddr = UdpIpAddrEdit.Text;
             int   port   = int.Parse(UdpIpPortEdit.Text);
 
-            FssAppFactory.Instance.EventDriver.NetworkConnect("UdpReceiver", "UdpReceiver", ipAddr, port);
+            FssEventDriver.NetworkConnect("UdpReceiver", "UdpReceiver", ipAddr, port);
         }
         else // Else disconnect
         {
             FssCentralLog.AddEntry("FssUINetworkWindow.OnUdpIpConnectButtonPressed - Disconnect");
-            FssAppFactory.Instance.EventDriver.NetworkDisconnect("UdpReceiver");
+            FssEventDriver.NetworkDisconnect("UdpReceiver");
         }
         FssCentralLog.AddEntry("FssUINetworkWindow.OnUdpIpConnectButtonPressed");
     }
@@ -261,12 +261,12 @@ public partial class FssUINetworkWindow : Window
             string ipAddr = TcpIpServerAddrEdit.Text;
             int   port   = int.Parse(TcpIpSerfverPortEdit.Text);
 
-            FssAppFactory.Instance.EventDriver.NetworkConnect("TcpServer", "TcpServer", ipAddr, port);
+            FssEventDriver.NetworkConnect("TcpServer", "TcpServer", ipAddr, port);
         }
         else // Else disconnect
         {
             FssCentralLog.AddEntry("FssUINetworkWindow.OnTcpIpServerConnectButtonPressed - Disconnect");
-            FssAppFactory.Instance.EventDriver.NetworkDisconnect("TcpServer");
+            FssEventDriver.NetworkDisconnect("TcpServer");
         }
     }
 
@@ -280,12 +280,12 @@ public partial class FssUINetworkWindow : Window
             string ipAddr = TcpIpClientAddrEdit.Text;
             int   port   = int.Parse(TcpIpClientPortEdit.Text);
 
-            FssAppFactory.Instance.EventDriver.NetworkConnect("TcpClient", "TcpClient", ipAddr, port);
+            FssEventDriver.NetworkConnect("TcpClient", "TcpClient", ipAddr, port);
         }
         else // Else disconnect
         {
             FssCentralLog.AddEntry("FssUINetworkWindow.OnTcpIpClientConnectButtonPressed - Disconnect");
-            FssAppFactory.Instance.EventDriver.NetworkDisconnect("TcpClient");
+            FssEventDriver.NetworkDisconnect("TcpClient");
         }
     }
 

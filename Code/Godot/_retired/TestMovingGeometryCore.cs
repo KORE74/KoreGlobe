@@ -74,9 +74,9 @@ public partial class TestMovingGeometryCore : Node3D
     // // Called every frame. 'delta' is the elapsed time since the previous frame.
     // public override void _Process(double delta)
     // {
-    //     if (UIPollTimer < FssCoreTime.RuntimeSecs)
+    //     if (UIPollTimer < FssCentralTime.RuntimeSecs)
     //     {
-    //         UIPollTimer = FssCoreTime.RuntimeSecs + 1f; // Update the timer to the next whole second
+    //         UIPollTimer = FssCentralTime.RuntimeSecs + 1f; // Update the timer to the next whole second
 
     //         GD.Print($"FocusPoint: Lat:{FssEarthCore.RwFocusLLA.LatDegs:0.00} Lon:{FssEarthCore.RwFocusLLA.LonDegs:0.00} RadiusM:{FssEarthCore.RwFocusLLA.RadiusM:0.00}");
     //         GD.Print($"PlatPos: Lat:{PlatformPos.LatDegs:0.00} Lon:{PlatformPos.LonDegs:0.00} RadiusM:{PlatformPos.RadiusM:0.00} // Course: Heading:{PlatformCourse.HeadingDegs:0.00} Speed:{PlatformCourse.SpeedMps:0.00}");

@@ -52,9 +52,9 @@ public partial class FssUICameraControl : Control
     // // Called every frame. 'delta' is the elapsed time since the previous frame.
     // public override void _Process(double delta)
     // {
-    //     if (TimerUIUpdate < FssCoreTime.RuntimeSecs)
+    //     if (TimerUIUpdate < FssCentralTime.RuntimeSecs)
     //     {
-    //         TimerUIUpdate = FssCoreTime.RuntimeSecs + 1f;
+    //         TimerUIUpdate = FssCentralTime.RuntimeSecs + 1f;
     //         UpdateUIText();
     //         UpdatePlatformLabels();
     //         UpdateCameraModeButtonStates();
@@ -78,14 +78,14 @@ public partial class FssUICameraControl : Control
 
     // private void UpdatePlatformLabels()
     // {
-    //     NearTargetLabel.Text = FssAppFactory.Instance.EventDriver.NearPlatformName();
-    //     FarTargetLabel.Text  = FssAppFactory.Instance.EventDriver.FarPlatformName();
+    //     NearTargetLabel.Text = FssEventDriver.NearPlatformName();
+    //     FarTargetLabel.Text  = FssEventDriver.FarPlatformName();
 
-    //     bool nearEnabled = FssAppFactory.Instance.EventDriver.NearPlatformValid();
+    //     bool nearEnabled = FssEventDriver.NearPlatformValid();
     //     NearTargetNextButton.Disabled = !nearEnabled;
     //     NearTargetPrevButton.Disabled = !nearEnabled;
 
-    //     bool farEnabled = FssAppFactory.Instance.EventDriver.FarPlatformValid();
+    //     bool farEnabled = FssEventDriver.FarPlatformValid();
     //     FarTargetNextButton.Disabled = !farEnabled;
     //     FarTargetPrevButton.Disabled = !farEnabled;
     // }
@@ -93,8 +93,8 @@ public partial class FssUICameraControl : Control
     // private void UpdateCameraModeButtonStates()
     // {
     //     bool worldEnabled = true;
-    //     bool chaseEnabled = (FssAppFactory.Instance.EventDriver.NumPlatforms() >= 1);
-    //     bool alignEnabled = (FssAppFactory.Instance.EventDriver.NumPlatforms() >= 2);
+    //     bool chaseEnabled = (FssEventDriver.NumPlatforms() >= 1);
+    //     bool alignEnabled = (FssEventDriver.NumPlatforms() >= 2);
 
     //     CameraModeWorldButton.Disabled    = !worldEnabled;
     //     CameraModeChaseCamButton.Disabled = !chaseEnabled;
@@ -115,7 +115,7 @@ public partial class FssUICameraControl : Control
 
     //     FssGodotFactory.Instance.UIState.CameraMode = FssCamMode.WorldCam;
 
-    //     TestZeroOffset.WorldCamNode.CamNode.Current = true;
+    //     FssRootNode.WorldCamNode.CamNode.Current = true;
     // }
 
     // private void OnCameraModeChaseCamButtonPressed()
@@ -141,7 +141,7 @@ public partial class FssUICameraControl : Control
     // {
     //     GD.Print("OnNearTargetNextButtonPressed");
 
-    //     FssAppFactory.Instance.EventDriver.NearPlatformNext();
+    //     FssEventDriver.NearPlatformNext();
     //     FssGodotFactory.Instance.UIState.UpdateDisplayedChaseCam();
     //     UpdatePlatformLabels();
     // }
@@ -150,7 +150,7 @@ public partial class FssUICameraControl : Control
     // {
     //     GD.Print("OnNearTargetPrevButtonPressed");
 
-    //     FssAppFactory.Instance.EventDriver.NearPlatformPrev();
+    //     FssEventDriver.NearPlatformPrev();
     //     FssGodotFactory.Instance.UIState.UpdateDisplayedChaseCam();
     //     UpdatePlatformLabels();
     // }
@@ -159,7 +159,7 @@ public partial class FssUICameraControl : Control
     // {
     //     GD.Print("OnFarTargetNextButtonPressed");
 
-    //     FssAppFactory.Instance.EventDriver.FarPlatformNext();
+    //     FssEventDriver.FarPlatformNext();
     //     UpdatePlatformLabels();
     // }
 
@@ -167,7 +167,7 @@ public partial class FssUICameraControl : Control
     // {
     //     GD.Print("OnFarTargetPrevButtonPressed");
 
-    //     FssAppFactory.Instance.EventDriver.FarPlatformPrev();
+    //     FssEventDriver.FarPlatformPrev();
     //     UpdatePlatformLabels();
     // }
 

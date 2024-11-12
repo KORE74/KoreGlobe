@@ -26,11 +26,11 @@ public class FssCommandEntityPosition : FssCommand
 
         string retString = "";
 
-        if (FssAppFactory.Instance.EventDriver.DoesEntityExist(entName))
+        if (FssEventDriver.DoesEntityExist(entName))
         {
             FssLLAPoint newLLA = new FssLLAPoint { LatDegs = latDegs, LonDegs = longDegs, AltMslM = altMslM };
 
-            FssAppFactory.Instance.EventDriver.SetEntityCurrLLA(entName, newLLA);
+            FssEventDriver.SetEntityCurrLLA(entName, newLLA);
             retString = $"Entity {entName} Updated: Course: {newLLA}.";
         }
         else

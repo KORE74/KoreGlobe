@@ -17,9 +17,14 @@ public class FssGodotFactory
     // public Node3D                EntityRootNode     { get; private set; }
     // public FssCameraMoverWorld   WorldCamNode       { get; private set; }
 
+    // Entity management
     public FssGodotEntityManager GodotEntityManager { get; private set; }
+
+    // Assets
     public FssTextureLoader      TextureLoader      { get; private set; }
     public Fss3DModelLibrary     ModelLibrary       { get; private set; }
+
+    // UI
     public FssUIState            UIState            { get; private set; }
 
     // Singleton pattern

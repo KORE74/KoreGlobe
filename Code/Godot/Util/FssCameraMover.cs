@@ -50,9 +50,9 @@ public partial class FssCameraMover : Camera3D
 
         MoveSpeed = (float)(FssValueUtils.LimitToRange(FssMapManager.LoadRefLLA.AltMslKm / 80, 0.02, 5000));
 
-        if (TimerReport < FssCoreTime.RuntimeSecs)
+        if (TimerReport < FssCentralTime.RuntimeSecs)
         {
-            TimerReport = FssCoreTime.RuntimeSecs + 1f;
+            TimerReport = FssCentralTime.RuntimeSecs + 1f;
 
             // GD.Print($"LoadRefLLA: {FssMapManager.LoadRefLLA} // MoveSpeed: {MoveSpeed}");
         }

@@ -32,9 +32,9 @@ public class FssUIState
 
     // public void UpdateDisplayedChaseCam()
     // {
-    //     if (IsCamModeChaseCam() && FssAppFactory.Instance.EventDriver.NearPlatformValid())
+    //     if (IsCamModeChaseCam() && FssEventDriver.NearPlatformValid())
     //     {
-    //         FssGodotFactory.Instance.GodotEntityManager.EnableChaseCam(FssAppFactory.Instance.EventDriver.NearPlatformName());
+    //         FssGodotFactory.Instance.GodotEntityManager.EnableChaseCam(FssEventDriver.NearPlatformName());
     //     }
     // }
 

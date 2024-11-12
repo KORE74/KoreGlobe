@@ -40,9 +40,9 @@ public partial class FssGodotEntityManager : Node3D
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
-        if (TimerModelCheck < FssCoreTime.RuntimeSecs)
+        if (TimerModelCheck < FssCentralTime.RuntimeSecs)
         {
-            TimerModelCheck = FssCoreTime.RuntimeSecs + 1f;
+            TimerModelCheck = FssCentralTime.RuntimeSecs + 1f;
             MatchModelPlatforms();
 
             // DeleteOrphanedEntities();
@@ -116,7 +116,7 @@ public partial class FssGodotEntityManager : Node3D
     public void MatchModelPlatforms()
     {
         // Get the model
-        List<string> modelEntityNames  = FssAppFactory.Instance.EventDriver.EntityNames();
+        List<string> modelEntityNames  = FssEventDriver.EntityNames();
         List<string> godotEntityNames = EntityNames();
 
         // Compare the two lists, to find the new, the deleted and the consistent
@@ -144,7 +144,7 @@ public partial class FssGodotEntityManager : Node3D
             MatchModelPlatform3DModel(currModelName);
 
             // Set the scale of the model
-            string platformType = FssAppFactory.Instance.EventDriver.EntityAttrib(currModelName, "type") ?? "default";
+            string platformType = FssEventDriver.EntityAttrib(currModelName, "type") ?? "default";
 
             SetModelScale(currModelName, platformType, addInfographicScale, scaleModifier);
         }
@@ -162,7 +162,7 @@ public partial class FssGodotEntityManager : Node3D
     public void AddPlatformElementRoute(string platName, string currElemName)
     {
         // // Get the Route Details
-        // FssPlatformElementRoute? route = FssAppFactory.Instance.EventDriver.GetElement(platName, currElemName) as FssPlatformElementRoute;
+        // FssPlatformElementRoute? route = FssEventDriver.GetElement(platName, currElemName) as FssPlatformElementRoute;
 
         // FssGodotPlatformElementRoute newRoute = new FssGodotPlatformElementRoute();
 
@@ -184,7 +184,7 @@ public partial class FssGodotEntityManager : Node3D
     public void UpdatePlatformElementRoute(string platName, string currElemName)
     {
         // // Get the Route Details
-        // FssPlatformElementRoute? route = FssAppFactory.Instance.EventDriver.GetElement(platName, currElemName) as FssPlatformElementRoute;
+        // FssPlatformElementRoute? route = FssEventDriver.GetElement(platName, currElemName) as FssPlatformElementRoute;
 
         // // Get the godot route we'll update
         // FssGodotPlatformElementRoute? routeNode = GetUnlinkedElement(platName, currElemName) as FssGodotPlatformElementRoute;

@@ -25,13 +25,13 @@ public class FssCommandEntityCourseDelta : FssCommand
 
         string retString = "";
 
-        if (FssAppFactory.Instance.EventDriver.DoesEntityExist(entName))
+        if (FssEventDriver.DoesEntityExist(entName))
         {
             FssCourseDelta newCourseDelta = new FssCourseDelta() {
                     SpeedChangeMpMps = speedChangeMpMps,
                     HeadingChangeClockwiseDegsSec = headingChangeClockwiseDegsSec };
 
-            FssAppFactory.Instance.EventDriver.SetEntityCourseDelta(entName, newCourseDelta);
+            FssEventDriver.SetEntityCourseDelta(entName, newCourseDelta);
             retString = $"Entity {entName} Updated: Course: {newCourseDelta}.";
         }
         else

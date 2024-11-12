@@ -123,9 +123,9 @@ public partial class FssUISettingWindow : Window
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
-        if (TimerUIUpdate < FssCoreTime.RuntimeSecs)
+        if (TimerUIUpdate < FssCentralTime.RuntimeSecs)
         {
-            TimerUIUpdate = FssCoreTime.RuntimeSecs + 1f;
+            TimerUIUpdate = FssCentralTime.RuntimeSecs + 1f;
             UpdateUIText();
         }
     }

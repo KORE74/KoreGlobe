@@ -1,13 +1,13 @@
 using System;
 using System.Diagnostics;
 
-// FssCoreTime - A standard C# class to provide a runtime timer for use throughout the class framework.
+// FssCentralTime - A standard C# class to provide a runtime timer for use throughout the class framework.
 
-public static class FssCoreTime
+public static class FssCentralTime
 {
     private static readonly Stopwatch stopwatch = new Stopwatch();
 
-    static FssCoreTime()
+    static FssCentralTime()
     {
         // Start the stopwatch when the class is first loaded
         stopwatch.Start();

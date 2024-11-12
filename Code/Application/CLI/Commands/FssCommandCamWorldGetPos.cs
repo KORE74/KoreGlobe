@@ -24,7 +24,7 @@ using Godot;
 
 //         // Exiting the application - ending the threads
 //         FssCentralLog.AddEntry("Exiting the application");
-//         FssAppFactory.Instance.EventDriver.ExitApplication();
+//         FssEventDriver.ExitApplication();
 
 //         // Call the Godot exit function -- Maybe not the right place?
 //         FssAppNode.Instance.ExitApplication();

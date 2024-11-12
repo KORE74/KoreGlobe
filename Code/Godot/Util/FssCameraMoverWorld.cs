@@ -51,9 +51,9 @@ public partial class FssCameraMoverWorld : Node3D
 
     public override void _Process(double delta)
     {
-        if (TimerCamReport < FssCoreTime.RuntimeSecs)
+        if (TimerCamReport < FssCentralTime.RuntimeSecs)
         {
-            TimerCamReport = FssCoreTime.RuntimeSecs + 1f;
+            TimerCamReport = FssCentralTime.RuntimeSecs + 1f;
 
             if (CamNode.Current)
             {

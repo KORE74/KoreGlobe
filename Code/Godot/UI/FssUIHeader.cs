@@ -66,9 +66,9 @@ public partial class FssUIHeader : PanelContainer
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
-        if (UIPollTimer < FssCoreTime.RuntimeSecs)
+        if (UIPollTimer < FssCentralTime.RuntimeSecs)
         {
-            UIPollTimer = FssCoreTime.RuntimeSecs + 0.2f; // Update the timer to the next whole second
+            UIPollTimer = FssCentralTime.RuntimeSecs + 0.2f; // Update the timer to the next whole second
 
             // Update each window visibility to the button state - in case we have alternative ways to close the window
             NetworkButton!.ButtonPressed = NetworkWindowNode!.Visible;
@@ -80,7 +80,7 @@ public partial class FssUIHeader : PanelContainer
             string strScenarioName = FssLanguageStrings.Instance.GetParam("ScenarioName");
             string strNotDefined   = FssLanguageStrings.Instance.GetParam("NotDefined");
 
-            string simclockHMS = FssAppFactory.Instance.EventDriver.SimTimeHMS();
+            string simclockHMS = FssEventDriver.SimTimeHMS();
 
             string displayScenarioName = strNotDefined;
             if (!string.IsNullOrEmpty(FssGodotFactory.Instance.UIState.ScenarioName))

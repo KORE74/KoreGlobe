@@ -7,13 +7,13 @@ using System.Collections.Generic;
 // Design Decisions:
 // - The FssEventDriver is the top level class that manages data. Commands and Tasks interact with the business logic through this point.
 
-public partial class FssEventDriver
+public static partial class FssEventDriver
 {
     // ---------------------------------------------------------------------------------------------
     // #MARK: Entity Management
     // ---------------------------------------------------------------------------------------------
 
-    public void AddEntity(string entityName)
+    public static void AddEntity(string entityName)
     {
         // Create a new Entity
         // if (FssAppFactory.Instance.EntityManager == null)
@@ -45,16 +45,16 @@ public partial class FssEventDriver
     //     DefaultEntityDetails(entityName);
     // }
 
-    public bool DoesEntityExist(string name) => FssAppFactory.Instance.EntityManager.DoesEntityExist(name);
-    public void DeleteEntity(string name)    => FssAppFactory.Instance.EntityManager.Delete(name);
-    public void DeleteAllEntities()          => FssAppFactory.Instance.EntityManager.DeleteAllEntities();
-    public int  NumEntities()                => FssAppFactory.Instance.EntityManager.NumEntities();
+    public static bool DoesEntityExist(string name) => FssAppFactory.Instance.EntityManager.DoesEntityExist(name);
+    public static void DeleteEntity(string name)    => FssAppFactory.Instance.EntityManager.Delete(name);
+    public static void DeleteAllEntities()          => FssAppFactory.Instance.EntityManager.DeleteAllEntities();
+    public static int  NumEntities()                => FssAppFactory.Instance.EntityManager.NumEntities();
 
     // ---------------------------------------------------------------------------------------------
     // #MARK: Entity Full Details
     // ---------------------------------------------------------------------------------------------
 
-    public void DefaultEntityDetails(string entName)
+    public static void DefaultEntityDetails(string entName)
     {
         FssLLAPoint    startPos    = new FssLLAPoint()    { LatDegs = 0.0, LonDegs = 0.0, AltMslM = 100.0 };
         FssLLAPoint    currPos     = new FssLLAPoint()    { LatDegs = 0.0, LonDegs = 0.0, AltMslM = 100.0 };
@@ -66,7 +66,7 @@ public partial class FssEventDriver
         SetEntityCurrDetails(entName, currPos, att, course, courseDelta);
     }
 
-    public void SetEntityStartDetails(string entName, FssLLAPoint startPos, FssAttitude startAtt, FssCourse startCourse)
+    public static void SetEntityStartDetails(string entName, FssLLAPoint startPos, FssAttitude startAtt, FssCourse startCourse)
     {
         // Get the entity
         FssEntity? ent = FssAppFactory.Instance.EntityManager.EntityForName(entName);
@@ -83,7 +83,7 @@ public partial class FssEventDriver
         ent.Kinetics.StartCourse   = startCourse;
     }
 
-    public void SetEntityCurrDetails(string entName, FssLLAPoint currPos, FssAttitude currAtt, FssCourse course, FssCourseDelta courseDelta)
+    public static void SetEntityCurrDetails(string entName, FssLLAPoint currPos, FssAttitude currAtt, FssCourse course, FssCourseDelta courseDelta)
     {
         // Get the entity
         FssEntity? ent = FssAppFactory.Instance.EntityManager.EntityForName(entName);
@@ -107,7 +107,7 @@ public partial class FssEventDriver
 
     // String based attributes that can be added to record types, model types, status etc
 
-    public void SetEntityAttrib(string entityName, string key, string value)
+    public static void SetEntityAttrib(string entityName, string key, string value)
     {
         // Get the entity
         FssEntity? ent = FssAppFactory.Instance.EntityManager.EntityForName(entityName);
@@ -122,7 +122,7 @@ public partial class FssEventDriver
         ent.Attribs.Set(key, value);
     }
 
-    public string EntityAttrib(string entityName, string key)
+    public static string EntityAttrib(string entityName, string key)
     {
         // Get the entity
         FssEntity? ent = FssAppFactory.Instance.EntityManager.EntityForName(entityName);
@@ -138,41 +138,41 @@ public partial class FssEventDriver
     // #MARK: Entity Position
     // ---------------------------------------------------------------------------------------------
 
-    public void SetEntityStartLLA(string entName, FssLLAPoint newpos)
+    public static void SetEntityStartLLA(string entName, FssLLAPoint newpos)
     {
         var entity = FssAppFactory.Instance.EntityManager.EntityForName(entName);
         if (entity != null)
             entity.Kinetics.StartPosition = newpos;
     }
 
-    public void SetEntityCurrLLA(string entName, FssLLAPoint newpos)
+    public static void SetEntityCurrLLA(string entName, FssLLAPoint newpos)
     {
         var entity = FssAppFactory.Instance.EntityManager.EntityForName(entName);
         if (entity != null)
             entity.Kinetics.CurrPosition = newpos;
     }
 
-    public FssLLAPoint? EntityStartLLA(string entName) => FssAppFactory.Instance.EntityManager.EntityForName(entName)?.Kinetics.StartPosition;
-    public FssLLAPoint? EntityCurrLLA(string entName)  => FssAppFactory.Instance.EntityManager.EntityForName(entName)?.Kinetics.CurrPosition;
+    public static FssLLAPoint? EntityStartLLA(string entName) => FssAppFactory.Instance.EntityManager.EntityForName(entName)?.Kinetics.StartPosition;
+    public static FssLLAPoint? EntityCurrLLA(string entName)  => FssAppFactory.Instance.EntityManager.EntityForName(entName)?.Kinetics.CurrPosition;
 
     // ---------------------------------------------------------------------------------------------
     // #MARK: Entity Attitude
     // ---------------------------------------------------------------------------------------------
 
-    public void SetEntityAttitude(string entName, FssAttitude newatt)
+    public static void SetEntityAttitude(string entName, FssAttitude newatt)
     {
         var entity = FssAppFactory.Instance.EntityManager.EntityForName(entName);
         if (entity != null)
             entity.Kinetics.CurrAttitude = newatt;
     }
 
-    public FssAttitude? EntityCurrAttitude(string entName) => FssAppFactory.Instance.EntityManager.EntityForName(entName)?.Kinetics.CurrAttitude;
+    public static FssAttitude? EntityCurrAttitude(string entName) => FssAppFactory.Instance.EntityManager.EntityForName(entName)?.Kinetics.CurrAttitude;
 
     // ---------------------------------------------------------------------------------------------
     // #MARK: Entity Course
     // ---------------------------------------------------------------------------------------------
 
-    public void SetEntityCourse(string entityName, FssCourse course)
+    public static void SetEntityCourse(string entityName, FssCourse course)
     {
         // Get the Entity
         FssEntity? Entity = FssAppFactory.Instance.EntityManager.EntityForName(entityName);
@@ -187,14 +187,14 @@ public partial class FssEventDriver
         Entity.Kinetics.CurrCourse = course;
     }
 
-    public FssCourse? EntityCurrCourse(string entityName) =>
+    public static FssCourse? EntityCurrCourse(string entityName) =>
         FssAppFactory.Instance.EntityManager.EntityForName(entityName)?.Kinetics.CurrCourse;
 
     // ---------------------------------------------------------------------------------------------
     // #MARK: Entity Course Delta
     // ---------------------------------------------------------------------------------------------
 
-    public void SetEntityCourseDelta(string entityName, FssCourseDelta courseDelta)
+    public static void SetEntityCourseDelta(string entityName, FssCourseDelta courseDelta)
     {
         // Get the Entity
         FssEntity? Entity = FssAppFactory.Instance.EntityManager.EntityForName(entityName);
@@ -209,7 +209,7 @@ public partial class FssEventDriver
         Entity.Kinetics.CurrCourseDelta = courseDelta;
     }
 
-    public FssCourseDelta? EntityCurrCourseDelta(string entityName)
+    public static FssCourseDelta? EntityCurrCourseDelta(string entityName)
     {
         // Get the Entity
         FssEntity? Entity = FssAppFactory.Instance.EntityManager.EntityForName(entityName);
@@ -231,27 +231,27 @@ public partial class FssEventDriver
     // #MARK: Entity Names
     // ---------------------------------------------------------------------------------------------
 
-    public string EntityNameForIndex(int index)        => FssAppFactory.Instance.EntityManager.EntityNameForIndex(index);
-    public FssEntity? EntityForIndex(int index)      => FssAppFactory.Instance.EntityManager.EntityForIndex(index);
-    public FssEntity? EntityForName(string Entityname) => FssAppFactory.Instance.EntityManager.EntityForName(Entityname);
+    public static string EntityNameForIndex(int index)        => FssAppFactory.Instance.EntityManager.EntityNameForIndex(index);
+    public static FssEntity? EntityForIndex(int index)      => FssAppFactory.Instance.EntityManager.EntityForIndex(index);
+    public static FssEntity? EntityForName(string Entityname) => FssAppFactory.Instance.EntityManager.EntityForName(Entityname);
 
     // Id being the 1-based user presented index
 
-    public string EntityIdForName(string Entityname) => FssAppFactory.Instance.EntityManager.EntityIdForName(Entityname);
-    public string EntityNameForId(int EntityId)      => FssAppFactory.Instance.EntityManager.EntityNameForId(EntityId);
+    public static string EntityIdForName(string Entityname) => FssAppFactory.Instance.EntityManager.EntityIdForName(Entityname);
+    public static string EntityNameForId(int EntityId)      => FssAppFactory.Instance.EntityManager.EntityNameForId(EntityId);
 
-    public int EntityIdNext(int currEntityId) =>  FssAppFactory.Instance.EntityManager.EntityIdNext(currEntityId);
-    public int EntityIdPrev(int currEntityId) =>  FssAppFactory.Instance.EntityManager.EntityIdPrev(currEntityId);
+    public static int EntityIdNext(int currEntityId) =>  FssAppFactory.Instance.EntityManager.EntityIdNext(currEntityId);
+    public static int EntityIdPrev(int currEntityId) =>  FssAppFactory.Instance.EntityManager.EntityIdPrev(currEntityId);
 
-    public List<string> EntityNames() => FssAppFactory.Instance.EntityManager.EntityNameList();
+    public static List<string> EntityNames() => FssAppFactory.Instance.EntityManager.EntityNameList();
 
     // ---------------------------------------------------------------------------------------------
     // #MARK: Entity Near/Far UI
     // ---------------------------------------------------------------------------------------------
 
     // Usage:
-    // - FssAppFactory.Instance.EventDriver.NearEntityValid();
-    // - FssAppFactory.Instance.EventDriver.NearEntityName();
+    // - FssEventDriver.NearEntityValid();
+    // - FssEventDriver.NearEntityName();
 
     // public bool NearEntityValid()  => FssAppFactory.Instance.EntityManager.NearEntityValid();
     // public bool FarEntityValid()   => FssAppFactory.Instance.EntityManager.FarEntityValid();

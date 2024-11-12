@@ -24,10 +24,10 @@
 //         string retString = "";
 
 //         // Delete the platform
-//         FssAppFactory.Instance.EventDriver.ModelToJsonFile(filename);
-        
+//         FssEventDriver.ModelToJsonFile(filename);
+
 //         retString = $"Model written to {filename}.";
-        
+
 //         return retString;
 //     }
 // }

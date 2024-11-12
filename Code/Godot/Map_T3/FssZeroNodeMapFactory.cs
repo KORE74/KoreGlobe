@@ -14,16 +14,17 @@ public partial class FssZeroNodeMapFactory : Node3D
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        // create a new tile to test the zero node offset
-        FssAzElBox axElBox = new FssAzElBox() { MinAzDegs = -4, MinElDegs = 52, MaxAzDegs = -3, MaxElDegs = 53 };
+        // // create a new tile to test the zero node offset
+        // FssAzElBox axElBox = new FssAzElBox() { MinAzDegs = -4, MinElDegs = 52, MaxAzDegs = -3, MaxElDegs = 53 };
 
-        FssFloat2DArray eledata = new FssFloat2DArray(100, 100);
-        eledata.SetRandomVals(10, -10);
+        // FssFloat2DArray eledata = new FssFloat2DArray(100, 100);
+        // eledata.SetRandomVals(10, -10);
 
-        FssZeroNodeMapTile tile = new FssZeroNodeMapTile() { RwAzElBox = axElBox, RwEleData = eledata };
+        // FssZeroNodeMapTile tile = new FssZeroNodeMapTile() { RwAzElBox = axElBox, RwEleData = eledata };
 
-        AddChild(tile);
+        // AddChild(tile);
 
+        CreateLvl0Tiles();
 
     }
 
@@ -34,6 +35,25 @@ public partial class FssZeroNodeMapFactory : Node3D
     }
 
 
+
+    private void CreateLvl0Tiles()
+    {
+        for (int lonId = 0; lonId < 12; lonId++)
+        {
+            for (int latId = 0; latId < 6; latId++)
+            {
+                FssMapTileCode currTileCode = new FssMapTileCode(lonId, latId);
+                FssFloat2DArray eleData = new(10, 10);
+                eleData.SetRandomVals(100, 500);
+
+                FssZeroNodeMapTile currTile = new FssZeroNodeMapTile() {
+                    RwLLBox = currTileCode.LLBox,
+                    RwEleData = eleData };
+
+                AddChild(currTile);
+            }
+        }
+    }
 
 }
 

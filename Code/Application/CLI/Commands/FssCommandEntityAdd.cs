@@ -21,9 +21,9 @@ public class FssCommandEntityAdd : FssCommand
         string entName = parameters[0];
         string retString = "";
 
-        if (!FssAppFactory.Instance.EventDriver.DoesEntityExist(entName))
+        if (!FssEventDriver.DoesEntityExist(entName))
         {
-            FssAppFactory.Instance.EventDriver.AddEntity(entName);
+            FssEventDriver.AddEntity(entName);
             retString += $"Entity {entName} added.";
         }
         else

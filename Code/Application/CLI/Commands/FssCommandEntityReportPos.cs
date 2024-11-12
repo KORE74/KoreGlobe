@@ -20,9 +20,9 @@ public class FssCommandEntityReportPos : FssCommand
 
         string entName = parameters[0];
 
-        if (FssAppFactory.Instance.EventDriver.DoesEntityExist(entName))
+        if (FssEventDriver.DoesEntityExist(entName))
         {
-            FssLLAPoint? lla = FssAppFactory.Instance.EventDriver.EntityCurrLLA(entName);
+            FssLLAPoint? lla = FssEventDriver.EntityCurrLLA(entName);
             if (lla != null)
             {
                 return $"Platform {entName} Position: {lla}";

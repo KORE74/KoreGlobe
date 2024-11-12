@@ -23,7 +23,7 @@ public partial class FssMessageManager
 
 
 
-    //     FssAppFactory.Instance.EventDriver.PlatformSetRoute(platName, points);
+    //     FssEventDriver.PlatformSetRoute(platName, points);
     // }
 
 

@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://cle61uafx4wyg"]
+[gd_scene load_steps=5 format=3 uid="uid://cle61uafx4wyg"]
 
-[ext_resource type="Script" path="res://Code/Godot/TestZeroOffset.cs" id="1_awllb"]
+[ext_resource type="Script" path="res://Code/Godot/FssRootNode.cs" id="1_awllb"]
 [ext_resource type="PackedScene" uid="uid://ck4tngsqwb7jf" path="res://Scenes/ui_top.tscn" id="3_3wlp5"]
+[ext_resource type="Script" path="res://Code/Godot/FssZeroNode.cs" id="3_k5cjo"]
 
 [sub_resource type="Environment" id="Environment_r87dp"]
 background_mode = 1
@@ -24,6 +25,7 @@ custom_minimum_size = Vector2(1100, 640)
 anchors_preset = -1
 
 [node name="ZeroNode" type="Node3D" parent="."]
+script = ExtResource("3_k5cjo")
 
 [node name="Services" type="Node" parent="."]
 

@@ -14,9 +14,9 @@ public partial class FssMessageManager
         FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_EntityAdd: {msg.Name}");
 
         // Check if the platform already exists
-        if (!FssAppFactory.Instance.EventDriver.DoesEntityExist(msg.Name))
+        if (!FssEventDriver.DoesEntityExist(msg.Name))
         {
-            FssAppFactory.Instance.EventDriver.AddEntity(msg.Name);
+            FssEventDriver.AddEntity(msg.Name);
         }
     }
 
@@ -27,9 +27,9 @@ public partial class FssMessageManager
         FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_EntityDelete: {msg.Name}");
 
         // Check if the platform exists
-        if (FssAppFactory.Instance.EventDriver.DoesEntityExist(msg.Name))
+        if (FssEventDriver.DoesEntityExist(msg.Name))
         {
-            FssAppFactory.Instance.EventDriver.DeleteEntity(msg.Name);
+            FssEventDriver.DeleteEntity(msg.Name);
         }
     }
 
@@ -40,9 +40,9 @@ public partial class FssMessageManager
         FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_EntityPosition: {msg.Name}");
 
         // Check if the platform exists
-        if (FssAppFactory.Instance.EventDriver.DoesEntityExist(msg.Name))
+        if (FssEventDriver.DoesEntityExist(msg.Name))
         {
-            FssAppFactory.Instance.EventDriver.SetEntityCurrLLA(msg.Name, msg.Pos);
+            FssEventDriver.SetEntityCurrLLA(msg.Name, msg.Pos);
         }
     }
 
@@ -51,9 +51,9 @@ public partial class FssMessageManager
     //     FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_PlatUpdate: {msg.Name}");
 
     //     // Check if the platform exists
-    //     if (FssAppFactory.Instance.EventDriver.DoesEntityExist(msg.Name))
+    //     if (FssEventDriver.DoesEntityExist(msg.Name))
     //     {
-    //         FssAppFactory.Instance.EventDriver.SetPlatformCurrDetails(
+    //         FssEventDriver.SetPlatformCurrDetails(
     //             msg.Name, msg.Pos, msg.Attitude, msg.Course, msg.CourseDelta);
     //     }
     // }
@@ -65,11 +65,11 @@ public partial class FssMessageManager
     //     FssCentralLog.AddEntry($"FssMessageManager.ProcessMessage_PlatPosition: {msg.PlatName}");
 
     //     // Check if the platform exists
-    //     if (FssAppFactory.Instance.EventDriver.DoesEntityExist(msg.PlatName))
+    //     if (FssEventDriver.DoesEntityExist(msg.PlatName))
     //     {
-    //         FssAppFactory.Instance.EventDriver.SetPlatformPosition(msg.PlatName, msg.Pos);
-    //         FssAppFactory.Instance.EventDriver.SetPlatformCourse(msg.PlatName, msg.Course);
-    //         FssAppFactory.Instance.EventDriver.SetPlatformAttitude(msg.PlatName, msg.Attitude);
+    //         FssEventDriver.SetPlatformPosition(msg.PlatName, msg.Pos);
+    //         FssEventDriver.SetPlatformCourse(msg.PlatName, msg.Course);
+    //         FssEventDriver.SetPlatformAttitude(msg.PlatName, msg.Attitude);
     //     }
     // }
 }

@@ -47,9 +47,9 @@ public partial class FssZeroNode : Node3D
     {
         ZeroNodeUpdated = false;
 
-        if (Timer1Hz < FssCoreTime.RuntimeSecs)
+        if (Timer1Hz < FssCentralTime.RuntimeSecs)
         {
-            Timer1Hz = FssCoreTime.RuntimeSecs + 1.0f;
+            Timer1Hz = FssCentralTime.RuntimeSecs + 1.0f;
             // CallDeferred("SetZeroNodePositionDeferred");
 
             SetZeroNodePositionDeferred();

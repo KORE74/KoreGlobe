@@ -156,16 +156,16 @@
 //         pos = pos.PlusPolarOffset(offset);
 
 //         // Debug print the new position values once a second
-//         if (Timer1Hz < FssCoreTime.RuntimeSecs)
+//         if (Timer1Hz < FssCentralTime.RuntimeSecs)
 //         {
 //             // check the previous position markers at 1Hz.
-//             Timer1Hz = (float)(FssCoreTime.RuntimeIntSecs + 1); // Update the timer to the next whole second
+//             Timer1Hz = (float)(FssCentralTime.RuntimeIntSecs + 1); // Update the timer to the next whole second
 //             GD.Print($"RuntimeSecs: {Timer1Hz:F1} Course: {Course} Offset: {offset} Position: {pos}");
 //         }
 
-//         if (Timer4Hz < FssCoreTime.RuntimeSecs)
+//         if (Timer4Hz < FssCentralTime.RuntimeSecs)
 //         {
-//             Timer4Hz = FssCoreTime.RuntimeSecs + 0.2f; // Update the timer to the next whole second
+//             Timer4Hz = FssCentralTime.RuntimeSecs + 0.2f; // Update the timer to the next whole second
 
 //             // if (TrailNode != null)
 //             // {

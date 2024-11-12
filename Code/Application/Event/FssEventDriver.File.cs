@@ -8,9 +8,9 @@ using FssNetworking;
 // Design Decisions:
 // - The FssEventDriver is the top level class that manages data. Commands and Tasks interact with the business logic through this point.
 
-public partial class FssEventDriver
+public static partial class FssEventDriver
 {
-    public void SetRootDir(string rootDir)
+    public static void SetRootDir(string rootDir)
     {
         // Check the root dir is valid
         if (string.IsNullOrEmpty(rootDir)) return;
@@ -21,14 +21,14 @@ public partial class FssEventDriver
         FssCentralLog.AddEntry($"SetRootDir: {rootDir}");
     }
 
-    public string ReportRootDir()
+    public static string ReportRootDir()
     {
         return "undefined"; // FssAppFactory.Instance.MapIOManager.ReportRootDir();
     }
 
     // ---------------------------------------------------------------------------------------------
 
-    public void CreateBaseDirectories()
+    public static void CreateBaseDirectories()
     {
         // string rootDir = "undefined"; // FssAppFactory.Instance.MapIOManager.ReportRootDir();
 

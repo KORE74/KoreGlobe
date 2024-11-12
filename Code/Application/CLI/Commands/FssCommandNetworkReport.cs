@@ -14,6 +14,6 @@ public class FssCommandNetworkReport : FssCommand
     {
         FssCentralLog.AddEntry("FssCommandNetworkReport.Execute");
 
-        return FssAppFactory.Instance.EventDriver.NetworkReport();
+        return FssEventDriver.NetworkReport();
     }
 }

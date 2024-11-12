@@ -63,11 +63,11 @@ public partial class FssElementContrail : Node3D
         if (UseModel)
         {
 
-            if (TimerModelTrail < FssCoreTime.RuntimeSecs)
+            if (TimerModelTrail < FssCentralTime.RuntimeSecs)
             {
-                TimerModelTrail = FssCoreTime.RuntimeSecs + 1f;
+                TimerModelTrail = FssCentralTime.RuntimeSecs + 1f;
 
-                FssLLAPoint? PlatformPos = FssAppFactory.Instance.EventDriver.EntityCurrLLA(ModelName);
+                FssLLAPoint? PlatformPos = FssEventDriver.EntityCurrLLA(ModelName);
 
                 if (PlatformPos != null)
                     AddTrailPoint((FssLLAPoint)PlatformPos);

@@ -27,7 +27,7 @@
 //         }
 
 //         // Get the list of platforms from the model
-//         List<string> platformNames = FssAppFactory.Instance.EventDriver.PlatformNames();
+//         List<string> platformNames = FssEventDriver.PlatformNames();
 
 //         // Nested loop, adding any platforms that don't exist
 //         foreach (string platformName in platformNames)
@@ -61,7 +61,7 @@
 //             return;
 //         }
 
-//         if (!FssAppFactory.Instance.EventDriver.DoesEntityExist(platformName))
+//         if (!FssEventDriver.DoesEntityExist(platformName))
 //         {
 //             FssCentralLog.AddEntry($"EC0-0024: Platform {platformName} does not exist.");
 //             return;

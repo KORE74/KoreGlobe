@@ -127,6 +127,35 @@ public partial class FssLineMesh3D : Node3D
     }
 
     // --------------------------------------------------------------------------------------------
+    // MARK: Add Surface Function
+    // --------------------------------------------------------------------------------------------
+
+    // Function to add lines for a given 2D surface array
+    public void AddSurface(Vector3[,] points, Color color)
+    {
+        int rows = points.GetLength(0);
+        int cols = points.GetLength(1);
+
+        // Add lines for rows
+        for (int r = 0; r < rows - 1; r++)
+        {
+            for (int c = 0; c < cols - 1; c++)
+            {
+                AddLine(points[r, c], points[r, c + 1], color); // Horizontal line
+                AddLine(points[r, c], points[r + 1, c], color); // Vertical line
+            }
+            // Connect the last column in this row to the next row
+            AddLine(points[r, cols - 1], points[r + 1, cols - 1], color);
+        }
+
+        // Add lines for the last row
+        for (int c = 0; c < cols - 1; c++)
+        {
+            AddLine(points[rows - 1, c], points[rows - 1, c + 1], color); // Horizontal line
+        }
+    }
+
+    // --------------------------------------------------------------------------------------------
     // MARK: Add box - Next level complexity
     // --------------------------------------------------------------------------------------------
 

@@ -23,7 +23,7 @@ public class FssCommandNetworkInjectIncoming : FssCommand
         // concatenate the parameters into a single string with spaces
         string message = string.Join(" ", parameters);
 
-        FssAppFactory.Instance.EventDriver.NetworkInjectIncoming(message);
+        FssEventDriver.NetworkInjectIncoming(message);
 
         // trim the message to 100 characters
         if (message.Length > 100)

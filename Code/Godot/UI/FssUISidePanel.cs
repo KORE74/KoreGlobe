@@ -93,9 +93,9 @@ public partial class FssUISidePanel : HBoxContainer
         currentSecondCallCount++;
         float averageCallsPerSecond = UpdateCallCount();
 
-        if (UIPollTimer < FssCoreTime.RuntimeSecs)
+        if (UIPollTimer < FssCentralTime.RuntimeSecs)
         {
-            UIPollTimer = FssCoreTime.RuntimeSecs + 1f; // Update the timer to the next whole second
+            UIPollTimer = FssCentralTime.RuntimeSecs + 1f; // Update the timer to the next whole second
 
             // Update each window visibility to the button state - in case we have alternative ways to close the window
             PlatformScaleButton!.ButtonPressed = PanelPlatformScale!.Visible;
@@ -151,9 +151,9 @@ public partial class FssUISidePanel : HBoxContainer
     private float UpdateCallCount()
     {
         // Update the performance counter every second
-        if (FssCoreTime.RuntimeSecs - lastSecondTime >= 1.0f)
+        if (FssCentralTime.RuntimeSecs - lastSecondTime >= 1.0f)
         {
-            lastSecondTime = FssCoreTime.RuntimeSecs;
+            lastSecondTime = FssCentralTime.RuntimeSecs;
 
             // Add the current second's call count to the list
             callCounts.Add(currentSecondCallCount);

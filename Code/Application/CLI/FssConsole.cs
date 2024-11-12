@@ -21,7 +21,7 @@ public class FssConsole
     private readonly List<FssCommand> commandHandlers = new List<FssCommand>();
 
     // Link to the EventDriver, an entity with an interface to action changes within the application.
-    public FssEventDriver? EventDriver;
+    //public FssEventDriver? EventDriver;
 
     // Two lists to hold input and output strings for the console.
     private FssThreadsafeStringList InputQueue  = new FssThreadsafeStringList();
@@ -283,4 +283,3 @@ public class FssConsole
         }
     }
 }
-

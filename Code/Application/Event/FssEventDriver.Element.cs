@@ -9,19 +9,19 @@ using FssNetworking;
 // Design Decisions:
 // - The FssEventDriver is the top level class that manages data. Commands and Tasks interact with the business logic through this point.
 
-public partial class FssEventDriver
+public static partial class FssEventDriver
 {
     // ---------------------------------------------------------------------------------------------
     // MARK: Basic Element Management
     // ---------------------------------------------------------------------------------------------
 
-    public void AddElement(string entityName, string elemName, string elemType)
+    public static void AddElement(string entityName, string elemName, string elemType)
     {
         // Create a new ent
         //FssElementOperations.CreateElement(entityName, elemName, elemType);
     }
 
-    public void AddElement(string entityName, string elemName, FssElement element)
+    public static void AddElement(string entityName, string elemName, FssElement element)
     {
         // Get the ent
         FssEntity? ent = FssAppFactory.Instance.EntityManager.EntityForName(entityName);
@@ -33,7 +33,7 @@ public partial class FssEventDriver
         ent.AddElement(element);
     }
 
-    public void DeleteElement(string entityName, string elemName)
+    public static void DeleteElement(string entityName, string elemName)
     {
         FssEntity? ent = FssAppFactory.Instance.EntityManager.EntityForName(entityName);
 
@@ -43,7 +43,7 @@ public partial class FssEventDriver
         ent.DeleteElement(elemName);
     }
 
-    public List<string> ElementNamesForEntity(string entityName)
+    public static List<string> ElementNamesForEntity(string entityName)
     {
         FssEntity? ent = FssAppFactory.Instance.EntityManager.EntityForName(entityName);
 
@@ -57,7 +57,7 @@ public partial class FssEventDriver
     // MARK: Element Name Helpers
     // ---------------------------------------------------------------------------------------------
 
-    public FssElement? GetElement(string entityName, string elemName)
+    public static FssElement? GetElement(string entityName, string elemName)
     {
         if (string.IsNullOrEmpty(entityName) || string.IsNullOrEmpty(elemName))
             return null;

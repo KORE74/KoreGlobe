@@ -5,7 +5,7 @@
 public class FssElevationTile
 {
     public FssFloat2DArray ElevationData { get; set; } = new FssFloat2DArray();
-    public FssLLBox        LLBox         { get; set; } = FssLLBox.ZeroBox;
+    public FssLLBox        LLBox         { get; set; } = FssLLBox.Zero;
 
     // --------------------------------------------------------------------------------------------
     // MARK: Resolution

@@ -69,9 +69,9 @@ public partial class FssUICliWindow : Window
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
-        if (TimerUIUpdate < FssCoreTime.RuntimeSecs)
+        if (TimerUIUpdate < FssCentralTime.RuntimeSecs)
         {
-            TimerUIUpdate = FssCoreTime.RuntimeSecs + 2f; // Update the timer to the next whole second
+            TimerUIUpdate = FssCentralTime.RuntimeSecs + 2f; // Update the timer to the next whole second
             UpdateUIText();
         }
     }
@@ -202,7 +202,7 @@ public partial class FssUICliWindow : Window
         sb.AppendLine();
         sb.AppendLine("Network Report");
         sb.AppendLine("--------------");
-        sb.Append(FssAppFactory.Instance.EventDriver.NetworkReport());
+        sb.Append(FssEventDriver.NetworkReport());
 
         // Add the DLC report
         sb.AppendLine();

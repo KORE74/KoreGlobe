@@ -22,9 +22,9 @@ public class FssCommandEntityDelete : FssCommand
         string retString = "";
 
         // Delete the platform
-        if (FssAppFactory.Instance.EventDriver.DoesEntityExist(entName))
+        if (FssEventDriver.DoesEntityExist(entName))
         {
-            FssAppFactory.Instance.EventDriver.DeleteEntity(entName);
+            FssEventDriver.DeleteEntity(entName);
             retString = $"Entity {entName} deleted.";
         }
         else

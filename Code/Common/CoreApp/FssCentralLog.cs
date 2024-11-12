@@ -33,14 +33,14 @@ public static class FssCentralLog
 
     public static void AddEntry(string entry)
     {
-        string timestamp = FssCoreTime.TimestampLocal;
+        string timestamp = FssCentralTime.TimestampLocal;
         string formattedEntry = $"{timestamp} : {entry}";
 
         lock (LogLock)
         {
             // Limit the number of entries in the display list
             DisplayEntries.Add(formattedEntry);
-            while (DisplayEntries.Count > 200) // Maintain latest 200 entries 
+            while (DisplayEntries.Count > 200) // Maintain latest 200 entries
                 DisplayEntries.RemoveAt(0);
 
             if (!LoggingActive)
@@ -84,7 +84,7 @@ public static class FssCentralLog
     {
         lock (LogLock)
         {
-            runtimeFilename = Path.Combine(newPath, $"{FssCoreTime.TimestampLocal}.log");
+            runtimeFilename = Path.Combine(newPath, $"{FssCentralTime.TimestampLocal}.log");
             IsLogReady = true;
         }
     }
