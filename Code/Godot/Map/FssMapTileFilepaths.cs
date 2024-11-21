@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-// FssTileNodeFilepaths class to fugire out and store the filepaths of assets for a map tile.
+// FssMapTileFilepaths class to fugire out and store the filepaths of assets for a map tile.
 
-public class FssTileNodeFilepaths
+public class FssMapTileFilepaths
 {
     public string EleFilepath    { get; set; }
     public string EleArrFilepath { get; set; }
@@ -16,7 +16,7 @@ public class FssTileNodeFilepaths
     public bool MeshFileExists   { get; set; } = false;
     public bool ImageFileExists  { get; set; } = false;
 
-    public FssTileNodeFilepaths(FssMapTileCode tileCode)
+    public FssMapTileFilepaths(FssMapTileCode tileCode)
     {
         // Get the tile code name
         string tileCodeName = tileCode.ToString();

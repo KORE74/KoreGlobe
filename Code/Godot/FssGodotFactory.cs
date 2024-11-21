@@ -23,6 +23,7 @@ public class FssGodotFactory
     // Assets
     public FssTextureLoader      TextureLoader      { get; private set; }
     public Fss3DModelLibrary     ModelLibrary       { get; private set; }
+    public FssImageManager       ImageManager       { get; private set; }
 
     // UI
     public FssUIState            UIState            { get; private set; }

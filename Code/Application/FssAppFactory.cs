@@ -14,17 +14,17 @@ public class FssAppFactory
     // --------------------------------------------------------------------------------------------
 
     // IO
-    public FssNetworkHub      NetworkHub       { get; private set; }
-    public FssConsole         ConsoleInterface { get; private set; }
-    public FssMessageManager  MessageManager   { get; private set; }
+    public FssNetworkHub       NetworkHub       { get; private set; }
+    public FssConsole          ConsoleInterface { get; private set; }
+    public FssMessageManager   MessageManager   { get; private set; }
 
     // Model . Simulation
-    public FssModelRun        ModelRun         { get; private set; } // Overall Run Status
-    public FssSimTime         SimClock         { get; private set; } // Clock
-    public FssEntityManager   EntityManager    { get; private set; } // platform data
+    public FssModelRun         ModelRun         { get; private set; } // Overall Run Status
+    public FssSimTime          SimClock         { get; private set; } // Clock
+    public FssEntityManager    EntityManager    { get; private set; } // platform data
 
     // Utilities
-    public FssElevationSystem EleSystem        { get; private set; }
+    public FssElevationManager EleManager       { get; private set; }
 
     // --------------------------------------------------------------------------------------------
 
@@ -84,7 +84,7 @@ public class FssAppFactory
         SimClock         = new FssSimTime();
         EntityManager    = new FssEntityManager();
 
-        EleSystem        = new FssElevationSystem();
+        EleManager        = new FssElevationManager();
 
         CallStart();
     }

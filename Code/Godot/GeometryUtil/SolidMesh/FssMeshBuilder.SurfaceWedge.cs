@@ -353,7 +353,7 @@ public partial class FssMeshBuilder
         float elMinDegs, float elMaxDegs,
         float surfaceRadius,
         FssFloat2DArray surfaceArray,
-        FssUvBoxDropEdgeTile uvBox,
+        FssUVBoxDropEdgeTile uvBox,
         bool flipTriangles = false)
     {
         int resolutionEl = surfaceArray.Height;

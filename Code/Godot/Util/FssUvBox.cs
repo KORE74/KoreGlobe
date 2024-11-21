@@ -2,15 +2,15 @@
 using System;
 using Godot;
 
-// FssUvBox: A struct to hold the UV co-oridnates of a box in a texture
+// FssUVBox: A struct to hold the UV co-oridnates of a box in a texture
 // Also includes the functionality of a UV box within a larger texture.
 
-public struct FssUvBox
+public struct FssUVBox
 {
     public Vector2 TopLeft;
     public Vector2 BottomRight;
 
-    public FssUvBox(Vector2 topLeft, Vector2 bottomRight)
+    public FssUVBox(Vector2 topLeft, Vector2 bottomRight)
     {
         TopLeft = topLeft;
         BottomRight = bottomRight;
@@ -33,14 +33,14 @@ public struct FssUvBox
 
         return new Vector2(u, v);
     }
-    
+
     // --------------------------------------------------------------------------------------------
 
     // create a UV box from a grid
     // (0,0) is top left box, (size-1, size-1) is bottom right box.
 
     // Creates a UV box for a subtile within the main tile
-    public static FssUvBox BoxFromGrid(Vector2 topLeft, Vector2 bottomRight, int horizSize, int vertSize, int horizIndex, int vertIndex)
+    public static FssUVBox BoxFromGrid(Vector2 topLeft, Vector2 bottomRight, int horizSize, int vertSize, int horizIndex, int vertIndex)
     {
         float horizStep = 1.0f / horizSize;
         float vertStep  = 1.0f / vertSize;
@@ -51,7 +51,7 @@ public struct FssUvBox
         float topValue = topLeft.Y + vertIndex * vertStep * (bottomRight.Y - topLeft.Y);
         float botValue = topLeft.Y + (vertIndex + 1) * vertStep * (bottomRight.Y - topLeft.Y);
 
-        return new FssUvBox(new Vector2(leftValue, topValue), new Vector2(rightValue, botValue));
+        return new FssUVBox(new Vector2(leftValue, topValue), new Vector2(rightValue, botValue));
     }
 }
 

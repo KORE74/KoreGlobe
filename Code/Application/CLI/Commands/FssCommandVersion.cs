@@ -11,8 +11,8 @@ public class FssCommandVersion : FssCommand
 
     public override string Execute(List<string> parameters)
     {
-        FssCentralLog.AddEntry("FssCommandVersion.Execute: " + FssGlobals.VersionString);
-        return FssGlobals.VersionString;
+        FssCentralLog.AddEntry("FssCommandVersion.Execute: " + FssFssbals.VersionString);
+        return FssFssbals.VersionString;
     }
 
 }

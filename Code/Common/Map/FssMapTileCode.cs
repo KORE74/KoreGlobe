@@ -53,6 +53,8 @@ public class FssMapTileCode
 
     public FssLLBox LLBox => LLBoxForCode(this);
 
+    public string TileCode => ToString();
+
     // --------------------------------------------------------------------------------------------
     // MARK: Constructor
     // --------------------------------------------------------------------------------------------
@@ -75,6 +77,12 @@ public class FssMapTileCode
     public static FssMapTileCode UndefinedTileCode()
     {
         return new FssMapTileCode();
+    }
+
+    // Zero default tile code
+    public static FssMapTileCode Zero
+    {
+        get { return new FssMapTileCode(); }
     }
 
     // --------------------------------------------------------------------------------------------

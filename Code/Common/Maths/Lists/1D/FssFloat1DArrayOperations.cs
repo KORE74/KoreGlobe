@@ -69,7 +69,7 @@ public static partial class FssFloat1DArrayOperations
     }
 
     // --------------------------------------------------------------------------------------------
-    // Smoothing
+    // MARK: Smoothing
     // --------------------------------------------------------------------------------------------
 
     public enum SmoothType { Undefined, MovingAverage5 };
@@ -100,5 +100,36 @@ public static partial class FssFloat1DArrayOperations
 
         return smoothedArray;
     }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Ranges
+    // --------------------------------------------------------------------------------------------
+
+    public static FssFloat1DArray ListForRange(float minVal, float maxVal, int numEntries)
+    {
+        FssFloat1DArray retArr = new(numEntries);
+
+        if (numEntries < 1)
+            return retArr;
+        if (numEntries == 1)
+        {
+            retArr[0] = minVal;
+            return retArr;
+        }
+        if (numEntries == 2)
+        {
+            retArr[0] = minVal;
+            retArr[1] = maxVal;
+            return retArr;
+        }
+        if (numEntries > 2)
+        {
+            float step = (maxVal - minVal) / (numEntries - 1);
+            for (int i = 0; i < numEntries; i++)
+                retArr[i] = minVal + i * step;
+        }
+        return retArr;
+    }
+
 }
 

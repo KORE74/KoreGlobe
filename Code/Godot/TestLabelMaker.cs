@@ -36,7 +36,7 @@ public partial class TestLabelMaker : Node3D
 
                 // Position and orient the label to face away from the center and use the up direction
                 label.Position = v3Pos;
-                label.LookAt(GlobalTransform.Origin, v3VectN);
+                label.LookAt(FssbalTransform.Origin, v3VectN);
             }
         }
     }

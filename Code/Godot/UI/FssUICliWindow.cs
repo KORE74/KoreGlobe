@@ -196,7 +196,7 @@ public partial class FssUICliWindow : Window
 
         // Add the time and version info
         sb.AppendLine($"Time: {DateTime.Now}");
-        sb.AppendLine($"Version: {FssGlobals.VersionString}");
+        sb.AppendLine($"Version: {FssFssbals.VersionString}");
 
         // Add the network report
         sb.AppendLine();
@@ -234,7 +234,7 @@ public partial class FssUICliWindow : Window
 
         // Add the time and version info
         sb.AppendLine($"Time: {DateTime.Now}");
-        sb.AppendLine($"Version: {FssGlobals.VersionString}");
+        sb.AppendLine($"Version: {FssFssbals.VersionString}");
 
         // Model report
         sb.AppendLine();

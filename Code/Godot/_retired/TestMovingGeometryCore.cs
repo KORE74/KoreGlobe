@@ -266,8 +266,8 @@ public partial class TestMovingGeometryCore : Node3D
     //     // Vector3 above = new Vector3(1f, 1f, 0f);
 
     //     Vector3 adjustedPos   = rwStruct.vecPos + FssEarthCore.FocusPos;
-    //     Vector3 adjustedAhead = ToGlobal(rwStruct.vecPosAhead + FssEarthCore.FocusPos);
-    //     Vector3 adjustedAbove = ToGlobal(rwStruct.vecPosAbove + FssEarthCore.FocusPos);
+    //     Vector3 adjustedAhead = ToFssbal(rwStruct.vecPosAhead + FssEarthCore.FocusPos);
+    //     Vector3 adjustedAbove = ToFssbal(rwStruct.vecPosAbove + FssEarthCore.FocusPos);
 
     //     // ahead += FssEarthCore.FocusPos;
     //     // above += FssEarthCore.FocusPos;

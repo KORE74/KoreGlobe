@@ -1,7 +1,7 @@
 using System;
 using Godot;
 
-public class FssUvBoxDropEdgeTile
+public class FssUVBoxDropEdgeTile
 {
     // Define the basic corners of the tile (or subtile) in UV co-ordinates of its texture
     public Vector2 TopLeft     { get; private set; }
@@ -14,7 +14,7 @@ public class FssUvBoxDropEdgeTile
     // The grid of UVs output for the tile, accomodating the drop-edge and insets
     private Vector2[,] UVGrid;
 
-    // FssUvBoxDropEdgeTile.UVTopLeft and FssUvBoxDropEdgeTile.BottomRight
+    // FssUVBoxDropEdgeTile.UVTopLeft and FssUVBoxDropEdgeTile.BottomRight
     public static Vector2 UVTopLeft     = new Vector2(0.0f, 0.0f);
     public static Vector2 UVBottomRight = new Vector2(1.0f, 1.0f);
 
@@ -24,7 +24,7 @@ public class FssUvBoxDropEdgeTile
 
     // Constructor that sets up the corners and initializes the UV grid
 
-    public FssUvBoxDropEdgeTile(Vector2 topLeft, Vector2 bottomRight, float edgeOffset = 0.001f, float insetOffset = 0.001f)
+    public FssUVBoxDropEdgeTile(Vector2 topLeft, Vector2 bottomRight, float edgeOffset = 0.001f, float insetOffset = 0.001f)
     {
         TopLeft     = topLeft;
         BottomRight = bottomRight;
@@ -37,7 +37,7 @@ public class FssUvBoxDropEdgeTile
 
     // Constructor that derives the UV box from a parent tile and subgrid position
 
-    public FssUvBoxDropEdgeTile(FssUvBoxDropEdgeTile parentBox, Fss2DGridPos gridPos)
+    public FssUVBoxDropEdgeTile(FssUVBoxDropEdgeTile parentBox, Fss2DGridPos gridPos)
     {
         // Calculate the new UV box from the parent box and grid position
         float minParentX  = parentBox.TopLeft.X;
@@ -64,9 +64,9 @@ public class FssUvBoxDropEdgeTile
 
     // With no input information, return a default UV box
 
-    public static FssUvBoxDropEdgeTile Default(int horizSize, int vertSize)
+    public static FssUVBoxDropEdgeTile Default(int horizSize, int vertSize)
     {
-        return new FssUvBoxDropEdgeTile(UVTopLeft, UVBottomRight, horizSize, vertSize);
+        return new FssUVBoxDropEdgeTile(UVTopLeft, UVBottomRight, horizSize, vertSize);
     }
 
     // --------------------------------------------------------------------------------------------

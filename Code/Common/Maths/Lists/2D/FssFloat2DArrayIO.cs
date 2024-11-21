@@ -19,7 +19,7 @@ public static class FssFloat2DArrayIO
         {
             for (int j = 0; j < array.Width; j++)
             {
-                csvBuilder.Append(array[j, i].ToString(format, System.Globalization.CultureInfo.InvariantCulture));
+                csvBuilder.Append(array[j, i].ToString(format, System.Fssbalization.CultureInfo.InvariantCulture));
                 //if (j < array.Width - 1)
                     csvBuilder.Append(", ");
             }
@@ -40,7 +40,7 @@ public static class FssFloat2DArrayIO
             string[] values = lines[i].Split(',');
             for (int j = 0; j < cols; j++)
             {
-                array[i, j] = float.Parse(values[j].Trim(), System.Globalization.CultureInfo.InvariantCulture);
+                array[i, j] = float.Parse(values[j].Trim(), System.Fssbalization.CultureInfo.InvariantCulture);
             }
         }
 

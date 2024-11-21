@@ -1,11 +1,20 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using Godot;
+
+#nullable enable
 
 // ZeroNode map tile: A tile placed at an offset from the zeronode.
 public partial class FssZeroNodeMapTile : Node3D
 {
+    FssMapTileCode TileCode = FssMapTileCode.Zero;
+    FssZeroNodeMapTile? ParentTile;
+
+    // Working values
+    private FssMapTileFilepaths?  Filepaths;
+
     // Main tile data, the az-el box and the 2D elevation array we stretch across it.
     public FssLLBox        RwLLBox = FssLLBox.Zero;
     public FssFloat2DArray RwEleData = new FssFloat2DArray();
@@ -39,8 +48,59 @@ public partial class FssZeroNodeMapTile : Node3D
     }
 
     // --------------------------------------------------------------------------------------------
+    // MARK: Main Create Funcs
+    // --------------------------------------------------------------------------------------------
+
+    public void StartTileConstruction(FssMapTileCode tileCode, FssZeroNodeMapTile? parentTile)
+    {
+        // Set the core Tilecode and node name.
+        TileCode = tileCode;
+        Name     = TileCode.ToString();
+
+        // Fire off the fully background task of creating/loading the mesh
+        Task.Run(async () => await BackgroundTileCreation());
+    }
+
+    private async Task BackgroundTileCreation()
+    {
+        await Task.Run(() =>
+        {
+            // Start the image loading
+            Filepaths = new FssMapTileFilepaths(TileCode); // Figure out the file paths for the tile
+
+            // Start the mesh creation process
+            FssAppFactory.Instance.EleManager.RequestTile(TileCode);
+
+            // Start looking for the mail tile image
+            SourceTileImage();
+        });
+    }
+
+    // --------------------------------------------------------------------------------------------
     // MARK: Create
     // --------------------------------------------------------------------------------------------
+
+    private void SourceTileImage()
+    {
+
+
+        // If we have no parent tile, we need to find the exact image for this tile.
+        // Likely a Lvl0 tile, or a testing situation.
+        if (ParentTile == null)
+        {
+            // If we have no texture, there is no option but to load a default image.
+            if (!Filepaths!.ImageFileExists)
+            {
+                // Load a default image
+            }
+            else
+            {
+                // STart the load the exact image (or confirmation that it already exists)
+                FssGodotFactory.Instance.ImageManager.StartImageLoading(Filepaths!.ImageFilepath);
+            }
+        }
+    }
+
 
     public void CreateMaterials()
     {

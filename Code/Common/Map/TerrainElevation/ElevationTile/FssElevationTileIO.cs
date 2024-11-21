@@ -1,5 +1,5 @@
 
-// Static utility class to read and write FSS elevation tiles to file.
+// Static utility class to read and write Fss elevation tiles to file.
 
 
 using System;
@@ -14,14 +14,13 @@ public static class FssElevationTileIO
     // MARK: Constants
     // --------------------------------------------------------------------------------------------
 
-    public const string ElevationTileExtension = ".fssElevTile";
-
+    public const string ElevationTileExtension = ".FssElevTile";
 
     // --------------------------------------------------------------------------------------------
-    // MARK: Text File Read Write
+    // MARK: Text File IO
     // --------------------------------------------------------------------------------------------
 
-    // FssElevationTileIO.WriteToTextFile
+    // FssElevationPrepTileIO.WriteToTextFile
 
     public static void WriteToTextFile(FssElevationTile tile, string filePath)
     {
@@ -51,16 +50,17 @@ public static class FssElevationTileIO
     }
 
     // --------------------------------------------------------------------------------------------
-    // MARK: Text Read Write
+    // MARK: String IO
     // --------------------------------------------------------------------------------------------
 
     public static string WriteToString(FssElevationTile tile)
     {
         StringBuilder sb = new StringBuilder();
 
+        // Write Tilecode
+        sb.AppendLine($"TileCode: {tile.TileCode.ToString()}");
         // Write bounding box
         sb.AppendLine($"BoundingBox: {tile.LLBox.MinLatDegs}, {tile.LLBox.MinLonDegs}, {tile.LLBox.MaxLatDegs}, {tile.LLBox.MaxLonDegs}");
-
         // Write resolution
         sb.AppendLine($"Resolution: {tile.ElevationData.Width}, {tile.ElevationData.Height}");
 
@@ -71,7 +71,7 @@ public static class FssElevationTileIO
             FssFloat1DArray row = tile.ElevationData.GetRow(i);
             for (int j = 0; j < row.Length; j++)
             {
-                sb.Append(row[j].ToString("F2"));
+                sb.Append(row[j].ToString("F2")); // F2 = 2DP on meters of elevation = 1cm accuracy.
                 if (j < row.Length - 1) sb.Append(",");
             }
             sb.AppendLine();
@@ -79,6 +79,8 @@ public static class FssElevationTileIO
 
         return sb.ToString();
     }
+
+    // --------------------------------------------------------------------------------------------
 
     public static FssElevationTile? ReadFromString(string content)
     {
@@ -132,7 +134,7 @@ public static class FssElevationTileIO
     }
 
     // --------------------------------------------------------------------------------------------
-    // MARK: Binary Read Write
+    // MARK: Binary File IO
     // --------------------------------------------------------------------------------------------
 
     public static void WriteToBinaryFile(FssElevationTile tile, string filePath)
@@ -168,6 +170,8 @@ public static class FssElevationTileIO
             Console.WriteLine($"Error writing to binary file: {ex.Message}");
         }
     }
+
+    // --------------------------------------------------------------------------------------------
 
     public static FssElevationTile? ReadFromBinaryFile(string filePath)
     {

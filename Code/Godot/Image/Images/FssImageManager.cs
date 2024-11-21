@@ -5,18 +5,18 @@ using System.Linq;
 
 using Godot;
 
+#nullable enable
+
 public partial class FssImageManager : Node
 {
     // Cache to hold the textures for map tiles.
-    private ConcurrentDictionary<string, Texture> TextureCache     = new ConcurrentDictionary<string, Texture>();
-    private ConcurrentDictionary<string, Task>    LoadingTasksList = new ConcurrentDictionary<string, Task>();
-    private ConcurrentDictionary<string, int>     ExpireTimeList   = new ConcurrentDictionary<string, int>();
+    private ConcurrentDictionary<string, Texture> TextureCache   = new ConcurrentDictionary<string, Texture>();
+    private ConcurrentDictionary<string, Task>    LoadingTasks   = new ConcurrentDictionary<string, Task>();
+    private ConcurrentDictionary<string, int>     LastAccessList = new ConcurrentDictionary<string, int>();
 
-    // Time for textures to keep alive or next check.
+    // Time for textures to keep alive (in seconds).
     private const int KeepAliveTime = 10;
     private const int ActionTimerIncrement = 2;
-
-    // Periodic action timer.
     private int ActionTimer = 0;
 
     // --------------------------------------------------------------------------------------------
@@ -31,11 +31,11 @@ public partial class FssImageManager : Node
     // Called every frame to handle the keep-alive functionality.
     public override void _Process(double delta)
     {
-        // Periodically delete the oldest expired image, reduce memory footprint.
-        if (ActionTimer < FssCentralTime.RuntimeIntSecs)
+        // Periodically delete the expired textures
+        if (ActionTimer <= FssCentralTime.RuntimeIntSecs)
         {
             ActionTimer = FssCentralTime.RuntimeIntSecs + ActionTimerIncrement;
-            DeleteOldestExpiredImage();
+            DeleteOldestExpiredTextures();
         }
     }
 
@@ -44,9 +44,9 @@ public partial class FssImageManager : Node
     // --------------------------------------------------------------------------------------------
 
     // Starts loading an image asynchronously. Non-blocking.
-    public async void StartImageLoading(string imagePath)
+    public async Task StartImageLoading(string imagePath)
     {
-        Texture texture = await LoadTextureAsync(imagePath);
+        await Task.Run(async () => await LoadTextureAsync(imagePath));
     }
 
     // --------------------------------------------------------------------------------------------
@@ -54,15 +54,17 @@ public partial class FssImageManager : Node
     // --------------------------------------------------------------------------------------------
 
     // Loads a texture from a resource path asynchronously.
-    private async Task<Texture> LoadTextureAsync(string path)
+    private async Task LoadTextureAsync(string path)
     {
-        if (TextureCache.TryGetValue(path, out Texture existingTexture))
+        // Update the last access time if the texture is already loaded, and return.
+        if (TextureCache.TryGetValue(path, out Texture? texture) && texture != null)
         {
-            ExpireTimeList[path] = FssCentralTime.RuntimeIntSecs;
-            return existingTexture;
+            LastAccessList[path] = FssCentralTime.RuntimeIntSecs;
+            return;
         }
 
-        if (!LoadingTasksList.ContainsKey(path))
+        // if we are not already loading the texture, load it in the background.
+        if (!LoadingTasks.ContainsKey(path))
         {
             // Load texture in the background.
             Task loadingTask = Task.Run(() =>
@@ -75,28 +77,44 @@ public partial class FssImageManager : Node
                         GD.PrintErr($"Failed to load image at path: {path}");
                         return;
                     }
-                    TextureCache[path]   = ImageTexture.CreateFromImage(image); // Put the image in the cache as a texture.
-                    ExpireTimeList[path] = FssCentralTime.RuntimeIntSecs + KeepAliveTime; // Set the expiration time.
+
+                    ImageTexture texture = ImageTexture.CreateFromImage(image);
+
+                    TextureCache[path]   = texture;
+                    LastAccessList[path] = FssCentralTime.RuntimeIntSecs;
                 }
                 catch (Exception ex)
                 {
-                    GD.PrintErr("", ex);
+                    GD.PrintErr("Error loading texture:", ex);
                 }
             });
 
-            LoadingTasksList[path] = loadingTask;
+            LoadingTasks[path] = loadingTask;
         }
 
-        await LoadingTasksList[path];
-        LoadingTasksList.TryRemove(path, out _);
-        TextureCache.TryGetValue(path, out Texture loadedTexture);
-        return loadedTexture;
+        await LoadingTasks[path];
+        LoadingTasks.TryRemove(path, out _);
     }
 
     // Checks if the image has been loaded and is available in the cache.
-    public bool IsImageLoaded(string path)
+    public bool HasImage(string path)
     {
-        return TextureCache.ContainsKey(path);
+        if (TextureCache.ContainsKey(path))
+        {
+            LastAccessList[path] = FssCentralTime.RuntimeIntSecs;
+            return true;
+        }
+        return false;
+    }
+
+    public Texture? GetTexture(string path)
+    {
+        if (TextureCache.TryGetValue(path, out Texture? texture) && texture != null)
+        {
+            LastAccessList[path] = FssCentralTime.RuntimeIntSecs;
+            return texture;
+        }
+        return null;
     }
 
     // --------------------------------------------------------------------------------------------
@@ -108,7 +126,7 @@ public partial class FssImageManager : Node
     {
         if (TextureCache.ContainsKey(path))
         {
-            ExpireTimeList[path] = FssCentralTime.RuntimeIntSecs + KeepAliveTime;
+            LastAccessList[path] = FssCentralTime.RuntimeIntSecs;
         }
     }
 
@@ -116,41 +134,45 @@ public partial class FssImageManager : Node
     // MARK: Expired Tile Deletion
     // --------------------------------------------------------------------------------------------
 
-    private void DeleteExpiredImage()
+    private void DeleteExpiredTextures()
     {
-        foreach (var key in ExpireTimeList.Keys)
+        if (TextureCache.Count == 0)
+            return;
+
+        int currentTime = FssCentralTime.RuntimeIntSecs;
+        foreach (var key in LastAccessList.Keys)
         {
-            if ((ExpireTimeList.TryGetValue(key, out int expireTime)) &&
-                (expireTime < FssCentralTime.RuntimeIntSecs))
+            if (LastAccessList.TryGetValue(key, out int lastAccess) && currentTime - lastAccess > KeepAliveTime)
             {
                 // Remove the texture to free up memory.
-                if (TextureCache.TryRemove(key, out Texture texture))
+                if (TextureCache.TryRemove(key, out Texture? texture) && texture != null)
                 {
                     texture.Dispose();
-                    ExpireTimeList.TryRemove(key, out _);
+                    LastAccessList.TryRemove(key, out _);
                 }
             }
         }
     }
 
     // Deletes the oldest, most out-of-date image from the cache.
-    private void DeleteOldestExpiredImage()
+    public void DeleteOldestExpiredTextures()
     {
         // Delete the oldest image only if it has exceeded the KeepAliveTime.
-        if (ExpireTimeList.Count == 0)
+        if (LastAccessList.Count == 0)
             return;
 
-        var oldestEntry  = ExpireTimeList.OrderBy(kvp => kvp.Value).FirstOrDefault();
+        var currentTime = FssCentralTime.RuntimeIntSecs;
+        var oldestEntry = LastAccessList.OrderBy(kvp => kvp.Value).FirstOrDefault();
         string oldestKey = oldestEntry.Key;
 
-        if ((!string.IsNullOrEmpty(oldestKey)) &&
-            (oldestEntry.Value < FssCentralTime.RuntimeIntSecs))
+        if (!string.IsNullOrEmpty(oldestKey) &&
+            (currentTime - oldestEntry.Value > KeepAliveTime))
         {
             // Only delete the oldest image if it has indeed expired.
-            if (TextureCache.TryRemove(oldestKey, out Texture texture))
+            if (TextureCache.TryRemove(oldestKey, out Texture? texture) && texture != null)
             {
                 texture.Dispose();
-                ExpireTimeList.TryRemove(oldestKey, out _);
+                LastAccessList.TryRemove(oldestKey, out _);
             }
         }
     }

@@ -109,7 +109,7 @@ public struct FssLLBox
         MaxLonRads     = tlLonRads + lonWidthRads;
     }
 
-    public static FssLLBox GlobalBox => new FssLLBox(-Math.PI / 2.0, -Math.PI, Math.PI, 2.0 * Math.PI);
+    public static FssLLBox FssbalBox => new FssLLBox(-Math.PI / 2.0, -Math.PI, Math.PI, 2.0 * Math.PI);
 
     public static FssLLBox Zero => new FssLLBox(0.0, 0.0, 0.0, 0.0);
 

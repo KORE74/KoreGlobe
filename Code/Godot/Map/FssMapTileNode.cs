@@ -14,7 +14,7 @@ public partial class FssMapTileNode : Node3D
     public StandardMaterial3D?  TileMaterial = null;
     public ArrayMesh            TileMeshData;
     //public ImageTexture         TerrainTexture;
-    public FssUvBoxDropEdgeTile UVBox;
+    public FssUVBoxDropEdgeTile UVBox;
 
     public bool ChildEleSubampled = false;
     public FssFloat2DArray[,] ChildEleData;
@@ -31,7 +31,7 @@ public partial class FssMapTileNode : Node3D
     // Map Tile Readable values
     public  FssMapTileCode       TileCode;
     private FssXYZPoint          RwTileCenterXYZ;
-    public  FssTileNodeFilepaths Filepaths;
+    public  FssMapTileFilepaths Filepaths;
     public  FssFloat2DArray      TileEleData;
 
     // Timer for UI updates. Has some minor randomisation applied to even out the load.
@@ -141,7 +141,7 @@ public partial class FssMapTileNode : Node3D
 
         //etup some basic elements of the tile ahead of the mail elevation and image loading.
         SetupTileCenterXYZ();
-        Filepaths = new FssTileNodeFilepaths(TileCode); // Figure out the file paths for the tile
+        Filepaths = new FssMapTileFilepaths(TileCode); // Figure out the file paths for the tile
 
         // Pause the thread, being a good citizen with lots of tasks around.
         await Task.Yield();
@@ -293,7 +293,7 @@ public partial class FssMapTileNode : Node3D
         AddChild(TileCodeLabel);
 
         TileCodeLabel.Position = v3Pos;
-        TileCodeLabel.LookAt(GlobalTransform.Origin, v3VectN);
+        TileCodeLabel.LookAt(FssbalTransform.Origin, v3VectN);
     }
 
     // --------------------------------------------------------------------------------------------
@@ -537,7 +537,7 @@ public partial class FssMapTileNode : Node3D
         }
 
         // Setup the UV Box - new image, so a full 0,0 -> 1,1 range
-        UVBox = new FssUvBoxDropEdgeTile(FssUvBoxDropEdgeTile.UVTopLeft, FssUvBoxDropEdgeTile.UVBottomRight);
+        UVBox = new FssUVBoxDropEdgeTile(FssUVBoxDropEdgeTile.UVTopLeft, FssUVBoxDropEdgeTile.UVBottomRight);
     }
 
     private void SubsampleParentTileImage()
@@ -556,13 +556,13 @@ public partial class FssMapTileNode : Node3D
 
             // Setup the UV Box - Sourced from the parent (which may already be subsampled), we subsample for this tile's range
             // Get the grid position of this tile in its parent (eg [1x,2y] in a 5x5 grid).
-            UVBox = new FssUvBoxDropEdgeTile(ParentTile.UVBox, TileCode.GridPos);
+            UVBox = new FssUVBoxDropEdgeTile(ParentTile.UVBox, TileCode.GridPos);
 
         }
         else
         {
             // Subsmapling, but no parent. Setup a default.
-            UVBox = FssUvBoxDropEdgeTile.Default(TileSizePointsPerLvl[TileCode.MapLvl], TileSizePointsPerLvl[TileCode.MapLvl]);
+            UVBox = FssUVBoxDropEdgeTile.Default(TileSizePointsPerLvl[TileCode.MapLvl], TileSizePointsPerLvl[TileCode.MapLvl]);
         }
     }
 
