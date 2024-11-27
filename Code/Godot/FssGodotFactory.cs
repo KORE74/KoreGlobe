@@ -11,19 +11,21 @@ using Godot;
 
 public class FssGodotFactory
 {
-    public Node3D                SceneRootNode      { get; private set; }
+    // Core Nodes
+    public Node                  SceneRootNode      { get; private set; }
     public FssZeroNode           ZeroNode           { get; private set; }
-    public FssMapManager         EarthCoreNode      { get; private set; }
-    // public Node3D                EntityRootNode     { get; private set; }
-    // public FssCameraMoverWorld   WorldCamNode       { get; private set; }
+    public Node                  ServicesNode       { get; private set; }
 
-    // Entity management
+    // Nodes with positional requirements
+    public FssZeroNodeMapManager ZeroNodeMapManager { get; private set; }
     public FssGodotEntityManager GodotEntityManager { get; private set; }
+    public FssCameraMoverWorld   CameraMoverWorld   { get; private set; }
+    public FssCameraMover        CameraMoverXYZ     { get; private set; }
 
     // Assets
     public FssTextureLoader      TextureLoader      { get; private set; }
     public Fss3DModelLibrary     ModelLibrary       { get; private set; }
-    public FssImageManager       ImageManager       { get; private set; }
+    public FssTextureManager     TextureManager     { get; private set; }
 
     // UI
     public FssUIState            UIState            { get; private set; }
@@ -70,16 +72,12 @@ public class FssGodotFactory
         }
     }
 
-    // Private constructor
-    private FssGodotFactory()
-    {
-    }
 
     // --------------------------------------------------------------------------------------------
     // MARK: Initialization
     // --------------------------------------------------------------------------------------------
 
-    public void CreateObjects(Node3D sceneRootNode)
+    public void CreateObjects(Node sceneRootNode)
     {
         lock(lockObject)
         {
@@ -87,22 +85,37 @@ public class FssGodotFactory
             {
                 FssCentralLog.AddEntry("FssGodotFactory CreateObjects");
 
+                // Record the top of the scene tree
                 SceneRootNode = sceneRootNode;
 
+                // Create key nodes
+                ServicesNode = new Node() { Name = "ServicesNode" };
+                SceneRootNode.AddChild(ServicesNode);
                 ZeroNode = new FssZeroNode();
                 SceneRootNode.AddChild(ZeroNode);
 
-                EarthCoreNode = new FssMapManager();
-                SceneRootNode.AddChild(EarthCoreNode);
+                // Create and add the nodes that have no postional requirements
+                TextureManager = new FssTextureManager();
+                ServicesNode.AddChild(TextureManager);
 
+                // Create and add the nodes that have postional requirements
                 GodotEntityManager = new FssGodotEntityManager();
                 ZeroNode.AddChild(GodotEntityManager);
+                ZeroNodeMapManager = new FssZeroNodeMapManager();
+                ZeroNode.AddChild(ZeroNodeMapManager);
+                CameraMoverWorld = new FssCameraMoverWorld();
+                ZeroNode.AddChild(CameraMoverWorld);
+                // CameraMoverXYZ = new FssCameraMover();
+                // SceneRootNode.AddChild(CameraMoverXYZ);
+                // CameraMoverXYZ.Current = true;
 
+                // Create the objects that are not godot nodes
                 TextureLoader = new FssTextureLoader();
                 ModelLibrary  = new Fss3DModelLibrary();
                 UIState       = new FssUIState();
 
                 IsInitialised = true;
+
             }
             else
             {
@@ -110,11 +123,4 @@ public class FssGodotFactory
             }
         }
     }
-
-    // --------------------------------------------------------------------------------------------
-    // MARK: Helpers
-    // --------------------------------------------------------------------------------------------
-
-
-
 }

@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using System.Text;
-using System.Fssbalization;
+using System.Globalization;
 
 public static class FssFloat1DArrayIO
 {

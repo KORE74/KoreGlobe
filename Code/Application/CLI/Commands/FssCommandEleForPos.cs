@@ -54,13 +54,13 @@ public class FssCommandEleForPos : FssCommand
             sb.AppendLine($"Valid operation: Progressing...");
 
             FssLLPoint pos = new FssLLPoint() { LatDegs = inLatRes, LonDegs = inLonRes };
-            float newEle = FssAppFactory.Instance.EleSystem.ElevationAtPos(pos);
+            float newEle = FssAppFactory.Instance.EleManager.ElevationAtPos(pos);
 
-            string eleWithReport = FssAppFactory.Instance.EleSystem.ElevationAtPosWithReport(pos);
+            // string eleWithReport = FssAppFactory.Instance.Elemanager.ElevationAtPosWithReport(pos);
 
 
             sb.AppendLine($"Elevation at position: {pos} = {newEle:F2}");
-            sb.AppendLine(eleWithReport);
+            //sb.AppendLine(eleWithReport);
 
         }
 

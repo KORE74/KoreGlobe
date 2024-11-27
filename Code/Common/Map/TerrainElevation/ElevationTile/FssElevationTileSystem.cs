@@ -62,8 +62,75 @@ public class FssElevationTileSystem
     }
 
     // --------------------------------------------------------------------------------------------
+    // MARK: Report
+    // --------------------------------------------------------------------------------------------
+
+    public string Report()
+    {
+        StringBuilder sb = new();
+
+        sb.AppendLine($"TileList: {TileList.Count} tiles");
+        foreach (var tile in TileList)
+        {
+            sb.AppendLine($"- {tile.Key}");
+        }
+
+        return sb.ToString();
+    }
+
+    // --------------------------------------------------------------------------------------------
+
+    // Loop through all of the tiles, checking the bounding box for containing the point, then return the value
+    // from the tile with the highest map level.
+
+    public float ElevationAtPos(FssLLPoint pos)
+    {
+        FssElevationTile? bestTile = null;
+        foreach (var tile in TileList.Values)
+        {
+            if (tile.LLBox.Contains(pos))
+            {
+                // If this tile has a higher level (more detailed) than the current bestTile, replace it.
+                if (bestTile == null || tile.TileCode.MapLvl > bestTile.TileCode.MapLvl)
+                {
+                    bestTile = tile;
+                }
+            }
+        }
+
+        if (bestTile != null)
+        {
+            return bestTile.ElevationAtPos(pos);
+        }
+
+        return FssElevationPrepSystem.InvalidEle; // Default value if no suitable tile is found.
+    }
+
+    // --------------------------------------------------------------------------------------------
     // MARK: Static Utils
     // --------------------------------------------------------------------------------------------
+
+    // We want to have square map tiles as much as possible, so setup a routine to
+    // Function to return the number of points for longitude given a latitude.
+    // Usage: int lonRes = FssElevationTileSystem.GetLonRes(latRes, latDegs);
+    // public static int GetLonRes(int latRes, double latDegs)
+    // {
+    //     // Clamp latitude to valid range (-90 to 90 degrees).
+    //     latDegs = Math.Max(-90.0, Math.Min(90.0, latDegs));
+
+    //     // Convert latitude to radians for easier trigonometric calculations.
+    //     double latRads = Math.Abs(latDegs) * (Math.PI / 180.0);
+
+    //     // Calculate a scaling factor based on the cosine of the latitude.
+    //     // Near the equator (latitude = 0), factor is 1.0 (full resolution).
+    //     // Near the poles (latitude = +/-90), factor approaches 0 (lower resolution).
+    //     double scale = Math.Cos(latRads);
+
+    //     // Calculate the adjusted resolution for longitude.
+    //     int adjustedLonRes = (int)Math.Max(1, Math.Round(latRes * scale));
+
+    //     return adjustedLonRes;
+    // }
 
     public static FssFloat2DArray PrepTileData(FssElevationPrepSystem elePrepSystem, FssLLBox llBox, int latRes, int lonRes)
     {

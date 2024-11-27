@@ -10,6 +10,8 @@ public static class FssMapTileOperations
 
     public static readonly double[] TileSizeDegsPerLvl  = { 30.0, 5.0, 1.0, 0.2};
 
+    // --------------------------------------------------------------------------------------------
+
     public static FssLLBox LLBoxForTileCode(FssMapTileCode tileCode)
     {
         double currTopLeftLatDegs = 90;

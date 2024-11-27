@@ -379,6 +379,51 @@ public partial class FssMeshBuilder
 
     // ----------------------------------------------------------------------------------
 
+    public void AddSurface(Vector3[,] points, FssFloatRange uvX, FssFloatRange uvY, bool flipTriangles = false)
+    {
+        int resolutionX = points.GetLength(0);
+        int resolutionY = points.GetLength(1);
+
+        FssFloat1DArray uvListX = FssFloat1DArrayOperations.ListForRange(uvX, resolutionX);
+        FssFloat1DArray uvListY = FssFloat1DArrayOperations.ListForRange(uvY, resolutionY);
+
+        for (int y = 0; y < resolutionY - 1; y++)
+        {
+            for (int x = 0; x < resolutionX - 1; x++)
+            {
+                // Get the MeshData.Vertices for the current quad
+                Vector3 p1 = points[x, y];
+                Vector3 p2 = points[x + 1, y];
+                Vector3 p3 = points[x, y + 1];
+                Vector3 p4 = points[x + 1, y + 1];
+
+                Vector2 uv1 = new Vector2(uvListX[x], uvListY[y]);
+                Vector2 uv2 = new Vector2(uvListX[x + 1], uvListY[y]);
+                Vector2 uv3 = new Vector2(uvListX[x], uvListY[y + 1]);
+                Vector2 uv4 = new Vector2(uvListX[x + 1], uvListY[y + 1]);
+
+                // Add points to MeshData.Vertices list and record the index of each point
+                // Can add the UV at any time, so long as we end up with the same size array as Vertex
+                int i1 = AddVertex(p1); AddUV(uv1);
+                int i2 = AddVertex(p2); AddUV(uv2);
+                int i3 = AddVertex(p3); AddUV(uv3);
+                int i4 = AddVertex(p4); AddUV(uv4);
+
+                // Create two MeshData.Triangles using the four MeshData.Vertices just added
+                if (flipTriangles)
+                {
+                    AddTriangle(i3, i2, i1);
+                    AddTriangle(i3, i4, i2);
+                }
+                else
+                {
+                    AddTriangle(i1, i2, i3);
+                    AddTriangle(i2, i4, i3);
+                }
+            }
+        }
+    }
+
     // Add surface, from an input 2d array of Vector3 points
     public void AddSurface(Vector3[,] points, bool flipTriangles = false)
     {

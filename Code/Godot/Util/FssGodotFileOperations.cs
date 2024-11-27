@@ -18,7 +18,7 @@ public static class FssGodotFileOperations
     public static string GetActualPath(string resourcePath)
     {
         // Convert the resource path to an absolute path
-        string absolutePath = ProjectSettings.FssbalizePath(resourcePath);
+        string absolutePath = ProjectSettings.GlobalizePath(resourcePath);
 
         return absolutePath;
     }

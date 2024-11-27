@@ -1,5 +1,6 @@
 
 using System;
+using FssJSON;
 using Godot;
 
 // FssUVBox: A struct to hold the UV co-oridnates of a box in a texture
@@ -7,13 +8,18 @@ using Godot;
 
 public struct FssUVBox
 {
-    public Vector2 TopLeft;
-    public Vector2 BottomRight;
+    public Vector2 TopLeft     = new Vector2(0f, 0f);
+    public Vector2 BottomRight = new Vector2(0f, 0f);
 
     public FssUVBox(Vector2 topLeft, Vector2 bottomRight)
     {
-        TopLeft = topLeft;
+        TopLeft     = topLeft;
         BottomRight = bottomRight;
+    }
+
+    public static FssUVBox Zero
+    {
+        get { return new FssUVBox(); }
     }
 
     // --------------------------------------------------------------------------------------------

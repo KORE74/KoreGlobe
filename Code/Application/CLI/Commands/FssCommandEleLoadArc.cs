@@ -17,7 +17,8 @@ public class FssCommandEleLoadArc : FssCommand
         Signature.Add("loadarc");
     }
 
-    public override string HelpString => $"{SignatureString} <ASCII Arc Filename> <min lat degs> <min lon degs> <max lat degs> <max lon degs> ";
+    public override string HelpString =>
+        $"{SignatureString} <ASCII Arc Filename> <min lat degs> <min lon degs> <max lat degs> <max lon degs> ";
 
     public override string Execute(List<string> parameters)
     {
@@ -61,17 +62,13 @@ public class FssCommandEleLoadArc : FssCommand
         {
             sb.AppendLine($"Valid operation: Progressing...");
 
-            FssElevationTile? newTile = FssAppFactory.Instance.EleSystem.LoadArcASCIIFileToTile(inEleFilename, llBox);
-
-            float testEleVal = newTile!.ElevationData[1,1];
-
-            sb.AppendLine($"ele[1,1] = {testEleVal}");
+            FssAppFactory.Instance.EleManager.LoadArcASCIIGridFile(inEleFilename, llBox);
         }
 
         // -------------------------------------------------
 
         sb.AppendLine($"Elevation System Report:");
-        sb.AppendLine(FssAppFactory.Instance.EleSystem.Report());
+        sb.AppendLine(FssAppFactory.Instance.EleManager.Report());
 
         return sb.ToString();
     }

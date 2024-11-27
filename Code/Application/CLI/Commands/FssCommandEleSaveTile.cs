@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Text;
 
+#nullable enable
 
 // CLI Usage: ele prep <inEleFilename> <inTileCode> <inOutDir> <action>
 // CLI Usage: ele prep c:/Util/GlobeLibrary_MapPrep/Europe/W005N50_UkCentral/Ele_BF_BF_50m.asc BF_BF C:/Util/_temp yes
@@ -14,13 +15,13 @@ public class FssCommandEleSaveTile : FssCommand
         Signature.Add("savetile");
     }
 
-    public override string HelpString => $"{SignatureString} <Ele Tile Filename>  <BL <min lat degs><min lon degs>>  <TR <max lat degs> <max lon degs>>  <lon res> <lat res>";
+    public override string HelpString => $"{SignatureString} <TileCode>";
 
     public override string Execute(List<string> parameters)
     {
         StringBuilder sb = new StringBuilder();
 
-        if (parameters.Count < 7)
+        if (parameters.Count != 1)
         {
             return "FssCommandEleSaveTile.Execute -> insufficient parameters";
         }
@@ -31,24 +32,31 @@ public class FssCommandEleSaveTile : FssCommand
         }
         // return sb.ToString();
 
-        string inEleFilename = parameters[0];
-        double inMinLatDegs  = double.Parse(parameters[1]);
-        double inMinLonDegs  = double.Parse(parameters[2]);
-        double inMaxLatDegs  = double.Parse(parameters[3]);
-        double inMaxLonDegs  = double.Parse(parameters[4]);
-        int inLonRes         = int.Parse(parameters[5]);
-        int inLatRes         = int.Parse(parameters[6]);
+        string inTilecode = parameters[0];
+
+        bool validOperation = true;
+
+
+        FssMapTileCode? tileCode = FssMapTileOperations.TileCodeFromString(inTilecode);
+        if ((tileCode == null) || (!tileCode.IsValid()))
+            validOperation = false;
+
+        // double inMinLatDegs  = double.Parse(parameters[1]);
+        // double inMinLonDegs  = double.Parse(parameters[2]);
+        // double inMaxLatDegs  = double.Parse(parameters[3]);
+        // double inMaxLonDegs  = double.Parse(parameters[4]);
+        // int inLonRes         = int.Parse(parameters[5]);
+        // int inLatRes         = int.Parse(parameters[6]);
 
         // sb.AppendLine($"Elevation ve Tile:");
         // sb.AppendLine($"- inEleFilename: {inEleFilename}");
 
-        FssLLBox llBox = new FssLLBox() {
-            MinLatDegs = inMinLatDegs,
-            MinLonDegs = inMinLonDegs,
-            MaxLatDegs = inMaxLatDegs,
-            MaxLonDegs = inMaxLonDegs };
+        // FssLLBox llBox = new FssLLBox() {
+        //     MinLatDegs = inMinLatDegs,
+        //     MinLonDegs = inMinLonDegs,
+        //     MaxLatDegs = inMaxLatDegs,
+        //     MaxLonDegs = inMaxLonDegs };
 
-        bool validOperation = true;
 
         // -------------------------------------------------
 
@@ -63,13 +71,17 @@ public class FssCommandEleSaveTile : FssCommand
 
         if (validOperation)
         {
+            // FssLLBox llBox = tileCode.LLBox;
+            // int latRes = 50;
+            // int lonRes = FssElevationTileSystem.GetLonRes(latRes, llBox.CenterPoint.LatDegs);
+
             sb.AppendLine($"Valid operation: Progressing...");
 
-            sb.AppendLine($"Creating new tile: {llBox} {inLatRes} {inLonRes}");
+            // sb.AppendLine($"Creating new tile: {tileCode.ToString()} {latRes} {lonRes}");
 
-            FssElevationTile newTile = FssAppFactory.Instance.EleSystem.CreateTile(llBox, inLatRes, inLonRes);
+            FssAppFactory.Instance.EleManager.PrepTile(tileCode!, true);
 
-            FssElevationTileIO.WriteToTextFile(newTile, inEleFilename);
+            //FssElevationTileIO.WriteToTextFile(newTile, inEleFilename);
         }
 
         // -------------------------------------------------
@@ -77,7 +89,7 @@ public class FssCommandEleSaveTile : FssCommand
         // sb.AppendLine($"Elevation System Report:");
         // sb.AppendLine(FssAppFactory.Instance.EleSystem.Report());
 
-        sb.AppendLine($"Tile saved to: {inEleFilename}");
+        //sb.AppendLine($"Tile saved to: {inEleFilename}");
 
         return sb.ToString();
     }

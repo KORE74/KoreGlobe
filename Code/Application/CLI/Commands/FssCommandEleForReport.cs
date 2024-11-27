@@ -19,7 +19,7 @@ public class FssCommandEleReport : FssCommand
     public override string Execute(List<string> parameters)
     {
         StringBuilder sb = new StringBuilder();
-        sb.Append(FssAppFactory.Instance.EleSystem.Report());
+        sb.Append(FssAppFactory.Instance.EleManager.Report());
 
         // -------------------------------------------------
 

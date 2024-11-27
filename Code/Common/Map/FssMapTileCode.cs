@@ -85,6 +85,20 @@ public class FssMapTileCode
         get { return new FssMapTileCode(); }
     }
 
+    public bool IsValid()
+    {
+        if (CodeList.Count == 0)
+        {
+            return false;
+        }
+        foreach (var code in CodeList)
+        {
+            if (code.LatIndex < 0 || code.LonIndex < 0) return false;
+            if (code.LatIndex >= NumTilesVertPerLvl[MapLvl] || code.LonIndex >= NumTilesHorizPerLvl[MapLvl]) return false;
+        }
+        return true;
+    }
+
     // --------------------------------------------------------------------------------------------
     // MARK: Edits
     // --------------------------------------------------------------------------------------------

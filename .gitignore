@@ -4,3 +4,4 @@ android/
 *.log
 /Export
 *.mesh
+*.uid

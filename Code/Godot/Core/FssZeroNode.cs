@@ -14,8 +14,8 @@ public partial class FssZeroNode : Node3D
 
     private float Timer1Hz = 0.0f;
 
-    // Usage: FssZeroNode.ZeroNodeUpdated
-    public static bool ZeroNodeUpdated = false;
+    // Usage: FssZeroNode.ZeroNodeUpdateCycle
+    public static bool ZeroNodeUpdateCycle = false;
 
     // --------------------------------------------------------------------------------------------
     // MARK: Node Functions
@@ -25,35 +25,18 @@ public partial class FssZeroNode : Node3D
     public override void _Ready()
     {
         Name = "ZeroNode";
-
-        // Setup the Zero Node.
-        //FssZeroOffset.ZeroNode = this;
-
-        // Add the EntityRootNode to the ZeroNode,
-        //AddChild(EntityRootNode);
-
-        // CreateDebugMarker();
-
-        //FssLineMesh3D lineCube = new FssLineMesh3D();
-        //AddChild(lineCube);
-
-
-        //AddChild(GodotEntityManager);
-
-        //CallDeferred("SetZeroNodePositionDeferred");
     }
 
     public override void _Process(double delta)
     {
-        ZeroNodeUpdated = false;
+        ZeroNodeUpdateCycle = false;
 
         if (Timer1Hz < FssCentralTime.RuntimeSecs)
         {
             Timer1Hz = FssCentralTime.RuntimeSecs + 1.0f;
-            // CallDeferred("SetZeroNodePositionDeferred");
 
             SetZeroNodePositionDeferred();
-            ZeroNodeUpdated = true;
+            ZeroNodeUpdateCycle = true;
         }
     }
 
@@ -88,7 +71,7 @@ public partial class FssZeroNode : Node3D
 
         // Update the cnsequent positions of the ZeroNode and EarthCoreNode.
         FssGodotFactory.Instance.ZeroNode.Position      = FssZeroOffset.GeZeroPoint();
-        FssGodotFactory.Instance.EarthCoreNode.Position = FssZeroOffset.GeCorePoint();
+        // FssGodotFactory.Instance.EarthCoreNode.Position = FssZeroOffset.GeCorePoint();
     }
 
     // --------------------------------------------------------------------------------------------

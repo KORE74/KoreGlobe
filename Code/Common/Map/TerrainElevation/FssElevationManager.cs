@@ -183,5 +183,19 @@ public class FssElevationManager
         });
     }
 
+    public float ElevationAtPos(FssLLPoint pos) => EleTiles.ElevationAtPos(pos);
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Report
+    // --------------------------------------------------------------------------------------------
+
+    public string Report()
+    {
+        string strPrep = ElePrep.Report();
+        string eleTile = EleTiles.Report();
+
+        return $"Elevation Manager:\n{strPrep}\n{eleTile}";
+    }
+
 }
 

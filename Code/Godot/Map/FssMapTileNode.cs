@@ -293,7 +293,7 @@ public partial class FssMapTileNode : Node3D
         AddChild(TileCodeLabel);
 
         TileCodeLabel.Position = v3Pos;
-        TileCodeLabel.LookAt(FssbalTransform.Origin, v3VectN);
+        TileCodeLabel.LookAt(GlobalTransform.Origin, v3VectN);
     }
 
     // --------------------------------------------------------------------------------------------

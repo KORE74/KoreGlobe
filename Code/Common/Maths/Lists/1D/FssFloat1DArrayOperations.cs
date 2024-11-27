@@ -131,5 +131,13 @@ public static partial class FssFloat1DArrayOperations
         return retArr;
     }
 
+    // --------------------------------------------------------------------------------------------
+
+    // Usage: FssFloat1DArray arr = FssFloat1DArrayOperations.ListForRange(new FssFloatRange(0.0f, 1.0f), 10);
+    public static FssFloat1DArray ListForRange(FssFloatRange inRange, int numEntries)
+    {
+        return ListForRange(inRange.Min, inRange.Max, numEntries);
+    }
+
 }
 

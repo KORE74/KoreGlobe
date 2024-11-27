@@ -26,6 +26,8 @@ public class FssElevationPrepTile
         return (latRes < lonRes) ? latRes : lonRes;
     }
 
+    // --------------------------------------------------------------------------------------------
+
     // Function to return the number of points for longitude given a latitude.
     // Usage: int lonRes = FssElevationPrepTile.GetLongitudeResolution(20, 60.0);
     public static int GetLongitudeResolution(int latitudeResolution, double latDegs)

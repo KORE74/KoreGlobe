@@ -1,15 +1,11 @@
 using Godot;
 
+
+// FssRootNode: Class is the top level of teh whole application, fires of initialisation activities.
 public partial class FssRootNode : Node
 {
     // Static reference to the root node for easy access
-    private static FssRootNode   _instance;
-
-    // References to the lower level nodes
-    public  FssZeroNode          ZeroNode        { get; private set; }
-    //public  Node2D               UIRoot          { get; private set; }
-    //public  FssIOManager         IOManager       { get; private set; }
-    //public  FssResourceManager   ResourceManager { get; private set; }
+    private static FssRootNode _instance;
 
     // Called when the node enters the scene tree for the first time
     public override void _Ready()
@@ -21,23 +17,16 @@ public partial class FssRootNode : Node
         }
         else
         {
-            GD.PrintErr("Warning: More than one RootNode instance detected!");
+            GD.PrintErr("ERROR: More than one RootNode instance detected!");
             QueueFree(); // Ensure there is only one instance
             return;
         }
 
-        // Create the level nodes
-        ZeroNode        = new FssZeroNode();
-       // UIRoot          = (CanvasLayer)ResourceLoader.Load("res://Scenes/ui_top.tscn").Instance();
-        //IOManager       = new FssIOManager();
-        //ResourceManager = new FssResourceManager();
-
-        // Add the level nodes to the scene tree
-        AddChild(ZeroNode);
-        //AddChild(UIRoot);
-        //AddChild(IOManager);
-        //AddChild(ResourceManager);
+        // Create the level nodes in the Factory (singleton for common access)
+        FssGodotFactory.Instance.CreateObjects(this);
     }
+
+    // --------------------------------------------------------------------------------------------
 
     // Static accessor for easy access to the RootNode instance
     public static FssRootNode Instance

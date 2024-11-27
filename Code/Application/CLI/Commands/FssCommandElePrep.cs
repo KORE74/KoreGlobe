@@ -14,7 +14,7 @@ public class FssCommandElePrep : FssCommand
     public FssCommandElePrep()
     {
         Signature.Add("ele");
-        Signature.Add("prep");
+        Signature.Add("preptile");
     }
 
     public override string Execute(List<string> parameters)
