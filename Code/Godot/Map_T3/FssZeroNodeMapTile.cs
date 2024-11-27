@@ -12,10 +12,15 @@ using Godot;
 
 public partial class FssZeroNodeMapTile : Node3D
 {
-    // Externally specified data required to start tile construction
-    public FssFloat2DArray       RwEleData  = new FssFloat2DArray();
+    // Tile code
     public FssMapTileCode        TileCode   = FssMapTileCode.Zero;
+
+    // Parent/child tiles relationships
     public FssZeroNodeMapTile?   ParentTile = null;
+    public List<FssZeroNodeMapTile> ChildTiles = new List<FssZeroNodeMapTile>();
+
+    // Real world elevation data, defining the tile's geometry
+    public FssFloat2DArray       RwEleData  = new FssFloat2DArray();
 
     // Child accessible values
     public FssFloatRange         UVx   = FssFloatRange.ZeroToOne;
@@ -24,7 +29,7 @@ public partial class FssZeroNodeMapTile : Node3D
 
     // Working values
     private FssMapTileFilepaths  Filepaths;
-    private FssLLAPoint          RwLLACenter = FssLLAPoint.Zero;
+    private readonly FssLLAPoint RwLLACenter = FssLLAPoint.Zero; // Shortcut from the tilecode center
 
     // One way or another, a tile will end up with an image filename, either from the Filename structure, a
     // parent tile of a default choice.
@@ -45,8 +50,10 @@ public partial class FssZeroNodeMapTile : Node3D
     private bool ImageDone            = false;
 
     // Flag set when the tile (or its children) should be visible. Gates the main visibility processing.
-    public bool ActiveVisibility      = false;
+    public bool  ActiveVisibility        = false;
+    public float LatestPixelsPerTriangle = 1000f
 
+    // Update timers
     private float CreateTaskUpdateTimerSecs = 1.0f;
     private float CreateTaskUpdateTimer     = 0.0f;
 
@@ -57,8 +64,9 @@ public partial class FssZeroNodeMapTile : Node3D
     public FssZeroNodeMapTile(FssMapTileCode tileCode)
     {
         // Set the core Tilecode and node name.
-        TileCode = tileCode;
-        Name     = tileCode.ToString();
+        TileCode    = tileCode;
+        Name        = tileCode.ToString();
+        RwLLACenter = tileCode.LLACenter;
 
         // Fire off the fully background task of creating/loading the tile elements asap.
         Task.Run(() => BackgroundTileCreation(tileCode));
@@ -94,9 +102,39 @@ public partial class FssZeroNodeMapTile : Node3D
     }
 
     // --------------------------------------------------------------------------------------------
-    // MARK: Main Create
+    // MARK: Child Tiles
     // --------------------------------------------------------------------------------------------
 
+    public void CreateChildTiles()
+    {
+        if (!TileCode.IsValid())
+        {
+            FssCentralLog.AddEntry("Invalid tile code for child tile creation.");
+            return;
+        }
+
+        List<FssMapTileCode> childCodes = TileCode.GetChildTileCodes();
+
+        foreach (FssMapTileCode currcode in childCodes)
+            ChildTiles.Add(new FssZeroNodeMapTile(currcode));
+    }
+
+    public bool ChildTilesExist()
+    {
+        return ChildTiles.Count > 0;
+    }
+
+    public bool ChildTilesContructed()
+    {
+        if (!ChildTilesExist())
+            return false;
+
+        foreach (FssZeroNodeMapTile childTile in ChildTiles)
+        {
+            if (!childTile.ConstructionComplete)
+                return false;
+        }
+    }
 
     // --------------------------------------------------------------------------------------------
 

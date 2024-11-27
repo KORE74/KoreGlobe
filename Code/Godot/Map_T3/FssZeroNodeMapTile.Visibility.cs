@@ -13,9 +13,108 @@ using Godot;
 public partial class FssZeroNodeMapTile : Node3D
 {
 
+
+
     private void UpdateVisibility()
     {
+        (bool validUnproject, float pixelsPerTriangle) = UnprojectedTriangleSize();
+        if (validUnproject) LatestPixelsPerTriangle = pixelsPerTriangle;
 
+    }
+
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Visibility Helper Routines
+    // --------------------------------------------------------------------------------------------
+
+    private (bool, float) UnprojectedTriangleSize()
+    {
+        bool  retValid     = false;
+        float retPixelSize = 1000f; // Large initial value, will be minimized
+
+        // Get the real-world corners of the tile's LL box
+        FssLLBox   tileLLBox = TileCode.LLBox;
+        FssLLPoint llaTileTL = tileLLBox.PosTopLeft;
+        FssLLPoint llaTileTR = tileLLBox.PosTopRight;
+        FssLLPoint llaTileBL = tileLLBox.PosBottomLeft;
+        FssLLPoint llaTileBR = tileLLBox.PosBottomRight;
+
+        // Get the game-engine version of those points
+        Vector3 v3TL = FssGeoConvOperations.RwToOffsetGe(llaTileTL);
+        Vector3 v3TR = FssGeoConvOperations.RwToOffsetGe(llaTileTR);
+        Vector3 v3BL = FssGeoConvOperations.RwToOffsetGe(llaTileBL);
+        Vector3 v3BR = FssGeoConvOperations.RwToOffsetGe(llaTileBR);
+
+        // Get the number of triangles along the box edges
+        int vertTriangleCount  = RwEleData.Height - 1;
+        int horizTriangleCount = RwEleData.Width - 1;
+
+        // Get the current scene camera and viewport, requirements for the unproject calls.
+        Viewport viewport   = GetViewport(); //Engine.GetMainLoop() is SceneTree sceneTree ? sceneTree.Root : null;
+        Camera3D currCamera = viewport.GetCamera3D();
+
+        // Unproject the tile corners into screen space
+        bool unprojectTLValid, unprojectTRValid, unprojectBLValid, unprojectBRValid;
+        Vector2 unprojectTL, unprojectTR, unprojectBL, unprojectBR;
+
+        // Unproject the points, to get an XY screen position and a validity
+        (unprojectTL, unprojectTLValid) = FssUnprojectUtils.UnprojectPoint(v3TL, currCamera, viewport);
+        (unprojectTR, unprojectTRValid) = FssUnprojectUtils.UnprojectPoint(v3TR, currCamera, viewport);
+        (unprojectBL, unprojectBLValid) = FssUnprojectUtils.UnprojectPoint(v3BL, currCamera, viewport);
+        (unprojectBR, unprojectBRValid) = FssUnprojectUtils.UnprojectPoint(v3BR, currCamera, viewport);
+
+        // Determine the validity around the edges, so we can perform an assessment even with some corners out of bounds.
+        bool topEdgeValid    = unprojectTLValid && unprojectTRValid;
+        bool bottomEdgeValid = unprojectBLValid && unprojectBRValid;
+        bool leftEdgeValid   = unprojectTLValid && unprojectBLValid;
+        bool rightEdgeValid  = unprojectTRValid && unprojectBRValid;
+
+        // Early exit if no edges are valid
+        if (!topEdgeValid && !bottomEdgeValid && !leftEdgeValid && !rightEdgeValid)
+        {
+            return (false, retPixelSize);
+        }
+
+        // A top or bottom edge may be compromised by being at a pole, so we need to make sure the edge has at least some distance to it.
+        const float minEdgePixels = 5f;
+
+        // Based on each edge validity, lets see what the smallest triangle-pixel-size is.
+        if (topEdgeValid)
+        {
+            float topEdgeScreenSpace = (unprojectTL - unprojectTR).Length();
+            if (topEdgeScreenSpace > minEdgePixels)
+            {
+                float topEdgePixelsPerTriangle = topEdgeScreenSpace / horizTriangleCount;
+                retPixelSize = Math.Min(topEdgePixelsPerTriangle, retPixelSize);
+                retValid = true;
+            }
+        }
+        if (bottomEdgeValid)
+        {
+            float bottomEdgeScreenSpace = (unprojectBL - unprojectBR).Length();
+            if (bottomEdgeScreenSpace > minEdgePixels)
+            {
+                float bottomEdgePixelsPerTriangle = bottomEdgeScreenSpace / horizTriangleCount;
+                retPixelSize = Math.Min(bottomEdgePixelsPerTriangle, retPixelSize);
+                retValid = true;
+            }
+        }
+        if (leftEdgeValid)
+        {
+            float leftEdgeScreenSpace = (unprojectTL - unprojectBL).Length();
+            float leftEdgePixelsPerTriangle = leftEdgeScreenSpace / vertTriangleCount;
+            retPixelSize = Math.Min(leftEdgePixelsPerTriangle, retPixelSize);
+            retValid = true;
+        }
+        if (rightEdgeValid)
+        {
+            float rightEdgeScreenSpace = (unprojectTR - unprojectBR).Length();
+            float rightEdgePixelsPerTriangle = rightEdgeScreenSpace  / vertTriangleCount;
+            retPixelSize = Math.Min(rightEdgePixelsPerTriangle, retPixelSize);
+            retValid = true;
+        }
+
+        return (retValid, retPixelSize);
     }
 
 }
