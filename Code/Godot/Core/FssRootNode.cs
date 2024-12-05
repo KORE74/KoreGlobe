@@ -1,7 +1,6 @@
 using Godot;
 
-
-// FssRootNode: Class is the top level of teh whole application, fires of initialisation activities.
+// FssRootNode: Class is the top level of the whole application, fires of initialisation activities.
 public partial class FssRootNode : Node
 {
     // Static reference to the root node for easy access

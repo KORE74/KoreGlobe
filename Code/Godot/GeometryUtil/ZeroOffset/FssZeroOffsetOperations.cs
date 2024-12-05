@@ -1,7 +1,7 @@
 
 using Godot;
 
-// FssGeoConvOperations: Functions for converting between real-world values and the Godot GameEngine presentation.
+// FssZeroOffsetOperations: Functions for converting between real-world values and the Godot GameEngine presentation.
 // - Real world is in mainly SI units, with other accessor operations. The Godot World in is units of kilometers, to best suit the full world presentation.
 // - The Godot axis system does not match the ECEF orientatino of teh Z axis, so this will see inverting.
 
@@ -25,37 +25,23 @@ public struct FssEntityV3
     public Vector3 VecNorth;
 }
 
-public static class FssGeoConvOperations
+public static class FssZeroOffsetOperations
 {
-    // --------------------------------------------------------------------------------------------
-    // MARK: Elevation conversion
-    // --------------------------------------------------------------------------------------------
-
-    // routine to take a model elevation in meters, and ouput a scaled elevation in km, in propoortion
-    // to the current presentation range FssZeroOffset.GeEarthRadius.
-    public static float ScaleElevation(double modelEleM)
-    {
-        // Determine model to presentation scale factor
-        double scaleMetersPerDisplayUnit = FssPosConsts.EarthRadiusM / FssZeroOffset.GeEarthRadius;
-
-        return (float)(modelEleM / scaleMetersPerDisplayUnit);
-    }
-
     // --------------------------------------------------------------------------------------------
     // MARK: Bare Position - No Zero offsets
     // --------------------------------------------------------------------------------------------
 
-    // FssGeoConvOperations.RwToGeStruct(pos);
+    // FssZeroOffsetOperations.RwToGeStruct(pos);
     public static Vector3 RwToGe(double radiusM, double latDegs, double lonDegs)
     {
         // Scale the radius
-        radiusM = radiusM * FssZeroOffset.RwToGeDistanceMultiplierM;
+        double radiusGe = radiusM * FssZeroOffset.RwToGeDistMultiplier;
 
         // Convert the LLA to an XYZ - No offset for this function
-        FssLLAPoint llap = new FssLLAPoint() { LatDegs = latDegs, LonDegs = lonDegs, RadiusM = radiusM };
+        FssLLAPoint llap = new FssLLAPoint() { LatDegs = latDegs, LonDegs = lonDegs, RadiusM = radiusGe };
         FssXYZPoint p = llap.ToXYZ();
 
-        // Create a new vecotr3, with teh Z axis inverted as Godot needs.
+        // Create a new vecotr3, with the Z axis inverted as Godot needs.
         return new Vector3((float)p.X, (float)p.Y, (float)-p.Z);
     }
 
@@ -66,19 +52,19 @@ public static class FssGeoConvOperations
 
     // --------------------------------------------------------------------------------------------
 
-    // A GE position is a vec3 AS AN OFFSET FROM TEH 0,0,0 position.
+    // A GE position is a vec3 AS AN OFFSET FROM 0,0,0 position.
     // 1 - We start by scaling that back into a real world offset.
     // 2 - We apply the real world earth centre offset (still all in XYZ)
     // 3 - We convert the XYZ into an LLA.
 
-    // FssGeoConvOperations.GeToRw(pos);
+    // FssZeroOffsetOperations.GeToRw(pos);
     public static FssLLAPoint GeToRw(Vector3 gePos)
     {
         // 1 - Scale the position back to real world
         //     The GE position has a flipped Z axis, so we need to invert it back
-        double rwX = gePos.X * FssZeroOffset.GeToRwDistanceMultiplierM;
-        double rwY = gePos.Y * FssZeroOffset.GeToRwDistanceMultiplierM;
-        double rwZ = gePos.Z * FssZeroOffset.GeToRwDistanceMultiplierM * -1;
+        double rwX = gePos.X * FssZeroOffset.ReToRwDistMultiplier;
+        double rwY = gePos.Y * FssZeroOffset.ReToRwDistMultiplier;
+        double rwZ = gePos.Z * FssZeroOffset.ReToRwDistMultiplier * -1;
 
         FssXYZPoint rwOffset = new FssXYZPoint(rwX, rwY, rwZ);
 
@@ -95,10 +81,12 @@ public static class FssGeoConvOperations
     // MARK: Bare Position - WITH Zero offsets
     // --------------------------------------------------------------------------------------------
 
-    // Usage: Vector3 v3Pos = FssGeoConvOperations.RwToOffsetGe(pos);
+    public static Vector3 RwToOffsetGe(FssLLPoint llPos) => FssZeroOffsetOperations.RwToOffsetGe(new FssLLAPoint(llPos));
+
+    // Usage: Vector3 v3Pos = FssZeroOffsetOperations.RwToOffsetGe(pos);
     public static Vector3 RwToOffsetGe(FssLLAPoint pos)
     {
-        //pos.RadiusM = ScaleElevation(pos.RadiusM);
+        //pos.RadiusM = ScaleDistance(pos.RadiusM);
         return FssZeroOffset.GeZeroPointOffset(pos.ToXYZ());
     }
 
@@ -106,7 +94,9 @@ public static class FssGeoConvOperations
     // MARK: Position with Orientation
     // --------------------------------------------------------------------------------------------
 
-    // Usage: FssPosV3 posV3 = FssGeoConvOperations.RwToGeStruct(Pos);
+    public static FssPosV3 RwToGeStruct(FssLLPoint llPos) => FssZeroOffsetOperations.RwToGeStruct(new FssLLAPoint(llPos));
+
+    // Usage: FssPosV3 posV3 = FssZeroOffsetOperations.RwToGeStruct(Pos);
     public static FssPosV3 RwToGeStruct(FssLLAPoint pos)
     {
         // Define the position and associated up direction for the label
@@ -136,7 +126,7 @@ public static class FssGeoConvOperations
     // MARK: Position with Course and Orientation
     // --------------------------------------------------------------------------------------------
 
-    // Usage: FssEntityV3 platformV3 = FssGeoConvOperations.RealWorldToStruct(PlatformPos, PlatformCourse);
+    // Usage: FssEntityV3 platformV3 = FssZeroOffsetOperations.RealWorldToStruct(PlatformPos, PlatformCourse);
 
     public static FssEntityV3 RwToGeStruct(FssLLAPoint pos, FssCourse course)
     {
@@ -145,7 +135,7 @@ public static class FssGeoConvOperations
         FssLLAPoint posNorth = new FssLLAPoint() { LatDegs = pos.LatDegs + 1, LonDegs = pos.LonDegs, AltMslM = pos.AltMslM};
 
         // get the offset and ensure we have sufficient magnitude
-        FssRangeBearing aheadCourse = new FssRangeBearing() { RangeM = FssZeroOffset.AheadDistGeM, BearingDegs = course.HeadingDegs };
+        FssRangeBearing aheadCourse = new FssRangeBearing() { RangeM = FssZeroOffset.AheadDistGE, BearingDegs = course.HeadingDegs };
         FssLLAPoint posAhead = pos.PlusRangeBearing(aheadCourse);
 
         // Define the absolute positions
@@ -203,7 +193,7 @@ public static class FssGeoConvOperations
         Vector3 v3PosAbove   = FssZeroOffset.GeZeroPointOffset(posAbove.ToXYZ());
 
         // get the offset and ensure we have sufficient magnitude
-        FssRangeBearing aheadCourse = new FssRangeBearing() { RangeM = FssZeroOffset.AheadDistGeM, BearingDegs = HeadingDegs };
+        FssRangeBearing aheadCourse = new FssRangeBearing() { RangeM = FssZeroOffset.AheadDistGE, BearingDegs = HeadingDegs };
         FssLLAPoint posAhead = pos.PlusRangeBearing(aheadCourse);
         Vector3 v3PosAhead   = FssZeroOffset.GeZeroPointOffset(posAhead.ToXYZ());
 
@@ -279,7 +269,7 @@ public static class FssGeoConvOperations
 
     // --------------------------------------------------------------------------------------------
 
-    // Usage: FssEntityV3 platformV3 = FssGeoConvOperations.RwToGeStruct(currPos, futurePos);
+    // Usage: FssEntityV3 platformV3 = FssZeroOffsetOperations.RwToGeStruct(currPos, futurePos);
 
     public static FssEntityV3 RwToGeStruct(FssLLAPoint frompos, FssLLAPoint topos)
     {

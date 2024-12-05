@@ -45,7 +45,7 @@ public partial class FssCameraMover : Camera3D
         {
             Camera3D camNode = (Camera3D)this;
             if (camNode.IsCurrent())
-                FssMapManager.LoadRefLLA = FssGeoConvOperations.GeToRw(Position);
+                FssMapManager.LoadRefLLA = FssZeroOffsetOperations.GeToRw(Position);
         }
 
         MoveSpeed = (float)(FssValueUtils.LimitToRange(FssMapManager.LoadRefLLA.AltMslKm / 80, 0.02, 5000));

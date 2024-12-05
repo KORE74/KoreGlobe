@@ -86,7 +86,7 @@ public partial class FssGodotEntityManager : Node3D
             // Create the bounding box
             //FssXYZBox rwAABB = new FssXYZBox() { Height = 200, Width = 400, Length = 600 };
             //rwAABB = ent.ModelInfo.RwAABB;
-            FssXYZBox geAABB = rwAABB.Scale(FssZeroOffset.RwToGeDistanceMultiplierM);
+            FssXYZBox geAABB = rwAABB.Scale(FssZeroOffset.RwToGeDistMultiplier);
 
             GD.Print($"MatchBoundingBox: {platformType} => geAABB:{geAABB}");
 

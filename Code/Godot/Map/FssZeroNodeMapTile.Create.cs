@@ -89,7 +89,7 @@ public partial class FssZeroNodeMapTile : Node3D
 
         // Setup the center position for the mesh and later positioning
         FssLLBox rwLLBox = TileCode.LLBox;
-        RwLLACenter = new FssLLAPoint() { LatDegs = rwLLBox.MidLatDegs, LonDegs = rwLLBox.MinLonDegs, RadiusM = FssPosConsts.EarthRadiusM};
+        //RwLLACenter = new FssLLAPoint() { LatDegs = rwLLBox.MidLatDegs, LonDegs = rwLLBox.MinLonDegs, RadiusM = FssPosConsts.EarthRadiusM};
 
         // Define zero longitude center, so we can create the tile from relative (not absolute) angles and
         // more intuitively rotate the tile.
@@ -122,9 +122,9 @@ public partial class FssZeroNodeMapTile : Node3D
 
                 // Convert the Real-World position to the Game Engine position.
                 v3Data[i, j] = new Vector3(
-                    (float)(rwXYZCenterOffset.X * FssZeroOffset.RwToGeDistanceMultiplierM),
-                    (float)(rwXYZCenterOffset.Y * FssZeroOffset.RwToGeDistanceMultiplierM),
-                    (float)(rwXYZCenterOffset.Z * FssZeroOffset.RwToGeDistanceMultiplierM));
+                    (float)(rwXYZCenterOffset.X * FssZeroOffset.RwToGeDistMultiplier),
+                    (float)(rwXYZCenterOffset.Y * FssZeroOffset.RwToGeDistMultiplier),
+                    (float)(rwXYZCenterOffset.Z * FssZeroOffset.RwToGeDistMultiplier));
             }
         }
 
@@ -174,7 +174,7 @@ public partial class FssZeroNodeMapTile : Node3D
     private void SourceTileElevation()
     {
         // Load the elevation data
-        FssAppFactory.Instance.EleManager.RequestTile(tileCode);
+        FssAppFactory.Instance.EleManager.RequestTile(TileCode);
     }
 
     // --------------------------------------------------------------------------------------------
@@ -184,7 +184,7 @@ public partial class FssZeroNodeMapTile : Node3D
     private void SourceTileImage()
     {
         // Request the image to be loaded in the background - non-blocking.
-        RegisteredTextureName
+        // RegisteredTextureName
 
         // FssTextureLoader? TL = FssTextureLoader.Instance;
         // if (TL != null)

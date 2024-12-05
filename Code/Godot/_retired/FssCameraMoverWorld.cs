@@ -38,7 +38,7 @@
 //             Rotation += rotation * RotateSpeed * (float)(delta);
 //         }
 
-//         //RwPosition = FssGeoConvOperations.GodotToRealWorld(Position);
+//         //RwPosition = FssZeroOffsetOperations.GodotToRealWorld(Position);
 //     }
 
 //     private void UpdateInputs()

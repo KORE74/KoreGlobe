@@ -11,7 +11,7 @@ public partial class FssGodotPlatformElementRoute : FssGodotPlatformElement
 
     FssLineMesh3D LineMesh = new FssLineMesh3D();
 
-    private static float BaseNodeSize = (float)(150 * FssZeroOffset.RwToGeDistanceMultiplierM);
+    private static float BaseNodeSize = (float)(150 * FssZeroOffset.RwToGeDistMultiplier);
 
     // --------------------------------------------------------------------------------------------
     // MARK: Node3D Routines
@@ -78,14 +78,14 @@ public partial class FssGodotPlatformElementRoute : FssGodotPlatformElement
             if (FssValueUtils.EqualsWithinTolerance(  endLLA.AltMslM, -0.5, 0.5))   endLLA.AltMslM = 2;
 
             // get the route positions in GE units, offset from ZeroPoint
-            Vector3 startPos = FssGeoConvOperations.RwToOffsetGe(startLLA);
-            Vector3 endPos   = FssGeoConvOperations.RwToOffsetGe(endLLA);
+            Vector3 startPos = FssZeroOffsetOperations.RwToOffsetGe(startLLA);
+            Vector3 endPos   = FssZeroOffsetOperations.RwToOffsetGe(endLLA);
 
             // Drop the start point line - so we see in anchored to a point in th ground.
             FssLLAPoint botLLA = RoutePoints[i];
             botLLA.AltMslM = -1000;
             Vector3 topPos = startPos;
-            Vector3 botPos = FssGeoConvOperations.RwToOffsetGe(botLLA);
+            Vector3 botPos = FssZeroOffsetOperations.RwToOffsetGe(botLLA);
             LineMesh.AddLine(topPos, botPos, FssColorUtil.Colors["Gray"]);
 
             // Anything over a distance threshold, divide up into sublines to interpolate along
@@ -100,8 +100,8 @@ public partial class FssGodotPlatformElementRoute : FssGodotPlatformElement
 
                 for (int subLegCount=0; subLegCount < pointList.Count-1; subLegCount++)
                 {
-                    Vector3 subStartPos = FssGeoConvOperations.RwToOffsetGe(pointList[subLegCount]);
-                    Vector3 subEndPos   = FssGeoConvOperations.RwToOffsetGe(pointList[subLegCount+1]);
+                    Vector3 subStartPos = FssZeroOffsetOperations.RwToOffsetGe(pointList[subLegCount]);
+                    Vector3 subEndPos   = FssZeroOffsetOperations.RwToOffsetGe(pointList[subLegCount+1]);
                     LineMesh.AddLine(subStartPos, subEndPos, FssColorUtil.Colors["Green"]);
                 }
             }
@@ -116,7 +116,7 @@ public partial class FssGodotPlatformElementRoute : FssGodotPlatformElement
                 botLLA = RoutePoints[i+1];
                 botLLA.AltMslM = -1000;
                 topPos = endPos;
-                botPos = FssGeoConvOperations.RwToOffsetGe(botLLA);
+                botPos = FssZeroOffsetOperations.RwToOffsetGe(botLLA);
                 LineMesh.AddLine(topPos, botPos, FssColorUtil.Colors["Gray"]);
             }
         }

@@ -285,8 +285,8 @@ public partial class FssMapTileNode : Node3D
         FssLLAPoint pos  = new FssLLAPoint() { LatDegs = posLL.LatDegs,        LonDegs = posLL.LonDegs, AltMslM = 2000};
         FssLLAPoint posN = new FssLLAPoint() { LatDegs = posLL.LatDegs + 0.01, LonDegs = posLL.LonDegs, AltMslM = 2000};
 
-        Godot.Vector3 v3Pos   = FssGeoConvOperations.RwToGe(pos);
-        Godot.Vector3 v3PosN  = FssGeoConvOperations.RwToGe(posN);
+        Godot.Vector3 v3Pos   = FssZeroOffsetOperations.RwToGe(pos);
+        Godot.Vector3 v3PosN  = FssZeroOffsetOperations.RwToGe(posN);
         Godot.Vector3 v3VectN = (v3PosN - v3Pos).Normalized();
 
         TileCodeLabel.Visible = false;

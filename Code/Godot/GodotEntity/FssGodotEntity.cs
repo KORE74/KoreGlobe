@@ -92,7 +92,7 @@ public partial class FssGodotEntity : Node3D
         // Only drive the zero node to match the entity position if the chase cam is the current camera
         if (ChaseCam.IsCurrent())
         {
-            FssZeroNode.SetZeroNodePosition(CurrentPosition);
+            //FssZeroNode.SetZeroNodePosition(CurrentPosition);
             GD.Print($"ZERO NODE UPDATE: EntityName:{EntityName} CurrentPosition:{CurrentPosition}");
         }
     }
@@ -120,7 +120,7 @@ public partial class FssGodotEntity : Node3D
             return;
         }
 
-        FssEntityV3 entityVecs = FssGeoConvOperations.RwToGeStruct((FssLLAPoint)pos, (FssCourse)course);
+        FssEntityV3 entityVecs = FssZeroOffsetOperations.RwToGeStruct((FssLLAPoint)pos, (FssCourse)course);
 
         //GD.Print($"Name: {EntityName} PosLLA:{pos} Ahead:{entityVecs.PosAhead} up:{entityVecs.VecUp}");
 

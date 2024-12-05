@@ -71,27 +71,27 @@ public struct FssLLBox
 
     // --------------------------------------------------------------------------------------------
 
-    public FssLLAPoint PosTopLeft
+    public FssLLPoint PosTopLeft
     {
-        get { return new FssLLAPoint() { LatRads = MaxLatRads, LonRads = MinLonRads }; }
+        get { return new FssLLPoint() { LatRads = MaxLatRads, LonRads = MinLonRads }; }
         set { MaxLatRads = value.LatRads; MinLonRads = value.LonRads; }
     }
 
-    public FssLLAPoint PosTopRight
+    public FssLLPoint PosTopRight
     {
-        get { return new FssLLAPoint() { LatRads = MaxLatRads, LonRads = MaxLonRads }; }
+        get { return new FssLLPoint() { LatRads = MaxLatRads, LonRads = MaxLonRads }; }
         set { MaxLatRads = value.LatRads; MaxLonRads = value.LonRads; }
     }
 
-    public FssLLAPoint PosBottomLeft
+    public FssLLPoint PosBottomLeft
     {
-        get { return new FssLLAPoint() { LatRads = MinLatRads, LonRads = MinLonRads }; }
+        get { return new FssLLPoint() { LatRads = MinLatRads, LonRads = MinLonRads }; }
         set { MinLatRads = value.LatRads; MinLonRads = value.LonRads; }
     }
 
-    public FssLLAPoint PosBottomRight
+    public FssLLPoint PosBottomRight
     {
-        get { return new FssLLAPoint() { LatRads = MinLatRads, LonRads = MaxLonRads }; }
+        get { return new FssLLPoint() { LatRads = MinLatRads, LonRads = MaxLonRads }; }
         set { MinLatRads = value.LatRads; MaxLonRads = value.LonRads; }
     }
 

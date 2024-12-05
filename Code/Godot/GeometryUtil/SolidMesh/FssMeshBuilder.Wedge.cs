@@ -102,8 +102,8 @@ public partial class FssMeshBuilder
             {
                 float azDegs = azimuthMinDegs + ((float)x * azDeltaDegs);
 
-                Vector3 insidePoint  = FssGeoConvOperations.RwToGe(distanceMin, azDegs + azDeltaDegs, elDegs);
-                Vector3 outsidePoint = FssGeoConvOperations.RwToGe(distanceMax, azDegs + azDeltaDegs, elDegs);
+                Vector3 insidePoint  = FssZeroOffsetOperations.RwToGe(distanceMin, azDegs + azDeltaDegs, elDegs);
+                Vector3 outsidePoint = FssZeroOffsetOperations.RwToGe(distanceMax, azDegs + azDeltaDegs, elDegs);
 
                 // Store points in the edge lists
                 if (y == 0)            topInsideEdge.Add(insidePoint);

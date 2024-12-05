@@ -25,7 +25,7 @@ public partial class FssTestRoute : Node3D
         // Create the Vector3 list
         List<Vector3> RouteVectors = new List<Vector3>();
         //foreach (FssLLAPoint point in RoutePoints)
-            //RouteVectors.Add(FssGeoConvOperations.RealWorldToGodot(point));
+            //RouteVectors.Add(FssZeroOffsetOperations.RealWorldToGodot(point));
 
         // Create the materials
         var matWire  = FssMaterialFactory.WireframeMaterial(FssColorUtil.Colors["White"]);
@@ -99,11 +99,11 @@ public partial class FssTestRoute : Node3D
         // // --- Define vectors -----------------------
 
         // // Define the Vector3 Offsets
-        // Vector3 vecPos   = FssGeoConvOperations.RealWorldToGodot(pos);
-        // Vector3 vecAbove = FssGeoConvOperations.RealWorldToGodot(posAbove);
-        // Vector3 vecAhead = FssGeoConvOperations.RealWorldToGodot(posAhead);
+        // Vector3 vecPos   = FssZeroOffsetOperations.RealWorldToGodot(pos);
+        // Vector3 vecAbove = FssZeroOffsetOperations.RealWorldToGodot(posAbove);
+        // Vector3 vecAhead = FssZeroOffsetOperations.RealWorldToGodot(posAhead);
 
-        // FssEntityV3 platVecs = FssGeoConvOperations.RealWorldToStruct(pos, FssCourse.Zero);
+        // FssEntityV3 platVecs = FssZeroOffsetOperations.RealWorldToStruct(pos, FssCourse.Zero);
 
         // // Update node position and orientation
         // ModelNode.Position = platVecs.Position;// vecPos;

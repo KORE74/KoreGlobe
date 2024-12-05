@@ -1,3 +1,28 @@
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+using Godot;
+
+#nullable enable
+
+// ZeroNode map tile:
+// - A tile placed at an offset from the zeronode.
+// - Orientation is zero, with the onus on the central point to angle it according to its LL.
+
+public partial class FssZeroNodeMapTile : Node3D
+{
+
+
+
+    private void UpdateVisibility()
+    {
+        (bool validUnproject, float pixelsPerTriangle) = UnprojectedTriangleSize();
+        if (validUnproject) LatestPixelsPerTriangle = pixelsPerTriangle;
+
+    }
+
+
     // --------------------------------------------------------------------------------------------
     // MARK: Visibility Helper Routines
     // --------------------------------------------------------------------------------------------
@@ -15,10 +40,10 @@
         FssLLPoint llaTileBR = tileLLBox.PosBottomRight;
 
         // Get the game-engine version of those points
-        Vector3 v3TL = FssGeoConvOperations.RwToOffsetGe(llaTileTL);
-        Vector3 v3TR = FssGeoConvOperations.RwToOffsetGe(llaTileTR);
-        Vector3 v3BL = FssGeoConvOperations.RwToOffsetGe(llaTileBL);
-        Vector3 v3BR = FssGeoConvOperations.RwToOffsetGe(llaTileBR);
+        Vector3 v3TL = FssZeroOffsetOperations.RwToOffsetGe(llaTileTL);
+        Vector3 v3TR = FssZeroOffsetOperations.RwToOffsetGe(llaTileTR);
+        Vector3 v3BL = FssZeroOffsetOperations.RwToOffsetGe(llaTileBL);
+        Vector3 v3BR = FssZeroOffsetOperations.RwToOffsetGe(llaTileBR);
 
         // Get the number of triangles along the box edges
         int vertTriangleCount  = RwEleData.Height - 1;
@@ -92,3 +117,4 @@
         return (retValid, retPixelSize);
     }
 
+}

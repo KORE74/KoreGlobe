@@ -1,90 +1,90 @@
 
-using System;
+// using System;
 
-using Godot;
+// using Godot;
 
-// Class representing the zero anchor position in the game engine world.
+// // Class representing the zero anchor position in the game engine world.
 
-public partial class FssZeroNode : Node3D
-{
-    // The root node for all entities, made static so it can be accessed from anywhere.
-    public static Node3D EntityRootNode = new Node3D() { Name = "EntityRootNode" };
+// public partial class FssZeroNode : Node3D
+// {
+//     // The root node for all entities, made static so it can be accessed from anywhere.
+//     public static Node3D EntityRootNode = new Node3D() { Name = "EntityRootNode" };
 
-    private static FssLLAPoint ZeroPosToApply = new FssLLAPoint() { LatDegs = 0, LonDegs = 0, RadiusM = FssPosConsts.EarthRadiusM };
+//     private static FssLLAPoint ZeroPosToApply = new FssLLAPoint() { LatDegs = 0, LonDegs = 0, RadiusM = FssPosConsts.EarthRadiusM };
 
-    private float Timer1Hz = 0.0f;
+//     private float Timer1Hz = 0.0f;
 
-    // Usage: FssZeroNode.ZeroNodeUpdateCycle
-    public static bool ZeroNodeUpdateCycle = false;
+//     // Usage: FssZeroNode.ZeroNodeUpdateCycle
+//     public static bool ZeroNodeUpdateCycle = false;
 
-    // --------------------------------------------------------------------------------------------
-    // MARK: Node Functions
-    // --------------------------------------------------------------------------------------------
+//     // --------------------------------------------------------------------------------------------
+//     // MARK: Node Functions
+//     // --------------------------------------------------------------------------------------------
 
-    // Called when the node enters the scene tree for the first time.
-    public override void _Ready()
-    {
-        Name = "ZeroNode";
-    }
+//     // Called when the node enters the scene tree for the first time.
+//     public override void _Ready()
+//     {
+//         Name = "ZeroNode";
+//     }
 
-    public override void _Process(double delta)
-    {
-        ZeroNodeUpdateCycle = false;
+//     public override void _Process(double delta)
+//     {
+//         ZeroNodeUpdateCycle = false;
 
-        if (Timer1Hz < FssCentralTime.RuntimeSecs)
-        {
-            Timer1Hz = FssCentralTime.RuntimeSecs + 1.0f;
+//         if (Timer1Hz < FssCentralTime.RuntimeSecs)
+//         {
+//             Timer1Hz = FssCentralTime.RuntimeSecs + 1.0f;
 
-            SetZeroNodePositionDeferred();
-            ZeroNodeUpdateCycle = true;
-        }
-    }
+//             SetZeroNodePositionDeferred();
+//             ZeroNodeUpdateCycle = true;
+//         }
+//     }
 
-    // --------------------------------------------------------------------------------------------
-    // MARK: ZeroNode Position
-    // --------------------------------------------------------------------------------------------
+//     // --------------------------------------------------------------------------------------------
+//     // MARK: ZeroNode Position
+//     // --------------------------------------------------------------------------------------------
 
-    // Usage: FssZeroNode.SetZeroNodePosition(pos);
-    public static void SetZeroNodePosition(FssLLAPoint pos)
-    {
-        ZeroPosToApply = pos;
-    }
+//     // Usage: FssZeroNode.SetZeroNodePosition(pos);
+//     public static void SetZeroNodePosition(FssLLAPoint pos)
+//     {
+//         ZeroPosToApply = pos;
+//     }
 
-    // Usage: FssZeroNode.SetZeroNodePosition(53.0, -6.0);
-    public static void SetZeroNodePosition(double lat, double lon)
-    {
-        // Set the position of the ZeroNode.
-        FssLLAPoint pos = new FssLLAPoint() {
-            LatDegs = lat,
-            LonDegs = lon,
-            RadiusM = FssPosConsts.EarthRadiusM };
+//     // Usage: FssZeroNode.SetZeroNodePosition(53.0, -6.0);
+//     public static void SetZeroNodePosition(double lat, double lon)
+//     {
+//         // Set the position of the ZeroNode.
+//         FssLLAPoint pos = new FssLLAPoint() {
+//             LatDegs = lat,
+//             LonDegs = lon,
+//             RadiusM = FssPosConsts.EarthRadiusM };
 
-        ZeroPosToApply = pos;
-    }
+//         ZeroPosToApply = pos;
+//     }
 
-    // Internal function to actually apply the new zero offset position, of the node's own timeline.
+//     // Internal function to actually apply the new zero offset position, of the node's own timeline.
 
-    private void SetZeroNodePositionDeferred()
-    {
-        // Set the position of the ZeroNode.
-        FssZeroOffset.SetLLA(ZeroPosToApply);
+//     private void SetZeroNodePositionDeferred()
+//     {
+//         // Set the position of the ZeroNode.
+//         FssZeroOffset.SetLLA(ZeroPosToApply);
 
-        // Update the cnsequent positions of the ZeroNode and EarthCoreNode.
-        FssGodotFactory.Instance.ZeroNode.Position      = FssZeroOffset.GeZeroPoint();
-        // FssGodotFactory.Instance.EarthCoreNode.Position = FssZeroOffset.GeCorePoint();
-    }
+//         // Update the cnsequent positions of the ZeroNode and EarthCoreNode.
+//         FssGodotFactory.Instance.ZeroNode.Position      = FssZeroOffset.GeZeroPoint();
+//         // FssGodotFactory.Instance.EarthCoreNode.Position = FssZeroOffset.GeCorePoint();
+//     }
 
-    // --------------------------------------------------------------------------------------------
-    // MARK: Helpers
-    // --------------------------------------------------------------------------------------------
+//     // --------------------------------------------------------------------------------------------
+//     // MARK: Helpers
+//     // --------------------------------------------------------------------------------------------
 
-    private void CreateDebugMarker()
-    {
-        float markerSize  = 2f;
+//     private void CreateDebugMarker()
+//     {
+//         float markerSize  = 2f;
 
-        Node3D zeroNodeMarker = FssPrimitiveFactory.CreateSphereNode("Marker", new Vector3(0f, 0f, 0f), markerSize, FssColorUtil.Colors["OffRed"], true);
-        AddChild(zeroNodeMarker);
+//         Node3D zeroNodeMarker = FssPrimitiveFactory.CreateSphereNode("Marker", new Vector3(0f, 0f, 0f), markerSize, FssColorUtil.Colors["OffRed"], true);
+//         AddChild(zeroNodeMarker);
 
-        zeroNodeMarker.AddChild( FssPrimitiveFactory.AxisMarkerNode(markerSize, markerSize/4) );
-    }
-}
+//         zeroNodeMarker.AddChild( FssPrimitiveFactory.AxisMarkerNode(markerSize, markerSize/4) );
+//     }
+// }

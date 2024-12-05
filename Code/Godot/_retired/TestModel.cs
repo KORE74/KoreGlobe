@@ -190,11 +190,11 @@
 
 
 //             //     // get the current position to assign to the sphere
-//             //     Vector3 vecPos   = FssGeoConvOperations.RealWorldToGodot(pos);
+//             //     Vector3 vecPos   = FssZeroOffsetOperations.RealWorldToGodot(pos);
 //             //     childSphere.Position = vecPos;
 
 //             //     // Create a new cylinder at the current position, and the ID
-//             //     Vector3 vecPrevPos   = FssGeoConvOperations.RealWorldToGodot(PrevPos);
+//             //     Vector3 vecPrevPos   = FssZeroOffsetOperations.RealWorldToGodot(PrevPos);
 //             //     Vector3 vecDiff = vecPrevPos - vecPos;
 
 //             //     FssMeshBuilder meshBuilder = new FssMeshBuilder();
@@ -266,12 +266,12 @@
 //         // // --- Define vectors -----------------------
 
 //         // // Define the Vector3 Offsets
-//         // Vector3 vecPos   = FssGeoConvOperations.RealWorldToGodot(pos);
-//         // Vector3 vecAbove = FssGeoConvOperations.RealWorldToGodot(posAbove);
-//         // Vector3 vecAhead = FssGeoConvOperations.RealWorldToGodot(posAhead);
+//         // Vector3 vecPos   = FssZeroOffsetOperations.RealWorldToGodot(pos);
+//         // Vector3 vecAbove = FssZeroOffsetOperations.RealWorldToGodot(posAbove);
+//         // Vector3 vecAhead = FssZeroOffsetOperations.RealWorldToGodot(posAhead);
 
 
-//         // FssEntityV3 platVecs = FssGeoConvOperations.RealWorldToStruct(pos, Course);
+//         // FssEntityV3 platVecs = FssZeroOffsetOperations.RealWorldToStruct(pos, Course);
 
 
 //         // // Update node position and orientation

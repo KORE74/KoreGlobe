@@ -22,10 +22,10 @@ public partial class FssTestCylinder2 : Node3D
             for (int lon = -180; lon < (180 - 5); lon += lonInc)
             {
                 // Define the position and associated up direction for the label
-                //Vector3 position      = FssGeoConvOperations.RealWorldToGodot(distance, lat, lon);
-                //Vector3 northPosition = FssGeoConvOperations.RealWorldToGodot(distance, lat + 1, lon);
-                //Vector3 eastPosition  = FssGeoConvOperations.RealWorldToGodot(distance, lat, lon + lonInc);
-                //Vector3 southPosition = FssGeoConvOperations.RealWorldToGodot(distance, lat - latInc, lon);
+                //Vector3 position      = FssZeroOffsetOperations.RealWorldToGodot(distance, lat, lon);
+                //Vector3 northPosition = FssZeroOffsetOperations.RealWorldToGodot(distance, lat + 1, lon);
+                //Vector3 eastPosition  = FssZeroOffsetOperations.RealWorldToGodot(distance, lat, lon + lonInc);
+                //Vector3 southPosition = FssZeroOffsetOperations.RealWorldToGodot(distance, lat - latInc, lon);
                 //Vector3 upDirection = (northPosition - position).Normalized();
 
                 // find the centre of this object

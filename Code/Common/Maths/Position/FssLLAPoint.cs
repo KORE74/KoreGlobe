@@ -74,6 +74,13 @@ public struct FssLLAPoint
         this.RadiusM = FssPosConsts.EarthRadiusM;
     }
 
+    public FssLLAPoint(FssLLPoint llPos)
+    {
+        this.LatRads = llPos.LatRads;
+        this.LonRads = llPos.LonRads;
+        this.RadiusM = FssPosConsts.EarthRadiusM;
+    }
+
     public static FssLLAPoint Zero
     {
         get { return new FssLLAPoint { LatRads = 0.0, LonRads = 0.0, RadiusM = 0.0 }; }

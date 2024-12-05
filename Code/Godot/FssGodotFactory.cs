@@ -13,17 +13,14 @@ public class FssGodotFactory
 {
     // Core Nodes
     public Node                  SceneRootNode      { get; private set; }
-    public FssZeroNode           ZeroNode           { get; private set; }
     public Node                  ServicesNode       { get; private set; }
 
     // Nodes with positional requirements
     public FssZeroNodeMapManager ZeroNodeMapManager { get; private set; }
     public FssGodotEntityManager GodotEntityManager { get; private set; }
     public FssCameraMoverWorld   CameraMoverWorld   { get; private set; }
-    public FssCameraMover        CameraMoverXYZ     { get; private set; }
 
     // Assets
-    public FssTextureLoader      TextureLoader      { get; private set; }
     public Fss3DModelLibrary     ModelLibrary       { get; private set; }
     public FssTextureManager     TextureManager     { get; private set; }
 
@@ -35,8 +32,6 @@ public class FssGodotFactory
     private static FssGodotFactory? SingletonInstance = null;
     private static bool             IsInitialised     = false;
     private static bool             IsCreating        = false;
-
-    // public FssMapManager MapManager => EarthCoreNode;
 
     // --------------------------------------------------------------------------------------------
     // MARK: Singleton Pattern
@@ -91,8 +86,6 @@ public class FssGodotFactory
                 // Create key nodes
                 ServicesNode = new Node() { Name = "ServicesNode" };
                 SceneRootNode.AddChild(ServicesNode);
-                ZeroNode = new FssZeroNode();
-                SceneRootNode.AddChild(ZeroNode);
 
                 // Create and add the nodes that have no postional requirements
                 TextureManager = new FssTextureManager();
@@ -100,17 +93,18 @@ public class FssGodotFactory
 
                 // Create and add the nodes that have postional requirements
                 GodotEntityManager = new FssGodotEntityManager();
-                ZeroNode.AddChild(GodotEntityManager);
+                SceneRootNode.AddChild(GodotEntityManager);
                 ZeroNodeMapManager = new FssZeroNodeMapManager();
-                ZeroNode.AddChild(ZeroNodeMapManager);
+                SceneRootNode.AddChild(ZeroNodeMapManager);
                 CameraMoverWorld = new FssCameraMoverWorld();
-                ZeroNode.AddChild(CameraMoverWorld);
+                SceneRootNode.AddChild(CameraMoverWorld);
+
                 // CameraMoverXYZ = new FssCameraMover();
                 // SceneRootNode.AddChild(CameraMoverXYZ);
                 // CameraMoverXYZ.Current = true;
 
                 // Create the objects that are not godot nodes
-                TextureLoader = new FssTextureLoader();
+                //TextureLoader = new FssTextureLoader();
                 ModelLibrary  = new Fss3DModelLibrary();
                 UIState       = new FssUIState();
 

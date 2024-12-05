@@ -41,7 +41,7 @@ public partial class FssCameraPolarOffset : Node3D
         CamNode.Fov  = 40f;
 
         // Set the camera position
-        CamOffsetDist    = (float)(100 * FssZeroOffset.RwToGeDistanceMultiplierM); // set to 100m
+        CamOffsetDist    = (float)(100 * FssZeroOffset.RwToGeDistMultiplier); // set to 100m
         CamRotation      = new Vector3(0, 0, 0);
         // Apply position and rotation
         CamNode.Position = new Vector3(0, 0, CamOffsetDist);
@@ -84,7 +84,7 @@ public partial class FssCameraPolarOffset : Node3D
         if (CamNode == null) return;
         if (!CamNode.Current) return;
 
-        //float distanceDelta = (float)(600 * FssZeroOffset.RwToGeDistanceMultiplierM) * GeDeltaTime;
+        //float distanceDelta = (float)(600 * FssZeroOffset.RwToGeDistMultiplier) * GeDeltaTime;
 
         float distanceDelta           = CamOffsetDist * GeDeltaTime * 0.8f;
         float distanceDeltaMouseWheel = distanceDelta * 2.5f;
@@ -158,7 +158,7 @@ public partial class FssCameraPolarOffset : Node3D
 
     public void SetCameraPosition(float rwCamDist, float rwCamAzDegs, float rwCamElDegs)
     {
-        CamOffsetDist  = (float)(rwCamDist * FssZeroOffset.RwToGeDistanceMultiplierM);
+        CamOffsetDist  = (float)(rwCamDist * FssZeroOffset.RwToGeDistMultiplier);
         camAzAngleDegs = rwCamAzDegs;
         camElAngleDegs = rwCamElDegs;
     }

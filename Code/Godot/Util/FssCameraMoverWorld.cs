@@ -57,7 +57,7 @@ public partial class FssCameraMoverWorld : Node3D
 
             if (CamNode.Current)
             {
-                FssZeroNode.SetZeroNodePosition(CamPos.LatDegs, CamPos.LonDegs);
+                // FssZeroNode.SetZeroNodePosition(CamPos.LatDegs, CamPos.LonDegs);
                 GD.Print($"ZERO NODE UPDATE: WorldCam CurrentPosition:{CamPos}");
             }
         }
@@ -237,7 +237,7 @@ public partial class FssCameraMoverWorld : Node3D
             if (CamNode.IsCurrent())
             {
                 CamNode.RotationDegrees = new Vector3(camPitch, 0, 0);
-                FssMapManager.LoadRefLLA = FssGeoConvOperations.GeToRw(Position);
+                FssMapManager.LoadRefLLA = FssZeroOffsetOperations.GeToRw(Position);
             }
         }
     }
@@ -257,7 +257,7 @@ public partial class FssCameraMoverWorld : Node3D
         Position = FssZeroOffset.GeZeroPointOffset(CamPos.ToXYZ());
 
         // Use the heading and LLA position to update the camera rotation
-        FssEntityV3 platformV3 = FssGeoConvOperations.RwToGeStruct(CamPos, CamCourse.HeadingDegs);
+        FssEntityV3 platformV3 = FssZeroOffsetOperations.RwToGeStruct(CamPos, CamCourse.HeadingDegs);
 
         LookAtFromPosition(
             platformV3.Pos,

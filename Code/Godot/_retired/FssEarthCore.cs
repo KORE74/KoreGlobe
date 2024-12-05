@@ -43,8 +43,8 @@ public static class FssEarthCore
     //     // ---- Now GE Values ----
 
     //     // Convert the XYZ values to Godot coordinates
-    //     FocusPos = FssGeoConvOperations.RealWorldToGodotRads((float)FocusOffsetDist, (float)latRads,     (float)lonRads);
-    //     CorePos  = FssGeoConvOperations.RealWorldToGodotRads((float)CoreOffsetDist,  (float)backLatRads, (float)backLonRads);
+    //     FocusPos = FssZeroOffsetOperations.RealWorldToGodotRads((float)FocusOffsetDist, (float)latRads,     (float)lonRads);
+    //     CorePos  = FssZeroOffsetOperations.RealWorldToGodotRads((float)CoreOffsetDist,  (float)backLatRads, (float)backLonRads);
     // }
 
 

@@ -5,10 +5,7 @@ using Godot;
 
 public static class FssZeroOffset
 {
-    // ZeroNode: A node always at 0,0,0 for objects (platforms) to be parented to.
-
-
-    // Real World Earth Center is 0,0,0. We create an offset 0,0,0 for the purposes og focussing the
+    // Real World Earth Center is 0,0,0. We create an offset 0,0,0 for the purposes of focussing the
     // game engine view within the range of its floating point precision.
     // FssZeroOffset.RwZeroPointLLA
     public static FssLLAPoint RwZeroPointLLA = new FssLLAPoint();
@@ -17,13 +14,13 @@ public static class FssZeroOffset
     public static FssXYZPoint RwZeroPointXYZ = new FssXYZPoint(0, 0, 0);
 
     // Game engine earth radius and conversion around it.
-    public static double GeEarthRadius = 1000;
-    public static double RwToGeDistanceMultiplierM = GeEarthRadius / FssPosConsts.EarthRadiusM;
-    public static double GeToRwDistanceMultiplierM = 1 / RwToGeDistanceMultiplierM;
+    public static double GeEarthRadius        = 1000;
+    public static double RwToGeDistMultiplier = GeEarthRadius / FssPosConsts.EarthRadiusM;
+    public static double ReToRwDistMultiplier = 1 / RwToGeDistMultiplier;
 
     // Define a reasonable "Up Distance" (Real World Meters) that still works when scales to the GE ranges.
-    public static double UpDistRwM    = 2 * GeToRwDistanceMultiplierM;
-    public static double AheadDistGeM = 2 * GeToRwDistanceMultiplierM;
+    public static double UpDistRwM   = 2 * ReToRwDistMultiplier;
+    public static double AheadDistGE = 2 * ReToRwDistMultiplier;
 
     // --------------------------------------------------------------------------------------------
 
@@ -31,7 +28,7 @@ public static class FssZeroOffset
     // Usage: FssZeroOffset.ReportConsts();
     public static void ReportConsts()
     {
-        GD.Print($"FssZeroOffset.ReportConsts:\n- GeEarthRadius:{GeEarthRadius}\n- RwToGeDistanceMultiplierM:{RwToGeDistanceMultiplierM}\n- GeToRwDistanceMultiplierM:{GeToRwDistanceMultiplierM}\n- AheadDistGeM:{AheadDistGeM}\n- UpDistRwM:{UpDistRwM}");
+        GD.Print($"FssZeroOffset.ReportConsts:\n- GeEarthRadius:{GeEarthRadius}\n- RwToGeDistMultiplier:{RwToGeDistMultiplier}\n- ReToRwDistMultiplier:{ReToRwDistMultiplier}\n- AheadDistGE:{AheadDistGE}\n- UpDistRwM:{UpDistRwM}");
     }
 
     // --------------------------------------------------------------------------------------------
@@ -43,8 +40,6 @@ public static class FssZeroOffset
     {
         RwZeroPointLLA = rwLLA;
         RwZeroPointXYZ = rwLLA.ToXYZ();
-
-        //GD.Print($"FssZeroOffset.SetLLA: RwZeroPointLLA:{RwZeroPointLLA} RwZeroPointXYZ:{RwZeroPointXYZ}");
     }
 
     // --------------------------------------------------------------------------------------------
@@ -81,9 +76,9 @@ public static class FssZeroOffset
         double z = rwOffsetXYZ.Z * -1;
 
         // 3 - Scale the XYZ by the GE distance multiplier.
-        x = x * RwToGeDistanceMultiplierM;
-        y = y * RwToGeDistanceMultiplierM;
-        z = z * RwToGeDistanceMultiplierM;
+        x = x * RwToGeDistMultiplier;
+        y = y * RwToGeDistMultiplier;
+        z = z * RwToGeDistMultiplier;
 
         // 4 - Return the vector3.
         return new Vector3((float)x, (float)y, (float)z);
@@ -93,7 +88,7 @@ public static class FssZeroOffset
     public static Vector3 GeZeroPoint()
     {
         // return new Vector3((float)RwZeroPointXYZ.X, (float)RwZeroPointXYZ.Y, (float)RwZeroPointXYZ.Z);
-        return new Vector3(0, 0, 0);
+        return Vector3.Zero;
     }
 
     // RwZeroPointXYZ is the offset from the real-world core to the zero point, so we need to apply the invese of this
@@ -103,9 +98,9 @@ public static class FssZeroOffset
     public static Vector3 GeCorePoint()
     {
         // The Z axis is inverted in the Godot engine, but as we're creating an iverted vector, the inverse of this pplies (ie to X and Y)
-        double x = RwZeroPointXYZ.X * RwToGeDistanceMultiplierM * -1;
-        double y = RwZeroPointXYZ.Y * RwToGeDistanceMultiplierM * -1;
-        double z = RwZeroPointXYZ.Z * RwToGeDistanceMultiplierM;
+        double x = RwZeroPointXYZ.X * RwToGeDistMultiplier * -1;
+        double y = RwZeroPointXYZ.Y * RwToGeDistMultiplier * -1;
+        double z = RwZeroPointXYZ.Z * RwToGeDistMultiplier;
 
         return new Vector3((float)x, (float)y, (float)z);
     }

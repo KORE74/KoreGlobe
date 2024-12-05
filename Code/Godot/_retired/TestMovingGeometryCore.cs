@@ -251,7 +251,7 @@ public partial class TestMovingGeometryCore : Node3D
 
     // private void UpdatePlatformNodes(double delta)
     // {
-    //     FssRWPlatformPositions rwStruct = FssGeoConvOperations.RealWorldStruct(PlatformPos, PlatformCourse);
+    //     FssRWPlatformPositions rwStruct = FssZeroOffsetOperations.RealWorldStruct(PlatformPos, PlatformCourse);
 
     //     // PlaformBaseNode.Position = rwStruct.vecPos;
     //     // PlaformBaseNode.LookAt(rwStruct.vecPosAhead, rwStruct.vecPosAbove, true);

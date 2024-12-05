@@ -16,7 +16,7 @@ public partial class FssZeroNodeMapTile : Node3D
     public FssMapTileCode        TileCode   = FssMapTileCode.Zero;
 
     // Parent/child tiles relationships
-    public FssZeroNodeMapTile?   ParentTile = null;
+    public FssZeroNodeMapTile?      ParentTile = null;
     public List<FssZeroNodeMapTile> ChildTiles = new List<FssZeroNodeMapTile>();
 
     // Real world elevation data, defining the tile's geometry
@@ -51,7 +51,7 @@ public partial class FssZeroNodeMapTile : Node3D
 
     // Flag set when the tile (or its children) should be visible. Gates the main visibility processing.
     public bool  ActiveVisibility        = false;
-    public float LatestPixelsPerTriangle = 1000f
+    public float LatestPixelsPerTriangle = 1000f;
 
     // Update timers
     private float CreateTaskUpdateTimerSecs = 1.0f;
@@ -66,7 +66,7 @@ public partial class FssZeroNodeMapTile : Node3D
         // Set the core Tilecode and node name.
         TileCode    = tileCode;
         Name        = tileCode.ToString();
-        RwLLACenter = tileCode.LLACenter;
+        RwLLACenter = new FssLLAPoint(tileCode.LLBox.CenterPoint);
 
         // Fire off the fully background task of creating/loading the tile elements asap.
         Task.Run(() => BackgroundTileCreation(tileCode));
@@ -79,6 +79,7 @@ public partial class FssZeroNodeMapTile : Node3D
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
+
     }
 
     // --------------------------------------------------------------------------------------------
@@ -87,7 +88,8 @@ public partial class FssZeroNodeMapTile : Node3D
     public override void _Process(double delta)
     {
         // Update tile position in cycle when the ZeroNode location is updated
-        if (FssZeroNode.ZeroNodeUpdateCycle && ConstructionComplete)
+        // if (FssZeroNode.ZeroNodeUpdateCycle && ConstructionComplete)
+        if (ConstructionComplete)
             LocateTile();
 
         if (CreateTaskUpdateTimer < FssCentralTime.RuntimeSecs)
@@ -113,7 +115,7 @@ public partial class FssZeroNodeMapTile : Node3D
             return;
         }
 
-        List<FssMapTileCode> childCodes = TileCode.GetChildTileCodes();
+        List<FssMapTileCode> childCodes = TileCode.ChildCodesList();
 
         foreach (FssMapTileCode currcode in childCodes)
             ChildTiles.Add(new FssZeroNodeMapTile(currcode));
@@ -134,6 +136,7 @@ public partial class FssZeroNodeMapTile : Node3D
             if (!childTile.ConstructionComplete)
                 return false;
         }
+        return true;
     }
 
     // --------------------------------------------------------------------------------------------
@@ -142,7 +145,16 @@ public partial class FssZeroNodeMapTile : Node3D
 
     private void LocateTile()
     {
-        Position = FssGeoConvOperations.RwToOffsetGe(RwLLACenter);
+        // Set the local position from the parent object
+        Vector3 newPos = FssZeroOffsetOperations.RwToOffsetGe(RwLLACenter);
+
+        // // Set the position from the global transform
+        // GlobalTransform = new Transform(Basis.Identity, newPos);
+
+        var transform = GlobalTransform;
+        transform.Origin = newPos;
+        GlobalTransform = transform;
+
     }
 
 

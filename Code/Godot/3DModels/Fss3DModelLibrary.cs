@@ -62,7 +62,7 @@ public class Fss3DModelLibrary
 
 
         // Flip for the Godot negative z-axis
-        modelScale *= (float)FssZeroOffset.RwToGeDistanceMultiplierM;
+        modelScale *= (float)FssZeroOffset.RwToGeDistMultiplier;
         modelRotate.Y += 180;
 
 

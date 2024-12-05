@@ -26,8 +26,8 @@ public partial class TestLabelMaker : Node3D
                 FssLLAPoint pos  = new FssLLAPoint() { LatDegs = lat, LonDegs = lon, RadiusM = FssZeroOffset.GeEarthRadius };
                 FssLLAPoint posN = new FssLLAPoint() { LatDegs = lat + 0.01, LonDegs = lon, RadiusM = FssZeroOffset.GeEarthRadius };
 
-                Godot.Vector3 v3Pos   = FssGeoConvOperations.RwToGe(pos);
-                Godot.Vector3 v3PosN  = FssGeoConvOperations.RwToGe(posN);
+                Godot.Vector3 v3Pos   = FssZeroOffsetOperations.RwToGe(pos);
+                Godot.Vector3 v3PosN  = FssZeroOffsetOperations.RwToGe(posN);
                 Godot.Vector3 v3VectN = v3PosN - v3Pos;
 
                 // Create the label
