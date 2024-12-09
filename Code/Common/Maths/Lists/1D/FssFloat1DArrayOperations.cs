@@ -68,6 +68,50 @@ public static partial class FssFloat1DArrayOperations
         return new FssFloat1DArray(differences);
     }
 
+        // --------------------------------------------------------------------------------------------
+    // MARK: Nearest
+    // --------------------------------------------------------------------------------------------
+
+    // Usage: float nearest = GloFloat1DArrayOperations.NearestValue(array, value);
+
+    public static float NearestValue(FssFloat1DArray array, float value)
+    {
+        float nearest = array[0];
+        float nearestDist = Math.Abs(array[0] - value);
+
+        for (int i = 1; i < array.Length; i++)
+        {
+            float dist = Math.Abs(array[i] - value);
+            if (dist < nearestDist)
+            {
+                nearest = array[i];
+                nearestDist = dist;
+            }
+        }
+
+        return nearest;
+    }
+
+    // --------------------------------------------------------------------------------------------
+
+    public static int NearestValueIndex(FssFloat1DArray array, float value)
+    {
+        int nearestIndex = 0;
+        float nearestDist = Math.Abs(array[0] - value);
+
+        for (int i = 1; i < array.Length; i++)
+        {
+            float dist = Math.Abs(array[i] - value);
+            if (dist < nearestDist)
+            {
+                nearestIndex = i;
+                nearestDist = dist;
+            }
+        }
+
+        return nearestIndex;
+    }
+    
     // --------------------------------------------------------------------------------------------
     // MARK: Smoothing
     // --------------------------------------------------------------------------------------------
