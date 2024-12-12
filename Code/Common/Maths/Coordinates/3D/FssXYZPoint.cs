@@ -93,6 +93,25 @@ public class FssXYZPoint : FssXYZ
     }
 
     // --------------------------------------------------------------------------------------------
+    // Polar Vectors
+    // --------------------------------------------------------------------------------------------
+
+    public FssXYZPolarOffset PolarOffsetTo(FssXYZPoint p)
+    {
+        FssXYZPoint diff = XYZTo(p);
+
+        FssXYZPolarOffset newOffset = FssXYZPolarOffset.FromXYZ(diff);
+
+        return newOffset;
+    }
+
+    public FssXYZPoint PlusPolarOffset(GloXYZPolarOffset offset)
+    {
+        FssXYZPoint diff = offset.ToXYZ();
+        return new FssXYZPoint(X + diff.X, Y + diff.Y, Z + diff.Z);
+    }
+
+    // --------------------------------------------------------------------------------------------
     // operator overloads
     // --------------------------------------------------------------------------------------------
 
