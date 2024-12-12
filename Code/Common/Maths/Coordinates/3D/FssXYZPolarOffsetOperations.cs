@@ -31,4 +31,16 @@ public static class FssXYZPolarOffsetOperations
         return angleDegs;
     }
 
+    public static FssXYZPolarOffset Lerp(FssXYZPolarOffset fromOffset, FssXYZPolarOffset toOffset, double fraction)
+    {
+        fraction = FssValueUtils.LimitToRange(fraction, 0, 1);
+        double invFraction = 1 - fraction;
+
+        FssXYZPolarOffset newOffset = new FssXYZPolarOffset();
+        newOffset.AzRads = (fromOffset.AzRads * invFraction) + (toOffset.AzRads * fraction);
+        newOffset.ElRads = (fromOffset.ElRads * invFraction) + (toOffset.ElRads * fraction);
+        newOffset.Range  = (fromOffset.Range  * invFraction) + (toOffset.Range  * fraction);
+
+        return newOffset;
+    }
 }
