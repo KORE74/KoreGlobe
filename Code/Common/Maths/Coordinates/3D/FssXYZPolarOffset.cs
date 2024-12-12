@@ -63,19 +63,6 @@ public struct FssXYZPolarOffset
         };
     }
 
-    public FssXYZPolarOffset SimpleInterpolation(FssXYZPolarOffset toOffset, double fraction)
-    {
-        fraction = GloValueUtils.LimitToRange(fraction, 0, 1);
-        double invFraction = 1 - fraction;
-
-        FssXYZPolarOffset newOffset = new FssXYZPolarOffset();
-        newOffset.AzRads = (AzRads * invFraction) + (toOffset.AzRads * fraction);
-        newOffset.ElRads = (ElRads * invFraction) + (toOffset.ElRads * fraction);
-        newOffset.Range  = (Range  * invFraction) + (toOffset.Range  * fraction);
-
-        return newOffset;
-    }
-
     // --------------------------------------------------------------------------------------------
     // #MARK: Conversion
     // --------------------------------------------------------------------------------------------
