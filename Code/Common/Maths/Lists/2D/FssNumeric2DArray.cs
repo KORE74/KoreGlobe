@@ -5,6 +5,8 @@ using System.Numerics;
 
 public class FssNumeric2DArray<T> where T : struct, INumber<T>
 {
+    public enum Edge {Undefined, Top, Bottom, Left, Right};
+
     private T[,] Data;
     public int Width { get; }
     public int Height { get; }
