@@ -11,14 +11,14 @@ public struct FssXYZPolarOffset
     // Add properties to convert to/from degrees
     public double AzDegs
     {
-        get { return AzRads * GloConsts.RadsToDegsMultiplier; }
-        set { AzRads = value * GloConsts.DegsToRadsMultiplier; }
+        get { return AzRads * FssConsts.RadsToDegsMultiplier; }
+        set { AzRads = value * FssConsts.DegsToRadsMultiplier; }
     }
 
     public double ElDegs
     {
-        get { return ElRads * GloConsts.RadsToDegsMultiplier; }
-        set { ElRads = value * GloConsts.DegsToRadsMultiplier; }
+        get { return ElRads * FssConsts.RadsToDegsMultiplier; }
+        set { ElRads = value * FssConsts.DegsToRadsMultiplier; }
     }
 
     // --------------------------------------------------------------------------------------------
@@ -76,7 +76,7 @@ public struct FssXYZPolarOffset
         return new FssXYZPoint(x, y, z);
     }
 
-    public static FssXYZPolarOffset FromXYZ(FssXYZPoint xyz)
+    public static FssXYZPolarOffset FromXYZ(FssXYZVector xyz)
     {
         FssXYZPolarOffset newOffset = new FssXYZPolarOffset()
         {

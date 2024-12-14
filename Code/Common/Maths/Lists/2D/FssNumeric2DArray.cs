@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 
-public class FssNumeric2DArray<T> where T : struct, INumber<T>
+public partial class FssNumeric2DArray<T> where T : struct, INumber<T>
 {
     public enum Edge {Undefined, Top, Bottom, Left, Right};
 

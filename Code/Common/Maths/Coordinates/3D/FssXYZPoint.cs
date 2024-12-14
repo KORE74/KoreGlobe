@@ -92,20 +92,25 @@ public class FssXYZPoint : FssXYZ
         return Math.Sqrt(diffX * diffX + diffY * diffY + diffZ * diffZ);
     }
 
+    public FssXYZVector XYZVectorTo(FssXYZPoint remoteXYZ)
+    {
+        return new FssXYZVector(remoteXYZ.X - X, remoteXYZ.Y - Y, remoteXYZ.Z - Z);
+    }
+
     // --------------------------------------------------------------------------------------------
     // Polar Vectors
     // --------------------------------------------------------------------------------------------
 
     public FssXYZPolarOffset PolarOffsetTo(FssXYZPoint p)
     {
-        FssXYZPoint diff = XYZTo(p);
+        FssXYZVector diff = XYZVectorTo(p);
 
         FssXYZPolarOffset newOffset = FssXYZPolarOffset.FromXYZ(diff);
 
         return newOffset;
     }
 
-    public FssXYZPoint PlusPolarOffset(GloXYZPolarOffset offset)
+    public FssXYZPoint PlusPolarOffset(FssXYZPolarOffset offset)
     {
         FssXYZPoint diff = offset.ToXYZ();
         return new FssXYZPoint(X + diff.X, Y + diff.Y, Z + diff.Z);

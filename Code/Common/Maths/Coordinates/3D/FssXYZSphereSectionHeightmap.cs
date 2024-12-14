@@ -1,8 +1,8 @@
 
 using System;
 
-public class FssXYZSphereSectionHeightmap : GloXYZ
+public class FssXYZSphereSectionHeightmap : FssXYZ
 {
-    public Section   FssXYZSphereSection;
-    public Heightmap FssFloat2DArray;
+    public FssXYZSphereSection Section;
+    public FssFloat2DArray     Heightmap;
 }

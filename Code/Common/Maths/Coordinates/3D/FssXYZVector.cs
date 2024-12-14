@@ -31,6 +31,7 @@ public class FssXYZVector : FssXYZ
             }
         }
     }
+    public double Length => Magnitude;
 
     // --------------------------------------------------------------------------------------------
 

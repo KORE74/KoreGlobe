@@ -1,4 +1,4 @@
-// FssXYZSphereWedge: Class representing a 3D "wedge", based on an inner and outer radius, height, and start and end angles.
+// FssXYZSphereSection: Class representing a 3D "wedge", based on a radius, height, and start and end angles.
 // Will have operations around the creation and manipulation of these wedges.
 
 // Design Decisions:
@@ -60,39 +60,47 @@ public class FssXYZSphereSection : FssXYZ
     // Constructor
     // --------------------------------------------------------------------------------------------
 
-    public FssXYZSphereWedge() : this(FssXYZPoint.Zero, 0, 0, 0, 0, 0) { }
+    public FssXYZSphereSection()
+    {
+        Center      = FssXYZPoint.Zero;
+        Radius      = 0;
+        StartAzRads = 0;
+        DeltaAzRads = 0;
+        StartElRads = 0;
+        DeltaElRads = 0;
+    }
 
-    public FssXYZSphereWedge(
+    public FssXYZSphereSection(
         FssXYZPoint center, double radius,
         double startAzRads, double deltaAzRads, double startElRads, double deltaElRads)
     {
         Center      = center;
-        InnerRadius = radius;
+        Radius      = radius;
         StartAzRads = startAzRads;
         DeltaAzRads = deltaAzRads;
         StartElRads = startElRads;
         DeltaElRads = deltaElRads;
     }
 
-    public FssXYZSphereWedge(FssXYZSphereWedge wedge)
+    public FssXYZSphereSection(FssXYZSphereSection wedge)
     {
         Center      = wedge.Center;
-        InnerRadius = wedge.Radius;
+        Radius      = wedge.Radius;
         StartAzRads = wedge.StartAzRads;
         DeltaAzRads = wedge.DeltaAzRads;
         StartElRads = wedge.StartElRads;
         DeltaElRads = wedge.DeltaElRads;
     }
 
-    public static FssXYZSphereWedge Zero => new FssXYZSphereWedge(FssXYZPoint.Zero, 0, 0, 0, 0, 0);
+    public static FssXYZSphereSection Zero => new FssXYZSphereSection(FssXYZPoint.Zero, 0, 0, 0, 0, 0);
 
     // --------------------------------------------------------------------------------------------
     // Public methods
     // --------------------------------------------------------------------------------------------
 
-    public FssXYZSphereWedge Offset(double x, double y, double z)
+    public FssXYZSphereSection Offset(double x, double y, double z)
     {
-        return new FssXYZSphereWedge(Center.Offset(x, y, z), Radius, StartAzRads, DeltaAzRads, StartElRads, DeltaElRads);
+        return new FssXYZSphereSection(Center.Offset(x, y, z), Radius, StartAzRads, DeltaAzRads, StartElRads, DeltaElRads);
     }
 
     // // Check if a point is within the wedge by checking distance from the center, angles, and height.
