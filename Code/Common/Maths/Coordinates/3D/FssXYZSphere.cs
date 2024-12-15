@@ -9,9 +9,9 @@ public class FssXYZSphere : FssXYZ
     // Read only / derived attributes
     // --------------------------------------------------------------------------------------------
 
-    public double Volume { get { return 4 / 3 * Math.PI * Radius * Radius * Radius; } }
+    public double Volume      { get { return 4 / 3 * Math.PI * Radius * Radius * Radius; } }
     public double SurfaceArea { get { return 4 * Math.PI * Radius * Radius; } }
-    public double Diameter { get { return 2 * Radius; } }
+    public double Diameter    { get { return 2 * Radius; } }
 
     // --------------------------------------------------------------------------------------------
     // Constructor
