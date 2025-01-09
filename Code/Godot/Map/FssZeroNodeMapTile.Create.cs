@@ -32,24 +32,28 @@ public partial class FssZeroNodeMapTile : Node3D
             Filepaths = new FssMapTileFilepaths(TileCode); // Figure out the file paths for the tile
 
             // Load the elevation data
-            FssAppFactory.Instance.EleManager.RequestTile(tileCode);
+            //FssAppFactory.Instance.EleManager.RequestTile(tileCode);
 
             // Source the tile image
             SourceTileImage();
+            SourceTileElevation();
+
+            FssCentralLog.AddEntry($"Tile {TileCode} background stage 1.");
 
             // Yield until (ImageSourced && ElevationSourced)
-            while (!ImageSourced || !ElevationSourced)
-                await Task.Delay(100);
+            // while (!ImageSourced || !ElevationSourced)
+            //     await Task.Delay(100);
 
             // Create the mesh
-            CreateMaterials();
-            await Task.Yield(); // Yield, be a good citizen
-            CreateMesh();
+            //CreateMaterials();
             await Task.Yield(); // Yield, be a good citizen
 
             // Set the flag for the Process() function to pick up and conclude any
             // construction tasks on the main thread.
             MeshCreated = true;
+
+            // Log the completion
+            FssCentralLog.AddEntry($"Tile {TileCode} background creation complete.");
         }
         catch (Exception ex)
         {
@@ -65,7 +69,8 @@ public partial class FssZeroNodeMapTile : Node3D
         // Start the creation of the mesh
         if (MeshCreated)
         {
-            AttachMesh();
+            CreateMesh();
+            //AttachMesh();
             ConstructionComplete = true;
         }
     }
@@ -102,8 +107,8 @@ public partial class FssZeroNodeMapTile : Node3D
         // Setup the loop control values
         int          pointCountLon   = RwEleData.Width;
         int          pointCountLat   = RwEleData.Height;
-        List<double> lonZeroListRads = FssValueUtils.CreateRangeList(pointCountLon, -rwLLBox.HalfDeltaLonRads, rwLLBox.HalfDeltaLonRads); // Relative azimuth
-        List<double> latListRads     = FssValueUtils.CreateRangeList(pointCountLat,  rwLLBox.MinLatRads,       rwLLBox.MaxLatRads);
+        List<double> lonZeroListRads = FssValueUtils.CreateRangeList(pointCountLon,  rwLLBox.HalfDeltaLonRads, -rwLLBox.HalfDeltaLonRads); // Relative azimuth
+        List<double> latListRads     = FssValueUtils.CreateRangeList(pointCountLat,  rwLLBox.MaxLatRads,        rwLLBox.MinLatRads);
         Vector3[,]   v3Data          = new Vector3[pointCountLon, pointCountLat];
 
         for (int i = 0; i < pointCountLon; i++)
@@ -138,8 +143,8 @@ public partial class FssZeroNodeMapTile : Node3D
         // Build the mesh data and add it to the node
         MeshInstance3D tileMeshInstance   = new MeshInstance3D() { Name = "tileMesh" };
         tileMeshInstance.Mesh             = meshBuilder.BuildWithUV("Surface");
-        tileMeshInstance.MaterialOverride = FssMaterialFactory.SimpleColoredMaterial(new Color(1.0f, 0.0f, 1.0f, 1.0f));
-        //tileMeshInstance.MaterialOverride = FssMaterialFactory.WaterMaterial();
+        //tileMeshInstance.MaterialOverride = FssMaterialFactory.SimpleColoredMaterial(new Color(1.0f, 0.0f, 1.0f, 1.0f));
+        tileMeshInstance.MaterialOverride = SurfaceMat;
 
         AddChild(tileMeshInstance);
 
@@ -159,22 +164,30 @@ public partial class FssZeroNodeMapTile : Node3D
     }
 
     // --------------------------------------------------------------------------------------------
-
-    // Creating the mesh can be done in a bckground thread, but it needs to be on the main thread
-    // when we attach it to the scene tree.
-    private void AttachMesh()
-    {
-
-    }
-
-    // --------------------------------------------------------------------------------------------
     // MARK: Elevation
     // --------------------------------------------------------------------------------------------
 
     private void SourceTileElevation()
     {
-        // Load the elevation data
-        FssAppFactory.Instance.EleManager.RequestTile(TileCode);
+        RwEleData = new FssFloat2DArray(20, 20);
+        return;
+
+        // If we have the elevation data, we'll use it, otherwise we'll take the parent's data.
+        if (Filepaths.EleArrFileExists)
+        {
+            // Load the elevation data
+            RwEleData = FssFloat2DArrayIO.LoadFromCSVFile(Filepaths.EleArrFilepath);
+        }
+        else if (Filepaths.EleFileExists)
+        {
+            // Load the elevation data
+            RwEleData = FssFloat2DArrayIO.LoadFromArcASIIGridFile(Filepaths.EleFilepath);
+        }
+        else
+        {
+            // for now, just create an ampty array
+            RwEleData = new FssFloat2DArray(20, 20);
+        }
     }
 
     // --------------------------------------------------------------------------------------------
@@ -183,54 +196,40 @@ public partial class FssZeroNodeMapTile : Node3D
 
     private void SourceTileImage()
     {
-        // Request the image to be loaded in the background - non-blocking.
-        // RegisteredTextureName
+        // Load the image if we have it, or take the parent file if it exists, or leave the image blank.
+        if (Filepaths.ImageFileExists)
+        {
+            // Load the image
+            FssGodotFactory.Instance.TextureManager.LoadTextureDirect(Filepaths.ImageFilepath);
 
-        // FssTextureLoader? TL = FssTextureLoader.Instance;
-        // if (TL != null)
-        // {
-        //     ImageTexture? tex = TL.LoadTextureDirect(Filepaths.ImageFilepath);
+            // Setup the material
+            StandardMaterial3D? mat = FssGodotFactory.Instance.TextureManager.GetMaterialWithTexture(Filepaths.ImageFilepath);
+            if (mat != null)
+            {
+                SurfaceMat = mat;
+                UVBox = FssUVBoxDropEdgeTile.FullImage();
+            }
+        }
+        else
+        {
+            FssCentralLog.AddEntry($"Tile {TileCode} has no image file: {Filepaths.ImageFilepath}");
+        }
 
-        //     if (tex != null)
-        //     {
-        //         TileMaterial = TL.GetMaterialWithTexture(Filepaths.ImageFilepath);
+        // If for any reason, we don't have the image, we'll try to get it from the parent.
+        if ((SurfaceMat == null) && (ParentTile != null))
+        {
+            SurfaceMat = ParentTile!.SurfaceMat;
 
-        //         if (TileMaterial != null)
-        //         {
-        //             ImageDone = true;
-        //         }
-        //     }
-        // }
+            // Setup the UV Box - Sourced from the parent (which may already be subsampled), we subsample for this tile's range
+            UVBox = new FssUVBoxDropEdgeTile(ParentTile!.UVBox, TileCode.GridPos);
+        }
 
-        // // Setup the UV Box - new image, so a full 0,0 -> 1,1 range
-        // UVBox = new FssUvBoxDropEdgeTile(FssUvBoxDropEdgeTile.UVTopLeft, FssUvBoxDropEdgeTile.UVBottomRight);
-    }
-
-
-    private void SubsampleParentTileImage()
-    {
-        // if (ParentTile != null)
-        // {
-        //     FssTextureLoader? TL = FssTextureLoader.Instance;
-
-        //     Filepaths.ImageFilepath   = ParentTile.Filepaths.ImageFilepath;
-        //     Filepaths.ImageFileExists = ParentTile.Filepaths.ImageFileExists;
-
-        //     TileMaterial = TL.GetMaterialWithTexture(Filepaths.ImageFilepath);
-
-        //     if (TileMaterial != null)
-        //         ImageDone = true;
-
-        //     // Setup the UV Box - Sourced from the parent (which may already be subsampled), we subsample for this tile's range
-        //     // Get the grid position of this tile in its parent (eg [1x,2y] in a 5x5 grid).
-        //     UVBox = new FssUvBoxDropEdgeTile(ParentTile.UVBox, TileCode.GridPos);
-
-        // }
-        // else
-        // {
-        //     // Subsmapling, but no parent. Setup a default.
-        //     UVBox = FssUvBoxDropEdgeTile.Default(TileSizePointsPerLvl[TileCode.MapLvl], TileSizePointsPerLvl[TileCode.MapLvl]);
-        // }
+        // If we still don't have the image, we'll setup a default Material and UVBox.
+        if (SurfaceMat == null)
+        {
+            SurfaceMat = FssMaterialFactory.SimpleColoredMaterial(new Color(1.0f, 0.0f, 1.0f, 1.0f));
+            UVBox = FssUVBoxDropEdgeTile.FullImage();
+        }
     }
 
     // --------------------------------------------------------------------------------------------

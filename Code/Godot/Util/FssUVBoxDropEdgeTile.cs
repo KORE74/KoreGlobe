@@ -69,6 +69,12 @@ public class FssUVBoxDropEdgeTile
         return new FssUVBoxDropEdgeTile(UVTopLeft, UVBottomRight, horizSize, vertSize);
     }
 
+    // Return a UV box for the full extent of an image FssUVBoxDropEdgeTile.FullImage()
+    public static FssUVBoxDropEdgeTile FullImage()
+    {
+        return new FssUVBoxDropEdgeTile(UVTopLeft, UVBottomRight);
+    }
+
     // --------------------------------------------------------------------------------------------
 
     // Create a simpler grid that just interpolates across the main UV range.

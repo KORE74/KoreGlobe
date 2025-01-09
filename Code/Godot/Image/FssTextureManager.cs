@@ -11,9 +11,9 @@ using System.IO;
 public partial class FssTextureManager : Node
 {
     // Cache to hold the textures for map tiles.
-    private ConcurrentDictionary<string, Texture> TextureCache   = new ConcurrentDictionary<string, Texture>();
-    private ConcurrentDictionary<string, Task>    LoadingTasks   = new ConcurrentDictionary<string, Task>();
-    private ConcurrentDictionary<string, int>     LastAccessList = new ConcurrentDictionary<string, int>();
+    private ConcurrentDictionary<string, ImageTexture> TextureCache   = new ConcurrentDictionary<string, ImageTexture>();
+    private ConcurrentDictionary<string, Task>         LoadingTasks   = new ConcurrentDictionary<string, Task>();
+    private ConcurrentDictionary<string, int>          LastAccessList = new ConcurrentDictionary<string, int>();
 
     // Time for textures to keep alive (in seconds).
     private const int KeepAliveTimeSecs        = 10;
@@ -62,7 +62,7 @@ public partial class FssTextureManager : Node
         await Task.Yield();
 
         // Update the last access time if the texture is already loaded, and return.
-        if (TextureCache.TryGetValue(path, out Texture? texture) && texture != null)
+        if (TextureCache.TryGetValue(path, out ImageTexture? texture) && texture != null)
         {
             LastAccessList[path] = FssCentralTime.RuntimeIntSecs;
             return;
@@ -94,14 +94,14 @@ public partial class FssTextureManager : Node
                         return;
                     }
 
-                    ImageTexture texture = ImageTexture.CreateFromImage(image);
+                    ImageTexture newTexture = ImageTexture.CreateFromImage(image);
 
-                    TextureCache[path]   = texture;
+                    TextureCache[path]   = newTexture;
                     LastAccessList[path] = FssCentralTime.RuntimeIntSecs;
                 }
                 catch (Exception ex)
                 {
-                    FssCentralLog.AddEntry($"TextureManager: Exception loading texture: {path} Exception message: {ex.Message}");
+                    FssCentralLog.AddEntry($"TextureManager: Exception loading texture async: {path} Exception message: {ex.Message}");
                 }
             });
 
@@ -110,6 +110,58 @@ public partial class FssTextureManager : Node
 
         await LoadingTasks[path];
         LoadingTasks.TryRemove(path, out _);
+    }
+
+    // --------------------------------------------------------------------------------------------
+
+    // Load a texture directly
+
+    public void LoadTextureDirect(string path)
+    {
+        // Update the last access time if the texture is already loaded, and return.
+        if (TextureCache.TryGetValue(path, out ImageTexture? cachedTexture) && cachedTexture != null)
+        {
+            LastAccessList[path] = FssCentralTime.RuntimeIntSecs;
+            return;
+        }
+
+        try
+        {
+            // Log the load request
+            FssCentralLog.AddEntry($"TextureManager: Loading request texture: {path}");
+
+            // Check if the file exists
+            if (!File.Exists(path))
+            {
+                FssCentralLog.AddEntry($"TextureManager: Texture file not found: {path}");
+                return;
+            }
+
+            // Load the image using Godot's Image class (supports WebP directly)
+            var image = new Image();
+            var loadError = image.Load(path);
+            if (loadError != Error.Ok)
+            {
+                FssCentralLog.AddEntry($"TextureManager: Failed to load image at path: {path}. Error: {loadError}");
+                image.Dispose();
+                return;
+            }
+
+            // Create a texture from the loaded image
+            var newTexture = ImageTexture.CreateFromImage(image);
+            image.Dispose(); // Release the image resource
+
+            // Add the texture to the cache and update the last access time
+            TextureCache[path] = newTexture;
+            LastAccessList[path] = FssCentralTime.RuntimeIntSecs;
+
+            FssCentralLog.AddEntry($"TextureManager: Successfully loaded and cached texture: {path}");
+        }
+        catch (Exception ex)
+        {
+            // Log any exceptions during the texture load process
+            FssCentralLog.AddEntry($"TextureManager: Exception loading texture direct: {path}. Exception: {ex.Message}");
+        }
     }
 
     // --------------------------------------------------------------------------------------------
@@ -127,13 +179,31 @@ public partial class FssTextureManager : Node
 
     // --------------------------------------------------------------------------------------------
 
-    public Texture? GetTexture(string path)
+    public ImageTexture? GetTexture(string path)
     {
-        if (TextureCache.TryGetValue(path, out Texture? texture) && texture != null)
+        if (TextureCache.TryGetValue(path, out ImageTexture? texture) && texture != null)
         {
             LastAccessList[path] = FssCentralTime.RuntimeIntSecs;
             return texture;
         }
+        return null;
+    }
+
+    // --------------------------------------------------------------------------------------------
+
+    public StandardMaterial3D? GetMaterialWithTexture(string filePath)
+    {
+        ImageTexture? tex = GetTexture(filePath);
+        if (tex != null)
+        {
+            var material = new StandardMaterial3D
+            {
+                AlbedoTexture = tex,
+                ShadingMode = StandardMaterial3D.ShadingModeEnum.Unshaded
+            };
+            return material;
+        }
+
         return null;
     }
 
@@ -165,7 +235,7 @@ public partial class FssTextureManager : Node
             if (LastAccessList.TryGetValue(key, out int lastAccess) && currentTime - lastAccess > KeepAliveTimeSecs)
             {
                 // Remove the texture to free up memory.
-                if (TextureCache.TryRemove(key, out Texture? texture) && texture != null)
+                if (TextureCache.TryRemove(key, out ImageTexture? texture) && texture != null)
                 {
                     texture.Dispose();
                     LastAccessList.TryRemove(key, out _);
@@ -193,7 +263,7 @@ public partial class FssTextureManager : Node
             (currentTime - oldestEntry.Value > KeepAliveTimeSecs))
         {
             // Only delete the oldest image if it has indeed expired.
-            if (TextureCache.TryRemove(oldestKey, out Texture? texture) && texture != null)
+            if (TextureCache.TryRemove(oldestKey, out ImageTexture? texture) && texture != null)
             {
                 texture.Dispose();
                 LastAccessList.TryRemove(oldestKey, out _);

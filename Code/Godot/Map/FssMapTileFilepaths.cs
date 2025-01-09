@@ -20,12 +20,13 @@ public class FssMapTileFilepaths
 
     public FssMapTileFilepaths(FssMapTileCode tileCode)
     {
+        string externalRootPath = FssFileOperations.StandardizePath( FssCentralConfig.Instance.GetParam<string>("MapRootPath") );
+
+
         // Get the tile code name
         string tileCodeName = tileCode.ToString();
 
         // Setup the path to the map level directory
-        var config = FssCentralConfig.Instance;
-        string externalRootPath = FssMapManager.MapRootPath;
         string externalMapLvlFilePath = FssFileOperations.JoinPaths(externalRootPath, FssMapTileCode.PathPerLvl[tileCode.MapLvl]);
         if (tileCode.MapLvl != 0)
             externalMapLvlFilePath = FssFileOperations.JoinPaths(externalMapLvlFilePath, tileCode.ParentString());
@@ -34,7 +35,7 @@ public class FssMapTileFilepaths
         EleFilepath      = FssFileOperations.JoinPaths(externalMapLvlFilePath, $"Ele_{tileCodeName}.asc");
         EleArrFilepath   = FssFileOperations.JoinPaths(externalMapLvlFilePath, $"Ele_{tileCodeName}.arr");
         MeshFilepath     = FssFileOperations.JoinPaths(externalMapLvlFilePath, $"Mesh_{tileCodeName}.mesh");
-        ImageFilepath    = FssFileOperations.JoinPaths(externalMapLvlFilePath, $"Sat_{tileCodeName}.png");
+        ImageFilepath    = FssFileOperations.JoinPaths(externalMapLvlFilePath, $"Sat_{tileCodeName}.webp");
         KTX2Filepath     = FssFileOperations.JoinPaths(externalMapLvlFilePath, $"Sat_{tileCodeName}.ktx2");
 
         // Check if the files exist

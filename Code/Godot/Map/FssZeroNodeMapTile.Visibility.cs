@@ -13,15 +13,12 @@ using Godot;
 public partial class FssZeroNodeMapTile : Node3D
 {
 
-
-
     private void UpdateVisibility()
     {
         (bool validUnproject, float pixelsPerTriangle) = UnprojectedTriangleSize();
         if (validUnproject) LatestPixelsPerTriangle = pixelsPerTriangle;
 
     }
-
 
     // --------------------------------------------------------------------------------------------
     // MARK: Visibility Helper Routines

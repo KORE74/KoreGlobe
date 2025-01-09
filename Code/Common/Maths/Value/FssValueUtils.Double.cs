@@ -190,8 +190,10 @@ public static partial class FssValueUtils
     {
         List<double> rangeList = new List<double>();
 
+        double increment = (end - start) / (length - 1);
+
         for (int i = 0; i < length; i++)
-            rangeList[i] = start + (end - start) * i / (length - 1);
+            rangeList.Add(start + (i * increment));
 
         return rangeList;
     }

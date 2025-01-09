@@ -25,7 +25,7 @@ public partial class FssZeroNodeMapTile : Node3D
     // Child accessible values
     public FssFloatRange         UVx   = FssFloatRange.ZeroToOne;
     public FssFloatRange         UVy   = FssFloatRange.ZeroToOne;
-    public FssUVBox              UVBox = FssUVBox.Zero;
+    public FssUVBoxDropEdgeTile  UVBox = FssUVBoxDropEdgeTile.FullImage();
 
     // Working values
     private FssMapTileFilepaths  Filepaths;
@@ -151,9 +151,9 @@ public partial class FssZeroNodeMapTile : Node3D
         // // Set the position from the global transform
         // GlobalTransform = new Transform(Basis.Identity, newPos);
 
-        var transform = GlobalTransform;
+        var transform    = GlobalTransform;
         transform.Origin = newPos;
-        GlobalTransform = transform;
+        GlobalTransform  = transform;
 
     }
 
