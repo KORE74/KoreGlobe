@@ -68,7 +68,7 @@ public static class FssFileOperations
     }
 
     // Filter where the string starts or ends with a specific string
-    
+
     // Usage example: FssFileOperations.FilterFilenameSuffix(filenames, ".json");
 
     public static List<string> FilterFilenameSuffix(List<string> filenames, string suffixsubstring)
@@ -98,6 +98,28 @@ public static class FssFileOperations
     public static List<string> OrderAlphabetically(List<string> filenames)
     {
         return filenames.OrderBy(filename => filename).ToList();
+    }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Directories
+    // --------------------------------------------------------------------------------------------
+
+    public static string DirectoryForPath(string path)
+    {
+        string normalizedPath = StandardizePath(path);
+        return Path.GetDirectoryName(normalizedPath);
+    }
+
+    // Create a directory if it doesn't exist.
+
+    // Usage example: FssFileOperations.CreateDirectoryForPath("C:/Users/User/Documents");
+
+    public static void CreateDirectoryForPath(string path)
+    {
+        string normalizedPath = StandardizePath(path);
+        string directory      = DirectoryForPath(normalizedPath);
+        if (!Directory.Exists(directory))
+            Directory.CreateDirectory(directory);
     }
 
     // --------------------------------------------------------------------------------------------

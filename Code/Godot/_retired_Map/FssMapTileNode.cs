@@ -102,7 +102,7 @@ public partial class FssMapTileNode : Node3D
             {
                 // string x = (TileMaterial == null) ? "null" : "not null";
 
-                // GD.Print($"Tile:{TileCode} Filepaths:{Filepaths.ImageFilepath} ImageDone:{ImageDone} MeshDone:{MeshDone} MeshInstatiated:{MeshInstatiated} ConstructionComplete:{ConstructionComplete}");
+                // GD.Print($"Tile:{TileCode} Filepaths:{Filepaths.ImagePngFilepath} ImageDone:{ImageDone} MeshDone:{MeshDone} MeshInstatiated:{MeshInstatiated} ConstructionComplete:{ConstructionComplete}");
                 // if (ParentTile != null) GD.Print($"Parent:{ParentTile.TileCode}");
                 // GD.Print($"UVBox:{UVBox}");
                 // GD.Print($"EleData:{TileEleData.sizeStr()}");
@@ -151,7 +151,7 @@ public partial class FssMapTileNode : Node3D
         // Load the image data - which will determine the UVBox it will need.
         // - 1 - we find the image and load it.
         // - 2 - We copy the parent tile image and UVBox, and subsample them.
-        if (Filepaths.ImageFileExists)
+        if (Filepaths.ImageWebpFileExists)
             LoadTileImage();
         else
             SubsampleParentTileImage();
@@ -250,9 +250,9 @@ public partial class FssMapTileNode : Node3D
         FssTextureLoader? TL = FssTextureLoader.Instance;
         if (TL != null)
         {
-            if (TL.IsTextureLoaded(Filepaths.ImageFilepath))
+            if (TL.IsTextureLoaded(Filepaths.ImagePngFilepath))
             {
-                Material? mat = TL.GetMaterialWithTexture(Filepaths.ImageFilepath);
+                Material? mat = TL.GetMaterialWithTexture(Filepaths.ImagePngFilepath);
                 if (mat != null)
                 {
                     MeshInstance.MaterialOverride = mat;
@@ -523,11 +523,11 @@ public partial class FssMapTileNode : Node3D
         FssTextureLoader? TL = FssTextureLoader.Instance;
         if (TL != null)
         {
-            ImageTexture? tex = TL.LoadTextureDirect(Filepaths.ImageFilepath);
+            ImageTexture? tex = TL.LoadTextureDirect(Filepaths.ImageWebpFilepath);
 
             if (tex != null)
             {
-                TileMaterial = TL.GetMaterialWithTexture(Filepaths.ImageFilepath);
+                TileMaterial = TL.GetMaterialWithTexture(Filepaths.ImageWebpFilepath);
 
                 if (TileMaterial != null)
                 {
@@ -546,10 +546,10 @@ public partial class FssMapTileNode : Node3D
         {
             FssTextureLoader? TL = FssTextureLoader.Instance;
 
-            Filepaths.ImageFilepath = ParentTile.Filepaths.ImageFilepath;
-            Filepaths.ImageFileExists = ParentTile.Filepaths.ImageFileExists;
+            Filepaths.ImageWebpFilepath   = ParentTile.Filepaths.ImageWebpFilepath;
+            Filepaths.ImageWebpFileExists = ParentTile.Filepaths.ImageWebpFileExists;
 
-            TileMaterial = TL.GetMaterialWithTexture(Filepaths.ImageFilepath);
+            TileMaterial = TL.GetMaterialWithTexture(Filepaths.ImageWebpFilepath);
 
             if (TileMaterial != null)
                 ImageDone = true;

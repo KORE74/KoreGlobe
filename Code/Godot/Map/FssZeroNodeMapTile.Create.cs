@@ -197,13 +197,13 @@ public partial class FssZeroNodeMapTile : Node3D
     private void SourceTileImage()
     {
         // Load the image if we have it, or take the parent file if it exists, or leave the image blank.
-        if (Filepaths.ImageFileExists)
+        if (Filepaths.ImageWebpFileExists)
         {
             // Load the image
-            FssGodotFactory.Instance.TextureManager.LoadTextureDirect(Filepaths.ImageFilepath);
+            FssGodotFactory.Instance.TextureManager.LoadTextureDirect(Filepaths.ImageWebpFilepath);
 
             // Setup the material
-            StandardMaterial3D? mat = FssGodotFactory.Instance.TextureManager.GetMaterialWithTexture(Filepaths.ImageFilepath);
+            StandardMaterial3D? mat = FssGodotFactory.Instance.TextureManager.GetMaterialWithTexture(Filepaths.ImageWebpFilepath);
             if (mat != null)
             {
                 SurfaceMat = mat;
@@ -212,7 +212,7 @@ public partial class FssZeroNodeMapTile : Node3D
         }
         else
         {
-            FssCentralLog.AddEntry($"Tile {TileCode} has no image file: {Filepaths.ImageFilepath}");
+            FssCentralLog.AddEntry($"Tile {TileCode} has no image file: {Filepaths.ImageWebpFilepath}");
         }
 
         // If for any reason, we don't have the image, we'll try to get it from the parent.
