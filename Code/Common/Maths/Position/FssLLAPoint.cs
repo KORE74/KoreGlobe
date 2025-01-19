@@ -402,5 +402,34 @@ public struct FssLLAPoint
         return this.PlusPolarOffset(offset);
     }
 
+    // --------------------------------------------------------------------------------------------
+    // MARK: Angle
+    // --------------------------------------------------------------------------------------------
+
+    // Determine a single angle value between two LLA points. At 180 degrees, the angle is on the border
+    // of the current hemisphere, including reaching over the poles.
+
+    // At ovr 180 degrees the checked point can be considered to be "pointing away" from teh current point
+    // and we can make decisions about visibiliy on a sphere etc.
+
+    public double AngleToRads(FssLLAPoint destPos)
+    {
+        // Spherical central angle
+        double lat1 = this.LatRads;
+        double lat2 = destPos.LatRads;
+        double dLon = destPos.LonRads - this.LonRads;
+
+        double cosAngle =
+            Math.Sin(lat1) * Math.Sin(lat2) +
+            Math.Cos(lat1) * Math.Cos(lat2) * Math.Cos(dLon);
+
+        // Clamp the cosine to [-1..1] in case of floating precision quirks
+        if (cosAngle > 1.0)  cosAngle = 1.0;
+        if (cosAngle < -1.0) cosAngle = -1.0;
+
+        return Math.Acos(cosAngle);
+    }
+
+
 
 }

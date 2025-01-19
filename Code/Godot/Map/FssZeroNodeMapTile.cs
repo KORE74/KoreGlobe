@@ -38,8 +38,10 @@ public partial class FssZeroNodeMapTile : Node3D
     // Materials and Meshes
     private ArrayMesh            TileMeshData;
     private Color                WireColor;
-    private StandardMaterial3D   SurfaceMat;
+    private Material?            SurfaceMat;
+
     private FssLineMesh3D        LineMesh3D;
+    private MeshInstance3D       TileMeshInstance;
 
     // Construction Flags
     private bool ConstructionComplete = false;
@@ -48,10 +50,12 @@ public partial class FssZeroNodeMapTile : Node3D
     private bool MeshCreated          = false;
     private bool MeshInstatiated      = false;
     private bool ImageDone            = false;
+    private bool BackgroundCreateCompleted = false;
 
     // Flag set when the tile (or its children) should be visible. Gates the main visibility processing.
-    public bool  ActiveVisibility        = false;
+    public bool  ActiveState             = false;
     public float LatestPixelsPerTriangle = 1000f;
+    public bool  ChildrenSetVisible       = false; // flag to more check intended child visibility state
 
     // Update timers
     private float CreateTaskUpdateTimerSecs = 1.0f;
@@ -87,6 +91,12 @@ public partial class FssZeroNodeMapTile : Node3D
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
+        if ((BackgroundCreateCompleted) && (!ConstructionComplete))
+        {
+            // Create the mesh instance
+            ProgressCreation();
+        }
+
         // Update tile position in cycle when the ZeroNode location is updated
         // if (FssZeroNode.ZeroNodeUpdateCycle && ConstructionComplete)
         if (ConstructionComplete)
@@ -107,6 +117,11 @@ public partial class FssZeroNodeMapTile : Node3D
     // MARK: Child Tiles
     // --------------------------------------------------------------------------------------------
 
+    public bool ChildTilesExist()
+    {
+        return ChildTiles.Count > 0;
+    }
+
     public void CreateChildTiles()
     {
         if (!TileCode.IsValid())
@@ -119,11 +134,12 @@ public partial class FssZeroNodeMapTile : Node3D
 
         foreach (FssMapTileCode currcode in childCodes)
             ChildTiles.Add(new FssZeroNodeMapTile(currcode));
-    }
 
-    public bool ChildTilesExist()
-    {
-        return ChildTiles.Count > 0;
+        foreach (var currChildTile in ChildTiles)
+        {
+            AddChild(currChildTile);
+            currChildTile.ParentTile = this;
+        }
     }
 
     public bool ChildTilesContructed()

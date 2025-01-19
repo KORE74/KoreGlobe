@@ -46,7 +46,7 @@ public partial class FssMapTileNode : Node3D
     private Label3D        TileCodeLabel;
 
     // Flag set when the tile (or its children) should be visible. Gates the main visibility processing.
-    public bool ActiveVisibility              = false;
+    public bool ActiveState              = false;
 
     // Record the states we assign, so we can restict  actions to just changes.
     public bool VisibleState                  = false;
@@ -111,9 +111,9 @@ public partial class FssMapTileNode : Node3D
 
             if (ConstructionComplete)
             {
-                if (TileCode.MapLvl == 0) ActiveVisibility = true;
+                if (TileCode.MapLvl == 0) ActiveState = true;
 
-                if (ActiveVisibility) UpdateVisbilityRules();
+                if (ActiveState) UpdateVisbilityRules();
             }
 
             bool showDebug = FssMapManager.ShowDebug && VisibleState;
@@ -137,7 +137,7 @@ public partial class FssMapTileNode : Node3D
     {
         // Starting: Set the flags that will be used later to determine activity around the tile wheil we construct it.
         ConstructionComplete = false;
-        ActiveVisibility     = false;
+        ActiveState     = false;
 
         //etup some basic elements of the tile ahead of the mail elevation and image loading.
         SetupTileCenterXYZ();
@@ -318,7 +318,7 @@ public partial class FssMapTileNode : Node3D
             // Create a new node
             FssMapTileNode childTile = new FssMapTileNode(currTileCode);
             childTile.ParentTile = this;
-            childTile.ActiveVisibility = false;
+            childTile.ActiveState = false;
             AddChild(childTile);
 
             ChildTiles.Add(childTile);
@@ -415,7 +415,7 @@ public partial class FssMapTileNode : Node3D
 
             foreach (FssMapTileNode currTile in ChildTiles)
             {
-                currTile.ActiveVisibility = active;
+                currTile.ActiveState = active;
             }
         }
     }
@@ -425,9 +425,9 @@ public partial class FssMapTileNode : Node3D
     private void UpdateVisbilityRules()
     {
         // Lvl0 tiles are always marked as active, so we have a starting point for the "towers of hanoi" tree of applying visibility rules.
-        if (TileCode.MapLvl == 0) ActiveVisibility = true;
+        if (TileCode.MapLvl == 0) ActiveState = true;
 
-        if (ActiveVisibility)
+        if (ActiveState)
         {
             // To allow for different game-engine deisplay radii, we do everything in terms of a fraction of the displayed Earth's radius.
 

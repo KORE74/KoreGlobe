@@ -18,11 +18,12 @@ public partial class FssZeroNodeMapTile : Node3D
 
     private async void BackgroundTileCreation(FssMapTileCode tileCode)
     {
+        // GD.Print($"Starting Create: {tileCode}");
         try
         {
             // Starting: Set the flags that will be used later to determine activity around the tile while we construct it.
             ConstructionComplete = false;
-            ActiveVisibility     = false;
+            ActiveState     = false;
             MeshCreated          = false;
 
             // Pause the thread, being a good citizen with lots of tasks around.
@@ -50,7 +51,7 @@ public partial class FssZeroNodeMapTile : Node3D
 
             // Set the flag for the Process() function to pick up and conclude any
             // construction tasks on the main thread.
-            MeshCreated = true;
+            BackgroundCreateCompleted = true;
 
             // Log the completion
             FssCentralLog.AddEntry($"Tile {TileCode} background creation complete.");
@@ -60,19 +61,22 @@ public partial class FssZeroNodeMapTile : Node3D
             // Handle exceptions
             Console.WriteLine($"An error occurred: {ex.Message}");
         }
+
+        // GD.Print($"Ending Create: {tileCode}");
     }
 
     // --------------------------------------------------------------------------------------------
 
     public void ProgressCreation()
     {
+        // GD.Print($"Progressing Create: {TileCode}");
+
         // Start the creation of the mesh
-        if (MeshCreated)
-        {
-            CreateMesh();
-            //AttachMesh();
-            ConstructionComplete = true;
-        }
+        CreateMesh();
+        //AttachMesh();
+        ConstructionComplete = true;
+
+        AddDebugOriginSphere();
     }
 
     // --------------------------------------------------------------------------------------------
@@ -141,25 +145,69 @@ public partial class FssZeroNodeMapTile : Node3D
         meshBuilder.AddSurface(v3Data, UVx, UVy, false);
 
         // Build the mesh data and add it to the node
-        MeshInstance3D tileMeshInstance   = new MeshInstance3D() { Name = "tileMesh" };
-        tileMeshInstance.Mesh             = meshBuilder.BuildWithUV("Surface");
+        TileMeshInstance        = new MeshInstance3D() { Name = "tileMesh" };
+        TileMeshInstance.Mesh   = meshBuilder.BuildWithUV("Surface");
         //tileMeshInstance.MaterialOverride = FssMaterialFactory.SimpleColoredMaterial(new Color(1.0f, 0.0f, 1.0f, 1.0f));
-        tileMeshInstance.MaterialOverride = SurfaceMat;
+        TileMeshInstance.MaterialOverride = SurfaceMat;
 
-        AddChild(tileMeshInstance);
+        AddChild(TileMeshInstance);
 
         // Rotate each tile into its position - The zero node only translates, so this is fixed after creation
         float rotAz = (float)(RwLLACenter.LonRads); // We created the tile with relative azimuth, so apply the absolute value to orient it to its longitude.
-        tileMeshInstance.Rotation = new Vector3(0, rotAz, 0);
+        TileMeshInstance.Rotation = new Vector3(0, rotAz, 0);
         LineMesh3D.Rotation       = new Vector3(0, rotAz, 0);
 
-        // Add a simple sphere marker for the tile center
-        // Create a new SphereMesh instance with radius and height set
+        // Set the visibility false, later functions will assign the correct visibility rules.
+        TileMeshInstance.Visible = false;
+        LineMesh3D.Visible       = false;
+        ActiveState              = false;
+    }
+
+    // Add a simple sphere marker for the tile center
+    // Create a new SphereMesh instance with radius and height set
+
+    private void AddDebugOriginSphere()
+    {
+        float sphereRad = 10f;
+        var sphereInstance = new MeshInstance3D { Name = "TestSphere", Mesh = new SphereMesh { Radius = sphereRad, Height = sphereRad*2f } };
+        AddChild(sphereInstance);
+    }
+
+
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Image
+    // --------------------------------------------------------------------------------------------
+
+    // We either load an image for this tile, or take the parent tile material (or a default material on error).
+
+    private void SourceTileImage()
+    {
+        // Load the image if we have it, or take the parent file if it exists, or leave the image blank.
+        if (Filepaths.ImageWebpFileExists)
         {
-            float sphereRad = 10f;
-            var sphereInstance = new MeshInstance3D { Name = "TestSphere", Mesh = new SphereMesh { Radius = sphereRad, Height = sphereRad*2f } };
-            AddChild(sphereInstance);
+            SurfaceMat = FssGodotImageOperations.LoadToMaterial(Filepaths.ImageWebpFilepath);
+            UVBox      = FssUVBoxDropEdgeTile.FullImage();
         }
+        else if (ParentTile != null)
+        {
+            SurfaceMat = ParentTile!.SurfaceMat;
+
+            // Setup the UV Box - Sourced from the parent (which may already be subsampled), we subsample for this tile's range
+            UVBox = new FssUVBoxDropEdgeTile(ParentTile!.UVBox, TileCode.GridPos);
+        }
+
+        // If we still don't have the image, we'll setup a default Material and UVBox.
+        if (SurfaceMat == null)
+        {
+            SurfaceMat = FssMaterialFactory.SimpleColoredMaterial(new Color(1.0f, 0.0f, 1.0f, 1.0f));
+            UVBox      = FssUVBoxDropEdgeTile.FullImage();
+        }
+
+        GD.Print($"TileCode: {TileCode} // UVBox: {UVBox.TopLeft} {UVBox.BottomRight}");
+
+        UVx = UVBox.UVXRange();
+        UVy = UVBox.UVYRange();
 
     }
 
@@ -189,53 +237,6 @@ public partial class FssZeroNodeMapTile : Node3D
             RwEleData = new FssFloat2DArray(20, 20);
         }
     }
-
-    // --------------------------------------------------------------------------------------------
-    // MARK: Image
-    // --------------------------------------------------------------------------------------------
-
-    private void SourceTileImage()
-    {
-        // Load the image if we have it, or take the parent file if it exists, or leave the image blank.
-        if (Filepaths.ImageWebpFileExists)
-        {
-            // Load the image
-            FssGodotFactory.Instance.TextureManager.LoadTextureDirect(Filepaths.ImageWebpFilepath);
-
-            // Setup the material
-            StandardMaterial3D? mat = FssGodotFactory.Instance.TextureManager.GetMaterialWithTexture(Filepaths.ImageWebpFilepath);
-            if (mat != null)
-            {
-                SurfaceMat = mat;
-                UVBox = FssUVBoxDropEdgeTile.FullImage();
-            }
-        }
-        else
-        {
-            FssCentralLog.AddEntry($"Tile {TileCode} has no image file: {Filepaths.ImageWebpFilepath}");
-        }
-
-        // If for any reason, we don't have the image, we'll try to get it from the parent.
-        if ((SurfaceMat == null) && (ParentTile != null))
-        {
-            SurfaceMat = ParentTile!.SurfaceMat;
-
-            // Setup the UV Box - Sourced from the parent (which may already be subsampled), we subsample for this tile's range
-            UVBox = new FssUVBoxDropEdgeTile(ParentTile!.UVBox, TileCode.GridPos);
-        }
-
-        // If we still don't have the image, we'll setup a default Material and UVBox.
-        if (SurfaceMat == null)
-        {
-            SurfaceMat = FssMaterialFactory.SimpleColoredMaterial(new Color(1.0f, 0.0f, 1.0f, 1.0f));
-            UVBox = FssUVBoxDropEdgeTile.FullImage();
-        }
-    }
-
-    // --------------------------------------------------------------------------------------------
-    // MARK: Create Elevation
-    // --------------------------------------------------------------------------------------------
-
 
 
 

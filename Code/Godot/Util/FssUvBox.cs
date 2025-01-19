@@ -48,14 +48,14 @@ public struct FssUVBox
     // Creates a UV box for a subtile within the main tile
     public static FssUVBox BoxFromGrid(Vector2 topLeft, Vector2 bottomRight, int horizSize, int vertSize, int horizIndex, int vertIndex)
     {
-        float horizStep = 1.0f / horizSize;
-        float vertStep  = 1.0f / vertSize;
+        float horizStep  = 1.0f / horizSize;
+        float vertStep   = 1.0f / vertSize;
 
         float leftValue  = topLeft.X + horizIndex * horizStep * (bottomRight.X - topLeft.X);
         float rightValue = topLeft.X + (horizIndex + 1) * horizStep * (bottomRight.X - topLeft.X);
 
-        float topValue = topLeft.Y + vertIndex * vertStep * (bottomRight.Y - topLeft.Y);
-        float botValue = topLeft.Y + (vertIndex + 1) * vertStep * (bottomRight.Y - topLeft.Y);
+        float topValue   = topLeft.Y + vertIndex * vertStep * (bottomRight.Y - topLeft.Y);
+        float botValue   = topLeft.Y + (vertIndex + 1) * vertStep * (bottomRight.Y - topLeft.Y);
 
         return new FssUVBox(new Vector2(leftValue, topValue), new Vector2(rightValue, botValue));
     }

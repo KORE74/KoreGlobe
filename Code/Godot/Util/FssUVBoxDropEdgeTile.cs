@@ -39,23 +39,25 @@ public class FssUVBoxDropEdgeTile
 
     public FssUVBoxDropEdgeTile(FssUVBoxDropEdgeTile parentBox, Fss2DGridPos gridPos)
     {
-        // Calculate the new UV box from the parent box and grid position
+        // Extract the parent UVbox limits
         float minParentX  = parentBox.TopLeft.X;
         float minParentY  = parentBox.TopLeft.Y;
         float maxParentX  = parentBox.BottomRight.X;
         float maxParentY  = parentBox.BottomRight.Y;
 
+        // Determine the UVbox width and height
         float diffParentX = maxParentX - minParentX;
         float diffParentY = maxParentY - minParentY;
 
-        float childMinX   = minParentX + gridPos.LeftEdgeFraction   * diffParentX;
-        float childMaxX   = minParentX + gridPos.RightEdgeFraction  * diffParentX;
-        float childMinY   = minParentY + gridPos.TopEdgeFraction    * diffParentY;
-        float childMaxY   = minParentY + gridPos.BottomEdgeFraction * diffParentY;
+        // Find the new box edges, based on fractions of the parent
+        float childMinX   = minParentX + (gridPos.LeftEdgeFraction   * diffParentX);
+        float childMaxX   = minParentX + (gridPos.RightEdgeFraction  * diffParentX);
+        float childMinY   = minParentY + (gridPos.TopEdgeFraction    * diffParentY);
+        float childMaxY   = minParentY + (gridPos.BottomEdgeFraction * diffParentY);
 
+        // Assign the new values to this object
         TopLeft           = new Vector2(childMinX, childMinY);
         BottomRight       = new Vector2(childMaxX, childMaxY);
-
         BoxEdgeOffset     = parentBox.BoxEdgeOffset;
         BoxInsetOffset    = parentBox.BoxInsetOffset;
 
@@ -153,6 +155,11 @@ public class FssUVBoxDropEdgeTile
 
         return UVGrid[x, y];
     }
+
+    // --------------------------------------------------------------------------------------------
+
+    public FssFloatRange UVYRange() => new FssFloatRange(TopLeft.Y, BottomRight.Y);
+    public FssFloatRange UVXRange() => new FssFloatRange(TopLeft.X, BottomRight.X);
 
     // --------------------------------------------------------------------------------------------
 

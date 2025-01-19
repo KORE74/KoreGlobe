@@ -118,6 +118,8 @@ public static class FssGodotImageOperations
     // MARK: Material
     // --------------------------------------------------------------------------------------------
 
+    // Usage example: Material? material = FssGodotImageOperations.LoadToMaterial("C:/Users/User/Documents/image.png");
+
     public static Material? LoadToMaterial(string filepath)
     {
         // Load the image

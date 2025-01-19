@@ -69,6 +69,8 @@ public struct FssLLBox
     public double HalfDeltaLonDegs => DeltaLonDegs / 2.0;
     public double HalfDeltaLatDegs => DeltaLatDegs / 2.0;
 
+    public double LargestHalfDeltaDegs => Math.Max(HalfDeltaLatDegs, HalfDeltaLonDegs);
+
     // --------------------------------------------------------------------------------------------
 
     public FssLLPoint PosTopLeft

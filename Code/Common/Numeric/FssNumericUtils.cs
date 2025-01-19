@@ -23,3 +23,10 @@ public class FssNumericUtils<T> where T : INumber<T>
         return value;
     }
 }
+
+/*
+
+    FssNumericUtils<double>.Clamp(1.0, 0.0, 2.0)
+
+
+*/

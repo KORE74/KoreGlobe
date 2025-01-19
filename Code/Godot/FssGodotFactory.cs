@@ -18,7 +18,7 @@ public class FssGodotFactory
     // Nodes with positional requirements
     public FssZeroNodeMapManager ZeroNodeMapManager { get; private set; }
     public FssGodotEntityManager GodotEntityManager { get; private set; }
-    public FssCameraMoverWorld   CameraMoverWorld   { get; private set; }
+    public FssCameraMoverWorld   CameraMoverWorld   { get; private set; } // FssGodotFactory.Instance.CameraMoverWorld
 
     // Assets
     public Fss3DModelLibrary     ModelLibrary       { get; private set; }
