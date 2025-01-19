@@ -557,6 +557,7 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="HBoxContainer-SidePanel" type="HBoxContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_constants/separation = 5
@@ -815,7 +816,7 @@ size_flags_vertical = 4
 
 [node name="CameraModeLabel" type="Label" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows"]
 layout_mode = 2
-text = "Camera Mode
+text = "<ModeStr>
 "
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -851,6 +852,7 @@ icon_alignment = 1
 expand_icon = true
 
 [node name="CameraModeAlignCamButton" type="Button" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer/PanelContainer-CamMode/MarginContainer/VBoxContainer-PanelRows/HBoxContainer"]
+visible = false
 custom_minimum_size = Vector2(45, 45)
 layout_mode = 2
 focus_mode = 0
@@ -863,6 +865,7 @@ icon = ExtResource("13_pe2s4")
 expand_icon = true
 
 [node name="PanelContainer-NearCamTarget" type="PanelContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer"]
+visible = false
 layout_mode = 2
 theme_override_styles/panel = ExtResource("1_ndm6o")
 
@@ -914,6 +917,7 @@ icon = ExtResource("15_7rjg6")
 expand_icon = true
 
 [node name="PanelContainer-FarCamTarget" type="PanelContainer" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer/Control-CameraControl/HBoxContainer"]
+visible = false
 layout_mode = 2
 theme_override_styles/panel = ExtResource("1_ndm6o")
 

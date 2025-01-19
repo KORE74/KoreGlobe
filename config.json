@@ -19,5 +19,6 @@
   "LoggingActive": true,
   "LogPath": "C:/Util/Data/Godot/Globe4-Capture",
   "DlcPath": "E:/Utils/Godot-Logging",
-  "ScenarioName": null
+  "ScenarioName": null,
+  "WorldCamPosStr": "[49.825,0.678,2252757][172,0][-54.76]"
 }

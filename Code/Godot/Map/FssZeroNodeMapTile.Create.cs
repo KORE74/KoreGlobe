@@ -111,14 +111,14 @@ public partial class FssZeroNodeMapTile : Node3D
         List<double> latListRads     = FssValueUtils.CreateRangeList(pointCountLat,  rwLLBox.MaxLatRads,        rwLLBox.MinLatRads);
         Vector3[,]   v3Data          = new Vector3[pointCountLon, pointCountLat];
 
-        for (int i = 0; i < pointCountLon; i++)
+        for (int ix = 0; ix < pointCountLon; ix++)
         {
-            for (int j = 0; j < pointCountLat; j++)
+            for (int jy = 0; jy < pointCountLat; jy++)
             {
                 // Find the Real-World (RW) position for each point in the mesh.
-                double      lonRads       = lonZeroListRads[i];
-                double      latRads       = latListRads[j];
-                double      ele           = RwLLACenter.RadiusM + RwEleData[i, j];
+                double      lonRads       = lonZeroListRads[ix];
+                double      latRads       = latListRads[jy];
+                double      ele           = RwLLACenter.RadiusM + RwEleData[ix, jy];
                 FssLLAPoint rwLLAPointPos = new FssLLAPoint() { LatRads = latRads, LonRads = lonRads, RadiusM = ele };
                 FssXYZPoint rwXYZPointPos = rwLLAPointPos.ToXYZ();
 
@@ -126,7 +126,7 @@ public partial class FssZeroNodeMapTile : Node3D
                 FssXYZPoint rwXYZCenterOffset = rwXYZZeroLonCenter.XYZTo(rwXYZPointPos);
 
                 // Convert the Real-World position to the Game Engine position.
-                v3Data[i, j] = new Vector3(
+                v3Data[ix, jy] = new Vector3(
                     (float)(rwXYZCenterOffset.X * FssZeroOffset.RwToGeDistMultiplier),
                     (float)(rwXYZCenterOffset.Y * FssZeroOffset.RwToGeDistMultiplier),
                     (float)(rwXYZCenterOffset.Z * FssZeroOffset.RwToGeDistMultiplier));
@@ -134,7 +134,7 @@ public partial class FssZeroNodeMapTile : Node3D
         }
 
         // Add the grid to the LineMesh
-        LineMesh3D.AddSurface(v3Data, FssColorUtil.Colors["Red"]);
+        LineMesh3D.AddSurface(v3Data, FssColorUtil.Colors["Red"], FssColorUtil.Colors["Yellow"]);
 
         // Create the game-engine mesh from the V3s
         FssMeshBuilder meshBuilder = new();

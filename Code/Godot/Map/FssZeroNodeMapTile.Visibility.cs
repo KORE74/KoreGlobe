@@ -12,12 +12,12 @@ using Godot;
 
 public partial class FssZeroNodeMapTile : Node3D
 {
-
     private void UpdateVisibility()
     {
         (bool validUnproject, float pixelsPerTriangle) = UnprojectedTriangleSize();
         if (validUnproject) LatestPixelsPerTriangle = pixelsPerTriangle;
 
+        //
     }
 
     // --------------------------------------------------------------------------------------------
@@ -44,7 +44,7 @@ public partial class FssZeroNodeMapTile : Node3D
 
         // Get the number of triangles along the box edges
         int vertTriangleCount  = RwEleData.Height - 1;
-        int horizTriangleCount = RwEleData.Width - 1;
+        int horizTriangleCount = RwEleData.Width  - 1;
 
         // Get the current scene camera and viewport, requirements for the unproject calls.
         Viewport viewport   = GetViewport(); //Engine.GetMainLoop() is SceneTree sceneTree ? sceneTree.Root : null;

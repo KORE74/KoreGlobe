@@ -131,27 +131,34 @@ public partial class FssLineMesh3D : Node3D
     // --------------------------------------------------------------------------------------------
 
     // Function to add lines for a given 2D surface array
-    public void AddSurface(Vector3[,] points, Color color)
+    // [X,Y]
+    public void AddSurface(Vector3[,] points, Color color, Color color2)
     {
         int rows = points.GetLength(0);
         int cols = points.GetLength(1);
 
+        Color currHorizColor = color;
+        Color currVertColor = color2;
+
         // Add lines for rows
-        for (int r = 0; r < rows - 1; r++)
+        for (int ry = 0; ry < rows - 1; ry++)
         {
-            for (int c = 0; c < cols - 1; c++)
+            currHorizColor = ((ry == 0) || (ry == rows - 1)) ? color2 : color;
+            for (int cx = 0; cx < cols - 1; cx++)
             {
-                AddLine(points[r, c], points[r, c + 1], color); // Horizontal line
-                AddLine(points[r, c], points[r + 1, c], color); // Vertical line
+                currVertColor = ((cx == 0) || (cx == cols - 1)) ? color2 : color;
+
+                AddLine(points[cx, ry], points[cx + 1, ry], currHorizColor); // Horizontal line
+                AddLine(points[cx, ry], points[cx, ry + 1], currVertColor); // Vertical line
             }
             // Connect the last column in this row to the next row
-            AddLine(points[r, cols - 1], points[r + 1, cols - 1], color);
+            AddLine(points[cols - 1, ry], points[cols - 1, ry + 1], color2);
         }
 
         // Add lines for the last row
-        for (int c = 0; c < cols - 1; c++)
+        for (int cx = 0; cx < cols - 1; cx++)
         {
-            AddLine(points[rows - 1, c], points[rows - 1, c + 1], color); // Horizontal line
+            AddLine(points[cx, rows - 1], points[cx + 1, rows - 1], color2); // Horizontal line
         }
     }
 
