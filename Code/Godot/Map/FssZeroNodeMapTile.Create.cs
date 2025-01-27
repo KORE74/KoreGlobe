@@ -16,6 +16,11 @@ public partial class FssZeroNodeMapTile : Node3D
     // MARK: Main Create
     // --------------------------------------------------------------------------------------------
 
+    // Create rules:
+    // - Need to have the elevation file to gate the creation of a child tile, or it blocks the
+    //   creation of the while set. No more exprapolation of elevation data.
+    // - Will use the tile's own image, the parent tile's image if it exists, or a default image if it doesn't.
+
     private async void BackgroundTileCreation(FssMapTileCode tileCode)
     {
         // GD.Print($"Starting Create: {tileCode}");
@@ -23,7 +28,7 @@ public partial class FssZeroNodeMapTile : Node3D
         {
             // Starting: Set the flags that will be used later to determine activity around the tile while we construct it.
             ConstructionComplete = false;
-            ActiveState     = false;
+            ActiveState          = false;
             MeshCreated          = false;
 
             // Pause the thread, being a good citizen with lots of tasks around.
@@ -168,12 +173,10 @@ public partial class FssZeroNodeMapTile : Node3D
 
     private void AddDebugOriginSphere()
     {
-        float sphereRad = 10f;
+        float sphereRad = 1f;
         var sphereInstance = new MeshInstance3D { Name = "TestSphere", Mesh = new SphereMesh { Radius = sphereRad, Height = sphereRad*2f } };
         AddChild(sphereInstance);
     }
-
-
 
     // --------------------------------------------------------------------------------------------
     // MARK: Image
@@ -206,9 +209,9 @@ public partial class FssZeroNodeMapTile : Node3D
 
         GD.Print($"TileCode: {TileCode} // UVBox: {UVBox.TopLeft} {UVBox.BottomRight}");
 
+        // Turn the UVBox into a UV Ranges
         UVx = UVBox.UVXRange();
         UVy = UVBox.UVYRange();
-
     }
 
     // --------------------------------------------------------------------------------------------
@@ -218,15 +221,17 @@ public partial class FssZeroNodeMapTile : Node3D
     private void SourceTileElevation()
     {
         RwEleData = new FssFloat2DArray(20, 20);
-        return;
+        //return;
 
-        // If we have the elevation data, we'll use it, otherwise we'll take the parent's data.
-        if (Filepaths.EleArrFileExists)
-        {
-            // Load the elevation data
-            RwEleData = FssFloat2DArrayIO.LoadFromCSVFile(Filepaths.EleArrFilepath);
-        }
-        else if (Filepaths.EleFileExists)
+        // // If we have the elevation data, we'll use it, otherwise we'll take the parent's data.
+        // if (Filepaths.EleArrFileExists)
+        // {
+        //     // Load the elevation data
+        //     RwEleData = FssFloat2DArrayIO.LoadFromCSVFile(Filepaths.EleArrFilepath);
+        // }
+        // else
+
+        if (Filepaths.EleFileExists)
         {
             // Load the elevation data
             RwEleData = FssFloat2DArrayIO.LoadFromArcASIIGridFile(Filepaths.EleFilepath);
@@ -234,7 +239,7 @@ public partial class FssZeroNodeMapTile : Node3D
         else
         {
             // for now, just create an ampty array
-            RwEleData = new FssFloat2DArray(20, 20);
+            CreationRejected = true;
         }
     }
 

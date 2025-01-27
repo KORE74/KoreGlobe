@@ -8,15 +8,14 @@ public class FssMapTileFilepaths
 {
     public string EleFilepath       { get; set; }
     public string EleArrFilepath    { get; set; }
-    public string MeshFilepath      { get; set; }
     public string ImagePngFilepath  { get; set; }
     public string ImageWebpFilepath { get; set; }
 
     public bool EleFileExists       { get; set; } = false;
     public bool EleArrFileExists    { get; set; } = false;
-    public bool MeshFileExists      { get; set; } = false;
     public bool ImagePngFileExists  { get; set; } = false;
     public bool ImageWebpFileExists { get; set; } = false;
+
 
     public FssMapTileFilepaths(FssMapTileCode tileCode)
     {
@@ -33,14 +32,12 @@ public class FssMapTileFilepaths
         // Setup the file paths
         EleFilepath         = FssFileOperations.JoinPaths(externalMapLvlFilePath, $"Ele_{tileCodeName}.asc");
         EleArrFilepath      = FssFileOperations.JoinPaths(externalMapLvlFilePath, $"Ele_{tileCodeName}.arr");
-        MeshFilepath        = FssFileOperations.JoinPaths(externalMapLvlFilePath, $"Mesh_{tileCodeName}.mesh");
         ImagePngFilepath    = FssFileOperations.JoinPaths(externalMapLvlFilePath, $"Sat_{tileCodeName}.png");
         ImageWebpFilepath   = FssFileOperations.JoinPaths(externalMapLvlFilePath, $"Sat_{tileCodeName}.webp");
 
         // Check if the files exist
         EleFileExists       = File.Exists(EleFilepath);
         EleArrFileExists    = File.Exists(EleArrFilepath);
-        MeshFileExists      = File.Exists(MeshFilepath);
         ImagePngFileExists  = File.Exists(ImagePngFilepath);
         ImageWebpFileExists = File.Exists(ImageWebpFilepath);
     }

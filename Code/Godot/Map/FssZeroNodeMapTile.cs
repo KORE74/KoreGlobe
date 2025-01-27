@@ -30,6 +30,7 @@ public partial class FssZeroNodeMapTile : Node3D
     // Working values
     private FssMapTileFilepaths  Filepaths;
     private readonly FssLLAPoint RwLLACenter = FssLLAPoint.Zero; // Shortcut from the tilecode center
+    private readonly FssXYZPoint RwXYZCenter = FssXYZPoint.Zero; // Shortcut from the tilecode center
 
     // One way or another, a tile will end up with an image filename, either from the Filename structure, a
     // parent tile of a default choice.
@@ -52,6 +53,9 @@ public partial class FssZeroNodeMapTile : Node3D
     private bool ImageDone            = false;
     private bool BackgroundCreateCompleted = false;
 
+    private bool CreationRejected = false;
+    private bool ChildCreationRejected = false;
+
     // Flag set when the tile (or its children) should be visible. Gates the main visibility processing.
     public bool  ActiveState             = false;
     public float LatestPixelsPerTriangle = 1000f;
@@ -60,6 +64,9 @@ public partial class FssZeroNodeMapTile : Node3D
     // Update timers
     private float CreateTaskUpdateTimerSecs = 1.0f;
     private float CreateTaskUpdateTimer     = 0.0f;
+
+    //                                                               Lvl0, Lvl1, Lvl2, Lvl3, Lvl4, Lvl5
+    public static readonly double[] childTileDisplayDistKmForLvl = { 2500, 800,  100,  20,   5,    1};
 
     // --------------------------------------------------------------------------------------------
     // MARK: Constructor
@@ -71,6 +78,7 @@ public partial class FssZeroNodeMapTile : Node3D
         TileCode    = tileCode;
         Name        = tileCode.ToString();
         RwLLACenter = new FssLLAPoint(tileCode.LLBox.CenterPoint);
+        RwXYZCenter = RwLLACenter.ToXYZ();
 
         // Fire off the fully background task of creating/loading the tile elements asap.
         Task.Run(() => BackgroundTileCreation(tileCode));
@@ -144,11 +152,19 @@ public partial class FssZeroNodeMapTile : Node3D
 
     public bool ChildTilesContructed()
     {
+        if (ChildCreationRejected)
+            return false;
+
         if (!ChildTilesExist())
             return false;
 
         foreach (FssZeroNodeMapTile childTile in ChildTiles)
         {
+            if (childTile.CreationRejected)
+            {
+                ChildCreationRejected = true;
+                return false;
+            }
             if (!childTile.ConstructionComplete)
                 return false;
         }

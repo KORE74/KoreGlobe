@@ -41,18 +41,37 @@ public partial class FssZeroNodeMapTile : Node3D
 
         double visibleLimitDegs = FssNumericUtils<double>.Clamp(horizonAngleDegs, 10, 95);
 
+        // --------------------------------------------------------------
+
+        bool displayChildByDistance = false;
+        bool createChildByDistance  = false;
+        bool deleteChildByDistance  = false;
+        double cameraDistanceM = RwXYZCenter.DistanceTo(FssGodotFactory.Instance.CameraMoverWorld.CamPosXYZ);
+
+        double currTileChildDisplayDistM = childTileDisplayDistKmForLvl[TileCode.MapLvl] * 1000;
+        double currTileChildCreateDistM  = currTileChildDisplayDistM * 1.2;
+        double currTileChildDeleteDistM  = currTileChildDisplayDistM * 1.5;
+
+        if (cameraDistanceM < currTileChildDisplayDistM) displayChildByDistance = true;
+
+
+
+
 
         // Flags to determine behavior
         bool displayTileByAngle = (angleToCameraDegs > visibleLimitDegs);
         bool childTile = TileCode.MapLvl > 0;
 
-        bool createChildTiles = displayTileByAngle && !ChildTilesExist();
+        bool createChildTiles = displayTileByAngle && !ChildTilesExist() && !ChildCreationRejected;
         bool destroyChildTiles = !displayTileByAngle & childTile;
 
 
 
 
-        GD.Print($"TileCode: {TileCode} Angle to Camera: {angleToCameraDegs:F0} // horizonEleDegs: {horizonEleDegs:F0}");
+
+
+
+        //GD.Print($"TileCode: {TileCode} Angle to Camera: {angleToCameraDegs:F0} // horizonEleDegs: {horizonEleDegs:F0} // CamDist: {cameraDistanceM:F0} ");
 
         bool angleVisible = true;
         if (angleToCameraDegs > visibleLimitDegs)
@@ -68,21 +87,34 @@ public partial class FssZeroNodeMapTile : Node3D
 
         if (ActiveState)
         {
-            if (TileCode.ToString() == "BF")
+            if (!ChildCreationRejected && createChildByDistance && !ChildTilesExist())
             {
-                if (!ChildTilesExist())
-                {
-                    GD.Print("#### BF Child Tiles ####");
-                    CreateChildTiles();
-                }
+                CreateChildTiles();
+            }
 
+            if (displayChildByDistance)
+            {
                 if (ChildTilesContructed())
                 {
                     SetChildrenActive(true);
                     SetVisibility(false);
                 }
             }
+            else
+            {
+                SetChildrenActive(false);
+                SetVisibility(true);
+            }
+        }
+        else
+        {
+            SetVisibility(false);
+            SetChildrenActive(false);
 
+            if (deleteChildByDistance)
+            {
+                DeleteChildTiles();
+            }
         }
     }
 
@@ -136,6 +168,20 @@ public partial class FssZeroNodeMapTile : Node3D
                 // Assign the new active state
                 childTile.SetActiveState(newActiveState);
             }
+        }
+    }
+
+    private void DeleteChildTiles()
+    {
+        if (ChildTilesExist())
+        {
+            foreach (FssZeroNodeMapTile childTile in ChildTiles)
+            {
+                childTile.DeleteChildTiles();
+                RemoveChild(childTile);
+                childTile.QueueFree();
+            }
+            ChildTiles.Clear();
         }
     }
 

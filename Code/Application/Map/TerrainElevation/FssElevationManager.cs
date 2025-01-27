@@ -58,9 +58,12 @@ public class FssElevationManager
             //await semaphore.WaitAsync(); // Wait for an available slot
             try
             {
+                // await
+                await Task.Yield();
+
                 // Setup the tile defining values
                 FssLLBox llBox      = tileCode.LLBox;
-                int      tileResLat = 100;
+                int      tileResLat = 30;
                 int      tileResLon = FssElevationPrepTile.GetLongitudeResolution(tileResLat, llBox.CenterPoint.LatDegs);
 
                 // Big operation: get the 2D array of elevations, which itself may require interpolation across nested arrays.
