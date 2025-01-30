@@ -20,7 +20,7 @@ public static class FssElevationTileIO
     // MARK: Text File IO
     // --------------------------------------------------------------------------------------------
 
-    // FssElevationPrepTileIO.WriteToTextFile
+    // FssElevationPatchIO.WriteToTextFile
 
     public static void WriteToTextFile(FssElevationTile tile, string filePath)
     {

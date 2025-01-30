@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 public class FssElevationManager
 {
     // Consume general Arc ASCII grid files and output elevations for a lat/lon.
-    private FssElevationPrepSystem ElePrep = new();
+    private FssElevationPatchSystem ElePrep = new();
 
     // Hold map tiles for use in display. Load/save tiles for caching work.
     private FssElevationTileSystem EleTiles = new();
@@ -31,7 +31,7 @@ public class FssElevationManager
             await semaphore.WaitAsync(); // Wait for an available slot
             try
             {
-                FssElevationPrepTile? newTile = ElePrep.ArcASCIIToTile(filename, llBox);
+                FssElevationPatch? newTile = ElePrep.ArcASCIIToTile(filename, llBox);
 
                 if (newTile != null)
                 {
@@ -64,7 +64,7 @@ public class FssElevationManager
                 // Setup the tile defining values
                 FssLLBox llBox      = tileCode.LLBox;
                 int      tileResLat = 30;
-                int      tileResLon = FssElevationPrepTile.GetLongitudeResolution(tileResLat, llBox.CenterPoint.LatDegs);
+                int      tileResLon = FssElevationPatch.GetLongitudeResolution(tileResLat, llBox.CenterPoint.LatDegs);
 
                 // Big operation: get the 2D array of elevations, which itself may require interpolation across nested arrays.
                 FssFloat2DArray eleData = FssElevationTileSystem.PrepTileData(ElePrep, llBox, tileResLat, tileResLon);

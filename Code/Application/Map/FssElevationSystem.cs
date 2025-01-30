@@ -4,6 +4,9 @@ using System.Text;
 
 #nullable enable
 
+// Patches: Ad hoc elevation data in lat long boxes
+// Tiles: Elevation data in strict lat long boxes for tile codes and at specific resolution
+
 // FssMap is a top level class for a map data structure.
 public class FssElevationSystem
 {
@@ -16,6 +19,21 @@ public class FssElevationSystem
     private List<FssElevationTile> TileList = new List<FssElevationTile>();
 
     // public FssMapTileArray MapTiles;
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Patches
+    // --------------------------------------------------------------------------------------------
+
+    // Patches are initially loaded from Arc ASCII files, but intended to be saved out to a proprietary format
+    // that better controls the lla box and resolution for our purposes
+
+    public void LoadArcASCIIPatch()
+    {
+
+    }
+
+
+
 
     // --------------------------------------------------------------------------------------------
     // MARK: Get Tile

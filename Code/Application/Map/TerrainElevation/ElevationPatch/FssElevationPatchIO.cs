@@ -8,7 +8,7 @@ using System.Text;
 
 #nullable enable
 
-public static class FssElevationPrepTileIO
+public static class FssElevationPatchIO
 {
     // --------------------------------------------------------------------------------------------
     // MARK: Constants
@@ -20,9 +20,9 @@ public static class FssElevationPrepTileIO
     // MARK: Text File IO
     // --------------------------------------------------------------------------------------------
 
-    // FssElevationPrepTileIO.WriteToTextFile
+    // FssElevationPatchIO.WriteToTextFile
 
-    public static void WriteToTextFile(FssElevationPrepTile tile, string filePath)
+    public static void WriteToTextFile(FssElevationPatch tile, string filePath)
     {
         try
         {
@@ -35,7 +35,7 @@ public static class FssElevationPrepTileIO
         }
     }
 
-    public static FssElevationPrepTile? ReadFromTextFile(string filePath)
+    public static FssElevationPatch? ReadFromTextFile(string filePath)
     {
         try
         {
@@ -53,7 +53,7 @@ public static class FssElevationPrepTileIO
     // MARK: String IO
     // --------------------------------------------------------------------------------------------
 
-    public static string WriteToString(FssElevationPrepTile tile)
+    public static string WriteToString(FssElevationPatch tile)
     {
         StringBuilder sb = new StringBuilder();
 
@@ -81,7 +81,7 @@ public static class FssElevationPrepTileIO
 
     // --------------------------------------------------------------------------------------------
 
-    public static FssElevationPrepTile? ReadFromString(string content)
+    public static FssElevationPatch? ReadFromString(string content)
     {
         try
         {
@@ -124,7 +124,7 @@ public static class FssElevationPrepTileIO
                 elevData.SetRow(i, row);
             }
 
-            return new FssElevationPrepTile() { ElevationData = elevData, LLBox = llBox };
+            return new FssElevationPatch() { ElevationData = elevData, LLBox = llBox };
         }
         catch (Exception)
         {
@@ -219,7 +219,7 @@ public static class FssElevationPrepTileIO
     // MARK: Binary File IO
     // --------------------------------------------------------------------------------------------
 
-    public static void WriteToBinaryFile(FssElevationPrepTile tile, string filePath)
+    public static void WriteToBinaryFile(FssElevationPatch tile, string filePath)
     {
         try
         {
@@ -255,7 +255,7 @@ public static class FssElevationPrepTileIO
 
     // --------------------------------------------------------------------------------------------
 
-    public static FssElevationPrepTile? ReadFromBinaryFile(string filePath)
+    public static FssElevationPatch? ReadFromBinaryFile(string filePath)
     {
         try
         {
@@ -284,7 +284,7 @@ public static class FssElevationPrepTileIO
                     elevData.SetRow(i, row);
                 }
 
-                return new FssElevationPrepTile() { ElevationData = elevData, LLBox = llBox };
+                return new FssElevationPatch() { ElevationData = elevData, LLBox = llBox };
             }
         }
         catch (Exception ex)

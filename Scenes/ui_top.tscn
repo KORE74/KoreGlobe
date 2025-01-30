@@ -780,6 +780,7 @@ icon_alignment = 1
 expand_icon = true
 
 [node name="Control-CameraControl" type="Control" parent="Control/MarginContainer-ScreenInset/VBoxContainer-Screen/VBoxContainer"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 10

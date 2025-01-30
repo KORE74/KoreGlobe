@@ -3,10 +3,10 @@ using System;
 
 #nullable enable
 
-// FssElevationPrepTile: A tile sized by an arbitrary AzEl box, and at an arbitrary resolution. Exists to
+// FssElevationPatch: A tile sized by an arbitrary AzEl box, and at an arbitrary resolution. Exists to
 // interpolate elevation values at lat/long values required for exporting tiles.
 
-public class FssElevationPrepTile
+public class FssElevationPatch
 {
     public FssFloat2DArray ElevationData { get; set; } = new();
     public FssLLBox        LLBox         { get; set; } = FssLLBox.Zero;
@@ -29,7 +29,7 @@ public class FssElevationPrepTile
     // --------------------------------------------------------------------------------------------
 
     // Function to return the number of points for longitude given a latitude.
-    // Usage: int lonRes = FssElevationPrepTile.GetLongitudeResolution(20, 60.0);
+    // Usage: int lonRes = FssElevationPatch.GetLongitudeResolution(20, 60.0);
     public static int GetLongitudeResolution(int latitudeResolution, double latDegs)
     {
         // Clamp latitude to valid range (-90 to 90 degrees).
@@ -62,7 +62,7 @@ public class FssElevationPrepTile
     {
         // Check if the position is within the bounds of the tile.
         if (!LLBox.Contains(pos))
-            return FssElevationPrepSystem.InvalidEle;
+            return FssElevationPatchSystem.InvalidEle;
 
         // Calculate the fractional position within the tile, then use that to access the value.
         double fracLat = (pos.LatDegs - LLBox.MinLatDegs) / LLBox.DeltaLatDegs;

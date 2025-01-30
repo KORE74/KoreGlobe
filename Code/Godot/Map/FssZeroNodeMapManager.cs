@@ -43,7 +43,7 @@ public partial class FssZeroNodeMapManager : Node3D
                 FssMapTileCode currTileCode = new FssMapTileCode(lonId, latId);
                 FssLLBox lLBox = currTileCode.LLBox;
 
-                int tileResLon = FssElevationPrepTile.GetLongitudeResolution(tileResLat, lLBox.CenterPoint.LatDegs);
+                int tileResLon = FssElevationPatch.GetLongitudeResolution(tileResLat, lLBox.CenterPoint.LatDegs);
 
                 FssFloat2DArray eledata = new FssFloat2DArray(tileResLon, tileResLat);
                 eledata.SetRandomVals(5000, 5500);
