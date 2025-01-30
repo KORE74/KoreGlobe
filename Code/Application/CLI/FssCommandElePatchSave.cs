@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-// GloCommandElePrep
+// FssCommandElePrep
 
 
 // CLI Usage: ele prep <inEleFilename> <inTileCode> <inOutDir> <action>
@@ -10,9 +10,9 @@ using System.Text;
 
 #nullable enable
 
-public class GloCommandElePatchSave : GloCommand
+public class FssCommandElePatchSave : FssCommand
 {
-    public GloCommandElePatchSave()
+    public FssCommandElePatchSave()
     {
         Signature.Add("ele");
         Signature.Add("patch");
@@ -26,7 +26,7 @@ public class GloCommandElePatchSave : GloCommand
         StringBuilder sb = new StringBuilder();
 
         if (parameters.Count != 7)
-            return "GloCommandEleLoadArc.Execute -> parameter count mismatch";
+            return "FssCommandEleLoadArc.Execute -> parameter count mismatch";
 
         string inPatchFilepath = parameters[0];
         int    inNumLonPoints  =    int.Parse(parameters[1]);
