@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-// GloCommandNetworkReport
+// FssCommandNetworkReport
 
-public class GloCommandNetworkEndConnection : GloCommand
+public class FssCommandNetworkEndConnection : FssCommand
 {
-    public GloCommandNetworkEndConnection()
+    public FssCommandNetworkEndConnection()
     {
         Signature.Add("network");
         Signature.Add("endconn");
@@ -15,10 +15,10 @@ public class GloCommandNetworkEndConnection : GloCommand
 
     public override string Execute(List<string> parameters)
     {
-        GloCentralLog.AddEntry("GloCommandNetworkReport.Execute");
+        GloCentralLog.AddEntry("FssCommandNetworkReport.Execute");
 
         if (parameters.Count != 1)
-            return "GloCommandEleSaveTile.Execute -> parameter count error";
+            return "FssCommandEleSaveTile.Execute -> parameter count error";
 
         string connectionName = parameters[0];
 
