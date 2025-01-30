@@ -1,17 +1,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-// GloCommandElePrep
-
-
-// CLI Usage: ele prep <inEleFilename> <inTileCode> <inOutDir> <action>
-// CLI Usage: ele prep c:/Util/GlobeLibrary_MapPrep/Europe/W005N50_UkCentral/Ele_BF_BF_50m.asc BF_BF C:/Util/_temp yes
+// FssCommandElePatchLoad
 
 #nullable enable
 
-public class GloCommandElePatchLoad : GloCommand
+public class FssCommandElePatchLoad : FssCommand
 {
-    public GloCommandElePatchLoad()
+    public FssCommandElePatchLoad()
     {
         Signature.Add("ele");
         Signature.Add("patch");
@@ -23,7 +19,7 @@ public class GloCommandElePatchLoad : GloCommand
     public override string Execute(List<string> parameters)
     {
         if (parameters.Count != 1)
-            return "GloCommandElePatchLoad -> parameter count mismatch";
+            return "FssCommandElePatchLoad -> parameter count mismatch";
 
 
         StringBuilder sb = new StringBuilder();
