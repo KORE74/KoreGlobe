@@ -23,7 +23,6 @@ namespace FssNetworking
         public BlockingCollection<string> sendMsgQueue;
 
         // Splits messages based on a sentinel character between messages
-        private FssMsgSplitter IncomingMsgSplitter;
         private FssMsgSplitter2 IncomingMsgSplitter2;
 
         private byte[] ReadBuffer = new byte[250000];
@@ -39,7 +38,6 @@ namespace FssNetworking
             NumMsgsHandled = 0;
 
             char sentinelCharacter = '\u0003';
-            IncomingMsgSplitter  = new FssMsgSplitter(sentinelCharacter);
             IncomingMsgSplitter2 = new FssMsgSplitter2(sentinelCharacter);
 
             client = null;
