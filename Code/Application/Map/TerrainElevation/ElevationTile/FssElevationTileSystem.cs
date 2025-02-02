@@ -103,7 +103,7 @@ public class FssElevationTileSystem
             return bestTile.ElevationAtPos(pos);
         }
 
-        return FssElevationPatchSystem.InvalidEle; // Default value if no suitable tile is found.
+        return FssElevationConsts.InvalidEle; // Default value if no suitable tile is found.
     }
 
     // --------------------------------------------------------------------------------------------

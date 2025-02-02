@@ -11,22 +11,18 @@ public class FssElevationPatchSystem
 {
     // public string RootDir = "";
 
-    // FssElevationPatchSystem.InvalidEle
-    public static float InvalidEle      = -9999f;
-    public static float InvalidEleCheck = -9990f; // For checking < or > comparisons
-
     private List<FssElevationPatch> TileList = new();
 
     // public FssMapTileArray MapTiles;
 
     // --------------------------------------------------------------------------------------------
-    // MARK: Get Tile
+    // MARK: Create
     // --------------------------------------------------------------------------------------------
 
     // Loop through the TileList, grabbing points from the highest resolution tile that contains the position.
     // Loop aross the points in a tile, populating the requested array.
 
-    public FssElevationPatch CreatePrepTile(FssLLBox llBox, int latRes, int lonRes)
+    public FssElevationPatch CreatePatch(FssLLBox llBox, int latRes, int lonRes)
     {
         FssFloat2DArray data = new(lonRes, latRes);
 
@@ -60,40 +56,14 @@ public class FssElevationPatchSystem
         // Loop through the TileList, grabbing points from the highest resolution tile that contains the position.
         // Loop across the points in a tile, populating the requested array.
 
-        if (TileList.Count == 0) return InvalidEle;
+        if (TileList.Count == 0) return FssElevationConsts.InvalidEle;
 
         foreach (FssElevationPatch tile in TileList)
         {
             if (tile.Contains(pos))
                 return tile.ElevationAtPos(pos);
         }
-        return InvalidEle;
-    }
-
-    public string ElevationAtPosWithReport(FssLLPoint pos)
-    {
-        StringBuilder sb = new StringBuilder();
-        float retEle = InvalidEle;
-
-        sb.AppendLine($"Elevation at position: {pos}");
-
-        foreach (FssElevationPatch tile in TileList)
-        {
-            sb.AppendLine($"Considering Tile: {tile.Report()}");
-            if (tile.Contains(pos))
-            {
-                sb.AppendLine($"position in Tile");
-
-                retEle = tile.ElevationAtPos(pos);
-                sb.AppendLine($"Elevation: {retEle}");
-            }
-            else
-            {
-                sb.AppendLine($"position NOT in Tile");
-            }
-        }
-        sb.AppendLine($"Concluding Elevation: {retEle}");
-        return sb.ToString();
+        return FssElevationConsts.InvalidEle;
     }
 
     // --------------------------------------------------------------------------------------------
@@ -108,13 +78,45 @@ public class FssElevationPatchSystem
     }
 
     // --------------------------------------------------------------------------------------------
+    // MARK: Load Patch
+    // --------------------------------------------------------------------------------------------
+
+    public void LoadPatchFile(string inPatchFilepath)
+    {
+        FssElevationPatch? newpatch = FssElevationPatchIO.ReadFromTextFile(inPatchFilepath);
+        if (newpatch != null)
+        {
+            TileList.Add(newpatch);
+            SortTileList();
+        }
+    }
+
+    public void CreatePatchFile(string inPatchFilepath, FssLLBox llBox, int latRes, int lonRes)
+    {
+        FssElevationPatch newPatch = CreatePatch(llBox, latRes, lonRes);
+        FssElevationPatchIO.WriteToTextFile(newPatch, inPatchFilepath);
+    }
+
+    // --------------------------------------------------------------------------------------------
     // MARK: Load / Save Arc ASCII Files
     // --------------------------------------------------------------------------------------------
 
     // An ASCII Arc file is a simple text file with a header followed by a grid of elevation values.
     // The top-left of the data is the top left of the map.
 
-    public FssElevationPatch? ArcASCIIToTile(string filename, FssLLBox llBox)
+    public void LoadArcASCII(string filename, FssLLBox llBox)
+    {
+        FssElevationPatch? newTile = ArcASCIIToTile(filename, llBox);
+        if (newTile != null)
+        {
+            TileList.Add(newTile);
+            SortTileList();
+        }
+    }
+
+    // --------------------------------------------------------------------------------------------
+
+    private FssElevationPatch? ArcASCIIToTile(string filename, FssLLBox llBox)
     {
         // Check the file exists
         if (!System.IO.File.Exists(filename))
@@ -128,10 +130,6 @@ public class FssElevationPatchSystem
 
         // Create the tile
         FssElevationPatch newTile = new() { ElevationData = data, LLBox = llBox };
-
-        // Add tile to internal list and sort in descending order of resolution
-        TileList.Add(newTile);
-        SortTileList();
 
         return newTile;
     }

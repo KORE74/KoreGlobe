@@ -36,7 +36,7 @@ public class FssCommandElePatchSave : FssCommand
         double inMinLatDegs    = double.Parse(parameters[5]);
         double inMaxLatDegs    = double.Parse(parameters[6]);
 
-        GloLLBox llBox = new GloLLBox() {
+        FssLLBox llBox = new FssLLBox() {
             MinLatDegs = inMinLatDegs,
             MinLonDegs = inMinLonDegs,
             MaxLatDegs = inMaxLatDegs,
@@ -66,7 +66,7 @@ public class FssCommandElePatchSave : FssCommand
 
             try
             {
-                GloAppFactory.Instance.EleManager.CreatePatchFile(inPatchFilepath, llBox, inNumLatPoints, inNumLonPoints);
+                FssAppFactory.Instance.EleManager.CreatePatchFile(inPatchFilepath, llBox, inNumLatPoints, inNumLonPoints);
             }
             catch (Exception ex)
             {
@@ -78,7 +78,7 @@ public class FssCommandElePatchSave : FssCommand
         // -------------------------------------------------
 
         sb.AppendLine($"Elevation System Report:");
-        //sb.AppendLine(GloAppFactory.Instance.EleSystem.Report());
+        //sb.AppendLine(FssAppFactory.Instance.EleSystem.Report());
 
         return sb.ToString();
 

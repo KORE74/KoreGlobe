@@ -35,6 +35,7 @@ public static class FssElevationPatchIO
         }
     }
 
+    // Usage: FssElevationPatch? newpatch = FssElevationPatchIO.ReadFromTextFile(filename);
     public static FssElevationPatch? ReadFromTextFile(string filePath)
     {
         try

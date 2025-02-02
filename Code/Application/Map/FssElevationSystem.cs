@@ -7,14 +7,17 @@ using System.Text;
 // Patches: Ad hoc elevation data in lat long boxes
 // Tiles: Elevation data in strict lat long boxes for tile codes and at specific resolution
 
+public class FssElevationConsts
+{
+    // FssElevationConsts.InvalidEle
+    public static float InvalidEle      = -9999f;
+    public static float InvalidEleCheck = -9990f; // For checking < or > comparisons
+}
+
 // FssMap is a top level class for a map data structure.
 public class FssElevationSystem
 {
     // public string RootDir = "";
-
-    // FssElevationSystem.InvalidEle
-    public static float InvalidEle      = -9999f;
-    public static float InvalidEleCheck = -9990f; // For checking < or > comparisons
 
     private List<FssElevationTile> TileList = new List<FssElevationTile>();
 
@@ -76,20 +79,20 @@ public class FssElevationSystem
         // Loop through the TileList, grabbing points from the highest resolution tile that contains the position.
         // Loop across the points in a tile, populating the requested array.
 
-        if (TileList.Count == 0) return InvalidEle;
+        if (TileList.Count == 0) return FssElevationConsts.InvalidEle;
 
         foreach (FssElevationTile tile in TileList)
         {
             if (tile.Contains(pos))
                 return tile.ElevationAtPos(pos);
         }
-        return InvalidEle;
+        return FssElevationConsts.InvalidEle;
     }
 
     public string ElevationAtPosWithReport(FssLLPoint pos)
     {
         StringBuilder sb = new StringBuilder();
-        float retEle = InvalidEle;
+        float retEle = FssElevationConsts.InvalidEle;
 
         sb.AppendLine($"Elevation at position: {pos}");
 

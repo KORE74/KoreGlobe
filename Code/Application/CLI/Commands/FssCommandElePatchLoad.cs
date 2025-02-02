@@ -46,13 +46,13 @@ public class FssCommandElePatchLoad : FssCommand
         {
             sb.AppendLine($"Valid operation: Progressing...");
 
-            GloAppFactory.Instance.EleManager.LoadPatchFile(inPatchFilepath);
+            FssAppFactory.Instance.EleManager.LoadPatchFile(inPatchFilepath);
         }
 
         // -------------------------------------------------
 
         //sb.AppendLine($"Elevation System Report:");
-        //sb.AppendLine(GloAppFactory.Instance.EleSystem.Report());
+        //sb.AppendLine(FssAppFactory.Instance.EleSystem.Report());
 
         return sb.ToString();
 

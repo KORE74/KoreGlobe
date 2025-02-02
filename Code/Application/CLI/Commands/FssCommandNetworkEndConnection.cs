@@ -15,7 +15,7 @@ public class FssCommandNetworkEndConnection : FssCommand
 
     public override string Execute(List<string> parameters)
     {
-        GloCentralLog.AddEntry("FssCommandNetworkReport.Execute");
+        FssCentralLog.AddEntry("FssCommandNetworkReport.Execute");
 
         if (parameters.Count != 1)
             return "FssCommandEleSaveTile.Execute -> parameter count error";
@@ -26,7 +26,7 @@ public class FssCommandNetworkEndConnection : FssCommand
 
         sb.Append($"Ending connection: {connectionName}\n");
 
-        GloAppFactory.Instance.EventDriver.NetworkDisconnect(connectionName);
+        FssEventDriver.NetworkDisconnect(connectionName);
 
         sb.Append("Done.");
 
