@@ -70,6 +70,15 @@ public partial class FssZeroNodeMapTile : Node3D
         // GD.Print($"Ending Create: {tileCode}");
     }
 
+    public void CreateMaterials()
+    {
+        // Create the material for the mesh.
+        WireColor  = FssColorUtil.Colors["Red"]; //StringToColor("default");
+        SurfaceMat = FssMaterialFactory.TransparentColoredMaterial(WireColor);
+    }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Create 2
     // --------------------------------------------------------------------------------------------
 
     public void ProgressCreation()
@@ -85,13 +94,6 @@ public partial class FssZeroNodeMapTile : Node3D
     }
 
     // --------------------------------------------------------------------------------------------
-
-    public void CreateMaterials()
-    {
-        // Create the material for the mesh.
-        WireColor  = FssColorUtil.Colors["Red"]; //StringToColor("default");
-        SurfaceMat = FssMaterialFactory.TransparentColoredMaterial(WireColor);
-    }
 
     // Inputs being the RwAzElBox and RwEleData, we create a mesh that represents the tile.
     // Context being the RwtoGe scaling factor.
@@ -192,6 +194,15 @@ public partial class FssZeroNodeMapTile : Node3D
             SurfaceMat = FssGodotImageOperations.LoadToMaterial(Filepaths.ImageWebpFilepath);
             UVBox      = FssUVBoxDropEdgeTile.FullImage();
         }
+        else if (Filepaths.ImagePngFileExists)
+        {
+            // Convert the image (typically from an import operation).
+            FssGodotImageOperations.PngToWebp(Filepaths.ImagePngFilepath, Filepaths.ImageWebpFilepath);
+
+            // repeat the Webp import process
+            SurfaceMat = FssGodotImageOperations.LoadToMaterial(Filepaths.ImageWebpFilepath);
+            UVBox      = FssUVBoxDropEdgeTile.FullImage();
+        }
         else if (ParentTile != null)
         {
             SurfaceMat = ParentTile!.SurfaceMat;
@@ -221,7 +232,7 @@ public partial class FssZeroNodeMapTile : Node3D
     private void SourceTileElevation()
     {
         RwEleData = new FssFloat2DArray(20, 20);
-        //return;
+        return;
 
         // // If we have the elevation data, we'll use it, otherwise we'll take the parent's data.
         // if (Filepaths.EleArrFileExists)

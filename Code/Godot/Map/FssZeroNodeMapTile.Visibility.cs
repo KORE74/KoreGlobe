@@ -18,15 +18,17 @@ public partial class FssZeroNodeMapTile : Node3D
         return Math.Acos(R / (R + altitudeM));
     }
 
-
     private void UpdateVisibility()
     {
         //(bool validUnproject, float pixelsPerTriangle) = UnprojectedTriangleSize();
         //if (validUnproject) LatestPixelsPerTriangle = pixelsPerTriangle;
 
         // Use the camera LLA and the tile centre LLA to determine the angle between the two
-        FssLLAPoint camPosLLA = FssGodotFactory.Instance.CameraMoverWorld.CamPos;
-        FssLLAPoint tileCentreLLA = new FssLLAPoint(TileCode.LLBox.CenterPoint);
+        FssLLAPoint camPosLLA     = FssGodotFactory.Instance.CameraMoverWorld.CamPos;
+        FssLLAPoint tileCentreLLA = RwLLACenter;
+
+        // Already populated tile attribs: RwLLACenter / RwXYZCenter
+
         double angleToCameraRads = camPosLLA.AngleToRads(tileCentreLLA);
         double angleToCameraDegs = angleToCameraRads * FssConsts.RadsToDegsMultiplier;
 
@@ -43,6 +45,8 @@ public partial class FssZeroNodeMapTile : Node3D
 
         // --------------------------------------------------------------
 
+        bool createChildByLvl  = TileCode.MapLvl <= 3;
+
         bool displayChildByDistance = false;
         bool createChildByDistance  = false;
         bool deleteChildByDistance  = false;
@@ -52,7 +56,9 @@ public partial class FssZeroNodeMapTile : Node3D
         double currTileChildCreateDistM  = currTileChildDisplayDistM * 1.2;
         double currTileChildDeleteDistM  = currTileChildDisplayDistM * 1.5;
 
+        if (cameraDistanceM < currTileChildCreateDistM)  createChildByDistance  = true;
         if (cameraDistanceM < currTileChildDisplayDistM) displayChildByDistance = true;
+        if (cameraDistanceM > currTileChildDeleteDistM)  deleteChildByDistance  = true;
 
 
 
@@ -68,53 +74,50 @@ public partial class FssZeroNodeMapTile : Node3D
 
 
 
-
-
-
         //GD.Print($"TileCode: {TileCode} Angle to Camera: {angleToCameraDegs:F0} // horizonEleDegs: {horizonEleDegs:F0} // CamDist: {cameraDistanceM:F0} ");
 
-        bool angleVisible = true;
-        if (angleToCameraDegs > visibleLimitDegs)
-        {
-            angleVisible = false;
-        }
+        // bool angleVisible = true;
+        // if (angleToCameraDegs > visibleLimitDegs)
+        // {
+        //     angleVisible = false;
+        // }
 
-        if (!ChildrenSetVisible)
-            SetVisibility(angleVisible);
+        // if (!ChildrenSetVisible)
+        //     SetVisibility(angleVisible);
 
         if (TileCode.MapLvl == 0)
             SetActiveState(true);
 
         if (ActiveState)
         {
-            if (!ChildCreationRejected && createChildByDistance && !ChildTilesExist())
+            if (createChildByLvl && createChildByDistance && !ChildTilesExist())
             {
                 CreateChildTiles();
             }
 
-            if (displayChildByDistance)
+            if (ChildTilesContructed())
             {
-                if (ChildTilesContructed())
+                if (displayChildByDistance)
                 {
                     SetChildrenActive(true);
                     SetVisibility(false);
                 }
-            }
-            else
-            {
-                SetChildrenActive(false);
-                SetVisibility(true);
+                else
+                {
+                    SetChildrenActive(false);
+                    SetVisibility(true);
+                }
+
+                if (deleteChildByDistance)
+                {
+                    DeleteChildTiles();
+                }
             }
         }
         else
         {
             SetVisibility(false);
             SetChildrenActive(false);
-
-            if (deleteChildByDistance)
-            {
-                DeleteChildTiles();
-            }
         }
     }
 

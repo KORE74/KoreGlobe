@@ -22,7 +22,7 @@ public partial class FssZeroNodeMapTile : Node3D
     // Real world elevation data, defining the tile's geometry
     public FssFloat2DArray       RwEleData  = new FssFloat2DArray();
 
-    // Child accessible values
+    // UV Box - Child accessible values
     public FssFloatRange         UVx   = FssFloatRange.ZeroToOne;
     public FssFloatRange         UVy   = FssFloatRange.ZeroToOne;
     public FssUVBoxDropEdgeTile  UVBox = FssUVBoxDropEdgeTile.FullImage();
@@ -31,10 +31,6 @@ public partial class FssZeroNodeMapTile : Node3D
     private FssMapTileFilepaths  Filepaths;
     private readonly FssLLAPoint RwLLACenter = FssLLAPoint.Zero; // Shortcut from the tilecode center
     private readonly FssXYZPoint RwXYZCenter = FssXYZPoint.Zero; // Shortcut from the tilecode center
-
-    // One way or another, a tile will end up with an image filename, either from the Filename structure, a
-    // parent tile of a default choice.
-    public string                RegisteredTextureName = "";
 
     // Materials and Meshes
     private ArrayMesh            TileMeshData;
@@ -58,7 +54,7 @@ public partial class FssZeroNodeMapTile : Node3D
 
     // Flag set when the tile (or its children) should be visible. Gates the main visibility processing.
     public bool  ActiveState             = false;
-    public float LatestPixelsPerTriangle = 1000f;
+    //public float LatestPixelsPerTriangle = 1000f;
     public bool  ChildrenSetVisible       = false; // flag to more check intended child visibility state
 
     // Update timers
@@ -77,6 +73,8 @@ public partial class FssZeroNodeMapTile : Node3D
         // Set the core Tilecode and node name.
         TileCode    = tileCode;
         Name        = tileCode.ToString();
+
+        // Populate the locatino shortcuts.
         RwLLACenter = new FssLLAPoint(tileCode.LLBox.CenterPoint);
         RwXYZCenter = RwLLACenter.ToXYZ();
 

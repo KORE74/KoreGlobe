@@ -69,6 +69,21 @@ public static class FssGodotImageOperations
     }
 
     // --------------------------------------------------------------------------------------------
+
+    public static void PngToWebp(string pngFilepath, string webpFilepath)
+    {
+        // Load the image - using clause ensures the image is disposed of after use
+        using (Image? image = LoadImage(pngFilepath))
+        {
+            if (image == null)
+                return;
+
+            // Save the image
+            SaveImageWebp(image, webpFilepath);
+        }
+    }
+
+    // --------------------------------------------------------------------------------------------
     // MARK: Resize
     // --------------------------------------------------------------------------------------------
 

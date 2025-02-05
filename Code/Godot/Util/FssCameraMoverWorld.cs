@@ -74,7 +74,7 @@ public partial class FssCameraMoverWorld : Node3D
             if (CamNode.Current)
             {
                 // FssZeroNode.SetZeroNodePosition(CamPos.LatDegs, CamPos.LonDegs);
-                GD.Print($"ZERO NODE UPDATE: WorldCam CurrentPosition:{CamPos}");
+                // GD.Print($"ZERO NODE UPDATE: WorldCam CurrentPosition:{CamPos}");
             }
             SaveCameraPosition();
         }
