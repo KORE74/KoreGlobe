@@ -18,9 +18,9 @@ config/features=PackedStringArray("4.4", "C#", "Forward Plus")
 run/max_fps=100
 boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/show_image=false
-boot_splash/image="res://Resources/SplashScreen/Splash-001-Halfsize.png"
 boot_splash/fullsize=false
 boot_splash/use_filter=false
+boot_splash/image="res://Resources/SplashScreen/Splash-001-Halfsize.png"
 config/icon="res://icon.svg"
 
 [display]
@@ -65,5 +65,5 @@ common/enable_object_picking=false
 rendering_device/fallback_to_d3d12=false
 textures/default_filters/use_nearest_mipmap_filter=true
 textures/default_filters/anisotropic_filtering_level=0
-environment/volumetric_fog/use_filter=0
 anti_aliasing/quality/msaa_3d=2
+environment/volumetric_fog/use_filter=0

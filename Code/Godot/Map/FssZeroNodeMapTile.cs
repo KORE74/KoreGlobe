@@ -187,8 +187,6 @@ public partial class FssZeroNodeMapTile : Node3D
 
     }
 
-
-
 }
 
 
