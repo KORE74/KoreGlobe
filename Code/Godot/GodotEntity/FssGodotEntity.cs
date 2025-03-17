@@ -93,7 +93,7 @@ public partial class FssGodotEntity : Node3D
         if (ChaseCam.IsCurrent())
         {
             //FssZeroNode.SetZeroNodePosition(CurrentPosition);
-            GD.Print($"ZERO NODE UPDATE: EntityName:{EntityName} CurrentPosition:{CurrentPosition}");
+            //GD.Print($"ZERO NODE UPDATE: EntityName:{EntityName} CurrentPosition:{CurrentPosition}");
         }
     }
 

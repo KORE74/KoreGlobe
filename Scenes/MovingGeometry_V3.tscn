@@ -15,7 +15,7 @@ sdfgi_enabled = true
 fog_light_color = Color(0.365943, 0.677669, 0.940654, 1)
 volumetric_fog_albedo = Color(0.599442, 0.763254, 0.970563, 1)
 
-[node name="Root" type="Node3D"]
+[node name="SceneRoot" type="Node3D"]
 top_level = true
 script = ExtResource("1_hb65s")
 

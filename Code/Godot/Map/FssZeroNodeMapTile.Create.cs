@@ -16,13 +16,19 @@ public partial class FssZeroNodeMapTile : Node3D
     // MARK: Main Create
     // --------------------------------------------------------------------------------------------
 
+    // Create rules:
+    // - Need to have the elevation file to gate the creation of a child tile, or it blocks the
+    //   creation of the while set. No more exprapolation of elevation data.
+    // - Will use the tile's own image, the parent tile's image if it exists, or a default image if it doesn't.
+
     private async void BackgroundTileCreation(FssMapTileCode tileCode)
     {
+        // GD.Print($"Starting Create: {tileCode}");
         try
         {
             // Starting: Set the flags that will be used later to determine activity around the tile while we construct it.
             ConstructionComplete = false;
-            ActiveVisibility     = false;
+            ActiveState          = false;
             MeshCreated          = false;
 
             // Pause the thread, being a good citizen with lots of tasks around.
@@ -32,45 +38,37 @@ public partial class FssZeroNodeMapTile : Node3D
             Filepaths = new FssMapTileFilepaths(TileCode); // Figure out the file paths for the tile
 
             // Load the elevation data
-            FssAppFactory.Instance.EleManager.RequestTile(tileCode);
+            //FssAppFactory.Instance.EleManager.RequestTile(tileCode);
 
             // Source the tile image
             SourceTileImage();
+            SourceTileElevation();
+
+            FssCentralLog.AddEntry($"Tile {TileCode} background stage 1.");
 
             // Yield until (ImageSourced && ElevationSourced)
-            while (!ImageSourced || !ElevationSourced)
-                await Task.Delay(100);
+            // while (!ImageSourced || !ElevationSourced)
+            //     await Task.Delay(100);
 
             // Create the mesh
-            CreateMaterials();
-            await Task.Yield(); // Yield, be a good citizen
-            CreateMesh();
+            //CreateMaterials();
             await Task.Yield(); // Yield, be a good citizen
 
             // Set the flag for the Process() function to pick up and conclude any
             // construction tasks on the main thread.
-            MeshCreated = true;
+            BackgroundCreateCompleted = true;
+
+            // Log the completion
+            FssCentralLog.AddEntry($"Tile {TileCode} background creation complete.");
         }
         catch (Exception ex)
         {
             // Handle exceptions
             Console.WriteLine($"An error occurred: {ex.Message}");
         }
+
+        // GD.Print($"Ending Create: {tileCode}");
     }
-
-    // --------------------------------------------------------------------------------------------
-
-    public void ProgressCreation()
-    {
-        // Start the creation of the mesh
-        if (MeshCreated)
-        {
-            AttachMesh();
-            ConstructionComplete = true;
-        }
-    }
-
-    // --------------------------------------------------------------------------------------------
 
     public void CreateMaterials()
     {
@@ -78,6 +76,24 @@ public partial class FssZeroNodeMapTile : Node3D
         WireColor  = FssColorUtil.Colors["Red"]; //StringToColor("default");
         SurfaceMat = FssMaterialFactory.TransparentColoredMaterial(WireColor);
     }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Create 2
+    // --------------------------------------------------------------------------------------------
+
+    public void ProgressCreation()
+    {
+        // GD.Print($"Progressing Create: {TileCode}");
+
+        // Start the creation of the mesh
+        CreateMesh();
+        //AttachMesh();
+        ConstructionComplete = true;
+
+        AddDebugOriginSphere();
+    }
+
+    // --------------------------------------------------------------------------------------------
 
     // Inputs being the RwAzElBox and RwEleData, we create a mesh that represents the tile.
     // Context being the RwtoGe scaling factor.
@@ -102,18 +118,18 @@ public partial class FssZeroNodeMapTile : Node3D
         // Setup the loop control values
         int          pointCountLon   = RwEleData.Width;
         int          pointCountLat   = RwEleData.Height;
-        List<double> lonZeroListRads = FssValueUtils.CreateRangeList(pointCountLon, -rwLLBox.HalfDeltaLonRads, rwLLBox.HalfDeltaLonRads); // Relative azimuth
-        List<double> latListRads     = FssValueUtils.CreateRangeList(pointCountLat,  rwLLBox.MinLatRads,       rwLLBox.MaxLatRads);
+        List<double> lonZeroListRads = FssValueUtils.CreateRangeList(pointCountLon,  rwLLBox.HalfDeltaLonRads, -rwLLBox.HalfDeltaLonRads); // Relative azimuth
+        List<double> latListRads     = FssValueUtils.CreateRangeList(pointCountLat,  rwLLBox.MaxLatRads,        rwLLBox.MinLatRads);
         Vector3[,]   v3Data          = new Vector3[pointCountLon, pointCountLat];
 
-        for (int i = 0; i < pointCountLon; i++)
+        for (int ix = 0; ix < pointCountLon; ix++)
         {
-            for (int j = 0; j < pointCountLat; j++)
+            for (int jy = 0; jy < pointCountLat; jy++)
             {
                 // Find the Real-World (RW) position for each point in the mesh.
-                double      lonRads       = lonZeroListRads[i];
-                double      latRads       = latListRads[j];
-                double      ele           = RwLLACenter.RadiusM + RwEleData[i, j];
+                double      lonRads       = lonZeroListRads[ix];
+                double      latRads       = latListRads[jy];
+                double      ele           = RwLLACenter.RadiusM + RwEleData[ix, jy];
                 FssLLAPoint rwLLAPointPos = new FssLLAPoint() { LatRads = latRads, LonRads = lonRads, RadiusM = ele };
                 FssXYZPoint rwXYZPointPos = rwLLAPointPos.ToXYZ();
 
@@ -121,7 +137,7 @@ public partial class FssZeroNodeMapTile : Node3D
                 FssXYZPoint rwXYZCenterOffset = rwXYZZeroLonCenter.XYZTo(rwXYZPointPos);
 
                 // Convert the Real-World position to the Game Engine position.
-                v3Data[i, j] = new Vector3(
+                v3Data[ix, jy] = new Vector3(
                     (float)(rwXYZCenterOffset.X * FssZeroOffset.RwToGeDistMultiplier),
                     (float)(rwXYZCenterOffset.Y * FssZeroOffset.RwToGeDistMultiplier),
                     (float)(rwXYZCenterOffset.Z * FssZeroOffset.RwToGeDistMultiplier));
@@ -129,42 +145,84 @@ public partial class FssZeroNodeMapTile : Node3D
         }
 
         // Add the grid to the LineMesh
-        LineMesh3D.AddSurface(v3Data, FssColorUtil.Colors["Red"]);
+        LineMesh3D.AddSurface(v3Data, FssColorUtil.Colors["Red"], FssColorUtil.Colors["Yellow"]);
 
         // Create the game-engine mesh from the V3s
         FssMeshBuilder meshBuilder = new();
         meshBuilder.AddSurface(v3Data, UVx, UVy, false);
 
         // Build the mesh data and add it to the node
-        MeshInstance3D tileMeshInstance   = new MeshInstance3D() { Name = "tileMesh" };
-        tileMeshInstance.Mesh             = meshBuilder.BuildWithUV("Surface");
-        tileMeshInstance.MaterialOverride = FssMaterialFactory.SimpleColoredMaterial(new Color(1.0f, 0.0f, 1.0f, 1.0f));
-        //tileMeshInstance.MaterialOverride = FssMaterialFactory.WaterMaterial();
+        TileMeshInstance        = new MeshInstance3D() { Name = "tileMesh" };
+        TileMeshInstance.Mesh   = meshBuilder.BuildWithUV("Surface");
+        //tileMeshInstance.MaterialOverride = FssMaterialFactory.SimpleColoredMaterial(new Color(1.0f, 0.0f, 1.0f, 1.0f));
+        TileMeshInstance.MaterialOverride = SurfaceMat;
 
-        AddChild(tileMeshInstance);
+        AddChild(TileMeshInstance);
 
         // Rotate each tile into its position - The zero node only translates, so this is fixed after creation
         float rotAz = (float)(RwLLACenter.LonRads); // We created the tile with relative azimuth, so apply the absolute value to orient it to its longitude.
-        tileMeshInstance.Rotation = new Vector3(0, rotAz, 0);
+        TileMeshInstance.Rotation = new Vector3(0, rotAz, 0);
         LineMesh3D.Rotation       = new Vector3(0, rotAz, 0);
 
-        // Add a simple sphere marker for the tile center
-        // Create a new SphereMesh instance with radius and height set
-        {
-            float sphereRad = 10f;
-            var sphereInstance = new MeshInstance3D { Name = "TestSphere", Mesh = new SphereMesh { Radius = sphereRad, Height = sphereRad*2f } };
-            AddChild(sphereInstance);
-        }
+        // Set the visibility false, later functions will assign the correct visibility rules.
+        TileMeshInstance.Visible = false;
+        LineMesh3D.Visible       = false;
+        ActiveState              = false;
+    }
 
+    // Add a simple sphere marker for the tile center
+    // Create a new SphereMesh instance with radius and height set
+
+    private void AddDebugOriginSphere()
+    {
+        float sphereRad = 1f;
+        var sphereInstance = new MeshInstance3D { Name = "TestSphere", Mesh = new SphereMesh { Radius = sphereRad, Height = sphereRad*2f } };
+        AddChild(sphereInstance);
     }
 
     // --------------------------------------------------------------------------------------------
+    // MARK: Image
+    // --------------------------------------------------------------------------------------------
 
-    // Creating the mesh can be done in a bckground thread, but it needs to be on the main thread
-    // when we attach it to the scene tree.
-    private void AttachMesh()
+    // We either load an image for this tile, or take the parent tile material (or a default material on error).
+
+    private void SourceTileImage()
     {
+        // Load the image if we have it, or take the parent file if it exists, or leave the image blank.
+        if (Filepaths.ImageWebpFileExists)
+        {
+            SurfaceMat = FssGodotImageOperations.LoadToMaterial(Filepaths.ImageWebpFilepath);
+            UVBox      = FssUVBoxDropEdgeTile.FullImage();
+        }
+        else if (Filepaths.ImagePngFileExists)
+        {
+            // Convert the image (typically from an import operation).
+            FssGodotImageOperations.PngToWebp(Filepaths.ImagePngFilepath, Filepaths.ImageWebpFilepath);
 
+            // repeat the Webp import process
+            SurfaceMat = FssGodotImageOperations.LoadToMaterial(Filepaths.ImageWebpFilepath);
+            UVBox      = FssUVBoxDropEdgeTile.FullImage();
+        }
+        else if (ParentTile != null)
+        {
+            SurfaceMat = ParentTile!.SurfaceMat;
+
+            // Setup the UV Box - Sourced from the parent (which may already be subsampled), we subsample for this tile's range
+            UVBox = new FssUVBoxDropEdgeTile(ParentTile!.UVBox, TileCode.GridPos);
+        }
+
+        // If we still don't have the image, we'll setup a default Material and UVBox.
+        if (SurfaceMat == null)
+        {
+            SurfaceMat = FssMaterialFactory.SimpleColoredMaterial(new Color(1.0f, 0.0f, 1.0f, 1.0f));
+            UVBox      = FssUVBoxDropEdgeTile.FullImage();
+        }
+
+        GD.Print($"TileCode: {TileCode} // UVBox: {UVBox.TopLeft} {UVBox.BottomRight}");
+
+        // Turn the UVBox into a UV Ranges
+        UVx = UVBox.UVXRange();
+        UVy = UVBox.UVYRange();
     }
 
     // --------------------------------------------------------------------------------------------
@@ -173,70 +231,28 @@ public partial class FssZeroNodeMapTile : Node3D
 
     private void SourceTileElevation()
     {
-        // Load the elevation data
-        FssAppFactory.Instance.EleManager.RequestTile(TileCode);
-    }
+        RwEleData = new FssFloat2DArray(20, 20);
+        return;
 
-    // --------------------------------------------------------------------------------------------
-    // MARK: Image
-    // --------------------------------------------------------------------------------------------
-
-    private void SourceTileImage()
-    {
-        // Request the image to be loaded in the background - non-blocking.
-        // RegisteredTextureName
-
-        // FssTextureLoader? TL = FssTextureLoader.Instance;
-        // if (TL != null)
+        // // If we have the elevation data, we'll use it, otherwise we'll take the parent's data.
+        // if (Filepaths.EleArrFileExists)
         // {
-        //     ImageTexture? tex = TL.LoadTextureDirect(Filepaths.ImageFilepath);
-
-        //     if (tex != null)
-        //     {
-        //         TileMaterial = TL.GetMaterialWithTexture(Filepaths.ImageFilepath);
-
-        //         if (TileMaterial != null)
-        //         {
-        //             ImageDone = true;
-        //         }
-        //     }
-        // }
-
-        // // Setup the UV Box - new image, so a full 0,0 -> 1,1 range
-        // UVBox = new FssUvBoxDropEdgeTile(FssUvBoxDropEdgeTile.UVTopLeft, FssUvBoxDropEdgeTile.UVBottomRight);
-    }
-
-
-    private void SubsampleParentTileImage()
-    {
-        // if (ParentTile != null)
-        // {
-        //     FssTextureLoader? TL = FssTextureLoader.Instance;
-
-        //     Filepaths.ImageFilepath   = ParentTile.Filepaths.ImageFilepath;
-        //     Filepaths.ImageFileExists = ParentTile.Filepaths.ImageFileExists;
-
-        //     TileMaterial = TL.GetMaterialWithTexture(Filepaths.ImageFilepath);
-
-        //     if (TileMaterial != null)
-        //         ImageDone = true;
-
-        //     // Setup the UV Box - Sourced from the parent (which may already be subsampled), we subsample for this tile's range
-        //     // Get the grid position of this tile in its parent (eg [1x,2y] in a 5x5 grid).
-        //     UVBox = new FssUvBoxDropEdgeTile(ParentTile.UVBox, TileCode.GridPos);
-
+        //     // Load the elevation data
+        //     RwEleData = FssFloat2DArrayIO.LoadFromCSVFile(Filepaths.EleArrFilepath);
         // }
         // else
-        // {
-        //     // Subsmapling, but no parent. Setup a default.
-        //     UVBox = FssUvBoxDropEdgeTile.Default(TileSizePointsPerLvl[TileCode.MapLvl], TileSizePointsPerLvl[TileCode.MapLvl]);
-        // }
+
+        if (Filepaths.EleFileExists)
+        {
+            // Load the elevation data
+            RwEleData = FssFloat2DArrayIO.LoadFromArcASIIGridFile(Filepaths.EleFilepath);
+        }
+        else
+        {
+            // for now, just create an ampty array
+            CreationRejected = true;
+        }
     }
-
-    // --------------------------------------------------------------------------------------------
-    // MARK: Create Elevation
-    // --------------------------------------------------------------------------------------------
-
 
 
 

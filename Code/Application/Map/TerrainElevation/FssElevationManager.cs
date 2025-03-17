@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 public class FssElevationManager
 {
     // Consume general Arc ASCII grid files and output elevations for a lat/lon.
-    private FssElevationPrepSystem ElePrep = new();
+    private FssElevationPatchSystem ElePrep = new();
 
     // Hold map tiles for use in display. Load/save tiles for caching work.
     private FssElevationTileSystem EleTiles = new();
@@ -21,28 +21,44 @@ public class FssElevationManager
     private static readonly SemaphoreSlim semaphore = new(10); // Adjust the number as needed.
 
     // --------------------------------------------------------------------------------------------
-    // MARK: Prep
+    // MARK: Arc ASCII Grid
     // --------------------------------------------------------------------------------------------
 
-    public void LoadArcASCIIGridFile(string filename, FssLLBox llBox)
+    public void LoadArcASCII(string filename, FssLLBox llBox)
     {
-        Task.Run(async() =>
-        {
-            await semaphore.WaitAsync(); // Wait for an available slot
-            try
-            {
-                FssElevationPrepTile? newTile = ElePrep.ArcASCIIToTile(filename, llBox);
+        ElePrep.LoadArcASCII(filename, llBox);
+    }
 
-                if (newTile != null)
-                {
-                    FssCentralLog.AddEntry($"Failed to load Arc ASCII Grid: {filename} // {llBox}");
-                }
-            }
-            finally
-            {
-                semaphore.Release(); // Release the slot
-            }
-        });
+    // public void LoadArcASCIIGridFile(string filename, FssLLBox llBox)
+    // {
+    //     Task.Run(async() =>
+    //     {
+    //         await semaphore.WaitAsync(); // Wait for an available slot
+    //         try
+    //         {
+    //             FssElevationPatch? newTile = ElePrep.ArcASCIIToTile(filename, llBox);
+
+    //             if (newTile != null)
+    //             {
+    //                 FssCentralLog.AddEntry($"Failed to load Arc ASCII Grid: {filename} // {llBox}");
+    //             }
+    //         }
+    //         finally
+    //         {
+    //             semaphore.Release(); // Release the slot
+    //         }
+    //     });
+    // }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Patches
+    // --------------------------------------------------------------------------------------------
+
+    public void LoadPatchFile(string inPatchFilepath) => ElePrep.LoadPatchFile(inPatchFilepath);
+
+    public void CreatePatchFile(string inPatchFilepath, FssLLBox llBox, int latRes, int lonRes)
+    {
+        ElePrep.CreatePatchFile(inPatchFilepath, llBox, latRes, lonRes);
     }
 
     // --------------------------------------------------------------------------------------------
@@ -58,10 +74,13 @@ public class FssElevationManager
             //await semaphore.WaitAsync(); // Wait for an available slot
             try
             {
+                // await
+                await Task.Yield();
+
                 // Setup the tile defining values
                 FssLLBox llBox      = tileCode.LLBox;
-                int      tileResLat = 100;
-                int      tileResLon = FssElevationPrepTile.GetLongitudeResolution(tileResLat, llBox.CenterPoint.LatDegs);
+                int      tileResLat = 30;
+                int      tileResLon = FssElevationPatch.GetLongitudeResolution(tileResLat, llBox.CenterPoint.LatDegs);
 
                 // Big operation: get the 2D array of elevations, which itself may require interpolation across nested arrays.
                 FssFloat2DArray eleData = FssElevationTileSystem.PrepTileData(ElePrep, llBox, tileResLat, tileResLon);

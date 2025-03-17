@@ -10,6 +10,7 @@ public partial class FssCameraMoverWorld : Node3D
     public float camPitch = 0;
 
     private float TimerCamReport = 0;
+    private bool OneShot = false;
 
     public Camera3D CamNode;
 
@@ -20,6 +21,13 @@ public partial class FssCameraMoverWorld : Node3D
     // mouse drag state
     private bool MouseDragging = false;
     private Vector2 MouseDragStart = new Vector2();
+
+    // ------------------------------------------------------------------------------------------------
+
+    public FssXYZPoint CamPosXYZ
+    {
+        get { return CamPos.ToXYZ(); }
+    }
 
     // ------------------------------------------------------------------------------------------------
     // MARK: Node Functions
@@ -51,6 +59,14 @@ public partial class FssCameraMoverWorld : Node3D
 
     public override void _Process(double delta)
     {
+        // Oneshot flag on the first update
+        if (!OneShot)
+        {
+            // Load the camera position here, prior may not have all the objects created.
+            LoadCameraPosition();
+            OneShot = true;
+        }
+
         if (TimerCamReport < FssCentralTime.RuntimeSecs)
         {
             TimerCamReport = FssCentralTime.RuntimeSecs + 1f;
@@ -58,8 +74,9 @@ public partial class FssCameraMoverWorld : Node3D
             if (CamNode.Current)
             {
                 // FssZeroNode.SetZeroNodePosition(CamPos.LatDegs, CamPos.LonDegs);
-                GD.Print($"ZERO NODE UPDATE: WorldCam CurrentPosition:{CamPos}");
+                // GD.Print($"ZERO NODE UPDATE: WorldCam CurrentPosition:{CamPos}");
             }
+            SaveCameraPosition();
         }
 
         // Turn the position CamPos into a GE positino and place the camera
@@ -240,6 +257,26 @@ public partial class FssCameraMoverWorld : Node3D
                 FssMapManager.LoadRefLLA = FssZeroOffsetOperations.GeToRw(Position);
             }
         }
+    }
+
+    // ------------------------------------------------------------------------------------------------
+    // MARK: Save Load
+    // ------------------------------------------------------------------------------------------------
+
+    // Save the camera position to a string and then to config
+    public void SaveCameraPosition()
+    {
+        string camPosStr = CamPosToString();
+        FssCentralConfig.Instance.SetParam("WorldCamPosStr", camPosStr);
+        FssCentralConfig.Instance.WriteToFile();
+    }
+
+    // Restore the camera position from config
+    private void LoadCameraPosition()
+    {
+        string camPosStr = FssCentralConfig.Instance.GetParam<string>("WorldCamPosStr");
+        if (!String.IsNullOrEmpty(camPosStr))
+            CamPosFromString(camPosStr);
     }
 
     // ------------------------------------------------------------------------------------------------

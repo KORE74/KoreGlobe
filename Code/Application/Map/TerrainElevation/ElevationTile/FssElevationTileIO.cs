@@ -8,7 +8,7 @@ using System.Text;
 
 #nullable enable
 
-public static class FssElevationPrepTileIO
+public static class FssElevationTileIO
 {
     // --------------------------------------------------------------------------------------------
     // MARK: Constants
@@ -20,9 +20,9 @@ public static class FssElevationPrepTileIO
     // MARK: Text File IO
     // --------------------------------------------------------------------------------------------
 
-    // FssElevationPrepTileIO.WriteToTextFile
+    // FssElevationPatchIO.WriteToTextFile
 
-    public static void WriteToTextFile(FssElevationPrepTile tile, string filePath)
+    public static void WriteToTextFile(FssElevationTile tile, string filePath)
     {
         try
         {
@@ -35,7 +35,7 @@ public static class FssElevationPrepTileIO
         }
     }
 
-    public static FssElevationPrepTile? ReadFromTextFile(string filePath)
+    public static FssElevationTile? ReadFromTextFile(string filePath)
     {
         try
         {
@@ -53,13 +53,14 @@ public static class FssElevationPrepTileIO
     // MARK: String IO
     // --------------------------------------------------------------------------------------------
 
-    public static string WriteToString(FssElevationPrepTile tile)
+    public static string WriteToString(FssElevationTile tile)
     {
         StringBuilder sb = new StringBuilder();
 
+        // Write Tilecode
+        sb.AppendLine($"TileCode: {tile.TileCode.ToString()}");
         // Write bounding box
         sb.AppendLine($"BoundingBox: {tile.LLBox.MinLatDegs}, {tile.LLBox.MinLonDegs}, {tile.LLBox.MaxLatDegs}, {tile.LLBox.MaxLonDegs}");
-
         // Write resolution
         sb.AppendLine($"Resolution: {tile.ElevationData.Width}, {tile.ElevationData.Height}");
 
@@ -70,7 +71,7 @@ public static class FssElevationPrepTileIO
             FssFloat1DArray row = tile.ElevationData.GetRow(i);
             for (int j = 0; j < row.Length; j++)
             {
-                sb.Append(row[j].ToString("F2"));
+                sb.Append(row[j].ToString("F2")); // F2 = 2DP on meters of elevation = 1cm accuracy.
                 if (j < row.Length - 1) sb.Append(",");
             }
             sb.AppendLine();
@@ -81,7 +82,7 @@ public static class FssElevationPrepTileIO
 
     // --------------------------------------------------------------------------------------------
 
-    public static FssElevationPrepTile? ReadFromString(string content)
+    public static FssElevationTile? ReadFromString(string content)
     {
         try
         {
@@ -124,7 +125,7 @@ public static class FssElevationPrepTileIO
                 elevData.SetRow(i, row);
             }
 
-            return new FssElevationPrepTile() { ElevationData = elevData, LLBox = llBox };
+            return new FssElevationTile() { ElevationData = elevData, LLBox = llBox };
         }
         catch (Exception)
         {
@@ -133,93 +134,10 @@ public static class FssElevationPrepTileIO
     }
 
     // --------------------------------------------------------------------------------------------
-    // MARK: Arc ASII Grid
-    // --------------------------------------------------------------------------------------------
-
-    /*
-        ncols         315
-        nrows         270
-        xllcorner     -491880.41
-        yllcorner     5849212.228
-        cellsize      200
-        nodata_value  -9999.0
-        <space separated data>
-    */
-
-    // Usage: FssFloat2DArray asciiArcArry = FssFloat2DArrayIO.LoadFromArcASIIGridFile(<filename>);
-
-    public static FssFloat2DArray LoadFromArcASIIGridFile(string filePath)
-    {
-        string[] lines = File.ReadAllLines(filePath);
-
-        // Parse header
-        int   inwidth     =   int.Parse(lines[0].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[1]);
-        int   inheight    =   int.Parse(lines[1].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[1]);
-        float xllcorner   = float.Parse(lines[2].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[1]);
-        float yllcorner   = float.Parse(lines[3].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[1]);
-        float cellsize    = float.Parse(lines[4].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[1]);
-        float nodataValue = float.Parse(lines[5].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[1]);
-
-        FssFloat2DArray grid = new FssFloat2DArray(inwidth, inheight);
-
-        // Start reading data from line 6 (after the header)
-        for (int i = 6; i < lines.Length; i++)
-        {
-            int lineIndex = i - 6;
-
-            string[] elevationValues = lines[i].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            for (int j = 0; j < inwidth; j++)
-            {
-                float elevation = float.Parse(elevationValues[j]);
-
-                // Check for no data value
-                if (elevation == nodataValue)
-                {
-                    // Handle no data value if needed
-                    elevation = 0; // Example: set to 0 or some other appropriate value
-                }
-                grid[j, lineIndex] = elevation;
-            }
-        }
-        return grid;
-    }
-
-    // Write a file back out to something like an ASCII ArcGrid file for later reading.
-    // We don't have the maths/geography libraries to do this accurately, so many of the params are expected to be deafults.
-
-    // Usage: FssFloat2DArrayIO.SaveToArcASIIGridFile(asciiArcArry, <filename>);
-
-    public static void SaveToArcASIIGridFile(
-            FssFloat2DArray array, string filePath,
-            float xllcorner = -1f, float yllcorner = -1f,
-            float cellsize  = -1f, float nodataValue = -1f)
-    {
-        using (StreamWriter writer = new StreamWriter(filePath))
-        {
-            writer.WriteLine($"ncols        {array.Width}");
-            writer.WriteLine($"nrows        {array.Height}");
-            writer.WriteLine($"xllcorner    {xllcorner}");
-            writer.WriteLine($"yllcorner    {yllcorner}");
-            writer.WriteLine($"cellsize     {cellsize}");
-            writer.WriteLine($"nodata_value {nodataValue}");
-
-
-            for (int j = 0; j < array.Height; j++)
-            {
-                for (int i = 0; i < array.Width; i++)
-                {
-                    writer.Write(array[i, j] + " ");
-                }
-                writer.WriteLine();
-            }
-        }
-    }
-
-    // --------------------------------------------------------------------------------------------
     // MARK: Binary File IO
     // --------------------------------------------------------------------------------------------
 
-    public static void WriteToBinaryFile(FssElevationPrepTile tile, string filePath)
+    public static void WriteToBinaryFile(FssElevationTile tile, string filePath)
     {
         try
         {
@@ -255,7 +173,7 @@ public static class FssElevationPrepTileIO
 
     // --------------------------------------------------------------------------------------------
 
-    public static FssElevationPrepTile? ReadFromBinaryFile(string filePath)
+    public static FssElevationTile? ReadFromBinaryFile(string filePath)
     {
         try
         {
@@ -284,7 +202,7 @@ public static class FssElevationPrepTileIO
                     elevData.SetRow(i, row);
                 }
 
-                return new FssElevationPrepTile() { ElevationData = elevData, LLBox = llBox };
+                return new FssElevationTile() { ElevationData = elevData, LLBox = llBox };
             }
         }
         catch (Exception ex)

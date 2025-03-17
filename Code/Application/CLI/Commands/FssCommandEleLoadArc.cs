@@ -62,7 +62,7 @@ public class FssCommandEleLoadArc : FssCommand
         {
             sb.AppendLine($"Valid operation: Progressing...");
 
-            FssAppFactory.Instance.EleManager.LoadArcASCIIGridFile(inEleFilename, llBox);
+            FssAppFactory.Instance.EleManager.LoadArcASCII(inEleFilename, llBox);
         }
 
         // -------------------------------------------------

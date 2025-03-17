@@ -18,11 +18,11 @@ public class FssGodotFactory
     // Nodes with positional requirements
     public FssZeroNodeMapManager ZeroNodeMapManager { get; private set; }
     public FssGodotEntityManager GodotEntityManager { get; private set; }
-    public FssCameraMoverWorld   CameraMoverWorld   { get; private set; }
+    public FssCameraMoverWorld   CameraMoverWorld   { get; private set; } // FssGodotFactory.Instance.CameraMoverWorld
 
     // Assets
     public Fss3DModelLibrary     ModelLibrary       { get; private set; }
-    public FssTextureManager     TextureManager     { get; private set; }
+    public FssTextureManager TextureManager { get => textureManager; private set => textureManager = value; } // FssGodotFactory.Instance.TextureManager
 
     // UI
     public FssUIState            UIState            { get; private set; }
@@ -32,12 +32,14 @@ public class FssGodotFactory
     private static FssGodotFactory? SingletonInstance = null;
     private static bool             IsInitialised     = false;
     private static bool             IsCreating        = false;
+    private FssTextureManager textureManager;
 
     // --------------------------------------------------------------------------------------------
     // MARK: Singleton Pattern
     // --------------------------------------------------------------------------------------------
 
     // The constructor could set up a lot of objects, so we add protection to ensure it doesn't get called recursively.
+
     public static FssGodotFactory Instance
     {
         get

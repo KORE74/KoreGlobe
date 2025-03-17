@@ -3,26 +3,25 @@ using System.Text;
 
 #nullable enable
 
-// CLI Usage: ele prep <inEleFilename> <inTileCode> <inOutDir> <action>
-// CLI Usage: ele prep c:/Util/GlobeLibrary_MapPrep/Europe/W005N50_UkCentral/Ele_BF_BF_50m.asc BF_BF C:/Util/_temp yes
+// CLI Usage: ele savetileset BF_BF 2
 
-public class FssCommandEleSaveTile : FssCommand
+public class FssCommandEleSaveTileSet : FssCommand
 {
-    public FssCommandEleSaveTile()
+    public FssCommandEleSaveTileSet()
     {
         Signature.Add("ele");
-        Signature.Add("savetile");
+        Signature.Add("savetileset");
     }
 
-    public override string HelpString => $"{SignatureString} <TileCode>";
+    public override string HelpString => $"{SignatureString} <TileCode> <levels>";
 
     public override string Execute(List<string> parameters)
     {
         StringBuilder sb = new StringBuilder();
 
-        if (parameters.Count != 1)
+        if (parameters.Count != 2)
         {
-            return "FssCommandEleSaveTile.Execute -> insufficient parameters";
+            return "FssCommandEleSaveTileSet.Execute -> parameter count error";
         }
 
         foreach (string param in parameters)
@@ -34,6 +33,7 @@ public class FssCommandEleSaveTile : FssCommand
         string inTilecode = parameters[0];
 
         bool validOperation = true;
+
 
         FssMapTileCode? tileCode = FssMapTileOperations.TileCodeFromString(inTilecode);
         if ((tileCode == null) || (!tileCode.IsValid()))

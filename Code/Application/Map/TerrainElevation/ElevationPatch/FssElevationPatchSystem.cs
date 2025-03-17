@@ -4,36 +4,34 @@ using System.Text;
 
 #nullable enable
 
-// FssMap is a top level class for a map data structure.
-public class FssElevationSystem
+// FssElevationPatchSystem: A class to contain a number of elevation prep tiles, and supply an elevation value
+// for a specific lat/long from the highest resolution (and assumed most accurate) tile it has for that location.
+
+public class FssElevationPatchSystem
 {
     // public string RootDir = "";
 
-    // FssElevationSystem.InvalidEle
-    public static float InvalidEle      = -9999f;
-    public static float InvalidEleCheck = -9990f; // For checking < or > comparisons
-
-    private List<FssElevationTile> TileList = new List<FssElevationTile>();
+    private List<FssElevationPatch> TileList = new();
 
     // public FssMapTileArray MapTiles;
 
     // --------------------------------------------------------------------------------------------
-    // MARK: Get Tile
+    // MARK: Create
     // --------------------------------------------------------------------------------------------
 
     // Loop through the TileList, grabbing points from the highest resolution tile that contains the position.
     // Loop aross the points in a tile, populating the requested array.
 
-    public FssElevationTile CreateTile(FssLLBox llBox, int latRes, int lonRes)
+    public FssElevationPatch CreatePatch(FssLLBox llBox, int latRes, int lonRes)
     {
-        FssFloat2DArray data = new FssFloat2DArray(lonRes, latRes);
+        FssFloat2DArray data = new(lonRes, latRes);
 
         double startLatDegs = llBox.MinLatDegs;
         double startLonDegs = llBox.MinLonDegs;
         double deltaLatDegs = llBox.DeltaLatDegs / latRes;
         double deltaLonDegs = llBox.DeltaLonDegs / lonRes;
 
-        FssLLPoint pos = new FssLLPoint(0, 0);
+        FssLLPoint pos = new(0, 0);
 
         // Loop through each of the lat and long positions of the destination tile
         for (int latIdx = 0; latIdx < latRes; latIdx++)
@@ -48,7 +46,7 @@ public class FssElevationSystem
             }
         }
 
-        FssElevationTile newTile = new FssElevationTile() { ElevationData = data, LLBox = llBox };
+        FssElevationPatch newTile = new() { ElevationData = data, LLBox = llBox };
 
         return newTile;
     }
@@ -58,40 +56,14 @@ public class FssElevationSystem
         // Loop through the TileList, grabbing points from the highest resolution tile that contains the position.
         // Loop across the points in a tile, populating the requested array.
 
-        if (TileList.Count == 0) return InvalidEle;
+        if (TileList.Count == 0) return FssElevationConsts.InvalidEle;
 
-        foreach (FssElevationTile tile in TileList)
+        foreach (FssElevationPatch tile in TileList)
         {
             if (tile.Contains(pos))
                 return tile.ElevationAtPos(pos);
         }
-        return InvalidEle;
-    }
-
-    public string ElevationAtPosWithReport(FssLLPoint pos)
-    {
-        StringBuilder sb = new StringBuilder();
-        float retEle = InvalidEle;
-
-        sb.AppendLine($"Elevation at position: {pos}");
-
-        foreach (FssElevationTile tile in TileList)
-        {
-            sb.AppendLine($"Considering Tile: {tile.Report()}");
-            if (tile.Contains(pos))
-            {
-                sb.AppendLine($"position in Tile");
-
-                retEle = tile.ElevationAtPos(pos);
-                sb.AppendLine($"Elevation: {retEle}");
-            }
-            else
-            {
-                sb.AppendLine($"position NOT in Tile");
-            }
-        }
-        sb.AppendLine($"Concluding Elevation: {retEle}");
-        return sb.ToString();
+        return FssElevationConsts.InvalidEle;
     }
 
     // --------------------------------------------------------------------------------------------
@@ -106,35 +78,58 @@ public class FssElevationSystem
     }
 
     // --------------------------------------------------------------------------------------------
+    // MARK: Load Patch
+    // --------------------------------------------------------------------------------------------
+
+    public void LoadPatchFile(string inPatchFilepath)
+    {
+        FssElevationPatch? newpatch = FssElevationPatchIO.ReadFromTextFile(inPatchFilepath);
+        if (newpatch != null)
+        {
+            TileList.Add(newpatch);
+            SortTileList();
+        }
+    }
+
+    public void CreatePatchFile(string inPatchFilepath, FssLLBox llBox, int latRes, int lonRes)
+    {
+        FssElevationPatch newPatch = CreatePatch(llBox, latRes, lonRes);
+        FssElevationPatchIO.WriteToTextFile(newPatch, inPatchFilepath);
+    }
+
+    // --------------------------------------------------------------------------------------------
     // MARK: Load / Save Arc ASCII Files
     // --------------------------------------------------------------------------------------------
 
     // An ASCII Arc file is a simple text file with a header followed by a grid of elevation values.
     // The top-left of the data is the top left of the map.
 
-    public FssElevationTile? LoadArcASCIIFileToTile(string filename, FssLLBox llBox)
+    public void LoadArcASCII(string filename, FssLLBox llBox)
     {
-        FssElevationTile? newTile = ArcASCIIToTile(filename, llBox);
+        FssElevationPatch? newTile = ArcASCIIToTile(filename, llBox);
         if (newTile != null)
+        {
             TileList.Add(newTile);
-
-        // Sort in descending order of resolution
-        SortTileList();
-
-        return newTile;
+            SortTileList();
+        }
     }
 
-    public static FssElevationTile? ArcASCIIToTile(string filename, FssLLBox llBox)
+    // --------------------------------------------------------------------------------------------
+
+    private FssElevationPatch? ArcASCIIToTile(string filename, FssLLBox llBox)
     {
         // Check the file exists
-        if (!System.IO.File.Exists(filename)) return null;
+        if (!System.IO.File.Exists(filename))
+            return null;
 
         // Read the file
-        FssFloat2DArray data        = FssFloat2DArrayIO.LoadFromArcASIIGridFile(filename);
+        FssFloat2DArray data = FssElevationPatchIO.LoadFromArcASIIGridFile(filename);
+
+        // Orient the data in the 2D array, placing (maxlat, minLon) at top-left.
         FssFloat2DArray flippedData = FssFloat2DArray.FlipXAxis(data);
 
         // Create the tile
-        FssElevationTile newTile = new FssElevationTile() { ElevationData = data, LLBox = llBox };
+        FssElevationPatch newTile = new() { ElevationData = data, LLBox = llBox };
 
         return newTile;
     }
@@ -147,7 +142,7 @@ public class FssElevationSystem
     {
         string report = $"Elevation System Report: {TileList.Count} Tile(s)\n";
 
-        foreach (FssElevationTile tile in TileList)
+        foreach (FssElevationPatch tile in TileList)
         {
             report += tile.Report() + "\n";
         }

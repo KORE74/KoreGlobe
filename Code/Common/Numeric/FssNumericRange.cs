@@ -6,15 +6,13 @@ global using FssDoubleRange = FssNumericRange<double>;
 using System;
 using System.Numerics;
 
-#nullable enable
-
 public enum RangeBehavior { Wrap, Limit }
 
 public class FssNumericRange<T> where T : INumber<T>
 {
-    public T Min { get; private set; }
-    public T Max { get; private set; }
-    public T Range => Max - Min;
+    public T             Min      { get; private set; }
+    public T             Max      { get; private set; }
+    public T             Range    => Max - Min;
     public RangeBehavior Behavior { get; private set; }
 
     // --------------------------------------------------------------------------------------------
@@ -30,11 +28,11 @@ public class FssNumericRange<T> where T : INumber<T>
     }
 
     // Predefined constant ranges
-    public static readonly FssNumericRange<T> ZeroToOne            = new FssNumericRange<T>(T.CreateChecked(0),        T.CreateChecked(1));
-    public static readonly FssNumericRange<T> ZeroTo360Degrees     = new FssNumericRange<T>(T.CreateChecked(0),        T.CreateChecked(360));
-    public static readonly FssNumericRange<T> Minus180To180Degrees = new FssNumericRange<T>(T.CreateChecked(-180),     T.CreateChecked(180));
-    public static readonly FssNumericRange<T> ZeroToTwoPiRadians   = new FssNumericRange<T>(T.CreateChecked(0),        T.CreateChecked(Math.PI * 2));
-    public static readonly FssNumericRange<T> MinusPiToPiRadians   = new FssNumericRange<T>(T.CreateChecked(-Math.PI), T.CreateChecked(Math.PI));
+    public static readonly FssNumericRange<T> ZeroToOne            = new FssNumericRange<T>(T.CreateChecked(0),    T.CreateChecked(1),   RangeBehavior.Limit);
+    public static readonly FssNumericRange<T> ZeroTo360Degrees     = new FssNumericRange<T>(T.CreateChecked(0),    T.CreateChecked(360), RangeBehavior.Wrap);
+    public static readonly FssNumericRange<T> Minus180To180Degrees = new FssNumericRange<T>(T.CreateChecked(-180), T.CreateChecked(180), RangeBehavior.Wrap);
+    public static readonly FssNumericRange<T> ZeroToTwoPiRadians   = new FssNumericRange<T>(T.CreateChecked(0),    FssConsts<T>.kTwoPi,  RangeBehavior.Wrap);
+    public static readonly FssNumericRange<T> MinusPiToPiRadians   = new FssNumericRange<T>(-FssConsts<T>.kPi,     FssConsts<T>.kPi,     RangeBehavior.Limit);
 
     // --------------------------------------------------------------------------------------------
     // MARK: Range Checking
@@ -44,14 +42,17 @@ public class FssNumericRange<T> where T : INumber<T>
     {
         return val >= Min && val <= Max;
     }
-
     public bool Contains(T val) => IsInRange(val);
 
-    public double FractionInRange(T val)
+    // Limit range clamps the val fraction to 0 to 1. Otherwise, it can go into a wider positive/negative range to provide extrapolation.
+    public T FractionInRange(T val, bool limitRange = true)
     {
-        if (val < Min) return 0.0;
-        if (val > Max) return 1.0;
-        return double.CreateChecked(val - Min) / double.CreateChecked(Range);
+        if (limitRange)
+        {
+            if (val < Min) return T.CreateChecked(0.0);
+            if (val > Max) return T.CreateChecked(1.0);
+        }
+        return T.CreateChecked(val - Min) / T.CreateChecked(Range);
     }
 
     // --------------------------------------------------------------------------------------------
@@ -79,30 +80,30 @@ public class FssNumericRange<T> where T : INumber<T>
     // MARK: General functions
     // --------------------------------------------------------------------------------------------
 
-    public override bool Equals(object? obj)
+    public override bool Equals(object obj)
     {
         if (ReferenceEquals(this, obj))
-        {
             return true;
-        }
 
         if (obj is FssNumericRange<T> other)
         {
             return this.Min.Equals(other.Min) &&
-                this.Max.Equals(other.Max) &&
-                this.Behavior == other.Behavior;
+                   this.Max.Equals(other.Max) &&
+                   this.Behavior == other.Behavior;
         }
-
         return false;
-    }
-
-    public override string ToString()
-    {
-        return $"[Min:{Min}, Max:{Max}, Behavior:{Behavior}]";
     }
 
     public override int GetHashCode()
     {
         return HashCode.Combine(Min, Max, Behavior);
     }
+
+    // --------------------------------------------------------------------------------------------
+
+    public override string ToString()
+    {
+        return $"[Min:{Min}, Max:{Max}, Behavior:{Behavior}]";
+    }
+
 }

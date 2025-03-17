@@ -12,16 +12,181 @@ using Godot;
 
 public partial class FssZeroNodeMapTile : Node3D
 {
-
-
+    double HorizonAngleAtCenter(double altitudeM)
+    {
+        double R = FssPosConsts.EarthRadiusM;
+        return Math.Acos(R / (R + altitudeM));
+    }
 
     private void UpdateVisibility()
     {
-        (bool validUnproject, float pixelsPerTriangle) = UnprojectedTriangleSize();
-        if (validUnproject) LatestPixelsPerTriangle = pixelsPerTriangle;
+        //(bool validUnproject, float pixelsPerTriangle) = UnprojectedTriangleSize();
+        //if (validUnproject) LatestPixelsPerTriangle = pixelsPerTriangle;
 
+        // Use the camera LLA and the tile centre LLA to determine the angle between the two
+        FssLLAPoint camPosLLA     = FssGodotFactory.Instance.CameraMoverWorld.CamPos;
+        FssLLAPoint tileCentreLLA = RwLLACenter;
+
+        // Already populated tile attribs: RwLLACenter / RwXYZCenter
+
+        double angleToCameraRads = camPosLLA.AngleToRads(tileCentreLLA);
+        double angleToCameraDegs = angleToCameraRads * FssConsts.RadsToDegsMultiplier;
+
+        double horizonEleRads = camPosLLA.HorizonElevationRads();
+        double horizonEleDegs = horizonEleRads * FssConsts.RadsToDegsMultiplier;
+
+        double horizonAngleRads = HorizonAngleAtCenter(camPosLLA.AltMslM);
+        double horizonAngleDegs = horizonAngleRads * FssConsts.RadsToDegsMultiplier;
+
+        horizonAngleDegs += TileCode.LLBox.LargestHalfDeltaDegs;
+        horizonAngleDegs += 10;
+
+        double visibleLimitDegs = FssNumericUtils<double>.Clamp(horizonAngleDegs, 10, 95);
+
+        // --------------------------------------------------------------
+
+        bool createChildByLvl  = TileCode.MapLvl <= 3;
+
+        bool displayChildByDistance = false;
+        bool createChildByDistance  = false;
+        bool deleteChildByDistance  = false;
+        double cameraDistanceM = RwXYZCenter.DistanceTo(FssGodotFactory.Instance.CameraMoverWorld.CamPosXYZ);
+
+        double currTileChildDisplayDistM = childTileDisplayDistKmForLvl[TileCode.MapLvl] * 1000;
+        double currTileChildCreateDistM  = currTileChildDisplayDistM * 1.2;
+        double currTileChildDeleteDistM  = currTileChildDisplayDistM * 1.5;
+
+        if (cameraDistanceM < currTileChildCreateDistM)  createChildByDistance  = true;
+        if (cameraDistanceM < currTileChildDisplayDistM) displayChildByDistance = true;
+        if (cameraDistanceM > currTileChildDeleteDistM)  deleteChildByDistance  = true;
+
+
+
+
+
+        // Flags to determine behavior
+        bool displayTileByAngle = (angleToCameraDegs > visibleLimitDegs);
+        bool childTile = TileCode.MapLvl > 0;
+
+        bool createChildTiles = displayTileByAngle && !ChildTilesExist() && !ChildCreationRejected;
+        bool destroyChildTiles = !displayTileByAngle & childTile;
+
+
+
+
+        //GD.Print($"TileCode: {TileCode} Angle to Camera: {angleToCameraDegs:F0} // horizonEleDegs: {horizonEleDegs:F0} // CamDist: {cameraDistanceM:F0} ");
+
+        // bool angleVisible = true;
+        // if (angleToCameraDegs > visibleLimitDegs)
+        // {
+        //     angleVisible = false;
+        // }
+
+        // if (!ChildrenSetVisible)
+        //     SetVisibility(angleVisible);
+
+        if (TileCode.MapLvl == 0)
+            SetActiveState(true);
+
+        if (ActiveState)
+        {
+            if (createChildByLvl && createChildByDistance && !ChildTilesExist())
+            {
+                CreateChildTiles();
+            }
+
+            if (ChildTilesContructed())
+            {
+                if (displayChildByDistance)
+                {
+                    SetChildrenActive(true);
+                    SetVisibility(false);
+                }
+                else
+                {
+                    SetChildrenActive(false);
+                    SetVisibility(true);
+                }
+
+                if (deleteChildByDistance)
+                {
+                    DeleteChildTiles();
+                }
+            }
+        }
+        else
+        {
+            SetVisibility(false);
+            SetChildrenActive(false);
+        }
     }
 
+    // --------------------------------------------------------------------------------------------
+
+    // Other functions deal with traversing trees of parent child relationships, this is just for this tile.
+    private void SetVisibility(bool newVisibleState)
+    {
+        LineMesh3D.Visible       = newVisibleState;
+        TileMeshInstance.Visible = newVisibleState;
+    }
+
+    // --------------------------------------------------------------------------------------------
+
+    // Other functions deal with traversing trees of parent child relationships, this is just for this tile.
+    private void SetActiveState(bool newActiveState)
+    {
+        // Ensure we are dealing with a state change on this tile
+        if (ActiveState == newActiveState)
+            return;
+
+        // If changing the child to active, set it visible in the moment
+        if (!ActiveState && newActiveState)
+        {
+            SetVisibility(true);
+        }
+
+        // If changing the child to inactive, set it invisible and cascade to any of its children
+        if (ActiveState && !newActiveState)
+        {
+            SetVisibility(false);
+        }
+
+        ActiveState = newActiveState;
+    }
+
+    // --------------------------------------------------------------------------------------------
+
+    // On setting a child tile active, it is immediately set to visible.
+    // On setting a child tile inactive, it is immediately set to invisible, and all children are set inactive
+
+    private void SetChildrenActive(bool newActiveState)
+    {
+        ChildrenSetVisible = newActiveState;
+
+        // Ensure we have child tiles in a correct state to update
+        if (ChildTilesExist() && ChildTilesContructed())
+        {
+            foreach (FssZeroNodeMapTile childTile in ChildTiles)
+            {
+                // Assign the new active state
+                childTile.SetActiveState(newActiveState);
+            }
+        }
+    }
+
+    private void DeleteChildTiles()
+    {
+        if (ChildTilesExist())
+        {
+            foreach (FssZeroNodeMapTile childTile in ChildTiles)
+            {
+                childTile.DeleteChildTiles();
+                RemoveChild(childTile);
+                childTile.QueueFree();
+            }
+            ChildTiles.Clear();
+        }
+    }
 
     // --------------------------------------------------------------------------------------------
     // MARK: Visibility Helper Routines
@@ -47,7 +212,7 @@ public partial class FssZeroNodeMapTile : Node3D
 
         // Get the number of triangles along the box edges
         int vertTriangleCount  = RwEleData.Height - 1;
-        int horizTriangleCount = RwEleData.Width - 1;
+        int horizTriangleCount = RwEleData.Width  - 1;
 
         // Get the current scene camera and viewport, requirements for the unproject calls.
         Viewport viewport   = GetViewport(); //Engine.GetMainLoop() is SceneTree sceneTree ? sceneTree.Root : null;

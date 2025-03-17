@@ -4,20 +4,39 @@ using System.Text;
 
 #nullable enable
 
-// FssElevationPrepSystem: A class to contain a number of elevation prep tiles, and supply an elevation value
-// for a specific lat/long from the highest resolution (and assumed most accurate) tile it has for that location.
+// Patches: Ad hoc elevation data in lat long boxes
+// Tiles: Elevation data in strict lat long boxes for tile codes and at specific resolution
 
-public class FssElevationPrepSystem
+public class FssElevationConsts
+{
+    // FssElevationConsts.InvalidEle
+    public static float InvalidEle      = -9999f;
+    public static float InvalidEleCheck = -9990f; // For checking < or > comparisons
+}
+
+// FssMap is a top level class for a map data structure.
+public class FssElevationSystem
 {
     // public string RootDir = "";
 
-    // FssElevationPrepSystem.InvalidEle
-    public static float InvalidEle      = -9999f;
-    public static float InvalidEleCheck = -9990f; // For checking < or > comparisons
-
-    private List<FssElevationPrepTile> TileList = new();
+    private List<FssElevationTile> TileList = new List<FssElevationTile>();
 
     // public FssMapTileArray MapTiles;
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Patches
+    // --------------------------------------------------------------------------------------------
+
+    // Patches are initially loaded from Arc ASCII files, but intended to be saved out to a proprietary format
+    // that better controls the lla box and resolution for our purposes
+
+    public void LoadArcASCIIPatch()
+    {
+
+    }
+
+
+
 
     // --------------------------------------------------------------------------------------------
     // MARK: Get Tile
@@ -26,16 +45,16 @@ public class FssElevationPrepSystem
     // Loop through the TileList, grabbing points from the highest resolution tile that contains the position.
     // Loop aross the points in a tile, populating the requested array.
 
-    public FssElevationPrepTile CreatePrepTile(FssLLBox llBox, int latRes, int lonRes)
+    public FssElevationTile CreateTile(FssLLBox llBox, int latRes, int lonRes)
     {
-        FssFloat2DArray data = new(lonRes, latRes);
+        FssFloat2DArray data = new FssFloat2DArray(lonRes, latRes);
 
         double startLatDegs = llBox.MinLatDegs;
         double startLonDegs = llBox.MinLonDegs;
         double deltaLatDegs = llBox.DeltaLatDegs / latRes;
         double deltaLonDegs = llBox.DeltaLonDegs / lonRes;
 
-        FssLLPoint pos = new(0, 0);
+        FssLLPoint pos = new FssLLPoint(0, 0);
 
         // Loop through each of the lat and long positions of the destination tile
         for (int latIdx = 0; latIdx < latRes; latIdx++)
@@ -50,7 +69,7 @@ public class FssElevationPrepSystem
             }
         }
 
-        FssElevationPrepTile newTile = new() { ElevationData = data, LLBox = llBox };
+        FssElevationTile newTile = new FssElevationTile() { ElevationData = data, LLBox = llBox };
 
         return newTile;
     }
@@ -60,24 +79,24 @@ public class FssElevationPrepSystem
         // Loop through the TileList, grabbing points from the highest resolution tile that contains the position.
         // Loop across the points in a tile, populating the requested array.
 
-        if (TileList.Count == 0) return InvalidEle;
+        if (TileList.Count == 0) return FssElevationConsts.InvalidEle;
 
-        foreach (FssElevationPrepTile tile in TileList)
+        foreach (FssElevationTile tile in TileList)
         {
             if (tile.Contains(pos))
                 return tile.ElevationAtPos(pos);
         }
-        return InvalidEle;
+        return FssElevationConsts.InvalidEle;
     }
 
     public string ElevationAtPosWithReport(FssLLPoint pos)
     {
         StringBuilder sb = new StringBuilder();
-        float retEle = InvalidEle;
+        float retEle = FssElevationConsts.InvalidEle;
 
         sb.AppendLine($"Elevation at position: {pos}");
 
-        foreach (FssElevationPrepTile tile in TileList)
+        foreach (FssElevationTile tile in TileList)
         {
             sb.AppendLine($"Considering Tile: {tile.Report()}");
             if (tile.Contains(pos))
@@ -114,24 +133,29 @@ public class FssElevationPrepSystem
     // An ASCII Arc file is a simple text file with a header followed by a grid of elevation values.
     // The top-left of the data is the top left of the map.
 
-    public FssElevationPrepTile? ArcASCIIToTile(string filename, FssLLBox llBox)
+    public FssElevationTile? LoadArcASCIIFileToTile(string filename, FssLLBox llBox)
+    {
+        FssElevationTile? newTile = ArcASCIIToTile(filename, llBox);
+        if (newTile != null)
+            TileList.Add(newTile);
+
+        // Sort in descending order of resolution
+        SortTileList();
+
+        return newTile;
+    }
+
+    public static FssElevationTile? ArcASCIIToTile(string filename, FssLLBox llBox)
     {
         // Check the file exists
-        if (!System.IO.File.Exists(filename))
-            return null;
+        if (!System.IO.File.Exists(filename)) return null;
 
         // Read the file
-        FssFloat2DArray data = FssElevationPrepTileIO.LoadFromArcASIIGridFile(filename);
-
-        // Orient the data in the 2D array, placing (maxlat, minLon) at top-left.
+        FssFloat2DArray data        = FssFloat2DArrayIO.LoadFromArcASIIGridFile(filename);
         FssFloat2DArray flippedData = FssFloat2DArray.FlipXAxis(data);
 
         // Create the tile
-        FssElevationPrepTile newTile = new() { ElevationData = data, LLBox = llBox };
-
-        // Add tile to internal list and sort in descending order of resolution
-        TileList.Add(newTile);
-        SortTileList();
+        FssElevationTile newTile = new FssElevationTile() { ElevationData = data, LLBox = llBox };
 
         return newTile;
     }
@@ -144,7 +168,7 @@ public class FssElevationPrepSystem
     {
         string report = $"Elevation System Report: {TileList.Count} Tile(s)\n";
 
-        foreach (FssElevationPrepTile tile in TileList)
+        foreach (FssElevationTile tile in TileList)
         {
             report += tile.Report() + "\n";
         }

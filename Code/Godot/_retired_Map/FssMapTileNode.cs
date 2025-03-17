@@ -46,7 +46,7 @@ public partial class FssMapTileNode : Node3D
     private Label3D        TileCodeLabel;
 
     // Flag set when the tile (or its children) should be visible. Gates the main visibility processing.
-    public bool ActiveVisibility              = false;
+    public bool ActiveState              = false;
 
     // Record the states we assign, so we can restict  actions to just changes.
     public bool VisibleState                  = false;
@@ -102,7 +102,7 @@ public partial class FssMapTileNode : Node3D
             {
                 // string x = (TileMaterial == null) ? "null" : "not null";
 
-                // GD.Print($"Tile:{TileCode} Filepaths:{Filepaths.ImageFilepath} ImageDone:{ImageDone} MeshDone:{MeshDone} MeshInstatiated:{MeshInstatiated} ConstructionComplete:{ConstructionComplete}");
+                // GD.Print($"Tile:{TileCode} Filepaths:{Filepaths.ImagePngFilepath} ImageDone:{ImageDone} MeshDone:{MeshDone} MeshInstatiated:{MeshInstatiated} ConstructionComplete:{ConstructionComplete}");
                 // if (ParentTile != null) GD.Print($"Parent:{ParentTile.TileCode}");
                 // GD.Print($"UVBox:{UVBox}");
                 // GD.Print($"EleData:{TileEleData.sizeStr()}");
@@ -111,9 +111,9 @@ public partial class FssMapTileNode : Node3D
 
             if (ConstructionComplete)
             {
-                if (TileCode.MapLvl == 0) ActiveVisibility = true;
+                if (TileCode.MapLvl == 0) ActiveState = true;
 
-                if (ActiveVisibility) UpdateVisbilityRules();
+                if (ActiveState) UpdateVisbilityRules();
             }
 
             bool showDebug = FssMapManager.ShowDebug && VisibleState;
@@ -137,7 +137,7 @@ public partial class FssMapTileNode : Node3D
     {
         // Starting: Set the flags that will be used later to determine activity around the tile wheil we construct it.
         ConstructionComplete = false;
-        ActiveVisibility     = false;
+        ActiveState     = false;
 
         //etup some basic elements of the tile ahead of the mail elevation and image loading.
         SetupTileCenterXYZ();
@@ -151,7 +151,7 @@ public partial class FssMapTileNode : Node3D
         // Load the image data - which will determine the UVBox it will need.
         // - 1 - we find the image and load it.
         // - 2 - We copy the parent tile image and UVBox, and subsample them.
-        if (Filepaths.ImageFileExists)
+        if (Filepaths.ImageWebpFileExists)
             LoadTileImage();
         else
             SubsampleParentTileImage();
@@ -250,9 +250,9 @@ public partial class FssMapTileNode : Node3D
         FssTextureLoader? TL = FssTextureLoader.Instance;
         if (TL != null)
         {
-            if (TL.IsTextureLoaded(Filepaths.ImageFilepath))
+            if (TL.IsTextureLoaded(Filepaths.ImagePngFilepath))
             {
-                Material? mat = TL.GetMaterialWithTexture(Filepaths.ImageFilepath);
+                Material? mat = TL.GetMaterialWithTexture(Filepaths.ImagePngFilepath);
                 if (mat != null)
                 {
                     MeshInstance.MaterialOverride = mat;
@@ -318,7 +318,7 @@ public partial class FssMapTileNode : Node3D
             // Create a new node
             FssMapTileNode childTile = new FssMapTileNode(currTileCode);
             childTile.ParentTile = this;
-            childTile.ActiveVisibility = false;
+            childTile.ActiveState = false;
             AddChild(childTile);
 
             ChildTiles.Add(childTile);
@@ -415,7 +415,7 @@ public partial class FssMapTileNode : Node3D
 
             foreach (FssMapTileNode currTile in ChildTiles)
             {
-                currTile.ActiveVisibility = active;
+                currTile.ActiveState = active;
             }
         }
     }
@@ -425,9 +425,9 @@ public partial class FssMapTileNode : Node3D
     private void UpdateVisbilityRules()
     {
         // Lvl0 tiles are always marked as active, so we have a starting point for the "towers of hanoi" tree of applying visibility rules.
-        if (TileCode.MapLvl == 0) ActiveVisibility = true;
+        if (TileCode.MapLvl == 0) ActiveState = true;
 
-        if (ActiveVisibility)
+        if (ActiveState)
         {
             // To allow for different game-engine deisplay radii, we do everything in terms of a fraction of the displayed Earth's radius.
 
@@ -523,11 +523,11 @@ public partial class FssMapTileNode : Node3D
         FssTextureLoader? TL = FssTextureLoader.Instance;
         if (TL != null)
         {
-            ImageTexture? tex = TL.LoadTextureDirect(Filepaths.ImageFilepath);
+            ImageTexture? tex = TL.LoadTextureDirect(Filepaths.ImageWebpFilepath);
 
             if (tex != null)
             {
-                TileMaterial = TL.GetMaterialWithTexture(Filepaths.ImageFilepath);
+                TileMaterial = TL.GetMaterialWithTexture(Filepaths.ImageWebpFilepath);
 
                 if (TileMaterial != null)
                 {
@@ -546,10 +546,10 @@ public partial class FssMapTileNode : Node3D
         {
             FssTextureLoader? TL = FssTextureLoader.Instance;
 
-            Filepaths.ImageFilepath = ParentTile.Filepaths.ImageFilepath;
-            Filepaths.ImageFileExists = ParentTile.Filepaths.ImageFileExists;
+            Filepaths.ImageWebpFilepath   = ParentTile.Filepaths.ImageWebpFilepath;
+            Filepaths.ImageWebpFileExists = ParentTile.Filepaths.ImageWebpFileExists;
 
-            TileMaterial = TL.GetMaterialWithTexture(Filepaths.ImageFilepath);
+            TileMaterial = TL.GetMaterialWithTexture(Filepaths.ImageWebpFilepath);
 
             if (TileMaterial != null)
                 ImageDone = true;

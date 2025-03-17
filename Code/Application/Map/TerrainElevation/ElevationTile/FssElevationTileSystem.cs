@@ -103,7 +103,7 @@ public class FssElevationTileSystem
             return bestTile.ElevationAtPos(pos);
         }
 
-        return FssElevationPrepSystem.InvalidEle; // Default value if no suitable tile is found.
+        return FssElevationConsts.InvalidEle; // Default value if no suitable tile is found.
     }
 
     // --------------------------------------------------------------------------------------------
@@ -132,7 +132,7 @@ public class FssElevationTileSystem
     //     return adjustedLonRes;
     // }
 
-    public static FssFloat2DArray PrepTileData(FssElevationPrepSystem elePrepSystem, FssLLBox llBox, int latRes, int lonRes)
+    public static FssFloat2DArray PrepTileData(FssElevationPatchSystem elePrepSystem, FssLLBox llBox, int latRes, int lonRes)
     {
         // Create lists of all the lats and lons we would iterate across
         FssFloat1DArray loopLats = FssFloat1DArrayOperations.ListForRange((float)llBox.MinLatDegs, (float)llBox.MaxLatDegs, latRes);
