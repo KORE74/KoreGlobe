@@ -24,32 +24,47 @@ public class FssElevationPatchSystem
 
     public FssElevationPatch CreatePatch(FssLLBox llBox, int latRes, int lonRes)
     {
-        FssFloat2DArray data = new(lonRes, latRes);
+        // Create lists of all the lats and lons we would iterate across
+        FssFloat1DArray loopLatDegs = FssFloat1DArrayOperations.ListForRange((float)llBox.MinLatDegs, (float)llBox.MaxLatDegs, latRes);
+        FssFloat1DArray loopLonDegs = FssFloat1DArrayOperations.ListForRange((float)llBox.MinLonDegs, (float)llBox.MaxLonDegs, lonRes);
 
-        double startLatDegs = llBox.MinLatDegs;
-        double startLonDegs = llBox.MinLonDegs;
-        double deltaLatDegs = llBox.DeltaLatDegs / latRes;
-        double deltaLonDegs = llBox.DeltaLonDegs / lonRes;
+        // Create the output 2D list
+        FssFloat2DArray eleData = new FssFloat2DArray(latRes, lonRes);
 
-        FssLLPoint pos = new(0, 0);
+        // Create the current position we'll move across the tile
+        FssLLPoint currPos = new();
 
-        // Loop through each of the lat and long positions of the destination tile
-        for (int latIdx = 0; latIdx < latRes; latIdx++)
+        // Store lengths, avoid repeated property access
+        int latLength = loopLatDegs.Length;
+        int lonLength = loopLonDegs.Length;
+
+        // Nested loop across the lat and long lists of tile positions
+        for (int latIdx = 0; latIdx < latLength; latIdx++)
         {
-            for (int lonIdx = 0; lonIdx < lonRes; lonIdx++)
-            {
-                pos.LatDegs = startLatDegs + latIdx * deltaLatDegs;
-                pos.LonDegs = startLonDegs + lonIdx * deltaLonDegs;
+            currPos.LatDegs = loopLatDegs[latIdx];
 
-                // Query the ordered source tile list for the elevation for the new position
-                data[lonIdx, latIdx] = ElevationAtPos(pos);
+            for (int lonIdx = 0; lonIdx < lonLength; lonIdx++)
+            {
+                currPos.LonDegs = loopLonDegs[lonIdx];
+
+                // Lookup the best value to this position and put it in our returned array
+                eleData[latIdx, lonIdx] = ElevationAtPos(currPos);
             }
         }
-
-        FssElevationPatch newTile = new() { ElevationData = data, LLBox = llBox };
+        FssElevationPatch newTile = new() { ElevationData = eleData, LLBox = llBox };
 
         return newTile;
     }
+
+    public void AddPatch(FssElevationPatch newpatch)
+    {
+        TileList.Add(newpatch);
+        SortTileList();
+    }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Elevation
+    // --------------------------------------------------------------------------------------------
 
     public float ElevationAtPos(FssLLPoint pos)
     {
@@ -67,7 +82,7 @@ public class FssElevationPatchSystem
     }
 
     // --------------------------------------------------------------------------------------------
-    // MARK: Sort Tile List
+    // MARK: Sort List
     // --------------------------------------------------------------------------------------------
 
     // Sort the TileList from highest resolution to lowest, as returned by the TileRes function.
@@ -106,7 +121,7 @@ public class FssElevationPatchSystem
 
     public void LoadArcASCII(string filename, FssLLBox llBox)
     {
-        FssElevationPatch? newTile = ArcASCIIToTile(filename, llBox);
+        FssElevationPatch? newTile = ArcASCIIToPatch(filename, llBox);
         if (newTile != null)
         {
             TileList.Add(newTile);
@@ -116,7 +131,7 @@ public class FssElevationPatchSystem
 
     // --------------------------------------------------------------------------------------------
 
-    private FssElevationPatch? ArcASCIIToTile(string filename, FssLLBox llBox)
+    private FssElevationPatch? ArcASCIIToPatch(string filename, FssLLBox llBox)
     {
         // Check the file exists
         if (!System.IO.File.Exists(filename))

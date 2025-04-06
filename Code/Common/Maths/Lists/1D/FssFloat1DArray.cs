@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-public class FssFloat1DArray
+public class FssFloat1DArray : IEnumerable<float>
 {
     public float[] Data { get; private set; }
 
@@ -30,6 +30,22 @@ public class FssFloat1DArray
     {
         get => Data[index];
         set => Data[index] = value;
+    }
+
+    // --------------------------------------------------------------------------------------------
+    // IEnumerable Implementation
+    // --------------------------------------------------------------------------------------------
+
+    public IEnumerator<float> GetEnumerator()
+    {
+        // Use the enumerator of the underlying array
+        return ((IEnumerable<float>)Data).GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        // Explicit interface implementation for non-generic IEnumerable
+        return Data.GetEnumerator();
     }
 
     // --------------------------------------------------------------------------------------------

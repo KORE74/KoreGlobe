@@ -24,42 +24,14 @@ public class FssElevationManager
     // MARK: Arc ASCII Grid
     // --------------------------------------------------------------------------------------------
 
-    public void LoadArcASCII(string filename, FssLLBox llBox)
-    {
-        ElePrep.LoadArcASCII(filename, llBox);
-    }
-
-    // public void LoadArcASCIIGridFile(string filename, FssLLBox llBox)
-    // {
-    //     Task.Run(async() =>
-    //     {
-    //         await semaphore.WaitAsync(); // Wait for an available slot
-    //         try
-    //         {
-    //             FssElevationPatch? newTile = ElePrep.ArcASCIIToTile(filename, llBox);
-
-    //             if (newTile != null)
-    //             {
-    //                 FssCentralLog.AddEntry($"Failed to load Arc ASCII Grid: {filename} // {llBox}");
-    //             }
-    //         }
-    //         finally
-    //         {
-    //             semaphore.Release(); // Release the slot
-    //         }
-    //     });
-    // }
+    public void LoadArcASCII(string filename, FssLLBox llBox) => ElePrep.LoadArcASCII(filename, llBox);
 
     // --------------------------------------------------------------------------------------------
     // MARK: Patches
     // --------------------------------------------------------------------------------------------
 
-    public void LoadPatchFile(string inPatchFilepath) => ElePrep.LoadPatchFile(inPatchFilepath);
-
-    public void CreatePatchFile(string inPatchFilepath, FssLLBox llBox, int latRes, int lonRes)
-    {
-        ElePrep.CreatePatchFile(inPatchFilepath, llBox, latRes, lonRes);
-    }
+    public void LoadPatchFile(string inPatchFilepath)                                           => ElePrep.LoadPatchFile(inPatchFilepath);
+    public void CreatePatchFile(string inPatchFilepath, FssLLBox llBox, int latRes, int lonRes) => ElePrep.CreatePatchFile(inPatchFilepath, llBox, latRes, lonRes);
 
     // --------------------------------------------------------------------------------------------
     // MARK: Tiles

@@ -1,0 +1,1784 @@
+Class: FssFssbals
+Class: FssAppFactory
+  Attribute: FssNetworkHub NetworkHub
+  Attribute: FssConsole ConsoleInterface
+  Attribute: FssMessageManager MessageManager
+  Attribute: FssModelRun ModelRun
+  Attribute: FssSimTime SimClock
+  Attribute: FssEntityManager EntityManager
+  Attribute: FssElevationManager EleManager
+  Attribute: FssAppFactory Instance
+  Method: void CallStart()
+Class: FssGodotFactory
+  Attribute: Node SceneRootNode
+  Attribute: Node ServicesNode
+  Attribute: FssZeroNodeMapManager ZeroNodeMapManager
+  Attribute: FssGodotEntityManager GodotEntityManager
+  Attribute: FssCameraMoverWorld CameraMoverWorld
+  Attribute: Fss3DModelLibrary ModelLibrary
+  Attribute: FssTextureManager TextureManager
+  Attribute: FssUIState UIState
+  Attribute: FssGodotFactory Instance
+  Method: void CreateObjects(Node sceneRootNode)
+Class: TestLabelMaker
+  Method: void _Ready()
+Class: FssConsole
+  Method: void Start()
+  Method: void Stop()
+  Method: void WaitForExit()
+  Method: void InitializeCommands()
+  Method: void ConsoleLoop()
+  Method: void ProcessCommand()
+  Method: void AddInput(string input)
+  Method: bool HasOutput()
+  Method: string GetOutput()
+  Method: bool RunInternalCommand(List<string> inputParts)
+Class: FssTask
+  Attribute: bool TaskCompleted
+  Method: void StartExecution()
+  Method: void Cancel()
+  Method: Task ExecuteAsync()
+  Method: Task ExecuteCoreAsync(CancellationToken cancellationToken)
+Class: FssThreadsafeStringList
+  Method: void AddString(string input)
+  Method: bool IsEmpty()
+  Method: string RetrieveString()
+Class: FssEventDriver
+  Method: void ExitApplication()
+Class: FssEventDriver
+  Method: void SimClockStart()
+  Method: void SimClockStop()
+  Method: void SimClockReset()
+  Method: void SetSimClockSeconds(double secs)
+  Method: void SetSimTimeHMS(string hms)
+  Method: int SimSeconds()
+  Method: string SimTimeHMS()
+  Method: void ClockSetRate(double rate)
+  Method: double ClockRate()
+Class: FssEventDriver
+  Method: void AddElement(string entityName, string elemName, string elemType)
+  Method: void AddElement(string entityName, string elemName, FssElement element)
+  Method: void DeleteElement(string entityName, string elemName)
+  Method: List<string> ElementNamesForEntity(string entityName)
+  Method: FssElement? GetElement(string entityName, string elemName)
+Class: FssEventDriver
+  Method: void AddEntity(string entityName)
+  Method: bool DoesEntityExist(string name)
+  Method: void DeleteEntity(string name)
+  Method: void DeleteAllEntities()
+  Method: int NumEntities()
+  Method: void DefaultEntityDetails(string entName)
+  Method: void SetEntityStartDetails(string entName, FssLLAPoint startPos, FssAttitude startAtt, FssCourse startCourse)
+  Method: void SetEntityCurrDetails(string entName, FssLLAPoint currPos, FssAttitude currAtt, FssCourse course, FssCourseDelta courseDelta)
+  Method: void SetEntityAttrib(string entityName, string key, string value)
+  Method: string EntityAttrib(string entityName, string key)
+  Method: void SetEntityStartLLA(string entName, FssLLAPoint newpos)
+  Method: void SetEntityCurrLLA(string entName, FssLLAPoint newpos)
+  Method: FssLLAPoint? EntityStartLLA(string entName)
+  Method: FssLLAPoint? EntityCurrLLA(string entName)
+  Method: void SetEntityAttitude(string entName, FssAttitude newatt)
+  Method: FssAttitude? EntityCurrAttitude(string entName)
+  Method: void SetEntityCourse(string entityName, FssCourse course)
+  Method: FssCourse? EntityCurrCourse(string entityName)
+  Method: void SetEntityCourseDelta(string entityName, FssCourseDelta courseDelta)
+  Method: FssCourseDelta? EntityCurrCourseDelta(string entityName)
+  Method: string EntityNameForIndex(int index)
+  Method: FssEntity? EntityForIndex(int index)
+  Method: FssEntity? EntityForName(string Entityname)
+  Method: string EntityIdForName(string Entityname)
+  Method: string EntityNameForId(int EntityId)
+  Method: int EntityIdNext(int currEntityId)
+  Method: int EntityIdPrev(int currEntityId)
+  Method: List<string> EntityNames()
+Class: FssEventDriver
+  Method: void SetRootDir(string rootDir)
+  Method: string ReportRootDir()
+  Method: void CreateBaseDirectories()
+Class: FssEventDriver
+  Method: void StartNetworking()
+  Method: void StopNetworking()
+  Method: void NetworkConnect(string connName, string connType, string ipAddrStr, int port)
+  Method: void NetworkDisconnect(string connName)
+  Method: string ReportLocalIP()
+  Method: string NetworkReport()
+  Method: void NetworkInjectIncoming(string message)
+  Method: bool HasIncomingMessage()
+  Method: FssMessageText? GetIncomingMessage()
+Class: FssLLAConverter
+  Method: FssLLAPoint Read(Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+  Method: void Write(Utf8JsonWriter writer, FssLLAPoint value, JsonSerializerOptions options)
+Class: CustomDoubleConverter
+  Method: double Read(Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+  Method: void Write(Utf8JsonWriter writer, double value, JsonSerializerOptions options)
+Class: JSONMessage
+Class: IncomingMessageHandler
+  Method: JSONMessage ProcessMessage(string strtype, string msgText)
+  Method: string GetMessageTypeName(string message)
+Class: JSONThreadsafeMessageFIFO
+  Attribute: int NumMessages
+  Method: void EnqueueMessage(JSONMessage message)
+  Method: bool TryDequeueMessage(JSONMessage message)
+Class: FssMessageManager
+  Method: void Start()
+  Method: void IncomingMessageMonitor()
+  Method: void EndThread()
+  Method: void ProcessMessage(FssMessageText message)
+Class: FssMessageManager
+Class: FssMessageManager
+  Method: void ProcessMessage_EntityAdd(EntityAdd msg)
+  Method: void ProcessMessage_EntityDelete(EntityDelete msg)
+  Method: void ProcessMessage_EntityPosition(EntityPosition msg)
+Class: FssMessageManager
+  Method: void ProcessMessage_ScenLoad(ScenLoad scenLoadMsg)
+  Method: void ProcessMessage_ScenStart(ScenStart scenStartMsg)
+  Method: void ProcessMessage_ScenStop(ScenStop scenStopMsg)
+  Method: void ProcessMessage_ScenPause(ScenPause scenPauseMsg)
+  Method: void ProcessMessage_ScenCont(ScenCont scenContMsg)
+  Method: void ProcessMessage_ClockSync(ClockSync clockSyncMsg)
+Class: FssCentralConfig
+  Attribute: FssCentralConfig Instance
+  Method: void SetParam(string key, object value)
+  Method: T GetParam(string key, T defaultValue)
+  Method: void WriteToFile()
+  Method: void ReadFromFile()
+Class: FssCentralLog
+  Attribute: bool LoggingActive
+  Method: void AddEntry(string entry)
+  Method: void WriteLogEntries(object state)
+  Method: void UpdatePath(string newPath)
+  Method: void Shutdown()
+  Method: List<string> GetLatestLines()
+Class: FssCentralTime
+  Attribute: float RuntimeSecs
+  Attribute: int RuntimeIntSecs
+  Attribute: string TimeOfDayHHMMSSUTC
+  Attribute: string DateYYYYMMDDUTC
+  Attribute: string TimestampUTC
+  Attribute: string TimeOfDayHHMMSSLocal
+  Attribute: string DateYYYYMMDDLocal
+  Attribute: string TimestampLocal
+Class: FssLanguageStrings
+  Attribute: FssLanguageStrings Instance
+  Method: void LoadOrCreateJSONConfig(string filename)
+  Method: void SaveJSONConfig(string filename)
+  Method: string LanguageToString(AppLanguage lang)
+  Method: AppLanguage StringToLanguage(string langStr)
+  Method: string LookupName(string name)
+  Method: void SetActiveLanguage(string langStr)
+  Method: void SetActiveLanguage(AppLanguage lang)
+  Method: void NextActiveLanguage()
+  Method: void PrevActiveLanguage()
+  Method: string CurrActiveLanguage()
+  Method: void SetParam(string name, string value, bool WriteOnAssign)
+  Method: bool HasParam(string name)
+  Method: string GetParam(string name)
+Class: FssElevationSystem
+  Method: FssElevationTile CreateTile(FssLLBox llBox, int latRes, int lonRes)
+  Method: float ElevationAtPos(FssLLPoint pos)
+  Method: string ElevationAtPosWithReport(FssLLPoint pos)
+  Method: void SortTileList()
+  Method: FssElevationTile? LoadArcASCIIFileToTile(string filename, FssLLBox llBox)
+  Method: FssElevationTile? ArcASCIIToTile(string filename, FssLLBox llBox)
+  Method: string Report()
+Class: FssMapTileCode
+  Attribute: List<FssLevelCodeElement> CodeList
+  Attribute: int MapLvl
+  Attribute: int HorizCount
+  Attribute: int VertCount
+  Attribute: int HorizIndex
+  Attribute: int VertIndex
+  Attribute: Fss2DGridPos GridPos
+  Attribute: FssLLBox LLBox
+  Attribute: string TileCode
+  Attribute: FssMapTileCode Zero
+  Method: FssMapTileCode UndefinedTileCode()
+  Method: bool IsValid()
+  Method: void AddLevelCode(int x, int y, int level)
+  Method: void AddLevelCode(int x, int y)
+  Method: void SetLevelCode(int x, int y, int level)
+  Method: FssMapTileCode ChildCode(int x, int y)
+  Method: List<FssMapTileCode> ChildCodesList()
+  Method: int ChildCodesWidth()
+  Method: int ChildCodesHeight()
+  Method: string ToString()
+  Method: string ParentString()
+  Method: string CodeForIndex(int y, int x)
+  Method: FssLLBox LLBoxForCode(FssMapTileCode tileCode)
+Class: FssMapTileOperations
+  Method: FssLLBox LLBoxForTileCode(FssMapTileCode tileCode)
+  Method: FssMapTileCode? TileCodeFromString(string inStrCode)
+Class: FssConsts
+Class: FssPosConsts
+Class: FssCommonConnection
+  Attribute: string Name
+  Method: string type()
+  Method: string connectionDetailsString()
+  Method: void sendMessage(string msgData)
+  Method: void startConnection()
+  Method: void stopConnection()
+  Method: void setupIncomingQueue(BlockingCollection<FssMessageText> newIncomingQueue)
+  Method: void QueueIncomingMessage(string msgData)
+  Method: void QueueIncomingMessage(FssMessageText newMsg)
+  Method: bool hasIncomingMessage()
+  Method: FssMessageText getNextIncomingMessage()
+Class: FssMsgSplitter
+  Method: void AddRawMessage(FssMessageText inRawMsg)
+  Method: bool HasMessage()
+  Method: FssMessageText NextMsg()
+Class: FssMsgSplitter2
+  Method: void AddRawMessage(string inRawMsg)
+  Method: bool HasMessage()
+  Method: FssMessageText NextMsg()
+Class: FssNetworkHub
+  Method: void createConnection(string connName, string connType, string ipAddrStr, int port)
+  Method: void endConnection(string connName)
+  Method: void endAllConnections()
+  Method: void sendMessage(string connName, string msgData)
+  Method: bool HasIncomingMessage()
+  Method: bool GetIncomingMessage(FssMessageText msg)
+  Method: FssMessageText? GetIncomingMessage()
+  Method: string localIPAddrStr()
+  Method: string Report()
+  Method: Task ConnectionWatchdog(CancellationToken token)
+  Method: void InjectIncomingMessage(string msgText)
+Class: FssTcpClientConnection
+  Method: void setConnectionDetails(string inIpAddrStr, int inPort)
+  Method: string type()
+  Method: string connectionDetailsString()
+  Method: void startConnection()
+  Method: void stopConnection()
+  Method: void sendMessage(string msgData)
+  Method: void ConnectCallback(IAsyncResult result)
+  Method: void sendThreadFunc()
+  Method: void receiveThreadFunc()
+Class: FssTcpServerClientConnection
+  Method: void setConnectionDetails(TcpClient newTcpClient, NetworkStream newStream)
+  Method: string type()
+  Method: string connectionDetailsString()
+  Method: void startConnection()
+  Method: void stopConnection()
+  Method: void sendMessage(string msgData)
+  Method: void sendThreadFunc()
+  Method: void receiveThreadFunc()
+Class: FssTcpServerConnection
+  Method: void setConnectionDetails(string inIpAddrStr, int inPort)
+  Method: string type()
+  Method: string connectionDetailsString()
+  Method: void startConnection()
+  Method: void stopConnection()
+  Method: void sendMessage(string msgData)
+  Method: void serverThreadFunc()
+Class: AsyncExtensions
+  Method: Task<T> WithCancellation(Task<T> task, CancellationToken cancellationToken)
+Class: FssUdpReceiver
+  Method: void setConnectionDetails(int inPort)
+  Method: string type()
+  Method: string connectionDetailsString()
+  Method: void startConnection()
+  Method: void stopConnection()
+  Method: void sendMessage(string msgData)
+  Method: Task ReceiveThreadFuncAsync(CancellationToken token)
+Class: FssUdpSender
+  Method: void setConnectionDetails(string inIpAddrStr, int inPort)
+  Method: string type()
+  Method: string connectionDetailsString()
+  Method: void startConnection()
+  Method: void stopConnection()
+  Method: void sendMessage(string msgData)
+  Method: Task sendMessageAsync(string msgData)
+Class: FssBackgroundTaskRunner
+  Attribute: T? Result
+  Attribute: bool IsResultAvailable
+  Method: void Start()
+  Method: void Cancel()
+  Method: Task<T> PerformBackgroundWork(CancellationToken cancellationToken)
+  Method: void FinalizeWithResult(T result)
+Class: FssLimitedConcurrentQueue
+  Attribute: int Count
+  Method: void Enqueue(T item)
+  Method: List<T> ToList()
+  Method: T GetMostRecent()
+  Method: void Clear()
+Class: FssThreadSafeValue
+  Attribute: T? Value
+  Attribute: bool IsSet
+Class: FssTestCenter
+  Method: FssTestLog RunCoreTests()
+Class: FssTestEntry
+  Attribute: string Name
+  Attribute: bool Result
+  Attribute: string Comment
+Class: FssTestLog
+  Method: void Add(string name, bool result, string comment)
+  Method: void Add(string name, bool result)
+  Method: bool OverallPass()
+  Method: string OneLineReport()
+  Method: string FullReport()
+Class: FssAttributeDictionary
+  Method: void Set(string key, string value)
+  Method: string Get(string key)
+  Method: bool Has(string key)
+  Method: bool Remove(string key)
+  Method: void Clear()
+  Method: string ToString()
+Class: FssCyclicIdGenerator
+  Method: string NextId()
+Class: FssFileOperations
+  Method: string StandardizePath(string inpath)
+  Method: List<string> Filenames(string startPath)
+  Method: List<string> FilterFilenameList(List<string> filenames, string substring)
+  Method: List<string> FilterFilenameSuffix(List<string> filenames, string suffixsubstring)
+  Method: List<string> FilterFilenamePrefix(List<string> filenames, string prefixsubstring)
+  Method: List<string> RemovePrefix(List<string> filenames, string prefix)
+  Method: List<string> RemoveSuffix(List<string> filenames, string suffix)
+  Method: List<string> OrderAlphabetically(List<string> filenames)
+  Method: string JoinPaths(string path1, string path2)
+  Method: string EnsureExtension(string filename, string extension)
+Class: FssMovingDouble
+  Attribute: double CurrentValue
+  Attribute: double CommandedValue
+  Attribute: double MaxMovementPerTick
+  Method: void SetCommandedValue(double newCommandedValue)
+  Method: void ForceToCommandedValue()
+  Method: void Tick()
+Class: FssRandomStringGenerator
+  Method: string GenerateRandomString(int length)
+Class: FssStringListOperations
+  Method: List<string> FilterIn(List<string> list, string substring)
+  Method: List<string> FilterOut(List<string> list, string substring)
+  Method: List<string> ListOmittedInSecond(List<string> list1, List<string> list2)
+  Method: List<string> ListInBoth(List<string> list1, List<string> list2)
+Class: FssStringOperations
+  Method: int NumberForLetter(char letter)
+  Method: char LetterForNumber(int number)
+  Method: bool BoolForString(string str)
+  Method: int TimeHmsToSeconds(string timeHms)
+Class: Fss3DModelInfo
+  Attribute: string Name
+  Attribute: string FilePath
+  Attribute: FssXYZBox RwAABB
+  Attribute: Vector3 CenterOffset
+  Attribute: Vector3 RotateDegs
+  Attribute: float Scale
+  Method: string ToString()
+  Method: Fss3DModelInfo Default()
+Class: Fss3DModelLibrary
+  Method: Node3D PrepModel(string modelName)
+  Method: void LoadJSONConfigFile(string jsonString)
+  Method: string SerializeJSONConfig(List<Fss3DModelInfo> modelList)
+  Method: void DeserializeJSONConfig(string jsonString)
+  Method: void SaveJSONConfig(string fullFilepath)
+  Method: string ReportContent()
+  Method: List<string> ModelNamesList()
+  Method: FssXYZBox? AABBForModel(string modelName)
+  Method: void LoadModel(string modelName)
+  Method: void AddModelInfo(string modelName)
+  Method: void RemoveModelInfo(string modelName)
+  Method: Fss3DModelInfo? GetModelInfo(string modelName)
+  Method: void SetModelPathForName(string modelName, string filePath)
+  Method: void SetModelAABBForName(string modelName, FssXYZBox aabb)
+  Method: void DuplicateModelForName(string modelName, string newModelName)
+Class: FssRootNode
+  Attribute: FssRootNode Instance
+  Method: void _Ready()
+Class: FssDlcOperations
+  Method: void EnsureDlcFolderExists()
+  Method: List<string> AllDlcExportableContent()
+  Method: List<string> DlcExportTitles()
+  Method: List<string> DlcExportContentForTitle(string DlcTitle)
+  Method: void CreateDlc()
+  Method: List<string> ListLoadableDlcPaths()
+  Method: void LoadDlc(string dlcPath)
+  Method: string InventoryJsonForDLCTitle(string dlcTitle)
+  Method: List<string> ListLoadedDlcPaths()
+  Method: List<string> ListLoadedDlcTitles()
+  Method: List<string> ListLoadedDlcContentForPath(string LoadedDlcPath)
+  Method: List<string> ListLoadedDlcContentForTitle(string dlcTitle)
+  Method: List<string> ListLoadedDlcContent()
+  Method: string DlcReport()
+Class: FssGodotPlatformElement
+  Attribute: string ElemType
+  Method: string Report()
+Class: FssElementContrail
+  Method: void _Ready()
+  Method: void _Process(double delta)
+  Method: void InitElement(string platformName)
+  Method: void SetModel(string modelName)
+  Method: void AddTrailPoint(FssLLAPoint point)
+  Method: void AddTrailFromModel()
+  Method: void UpdateTrail()
+Class: FssGodotPlatformElementRoute
+  Method: void _Ready()
+  Method: void _Process(double delta)
+  Method: void InitElement(string platformName)
+  Method: void SetRoutePoints(List<FssLLAPoint> routePoints)
+  Method: void UpdateRoute()
+  Method: void SetVisibility(bool visible)
+Class: FssGodotEntity
+  Attribute: string EntityName
+  Attribute: Fss3DModelInfo ModelInfo
+  Method: void _Ready()
+  Method: void _Process(double delta)
+  Method: void CreateEntity()
+  Method: void EnableChaseCam()
+  Method: void UpdateZeroNode()
+  Method: void UpdateEntityPosition()
+  Method: void UpdateAttitude(FssAttitude attitude)
+  Method: void UpdateRoute()
+  Method: void UpdateContrail()
+Class: FssGodotEntityManager
+  Method: void MatchModelPlatform3DModel(string platName)
+  Method: void MatchBoundingBox(string platName, string platformType)
+  Method: void SetModelScale(string platName, string platformType, bool applyRwScaling, float scaleModifier)
+Class: FssGodotEntityManager
+  Method: void EnableChaseCam(string platName)
+Class: FssGodotEntityManager
+  Method: void _Ready()
+  Method: void _Process(double delta)
+  Method: bool EntityExists(string entityName)
+  Method: void AddEntity(string entityName)
+  Method: void RemoveEntity(string entityName)
+  Method: FssGodotEntity? GetEntity(string entityName)
+  Method: List<string> EntityNames()
+  Method: void MatchModelPlatforms()
+  Method: void AddPlatformElementRoute(string platName, string currElemName)
+  Method: void UpdatePlatformElementRoute(string platName, string currElemName)
+  Method: string FullReport()
+Class: FssGodotEntityManager
+  Method: bool LinkedElementExists(string entityName, string elementName)
+  Method: void AddLinkedElement(string entityName, FssGodotPlatformElement element)
+  Method: void RemoveLinkedElement(string entityName, string elementName)
+  Method: Node3D? GetLinkedElement(string entityName, string elementName)
+  Method: List<string> LinkedElementNames(string entityName)
+Class: FssGodotEntityManager
+  Method: Node3D UnlinkedPlatform(string entityName)
+  Method: void RemoveUnlinkedPlatform(string entityName)
+  Method: bool UnlinkedElementExists(string entityName, string elementName)
+  Method: void AddUnlinkedElement(string entityName, FssGodotPlatformElement element)
+  Method: void RemoveUnlinkedElement(string entityName, string elementName)
+  Method: Node3D? GetUnlinkedElement(string entityName, string elementName)
+  Method: List<string> UnlinkedElementNames(string entityName)
+Class: FssTextureManager
+  Method: void _Ready()
+  Method: void _Process(double delta)
+  Method: void StartTextureLoading(string imagePath)
+  Method: Task LoadTextureAsync(string path)
+  Method: bool HasTexture(string path)
+  Method: Texture? GetTexture(string path)
+  Method: void RefreshTextureTimeout(string path)
+  Method: void DeleteExpiredTextures()
+  Method: void DeleteOldestExpiredTextures()
+Class: FssMapTileFilepaths
+  Attribute: string EleFilepath
+  Attribute: string EleArrFilepath
+  Attribute: string MeshFilepath
+  Attribute: string ImageFilepath
+  Attribute: string KTX2Filepath
+  Attribute: bool EleFileExists
+  Attribute: bool EleArrFileExists
+  Attribute: bool MeshFileExists
+  Attribute: bool ImageFileExists
+  Attribute: bool KTX2FileExists
+Class: FssZeroNodeMapManager
+  Method: void _Ready()
+  Method: void _Process(double delta)
+  Method: void CreateLvl0Tiles()
+Class: FssZeroNodeMapTile
+  Method: void BackgroundTileCreation(FssMapTileCode tileCode)
+  Method: void ProgressCreation()
+  Method: void CreateMaterials()
+  Method: void CreateMesh()
+  Method: void AttachMesh()
+  Method: void SourceTileElevation()
+  Method: void SourceTileImage()
+  Method: void SubsampleParentTileImage()
+Class: FssZeroNodeMapTile
+  Method: void _Ready()
+  Method: void _Process(double delta)
+  Method: void CreateChildTiles()
+  Method: bool ChildTilesExist()
+  Method: bool ChildTilesContructed()
+  Method: void LocateTile()
+Class: FssZeroNodeMapTile
+  Method: void UpdateVisibility()
+  Method: (bool, float) UnprojectedTriangleSize()
+Class: FssUICameraControl
+Class: FssUICliWindow
+  Method: void _Ready()
+  Method: void _Process(double delta)
+  Method: void UpdateUIText()
+  Method: void ScrollToBottom()
+  Method: void OnUpdateTimerElapsed(object sender, ElapsedEventArgs e)
+  Method: void UpdateLogLabel()
+  Method: void OnCommandSubmitted(string newText)
+  Method: void ClearCommandEdit()
+  Method: void ClearLabel()
+  Method: void UpdateLabel(string newText)
+  Method: void UpdateConsoleLabel()
+  Method: void OnAppReportButtonPressed()
+  Method: void OnDataReportButtonPressed()
+  Method: void OnClipboardButtonPressed()
+  Method: void OnCloseRequested()
+  Method: void ToggleVisibility()
+Class: FssUIHeader
+  Method: void _Ready()
+  Method: void _Process(double delta)
+  Method: void OnExitButtonPressed()
+  Method: void OnCLIButtonPressed()
+  Method: void OnSettingButtonPressed()
+  Method: void OnHelpButtonPressed()
+  Method: void OnNetworkButtonPressed()
+Class: FssUINetworkWindow
+  Method: void _Ready()
+  Method: void _Process(double delta)
+  Method: void MaintainConnections()
+  Method: void PopulateDialogControls()
+  Method: void SaveControlValues()
+  Method: void UpdateUIText()
+  Method: void OnOkButtonPressed()
+  Method: void OnCancelButtonPressed()
+  Method: void OnUdpIpConnectButtonPressed()
+  Method: void OnTcpIpServerConnectButtonPressed()
+  Method: void OnTcpIpClientConnectButtonPressed()
+Class: FssUISettingWindow
+  Method: void _Ready()
+  Method: void _Process(double delta)
+  Method: void RefreshContent()
+  Method: void WriteControlValues()
+  Method: void SaveControlValues()
+  Method: void UpdateDlcList()
+  Method: void UpdateUIText()
+  Method: void OnOkButtonPressed()
+  Method: void OnCancelButtonPressed()
+  Method: void OnNextLanguageButtonPressed()
+  Method: void OnPrevLanguageButtonPressed()
+  Method: void OnMaxMapLvlSliderValueChanged(float value)
+  Method: void OnToggleTileDetailsButtonPressed()
+  Method: void OnToggleLogButtonPressed()
+  Method: void OnDLCRefreshButtonPressed()
+Class: FssUISidePanel
+  Method: void _Ready()
+  Method: void _Process(double delta)
+  Method: void DebugCheck()
+  Method: float UpdateCallCount()
+  Method: void OnPlatformScaleButtonPressed()
+  Method: void OnShowElementsButtonPressed()
+  Method: void OnRxTxButtonPressed()
+  Method: void OnRWScaleToggleButtonPressed()
+  Method: void OnInfographicScaleButtonPressed()
+  Method: void OnInfographicScaleSliderValueChanged(float value)
+  Method: void OnShowRoutesButtonPressed()
+Class: FssUIState
+  Attribute: string ScenarioName
+  Attribute: FssCamMode CameraMode
+  Attribute: bool IsRwScale
+  Attribute: float InfographicScale
+  Attribute: bool ShowRoutes
+  Method: bool IsCamModeWorld()
+  Method: bool IsCamModeChaseCam()
+  Method: bool IsCamModeAlignCam()
+Class: FssCameraMover
+  Method: void _Ready()
+  Method: void _Process(double delta)
+  Method: void UpdateInputs()
+Class: FssCameraMoverWorld
+  Method: void _Ready()
+  Method: void _Process(double delta)
+  Method: void _Input(InputEvent inputEvent)
+  Method: void UpdateCameraPosition()
+  Method: string CamPosToString()
+  Method: void CamPosFromString(string str)
+Class: FssCameraPolarOffset
+  Method: void _Ready()
+  Method: void _Process(double delta)
+  Method: void _Input(InputEvent inputEvent)
+  Method: void SetCameraPosition(float rwCamDist, float rwCamAzDegs, float rwCamElDegs)
+  Method: bool IsCurrent()
+Class: FssColorRange
+  Method: void AddEntry(float value, Color color)
+  Method: Color GetColor(float value)
+  Method: void Clear()
+  Method: FssColorRange RedToGreen()
+  Method: FssColorRange RedYellowGreen()
+  Method: FssColorRange BlueGreenYellowOrangeRed()
+Class: FssColorUtil
+  Method: Color ColorWithRGBNoise(Color color, float fractionNoise)
+  Method: Color ColorwithBrightnessNoise(Color color, float fractionNoise)
+  Method: Color StringToColor(string input)
+Class: FssGodotFileOperations
+  Method: string GetActualPath(string resourcePath)
+  Method: List<string> ListFiles(string topLevel, ListContent content, bool recursive)
+  Method: string JoinPaths(string path1, string path2)
+  Method: string JoinPaths(string path1, string path2, string path3)
+  Method: string LastPathElement(string path)
+  Method: bool Exists(string path)
+  Method: string LoadFromFile(string resPath)
+Class: FssLabel3DFactory
+  Method: Label3D CreateLabel(string text, float pixelSize)
+Class: FssLabelMaker
+  Method: Texture2D CreateLabelTexture(string text)
+Class: FssMaterialFactory
+  Method: StandardMaterial3D SimpleColoredMaterial(Color color)
+  Method: StandardMaterial3D TransparentColoredMaterial(Color color)
+  Method: ShaderMaterial WireframeMaterial(Color col)
+  Method: ShaderMaterial VertexColorMaterial()
+  Method: ShaderMaterial TexMaterial()
+  Method: ShaderMaterial WaterMaterial()
+Class: FssPrimitiveFactory
+  Method: MeshInstance3D CreateGodotSphere(Vector3 position, float radius, Color color)
+  Method: Node3D CreateSphereNode(string name, Vector3 position, float radius, Color color, bool WithWireframe)
+  Method: MeshInstance3D CreateCylinder(Vector3 toPoint, float radius, Color color)
+  Method: MeshInstance3D CreateGodotCylinder(Vector3 fromPoint, Vector3 toPoint, float radius, Color color)
+  Method: void OrientGodotCylinder(MeshInstance3D cylinder, FssEntityV3 platformV3)
+  Method: void AddAxisMarkers(Node3D node, float offsetSize, float markerRadius)
+  Method: Node3D AxisMarkerNode(float offsetSize, float markerRadius)
+Class: FssTextureLoader
+  Attribute: FssTextureLoader Instance
+  Method: ImageTexture? LoadTextureDirect(string filePath)
+  Method: void CreateTexture(string filePath, Image image)
+  Method: bool IsFileLoadable(string filePath)
+  Method: void QueueTexture(string filePath)
+  Method: void ReleaseTexture(string filePath)
+  Method: bool IsTextureLoaded(string filePath)
+  Method: ImageTexture? GetTexture(string filePath)
+  Method: StandardMaterial3D? GetMaterialWithTexture(string filePath)
+  Method: string TextureCacheList()
+Class: FssUnprojectUtils
+  Method: bool IsPointInFrontOfCameraPlane(Vector3 gePosition, Camera3D camera)
+  Method: (Vector2 position, bool success) UnprojectPoint(Vector3 worldPosition, Camera3D camera, Viewport viewport)
+Class: FssUVBoxDropEdgeTile
+  Attribute: Vector2 TopLeft
+  Attribute: Vector2 BottomRight
+  Attribute: float BoxEdgeOffset
+  Attribute: float BoxInsetOffset
+  Attribute: bool UseEdgeOffsets
+  Method: FssUVBoxDropEdgeTile Default(int horizSize, int vertSize)
+  Method: void InitializeSimpleUvGrid(int horizSize, int vertSize)
+  Method: void InitializeUvGrid(int horizSize, int vertSize)
+  Method: Vector2 CalculateUV(int x, int y, int horizSize, int vertSize, float horizStep, float vertStep, float edgeOffset, float insetOffset)
+  Method: float GetStepPosition(int index, int size, float step, float edgeOffset, float insetOffset)
+  Method: Vector2 GetUV(int x, int y)
+  Method: string ToString()
+Class: FssEarthCore
+Class: FssGlobeCore2
+  Method: void _Ready()
+  Method: void _Process(double delta)
+Class: FssTestCylinder2
+  Method: void _Ready()
+  Method: void _Process(double delta)
+  Method: void CreateSphere(Vector3 position, float radius)
+  Method: void CreateCylinder(Vector3 start, Vector3 end, float radius)
+Class: FssTestDome
+  Method: void _Ready()
+  Method: void _Process(double delta)
+  Method: void UpdateModelPosition()
+Class: FssTestGlobeCore
+  Method: void _Ready()
+  Method: void _Process(double delta)
+Class: FssTestRoute
+  Method: void _Ready()
+  Method: void _Process(double delta)
+  Method: void UpdateModelPosition()
+Class: FssWedgeBuilder
+  Method: void _Ready()
+  Method: void _Process(double delta)
+Class: TesColoredCube
+  Method: void _Ready()
+Class: TestMeshBuilder
+  Method: void _Ready()
+  Method: void _Process(double delta)
+Class: TestMeshCreation
+  Method: void _Ready()
+  Method: void _Process(double delta)
+Class: TestMovingGeometryCore
+Class: TestShape
+  Method: void _Ready()
+  Method: void _Process(double delta)
+Class: FssMapFileOperations
+Class: FssMapManager
+  Attribute: FssXYZPoint LoadRefXYZ
+  Method: void _Ready()
+  Method: void _Process(double delta)
+  Method: void LoadConfig()
+  Method: void SetDebug(bool debug)
+  Method: void SetMaxMapLvl(int maxMapLvl)
+  Method: int GetChildNodeCount(Node node)
+  Method: void CreateDebugMarker()
+Class: FssMapTileNode
+  Attribute: bool IsDone
+  Method: void _Ready()
+  Method: void _Process(double delta)
+  Method: void BackgroundTileCreation(FssMapTileCode tileCode)
+  Method: void MainThreadFinalizeCreation()
+  Method: void InstatiateMesh()
+  Method: void AddMeshToTree()
+  Method: void ApplyImageMaterial()
+  Method: void LabelTile(FssMapTileCode tileCode)
+  Method: void CreateSubtileNodes()
+  Method: bool DoChildTilesExist()
+  Method: bool AreChildTilesLoaded()
+  Method: void DeleteSubtileNodes()
+  Method: void SetVisibility(bool visible)
+  Method: void SetChildrenVisibility(bool visible)
+  Method: void SetChildrenActive(bool active)
+  Method: void UpdateVisbilityRules()
+  Method: void SetupTileCenterXYZ()
+  Method: void LoadTileImage()
+  Method: void SubsampleParentTileImage()
+  Method: void LoadTileEle()
+  Method: void SubsampleParentTileEle()
+  Method: void CreateDefaultChildEleData(FssFloat2DArray eleData)
+  Method: void CreateMesh()
+Class: FssMapTileNodeOperations
+  Method: ImageTexture? ScavengeTextureFromParent(FssMapTileNode parentTileNode, FssMapTileCode childtileCode)
+Class: FssCommand
+  Attribute: List<string> Signature
+  Attribute: string SignatureString
+  Attribute: string HelpString
+  Attribute: int SignatureCount
+  Method: string Execute(List<string> parameters)
+  Method: bool Matches(List<string> inputParts)
+Class: FssCommandAppExit
+  Method: string Execute(List<string> parameters)
+Class: FssCommandEleForPos
+  Attribute: string HelpString
+  Method: string Execute(List<string> parameters)
+Class: FssCommandEleReport
+  Attribute: string HelpString
+  Method: string Execute(List<string> parameters)
+Class: FssCommandEleLoadArc
+  Attribute: string HelpString
+  Method: string Execute(List<string> parameters)
+Class: FssCommandElePrep
+  Method: string Execute(List<string> parameters)
+Class: FssCommandEleSaveTile
+  Attribute: string HelpString
+  Method: string Execute(List<string> parameters)
+Class: FssCommandEntityAdd
+  Attribute: string HelpString
+  Method: string Execute(List<string> parameters)
+Class: FssCommandEntityCourse
+  Attribute: string HelpString
+  Method: string Execute(List<string> parameters)
+Class: FssCommandEntityCourseDelta
+  Attribute: string HelpString
+  Method: string Execute(List<string> parameters)
+Class: FssCommandEntityDelete
+  Attribute: string HelpString
+  Method: string Execute(List<string> parameters)
+Class: FssCommandEntityPosition
+  Attribute: string HelpString
+  Method: string Execute(List<string> parameters)
+Class: FssCommandEntityReportElem
+  Method: string Execute(List<string> parameters)
+Class: FssCommandEntityReportPos
+  Attribute: string HelpString
+  Method: string Execute(List<string> parameters)
+Class: FssCommandNetworkInjectIncoming
+  Method: string Execute(List<string> parameters)
+Class: FssCommandNetworkReport
+  Method: string Execute(List<string> parameters)
+Class: FssCommandSimClock
+  Method: string Execute(List<string> parameters)
+Class: FssCommandSimPause
+  Method: string Execute(List<string> parameters)
+Class: FssCommandSimReset
+  Method: string Execute(List<string> parameters)
+Class: FssCommandSimResume
+  Method: string Execute(List<string> parameters)
+Class: FssCommandSimStart
+  Method: string Execute(List<string> parameters)
+Class: FssCommandSimStop
+  Method: string Execute(List<string> parameters)
+Class: FssCommandVersion
+  Method: string Execute(List<string> parameters)
+Class: AppShutdown
+  Method: AppShutdown ParseJSON(string json)
+Class: NullMsg
+  Method: NullMsg ParseJSON(string json)
+Class: ElementModel
+  Attribute: string Name
+  Attribute: string ModelName
+  Method: ElementModel ParseJSON(string json)
+Class: EntityAdd
+  Attribute: string Name
+  Attribute: double LatDegs
+  Attribute: double LongDegs
+  Attribute: double AltitudeMtrs
+  Attribute: FssLLAPoint Pos
+  Method: EntityAdd ParseJSON(string json)
+Class: EntityDelete
+  Attribute: string Name
+  Method: EntityDelete ParseJSON(string json)
+Class: EntityMotionDelta
+  Attribute: string Name
+  Attribute: double RollRateDegsSec
+  Attribute: double PitchRateDegsSec
+  Attribute: double YawRateDegsSec
+  Attribute: double HeadingChangeClockwiseDegsSec
+  Attribute: double SpeedChangeMpMps
+  Attribute: FssAttitudeDelta AttitudeDelta
+  Attribute: FssCourseDelta CourseDelta
+  Method: EntityMotionDelta ParseJSON(string json)
+Class: EntityPosition
+  Attribute: string Name
+  Attribute: double LatDegs
+  Attribute: double LongDegs
+  Attribute: double AltitudeMtrs
+  Attribute: double RollClockwiseDegs
+  Attribute: double PitchUpDegs
+  Attribute: double YawClockwiseDegs
+  Attribute: double HeadingDegs
+  Attribute: double GrndSpeedMtrSec
+  Attribute: double ClimbRateMtrSec
+  Attribute: FssLLAPoint Pos
+  Attribute: FssAttitude Attitude
+  Attribute: FssCourse Course
+  Method: EntityPosition ParseJSON(string json)
+Class: ScenClear
+  Method: ScenClear ParseJSON(string json)
+Class: ClockSync
+  Attribute: string ScenTimeHMS
+  Attribute: float ScenTimeSecs
+  Method: ClockSync ParseJSON(string json)
+Class: ScenCont
+  Attribute: string ScenTimeHMS
+  Attribute: float ScenTimeSecs
+  Method: ScenCont ParseJSON(string json)
+Class: ScenLoad
+  Attribute: string ScenName
+  Attribute: double Lat
+  Attribute: double Long
+  Attribute: string EarthModel
+  Attribute: string RxName
+  Attribute: string DFModel
+  Attribute: FssLLAPoint ScenPos
+  Method: ScenLoad ParseJSON(string json)
+Class: ScenPause
+  Attribute: string ScenTimeHMS
+  Attribute: float ScenTimeSecs
+  Method: ScenPause ParseJSON(string json)
+Class: ScenStart
+  Method: ScenStart ParseJSON(string json)
+Class: ScenStop
+  Method: ScenStop ParseJSON(string json)
+Class: FssElement
+  Attribute: string Name
+  Attribute: string Type
+  Attribute: bool Enabled
+  Method: string Report()
+Class: FssElementRoute
+  Attribute: List<FssLLAPoint> RoutePoints
+  Attribute: string Type
+  Attribute: List<FssLLAPoint> Points
+  Method: string Report()
+  Method: void AddPoint(FssLLAPoint point)
+  Method: void AddPoints(List<FssLLAPoint> points)
+  Method: void Clear()
+  Method: int PointCount()
+  Method: FssLLAPoint Point(int index)
+Class: FssEntity
+  Attribute: string Name
+  Attribute: FssEntityKinetics Kinetics
+  Attribute: FssAttributeDictionary Attribs
+  Attribute: List<FssElement>? Elements
+  Attribute: List<FssElement> ElementsList
+  Method: void AddElement(FssElement element)
+  Method: void DeleteElement(FssElement element)
+  Method: void DeleteElement(string name)
+  Method: List<string> ElementNames()
+  Method: FssElement? ElementForName(string name)
+  Method: bool DoesElementExist(string name)
+  Method: string PositionReport()
+  Method: string ElementReport()
+Class: FssEntityKinetics
+  Attribute: FssLLAPoint StartPosition
+  Attribute: FssAttitude StartAttitude
+  Attribute: FssCourse StartCourse
+  Attribute: FssLLAPoint CurrPosition
+  Attribute: FssAttitude CurrAttitude
+  Attribute: FssAttitudeDelta CurrAttitudeDelta
+  Attribute: FssCourse CurrCourse
+  Attribute: FssCourseDelta CurrCourseDelta
+  Attribute: FssXYZBox BoundingBox
+  Method: void ResetPosition()
+  Method: void UpdateForDuration(float elapsedSeconds)
+Class: FssEntityManager
+  Method: int NumEntities()
+  Method: void DeleteAllEntities()
+  Method: FssEntity? Add(string entityname)
+  Method: void Delete(string entityname)
+  Method: FssEntity? EntityForName(string entityname)
+  Method: FssEntity? EntityForIndex(int index)
+  Method: string EntityNameForIndex(int index)
+  Method: int EntityIndexForName(string entityname)
+  Method: string EntityNameForId(int entityId)
+  Method: string EntityIdForName(string entityname)
+  Method: int EntityIdNext(int currPlatId)
+  Method: int EntityIdPrev(int currPlatId)
+  Method: bool DoesEntityExist(string entityname)
+  Method: List<string> EntityNameList()
+  Method: bool DoesElementExist(string entityname, string elemname)
+  Method: bool AddElement(string entityname, FssElement newElem)
+  Method: void DeleteElement(string entityname, string elemname)
+  Method: FssElement? ElementForName(string entityname, string elemname)
+  Method: string PlatformPositionsReport()
+  Method: string PlatformElementsReport()
+  Method: string FullReport()
+  Method: void Reset()
+  Method: void UpdateKinetics()
+Class: FssModelRun
+  Method: void Start()
+  Method: void Pause()
+  Method: void Resume()
+  Method: void Stop()
+  Method: void Reset()
+  Method: void RunModel()
+  Method: void Update()
+Class: FssSimTime
+  Attribute: bool IsRunning
+  Attribute: double SimRate
+  Attribute: double SimTime
+  Attribute: string SimTimeHMS
+  Method: void SetSimRate(double newSimRate)
+  Method: void Start()
+  Method: void Stop()
+  Method: void Reset()
+  Method: void MarkTime()
+  Method: double ElapsedTimeSinceMark()
+Class: FssElevationManager
+  Method: void LoadArcASCIIGridFile(string filename, FssLLBox llBox)
+  Method: void PrepTile(FssMapTileCode tileCode, bool saveFile)
+  Method: void LoadTile(FssMapTileCode tileCode)
+  Method: void LoadTileFile(string filepath)
+  Method: bool HasTile(FssMapTileCode tileCode)
+  Method: FssElevationTile GetTile(FssMapTileCode tileCode)
+  Method: void DeleteTile(FssMapTileCode tileCode)
+  Method: void DeleteAllTiles()
+  Method: void RequestTile(FssMapTileCode tileCode)
+  Method: float ElevationAtPos(FssLLPoint pos)
+  Method: string Report()
+Class: FssGCPath
+  Attribute: FssXYZPoint StartPos
+  Attribute: FssXYZPoint EndPos
+  Attribute: double RefAngle
+  Method: FssXYZPoint PositionAtFractionOfRoute(double fraction)
+  Method: FssXYZPoint PositionAtFractionOfFullCircle(double fraction)
+  Method: FssXYZPoint PositionAtDistance(double distAlongRouteM)
+  Method: double PathDistance()
+Class: FssLLAPointOperations
+  Method: FssLLAPoint RhumbLineInterpolation(FssLLAPoint fromPoint, FssLLAPoint toPoint, double fraction)
+  Method: List<FssLLAPoint> DividedRhumbLine(FssLLAPoint fromPoint, FssLLAPoint toPoint, int returnedListCount)
+  Method: FssLLAPoint StraightLineInterpolation(FssLLAPoint fromPoint, FssLLAPoint toPoint, double fraction)
+  Method: FssLLAPoint GreatCircleInterpolation(FssLLAPoint fromPoint, FssLLAPoint toPoint, double fraction)
+Class: FssLLPointOperations
+  Method: double AngleBetween(FssLLPoint fromPoint, FssLLPoint toPoint)
+  Method: FssLLPoint RhumbLineInterpolation(FssLLPoint fromPoint, FssLLPoint toPoint, double fraction)
+  Method: FssLLPoint GreatCircleInterpolation(FssLLPoint fromPoint, FssLLPoint toPoint, double fraction)
+  Method: List<FssLLPoint> GreatCirclePointList(FssLLPoint fromPoint, FssLLPoint toPoint, int numPoints)
+Class: FssRoute
+  Method: double GetDistanceM()
+  Method: double GetDurationS()
+  Method: FssLLAPoint PositionAtTime(double routeTimeS)
+  Method: FssAttitude CurrentAttitude(double routeTimeS)
+Class: FssRouteLeg
+  Attribute: FssLLAPoint StartPoint
+  Attribute: FssLLAPoint EndPoint
+  Attribute: FssAttitude StartAttitude
+  Attribute: FssAttitude EndAttitude
+  Attribute: FssAttitudeDelta StartAttitudeDelta
+  Attribute: FssAttitudeDelta EndAttitudeDelta
+  Method: double GetDistanceM()
+  Method: double GetDurationS()
+  Method: FssLLAPoint PositionAtTime(double legtimeS)
+  Method: FssAttitude AttitudeAtTime(double legtimeS)
+  Method: FssAttitudeDelta AttitudeDeltaAtTime(double legtimeS)
+Class: FSSRouteLegPointToPoint
+  Method: double GetDistanceM()
+  Method: double GetDurationS()
+  Method: FssLLAPoint CurrentPosition(double timeS)
+Class: FssAngle
+  Attribute: double Radians
+  Attribute: FssDoubleRange Range
+  Attribute: double Degrees
+  Method: string ToString()
+Class: FssAngleDelta
+  Attribute: double Radians
+  Attribute: double Degrees
+  Attribute: AngleDirection Direction
+  Method: FssAngleDelta FromDegrees(double degrees)
+  Method: string ToString()
+Class: FssNumericRange
+  Attribute: T Min
+  Attribute: T Max
+  Attribute: T Range
+  Attribute: RangeBehavior Behavior
+  Method: bool IsInRange(T val)
+  Method: bool Contains(T val)
+  Method: double FractionInRange(T val)
+  Method: T Apply(T value)
+  Method: bool Equals(object? obj)
+  Method: string ToString()
+  Method: int GetHashCode()
+Class: FssValueUtils
+  Method: double RadsToDegs(double rad)
+  Method: double DegsToRads(double deg)
+  Method: double NormalizeAngle360(double angleDegrees)
+  Method: double NormalizeAngle180(double angleDegrees)
+  Method: double NormalizeAngle2Pi(double angleRadians)
+  Method: double NormalizeAnglePi(double angleRadians)
+  Method: double AngleDiffDegs(double angle1Degrees, double angle2Degrees)
+  Method: double AngleDiffRads(double angle1Radians, double angle2Radians)
+  Method: double AnglePlusDeltaDegs(double angleDegrees, double deltaDegrees)
+  Method: double AnglePlusDeltaRads(double angleRadians, double deltaRadians)
+  Method: bool IsAngleInRangeRads(double angleRads, double startAngleRads, double endAngleRads)
+  Method: bool IsAngleInRangeRadsDelta(double angleRads, double startAngleRads, double deltaAngleRads)
+Class: FssValueUtils
+  Method: string BoolToStr(bool val)
+  Method: bool StrToBool(string str)
+Class: FssValueUtils
+Class: FssValueUtils
+  Method: double Modulo(double value, double rangesize)
+  Method: double LimitToRange(double val, double rangemin, double rangemax)
+  Method: double ClampD(double val, double rangemin, double rangemax)
+  Method: double WrapToRange(double val, double rangemin, double rangemax)
+  Method: double DiffInWrapRange(double rangemin, double rangemax, double val1, double val2)
+  Method: int IndexFromFraction(double fraction, int minval, int maxval)
+  Method: int IndexFromIncrement(double minLimit, double increment, double val)
+  Method: bool IsInRange(double val, double rangemin, double rangemax)
+  Method: double ScaleVal(double inval, double inrangemin, double inrangemax, double outrangemin, double outrangemax)
+  Method: double AdjustWithinBounds(double currentValue, double commandedValue, double maxDelta)
+  Method: double Interpolate(double inrangemin, double inrangemax, double fraction)
+  Method: bool EqualsWithinTolerance(double val, double matchval, double tolerance)
+  Method: bool IsZero(double val, double tolerance)
+  Method: double RandomInRange(double minVal, double maxVal)
+  Method: List<double> CreateRangeList(int length, double start, double end)
+Class: FssValueUtils
+  Method: float Modulo(float value, float rangesize)
+  Method: float LimitToRange(float val, float rangemin, float rangemax)
+  Method: float WrapToRange(float val, float rangemin, float rangemax)
+  Method: float Clamp(float val, float minval, float maxval)
+  Method: float DiffInWrapRange(float rangemin, float rangemax, float val1, float val2)
+  Method: float ScaleVal(float inval, float inrangemin, float inrangemax, float outrangemin, float outrangemax)
+  Method: int IndexFromFraction(float fraction, int minval, int maxval)
+  Method: int IndexFromIncrement(float minLimit, float increment, float val)
+  Method: bool IsInRange(float val, float rangemin, float rangemax)
+  Method: float Interpolate(float inrangemin, float inrangemax, float fraction)
+  Method: bool EqualsWithinTolerance(float val, float matchval, float tolerance)
+Class: FssValueUtils
+  Method: int Clamp(int val, int min, int max)
+  Method: int Wrap(int val, int min, int max)
+Class: FssTestMath
+  Method: void RunTests(FssTestLog testLog)
+  Method: void TestValueUtilsBool(FssTestLog testLog)
+  Method: void TestValueUtilsInt(FssTestLog testLog)
+  Method: void TestValueUtilsFloat(FssTestLog testLog)
+  Method: void TestFloat1DArray_Basics(FssTestLog testLog)
+Class: FssTestPosition
+  Method: void RunTests(FssTestLog testLog)
+  Method: void TestFssXYZ(FssTestLog testLog)
+  Method: void TestFssXYZLine(FssTestLog testLog)
+  Method: void TestFssXYZPlane(FssTestLog testLog)
+Class: FssTestPosition
+  Method: void TestFssXYPoint(FssTestLog testLog)
+  Method: void TestFssXYLine(FssTestLog testLog)
+Class: FssLineMesh3D
+  Method: void AddCone(float axisDist, float heightDist, int baseNumPoints, Color lineCol)
+  Method: void AddEllipticalCone(float majorAxis, float minorAxis, float height, int baseNumPoints, Color lineCol)
+Class: FssLineMesh3D
+  Method: void _Ready()
+  Method: void _Process(double delta)
+  Method: void AddLine(Vector3 p1, Vector3 p2)
+  Method: void AddLine(Vector3 p1, Vector3 p2, Color linecolor)
+  Method: void AddLine(Vector3 p1, Vector3 p2, Color p1Color, Color p2Color)
+  Method: void AddLine(FssXYZPoint p1, FssXYZPoint p2, Color color)
+  Method: void AddLine(FssXYZLine l1, Color color)
+  Method: void AddDottedLine(Vector3 p1, Vector3 p2, Color color, float segmentLength)
+  Method: void Clear()
+  Method: void UpdateMesh()
+  Method: void AddSurface(Vector3[,] points, Color color)
+  Method: void AddBox(FssXYZBox xyzBox, Color color)
+  Method: void AddBoxWithLeadingEdge(FssXYZBox xyzBox, Color color)
+  Method: void CreateCube()
+  Method: ShaderMaterial GetSharedVertexColorMaterial()
+Class: FssLineMesh3D
+  Method: void AddHemisphere(Vector3 center, float radius, int numSegments, Color lineCol)
+Class: FssLineMesh3D
+  Method: void AddPyramidByPoint(float baseDist, float baseWidth, float baseHeight, Color lineColor)
+  Method: void AddPyramidByAzElDist(FssAzElBox azElBox, float baseDist, Color lineColor, PyramidStyle drawStyle)
+  Method: void AddCroppedPyramidByAzElDist(FssAzElBox azElBox, float topDist, float baseDist, Color lineColor)
+Class: FssMeshBuilder
+  Method: void AddBox(Vector3 center, float height, float width, float depth)
+  Method: void AddBox(Vector3 pTLF, Vector3 pTRF, Vector3 pTLB, Vector3 pTRB, Vector3 pBLF, Vector3 pBRF, Vector3 pBLB, Vector3 pBRB)
+  Method: void AddBoxOutline(Vector3 pTLF, Vector3 pTRF, Vector3 pTLB, Vector3 pTRB, Vector3 pBLF, Vector3 pBRF, Vector3 pBLB, Vector3 pBRB, float outlineRadius, int segments)
+Class: FssMeshBuilder
+  Method: void AddCone(float axisDist, float heightDist, int baseNumPoints)
+  Method: void AddEllipticalCone(float majorAxis, float minorAxis, float height, int baseNumPoints)
+  Method: void AddEllipticalConeOutline(float majorAxis, float minorAxis, float height, int baseNumPoints, int numCylinderSides, float baseRadius, float apexRadius)
+Class: FssMeshBuilder
+  Method: void Init()
+  Method: ArrayMesh Build(string name, bool recalcNormals)
+  Method: ArrayMesh Build2(string name, bool recalcNormals)
+  Method: ArrayMesh BuildWithUV(string name)
+  Method: int NumPoints()
+  Method: int NumTriangles()
+  Method: string MeshReport()
+  Method: int AddVertex(Vector3 vertex)
+  Method: void AddTriangle(Vector3 p1, Vector3 p2, Vector3 p3)
+  Method: void AddTriangle(int i1, int i2, int i3)
+  Method: void AddSquare(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4)
+  Method: void AddNormal(Vector3 normal)
+  Method: void AddUV(Vector2 uv)
+  Method: void AddColor(Color color)
+  Method: void AddFan(Vector3 center, List<Vector3> edgePoints, bool wrapAround)
+  Method: void AddRibbon(List<Vector3> pntList1, List<Vector3> pntList2, bool wrapAround)
+  Method: void AddSurface(int resolutionX, int resolutionY, List<Vector3> points, bool flipTriangles)
+  Method: void AddSurface(Vector3[,] points, FssFloatRange uvX, FssFloatRange uvY, bool flipTriangles)
+  Method: void AddSurface(Vector3[,] points, bool flipTriangles)
+Class: FssMeshBuilder
+  Method: void AddCylinder(Vector3 p1, Vector3 p2, float p1radius, float p2radius, int sides, bool endsClosed)
+  Method: void AddCylinders(List<Vector3> points, float p1radius, float p2radius, int sides, bool endsClosed)
+Class: FssMeshBuilder
+  Method: void AddHemisphere(Vector3 center, float radius, int numSegments)
+Class: FssMeshBuilder
+  Method: void AddMalleableSphere(Vector3 center, FssFloat2DArray radiusList, FssColorRange colorRange)
+Class: FssMeshBuilder
+  Method: void AddPyramidByPoint(float baseDist, float baseWidth, float baseHeight)
+  Method: void AddPyramidByAzElDist(FssAzElBox azElBox, float baseDist)
+  Method: void AddCroppedPyramidByAzElDist(FssAzElBox azElBox, float topDist, float baseDist)
+Class: FssMeshBuilder
+  Method: void AddSphere(Vector3 center, float radius, int numSegments)
+  Method: void AddSphereOutline(Vector3 center, float radius, int numSegments, float outlineRadius)
+Class: FssMeshBuilder
+  Method: void AddSurface(float azMinDegs, float azMaxDegs, float elMinDegs, float elMaxDegs, float surfaceRadius, FssFloat2DArray surfaceArray, bool flipTriangles)
+  Method: void AddSurfaceWedgeSides(float azMinDegs, float azMaxDegs, float elMinDegs, float elMaxDegs, float surfaceRadius, float innerRadius, FssFloat2DArray surfaceArray, bool flipTriangles)
+  Method: void AddSurfaceWithUVBox(float azMinDegs, float azMaxDegs, float elMinDegs, float elMaxDegs, float surfaceRadius, FssFloat2DArray surfaceArray, FssUVBoxDropEdgeTile uvBox, bool flipTriangles)
+  Method: void AddSurfaceWedge(float azMinDegs, float azMaxDegs, float elMinDegs, float elMaxDegs, float radiusMin, float radiusMax, FssFloat2DArray outerSurfaceDelta)
+Class: FssMeshBuilder
+  Method: void AddShellSegment(float azimuthMinDegs, float azimuthMaxDegs, float elevationMinDegs, float elevationMaxDegs, float distanceMin, float distanceMax, int resolutionAz, int resolutionEl)
+  Method: void AddShellSegmentOutline(float azimuthMinDegs, float azimuthMaxDegs, float elevationMinDegs, float elevationMaxDegs, float distanceMin, float distanceMax, int resolutionAz, int resolutionEl, float insideRadius, float outsideRadius, int segments)
+Class: FssMeshData
+  Method: ArrayMesh BuildMesh(bool recalcNormals)
+  Method: FssMeshData DefaultCube()
+Class: FssMeshDataIO
+  Method: void WriteMeshToFile(FssMeshData meshData, string path)
+  Method: FssMeshData ReadMeshFromFile(string path)
+  Method: void WriteMeshToJSON(FssMeshData meshData, string path)
+  Method: FssMeshData ReadMeshFromJSON(string path)
+Class: FssGodotGeometryOperations
+  Method: Vector3 ToVector3(FssXYZPoint point)
+  Method: Vector3 Vector3FromPolar(Vector3 origin, float azRads, float elRads, float distance)
+Class: FssZeroOffset
+  Method: void ReportConsts()
+  Method: void SetLLA(FssLLAPoint rwLLA)
+  Method: FssXYZPoint RwZeroPointOffset(FssXYZPoint RwXYZ)
+  Method: FssXYZPoint RwZeroPointOffset(FssLLAPoint RwLLA)
+  Method: Vector3 GeZeroPointOffset(FssXYZPoint RwXYZ)
+  Method: Vector3 GeZeroPoint()
+  Method: Vector3 GeCorePoint()
+Class: FssZeroOffsetOperations
+  Method: Vector3 RwToGe(double radiusM, double latDegs, double lonDegs)
+  Method: Vector3 RwToGe(FssLLAPoint llap)
+  Method: FssLLAPoint GeToRw(Vector3 gePos)
+  Method: Vector3 RwToOffsetGe(FssLLPoint llPos)
+  Method: Vector3 RwToOffsetGe(FssLLAPoint pos)
+  Method: FssPosV3 RwToGeStruct(FssLLPoint llPos)
+  Method: FssPosV3 RwToGeStruct(FssLLAPoint pos)
+  Method: FssEntityV3 RwToGeStruct(FssLLAPoint pos, FssCourse course)
+  Method: FssEntityV3 RwToGeStruct(FssLLAPoint pos, double HeadingDegs)
+  Method: FssEntityV3 RwToGeStruct(FssLLAPoint frompos, FssLLAPoint topos)
+  Method: void DebugV3(Vector3 pos, Vector3 posAhead, Vector3 posAbove)
+Class: FssElevationPrepSystem
+  Method: FssElevationPrepTile CreatePrepTile(FssLLBox llBox, int latRes, int lonRes)
+  Method: float ElevationAtPos(FssLLPoint pos)
+  Method: string ElevationAtPosWithReport(FssLLPoint pos)
+  Method: void SortTileList()
+  Method: FssElevationPrepTile? ArcASCIIToTile(string filename, FssLLBox llBox)
+  Method: string Report()
+Class: FssElevationPrepTile
+  Attribute: FssFloat2DArray ElevationData
+  Attribute: FssLLBox LLBox
+  Method: float TileRes()
+  Method: int GetLongitudeResolution(int latitudeResolution, double latDegs)
+  Method: bool Contains(FssLLPoint pos)
+  Method: float ElevationAtPos(FssLLPoint pos)
+  Method: string Report()
+Class: FssElevationPrepTileIO
+  Method: void WriteToTextFile(FssElevationPrepTile tile, string filePath)
+  Method: FssElevationPrepTile? ReadFromTextFile(string filePath)
+  Method: string WriteToString(FssElevationPrepTile tile)
+  Method: FssElevationPrepTile? ReadFromString(string content)
+  Method: FssFloat2DArray LoadFromArcASIIGridFile(string filePath)
+  Method: void SaveToArcASIIGridFile(FssFloat2DArray array, string filePath, float xllcorner, float yllcorner, float cellsize, float nodataValue)
+  Method: void WriteToBinaryFile(FssElevationPrepTile tile, string filePath)
+  Method: FssElevationPrepTile? ReadFromBinaryFile(string filePath)
+Class: FssElevationTile
+  Attribute: FssElevationTile Zero
+  Method: float TileRes()
+  Method: bool Contains(FssLLPoint pos)
+  Method: float ElevationAtPos(FssLLPoint pos)
+  Method: string Report()
+Class: FssElevationTileIO
+  Method: void WriteToTextFile(FssElevationTile tile, string filePath)
+  Method: FssElevationTile? ReadFromTextFile(string filePath)
+  Method: string WriteToString(FssElevationTile tile)
+  Method: FssElevationTile? ReadFromString(string content)
+  Method: void WriteToBinaryFile(FssElevationTile tile, string filePath)
+  Method: FssElevationTile? ReadFromBinaryFile(string filePath)
+Class: FssElevationTileSystem
+  Method: void AddTile(FssElevationTile tile)
+  Method: bool HasTile(string name)
+  Method: FssElevationTile GetTile(string name)
+  Method: void DeleteTile(string name)
+  Method: void DeleteAllTiles()
+  Method: string Report()
+  Method: float ElevationAtPos(FssLLPoint pos)
+  Method: FssFloat2DArray PrepTileData(FssElevationPrepSystem elePrepSystem, FssLLBox llBox, int latRes, int lonRes)
+Class: FssXY
+Class: FssXYAnnularSector
+  Attribute: FssXYPoint Center
+  Attribute: double InnerRadius
+  Attribute: double OuterRadius
+  Attribute: double StartAngleRads
+  Attribute: double DeltaAngleRads
+  Attribute: double EndAngleRads
+  Attribute: double StartAngleDegs
+  Attribute: double DeltaAngleDegs
+  Attribute: double EndAngleDegs
+  Attribute: double AngleSpanRads
+  Attribute: double AngleSpanDegs
+  Attribute: FssXYPoint StartInnerPoint
+  Attribute: FssXYPoint EndInnerPoint
+  Attribute: FssXYPoint StartOuterPoint
+  Attribute: FssXYPoint EndOuterPoint
+  Attribute: FssXYLine StartInnerOuterLine
+  Attribute: FssXYLine EndInnerOuterLine
+  Attribute: FssXYCircle InnerCircle
+  Attribute: FssXYCircle OuterCircle
+  Attribute: FssXYArc InnerArc
+  Attribute: FssXYArc OuterArc
+  Method: FssXYAnnularSector offset(double x, double y)
+  Method: bool Contains(FssXYPoint checkPos)
+Class: FssXYAnnularSectorOperations
+  Method: List<FssXYPoint> IntersectionPoints(FssXYAnnularSector sector, FssXYLine line)
+Class: FssXYArc
+  Attribute: FssXYPoint Center
+  Attribute: double Radius
+  Attribute: double StartAngleRads
+  Attribute: double DeltaAngleRads
+  Attribute: double EndAngleRads
+  Attribute: double Diameter
+  Attribute: double AngleSpanRads
+  Attribute: double LengthCurved
+  Attribute: double LengthStraightLine
+  Attribute: FssXYPoint StartPoint
+  Attribute: FssXYPoint EndPoint
+  Attribute: double StartAngleDegs
+  Attribute: double EndAngleDegs
+  Attribute: double AngleSpanDegs
+  Attribute: FssXYCircle Circle
+  Method: FssXYArc offset(double x, double y)
+  Method: bool ContainsAngle(double angleRads)
+Class: FssXYArcOperations
+  Method: List<FssXYPoint> IntersectionPoints(FssXYArc arc, FssXYLine line)
+  Method: FssXYPoint PointAtFraction(FssXYArc arc, double fraction)
+  Method: FssXYPolyLine ToPolyLine(FssXYArc arc, int numPoints)
+Class: FssXYCircle
+  Attribute: FssXYPoint Center
+  Attribute: double Radius
+  Attribute: double Area
+  Attribute: double Circumference
+  Attribute: double Diameter
+  Method: bool Contains(double x, double y)
+  Method: bool Contains(FssXYPoint xy)
+  Method: FssXYCircle Offset(double x, double y)
+  Method: FssXYCircle Offset(FssXYPoint xy)
+  Method: FssXYCircle Offset(FssXYPolarOffset o)
+Class: FssXYCircleOperations
+  Method: double ClosestDistanceTo(FssXYCircle circle, FssXYPoint xy)
+  Method: double ClosestDistanceTo(FssXYCircle circle, FssXYLine line)
+  Method: FssXYPoint PointAtAngleRads(FssXYCircle circle, double angleRads)
+  Method: FssXYPolyLine ToPolyLine(FssXYCircle circle, int numPoints)
+  Method: bool DoesLineIntersect(FssXYCircle circle, FssXYLine line)
+  Method: List<FssXYPoint> IntersectionPoints(FssXYCircle circle, FssXYLine line)
+  Method: List<FssXYPoint> IntersectionPoints(FssXYCircle circle1, FssXYCircle circle2)
+  Method: List<FssXYPoint> TangentPoints(FssXYCircle circle, FssXYPoint pos)
+Class: FssXYCompound
+  Attribute: List<FssXY> Shapes
+  Method: FssXYCompound Offset(double x, double y)
+Class: FssXYCompoundOperations
+  Method: FssXYCompound AppendShape(FssXYCompound compound, FssXY shape)
+Class: FssXYLine
+  Attribute: FssXYPoint P1
+  Attribute: FssXYPoint P2
+  Attribute: double Length
+  Attribute: FssXYPoint Direction
+  Attribute: FssXYPoint DirectionUnitVector
+  Method: FssXYPoint MidPoint()
+  Method: FssXYLine Offset(double x, double y)
+  Method: FssXYLine Offset(FssXYPoint xy)
+  Method: string ToString()
+Class: FssXYLineOperations
+  Method: double ClosestDistanceTo(FssXYLine line, FssXYPoint xy)
+  Method: bool IsPointOnLine(FssXYLine line, FssXYPoint xy, bool limitToLineSegment, double tolerance)
+  Method: FssXYPoint? Intersection(FssXYLine line1, FssXYLine line2)
+  Method: bool IsParallel(FssXYLine line1, FssXYLine line2)
+  Method: FssXYLine ExtendLine(FssXYLine line, double p1Dist, double p2Dist)
+Class: FssXYPoint
+  Attribute: double X
+  Attribute: double Y
+  Method: double DistanceTo(double x, double y)
+  Method: double DistanceTo(FssXYPoint xy)
+  Method: double AngleToRads(double x, double y)
+  Method: double AngleToRads(FssXYPoint xy)
+  Method: FssXYPoint Offset(double x, double y)
+  Method: FssXYPoint Offset(FssXYPoint xy)
+  Method: FssXYPoint Offset(FssXYPolarOffset o)
+  Method: FssXYPoint Sum(FssXYPoint a, FssXYPoint b)
+  Method: FssXYPoint Diff(FssXYPoint a, FssXYPoint b)
+  Method: FssXYPoint Scale(FssXYPoint a, double b)
+  Method: bool EqualsWithinTolerance(FssXYPoint a, FssXYPoint b, double tolerance)
+Class: FssXYPointOperations
+  Method: double DotProduct(FssXYPoint a, FssXYPoint b)
+  Method: double Angle(FssXYPoint fromPos, FssXYPoint toPos)
+  Method: FssXYPoint OffsetPolar(FssXYPoint fromPos, double distance, double angleRads)
+  Method: double AngleBetweenRads(FssXYPoint a, FssXYPoint b, FssXYPoint c)
+  Method: FssXYPoint InsetPoint(FssXYPoint a, FssXYPoint b, FssXYPoint c, double t)
+Class: FssXYPolarOffset
+  Attribute: double AngleRads
+  Attribute: double Distance
+  Attribute: double AngleDegs
+Class: FssXYPolarOffsetOperations
+  Method: FssXYPoint ToXY(FssXYPolarOffset o)
+  Method: FssXYPolarOffset FromXY(FssXYPoint p)
+  Method: FssXYPolarOffset OffsetToPoint(FssXYPoint fromPoint, FssXYPoint toPoint)
+Class: FssXYPolygon
+  Attribute: IReadOnlyList<FssXYPoint> Vertices
+  Method: double Area()
+  Method: FssXYPolygon Offset(double x, double y)
+  Method: FssXYPolygon Offset(FssXYPoint xy)
+Class: FssXYPolygonOperations
+  Method: FssXYLine? ClipLineToPolygon(FssXYLine line, FssXYPolygon polygon)
+Class: FssXYPolyLine
+  Attribute: List<FssXYPoint> Points
+  Method: double Length()
+  Method: int NumSubLines()
+  Method: FssXYLine SubLine(int lineIndex)
+  Method: List<FssXYLine> SubLines()
+  Method: FssXYPolyLine Offset(double x, double y)
+  Method: FssXYPolyLine Offset(FssXYPoint xy)
+Class: FssXYPolyLineOperations
+  Method: FssXYPoint Calculate3PointBezierPos(double t, FssXYPoint start, FssXYPoint control, FssXYPoint end)
+  Method: double Calculate3PointBezierTangentAngle(double t, FssXYPoint start, FssXYPoint control, FssXYPoint end)
+  Method: FssXYPoint Calculate3PointBezierFirstDerivative(FssXYPoint start, FssXYPoint control, FssXYPoint end, double t)
+  Method: FssXYPoint Calculate3PointBezierSecondDerivative(FssXYPoint start, FssXYPoint control, FssXYPoint end, double t)
+  Method: FssXYPolyLine? Create3PointBezier(FssXYPoint p1, FssXYPoint p2, FssXYPoint p3, int numSegments)
+  Method: double Calculate3PointBezierCurvature(double t, FssXYPoint start, FssXYPoint control, FssXYPoint end)
+  Method: FssXYPoint Calculate4PointBezierPos(double fraction, FssXYPoint start, FssXYPoint control1, FssXYPoint control2, FssXYPoint end)
+  Method: double Calculate4PointBezierTangentAngle(double t, FssXYPoint start, FssXYPoint control1, FssXYPoint control2, FssXYPoint end)
+  Method: FssXYPoint Calculate4PointBezierFirstDerivative(FssXYPoint start, FssXYPoint control1, FssXYPoint control2, FssXYPoint end, double t)
+  Method: FssXYPoint Calculate4PointBezierSecondDerivative(FssXYPoint start, FssXYPoint control1, FssXYPoint control2, FssXYPoint end, double t)
+  Method: FssXYPolyLine? Create4PointBezier(FssXYPoint p1, FssXYPoint p2, FssXYPoint p3, FssXYPoint p4, int numSegments)
+  Method: double CalculateCurvature(FssXYPoint firstDerivative, FssXYPoint secondDerivative)
+Class: FssXYRect
+  Attribute: FssXYPoint TopLeft
+  Attribute: FssXYPoint BottomRight
+  Attribute: double Width
+  Attribute: double Height
+  Attribute: double Left
+  Attribute: double Right
+  Attribute: double Top
+  Attribute: double Bottom
+  Attribute: double Area
+  Attribute: FssXYPoint TopRight
+  Attribute: FssXYPoint BottomLeft
+  Attribute: FssXYPoint Center
+  Attribute: FssXYPoint TopCenter
+  Attribute: FssXYPoint BottomCenter
+  Attribute: FssXYPoint LeftCenter
+  Attribute: FssXYPoint RightCenter
+  Attribute: FssXYLine TopLine
+  Attribute: FssXYLine BottomLine
+  Attribute: FssXYLine LeftLine
+  Attribute: FssXYLine RightLine
+  Method: bool Contains(FssXYPoint xy)
+Class: FssXYZ
+Class: FssXYZAnnularWedge
+  Attribute: FssXYZPoint Center
+  Attribute: double InnerRadius
+  Attribute: double OuterRadius
+  Attribute: double StartAzimuthRads
+  Attribute: double DeltaAzimuthRads
+  Attribute: double StartElevationRads
+  Attribute: double DeltaElevationRads
+  Attribute: double Height
+  Attribute: double EndAzimuthRads
+  Attribute: double EndElevationRads
+  Attribute: double StartAzimuthDegs
+  Attribute: double DeltaAzimuthDegs
+  Attribute: double EndAzimuthDegs
+  Attribute: double StartElevationDegs
+  Attribute: double DeltaElevationDegs
+  Attribute: double EndElevationDegs
+  Attribute: double AzimuthSpanRads
+  Attribute: double AzimuthSpanDegs
+  Attribute: double ElevationSpanRads
+  Attribute: double ElevationSpanDegs
+  Attribute: FssXYZPoint BaseStartInnerPoint
+  Attribute: FssXYZPoint BaseEndInnerPoint
+  Attribute: FssXYZPoint BaseStartOuterPoint
+  Attribute: FssXYZPoint BaseEndOuterPoint
+  Attribute: FssXYZPoint TopStartInnerPoint
+  Attribute: FssXYZPoint TopEndInnerPoint
+  Attribute: FssXYZPoint TopStartOuterPoint
+  Attribute: FssXYZPoint TopEndOuterPoint
+  Method: FssXYZAnnularWedge Offset(double x, double y, double z)
+Class: FssXYZArc
+  Attribute: FssXYZPoint Origin
+  Attribute: double Radius
+  Attribute: double StartAzimuthRads
+  Attribute: double StartElevationRads
+  Attribute: double DeltaAzimuthRads
+  Attribute: double DeltaElevationRads
+  Attribute: double EndAzimuthRads
+  Attribute: double EndElevationRads
+  Attribute: double StartAzimuthDegs
+  Attribute: double DeltaAzimuthDegs
+  Attribute: double EndAzimuthDegs
+  Attribute: double StartElevationDegs
+  Attribute: double DeltaElevationDegs
+  Attribute: double EndElevationDegs
+  Attribute: double AzimuthSpanRads
+  Attribute: double AzimuthSpanDegs
+  Attribute: double ElevationSpanRads
+  Attribute: double ElevationSpanDegs
+  Attribute: FssXYZPoint StartPoint
+  Attribute: FssXYZPoint EndPoint
+  Method: FssXYZArc Offset(double x, double y, double z)
+  Method: double Angle()
+Class: FssXYZBox
+  Attribute: FssXYZPoint Center
+  Attribute: double Width
+  Attribute: double Height
+  Attribute: double Length
+  Attribute: FssXYZBox Zero
+  Attribute: FssXYZBox One
+  Attribute: double OffsetForwards
+  Attribute: double OffsetBackwards
+  Attribute: double OffsetLeft
+  Attribute: double OffsetRight
+  Attribute: double OffsetUp
+  Attribute: double OffsetDown
+  Attribute: double LongestDimension
+  Method: FssXYZBox Scale(double scale)
+  Method: double LongestOffset()
+  Method: FssXYZPoint Corner(EnumCorner corner)
+  Method: FssXYZLine Edge(EnumEdge edge)
+  Method: string ToString()
+  Method: FssXYZBox Inset(double insetWidth, double insetHeight, double insetLength)
+Class: FssXYZCompound
+  Attribute: List<FssXYZ> Shapes
+Class: FssXYZCompoundOperations
+  Method: FssXYZCompound AppendShape(FssXYZCompound compound, FssXYZ shape)
+Class: FssXYZHeightmapSphere
+  Attribute: FssXYZPoint Center
+  Attribute: FssFloat2DArray Heightmap
+Class: FssXYZHeightmapSphereOperations
+  Method: FssXYZHeightmapSphere CreateSimpleHeightmapSphere(FssXYZPoint center, double radius)
+  Method: FssXYZHeightmapSphere CreateLobeHeightmapSphere(FssXYZPoint center, double radius, double lobeHeight, double lobeWidth)
+Class: FssXYZLine
+  Attribute: FssXYZPoint P1
+  Attribute: FssXYZPoint P2
+  Attribute: double Length
+  Attribute: FssXYZPoint Direction
+  Attribute: FssXYZPoint DirectionUnitVector
+  Attribute: FssXYZPoint MidPoint
+  Method: FssXYZLine Normalize()
+Class: FssXYZLineOperations
+  Method: bool IsParallel(FssXYZLine l1, FssXYZLine l2)
+Class: FssXYZMesh
+  Attribute: List<FssXYZ> Vertices
+  Attribute: List<int> TriangleIds
+Class: FssXYZMeshOperations
+Class: FssXYZPlane
+  Attribute: FssXYZPoint P1
+  Attribute: FssXYZPoint P2
+  Attribute: FssXYZPoint P3
+  Method: FssXYZPoint Normal()
+  Method: double DistanceFromPlane(FssXYZPoint point, FssXYZPlane plane)
+Class: FssXYZPlaneOperations
+  Method: bool PointsCollinear(FssXYZPoint p1, FssXYZPoint p2, FssXYZPoint p3)
+  Method: FssXYZPoint? IntersectionWithLine(FssXYZPlane plane, FssXYZLine line)
+Class: FssXYZPoint
+  Attribute: double X
+  Attribute: double Y
+  Attribute: double Z
+  Attribute: double Magnitude
+  Attribute: FssXYZPoint Zero
+  Method: FssXYZPoint Offset(double x, double y, double z)
+  Method: FssXYZPoint Offset(FssXYZPoint shiftXYZ)
+  Method: FssXYZPoint Subtract(FssXYZPoint inputXYZ)
+  Method: FssXYZPoint Scale(double scaleFactor)
+  Method: FssXYZPoint Normalize()
+  Method: FssXYZPoint XYZTo(FssXYZPoint remoteXYZ)
+  Method: double DistanceTo(FssXYZPoint inputXYZ)
+  Method: FssXYZVector XYZVectorTo(FssXYZPoint remoteXYZ)
+  Method: FssXYZPolarOffset PolarOffsetTo(FssXYZPoint p)
+  Method: FssXYZPoint PlusPolarOffset(FssXYZPolarOffset offset)
+  Method: string ToString()
+  Method: FssXYZPoint Diff(FssXYZPoint inputXYZ1, FssXYZPoint inputXYZ2)
+  Method: FssXYZPoint Sum(FssXYZPoint inputXYZ1, FssXYZPoint inputXYZ2)
+  Method: FssXYZPoint Scale(FssXYZPoint inputXYZ1, double scaleFactor)
+  Method: double DistanceBetween(FssXYZPoint inputXYZ1, FssXYZPoint inputXYZ2)
+Class: FssXYZPointOperations
+  Method: double DotProduct(FssXYZPoint a, FssXYZPoint b)
+  Method: FssXYZPoint CrossProduct(FssXYZPoint a, FssXYZPoint b)
+  Method: double AngleBetweenRads(FssXYZPoint a, FssXYZPoint b)
+  Method: double AngleBetweenRads(FssXYZPoint origin, FssXYZPoint a, FssXYZPoint b)
+  Method: FssXYZPoint OffsetAzEl(FssXYZPoint origin, double radius, double azimuthRads, double elevationRads)
+  Method: FssXYZPoint Lerp(FssXYZPoint fromPoint, FssXYZPoint toPoint, double fraction)
+  Method: FssXYZPoint Slerp(FssXYZPoint a, FssXYZPoint b, double fraction)
+  Method: FssXYZPoint InsetPoint(FssXYZPoint a, FssXYZPoint b, FssXYZPoint c, double t)
+  Method: FssXYZPoint RotateAboutAxis(FssXYZPoint point, FssXYZPoint axis, double angleRads)
+Class: FssXYZPolarOffsetOperations
+  Method: double AngleDegsBetween(FssXYZPolarOffset a, FssXYZPolarOffset b)
+  Method: FssXYZPolarOffset Lerp(FssXYZPolarOffset fromOffset, FssXYZPolarOffset toOffset, double fraction)
+Class: FssXYZPolyLine
+  Attribute: List<FssXYZPoint> Points
+  Method: double Length()
+  Method: int NumSubLines()
+  Method: FssXYZLine SubLine(int lineIndex)
+  Method: List<FssXYZLine> SubLines()
+  Method: FssXYZPolyLine Offset(double x, double y, double z)
+  Method: FssXYZPolyLine Offset(FssXYZPoint xy)
+Class: FssXYZPolyLineOperations
+  Method: FssXYZPoint Calculate3PointBezierPos(double t, FssXYZPoint start, FssXYZPoint control, FssXYZPoint end)
+  Method: FssXYZPoint Calculate3PointBezierFirstDerivative(FssXYZPoint start, FssXYZPoint control, FssXYZPoint end, double t)
+  Method: FssXYZPoint Calculate3PointBezierSecondDerivative(FssXYZPoint start, FssXYZPoint control, FssXYZPoint end, double t)
+  Method: FssXYZPoint Calculate4PointBezierPos(double t, FssXYZPoint start, FssXYZPoint control1, FssXYZPoint control2, FssXYZPoint end)
+  Method: FssXYZPoint Calculate4PointBezierFirstDerivative(FssXYZPoint start, FssXYZPoint control1, FssXYZPoint control2, FssXYZPoint end, double t)
+  Method: FssXYZPoint Calculate4PointBezierSecondDerivative(FssXYZPoint start, FssXYZPoint control1, FssXYZPoint control2, FssXYZPoint end, double t)
+Class: FssXYZSphere
+  Attribute: FssXYZPoint Center
+  Attribute: double Radius
+  Attribute: double Volume
+  Attribute: double SurfaceArea
+  Attribute: double Diameter
+  Method: bool ContainsPoint(FssXYZPoint point)
+Class: FssXYZSphereOperations
+  Method: bool LineIntersectsSphere(FssXYZLine line, FssXYZSphere sphere, FssXYZPoint? intersection1, FssXYZPoint? intersection2)
+Class: FssXYZSphereSection
+  Attribute: FssXYZPoint Center
+  Attribute: double Radius
+  Attribute: double StartAzRads
+  Attribute: double StartElRads
+  Attribute: double DeltaAzRads
+  Attribute: double DeltaElRads
+  Attribute: double StartAzDegs
+  Attribute: double DeltaAzDegs
+  Attribute: double StartElDegs
+  Attribute: double DeltaElDegs
+  Attribute: double EndAzRads
+  Attribute: double EndAzDegs
+  Attribute: double EndElRads
+  Attribute: double EndElDegs
+  Attribute: FssDoubleRange AzRangeDegs
+  Attribute: FssDoubleRange ElRangeDegs
+  Attribute: FssDoubleRange AzRangeRads
+  Attribute: FssDoubleRange ElRangeRads
+  Attribute: FssXYZPoint BaseStartPoint
+  Attribute: FssXYZPoint BaseEndPoint
+  Attribute: FssXYZPoint TopStartPoint
+  Attribute: FssXYZPoint TopEndPoint
+  Attribute: FssXYZSphereSection Zero
+  Method: FssXYZSphereSection Offset(double x, double y, double z)
+  Method: bool Contains(FssXYZPolarOffset offset)
+Class: FssXYZSphereSectionHeightmap
+Class: FssXYZVector
+  Attribute: double X
+  Attribute: double Y
+  Attribute: double Z
+  Attribute: double Magnitude
+  Attribute: double Length
+  Method: FssXYZVector Zero()
+  Method: FssXYZVector Offset(double x, double y, double z)
+  Method: FssXYZVector Offset(FssXYZVector shiftXYZ)
+  Method: FssXYZVector Subtract(FssXYZVector inputXYZ)
+  Method: FssXYZVector Scale(double scaleFactor)
+  Method: FssXYZVector Normalize()
+  Method: FssXYZVector XYZTo(FssXYZVector remoteXYZ)
+  Method: string ToString()
+  Method: FssXYZVector Diff(FssXYZVector inputXYZ1, FssXYZVector inputXYZ2)
+  Method: FssXYZVector Sum(FssXYZVector inputXYZ1, FssXYZVector inputXYZ2)
+  Method: FssXYZVector Scale(FssXYZVector inputXYZ1, double scaleFactor)
+Class: FssFloat1DArray
+  Attribute: float[] Data
+  Attribute: int Length
+  Method: float Average()
+  Method: float Min()
+  Method: float Max()
+  Method: float Sum()
+  Method: float SumAbs()
+  Method: FssFloat1DArray Multiply(FssFloat1DArray other)
+  Method: float FractionForIndex(int index)
+  Method: int IndexForFraction(float fraction)
+  Method: float InterpolateAtFraction(float fraction)
+  Method: FssFloat1DArray Resize(int newSize)
+  Method: FssFloat1DArray ArrayForIndexRange(int firstIndex, int lastIndex)
+  Method: string ToString(string format)
+Class: FssFloat1DArrayIO
+  Method: string ToCSVString(FssFloat1DArray array, int decimalPlaces)
+  Method: FssFloat1DArray FromCSVString(string csvString)
+  Method: void SaveToCSVFile(FssFloat1DArray array, string filePath, int decimalPlaces)
+  Method: FssFloat1DArray LoadFromCSVFile(string filePath)
+  Method: void SaveToBinaryFile(FssFloat1DArray array, string filePath)
+  Method: FssFloat1DArray LoadFromBinaryFile(string filePath)
+Class: FssFloat1DArrayOperations
+  Method: float CalculatePoint(float t, FssFloat1DArray controlPoints)
+  Method: FssFloat1DArray CalculateFirstDerivative(float t, FssFloat1DArray controlPoints)
+  Method: FssFloat1DArray CalculateSecondDerivative(float t, FssFloat1DArray controlPoints)
+  Method: float Calculate3PointBezier(float t, FssFloat1DArray controlPoints)
+  Method: FssFloat1DArray Calculate3PointBezierFirstDerivative(float t, FssFloat1DArray controlPoints)
+  Method: FssFloat1DArray Calculate3PointBezierSecondDerivative(FssFloat1DArray controlPoints)
+  Method: float Calculate4PointBezier(float t, FssFloat1DArray controlPoints)
+  Method: FssFloat1DArray Calculate4PointBezierFirstDerivative(float t, FssFloat1DArray controlPoints)
+  Method: FssFloat1DArray Calculate4PointBezierSecondDerivative(float t, FssFloat1DArray controlPoints)
+  Method: float Calculate5PointBezier(float t, FssFloat1DArray controlPoints)
+  Method: FssFloat1DArray Calculate5PointBezierFirstDerivative(float t, FssFloat1DArray controlPoints)
+  Method: FssFloat1DArray Calculate5PointBezierSecondDerivative(float t, FssFloat1DArray controlPoints)
+Class: FssFloat1DArrayOperations
+  Method: FssFloatRange FindValueRange(FssFloat1DArray array)
+  Method: FssFloat1DArray NormalizeToValueRange(FssFloat1DArray array, FssFloatRange newRange)
+  Method: FssFloat1DArray CropToValueRange(FssFloat1DArray array, FssFloatRange newRange)
+  Method: FssFloat1DArray Softmax(FssFloat1DArray array)
+  Method: FssFloat1DArray CreateDifferenceList(FssFloat1DArray array)
+  Method: float NearestValue(FssFloat1DArray array, float value)
+  Method: int NearestValueIndex(FssFloat1DArray array, float value)
+  Method: FssFloat1DArray Smooth(FssFloat1DArray array, SmoothType type)
+  Method: FssFloat1DArray SmoothMovingAverage5(FssFloat1DArray array)
+  Method: FssFloat1DArray ListForRange(float minVal, float maxVal, int numEntries)
+  Method: FssFloat1DArray ListForRange(FssFloatRange inRange, int numEntries)
+Class: Fss1DMappedRange
+  Method: void AddEntry(double input, double output)
+  Method: double GetValue(double input)
+Class: FssFloatDataSet
+  Attribute: IReadOnlyList<(float Fraction, float Value)> DataPoints
+  Method: void AddDataPoint(float fraction, float value)
+  Method: void RemoveDataPoint(float fraction)
+  Method: float GetValue(float fraction)
+  Method: float LinearInterpolate((float Fraction, float Value) lowerPoint, (float Fraction, float Value) upperPoint, float fraction)
+  Method: int Compare((float Fraction, float Value) x, (float Fraction, float Value) y)
+Class: FractionComparer
+  Method: int Compare((float Fraction, float Value) x, (float Fraction, float Value) y)
+Class: FssFloatDataSetIO
+  Method: string ToCSVString(FssFloatDataSet dataSet, int decimalPlaces)
+  Method: FssFloatDataSet FromCSVString(string csvString)
+  Method: void SaveToCSVFile(FssFloatDataSet dataSet, string filePath, int decimalPlaces)
+  Method: FssFloatDataSet LoadFromCSVFile(string filePath)
+  Method: void SaveToBinaryFile(FssFloatDataSet dataSet, string filePath)
+  Method: FssFloatDataSet LoadFromBinaryFile(string filePath)
+Class: FssFloatDataSetOperations
+  Method: FssFloat1DArray DataSetToArray(FssFloatDataSet dataSet, int arraySize)
+  Method: FssFloatDataSet ArrayToDataSet_Interpolation(FssFloat1DArray array, int numberOfPoints)
+  Method: FssFloatDataSet ArrayToDataSet(FssFloat1DArray array, int numberOfPoints, float directionChangeThreshold)
+Class: FssNumeric1DArray
+  Attribute: T[] Data
+  Attribute: int Length
+  Method: T Average()
+  Method: T Min()
+  Method: T Max()
+  Method: T Sum()
+  Method: T SumAbs()
+  Method: FssNumeric1DArray<T> Multiply(FssNumeric1DArray<T> other)
+  Method: T FractionForIndex(int index)
+  Method: int IndexForFraction(T fraction)
+  Method: T InterpolateAtFraction(T fraction)
+  Method: FssNumeric1DArray<T> InterpolatedResize(int newSize)
+  Method: FssNumeric1DArray<T> ArrayForIndexRange(int firstIndex, int lastIndex)
+  Method: FssNumeric1DArray<T> Reverse()
+  Method: string ToString(string format)
+Class: FssFloat2DArray
+  Attribute: int Width
+  Attribute: int Height
+  Attribute: int Count
+  Attribute: bool Populated
+  Method: string sizeStr()
+  Method: void SetFractionalValue(float fractionx, float fractiony, float value, double blendFraction)
+  Method: void InitZero()
+  Method: bool IsZero()
+  Method: float MinVal()
+  Method: float MaxVal()
+  Method: float ValRange()
+  Method: FssFloat2DArray ScaleToRange(float newMin, float newMax)
+  Method: FssFloat2DArray ScaleToMax(float newMax)
+  Method: void SetRow(int row, float value)
+  Method: void SetCol(int column, float value)
+  Method: FssFloat2DArray FlipYAxis(FssFloat2DArray array)
+  Method: FssFloat2DArray FlipXAxis(FssFloat2DArray array)
+  Method: void SetAllVals(float val)
+  Method: void SetRandomVals(float minVal, float maxVal)
+  Method: void SetTestPattern()
+  Method: bool SetPatch(FssFloat2DArray newPatch, int blX, int blY)
+  Method: bool GetPatch(int blX, int blY, int patchWidth, int patchHeight, FssFloat2DArray outPatch)
+  Method: FssFloat1DArray GetEdge(Edge e)
+  Method: void SetEdge(FssFloat1DArray edgeArray, Edge e)
+  Method: FssFloat1DArray GetRow(int row)
+  Method: void SetRow(int row, FssFloat1DArray rowArray)
+  Method: FssFloat1DArray GetCol(int col)
+  Method: void SetCol(int col, FssFloat1DArray colArray)
+  Method: float InterpolatedValue(float fractionx, float fractiony)
+  Method: FssFloat2DArray GetInterpolatedGrid(int inNewSizeX, int inNewSizeY)
+  Method: FssFloat2DArray GetSubgrid(int startX, int startY, int subgridWidth, int subgridHeight)
+  Method: FssFloat2DArray GetInterpolatedSubgrid(Fss2DGridPos gridPos, int subgridWidth, int subgridHeight)
+  Method: FssFloat2DArray[,] GetInterpolatedSubGridCellWithOverlap(int inNumSubgridCols, int inNumSubgridRows, int inSubgridSizeX, int inSubgridSizeY)
+Class: FssFloat2DArrayIO
+  Method: string ToCSVString(FssFloat2DArray array, int decimalPlaces)
+  Method: FssFloat2DArray FromCSVString(string csvString)
+  Method: void SaveToCSVFile(FssFloat2DArray array, string filePath, int decimalPlaces)
+  Method: FssFloat2DArray LoadFromCSVFile(string filePath)
+  Method: void SaveToBinaryFile(FssFloat2DArray array, string filePath)
+  Method: FssFloat2DArray LoadFromBinaryFile(string filePath)
+  Method: FssFloat2DArray LoadFromArcASIIGridFile(string filePath)
+  Method: void SaveToArcASIIGridFile(FssFloat2DArray array, string filePath, float xllcorner, float yllcorner, float cellsize, float nodataValue)
+Class: FssFloat2DArrayOperations
+  Method: FssFloat2DArray SmoothGridEdge(FssFloat2DArray refGrid, FssFloat2DArray adjacentGrid, GridPlacement adjacentPosition)
+  Method: FssFloatRange FindValueRange(FssFloat2DArray array)
+  Method: FssFloat2DArray NormalizeToRange(FssFloat2DArray array, FssFloatRange newRange)
+  Method: FssFloat2DArray CropToRange(FssFloat2DArray array, FssFloatRange newRange)
+Class: FssNumeric2DArray
+  Attribute: int Width
+  Attribute: int Height
+  Attribute: int Count
+  Attribute: bool Populated
+  Method: T MinVal()
+  Method: T MaxVal()
+  Method: T Sum()
+  Method: FssNumeric2DArray<T> Scale(T newMin, T newMax)
+  Method: void SetAll(T value)
+  Method: void SetRow(int row, T value)
+  Method: void SetCol(int col, T value)
+  Method: FssNumeric2DArray<T> Transpose()
+  Method: FssNumeric2DArray<T> ReverseRows()
+  Method: FssNumeric2DArray<T> ReverseCols()
+  Method: string ToString()
+Class: FssNumeric2DArray
+  Method: FssNumeric1DArray<T> GetRow(int row)
+  Method: void SetRow(int row, FssNumeric1DArray<T> rowArray)
+  Method: FssNumeric1DArray<T> GetCol(int col)
+  Method: void SetCol(int col, FssNumeric1DArray<T> colArray)
+  Method: FssNumeric1DArray<T> GetEdge(Edge e)
+  Method: void SetEdge(FssNumeric1DArray<T> edgeArray, Edge e)
+Class: FssNumeric2DArray
+  Method: FssNumeric2DArray<T> GetInterpolatedGrid(int inNewSizeX, int inNewSizeY)
+  Method: FssNumeric2DArray<T> GetSubgrid(int startX, int startY, int subgridWidth, int subgridHeight)
+  Method: FssNumeric2DArray<T> GetInterpolatedSubgrid(Fss2DGridPos gridPos, int subgridWidth, int subgridHeight)
+  Method: FssNumeric2DArray<T>[,] GetInterpolatedSubGridCellWithOverlap(int inNumSubgridCols, int inNumSubgridRows, int inSubgridSizeX, int inSubgridSizeY)
+Class: FssNumeric2DArrayIO
+  Method: string ToCSVString(FssNumeric2DArray<T> array, int decimalPlaces)
+  Method: FssNumeric2DArray<T> FromCSVString(string csvString)
+  Method: void SaveToCSVFile(FssNumeric2DArray<T> array, string filePath, int decimalPlaces)
+  Method: FssNumeric2DArray<T> LoadFromCSVFile(string filePath)
+  Method: void SaveToBinaryFile(FssNumeric2DArray<T> array, string filePath)
+  Method: FssNumeric2DArray<T> LoadFromBinaryFile(string filePath)
+  Method: void SaveToArcASCIIGridFile(FssNumeric2DArray<T> array, string filePath, T xllcorner, T yllcorner, T cellsize, T nodataValue)
+  Method: FssNumeric2DArray<T> LoadFromArcASCIIGridFile(string filePath)

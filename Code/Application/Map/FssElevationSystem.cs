@@ -7,13 +7,6 @@ using System.Text;
 // Patches: Ad hoc elevation data in lat long boxes
 // Tiles: Elevation data in strict lat long boxes for tile codes and at specific resolution
 
-public class FssElevationConsts
-{
-    // FssElevationConsts.InvalidEle
-    public static float InvalidEle      = -9999f;
-    public static float InvalidEleCheck = -9990f; // For checking < or > comparisons
-}
-
 // FssMap is a top level class for a map data structure.
 public class FssElevationSystem
 {
@@ -34,9 +27,6 @@ public class FssElevationSystem
     {
 
     }
-
-
-
 
     // --------------------------------------------------------------------------------------------
     // MARK: Get Tile

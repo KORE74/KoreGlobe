@@ -3,9 +3,9 @@
 
 public class FssElevationTile
 {
-    public FssLLBox        LLBox;
+    public FssMapTileCode  TileCode       = FssMapTileCode.Zero;
+    public FssLLBox        LLBox          = FssLLBox.Zero;
     public FssFloat2DArray ElevationData;
-    public FssMapTileCode  TileCode;
 
     // Zero tile
     public static FssElevationTile Zero

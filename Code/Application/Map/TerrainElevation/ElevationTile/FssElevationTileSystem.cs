@@ -110,47 +110,30 @@ public class FssElevationTileSystem
     // MARK: Static Utils
     // --------------------------------------------------------------------------------------------
 
-    // We want to have square map tiles as much as possible, so setup a routine to
-    // Function to return the number of points for longitude given a latitude.
-    // Usage: int lonRes = FssElevationTileSystem.GetLonRes(latRes, latDegs);
-    // public static int GetLonRes(int latRes, double latDegs)
-    // {
-    //     // Clamp latitude to valid range (-90 to 90 degrees).
-    //     latDegs = Math.Max(-90.0, Math.Min(90.0, latDegs));
-
-    //     // Convert latitude to radians for easier trigonometric calculations.
-    //     double latRads = Math.Abs(latDegs) * (Math.PI / 180.0);
-
-    //     // Calculate a scaling factor based on the cosine of the latitude.
-    //     // Near the equator (latitude = 0), factor is 1.0 (full resolution).
-    //     // Near the poles (latitude = +/-90), factor approaches 0 (lower resolution).
-    //     double scale = Math.Cos(latRads);
-
-    //     // Calculate the adjusted resolution for longitude.
-    //     int adjustedLonRes = (int)Math.Max(1, Math.Round(latRes * scale));
-
-    //     return adjustedLonRes;
-    // }
-
     public static FssFloat2DArray PrepTileData(FssElevationPatchSystem elePrepSystem, FssLLBox llBox, int latRes, int lonRes)
     {
         // Create lists of all the lats and lons we would iterate across
-        FssFloat1DArray loopLats = FssFloat1DArrayOperations.ListForRange((float)llBox.MinLatDegs, (float)llBox.MaxLatDegs, latRes);
-        FssFloat1DArray loopLons = FssFloat1DArrayOperations.ListForRange((float)llBox.MinLonDegs, (float)llBox.MaxLonDegs, lonRes);
+        FssFloat1DArray loopLatDegs = FssFloat1DArrayOperations.ListForRange((float)llBox.MinLatDegs, (float)llBox.MaxLatDegs, latRes);
+        FssFloat1DArray loopLonDegs = FssFloat1DArrayOperations.ListForRange((float)llBox.MinLonDegs, (float)llBox.MaxLonDegs, lonRes);
 
         // Create the output 2D list
         FssFloat2DArray retEle = new FssFloat2DArray(latRes, lonRes);
 
-        // Create the current position we'll move acorss the tile
+        // Create the current position we'll move across the tile
         FssLLPoint currPos = new();
 
+        // Store lengths, avoid repeated property access
+        int latLength = loopLatDegs.Length;
+        int lonLength = loopLonDegs.Length;
+
         // Nested loop across the lat and long lists of tile positions
-        for (int latIdx = 0; latIdx < loopLats.Length; latIdx++)
+        for (int latIdx = 0; latIdx < latLength; latIdx++)
         {
-            currPos.LatDegs = loopLats[latIdx];
-            for (int lonIdx = 0; lonIdx < loopLons.Length; lonIdx++)
+            currPos.LatDegs = loopLatDegs[latIdx];
+
+            for (int lonIdx = 0; lonIdx < lonLength; lonIdx++)
             {
-                currPos.LonDegs = loopLons[lonIdx];
+                currPos.LonDegs = loopLonDegs[lonIdx];
 
                 // Lookup the best value to this position and put it in our returned array
                 retEle[latIdx, lonIdx] = elePrepSystem.ElevationAtPos(currPos);

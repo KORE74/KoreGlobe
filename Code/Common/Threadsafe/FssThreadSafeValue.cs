@@ -1,20 +1,17 @@
 using System;
 
-#nullable enable
-
-public class FssThreadSafeValue<T> where T : class?
+public class FssThreadSafeValue<T> where T : class
 {
-    private T? _value; // Mark the field as nullable
+    private T               _value;
     private readonly object _lock = new();
-    private bool _isSet = false;
 
-    public T? Value // Mark the property as nullable
+    public T Value // Mark the property as nullable
     {
         get
         {
             lock (_lock)
             {
-                return _isSet ? _value : default;
+                return _value;
             }
         }
         set
@@ -22,19 +19,24 @@ public class FssThreadSafeValue<T> where T : class?
             lock (_lock)
             {
                 _value = value;
-                _isSet = true;
             }
         }
     }
 
-    public bool IsSet
+    public FssThreadSafeValue(T initialValue)
     {
-        get
+        _value = initialValue;
+    }
+
+    // Method to update the value atomically
+    // Example:
+    //    var threadSafeValue = new FssThreadSafeValue<int>(10);
+    //    threadSafeValue.Update(value => value + 5);
+    public void Update(Func<T, T> updateFunc)
+    {
+        lock (_lock)
         {
-            lock (_lock)
-            {
-                return _isSet;
-            }
+            _value = updateFunc(_value);
         }
     }
 }

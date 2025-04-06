@@ -22,6 +22,9 @@ public partial class FssCameraMoverWorld : Node3D
     private bool MouseDragging = false;
     private Vector2 MouseDragStart = new Vector2();
 
+    private bool MouseDraggingRight = false;
+    private Vector2 MouseDragStartRight = new Vector2();
+
     // ------------------------------------------------------------------------------------------------
 
     public FssXYZPoint CamPosXYZ
@@ -139,6 +142,40 @@ public partial class FssCameraMoverWorld : Node3D
             }
         }
         FssPolarOffset polar = new FssPolarOffset() { AzDegs = CamCourse.HeadingDegs, ElDegs = camPitch, RangeM = distanceDeltaMouseWheel };
+
+
+
+
+
+
+        // Mouse Drag RIGHT - - - - -
+
+        if (inputEvent is InputEventMouseButton dragEventRight && dragEventRight.ButtonIndex == MouseButton.Right)
+        {
+            if (!MouseDraggingRight &&  dragEventRight.Pressed) { MouseDraggingRight = true; MouseDragStart = dragEventRight.Position; }
+            if (                       !dragEventRight.Pressed) { MouseDraggingRight = false; }
+
+            GD.Print($"Right Mouse Button: {dragEventRight.Pressed} / {dragEventRight.Position}");
+        }
+        else if (inputEvent is InputEventMouseMotion motionEventRight && MouseDraggingRight)
+        {
+            GD.Print($"Right Mouse Drag: {motionEventRight.Position} / {motionEventRight.Relative}");
+
+            Vector2 dragPosition = motionEventRight.Position;
+            Vector2 dragMovement = dragPosition - MouseDragStart;
+
+            MouseDragStart = dragPosition;
+
+            float rotateScale = 0.02f;
+
+            rotateUpDegs   += dragMovement.Y * rotateScale;
+            rotateLeftDegs -= dragMovement.X * rotateScale;
+        }
+
+
+
+
+
 
         // Mouse Drag - - - - -
 
