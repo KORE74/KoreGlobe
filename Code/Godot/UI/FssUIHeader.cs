@@ -100,6 +100,33 @@ public partial class FssUIHeader : PanelContainer
     }
 
     // --------------------------------------------------------------------------------------------
+    // MARK: Localisation
+    // --------------------------------------------------------------------------------------------
+
+    // All string values - dealt with in the _Process method
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: UI Scaling
+    // --------------------------------------------------------------------------------------------
+
+    void ProcessUILayout()
+    {
+        // Get the layout parameters
+        FssUILayoutParams layoutparams = FssGodotFactory.Instance.UIState.LayoutParams;
+
+        // Get the button size
+        float buttonSize = layoutparams.GetParam("ButtonSize");
+
+        Vector2 buttonsize = new Vector2(buttonSize, buttonSize);
+
+        CliButton!.SetSize(buttonsize);
+        SettingButton!.SetSize(buttonsize);
+        NetworkButton!.SetSize(buttonsize);
+        HelpButton!.SetSize(buttonsize);
+        ExitButton!.SetSize(buttonsize);
+    }
+
+    // --------------------------------------------------------------------------------------------
     // MARK: UI Interactions
     // --------------------------------------------------------------------------------------------
 

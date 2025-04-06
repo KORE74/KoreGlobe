@@ -8,6 +8,8 @@ public enum FssCamMode
     AlignCam
 }
 
+
+
 public class FssUIState
 {
     public string     ScenarioName        { get; set; } = "DefaultScenario";
@@ -18,10 +20,13 @@ public class FssUIState
 
     public bool       ShowRoutes          { get; set; } = true;
 
+    public FssUILayoutParams LayoutParams { get; set; } = new FssUILayoutParams();
 
     public FssUIState()
     {
         CameraMode = FssCamMode.WorldCam;
+
+        LayoutParams.ReadFromFile();
     }
 
     public bool IsCamModeWorld()    => CameraMode == FssCamMode.WorldCam;

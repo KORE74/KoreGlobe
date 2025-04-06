@@ -147,5 +147,10 @@ public static partial class FssValueUtils
         return Math.Abs(val - matchval) <= tolerance;
     }
 
+    // Usage: if (FssValueUtils.IsInteger(3.0f)) { ... }
+    public static bool IsInteger(float val, float tolerance = FssConsts.ArbitraryMinFloat)
+    {
+        return EqualsWithinTolerance(val, (float)Math.Round(val), tolerance);
+    }
 
 }

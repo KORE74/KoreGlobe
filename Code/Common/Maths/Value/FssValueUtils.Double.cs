@@ -112,6 +112,11 @@ public static partial class FssValueUtils
         return val >= rangemin && val <= rangemax;
     }
 
+    private static bool IsInteger(double val, double tolerance = FssConsts.ArbitraryMinDouble)
+    {
+        return EqualsWithinTolerance(val, Math.Round(val), tolerance);
+    }
+
     // --------------------------------------------------------------------------------------------
     // Uses a y=mx+c mechanism to convert a value between an input and output range.
 

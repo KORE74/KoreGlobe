@@ -19,10 +19,9 @@ public partial class FssCameraMoverWorld : Node3D
     private Fss1DMappedRange camVertSpeedForAlt = new Fss1DMappedRange();
 
     // mouse drag state
-    private bool MouseDragging = false;
-    private Vector2 MouseDragStart = new Vector2();
-
-    private bool MouseDraggingRight = false;
+    private bool    MouseDraggingLeft   = false;
+    private bool    MouseDraggingRight  = false;
+    private Vector2 MouseDragStartLeft  = new Vector2();
     private Vector2 MouseDragStartRight = new Vector2();
 
     // ------------------------------------------------------------------------------------------------
@@ -148,23 +147,23 @@ public partial class FssCameraMoverWorld : Node3D
 
 
 
-        // Mouse Drag RIGHT - - - - -
+        // Mouse Drag // Right Rotate - - - - -
 
         if (inputEvent is InputEventMouseButton dragEventRight && dragEventRight.ButtonIndex == MouseButton.Right)
         {
-            if (!MouseDraggingRight &&  dragEventRight.Pressed) { MouseDraggingRight = true; MouseDragStart = dragEventRight.Position; }
+            if (!MouseDraggingRight &&  dragEventRight.Pressed) { MouseDraggingRight = true; MouseDragStartLeft = dragEventRight.Position; }
             if (                       !dragEventRight.Pressed) { MouseDraggingRight = false; }
 
-            GD.Print($"Right Mouse Button: {dragEventRight.Pressed} / {dragEventRight.Position}");
+            //GD.Print($"Right Mouse Button: {dragEventRight.Pressed} / {dragEventRight.Position}");
         }
         else if (inputEvent is InputEventMouseMotion motionEventRight && MouseDraggingRight)
         {
-            GD.Print($"Right Mouse Drag: {motionEventRight.Position} / {motionEventRight.Relative}");
+            //GD.Print($"Right Mouse Drag: {motionEventRight.Position} / {motionEventRight.Relative}");
 
             Vector2 dragPosition = motionEventRight.Position;
-            Vector2 dragMovement = dragPosition - MouseDragStart;
+            Vector2 dragMovement = dragPosition - MouseDragStartLeft;
 
-            MouseDragStart = dragPosition;
+            MouseDragStartLeft = dragPosition;
 
             float rotateScale = 0.02f;
 
@@ -177,48 +176,29 @@ public partial class FssCameraMoverWorld : Node3D
 
 
 
-        // Mouse Drag - - - - -
+        // Mouse Drag // Left Pan - - - - -
 
         if (inputEvent is InputEventMouseButton dragEvent && dragEvent.ButtonIndex == MouseButton.Left)
         {
-            if (!MouseDragging &&  dragEvent.Pressed) { MouseDragging = true; MouseDragStart = dragEvent.Position; }
-            if (                  !dragEvent.Pressed) { MouseDragging = false; }
+            if (!MouseDraggingLeft &&  dragEvent.Pressed) { MouseDraggingLeft = true; MouseDragStartLeft = dragEvent.Position; }
+            if (                  !dragEvent.Pressed) { MouseDraggingLeft = false; }
         }
         else
         {
-            if (inputEvent is InputEventMouseMotion motionEvent && MouseDragging)
+            if (inputEvent is InputEventMouseMotion motionEvent && MouseDraggingLeft)
             {
                 Vector2 dragPosition = motionEvent.Position;
-                Vector2 dragMovement = dragPosition - MouseDragStart;
+                Vector2 dragMovement = dragPosition - MouseDragStartLeft;
 
-                // ALT = rotate
-                if (Input.IsActionPressed("ui_alt"))
-                {
-                    // ALT-SHIFT = Elevate
-                    if (Input.IsActionPressed("ui_shift"))
-                    {
-                        translateUpM += dragMovement.Y / 50f;
-                    }
-                    else
-                    {
-                        float rotateScale = 0.02f;
+                float drawMovementScale = 150f;
+                if (Input.IsActionPressed("ui_shift")) drawMovementScale /= 3f;
+                if (Input.IsActionPressed("ui_ctrl"))  drawMovementScale *= 2f;
 
-                        rotateUpDegs   += dragMovement.Y * rotateScale;
-                        rotateLeftDegs -= dragMovement.X * rotateScale;
-                    }
-                }
-                else
-                {
-                    float drawMovementScale = 150f;
-                    if (Input.IsActionPressed("ui_shift")) drawMovementScale /= 3f;
-                    if (Input.IsActionPressed("ui_ctrl"))  drawMovementScale *= 2f;
-
-                    translateFwdM  -= dragMovement.Y / drawMovementScale;
-                    translateLeftM += dragMovement.X / drawMovementScale;
-                }
+                translateFwdM  -= dragMovement.Y / drawMovementScale;
+                translateLeftM += dragMovement.X / drawMovementScale;
 
                 // Reset the drag start position: Not doing this makes the offset act more as a veolicty than a position.
-                MouseDragStart = dragPosition;
+                MouseDragStartLeft = dragPosition;
             }
         }
 
