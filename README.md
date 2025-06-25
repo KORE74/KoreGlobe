@@ -10,6 +10,9 @@
 - 🧭 Lat/Lon/Alt position system with smooth camera navigation
 - 🛠️ Built entirely in C# using Godot's .NET support
 
+![KoreGlobe Screenshot](./GlobeScreenshot.png)
+
+
 ## Getting Started
 
 ### Prerequisites
