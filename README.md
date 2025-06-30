@@ -26,3 +26,5 @@
 ```bash
 git clone https://github.com/KORE74/KoreGlobe.git
 ```
+Open the project in Godot and build/run the main scene.
+A map library of pre-prepared data is available separately.
