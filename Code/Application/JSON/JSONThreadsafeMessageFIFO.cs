@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 
-namespace FssJSON
+namespace GloJSON
 {
     public class JSONThreadsafeMessageFIFO
     {

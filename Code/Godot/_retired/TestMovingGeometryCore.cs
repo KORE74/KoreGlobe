@@ -42,12 +42,12 @@ public partial class TestMovingGeometryCore : Node3D
     // private float UIPollTimer2 = 0.0f;
     // private float PollTimerTrailNode = 0.0f;
 
-    // private FssLLAPoint    PlatformPos;
-    // private FssCourse      PlatformCourse;
-    // private FssCourseDelta PlatformCourseDelta;
+    // private GloLLAPoint    PlatformPos;
+    // private GloCourse      PlatformCourse;
+    // private GloCourseDelta PlatformCourseDelta;
 
-    // private FssCyclicIdGenerator IdGen = new FssCyclicIdGenerator(250);
-    // private string randomString = FssRandomStringGenerator.GenerateRandomString(5);
+    // private GloCyclicIdGenerator IdGen = new GloCyclicIdGenerator(250);
+    // private string randomString = GloRandomStringGenerator.GenerateRandomString(5);
 
     // // --------------------------------------------------------------------------------------------
     // // MARK: Node _Ready and _Process
@@ -56,13 +56,13 @@ public partial class TestMovingGeometryCore : Node3D
     // // Called when the node enters the scene tree for the first time.
     // public override void _Ready()
     // {
-    //     FssEarthCore.EarthRadiusM = 10;
+    //     GloEarthCore.EarthRadiusM = 10;
 
-    //     matColorRed    = FssMaterialFactory.SimpleColoredMaterial(new Color(0.9f, 0.3f, 0.3f, 1f));
-    //     matColorBlue   = FssMaterialFactory.SimpleColoredMaterial(new Color(0.3f, 0.3f, 0.9f, 1f));
-    //     matColorYellow = FssMaterialFactory.SimpleColoredMaterial(FssColorUtil.Colors["OffYellow"]);
-    //     matColorWhite  = FssMaterialFactory.SimpleColoredMaterial(new Color(1f, 1f, 1f, 1f));
-    //     matWire        = FssMaterialFactory.WireframeMaterial(FssColorUtil.Colors["White"]);
+    //     matColorRed    = GloMaterialFactory.SimpleColoredMaterial(new Color(0.9f, 0.3f, 0.3f, 1f));
+    //     matColorBlue   = GloMaterialFactory.SimpleColoredMaterial(new Color(0.3f, 0.3f, 0.9f, 1f));
+    //     matColorYellow = GloMaterialFactory.SimpleColoredMaterial(GloColorUtil.Colors["OffYellow"]);
+    //     matColorWhite  = GloMaterialFactory.SimpleColoredMaterial(new Color(1f, 1f, 1f, 1f));
+    //     matWire        = GloMaterialFactory.WireframeMaterial(GloColorUtil.Colors["White"]);
 
     //     CreateCoreNode();
     //     CreateLinkCylinder();
@@ -74,13 +74,13 @@ public partial class TestMovingGeometryCore : Node3D
     // // Called every frame. 'delta' is the elapsed time since the previous frame.
     // public override void _Process(double delta)
     // {
-    //     if (UIPollTimer < FssCentralTime.RuntimeSecs)
+    //     if (UIPollTimer < GloCentralTime.RuntimeSecs)
     //     {
-    //         UIPollTimer = FssCentralTime.RuntimeSecs + 1f; // Update the timer to the next whole second
+    //         UIPollTimer = GloCentralTime.RuntimeSecs + 1f; // Update the timer to the next whole second
 
-    //         GD.Print($"FocusPoint: Lat:{FssEarthCore.RwFocusLLA.LatDegs:0.00} Lon:{FssEarthCore.RwFocusLLA.LonDegs:0.00} RadiusM:{FssEarthCore.RwFocusLLA.RadiusM:0.00}");
+    //         GD.Print($"FocusPoint: Lat:{GloEarthCore.RwFocusLLA.LatDegs:0.00} Lon:{GloEarthCore.RwFocusLLA.LonDegs:0.00} RadiusM:{GloEarthCore.RwFocusLLA.RadiusM:0.00}");
     //         GD.Print($"PlatPos: Lat:{PlatformPos.LatDegs:0.00} Lon:{PlatformPos.LonDegs:0.00} RadiusM:{PlatformPos.RadiusM:0.00} // Course: Heading:{PlatformCourse.HeadingDegs:0.00} Speed:{PlatformCourse.SpeedMps:0.00}");
-    //         GD.Print($"FocusPos: {FssEarthCore.FocusPos} // CorePos: {FssEarthCore.CorePos} // CorePos Magnitude {FssEarthCore.CorePos.Length()}");
+    //         GD.Print($"FocusPos: {GloEarthCore.FocusPos} // CorePos: {GloEarthCore.CorePos} // CorePos Magnitude {GloEarthCore.CorePos.Length()}");
     //     }
 
     //     float scale = 0.7f;
@@ -93,13 +93,13 @@ public partial class TestMovingGeometryCore : Node3D
     //     if (AnimAzDegs >  25f) AnimAzDelta = -1.55f;
     //     if (AnimAzDegs <   0f) AnimAzDelta =  1.55f;
 
-    //     FssEarthCore.RwFocusLLA = new FssLLAPoint() {
+    //     GloEarthCore.RwFocusLLA = new GloLLAPoint() {
     //         LatDegs = AnimElDegs,
     //         LonDegs = AnimAzDegs,
-    //         RadiusM = FssEarthCore.EarthRadiusM };
+    //         RadiusM = GloEarthCore.EarthRadiusM };
 
     //     // Update the gloabel Focus Position, LLA and Vector3
-    //     FssEarthCore.UpdatePositions();
+    //     GloEarthCore.UpdatePositions();
 
     //     UpdatePositions();
     //     UpdateLinkCylinder();
@@ -114,40 +114,40 @@ public partial class TestMovingGeometryCore : Node3D
 
     // private void CreateCoreNode()
     // {
-    //     CoreNode = FssPrimitiveFactory.CreateSphereNode("CoreNode", new Vector3(0f, 0f, 0f), MarkerSize, FssColorUtil.Colors["OffBlue"], WithWire);
+    //     CoreNode = GloPrimitiveFactory.CreateSphereNode("CoreNode", new Vector3(0f, 0f, 0f), MarkerSize, GloColorUtil.Colors["OffBlue"], WithWire);
     //     AddChild(CoreNode);
 
-    //     FocusPointNode = FssPrimitiveFactory.CreateSphereNode("FocusPointNode", new Vector3(0f, 0f, 0f), MarkerSize, FssColorUtil.Colors["OffYellow"], WithWire);
+    //     FocusPointNode = GloPrimitiveFactory.CreateSphereNode("FocusPointNode", new Vector3(0f, 0f, 0f), MarkerSize, GloColorUtil.Colors["OffYellow"], WithWire);
     //     AddChild(FocusPointNode);
 
-    //     ZeroNode = FssPrimitiveFactory.CreateSphereNode("ZeroNode", new Vector3(0f, 0f, 0f), MarkerSize, FssColorUtil.Colors["OffRed"], WithWire);
+    //     ZeroNode = GloPrimitiveFactory.CreateSphereNode("ZeroNode", new Vector3(0f, 0f, 0f), MarkerSize, GloColorUtil.Colors["OffRed"], WithWire);
     //     AddChild(ZeroNode);
 
 
     //     {
-    //         Node3D tempNode1 = FssPrimitiveFactory.CreateSphereNode("tempNode1", new Vector3(0f, 1f, 0f), MarkerSize/3, FssColorUtil.Colors["Magenta"], WithWire);
+    //         Node3D tempNode1 = GloPrimitiveFactory.CreateSphereNode("tempNode1", new Vector3(0f, 1f, 0f), MarkerSize/3, GloColorUtil.Colors["Magenta"], WithWire);
     //         FocusPointNode.AddChild(tempNode1);
 
-    //         Node3D tempNode2 = FssPrimitiveFactory.CreateSphereNode("tempNode2", new Vector3(0f, 2f, 0f), MarkerSize/3, FssColorUtil.Colors["Magenta"], WithWire);
+    //         Node3D tempNode2 = GloPrimitiveFactory.CreateSphereNode("tempNode2", new Vector3(0f, 2f, 0f), MarkerSize/3, GloColorUtil.Colors["Magenta"], WithWire);
     //         FocusPointNode.AddChild(tempNode2);
 
-    //         Node3D tempNode3 = FssPrimitiveFactory.CreateSphereNode("tempNode3", new Vector3(1f, 1f, 0f), MarkerSize/3, FssColorUtil.Colors["Magenta"], WithWire);
+    //         Node3D tempNode3 = GloPrimitiveFactory.CreateSphereNode("tempNode3", new Vector3(1f, 1f, 0f), MarkerSize/3, GloColorUtil.Colors["Magenta"], WithWire);
     //         FocusPointNode.AddChild(tempNode3);
     //     }
 
     //     {
-    //         TestNode = FssPrimitiveFactory.CreateSphereNode("TestNode", Vector3.Zero, MarkerSize/3, FssColorUtil.Colors["Yellow"], WithWire);
+    //         TestNode = GloPrimitiveFactory.CreateSphereNode("TestNode", Vector3.Zero, MarkerSize/3, GloColorUtil.Colors["Yellow"], WithWire);
     //         FocusPointNode.AddChild(TestNode);
 
-    //         TestNodeAbove = FssPrimitiveFactory.CreateSphereNode("TestNodeAbove", Vector3.Zero, MarkerSize/3, FssColorUtil.Colors["Yellow"], WithWire);
+    //         TestNodeAbove = GloPrimitiveFactory.CreateSphereNode("TestNodeAbove", Vector3.Zero, MarkerSize/3, GloColorUtil.Colors["Yellow"], WithWire);
     //         FocusPointNode.AddChild(TestNodeAbove);
 
-    //         TestNodeAhead = FssPrimitiveFactory.CreateSphereNode("TestNodeAhead", Vector3.Zero, MarkerSize/3, FssColorUtil.Colors["Yellow"], WithWire);
+    //         TestNodeAhead = GloPrimitiveFactory.CreateSphereNode("TestNodeAhead", Vector3.Zero, MarkerSize/3, GloColorUtil.Colors["Yellow"], WithWire);
     //         FocusPointNode.AddChild(TestNodeAhead);
     //     }
 
 
-    //     CoreNode.AddChild(new TestEarthCore((float)FssEarthCore.EarthRadiusM));
+    //     CoreNode.AddChild(new TestEarthCore((float)GloEarthCore.EarthRadiusM));
     //     CoreNode.AddChild(new TestLabelMaker());
     // }
 
@@ -168,13 +168,13 @@ public partial class TestMovingGeometryCore : Node3D
 
     // private void UpdateLinkCylinder()
     // {
-    //     Vector3 frompoint = FssEarthCore.CorePos;
-    //     Vector3 topoint   = FssEarthCore.FocusPos;
+    //     Vector3 frompoint = GloEarthCore.CorePos;
+    //     Vector3 topoint   = GloEarthCore.FocusPos;
     //     Vector3 pointdiff = topoint - frompoint;
 
     //     float radius = MarkerSize * 0.5f;
 
-    //     FssMeshBuilder meshBuilder = new FssMeshBuilder();
+    //     GloMeshBuilder meshBuilder = new GloMeshBuilder();
     //     meshBuilder.AddCylinder(Vector3.Zero, pointdiff, radius, radius, 12, false);
     //     ArrayMesh meshData = meshBuilder.Build2("LinkCylinder", false);
 
@@ -189,8 +189,8 @@ public partial class TestMovingGeometryCore : Node3D
 
     // private void UpdatePositions()
     // {
-    //     CoreNode.Position       = FssEarthCore.CorePos;
-    //     FocusPointNode.Position = FssEarthCore.FocusPos;
+    //     CoreNode.Position       = GloEarthCore.CorePos;
+    //     FocusPointNode.Position = GloEarthCore.FocusPos;
 
     //     // Ensure the core and focus point rotations are zero
     //     CoreNode.Rotation       = new Vector3(0f, 0f, 0f);
@@ -203,16 +203,16 @@ public partial class TestMovingGeometryCore : Node3D
 
     // private void CreatePlatform()
     // {
-    //     PlatformPos = new FssLLAPoint() {
+    //     PlatformPos = new GloLLAPoint() {
     //         LatDegs = 10f,
     //         LonDegs = 10f,
     //         RadiusM = 10f };
 
-    //     PlatformCourse = new FssCourse() {
+    //     PlatformCourse = new GloCourse() {
     //         HeadingDegs = 0f,
     //         SpeedMps    = 0.15f };
 
-    //     PlatformCourseDelta = new FssCourseDelta() {
+    //     PlatformCourseDelta = new GloCourseDelta() {
     //         HeadingChangeClockwiseDegsSec = -8f,
     //         SpeedChangeMpMps              = 0f };
     // }
@@ -223,7 +223,7 @@ public partial class TestMovingGeometryCore : Node3D
     //     PlaformBaseNode = new Node3D() { Name = "PlaformBaseNode" };
     //     FocusPointNode.AddChild(PlaformBaseNode);
 
-    //     FssPrimitiveFactory.AddAxisMarkers(PlaformBaseNode, 0.2f, 0.05f);
+    //     GloPrimitiveFactory.AddAxisMarkers(PlaformBaseNode, 0.2f, 0.05f);
 
     //     string ModelPath = "res://Resources/Plane_Paper/PaperPlanes_v002.glb";
 
@@ -251,7 +251,7 @@ public partial class TestMovingGeometryCore : Node3D
 
     // private void UpdatePlatformNodes(double delta)
     // {
-    //     FssRWPlatformPositions rwStruct = FssZeroOffsetOperations.RealWorldStruct(PlatformPos, PlatformCourse);
+    //     GloRWPlatformPositions rwStruct = GloGeoConvOperations.RealWorldStruct(PlatformPos, PlatformCourse);
 
     //     // PlaformBaseNode.Position = rwStruct.vecPos;
     //     // PlaformBaseNode.LookAt(rwStruct.vecPosAhead, rwStruct.vecPosAbove, true);
@@ -265,12 +265,12 @@ public partial class TestMovingGeometryCore : Node3D
     //     // Vector3 ahead = new Vector3(0f, 2f, 0f);
     //     // Vector3 above = new Vector3(1f, 1f, 0f);
 
-    //     Vector3 adjustedPos   = rwStruct.vecPos + FssEarthCore.FocusPos;
-    //     Vector3 adjustedAhead = ToFssbal(rwStruct.vecPosAhead + FssEarthCore.FocusPos);
-    //     Vector3 adjustedAbove = ToFssbal(rwStruct.vecPosAbove + FssEarthCore.FocusPos);
+    //     Vector3 adjustedPos   = rwStruct.vecPos + GloEarthCore.FocusPos;
+    //     Vector3 adjustedAhead = ToGlobal(rwStruct.vecPosAhead + GloEarthCore.FocusPos);
+    //     Vector3 adjustedAbove = ToGlobal(rwStruct.vecPosAbove + GloEarthCore.FocusPos);
 
-    //     // ahead += FssEarthCore.FocusPos;
-    //     // above += FssEarthCore.FocusPos;
+    //     // ahead += GloEarthCore.FocusPos;
+    //     // above += GloEarthCore.FocusPos;
 
     //     PlaformBaseNode.Position = adjustedPos;
     //     PlaformBaseNode.LookAt(adjustedAhead, adjustedAbove, true);

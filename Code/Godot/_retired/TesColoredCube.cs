@@ -68,8 +68,8 @@ public partial class TesColoredCube : Node3D
 
 
 
-        var matColor = FssMaterialFactory.VertexColorMaterial();
-        var matBlue  = FssMaterialFactory.SimpleColoredMaterial(new Color(0.0f, 0.5f, 1.0f, 1.0f));
+        var matColor = GloMaterialFactory.VertexColorMaterial();
+        var matBlue  = GloMaterialFactory.SimpleColoredMaterial(new Color(0.0f, 0.5f, 1.0f, 1.0f));
 
         // Assign the material to the mesh instance
         //meshInstance.MaterialOverride = vertexColorMaterial;

@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://cle61uafx4wyg"]
 
-[ext_resource type="Script" uid="uid://bw1a3iur4ywdp" path="res://Code/Godot/Core/FssRootNode.cs" id="1_hb65s"]
+[ext_resource type="Script" uid="uid://d2o8w4swpnh2y" path="res://Code/Godot/TestZeroOffset.cs" id="1_hb65s"]
 [ext_resource type="PackedScene" uid="uid://ck4tngsqwb7jf" path="res://Scenes/ui_top.tscn" id="3_3wlp5"]
 
 [sub_resource type="Environment" id="Environment_r87dp"]

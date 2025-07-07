@@ -1,0 +1,167 @@
+using Godot;
+using System;
+using System.IO;
+using System.Collections.Generic;
+
+public partial class TestZeroOffset : Node3D
+{
+    Node3D PlaformBaseNode;
+    Node3D ModelResourceNode;
+
+    // TestZeroOffset.WorldCamNode.CamNode
+
+    // public static GloCameraMoverWorld WorldCamNode;
+
+    private float MarkerSize  = 0.2f;
+    private bool  WithWire = true;
+
+    private float AnimAzDegs  = 0f;
+    private float AnimElDegs  = 0f;
+    private float AnimAzDelta = 1.55f;
+    private float AnimElDelta = 1.05f;
+
+    private float UIPollTimer = 0.0f;
+    private float UIPollTimer2 = 0.0f;
+    private float PollTimerTrailNode = 0.0f;
+
+    //private GloLLAPoint    PlatformPos;
+    //private GloCourse      PlatformCourse;
+    //private GloCourseDelta PlatformCourseDelta;
+
+    private float Timer5Sec = 0.0f;
+    private bool  OneShot = false;
+
+    private bool  OneShot_5Seconds = false;
+
+
+    //private float TimerContrail = 0.0f;
+
+    // private GloCyclicIdGenerator IdGen = new GloCyclicIdGenerator(250);
+    // private string randomString = GloRandomStringGenerator.GenerateRandomString(5);
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Node _Ready and _Process
+    // --------------------------------------------------------------------------------------------
+
+    // Called when the node enters the scene tree for the first time.
+    public override void _Ready()
+    {
+        GloCentralLog.AddEntry($"TestZeroOffset: _Ready // {KoreGlobals.VersionString}");
+        GD.Print($"=== TestZeroOffset: _Ready // {KoreGlobals.VersionString} ===================================== ");
+
+        // Setup the factory that holds a centralised reference to key objects
+        GloGodotFactory.Instance.CreateObjects(this);
+
+        // Default the zero point.
+        GloZeroNode.SetZeroNodePosition(45, 0);
+
+        // Debug report the world consts
+        GloZeroOffset.ReportConsts();
+
+
+        // Read the manually included sets of assets
+        bool loadModels = true;
+        if (loadModels)
+        {
+            try
+            {
+                GloCentralLog.AddEntry("ModelImport // Stage 1: Load JSON files");
+                string jsonMilitary     = GloGodotFileOperations.ReadStringFromFile("res://Resources/Assets/MilitaryVehicles/Inventory.json");
+                string jsonCivilian     = GloGodotFileOperations.ReadStringFromFile("res://Resources/Assets/CivilianVehicles/Inventory.json");
+                string jsonPlaceholders = GloGodotFileOperations.ReadStringFromFile("res://Resources/Assets/PlaceholderModels/Inventory.json");
+                GloGodotFactory.Instance.ModelLibrary.LoadJSONConfigFile(jsonMilitary);
+                GloGodotFactory.Instance.ModelLibrary.LoadJSONConfigFile(jsonCivilian);
+                GloGodotFactory.Instance.ModelLibrary.LoadJSONConfigFile(jsonPlaceholders);
+
+                GloCentralLog.AddEntry("ModelImport // Stage 2: Load Models");
+                GloGodotFactory.Instance.ModelLibrary.LoadModelToCache();
+                GloCentralLog.AddEntry("ModelImport // Done");
+
+            }
+            catch (Exception ex)
+            {
+                GloCentralLog.AddEntry("ModelImport // EXCEPTION: {ex.Message}");
+            }
+        }
+
+        // bool DLCTesting = true;
+
+        // if (DLCTesting)
+        // {
+        //     //GloDlcOperations.CreateDlc();
+
+        //     List<string> dlcList = GloDlcOperations.ListLoadableDlcPaths();
+
+        //     foreach (string dlc in dlcList)
+        //         GloDlcOperations.LoadDlc(dlc);
+
+        //     GloCentralLog.AddEntry( GloDlcOperations.DlcReport() );
+
+        //     // Find the JSON files in each DLC and report on them
+        //     List<string> dlcTitlesList = GloDlcOperations.ListLoadedDlcTitles();
+        //     foreach (string currDlcTitle in dlcTitlesList)
+        //     {
+        //         string invJson = GloDlcOperations.InventoryJsonForDLCTitle(currDlcTitle);
+        //         GloCentralLog.AddEntry($"DLC: {currDlcTitle} JSON: {invJson}");
+        //     }
+
+        //     string invJson2 = GloDlcOperations.InventoryJsonForDLCTitle("PlaceholderModels");
+        //     GloGodotFactory.Instance.ModelLibrary.LoadJSONConfigFile(invJson2);
+
+        //     string invJson3 = GloDlcOperations.InventoryJsonForDLCTitle("MilitaryVehicles");
+        //     GloGodotFactory.Instance.ModelLibrary.LoadJSONConfigFile(invJson3);
+
+        //     GloCentralLog.AddEntry( GloGodotFactory.Instance.ModelLibrary.ReportContent() );
+        // }
+    }
+
+
+    // Called every frame. 'delta' is the elapsed time since the previous frame.
+    public override void _Process(double delta)
+    {
+        if (!OneShot)
+        {
+            OneShot = true;
+            GD.Print("OneShot: _Process");
+            GloCentralLog.AddEntry("OneShot: _Process");
+
+        }
+
+        if (!OneShot_5Seconds)
+        {
+            if (GloCentralTime.RuntimeIntSecs > 5)
+            {
+                OneShot_5Seconds = true;
+                GloCentralLog.AddEntry("OneShot_5Seconds: _Process");
+                GD.Print("OneShot_5Seconds: _Process");
+
+                // GloGodotFactory.Instance.ModelLibrary.CheckModelLoad();
+                //var packedScene = GD.Load<PackedScene>("res://Scenes/TreeView.tscn");
+                var packedScene = GD.Load<PackedScene>("res://Scenes/ui_top.tscn");
+
+                // Instance it (turn PackedScene into a live node)
+                Control newNode = packedScene.Instantiate<Control>();
+
+                // Add it to the current node (or wherever you want)
+                AddChild(newNode);
+
+            }
+        }
+
+        // trigger every 5 seconds
+        if (GloCentralTime.RuntimeIntSecs > Timer5Sec)
+        {
+            Timer5Sec = GloCentralTime.RuntimeIntSecs + 5;
+
+            // Randomize the zero point in each run so we don't bake-in assumptions.
+            double randomLat = GloValueUtils.RandomInRange(45, 60);
+            double randomLon = GloValueUtils.RandomInRange(-8, -0);
+
+            // GloZeroNode.SetZeroNodePosition(randomLat, randomLon);
+
+            // GloGodotFactory.Instance.ModelLibrary.CheckModelLoad();
+
+
+        }
+    }
+}

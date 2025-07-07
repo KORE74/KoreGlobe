@@ -12,16 +12,16 @@
 //     public string ModelPath = "res://Resources/Models/Plane/Plane_Paper/PaperPlanes_v002.glb";
 
 //     Node? CoreNode;
-//     FssLLAPoint PrevPos = new FssLLAPoint() { LatDegs = 0, LonDegs = -70, AltMslM = 1.4f };
+//     GloLLAPoint PrevPos = new GloLLAPoint() { LatDegs = 0, LonDegs = -70, AltMslM = 1.4f };
 
-//     ShaderMaterial     matWire  = FssMaterialFactory.WireframeMaterial(FssColorUtil.Colors["White"]);
-//     StandardMaterial3D matGrey  = FssMaterialFactory.SimpleColoredMaterial(new Color(0.5f, 0.5f, 0.5f, 1f));
+//     ShaderMaterial     matWire  = GloMaterialFactory.WireframeMaterial(GloColorUtil.Colors["White"]);
+//     StandardMaterial3D matGrey  = GloMaterialFactory.SimpleColoredMaterial(new Color(0.5f, 0.5f, 0.5f, 1f));
 
 //     // Define the position and course
-//     private FssLLAPoint pos   = new FssLLAPoint() { LatDegs = 0, LonDegs = -70, AltMslM = 1.4f };
-//     private FssCourse Course  = new FssCourse()   { HeadingDegs = 0, SpeedKph = 1200000 };
+//     private GloLLAPoint pos   = new GloLLAPoint() { LatDegs = 0, LonDegs = -70, AltMslM = 1.4f };
+//     private GloCourse Course  = new GloCourse()   { HeadingDegs = 0, SpeedKph = 1200000 };
 
-//     private FssPolarOffset CameraOffset = new FssPolarOffset() { RangeM = -0.7f, AzDegs = 45, ElDegs = 45 };
+//     private GloAzElRange CameraOffset = new GloAzElRange() { RangeM = -0.7f, AzDegs = 45, ElDegs = 45 };
 
 //     // Define the model node hierarchy
 //     // Parent
@@ -40,9 +40,9 @@
 //     // Node3D NodeMarkerAhead   = null;
 //     Camera3D ModelCamera     = null;
 
-//     FssCyclicIdGenerator IdGen = new FssCyclicIdGenerator(250);
+//     GloCyclicIdGenerator IdGen = new GloCyclicIdGenerator(250);
 
-//     private string randomString = FssRandomStringGenerator.GenerateRandomString(5);
+//     private string randomString = GloRandomStringGenerator.GenerateRandomString(5);
 
 //     float Timer1Hz = 0f;
 //     float Timer4Hz = 0f;
@@ -54,10 +54,10 @@
 //     public override void _Ready()
 //     {
 //         // Define the position to start
-//         double randLat = FssValueUtils.RandomInRange(-30, 30);
-//         double randLon = FssValueUtils.RandomInRange(-150, 150);
-//         double randAlt = FssValueUtils.RandomInRange(1.3, 1.5);
-//         pos   = new FssLLAPoint() { LatDegs = randLat, LonDegs = randLon, AltMslM = randAlt };
+//         double randLat = GloValueUtils.RandomInRange(-30, 30);
+//         double randLon = GloValueUtils.RandomInRange(-150, 150);
+//         double randAlt = GloValueUtils.RandomInRange(1.3, 1.5);
+//         pos   = new GloLLAPoint() { LatDegs = randLat, LonDegs = randLon, AltMslM = randAlt };
 
 //         PackedScene importedModel = (PackedScene)ResourceLoader.Load(ModelPath);
 //         if (importedModel != null)
@@ -78,18 +78,18 @@
 //             //ModelResourceNode.Scale    = new Vector3(0.005f, 0.005f, 0.005f); // Set the model scale
 //             ModelResourceNode.Position = new Vector3(0f, 0f, 0f); // Set the model position
 
-//             FssPrimitiveFactory.AddAxisMarkers(ModelNode, 0.02f, 0.005f);
+//             GloPrimitiveFactory.AddAxisMarkers(ModelNode, 0.02f, 0.005f);
 
 //             // ---------------------------------------
 
 //             // Add a wedge in front
-//             FssMeshBuilder frontWedge = new FssMeshBuilder();
+//             GloMeshBuilder frontWedge = new GloMeshBuilder();
 //             frontWedge.AddPyramidByPoint(0.3f, 0.1f, 0.04f);
 
 //             ArrayMesh meshData = frontWedge.Build2("Sphere", false);
 
-//             var matWire      = FssMaterialFactory.WireframeMaterial(FssColorUtil.Colors["White"]);
-//             var matTransBlue = FssMaterialFactory.TransparentColoredMaterial(new Color(0.2f, 0.2f, 0.7f, 0.4f));
+//             var matWire      = GloMaterialFactory.WireframeMaterial(GloColorUtil.Colors["White"]);
+//             var matTransBlue = GloMaterialFactory.TransparentColoredMaterial(new Color(0.2f, 0.2f, 0.7f, 0.4f));
 
 //             MeshInstance3D meshInstance    = new() { Name = "FrontWedge" };
 //             meshInstance.Mesh              = meshData;
@@ -112,8 +112,8 @@
 //                 return;
 //             }
 
-//            // CoreNode = FssAppNode.Instance.FindNode("GlobeCore");
-//             TrailNode = new Node3D() { Name = FssRandomStringGenerator.GenerateRandomString(5) };
+//            // CoreNode = GloAppNode.Instance.FindNode("GlobeCore");
+//             TrailNode = new Node3D() { Name = GloRandomStringGenerator.GenerateRandomString(5) };
 //             GlobeRoot.AddChild(TrailNode);
 
 //             // -----------
@@ -143,11 +143,11 @@
 //             OneShotFlag = true;
 //         }
 
-//         //CoreNode = FssAppNode.Instance.FindNode("GlobeCore");
+//         //CoreNode = GloAppNode.Instance.FindNode("GlobeCore");
 
 //         // Figure out the change in position
 //         Course.HeadingDegs += 5 * delta;
-//         FssPolarOffset offset = Course.ToPolarOffset(delta);
+//         GloAzElRange offset = Course.ToPolarOffset(delta);
 
 //         // Pan the camera
 //         CameraOffset.AzDegs += 10 * delta;
@@ -156,16 +156,16 @@
 //         pos = pos.PlusPolarOffset(offset);
 
 //         // Debug print the new position values once a second
-//         if (Timer1Hz < FssCentralTime.RuntimeSecs)
+//         if (Timer1Hz < GloCentralTime.RuntimeSecs)
 //         {
 //             // check the previous position markers at 1Hz.
-//             Timer1Hz = (float)(FssCentralTime.RuntimeIntSecs + 1); // Update the timer to the next whole second
+//             Timer1Hz = (float)(GloCentralTime.RuntimeIntSecs + 1); // Update the timer to the next whole second
 //             GD.Print($"RuntimeSecs: {Timer1Hz:F1} Course: {Course} Offset: {offset} Position: {pos}");
 //         }
 
-//         if (Timer4Hz < FssCentralTime.RuntimeSecs)
+//         if (Timer4Hz < GloCentralTime.RuntimeSecs)
 //         {
-//             Timer4Hz = FssCentralTime.RuntimeSecs + 0.2f; // Update the timer to the next whole second
+//             Timer4Hz = GloCentralTime.RuntimeSecs + 0.2f; // Update the timer to the next whole second
 
 //             // if (TrailNode != null)
 //             // {
@@ -183,21 +183,21 @@
 //             //     }
 
 //             //     // Create a new sphere at the current position, and the ID
-//             //     Node3D childSphere = FssPrimitiveFactory.CreateGodotSphere(Vector3.Zero, 0.005f, new Color(0.9f, 0.9f, 0.9f, 1f));
+//             //     Node3D childSphere = GloPrimitiveFactory.CreateGodotSphere(Vector3.Zero, 0.005f, new Color(0.9f, 0.9f, 0.9f, 1f));
 //             //     childSphere.Name = $"{randomString}{nextId}";
 //             //     TrailNode.AddChild(childSphere);
 //             //     childSphere.Name = nextId;
 
 
 //             //     // get the current position to assign to the sphere
-//             //     Vector3 vecPos   = FssZeroOffsetOperations.RealWorldToGodot(pos);
+//             //     Vector3 vecPos   = GloGeoConvOperations.RealWorldToGodot(pos);
 //             //     childSphere.Position = vecPos;
 
 //             //     // Create a new cylinder at the current position, and the ID
-//             //     Vector3 vecPrevPos   = FssZeroOffsetOperations.RealWorldToGodot(PrevPos);
+//             //     Vector3 vecPrevPos   = GloGeoConvOperations.RealWorldToGodot(PrevPos);
 //             //     Vector3 vecDiff = vecPrevPos - vecPos;
 
-//             //     FssMeshBuilder meshBuilder = new FssMeshBuilder();
+//             //     GloMeshBuilder meshBuilder = new GloMeshBuilder();
 //             //     meshBuilder.AddCylinder(Vector3.Zero, vecDiff, 0.005f, 0.005f, 12, true);
 
 //             //     ArrayMesh meshData = meshBuilder.Build2("Wedge", false);
@@ -230,7 +230,7 @@
 //         {
 //             GD.Print($"Parent: {p.Name}");
 
-//             string trailName = FssRandomStringGenerator.GenerateRandomString(5);
+//             string trailName = GloRandomStringGenerator.GenerateRandomString(5);
 //             TrailNode = new Node3D() { Name = $"TrailNode-{trailName}" };
 //             //TrailNode = new Node3D() { Name = "TrailNode" };
 //             p.AddChild(TrailNode);
@@ -248,11 +248,11 @@
 
 
 //         // // Define the position and associated up direction for the label
-//         // FssLLAPoint posAbove = pos;
+//         // GloLLAPoint posAbove = pos;
 //         // posAbove.AltMslM += 0.04f;
 
 //         // // Get the position 5 seconds ahead, or just north if stationary
-//         // FssLLAPoint posAhead = FssLLAPoint.Zero;
+//         // GloLLAPoint posAhead = GloLLAPoint.Zero;
 //         // if (Course.IsStationary())
 //         // {
 //         //     posAhead = pos;
@@ -266,12 +266,12 @@
 //         // // --- Define vectors -----------------------
 
 //         // // Define the Vector3 Offsets
-//         // Vector3 vecPos   = FssZeroOffsetOperations.RealWorldToGodot(pos);
-//         // Vector3 vecAbove = FssZeroOffsetOperations.RealWorldToGodot(posAbove);
-//         // Vector3 vecAhead = FssZeroOffsetOperations.RealWorldToGodot(posAhead);
+//         // Vector3 vecPos   = GloGeoConvOperations.RealWorldToGodot(pos);
+//         // Vector3 vecAbove = GloGeoConvOperations.RealWorldToGodot(posAbove);
+//         // Vector3 vecAhead = GloGeoConvOperations.RealWorldToGodot(posAhead);
 
 
-//         // FssEntityV3 platVecs = FssZeroOffsetOperations.RealWorldToStruct(pos, Course);
+//         // GloEntityV3 platVecs = GloGeoConvOperations.RealWorldToStruct(pos, Course);
 
 
 //         // // Update node position and orientation
@@ -279,7 +279,7 @@
 //         // ModelNode.LookAt(platVecs.PosAhead, platVecs.PosAbove);
 
 //         // // Update camera position and orientation
-//         // FssXYZPoint camOffsetXYZ = CameraOffset.ToXYZ();
+//         // GloXYZPoint camOffsetXYZ = CameraOffset.ToXYZ();
 //         // ModelCamera.Position = new Vector3((float)camOffsetXYZ.X, -(float)camOffsetXYZ.Y, -(float)camOffsetXYZ.Z);
 //         // ModelCamera.LookAt(vecPos, vecAbove);
 //     }
