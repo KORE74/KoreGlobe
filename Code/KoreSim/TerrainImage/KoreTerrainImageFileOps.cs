@@ -13,6 +13,43 @@ namespace KoreSim;
 
 public static class KoreTerrainImageFileOps
 {
+    // --------------------------------------------------------------------------------------------
+    // MARK: Tile Image Size
+    // --------------------------------------------------------------------------------------------
+
+    // Load the image for a tile, and reduce the size for tiles nearer the poles. They are distorted, save memory space.
+    // - Below 70 degrees latitude, the tile image size is 1024x1024 pixels.
+    // - Above 70 degrees latitude, the tile image size is reduced to 512x512 pixels.
+    // - Above 80 degrees latitude, the tile image size is reduced to 256x256 pixels.
+    // - Above 85 degrees latitude, the tile image size is reduced to 128x128 pixels.
+    public static void AdjustTileImageSize(KoreMapTileCode tileCode)
+    {
+        // Find all the filenames
+        KoreMapTileFilepaths filepaths = new KoreMapTileFilepaths(tileCode);
+
+        if (filepaths.WebpFileExists)
+        {
+            // Load the image
+            var tileImage = KoreSkiaSharpBitmapOps.LoadBitmap(filepaths.WebpFilepath);
+            if (tileImage == null) return;
+
+            KoreLLBox codeLLBox = tileCode.LLBox;
+            double latDegs = codeLLBox.MidLatDegs;
+
+            // Determine the new size based on the latitude
+            int newSize = 1024; // Default size
+            if (latDegs > 70) newSize = 512;
+            if (latDegs > 80) newSize = 256;
+            if (latDegs > 85) newSize = 128;
+
+            // Resize the image
+            var resizedImage = KoreSkiaSharpBitmapOps.ResizeImage(tileImage, newSize, newSize);
+
+            // Save the resized image back to the file
+            KoreSkiaSharpBitmapOps.SaveBitmapAsWebp(resizedImage, filepaths.WebpFilepath);
+        }
+    }
+
     // // Function to load all the webp images from the child tiles, combining them into a single image, and then resizing it and
     // // saving it out as the parent tile image.
 
