@@ -82,6 +82,7 @@ public class KoreSimFactory
         ModelRun = new KoreModelRun();
         MessageManager = new KoreMessageManager();
         EleManager = new KoreElevationManager();
+        EventRegister = new KoreEventRegister();
 
         // Link the objects
         //ConsoleInterface.KoreEventDriver = KoreEventDriver;
@@ -104,12 +105,12 @@ public class KoreSimFactory
 
         // KoreTestCenter.RunAdHocTests();
     }
+
     // --------------------------------------------------------------------------------------------
 
     // // point to start the services, called after the main constructors
     // public void CallStart()
     // {
-
 
     //     //ConsoleInterface.Start();
     //     //MessageManager.Start();

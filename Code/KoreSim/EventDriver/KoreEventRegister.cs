@@ -27,11 +27,19 @@ public class KoreEventRegister
 
     public const string EventEntityCreated = "EntityCreated"; // KoreEventRegister.EventEntityCreated
     public const string EventEntityDeleted = "EntityDeleted"; // KoreEventRegister.EventEntityDeleted
+    public const string EventEntityMoving = "EntityMoving"; // KoreEventRegister.EventEntityMoving
+    public const string EventEntityStopped = "EntityStopped"; // KoreEventRegister.EventEntityStopped
+
     public const string EventEntityElementCreated = "EntityElementCreated"; // KoreEventRegister.EventEntityElementCreated
     public const string EventEntityElementDeleted = "EntityElementDeleted"; // KoreEventRegister.EventEntityElementDeleted
 
+
+
     public const string KeyEntityName = "EntityName"; // KoreEventRegister.KeyEntityName
     public const string KeyElementName = "ElementName"; // KoreEventRegister.KeyElementName
+
+    public const string KeyEventTime = "EventTime"; // KoreEventRegister.KeyEventTime
+
 
 
     // --------------------------------------------------------------------------------------------
@@ -103,6 +111,8 @@ public class KoreEventRegister
     // MARK: Complex Consumers
     // --------------------------------------------------------------------------------------------
 
+    // When a consumer wants to check the queue, they can do so without need to wait/rely on a central dispatcher
+
     public KoreStringDictionary? ConsumeNextEventByType(string eventType)
     {
         lock (EventListLock)
@@ -123,6 +133,8 @@ public class KoreEventRegister
         }
         return null;
     }
+
+    // A consumer can take all the pending events in one pass, batch processing
 
     public List<KoreStringDictionary> ConsumeAllEventsByType(string eventType)
     {
@@ -147,6 +159,29 @@ public class KoreEventRegister
         }
     }
 
+    // Remove events that have not had a consumer, to avoid unconsumed events dominating the list.
+
+    public void RemoveStaleEvents(int staleDurationSecs)
+    {
+        lock (EventListLock)
+        {
+            int currentTime = KoreCentralTime.RuntimeIntSecs;
+
+            // Remove events older than the specified stale duration
+            EventList.RemoveAll(ev =>
+            {
+                if (ev.Has(KeyEventTime))
+                {
+                    if (int.TryParse(ev[KeyEventTime], out int eventTime))
+                    {
+                        return (currentTime - eventTime) > staleDurationSecs;
+                    }
+                }
+                return false; // Remove if no valid event time
+            });
+        }
+    }
+
     // --------------------------------------------------------------------------------------------
     // MARK: Prefab Event
     // --------------------------------------------------------------------------------------------
@@ -156,7 +191,8 @@ public class KoreEventRegister
         return new KoreStringDictionary
         {
             [KeyEventType] = EventEntityCreated,
-            [KeyEntityName] = entityName
+            [KeyEntityName] = entityName,
+            [KeyEventTime] = KoreCentralTime.RuntimeSecs8Chars
         };
     }
 
@@ -168,6 +204,8 @@ public class KoreEventRegister
             [KeyEntityName] = entityName
         };
     }
+
+   // --------------------------------------------------------------------------------------------
 
     public static KoreStringDictionary CreateEvent_CreateEntityElement(string entityName, string elementName)
     {
