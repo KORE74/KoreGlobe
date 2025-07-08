@@ -1,5 +1,5 @@
 // KoreGodotSurfaceMesh : Class to take a KoreCommon/KoreMeshData and create a Godot SurfaceMesh from it.
-// - Will use the lines list and the Godot SurfaceTool.
+// - Will use the vertices/triangles list and the Godot SurfaceTool.
 
 using KoreCommon;
 
@@ -42,7 +42,7 @@ public partial class KoreGodotSurfaceMesh : Node3D
     private void UpdateMesh(KoreMeshData newMeshData)
     {
         _surfaceTool.Clear();
-        _surfaceTool.Begin(Mesh.PrimitiveType.Lines);
+        _surfaceTool.Begin(Mesh.PrimitiveType.Triangles);
 
         // Traverse the list using Id, so we have the index to look stuff up.
         int numLines = newMeshData.Lines.Count;

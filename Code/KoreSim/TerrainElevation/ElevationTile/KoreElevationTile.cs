@@ -6,8 +6,8 @@ namespace KoreSim;
 
 public class KoreElevationTile
 {
-    public KoreLLBox LLBox;
-    public KoreMapTileCode TileCode = new();
+    public KoreLLBox        LLBox;
+    public KoreMapTileCode  TileCode = new();
 
     public KoreNumeric2DArray<float> ElevationData = new KoreNumeric2DArray<float>(10, 10);
 

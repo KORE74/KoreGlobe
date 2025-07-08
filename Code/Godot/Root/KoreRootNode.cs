@@ -3,7 +3,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
-public partial class TestZeroOffset : Node3D
+public partial class KoreRootNode : Node3D
 {
     Node3D PlaformBaseNode;
     Node3D ModelResourceNode;
@@ -50,13 +50,13 @@ public partial class TestZeroOffset : Node3D
         GD.Print($"=== TestZeroOffset: _Ready // {KoreGlobals.VersionString} ===================================== ");
 
         // Setup the factory that holds a centralised reference to key objects
-        GloGodotFactory.Instance.CreateObjects(this);
+        KoreGodotFactory.Instance.CreateObjects(this);
 
         // Default the zero point.
-        GloZeroNode.SetZeroNodePosition(45, 0);
+        KoreZeroNode.SetZeroNodePosition(45, 0);
 
         // Debug report the world consts
-        GloZeroOffset.ReportConsts();
+        KoreZeroOffset.ReportConsts();
 
 
         // Read the manually included sets of assets
@@ -69,12 +69,12 @@ public partial class TestZeroOffset : Node3D
                 string jsonMilitary     = GloGodotFileOperations.ReadStringFromFile("res://Resources/Assets/MilitaryVehicles/Inventory.json");
                 string jsonCivilian     = GloGodotFileOperations.ReadStringFromFile("res://Resources/Assets/CivilianVehicles/Inventory.json");
                 string jsonPlaceholders = GloGodotFileOperations.ReadStringFromFile("res://Resources/Assets/PlaceholderModels/Inventory.json");
-                GloGodotFactory.Instance.ModelLibrary.LoadJSONConfigFile(jsonMilitary);
-                GloGodotFactory.Instance.ModelLibrary.LoadJSONConfigFile(jsonCivilian);
-                GloGodotFactory.Instance.ModelLibrary.LoadJSONConfigFile(jsonPlaceholders);
+                KoreGodotFactory.Instance.ModelLibrary.LoadJSONConfigFile(jsonMilitary);
+                KoreGodotFactory.Instance.ModelLibrary.LoadJSONConfigFile(jsonCivilian);
+                KoreGodotFactory.Instance.ModelLibrary.LoadJSONConfigFile(jsonPlaceholders);
 
                 GloCentralLog.AddEntry("ModelImport // Stage 2: Load Models");
-                GloGodotFactory.Instance.ModelLibrary.LoadModelToCache();
+                KoreGodotFactory.Instance.ModelLibrary.LoadModelToCache();
                 GloCentralLog.AddEntry("ModelImport // Done");
 
             }

@@ -54,6 +54,11 @@ public class KoreStringDictionary
         return Get(key);
     }
 
+    public string GetOrThrow(string key)
+    {
+        return Get(key) ?? throw new KeyNotFoundException($"Key '{key}' not found.");
+    }
+
     public IEnumerable<string> FindFirst(string keySubstring)
     {
         foreach (var key in _data.Keys)

@@ -5,10 +5,10 @@ using Godot;
 
 // Class representing the zero anchor position in the game engine world.
 
-public partial class GloZeroNode : Node3D
+public partial class KoreZeroNode : Node3D
 {
     // The root node for all entities, made static so it can be accessed from anywhere.
-    public static Node3D EntityRootNode = new Node3D() { Name = "EntityRootNode" };
+    public static Node3D EntityRootNode = new Node3D() { Name = "KoreZeroNode" };
 
     private static GloLLAPoint ZeroPosToApply = new GloLLAPoint() { LatDegs = 0, LonDegs = 0, RadiusM = GloWorldConsts.EarthRadiusM };
 

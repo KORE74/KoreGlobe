@@ -22,13 +22,13 @@ public class Kore3DModelInfo
 
     // --------------------------------------------------------------------------------------------
 
-    public static Glo3DModelInfo Default()
+    public static Kore3DModelInfo Default()
     {
-        return new Glo3DModelInfo
+        return new Kore3DModelInfo
         {
             Name         = "Default",
             FilePath     = "Default.glb",
-            RwAABB       = new GloXYZBox() { Center = GloXYZPoint.Zero, Width = 50, Height = 20, Length = 40 },
+            RwAABB       = new KoreXYZBox() { Center = KoreXYZPoint.Zero, Width = 50, Height = 20, Length = 40 },
             CenterOffset = new Vector3(0, 0, 0),
             RotateDegs   = new Vector3(0, 0, 0),
             Scale        = 1.0f,

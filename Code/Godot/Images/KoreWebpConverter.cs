@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public static class GloWebpCompressor
+public static class KoreWebpConverter
 {
     public static void CompressTexture(string inputPngPath, string outputWebpPath)
     {

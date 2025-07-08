@@ -11,26 +11,26 @@ using GloJSON;
 
 #nullable enable
 
-public class GloGodotFactory
+public class KoreGodotFactory
 {
-    public Node3D                SceneRootNode      { get; private set; }
-    public GloZeroNode           ZeroNode           { get; private set; }
+    public Node3D                 SceneRootNode      { get; private set; }
+    public KoreZeroNode           ZeroNode           { get; private set; }
     // public GloMapManager         EarthCoreNode      { get; private set; }  // GloGodotFactory.Instance.EarthCodeNode
 
     public GloCameraMoverWorld WorldCamNode         { get; private set; }
 
 
-    public GloGodotEntityManager GodotEntityManager { get; private set; }
-    public GloZeroNodeMapManager ZeroNodeMapManager { get; private set; }
-    public GloTextureLoader      TextureLoader      { get; private set; }
-    public Glo3DModelLibrary     ModelLibrary       { get; private set; } // GloGodotFactory.Instance.ModelLibrary
-    public GloUIState            UIState            { get; private set; }
+    public KoreGodotEntityManager GodotEntityManager { get; private set; }
+    public GloZeroNodeMapManager  ZeroNodeMapManager { get; private set; }
+    public GloTextureLoader       TextureLoader      { get; private set; }
+    public Kore3DModelLibrary     ModelLibrary       { get; private set; } // GloGodotFactory.Instance.ModelLibrary
+    public GloUIState             UIState            { get; private set; }
 
     // Singleton pattern
-    private static readonly object  lockObject        = new object();
-    private static GloGodotFactory? SingletonInstance = null;
-    private static bool             IsInitialised     = false;
-    private static bool             IsCreating        = false;
+    private static readonly object   lockObject        = new object();
+    private static KoreGodotFactory? SingletonInstance = null;
+    private static bool              IsInitialised     = false;
+    private static bool              IsCreating        = false;
 
     // Threadsafe message queue, for messages that need to be handled on the main thread
     public JSONThreadsafeMessageFIFO UIMsgQueue       { get; private set; }
@@ -45,7 +45,7 @@ public class GloGodotFactory
     // --------------------------------------------------------------------------------------------
 
     // The constructor could set up a lot of objects, so we add protection to ensure it doesn't get called recursively.
-    public static GloGodotFactory Instance
+    public static KoreGodotFactory Instance
     {
         get
         {
@@ -62,7 +62,7 @@ public class GloGodotFactory
                     IsCreating = true;
                     try
                     {
-                        SingletonInstance = new GloGodotFactory();
+                        SingletonInstance = new KoreGodotFactory();
                     }
                     finally
                     {
@@ -75,7 +75,7 @@ public class GloGodotFactory
     }
 
     // Private constructor
-    private GloGodotFactory()
+    private KoreGodotFactory()
     {
     }
 
@@ -89,7 +89,7 @@ public class GloGodotFactory
             {
                 if (SingletonInstance == null)
                 {
-                    SingletonInstance = new GloGodotFactory();
+                    SingletonInstance = new KoreGodotFactory();
                 }
             }
         }
@@ -112,13 +112,13 @@ public class GloGodotFactory
 
                     SceneRootNode = sceneRootNode;
 
-                    ZeroNode = new GloZeroNode();
+                    ZeroNode = new KoreZeroNode();
                     SceneRootNode.AddChild(ZeroNode);
 
-                    // EarthCoreNode = new GloMapManager();
+                    // EarthCoreNode = new KoreMapManager();
                     // SceneRootNode.AddChild(EarthCoreNode);
 
-                    GodotEntityManager = new GloGodotEntityManager();
+                    GodotEntityManager = new KoreGodotEntityManager();
                     ZeroNode.AddChild(GodotEntityManager);
 
                     ZeroNodeMapManager = new GloZeroNodeMapManager(ZeroNode);
@@ -128,11 +128,11 @@ public class GloGodotFactory
                     // SceneRootNode.AddChild(ImageManager);
 
 
-                    TextureLoader = new GloTextureLoader();
-                    ModelLibrary  = new Glo3DModelLibrary();
-                    UIState       = new GloUIState();
+                    TextureLoader = new KoreTextureLoader();
+                    ModelLibrary  = new Kore3DModelLibrary();
+                    UIState       = new KoreUIState();
 
-                    WorldCamNode = new GloCameraMoverWorld() { Name = "WorldCamBase" };
+                    WorldCamNode = new KoreCameraMoverWorld() { Name = "WorldCamBase" };
                     SceneRootNode.AddChild(WorldCamNode);
                     WorldCamNode.CamNode.Current = true;
                     WorldCamNode.CamPosFromString(UIState.CameraMemory);

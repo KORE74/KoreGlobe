@@ -48,6 +48,9 @@ public static partial class KoreEventDriver
         //DefaultEntityDetails(entName);
     }
 
+    public static bool HasEntity(string entName) => KoreSimFactory.Instance.EntityManager.DoesEntityExist(entName);
+
+
     public static bool DoesEntityExist(string entName) => KoreSimFactory.Instance.EntityManager.DoesEntityExist(entName);
     public static void DeleteEntity(string entName) => KoreSimFactory.Instance.EntityManager.Delete(entName);
     public static void DeleteAllEntities() => KoreSimFactory.Instance.EntityManager.DeleteAllEntities();
@@ -172,13 +175,13 @@ public static partial class KoreEventDriver
         Entity.Kinetics.CurrPosition = newpos;
     }
 
-    public static KoreLLAPoint? GetEntityPosition(string entityName)
+    public static KoreLLAPoint GetEntityPosition(string entityName)
     {
         // Get the Entity
         KoreEntity? Entity = KoreSimFactory.Instance.EntityManager.EntityForName(entityName);
 
         if (Entity == null)
-            return null;
+            return KoreLLAPoint.Zero;
 
         return Entity.Kinetics.CurrPosition;
     }
@@ -187,13 +190,13 @@ public static partial class KoreEventDriver
     // MARK: Attitude
     // ---------------------------------------------------------------------------------------------
 
-    public static KoreAttitude? GetEntityAttitude(string entityName)
+    public static KoreAttitude GetEntityAttitude(string entityName)
     {
         // Get the Entity
         KoreEntity? Entity = KoreSimFactory.Instance.EntityManager.EntityForName(entityName);
 
         if (Entity == null)
-            return null;
+            return KoreAttitude.Zero;
 
         return Entity.Kinetics.CurrAttitude;
     }
@@ -232,8 +235,19 @@ public static partial class KoreEventDriver
         Entity.Kinetics.CurrCourse = course;
     }
 
-    public static KoreCourse? EntityCurrCourse(string entityName) =>
-        KoreSimFactory.Instance.EntityManager.EntityForName(entityName)?.Kinetics.CurrCourse;
+    public static KoreCourse GetEntityCourse(string entityName)
+    {
+        // Get the Entity
+        KoreEntity? Entity = KoreSimFactory.Instance.EntityManager.EntityForName(entityName);
+
+        if (Entity == null)
+        {
+            KoreCentralLog.AddEntry($"EC0-0010: Entity {entityName} not found.");
+            return KoreCourse.Zero;
+        }
+
+        return Entity.Kinetics.CurrCourse;
+    }
 
     // ---------------------------------------------------------------------------------------------
     // MARK: Course Delta
@@ -278,11 +292,11 @@ public static partial class KoreEventDriver
 
     public static string EntityNameForIndex(int index) => KoreSimFactory.Instance.EntityManager.EntityNameForIndex(index);
     public static KoreEntity? EntityForIndex(int index) => KoreSimFactory.Instance.EntityManager.EntityForIndex(index);
-    public static KoreEntity? EntityForName(string entityname) => KoreSimFactory.Instance.EntityManager.EntityForName(entityname);
+    public static KoreEntity? EntityForName(string entityName) => KoreSimFactory.Instance.EntityManager.EntityForName(entityName);
 
     // Id being the 1-based user presented index
 
-    public static string EntityIdForName(string entityname) => KoreSimFactory.Instance.EntityManager.EntityIdForName(entityname);
+    public static string EntityIdForName(string entityName) => KoreSimFactory.Instance.EntityManager.EntityIdForName(entityName);
     public static string EntityNameForId(int entityId) => KoreSimFactory.Instance.EntityManager.EntityNameForId(entityId);
 
     public static int EntityIdNext(int currEntityId) => KoreSimFactory.Instance.EntityManager.EntityIdNext(currEntityId);

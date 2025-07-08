@@ -6,7 +6,7 @@ using Godot;
 
 #nullable enable
 
-public partial class GloGodotEntityManager : Node3D
+public partial class KoreGodotEntityManager : Node3D
 {
     // --------------------------------------------------------------------------------------------
     // MARK: Linked Element Management

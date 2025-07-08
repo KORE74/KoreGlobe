@@ -36,19 +36,24 @@ public partial class KoreEntityManager
         {
             KoreEntity newEntity = new KoreEntity() { Name = entityName };
             EntityList.Add(newEntity);
+
+            KoreSimFactory.Instance.EventRegister.AddEvent(KoreEventRegister.CreateEvent_CreateEntity(entityName));
+
             return newEntity;
         }
         return null;
     }
 
     // Looping through the list using the index, and in reverse order to more safely delete a Entity
-    public void Delete(string entityname)
+    public void Delete(string entityName)
     {
         for (int i = EntityList.Count - 1; i >= 0; i--)
         {
-            if (EntityList[i].Name == entityname)
+            if (EntityList[i].Name == entityName)
             {
                 EntityList.RemoveAt(i);
+                KoreSimFactory.Instance.EventRegister.AddEvent(KoreEventRegister.CreateEvent_DeleteEntity(entityName));
+
             }
         }
     }
@@ -125,7 +130,7 @@ public partial class KoreEntityManager
         int minId    = (numEntities > 0) ? 1 : 0;
         int maxId    = (numEntities > 0) ? numEntities: 0;
 
-        if (numEntities == 0)       return 0;     // return 0 if no Entities
+        if (numEntities == 0)      return 0;     // return 0 if no Entities
         if (currEntityId < minId)  return minId; // Move up to min if below it
         if (currEntityId >= maxId) return minId; // wrap around to min if at or above max
         return currEntityId + 1;                 // Move up one if mid-range
@@ -137,7 +142,7 @@ public partial class KoreEntityManager
         int minId    = (numEntities > 0) ? 1 : 0;
         int maxId    = (numEntities > 0) ? numEntities: 0;
 
-        if (numEntities == 0)       return 0;     // return 0 if no Entities
+        if (numEntities == 0)      return 0;     // return 0 if no Entities
         if (currEntityId <= minId) return maxId; // wrap around to max if at or below min
         if (currEntityId > maxId)  return maxId; // Move down to max if above it
         return currEntityId - 1;                 // Move down one if mid-range

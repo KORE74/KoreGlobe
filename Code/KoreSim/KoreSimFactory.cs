@@ -26,7 +26,7 @@ public class KoreSimFactory
     public KoreModelRun ModelRun { get; private set; }
     public KoreMessageManager MessageManager { get; private set; }
     public KoreElevationManager EleManager { get; private set; }
-
+    public KoreEventRegister EventRegister { get; private set; }
 
     // Usage: KoreStringDictionary kc = KoreSimFactory.Instance.KoreConfig;
     //        //        kc.SetParam("Key", "Value");

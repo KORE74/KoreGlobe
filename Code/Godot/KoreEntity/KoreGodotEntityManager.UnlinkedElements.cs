@@ -6,10 +6,10 @@ using Godot;
 
 #nullable enable
 
-public partial class GloGodotEntityManager : Node3D
+public partial class KoreGodotEntityManager : Node3D
 {
     // --------------------------------------------------------------------------------------------
-    // MARK: Unlinked Element Management
+    // MARK: Basic Unlinked Element Management
     // --------------------------------------------------------------------------------------------
     // Unlinked elements are those that remain fixed in a global position, such as routes. They are
     // parented off of the ZeroNode (plus children) and not the moving platform, so their access is
@@ -17,7 +17,7 @@ public partial class GloGodotEntityManager : Node3D
     // We also add a platform layer to the nodes, so they can be managed as a group.
 
     // Get or Add the Unlinked Platform Node
-    public Node3D UnlinkedPlatform(string entityName)
+    public Node3D UnlinkedEntity(string entityName)
     {
         // Return the existing node if we find it
         foreach (Node3D currNode in UnlinkedRootNode.GetChildren())
@@ -33,9 +33,9 @@ public partial class GloGodotEntityManager : Node3D
         return entNode;
     }
 
-    public void RemoveUnlinkedPlatform(string entityName)
+    public void RemoveUnlinkedEntity(string entityName)
     {
-        Node3D? entNode = UnlinkedPlatform(entityName);
+        Node3D? entNode = UnlinkedEntity(entityName);
 
         if (entNode != null)
             entNode.QueueFree();
@@ -49,7 +49,7 @@ public partial class GloGodotEntityManager : Node3D
 
     public bool UnlinkedElementExists(string entityName, string elementName)
     {
-        Node3D entityNode = UnlinkedPlatform(entityName);
+        Node3D entityNode = UnlinkedEntity(entityName);
 
         foreach (Node3D currNode in entityNode.GetChildren())
         {

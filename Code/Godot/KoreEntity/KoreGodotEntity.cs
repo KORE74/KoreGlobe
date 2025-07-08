@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 
 using KoreCommon;
+using KoreSim;
 
 using Godot;
 
@@ -12,15 +13,19 @@ public partial class KoreGodotEntity : Node3D
     public string EntityName { get; set; }
 
     // Setup default model info, so we always have something to work with.
-    public Glo3DModelInfo ModelInfo { get; set; } = Glo3DModelInfo.Default();
+    // public 3DModelInfo ModelInfo { get; set; } = Glo3DModelInfo.Default();
 
     public Node3D AttitudeNode = new Node3D() { Name = "Attitude" };
 
     private GloElementContrail ElementContrail;
 
-    private KoreAttitude          CurrentAttitude = new KoreAttitude();
-    private KoreLLAPoint          CurrentPosition = new KoreLLAPoint();
-    private GloCameraPolarOffset ChaseCam        = new GloCameraPolarOffset();
+    private KoreAttitude          CurrAttitude = KoreAttitude.Zero;
+    private KoreLLAPoint          CurrLLA = KoreLLAPoint.Zero;
+    private KoreCourse            CurrCourse = KoreCourse.Zero;
+
+    private KoreAttitude          SmoothedAttitude = KoreAttitude.Zero;
+
+    private GloCameraPolarOffset ChaseCam = new GloCameraPolarOffset();
 
     private float Timer1Hz = 0.0f;
 
@@ -51,25 +56,25 @@ public partial class KoreGodotEntity : Node3D
             Timer1Hz = GloCentralTime.RuntimeSecs + 1.0f;
             UpdateZeroNode();
 
-            if (ChaseCam.IsCurrent())
-            {
-                // Get the Camera Polar Offset - flip the azimuth so we create the LLA correctly.
-                GloAzElRange camPO = ChaseCam.RwCamOffset;
+            // if (ChaseCam.IsCurrent())
+            // {
+            //     // Get the Camera Polar Offset - flip the azimuth so we create the LLA correctly.
+            //     GloAzElRange camPO = ChaseCam.RwCamOffset;
 
-                // Get the platform heading and add the camera offset to get the chase cam LLA
-                //GloLLAPoint? pos    = GloAppFactory.Instance.EventDriver.GetPlatformPosition(EntityName);
-                GloCourse? course = GloAppFactory.Instance.EventDriver.PlatformCurrCourse(EntityName);
+            //     // Get the platform heading and add the camera offset to get the chase cam LLA
+            //     //GloLLAPoint? pos    = GloAppFactory.Instance.EventDriver.GetPlatformPosition(EntityName);
+            //     GloCourse? course = GloAppFactory.Instance.EventDriver.PlatformCurrCourse(EntityName);
 
-                if (course != null)
-                    camPO.AzDegs += course?.HeadingDegs ?? 0.0;
+            //     if (course != null)
+            //         camPO.AzDegs += course?.HeadingDegs ?? 0.0;
 
-                GloLLAPoint chaseCamLLA  = CurrentPosition.PlusPolarOffset(camPO);
+            //     GloLLAPoint chaseCamLLA  = CurrentPosition.PlusPolarOffset(camPO);
 
-                GloZeroNodeMapManager.SetLoadRefLLA(chaseCamLLA);
+            //     GloZeroNodeMapManager.SetLoadRefLLA(chaseCamLLA);
 
-                string strCamLLA = chaseCamLLA.ToString();
-                GD.Print($"Camera LLA: Lat:{chaseCamLLA.LatDegs:F6} Lon:{chaseCamLLA.LonDegs:F6} Alt:{chaseCamLLA.AltMslM:F2}");
-            }
+            //     string strCamLLA = chaseCamLLA.ToString();
+            //     GD.Print($"Camera LLA: Lat:{chaseCamLLA.LatDegs:F6} Lon:{chaseCamLLA.LonDegs:F6} Alt:{chaseCamLLA.AltMslM:F2}");
+            // }
         }
     }
 
@@ -97,24 +102,24 @@ public partial class KoreGodotEntity : Node3D
     // MARK: Chase Cam
     // --------------------------------------------------------------------------------------------
 
-    public void EnableChaseCam()
-    {
-        ChaseCam.CamNode.Current = true;
-    }
+    // public void EnableChaseCam()
+    // {
+    //     ChaseCam.CamNode.Current = true;
+    // }
 
-    // Report the current state of the camer
+    // // Report the current state of the camer
 
-    public void UpdateZeroNode()
-    {
-        // GD.Print("EntityName:{EntityName}");
+    // public void UpdateZeroNode()
+    // {
+    //     // GD.Print("EntityName:{EntityName}");
 
-        // Only drive the zero node to match the entity position if the chase cam is the current camera
-        if (ChaseCam.IsCurrent())
-        {
-            GloZeroNode.SetZeroNodePosition(CurrentPosition);
-            // GD.Print($"ZERO NODE UPDATE: EntityName:{EntityName} CurrentPosition:{CurrentPosition}");
-        }
-    }
+    //     // Only drive the zero node to match the entity position if the chase cam is the current camera
+    //     if (ChaseCam.IsCurrent())
+    //     {
+    //         GloZeroNode.SetZeroNodePosition(CurrentPosition);
+    //         // GD.Print($"ZERO NODE UPDATE: EntityName:{EntityName} CurrentPosition:{CurrentPosition}");
+    //     }
+    // }
 
     // --------------------------------------------------------------------------------------------
     // MARK: Position and Attitude
@@ -122,64 +127,47 @@ public partial class KoreGodotEntity : Node3D
 
     // Note that position here is a polar offset for the rotating chase cam
 
-    public void UpdateEntityPosition()
+    public void UpdateRwPosition()
     {
-        // Update the position and orientation of the entity.
-        // This is done by the parent node.
-
-        GloLLAPoint? pos    = GloAppFactory.Instance.EventDriver.GetPlatformPosition(EntityName);
-        GloCourse?   course = GloAppFactory.Instance.EventDriver.PlatformCurrCourse(EntityName);
-        String?      platCat = GloAppFactory.Instance.EventDriver.PlatformCategory(EntityName);
-
-        if (pos != null)
-            CurrentPosition = (GloLLAPoint)pos;
-
-        if (pos == null || course == null)
-        {
-            GD.Print($"EC0-0025: Platform {EntityName} not found.");
+        // Quick check the entity is valid
+        if (!KoreEventDriver.HasEntity(EntityName))
             return;
-        }
 
-        GloEntityV3 entityVecs = GloGeoConvOperations.RwToGeStruct((GloLLAPoint)pos, (GloCourse)course);
+        // Get the 6DOF data (will return a .Zero value on error, not a null object)
+        CurrLLA      = KoreEventDriver.GetEntityPosition(EntityName);
+        CurrCourse   = KoreEventDriver.GetEntityCourse(EntityName);
+
+        // Convert the position to a game-engine structure
+        GloEntityV3 entityVecs = GloGeoConvOperations.RwToGeStruct(CurrLLA, CurrCourse);
 
         //GD.Print($"Name: {EntityName} PosLLA:{pos} Ahead:{entityVecs.PosAhead} up:{entityVecs.VecUp}");
 
+        // Apply the game-engine position and orientation to the node
         Position = entityVecs.Pos;
-        //LookAtFromPosition(entityVecs.Pos, entityVecs.PosAhead, entityVecs.VecUp, true);
-
         LookAt(entityVecs.PosAhead, entityVecs.VecUp);
-
-        GloAttitude? att = GloAppFactory.Instance.EventDriver.GetPlatformAttitude(EntityName);
-        if (att != null)
-            UpdateAttitude((GloAttitude)att);
-
-
-        if (!String.IsNullOrEmpty(platCat) && (platCat == "GroundClamped"))
-        {
-            GloLLPoint llPos = new GloLLPoint() { LatDegs = pos?.LatDegs ?? 0.0, LonDegs = pos?.LonDegs ?? 0.0 };
-            float mapEle = GloGodotFactory.Instance.ZeroNodeMapManager.GetElevation(llPos);
-
-            GloLLAPoint platLLA = new GloLLAPoint() { LatDegs = llPos.LatDegs, LonDegs = llPos.LonDegs, AltMslM = mapEle };
-            GloAppFactory.Instance.EventDriver.SetPlatformPosition(EntityName, platLLA);
-
-            GD.Print($"GroundClamped: {EntityName} {platLLA}");
-        }
+        //LookAtFromPosition(entityVecs.Pos, entityVecs.PosAhead, entityVecs.VecUp, true);
     }
 
-    public void UpdateAttitude(GloAttitude attitude)
+    public void ApplySmoothAttitude()
     {
-        CurrentAttitude.PitchUpDegs       = GloValueUtils.AdjustWithinBounds(CurrentAttitude.PitchUpDegs,       attitude.PitchUpDegs, 1);
-        CurrentAttitude.RollClockwiseDegs = GloValueUtils.AdjustWithinBounds(CurrentAttitude.RollClockwiseDegs, attitude.RollClockwiseDegs, 1);
-        CurrentAttitude.YawClockwiseDegs  = GloValueUtils.AdjustWithinBounds(CurrentAttitude.YawClockwiseDegs,  attitude.YawClockwiseDegs, 1);
+        // Quick check the entity is valid
+        if (!KoreEventDriver.HasEntity(EntityName))
+            return;
 
-        double pitchUpRads       = CurrentAttitude.PitchUpRads;
-        double rollClockwiseRads = CurrentAttitude.RollClockwiseRads;
-        double yawClockwiseRads  = CurrentAttitude.YawClockwiseRads;
+        // Get the 6DOF data (will return a .Zero value on error, not a null object)
+        CurrAttitude = KoreEventDriver.GetEntityAttitude(EntityName);
 
-        float gePitchRads = (float)pitchUpRads;
-        float geRollRads  = (float)rollClockwiseRads;
-        float geYawRads   = (float)yawClockwiseRads;
+        // Update the smoothed attitude (that will progressively update the entity orientation), by 1 degree per update() call.
+        SmoothedAttitude.PitchUpDegs       = GloValueUtils.AdjustWithinBounds(SmoothedAttitude.PitchUpDegs,       CurrAttitude.PitchUpDegs, 1);
+        SmoothedAttitude.RollClockwiseDegs = GloValueUtils.AdjustWithinBounds(SmoothedAttitude.RollClockwiseDegs, CurrAttitude.RollClockwiseDegs, 1);
+        SmoothedAttitude.YawClockwiseDegs  = GloValueUtils.AdjustWithinBounds(SmoothedAttitude.YawClockwiseDegs,  CurrAttitude.YawClockwiseDegs, 1);
 
+        // Convert the the right float and rads units
+        float gePitchRads = (float)SmoothedAttitude.PitchUpRads;
+        float geRollRads  = (float)SmoothedAttitude.RollClockwiseRads;
+        float geYawRads   = (float)SmoothedAttitude.YawClockwiseRads;
+
+        // Apply attitude to node rotation
         AttitudeNode.Rotation = new Vector3(gePitchRads, geYawRads, geRollRads);
     }
 

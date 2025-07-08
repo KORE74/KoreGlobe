@@ -1,27 +1,29 @@
 
 using Godot;
 
+using KoreCommon;
+
 // A static (non-Node3D class for globally managing the zero offset)
 
-public static class GloZeroOffset
+public static class KoreZeroOffset
 {
     // ZeroNode: A node always at 0,0,0 for objects (platforms) to be parented to.
 
 
     // Real World Earth Center is 0,0,0. We create an offset 0,0,0 for the purposes og focussing the
     // game engine view within the range of its floating point precision.
-    public static GloLLAPoint RwZeroPointLLA = new GloLLAPoint();
+    public static KoreLLAPoint RwZeroPointLLA = new KoreLLAPoint();
 
     // Offset "FROM real-world Earth center TO game engine center". We use the inverse of this to place the earth center.
-    public static GloXYZPoint RwZeroPointXYZ = new GloXYZPoint(0, 0, 0);
+    public static KoreXYZPoint RwZeroPointXYZ = new KoreXYZPoint(0, 0, 0);
 
     // Game engine earth radius and conversion around it.
-    public static double GeEarthRadius            = 1000; // Earth radius in Game Engine units
-    public static double RwToGeDistanceMultiplier = GeEarthRadius / GloWorldConsts.EarthRadiusM;
+    public static double GeEarthRadius = 1000; // Earth radius in Game Engine units
+    public static double RwToGeDistanceMultiplier = GeEarthRadius / KoreWorldConsts.EarthRadiusM;
     public static double GeToRwDistanceMultiplier = 1 / RwToGeDistanceMultiplier;
 
     // Define a reasonable "Up Distance" (Real World Meters) that still works when scales to the GE ranges.
-    public static double UpDistRwM    = 2 * GeToRwDistanceMultiplier;
+    public static double UpDistRwM = 2 * GeToRwDistanceMultiplier;
     public static double AheadDistGeM = 2 * GeToRwDistanceMultiplier;
 
     // --------------------------------------------------------------------------------------------
@@ -40,14 +42,14 @@ public static class GloZeroOffset
     // --------------------------------------------------------------------------------------------
 
     // Set the zero point for the game engine.
-    // Usage: GloZeroOffset.SetLLA(pos);
+    // Usage: KoreZeroOffset.SetLLA(pos);
 
-    public static void SetLLA(GloLLAPoint rwLLA)
+    public static void SetLLA(KoreLLAPoint rwLLA)
     {
         RwZeroPointLLA = rwLLA;
         RwZeroPointXYZ = rwLLA.ToXYZ();
 
-        //GD.Print($"GloZeroOffset.SetLLA: RwZeroPointLLA:{RwZeroPointLLA} RwZeroPointXYZ:{RwZeroPointXYZ}");
+        //GD.Print($"KoreZeroOffset.SetLLA: RwZeroPointLLA:{RwZeroPointLLA} RwZeroPointXYZ:{RwZeroPointXYZ}");
     }
 
     // --------------------------------------------------------------------------------------------
@@ -55,17 +57,17 @@ public static class GloZeroOffset
     // The real-world XYZ we have from the model in A. the Earth centre offset is B, and we need the game engine
     // zero-offset C: C = A - B
 
-    public static GloXYZPoint RwZeroPointOffset(GloXYZPoint RwXYZ)
+    public static KoreXYZPoint RwZeroPointOffset(KoreXYZPoint RwXYZ)
     {
-        GloXYZVector offset = RwZeroPointXYZ.XYZTo(RwXYZ);
-        return new GloXYZPoint(offset.X, offset.Y, offset.Z);
+        KoreXYZVector offset = RwZeroPointXYZ.XYZTo(RwXYZ);
+        return new KoreXYZPoint(offset.X, offset.Y, offset.Z);
     }
 
-    public static GloXYZPoint RwZeroPointOffset(GloLLAPoint RwLLA)
+    public static KoreXYZPoint RwZeroPointOffset(KoreLLAPoint RwLLA)
     {
-        GloXYZPoint RwXYZ = RwLLA.ToXYZ();
-        GloXYZVector offset = RwZeroPointXYZ.XYZTo(RwXYZ);
-        return new GloXYZPoint(offset.X, offset.Y, offset.Z);
+        KoreXYZPoint RwXYZ = RwLLA.ToXYZ();
+        KoreXYZVector offset = RwZeroPointXYZ.XYZTo(RwXYZ);
+        return new KoreXYZPoint(offset.X, offset.Y, offset.Z);
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -76,12 +78,12 @@ public static class GloZeroOffset
     // 3 - Scale the XYZ by the GE distance multiplier.
     // 4 - Return the vector3.
 
-    // Usage: Vector3 GePos = GloZeroOffset.GeZeroPointOffset(RwXYZPos);
+    // Usage: Vector3 GePos = KoreZeroOffset.GeZeroPointOffset(RwXYZPos);
 
-    public static Vector3 GeZeroPointOffset(GloXYZPoint RwXYZ)
+    public static Vector3 GeZeroPointOffset(KoreXYZPoint RwXYZ)
     {
         // 1 - Subtract the zero point offset to get the offset XYZ.
-        GloXYZVector rwOffsetXYZ = RwZeroPointXYZ.XYZTo(RwXYZ);
+        KoreXYZVector rwOffsetXYZ = RwZeroPointXYZ.XYZTo(RwXYZ);
 
         // 2 - Invert the Z axis to match the Godot engine orientation.
         double x = rwOffsetXYZ.X;

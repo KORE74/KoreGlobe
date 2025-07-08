@@ -178,7 +178,7 @@ public partial class GloZeroNodeMapTile : Node3D
         else if (Filepaths.ImageFileExists)
         {
             // Convert the image (typically from an import operation).
-            GloWebpCompressor.CompressTexture(Filepaths.ImageFilepath, Filepaths.WebpFilepath);
+            KoreWebpConverter.CompressTexture(Filepaths.ImageFilepath, Filepaths.WebpFilepath);
 
             // repeat the Webp import process
             TileMaterial = TL.CreateDirectWebpMaterial(Filepaths.WebpFilepath);

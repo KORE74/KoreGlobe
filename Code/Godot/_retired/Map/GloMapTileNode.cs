@@ -188,7 +188,7 @@
 //         else if (Filepaths.ImageFileExists)
 //         {
 //             if (!Filepaths.WebpFileExists)
-//                 GloWebpCompressor.CompressTexture(Filepaths.ImageFilepath, Filepaths.WebpFilepath);
+//                 KoreWebpConverter.CompressTexture(Filepaths.ImageFilepath, Filepaths.WebpFilepath);
 
 //             // Update the filepaths to reflect the new WebP file, try to open it.
 //             Filepaths = new GloMapTileFilepaths(TileCode);
