@@ -6,8 +6,7 @@ using Godot;
 public enum GloCamMode
 {
     WorldCam,
-    ChaseCam,
-    AlignCam
+    ChaseCam
 }
 
 public class GloUIState
@@ -30,6 +29,7 @@ public class GloUIState
 
     // Usage: GloGodotFactory.Instance.UIState.ShowTileInfo
     public bool       ShowTileInfo        { get; set; } = false;
+    public bool       ShowTileMesh        { get; set; } = false;
 
     public GloUIState()
     {
@@ -46,25 +46,23 @@ public class GloUIState
 
     public bool IsCamModeWorld()    => CameraMode == GloCamMode.WorldCam;
     public bool IsCamModeChaseCam() => CameraMode == GloCamMode.ChaseCam;
-    public bool IsCamModeAlignCam() => CameraMode == GloCamMode.AlignCam;
 
     public void SetCameraModeWorld()    => CameraMode = GloCamMode.WorldCam;
     public void SetCameraModeChaseCam() => CameraMode = GloCamMode.ChaseCam;
-    public void SetCameraModeAlignCam() => CameraMode = GloCamMode.AlignCam;
 
 
     // Usage: GloGodotFactory.Instance.UIState.UpdateDisplayedChaseCam()
 
-    public void UpdateDisplayedChaseCam()
-    {
-        if (GloAppFactory.Instance.EventDriver.NearPlatformValid())
-        {
-            if (!IsCamModeChaseCam())
-                SetCameraModeChaseCam();
+    // public void UpdateDisplayedChaseCam()
+    // {
+    //     if (GloAppFactory.Instance.EventDriver.NearPlatformValid())
+    //     {
+    //         if (!IsCamModeChaseCam())
+    //             SetCameraModeChaseCam();
 
-            GloGodotFactory.Instance.GodotEntityManager.EnableChaseCam(GloAppFactory.Instance.EventDriver.NearPlatformName());
-        }
-    }
+    //         GloGodotFactory.Instance.GodotEntityManager.EnableChaseCam(GloAppFactory.Instance.EventDriver.NearPlatformName());
+    //     }
+    // }
 
     public void UpdateTileInfo(bool infoVisible)
     {
@@ -73,7 +71,7 @@ public class GloUIState
         config.SetParam("ShowDebug", infoVisible);
         ShowTileInfo = infoVisible;
 
-        GloGodotFactory.Instance.ZeroNodeMapManager.UpdateInfoVisibility(infoVisible);
+        // GloGodotFactory.Instance.ZeroNodeMapManager.UpdateInfoVisibility(infoVisible);
     }
 
 }
