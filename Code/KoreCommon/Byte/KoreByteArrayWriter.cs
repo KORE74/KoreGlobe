@@ -13,11 +13,11 @@ public class KoreByteArrayWriter
     }
 
     public byte[] ToArray() => _data.ToArray();
-    public void WriteInt(int value) { _data.AddRange(BitConverter.GetBytes(value)); }
-    public void WriteFloat(float value) { _data.AddRange(BitConverter.GetBytes(value)); }
+    public void WriteInt(int value)       { _data.AddRange(BitConverter.GetBytes(value)); }
+    public void WriteFloat(float value)   { _data.AddRange(BitConverter.GetBytes(value)); }
     public void WriteDouble(double value) { _data.AddRange(BitConverter.GetBytes(value)); }
-    public void WriteBool(bool value) { _data.AddRange(BitConverter.GetBytes(value)); }
-    public void WriteBytes(byte[] value) { _data.AddRange(value); }
+    public void WriteBool(bool value)     { _data.AddRange(BitConverter.GetBytes(value)); }
+    public void WriteBytes(byte[] value)  { _data.AddRange(value); }
 
     // --------------------------------------------------------------------------------------------
     // MARK: String

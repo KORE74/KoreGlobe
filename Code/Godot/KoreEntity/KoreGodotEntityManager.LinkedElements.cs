@@ -11,12 +11,15 @@ public partial class KoreGodotEntityManager : Node3D
     // --------------------------------------------------------------------------------------------
     // MARK: Linked Element Management
     // --------------------------------------------------------------------------------------------
-    // Linked elements are those that hang off of the platform, such as radars.
+    // Linked elements are those that hang off of the platform, such as the 3D models, and geometry like radar wedges etc.
     // They are named children of the entity node, and are managed through dedicated routines.
+    //
+    // (Conversely unlinked elements are ones that are not attached, such as routes/waypoints. Things with a lat/long than
+    //  than an offset to the entity position).
 
     public bool LinkedElementExists(string entityName, string elementName)
     {
-        GloGodotEntity? ent = GetEntity(entityName);
+        KoreGodotEntity? ent = GetEntity(entityName);
 
         if (ent == null)
             return false;
@@ -26,30 +29,32 @@ public partial class KoreGodotEntityManager : Node3D
             if (currNode.Name == elementName)
                 return true;
         }
-
         return false;
     }
 
-    public void AddLinkedElement(string entityName, GloGodotPlatformElement element)
+    public void AddLinkedElement(string entityName, KoreGodotEntityElement element)
     {
-        string elementName = element.Name;
-        if (!LinkedElementExists(entityName, elementName))
-        {
-            GloGodotEntity? ent = GetEntity(entityName);
+        // fail if named item already exixts
+        if (LinkedElementExists(entityName, element.Name))
+            return;
 
-            if (ent == null)
-                return;
+        // Fail if the entity can't be accessed
+        KoreGodotEntity? ent = GetEntity(entityName);
+        if (ent == null)
+            return;
 
-            ent.AttitudeNode.AddChild(element);
-        }
+        // Add the element to the node to the element attitude node
+        ent.AttitudeNode.AddChild(element);
     }
 
     public void RemoveLinkedElement(string entityName, string elementName)
     {
-        GloGodotEntity? ent = GetEntity(entityName);
+        // return if we can't find the entity
+        KoreGodotEntity? ent = GetEntity(entityName);
         if (ent == null)
             return;
 
+        // Find the element by name and remove it
         foreach (Node3D currNode in ent.AttitudeNode.GetChildren())
         {
             if (currNode.Name == elementName)
@@ -62,7 +67,7 @@ public partial class KoreGodotEntityManager : Node3D
 
     public Node3D? GetLinkedElement(string entityName, string elementName)
     {
-        GloGodotEntity? ent = GetEntity(entityName);
+        KoreGodotEntity? ent = GetEntity(entityName);
         if (ent == null)
             return null;
 
@@ -75,11 +80,12 @@ public partial class KoreGodotEntityManager : Node3D
         return null;
     }
 
+    // Return a list of all the linked elements for an entity.
     public List<string> LinkedElementNames(string entityName)
     {
         List<string> elementNames = new List<string>();
 
-        GloGodotEntity? ent = GetEntity(entityName);
+        KoreGodotEntity? ent = GetEntity(entityName);
         if (ent == null)
             return elementNames;
 

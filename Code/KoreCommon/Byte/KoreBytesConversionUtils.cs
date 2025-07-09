@@ -5,6 +5,9 @@ using System.Collections.Generic;
 
 namespace KoreCommon;
 
+// KoreBytesConversionUtils: A class of static functions for converting between standard types and byte arrays.
+// - Once we have a byte array, we have a more condensed representation of the data that can be stored, transmitted, or processed more efficiently.
+
 public static class KoreBytesConversionUtils
 {
     // --------------------------------------------------------------------------------------------

@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace KoreCommon;
 
+// KoreBinaryDataManager: A class for managing binary data storage in SQLite.
+// - We can access blocks of data with a name, then use KoreByteArrayWriter/KoreByteArrayReader to write and read the data.
+
 public class KoreBinaryDataManager : IDisposable
 {
     private string _connectionString;
@@ -21,6 +24,7 @@ public class KoreBinaryDataManager : IDisposable
     // ----------------------------------------------------------------------------------------
     // Constructor: Initializes the connection and ensures schema exists.
     // ----------------------------------------------------------------------------------------
+
     public KoreBinaryDataManager(string dbFilePath)
     {
         _connectionString = $"Data Source={dbFilePath};Version=3;";
@@ -30,6 +34,7 @@ public class KoreBinaryDataManager : IDisposable
     // ----------------------------------------------------------------------------------------
     // One-time schema creation using a static lock.
     // ----------------------------------------------------------------------------------------
+
     private void EnsureSchemaCreated()
     {
         if (!_schemaCreated)
@@ -67,6 +72,7 @@ public class KoreBinaryDataManager : IDisposable
     // ----------------------------------------------------------------------------------------
     // Add
     // ----------------------------------------------------------------------------------------
+
     public bool Add(string dataName, byte[] dataBytes)
     {
         if (dataBytes == null || dataBytes.Length == 0 || string.IsNullOrEmpty(dataName))
@@ -124,6 +130,7 @@ public class KoreBinaryDataManager : IDisposable
     // ----------------------------------------------------------------------------------------
     // Get
     // ----------------------------------------------------------------------------------------
+
     public byte[] Get(string dataName)
     {
         _semaphore.Wait();
@@ -156,6 +163,7 @@ public class KoreBinaryDataManager : IDisposable
     // ----------------------------------------------------------------------------------------
     // List & Exists
     // ----------------------------------------------------------------------------------------
+
     public List<string> List()
     {
         var fileList = new List<string>();
@@ -213,6 +221,7 @@ public class KoreBinaryDataManager : IDisposable
     // ----------------------------------------------------------------------------------------
     // Dispose
     // ----------------------------------------------------------------------------------------
+
     public void Dispose()
     {
         if (!_disposed)

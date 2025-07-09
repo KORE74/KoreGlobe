@@ -49,12 +49,13 @@ public partial class KoreGodotEntity : Node3D
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
-        UpdateEntityPosition();
 
         if (Timer1Hz < GloCentralTime.RuntimeSecs)
         {
             Timer1Hz = GloCentralTime.RuntimeSecs + 1.0f;
-            UpdateZeroNode();
+
+            UpdateRwPosition();
+            ApplySmoothAttitude();
 
             // if (ChaseCam.IsCurrent())
             // {
@@ -134,11 +135,11 @@ public partial class KoreGodotEntity : Node3D
             return;
 
         // Get the 6DOF data (will return a .Zero value on error, not a null object)
-        CurrLLA      = KoreEventDriver.GetEntityPosition(EntityName);
-        CurrCourse   = KoreEventDriver.GetEntityCourse(EntityName);
+        CurrLLA = KoreEventDriver.GetEntityPosition(EntityName);
+        CurrCourse = KoreEventDriver.GetEntityCourse(EntityName);
 
         // Convert the position to a game-engine structure
-        GloEntityV3 entityVecs = GloGeoConvOperations.RwToGeStruct(CurrLLA, CurrCourse);
+        KoreEntityV3 entityVecs = KoreGeoConvOperations.RwToGeStruct(CurrLLA, CurrCourse);
 
         //GD.Print($"Name: {EntityName} PosLLA:{pos} Ahead:{entityVecs.PosAhead} up:{entityVecs.VecUp}");
 

@@ -13,12 +13,17 @@ public partial class KoreGodotEntityManager : Node3D
 {
     // List<GloGodotEntity> EntityList = new List<GloGodotEntity>();
 
+    // The root node for all entities (think vehicles) in scene tree
     public Node3D EntityRootNode = new Node3D() { Name = "EntityRootNode" };
+
+    // The root node for all unlinked entities (think routes/waypoints) in scene tree
     public Node3D UnlinkedRootNode = new Node3D() { Name = "UnlinkedRootNode" };
 
-    float TimerModelCheck = 0.0f;
+    // Simple timer to periodically check the scene matches the KoreSim *truth*.
+    private float TimerModelCheck = 0.0f;
+    private float TimerModelTick = 0.2f;
 
-    private Glo1DMappedRange InfographicScaleRange = new Glo1DMappedRange();
+    //private Glo1DMappedRange InfographicScaleRange = new Glo1DMappedRange();
 
     // --------------------------------------------------------------------------------------------
     // MARK: Node3D Functions
@@ -32,12 +37,6 @@ public partial class KoreGodotEntityManager : Node3D
         // Setup the Root Nodes.
         AddChild(EntityRootNode);
         AddChild(UnlinkedRootNode);
-
-        // Setup the Infographic Scale Range
-        InfographicScaleRange.AddEntry(1, 1);
-        InfographicScaleRange.AddEntry(4, 16);
-        InfographicScaleRange.AddEntry(8, 100);
-        InfographicScaleRange.AddEntry(10, 400);
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -45,23 +44,23 @@ public partial class KoreGodotEntityManager : Node3D
     {
         if (TimerModelCheck < GloCentralTime.RuntimeSecs)
         {
-            TimerModelCheck = GloCentralTime.RuntimeSecs + 1f;
+            TimerModelCheck = GloCentralTime.RuntimeSecs + TimerModelTick;
             // MatchModelPlatforms();
 
-            EventCheck();
+            EntityEventCheck();
+            ElementEventCheck();
 
             // DeleteOrphanedEntities();
         }
     }
 
-
     // --------------------------------------------------------------------------------------------
     // MARK: EventCheck
     // --------------------------------------------------------------------------------------------
 
-    private void EventCheck()
+    private void EntityEventCheck()
     {
-        // Consume any create entity events
+        // Consume any CREATE entity events
         var createEntityEvents = KoreSimFactory.Instance.EventRegister.ConsumeAllEventsByType(KoreEventRegister.EventEntityCreated);
         foreach (var createEvent in createEntityEvents)
         {
@@ -71,7 +70,7 @@ public partial class KoreGodotEntityManager : Node3D
                 AddEntity(entName);
         }
 
-        // Consume any delete entity events
+        // Consume any DELETE entity events
         var deleteEntityEvents = KoreSimFactory.Instance.EventRegister.ConsumeAllEventsByType(KoreEventRegister.EventEntityDeleted);
         foreach (var deleteEvent in deleteEntityEvents)
         {
@@ -80,7 +79,26 @@ public partial class KoreGodotEntityManager : Node3D
         }
     }
 
+    private void ElementEventCheck()
+    {
+        // Consume any CREATE element events
+        var createElementEvents = KoreSimFactory.Instance.EventRegister.ConsumeAllEventsByType(KoreEventRegister.EventEntityElementCreated);
+        foreach (var createEvent in createElementEvents)
+        {
+            string entityName = createEvent.GetOrThrow(KoreEventRegister.KeyEntityName);
+            string elementName = createEvent.GetOrThrow(KoreEventRegister.KeyElementName);
+            AddEntityElement(entityName, elementName);
+        }
 
+        // Consume any DELETE element events
+        var deleteElementEvents = KoreSimFactory.Instance.EventRegister.ConsumeAllEventsByType(KoreEventRegister.EventEntityElementDeleted);
+        foreach (var deleteEvent in deleteElementEvents)
+        {
+            string entityName = deleteEvent.GetOrThrow(KoreEventRegister.KeyEntityName);
+            string elementName = deleteEvent.GetOrThrow(KoreEventRegister.KeyElementName);
+            RemoveEntityElement(entityName, elementName);
+        }
+    }
 
     // --------------------------------------------------------------------------------------------
     // MARK: Basic Entity Management
@@ -99,10 +117,12 @@ public partial class KoreGodotEntityManager : Node3D
         return false;
     }
 
+    public int EntityCount => EntityRootNode.GetChildCount();
+
     public void AddEntity(string entityName)
     {
         if (!EntityExists(entityName))
-            EntityRootNode.AddChild(new GloGodotEntity() { EntityName = entityName });
+            EntityRootNode.AddChild(new KoreGodotEntity() { EntityName = entityName });
     }
 
     public void RemoveEntity(string entityName)
@@ -112,7 +132,7 @@ public partial class KoreGodotEntityManager : Node3D
             if (currNode.Name == entityName)
             {
                 currNode.QueueFree();
-                RemoveUnlinkedEntity(entityName);
+                RemoveUnlinkedEntityNode(entityName);
                 return;
             }
         }
@@ -137,6 +157,46 @@ public partial class KoreGodotEntityManager : Node3D
             names.Add(currNode.Name);
 
         return names;
+    }
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Basic Element Management
+    // --------------------------------------------------------------------------------------------
+
+    // Godot Elements - check if they exist in the scene tree (not the KoreSim model).
+
+    public bool ElementExists(string entityName, string elementName)
+    {
+        // Not entity in the scene tree, so no elements.
+        if (!EntityExists(entityName))
+            return false;
+
+        // Check for linked and unlinked elements
+        if (LinkedElementExists(entityName, elementName)) return true;
+        if (UnlinkedElementExists(entityName, elementName)) return true;
+
+        // default not found response
+        return false;
+    }
+
+    // Top level element add and removal - uses the element type to filter down into child function calls.
+
+    public void AddEntityElement(string entityName, string elementName)
+    {
+        if (EntityExists(entityName))
+        {
+            KoreGodotEntity? entity = GetEntity(entityName);
+            //entity?.AddElement(elementName);
+        }
+    }
+
+    public void RemoveEntityElement(string entityName, string elementName)
+    {
+        if (EntityExists(entityName))
+        {
+            KoreGodotEntity? entity = GetEntity(entityName);
+            //entity?.RemoveElement(elementName);
+        }
     }
 
     // --------------------------------------------------------------------------------------------

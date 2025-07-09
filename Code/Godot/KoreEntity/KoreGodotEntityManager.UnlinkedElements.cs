@@ -17,7 +17,7 @@ public partial class KoreGodotEntityManager : Node3D
     // We also add a platform layer to the nodes, so they can be managed as a group.
 
     // Get or Add the Unlinked Platform Node
-    public Node3D UnlinkedEntity(string entityName)
+    public Node3D UnlinkedEntityNode(string entityName)
     {
         // Return the existing node if we find it
         foreach (Node3D currNode in UnlinkedRootNode.GetChildren())
@@ -33,9 +33,9 @@ public partial class KoreGodotEntityManager : Node3D
         return entNode;
     }
 
-    public void RemoveUnlinkedEntity(string entityName)
+    public void RemoveUnlinkedEntityNode(string entityName)
     {
-        Node3D? entNode = UnlinkedEntity(entityName);
+        Node3D? entNode = UnlinkedEntityNode(entityName);
 
         if (entNode != null)
             entNode.QueueFree();
@@ -49,7 +49,7 @@ public partial class KoreGodotEntityManager : Node3D
 
     public bool UnlinkedElementExists(string entityName, string elementName)
     {
-        Node3D entityNode = UnlinkedEntity(entityName);
+        Node3D entityNode = UnlinkedEntityNode(entityName);
 
         foreach (Node3D currNode in entityNode.GetChildren())
         {
@@ -62,13 +62,13 @@ public partial class KoreGodotEntityManager : Node3D
 
     public void AddUnlinkedElement(string entityName, GloGodotPlatformElement element)
     {
-        Node3D entityNode = UnlinkedPlatform(entityName);
+        Node3D entityNode = UnlinkedEntityNode(entityName);
         entityNode.AddChild(element);
     }
 
     public void RemoveUnlinkedElement(string entityName, string elementName)
     {
-        Node3D entityNode = UnlinkedPlatform(entityName);
+        Node3D entityNode = UnlinkedEntityNode(entityName);
 
         foreach (Node3D currNode in entityNode.GetChildren())
         {
@@ -82,7 +82,7 @@ public partial class KoreGodotEntityManager : Node3D
 
     public Node3D? GetUnlinkedElement(string entityName, string elementName)
     {
-        Node3D entityNode = UnlinkedPlatform(entityName);
+        Node3D entityNode = UnlinkedEntityNode(entityName);
 
         foreach (Node3D currNode in entityNode.GetChildren())
         {
@@ -97,7 +97,7 @@ public partial class KoreGodotEntityManager : Node3D
     {
         List<string> elementNames = new List<string>();
 
-        Node3D entityNode = UnlinkedPlatform(entityName);
+        Node3D entityNode = UnlinkedEntityNode(entityName);
 
         foreach (Node3D currNode in entityNode.GetChildren())
         {

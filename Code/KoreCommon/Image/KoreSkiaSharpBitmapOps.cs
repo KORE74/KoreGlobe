@@ -7,8 +7,14 @@ using SkiaSharp;
 using KoreCommon;
 namespace KoreCommon.SkiaSharp;
 
+// KoreSkiaSharpBitmapOps: static class of functions around manipulating bitmaps. Uses SkiaSharp, to be universal across any dotnet application.
+
 public static class KoreSkiaSharpBitmapOps
 {
+    // --------------------------------------------------------------------------------------------
+    // MARK: Resize
+    // --------------------------------------------------------------------------------------------
+
     // RotateAndScaleBitmap
     // - Maintains the centre of the bitmap as the anchor position.
     public static SKBitmap RotateAndScaleBitmap(SKBitmap originalBitmap, float angle, float scale)
@@ -56,25 +62,6 @@ public static class KoreSkiaSharpBitmapOps
     }
 
     public static SKBitmap ResizeImage(SKBitmap originalImage, SKSize newSize) => ResizeImage(originalImage, (int)newSize.Width, (int)newSize.Height);
-
-    // --------------------------------------------------------------------------------------------
-
-    // function to apply a pixelation effect to a bitmap, by reducing its size by a factor, then restoring the size to
-    // its original dimensions.
-
-    public static SKBitmap PixelateImage(SKBitmap originalBitmap, int pixelationFactor)
-    {
-        // Create a new SKBitmap with the desired dimensions
-        SKBitmap pixelatedBitmap = new SKBitmap(originalBitmap.Width / pixelationFactor, originalBitmap.Height / pixelationFactor);
-
-        using (SKCanvas canvas = new SKCanvas(pixelatedBitmap))
-        {
-            // Set the quality of the resize
-            canvas.DrawBitmap(originalBitmap, new SKRect(0, 0, pixelatedBitmap.Width, pixelatedBitmap.Height));
-        }
-
-        return ResizeImage(pixelatedBitmap, originalBitmap.Width, originalBitmap.Height);
-    }
 
     // --------------------------------------------------------------------------------------------
     // MARK: Load
@@ -216,5 +203,24 @@ public static class KoreSkiaSharpBitmapOps
         return result;
     }
 
+    // --------------------------------------------------------------------------------------------
+    // MARK: Effects
+    // --------------------------------------------------------------------------------------------
 
+    // function to apply a pixelation effect to a bitmap, by reducing its size by a factor, then restoring the size to
+    // its original dimensions.
+
+    public static SKBitmap PixelateImage(SKBitmap originalBitmap, int pixelationFactor)
+    {
+        // Create a new SKBitmap with the desired dimensions
+        SKBitmap pixelatedBitmap = new SKBitmap(originalBitmap.Width / pixelationFactor, originalBitmap.Height / pixelationFactor);
+
+        using (SKCanvas canvas = new SKCanvas(pixelatedBitmap))
+        {
+            // Set the quality of the resize
+            canvas.DrawBitmap(originalBitmap, new SKRect(0, 0, pixelatedBitmap.Width, pixelatedBitmap.Height));
+        }
+
+        return ResizeImage(pixelatedBitmap, originalBitmap.Width, originalBitmap.Height);
+    }
 }
