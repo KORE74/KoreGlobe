@@ -36,7 +36,7 @@ public static class KoreZeroOffset
 
         GD.Print(constReport);
 
-        GloCentralLog.AddEntry(constReport);
+        KoreCentralLog.AddEntry(constReport);
     }
 
     // --------------------------------------------------------------------------------------------

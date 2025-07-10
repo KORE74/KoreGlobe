@@ -1,6 +1,8 @@
 
 using System;
 
+using KoreCommon;
+
 using Godot;
 
 // Class representing the zero anchor position in the game engine world.
@@ -10,11 +12,11 @@ public partial class KoreZeroNode : Node3D
     // The root node for all entities, made static so it can be accessed from anywhere.
     public static Node3D EntityRootNode = new Node3D() { Name = "KoreZeroNode" };
 
-    private static GloLLAPoint ZeroPosToApply = new GloLLAPoint() { LatDegs = 0, LonDegs = 0, RadiusM = GloWorldConsts.EarthRadiusM };
+    private static KoreLLAPoint ZeroPosToApply = KoreLLAPoint.Zero;
 
     private float Timer1Hz = 0.0f;
 
-    // Usage: GloZeroNode.ZeroNodeUpdateCycle
+    // Usage: KoreZeroNode.ZeroNodeUpdateCycle
     static public bool ZeroNodeUpdateCycle {get; private set; } = false;
 
     static private bool UpdateTrigger = false;
@@ -45,10 +47,10 @@ public partial class KoreZeroNode : Node3D
 
     public override void _Process(double delta)
     {
-        if ((Timer1Hz < GloCentralTime.RuntimeSecs) || (UpdateTrigger))
+        if ((Timer1Hz < KoreCentralTime.RuntimeSecs) || (UpdateTrigger))
         {
             UpdateTrigger = false;
-            Timer1Hz = GloCentralTime.RuntimeSecs + 2.0f;
+            Timer1Hz = KoreCentralTime.RuntimeSecs + 2.0f;
             CallDeferred("SetZeroNodePositionDeferred");
         }
         else
@@ -68,20 +70,20 @@ public partial class KoreZeroNode : Node3D
         UpdateTrigger = true;
     }
 
-    // Usage: GloZeroNode.SetZeroNodePosition(pos);
-    public static void SetZeroNodePosition(GloLLAPoint pos)
+    // Usage: KoreZeroNode.SetZeroNodePosition(pos);
+    public static void SetZeroNodePosition(KoreLLAPoint pos)
     {
         ZeroPosToApply = pos;
     }
 
-    // Usage: GloZeroNode.SetZeroNodePosition(53.0, -6.0);
+    // Usage: KoreZeroNode.SetZeroNodePosition(53.0, -6.0);
     public static void SetZeroNodePosition(double latDegs, double lonDegs)
     {
         // Set the position of the ZeroNode.
-        GloLLAPoint pos = new GloLLAPoint() {
+        KoreLLAPoint pos = new KoreLLAPoint() {
             LatDegs = latDegs,
             LonDegs = lonDegs,
-            RadiusM = GloWorldConsts.EarthRadiusM };
+            RadiusM = KoreWorldConsts.EarthRadiusM };
 
         ZeroPosToApply = pos;
     }
@@ -114,9 +116,9 @@ public partial class KoreZeroNode : Node3D
     {
         float markerSize  = 2f;
 
-        Node3D zeroNodeMarker = GloPrimitiveFactory.CreateSphereNode("Marker", new Vector3(0f, 0f, 0f), markerSize, GloColorUtil.Colors["OffRed"], true);
+        Node3D zeroNodeMarker = KorePrimitiveFactory.CreateSphereNode("Marker", new Vector3(0f, 0f, 0f), markerSize, KoreColorUtil.Colors["OffRed"], true);
         AddChild(zeroNodeMarker);
 
-        zeroNodeMarker.AddChild( GloPrimitiveFactory.AxisMarkerNode(markerSize, markerSize/4) );
+        zeroNodeMarker.AddChild( KorePrimitiveFactory.AxisMarkerNode(markerSize, markerSize/4) );
     }
 }
