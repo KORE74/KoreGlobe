@@ -107,25 +107,25 @@ public partial class GloUISidePanel : HBoxContainer
             ShowElementsButton!.ButtonPressed  = PanelShowElements!.Visible;
             RxTxButton!.ButtonPressed          = PanelBeamRxTx!.Visible;
 
-            //GD.Print($"GloGodotFactory.Instance.UIState.InfographicScale:{GloGodotFactory.Instance.UIState.InfographicScale}");
+            //GD.Print($"KoreGodotFactory.Instance.UIState.InfographicScale:{KoreGodotFactory.Instance.UIState.InfographicScale}");
 
             // Manage the toggle buttons
-            RWScaleToggleButton!.ButtonPressed    =  GloGodotFactory.Instance.UIState.IsRwScale;
-            InfographicScaleButton!.ButtonPressed = !GloGodotFactory.Instance.UIState.IsRwScale;
+            RWScaleToggleButton!.ButtonPressed    =  KoreGodotFactory.Instance.UIState.IsRwScale;
+            InfographicScaleButton!.ButtonPressed = !KoreGodotFactory.Instance.UIState.IsRwScale;
 
             // Fix the number to the range and update the slider and label
-            GloGodotFactory.Instance.UIState.InfographicScale = GloValueUtils.Clamp(GloGodotFactory.Instance.UIState.InfographicScale, 1f, 10f);
-            InfographicScaleSlider!.Value = GloGodotFactory.Instance.UIState.InfographicScale;
-            InfographicScaleLabel!.Text   = $"{GloGodotFactory.Instance.UIState.InfographicScale:F0}";
+            KoreGodotFactory.Instance.UIState.InfographicScale = GloValueUtils.Clamp(KoreGodotFactory.Instance.UIState.InfographicScale, 1f, 10f);
+            InfographicScaleSlider!.Value = KoreGodotFactory.Instance.UIState.InfographicScale;
+            InfographicScaleLabel!.Text   = $"{KoreGodotFactory.Instance.UIState.InfographicScale:F0}";
 
             // Manage the Show Elements buttons
-            ShowRoutesButton!.ButtonPressed          = GloGodotFactory.Instance.UIState.ShowRoutes;
-            ShowEmittersButton!.ButtonPressed        = GloGodotFactory.Instance.UIState.ShowEmitters;
-            ShowAntennaPatternsButton!.ButtonPressed = GloGodotFactory.Instance.UIState.ShowAntennaPatterns;
+            ShowRoutesButton!.ButtonPressed          = KoreGodotFactory.Instance.UIState.ShowRoutes;
+            ShowEmittersButton!.ButtonPressed        = KoreGodotFactory.Instance.UIState.ShowEmitters;
+            ShowAntennaPatternsButton!.ButtonPressed = KoreGodotFactory.Instance.UIState.ShowAntennaPatterns;
 
             // Manage the RxTx buttons
-            ShowTxButton!.ButtonPressed = GloGodotFactory.Instance.UIState.ShowTx;
-            ShowRxButton!.ButtonPressed = GloGodotFactory.Instance.UIState.ShowRx;
+            ShowTxButton!.ButtonPressed = KoreGodotFactory.Instance.UIState.ShowTx;
+            ShowRxButton!.ButtonPressed = KoreGodotFactory.Instance.UIState.ShowRx;
 
             PerformanceLabel!.Text = $"{currentSecondCallCount:F0}\nUPS";
             currentSecondCallCount = 0;
@@ -193,11 +193,11 @@ public partial class GloUISidePanel : HBoxContainer
     {
         GD.Print("GloUIHeader.OnRWScaleToggleButtonPressed");
 
-        if (!GloGodotFactory.Instance.UIState.IsRwScale)
-            GloGodotFactory.Instance.UIState.IsRwScale = true;
+        if (!KoreGodotFactory.Instance.UIState.IsRwScale)
+            KoreGodotFactory.Instance.UIState.IsRwScale = true;
 
-        RWScaleToggleButton!.ButtonPressed    =  GloGodotFactory.Instance.UIState.IsRwScale;
-        InfographicScaleButton!.ButtonPressed = !GloGodotFactory.Instance.UIState.IsRwScale;
+        RWScaleToggleButton!.ButtonPressed    =  KoreGodotFactory.Instance.UIState.IsRwScale;
+        InfographicScaleButton!.ButtonPressed = !KoreGodotFactory.Instance.UIState.IsRwScale;
     }
 
     // Called when the "InfographicScaleButton" button is pressed
@@ -205,11 +205,11 @@ public partial class GloUISidePanel : HBoxContainer
     {
         GD.Print("GloUIHeader.OnInfographicScaleButtonPressed");
 
-        if (GloGodotFactory.Instance.UIState.IsRwScale)
-            GloGodotFactory.Instance.UIState.IsRwScale = false;
+        if (KoreGodotFactory.Instance.UIState.IsRwScale)
+            KoreGodotFactory.Instance.UIState.IsRwScale = false;
 
-        RWScaleToggleButton!.ButtonPressed    =  GloGodotFactory.Instance.UIState.IsRwScale;
-        InfographicScaleButton!.ButtonPressed = !GloGodotFactory.Instance.UIState.IsRwScale;
+        RWScaleToggleButton!.ButtonPressed    =  KoreGodotFactory.Instance.UIState.IsRwScale;
+        InfographicScaleButton!.ButtonPressed = !KoreGodotFactory.Instance.UIState.IsRwScale;
     }
 
     // Called when the "InfographicScaleSlider" value is changed
@@ -217,8 +217,8 @@ public partial class GloUISidePanel : HBoxContainer
     {
         GloCentralLog.AddEntry("GloUIHeader.OnInfographicScaleSliderValueChanged");
 
-        GloGodotFactory.Instance.UIState.InfographicScale = value;
-        InfographicScaleLabel!.Text = $"{GloGodotFactory.Instance.UIState.InfographicScale:F0}";
+        KoreGodotFactory.Instance.UIState.InfographicScale = value;
+        InfographicScaleLabel!.Text = $"{KoreGodotFactory.Instance.UIState.InfographicScale:F0}";
     }
 
     // --------------------------------------------------------------------------------------------
@@ -230,7 +230,7 @@ public partial class GloUISidePanel : HBoxContainer
     {
         GloCentralLog.AddEntry("GloUIHeader.OnShowRoutesButtonPressed");
 
-        GloGodotFactory.Instance.UIState.ShowRoutes = ShowRoutesButton!.ButtonPressed;
+        KoreGodotFactory.Instance.UIState.ShowRoutes = ShowRoutesButton!.ButtonPressed;
     }
 
     // Called when the "ShowEmittersButton" button is pressed
@@ -238,7 +238,7 @@ public partial class GloUISidePanel : HBoxContainer
     {
         GloCentralLog.AddEntry("GloUIHeader.OnShowEmittersButtonPressed");
 
-        GloGodotFactory.Instance.UIState.ShowEmitters = ShowEmittersButton!.ButtonPressed;
+        KoreGodotFactory.Instance.UIState.ShowEmitters = ShowEmittersButton!.ButtonPressed;
     }
 
     // Called when the "ShowAntennaPatternsButton" button is pressed
@@ -246,7 +246,7 @@ public partial class GloUISidePanel : HBoxContainer
     {
         GloCentralLog.AddEntry("GloUIHeader.OnShowAntennaPatternsButtonPressed");
 
-        GloGodotFactory.Instance.UIState.ShowAntennaPatterns = ShowAntennaPatternsButton!.ButtonPressed;
+        KoreGodotFactory.Instance.UIState.ShowAntennaPatterns = ShowAntennaPatternsButton!.ButtonPressed;
     }
 
     // --------------------------------------------------------------------------------------------

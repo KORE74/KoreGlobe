@@ -160,10 +160,10 @@ public partial class GloUISettingWindow : Window
 
         ActiveLanguageLabel.Text   = GloLanguageStrings.Instance.CurrActiveLanguage();
 
-        MaxMapLvlValueLabel.Text   = GloZeroNodeMapManager.CurrMaxMapLvl.ToString();
-        MaxMapLvlSlider.Value      = GloZeroNodeMapManager.CurrMaxMapLvl;
+        MaxMapLvlValueLabel.Text   = KoreZeroNodeMapManager.CurrMaxMapLvl.ToString();
+        MaxMapLvlSlider.Value      = KoreZeroNodeMapManager.CurrMaxMapLvl;
 
-        ToggleTileDetailsButton.SetPressed(GloGodotFactory.Instance.UIState.ShowTileInfo);
+        ToggleTileDetailsButton.SetPressed(KoreGodotFactory.Instance.UIState.ShowTileInfo);
 
         ToggleLogButton.SetPressed(GloCentralLog.LoggingActive);
 
@@ -186,7 +186,7 @@ public partial class GloUISettingWindow : Window
         GloCentralConfig.Instance.SetParam("DlcPath",       fixedDLCPath);
 
         // Assign (and write to config) the new max map level
-        GloZeroNodeMapManager.SetMaxMapLvl((int)MaxMapLvlSlider.Value);
+        KoreZeroNodeMapManager.SetMaxMapLvl((int)MaxMapLvlSlider.Value);
 
         // Set the active language in GloLanguageStrings, it will pass this on to the config
         GloCentralConfig.Instance.SetParam("ActiveLanguage", GloLanguageStrings.Instance.CurrActiveLanguage());
@@ -292,7 +292,7 @@ public partial class GloUISettingWindow : Window
 
         // Save the debug flag to config
         // GloMapManager.SetDebug(flagState);
-        GloGodotFactory.Instance.UIState.UpdateTileInfo(flagState);
+        KoreGodotFactory.Instance.UIState.UpdateTileInfo(flagState);
     }
 
     public void OnToggleLogButtonPressed()

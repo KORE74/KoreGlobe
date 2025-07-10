@@ -1,6 +1,6 @@
 
 // GloAppFactory is a central global class managing access to internal modelling element.
-// GloGodotFactory is a class that manages the creation of Godot entities.
+// KoreGodotFactory is a class that manages the creation of Godot entities.
 
 using System;
 using System.Collections.Generic;
@@ -15,15 +15,15 @@ public class KoreGodotFactory
 {
     public Node3D                 SceneRootNode      { get; private set; }
     public KoreZeroNode           ZeroNode           { get; private set; }
-    // public GloMapManager         EarthCoreNode      { get; private set; }  // GloGodotFactory.Instance.EarthCodeNode
+    // public GloMapManager         EarthCoreNode      { get; private set; }  // KoreGodotFactory.Instance.EarthCodeNode
 
     public GloCameraMoverWorld WorldCamNode         { get; private set; }
 
 
     public KoreGodotEntityManager GodotEntityManager { get; private set; }
-    public GloZeroNodeMapManager  ZeroNodeMapManager { get; private set; }
+    public KoreZeroNodeMapManager  ZeroNodeMapManager { get; private set; }
     public GloTextureLoader       TextureLoader      { get; private set; }
-    public Kore3DModelLibrary     ModelLibrary       { get; private set; } // GloGodotFactory.Instance.ModelLibrary
+    public Kore3DModelLibrary     ModelLibrary       { get; private set; } // KoreGodotFactory.Instance.ModelLibrary
     public GloUIState             UIState            { get; private set; }
 
     // Singleton pattern
@@ -37,8 +37,8 @@ public class KoreGodotFactory
     private GloUIMessageManager      UIMessageManager { get; set; }
 
     // Usage:
-    // - GloGodotFactory.Instance.UIMsgQueue.EnqueueMessage
-    // - GloGodotFactory.Instance.UIMsgQueue.TryDequeueMessage
+    // - KoreGodotFactory.Instance.UIMsgQueue.EnqueueMessage
+    // - KoreGodotFactory.Instance.UIMsgQueue.TryDequeueMessage
 
     // --------------------------------------------------------------------------------------------
     // MARK: Singleton Pattern
@@ -49,12 +49,12 @@ public class KoreGodotFactory
     {
         get
         {
-            //GD.Print("GloGodotFactory.Instance");
+            //GD.Print("KoreGodotFactory.Instance");
             lock (lockObject)  // Note: This locks per-thread, so can recursively call within the same thread.
             {
                 if (IsCreating)
                 {
-                    throw new InvalidOperationException("GloGodotFactory instance is being initialized and cannot be accessed recursively.");
+                    throw new InvalidOperationException("KoreGodotFactory instance is being initialized and cannot be accessed recursively.");
                 }
 
                 if (SingletonInstance == null)
@@ -84,7 +84,7 @@ public class KoreGodotFactory
     {
         if (SingletonInstance == null)
         {
-            GD.Print("GloGodotFactory.TriggerInstance");
+            GD.Print("KoreGodotFactory.TriggerInstance");
             lock (lockObject)
             {
                 if (SingletonInstance == null)
@@ -108,7 +108,7 @@ public class KoreGodotFactory
                 // Doing a chunk of object creation, wrapping in an excpetion handler
                 try
                 {
-                    GD.Print("- GloGodotFactory CreateObjects - - - -");
+                    GD.Print("- KoreGodotFactory CreateObjects - - - -");
 
                     SceneRootNode = sceneRootNode;
 
@@ -121,7 +121,7 @@ public class KoreGodotFactory
                     GodotEntityManager = new KoreGodotEntityManager();
                     ZeroNode.AddChild(GodotEntityManager);
 
-                    ZeroNodeMapManager = new GloZeroNodeMapManager(ZeroNode);
+                    ZeroNodeMapManager = new KoreZeroNodeMapManager(ZeroNode);
                     ZeroNode.AddChild(ZeroNodeMapManager);
 
                     // ImageManager = new();
@@ -146,19 +146,19 @@ public class KoreGodotFactory
 
                     IsInitialised = true;
 
-                    GloCentralLog.AddEntry("GloGodotFactory CreateObjects Done");
-                    GD.Print("- GloGodotFactory CreateObjects Done - - - - ");
+                    GloCentralLog.AddEntry("KoreGodotFactory CreateObjects Done");
+                    GD.Print("- KoreGodotFactory CreateObjects Done - - - - ");
 
                     // TestPoint();
                 }
                 catch (Exception ex)
                 {
-                    GloCentralLog.AddEntry($"GloGodotFactory.CreateObjects: Exception: {ex.Message}");
+                    GloCentralLog.AddEntry($"KoreGodotFactory.CreateObjects: Exception: {ex.Message}");
                 }
             }
             else
             {
-                throw new InvalidOperationException("GloGodotFactory.CreateObjects called twice.");
+                throw new InvalidOperationException("KoreGodotFactory.CreateObjects called twice.");
             }
         }
     }

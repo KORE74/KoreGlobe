@@ -312,13 +312,13 @@ public partial class GloCameraMoverWorld : Node3D
     private void UpdateCameraPosition()
     {
         // Set the camera position
-        // Vector3 GePos = GloZeroOffset.GeZeroPointOffset(CamPos.ToXYZ());
+        // Vector3 GePos = KoreZeroOffset.GeZeroPointOffset(CamPos.ToXYZ());
         // Translation = GePos;
 
-        Position = GloZeroOffset.GeZeroPointOffset(CamPos.ToXYZ());
+        Position = KoreZeroOffset.GeZeroPointOffset(CamPos.ToXYZ());
 
         // Use the heading and LLA position to update the camera rotation
-        GloEntityV3 platformV3 = GloGeoConvOperations.RwToGeStruct(CamPos, CamCourse.HeadingDegs);
+        KoreEntityV3 platformV3 = KoreGeoConvOperations.RwToGeStruct(CamPos, CamCourse.HeadingDegs);
 
         LookAtFromPosition(
             platformV3.Pos,
@@ -343,7 +343,7 @@ public partial class GloCameraMoverWorld : Node3D
             if (CamNode.IsCurrent())
             {
                 CamNode.RotationDegrees = new Vector3(camPitch, 0, 0);
-                GloZeroNodeMapManager.SetLoadRefLLA(GloGeoConvOperations.GeToRw(Position));
+                KoreZeroNodeMapManager.SetLoadRefLLA(KoreGeoConvOperations.GeToRw(Position));
             }
         }
     }

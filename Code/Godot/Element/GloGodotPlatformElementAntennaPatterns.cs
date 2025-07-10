@@ -13,8 +13,8 @@ public partial class GloGodotPlatformElementAntennaPatterns : GloGodotPlatformEl
     // public GloAzElRange  PortPolarOffset = new GloAzElRange();
     // public GloFloat2DArray AntennaPattern  = new GloFloat2DArray();
 
-    private float GeOffsetDistance   = 100f * (float)GloZeroOffset.RwToGeDistanceMultiplier;
-    private float GePatternMagnitude =  80f * (float)GloZeroOffset.RwToGeDistanceMultiplier;
+    private float GeOffsetDistance   = 100f * (float)KoreZeroOffset.RwToGeDistanceMultiplier;
+    private float GePatternMagnitude =  80f * (float)KoreZeroOffset.RwToGeDistanceMultiplier;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -60,8 +60,8 @@ public partial class GloGodotPlatformElementAntennaPatterns : GloGodotPlatformEl
 
     public void SetSizeAndDistance(float sizeM, float distanceM)
     {
-        GePatternMagnitude = sizeM; //     * (float)GloZeroOffset.RwToGeDistanceMultiplier;
-        GeOffsetDistance   = distanceM; // * (float)GloZeroOffset.RwToGeDistanceMultiplier;
+        GePatternMagnitude = sizeM; //     * (float)KoreZeroOffset.RwToGeDistanceMultiplier;
+        GeOffsetDistance   = distanceM; // * (float)KoreZeroOffset.RwToGeDistanceMultiplier;
     }
 
     public void AddPattern(GloAntennaPattern pattern)

@@ -28,7 +28,7 @@ public partial class GloUIHeader : PanelContainer
         GloCentralLog.AddEntry("GloUIHeader._Ready");
         GD.Print("GloUIHeader._Ready");
 
-        GloGodotFactory.TriggerInstance();
+        KoreGodotFactory.TriggerInstance();
 
         // Get the button objects
         CliButton         = (Button)FindChild("CLI-IconButton");
@@ -86,8 +86,8 @@ public partial class GloUIHeader : PanelContainer
             string simclockHMS = GloAppFactory.Instance.EventDriver.SimTimeHMS();
 //
             //string displayScenarioName = strNotDefined;
-            //if (!string.IsNullOrEmpty(GloGodotFactory.Instance.UIState.ScenarioName))
-                //displayScenarioName = GloGodotFactory.Instance.UIState.ScenarioName;
+            //if (!string.IsNullOrEmpty(KoreGodotFactory.Instance.UIState.ScenarioName))
+                //displayScenarioName = KoreGodotFactory.Instance.UIState.ScenarioName;
 
             // If the length of the scenario name is greater than 30 characters, truncate the middle and add "..."
             //if (displayScenarioName.Length > 30)

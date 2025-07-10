@@ -82,8 +82,8 @@ public partial class GloGodotPlatformElementDomeSector : GloGodotPlatformElement
             if (TxDistanceM < minDistM) TxDistanceM = minDistM;
             if (TxDistanceM > maxDistM) TxDistanceM = maxDistM;
 
-            float rxDist = (float)(RxDistanceM * GloZeroOffset.RwToGeDistanceMultiplier);
-            float txDist = (float)(TxDistanceM * GloZeroOffset.RwToGeDistanceMultiplier);
+            float rxDist = (float)(RxDistanceM * KoreZeroOffset.RwToGeDistanceMultiplier);
+            float txDist = (float)(TxDistanceM * KoreZeroOffset.RwToGeDistanceMultiplier);
 
 
             ArrayMesh rxMeshData = rxMeshBuilder.Build2("RxSector", false);
@@ -127,8 +127,8 @@ public partial class GloGodotPlatformElementDomeSector : GloGodotPlatformElement
         float azMax =  5f;
         float elMin =  5f;
         float elMax = 80f;
-        float distMin = (float)(200         * GloZeroOffset.RwToGeDistanceMultiplier);
-        float distMax = (float)(RxDistanceM * GloZeroOffset.RwToGeDistanceMultiplier) * 0.95f;
+        float distMin = (float)(200         * KoreZeroOffset.RwToGeDistanceMultiplier);
+        float distMax = (float)(RxDistanceM * KoreZeroOffset.RwToGeDistanceMultiplier) * 0.95f;
 
         int resAz = 5;
         int resEl = 50;

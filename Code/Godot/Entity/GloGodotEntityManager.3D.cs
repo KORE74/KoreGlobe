@@ -34,7 +34,7 @@
 //                 Node3D? modelNode = ent.AttitudeNode.GetNodeOrNull<Node3D>(modelNodeName);
 //                 if (modelNode == null)
 //                 {
-//                     modelNode = GloGodotFactory.Instance.ModelLibrary.PrepModel2(platformType);
+//                     modelNode = KoreGodotFactory.Instance.ModelLibrary.PrepModel2(platformType);
 
 //                     if (modelNode != null)
 //                     {
@@ -55,14 +55,14 @@
 //         GloGodotEntity? ent = GetEntity(platName);
 
 //         // Get the AABB for the model
-//         GloXYZBox? rwAABB = GloGodotFactory.Instance.ModelLibrary.AABBForModel(platformType);
+//         GloXYZBox? rwAABB = KoreGodotFactory.Instance.ModelLibrary.AABBForModel(platformType);
 
 
 //         if (rwAABB == null)
 //         {
 //             GloCentralLog.AddEntry($"MatchBoundingBox: {platformType} => rwAABB is null");
 
-//             List<string> modelNames = GloGodotFactory.Instance.ModelLibrary.ModelNamesList();
+//             List<string> modelNames = KoreGodotFactory.Instance.ModelLibrary.ModelNamesList();
 //             string modelNamesStr = string.Join(", ", modelNames);
 
 //             GloCentralLog.AddEntry($"Known models: {modelNamesStr}");
@@ -87,7 +87,7 @@
 //             // Create the bounding box
 //             //GloXYZBox rwAABB = new GloXYZBox() { Height = 200, Width = 400, Length = 600 };
 //             //rwAABB = ent.ModelInfo.RwAABB;
-//             GloXYZBox geAABB = rwAABB.Scale(GloZeroOffset.RwToGeDistanceMultiplier);
+//             GloXYZBox geAABB = rwAABB.Scale(KoreZeroOffset.RwToGeDistanceMultiplier);
 
 //             GD.Print($"MatchBoundingBox: {platformType} => geAABB:{geAABB}");
 
@@ -132,7 +132,7 @@
 //         }
 
 //         // Get the 3D Library entry for the type
-//         Glo3DModelInfo? modelInfo = GloGodotFactory.Instance.ModelLibrary.GetModelInfo(platformType);
+//         Glo3DModelInfo? modelInfo = KoreGodotFactory.Instance.ModelLibrary.GetModelInfo(platformType);
 //         if (modelInfo == null)
 //         {
 //             GloCentralLog.AddEntry($"SetModelScale: Model info not found for {platformType}.");

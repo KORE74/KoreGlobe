@@ -135,7 +135,7 @@
 //                 //     MeshInstanceW.Visible = showDebug;
 
 //                 // if (!string.IsNullOrEmpty(KeepAliveTexFilename))
-//                 //     GloGodotFactory.Instance.ImageManager.KeepAlive(KeepAliveTexFilename);
+//                 //     KoreGodotFactory.Instance.ImageManager.KeepAlive(KeepAliveTexFilename);
 //             }
 //         }
 //     }
@@ -277,8 +277,8 @@
 //         GloLLAPoint pos  = new GloLLAPoint() { LatDegs = posLL.LatDegs,        LonDegs = posLL.LonDegs, AltMslM = 2000};
 //         GloLLAPoint posN = new GloLLAPoint() { LatDegs = posLL.LatDegs + 0.01, LonDegs = posLL.LonDegs, AltMslM = 2000};
 
-//         Godot.Vector3 v3Pos   = GloGeoConvOperations.RwToGe(pos);
-//         Godot.Vector3 v3PosN  = GloGeoConvOperations.RwToGe(posN);
+//         Godot.Vector3 v3Pos   = KoreGeoConvOperations.RwToGe(pos);
+//         Godot.Vector3 v3PosN  = KoreGeoConvOperations.RwToGe(posN);
 //         Godot.Vector3 v3VectN = (v3PosN - v3Pos).Normalized();
 
 //         TileCodeLabel.Visible = false;
@@ -372,7 +372,7 @@
 //             VisibleState = visible;
 //             //GD.Print($"Setting visibility for {TileCode} to {visible}");
 
-//             bool showDebug  = visible && GloGodotFactory.Instance.UIState.ShowTileInfo;
+//             bool showDebug  = visible && KoreGodotFactory.Instance.UIState.ShowTileInfo;
 
 
 //             if (MeshInstance  != null) MeshInstance.Visible  = visible;

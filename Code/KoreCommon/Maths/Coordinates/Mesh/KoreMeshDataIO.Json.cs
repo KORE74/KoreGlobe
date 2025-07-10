@@ -14,10 +14,10 @@ namespace KoreCommon;
 
 public static partial class KoreMeshDataIO
 {
-    static string idName = "id";
+    static string idName         = "id";
     static string startColorName = "start";
-    static string endColorName = "end";
-    static string colorName = "color";
+    static string endColorName   = "end";
+    static string colorName      = "color";
 
     // --------------------------------------------------------------------------------------------
     // MARK: ToJson
@@ -28,14 +28,14 @@ public static partial class KoreMeshDataIO
     {
         var obj = new
         {
-            vertices = mesh.Vertices,
-            lines = mesh.Lines,
-            triangles = mesh.Triangles,
-            normals = mesh.Normals,
-            uvs = mesh.UVs,
-            vertexColors = mesh.VertexColors,
-            lineColors = mesh.LineColors,
-            triangleColors = mesh.TriangleColors,
+            vertices        = mesh.Vertices,
+            lines           = mesh.Lines,
+            triangles       = mesh.Triangles,
+            normals         = mesh.Normals,
+            uvs             = mesh.UVs,
+            vertexColors    = mesh.VertexColors,
+            lineColors      = mesh.LineColors,
+            triangleColors  = mesh.TriangleColors,
         };
 
         var options = new JsonSerializerOptions

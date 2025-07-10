@@ -43,7 +43,7 @@ public partial class KoreGodotEntity : Node3D
         // ElementContrail = new GloElementContrail();
         // ElementContrail.InitElement(EntityName);
         // ElementContrail.SetModel(EntityName);
-        // GloGodotFactory.Instance.GodotEntityManager.ElementRootNode.AddChild(ElementContrail);
+        // KoreGodotFactory.Instance.GodotEntityManager.ElementRootNode.AddChild(ElementContrail);
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -71,7 +71,7 @@ public partial class KoreGodotEntity : Node3D
 
             //     GloLLAPoint chaseCamLLA  = CurrentPosition.PlusPolarOffset(camPO);
 
-            //     GloZeroNodeMapManager.SetLoadRefLLA(chaseCamLLA);
+            //     KoreZeroNodeMapManager.SetLoadRefLLA(chaseCamLLA);
 
             //     string strCamLLA = chaseCamLLA.ToString();
             //     GD.Print($"Camera LLA: Lat:{chaseCamLLA.LatDegs:F6} Lon:{chaseCamLLA.LonDegs:F6} Alt:{chaseCamLLA.AltMslM:F2}");

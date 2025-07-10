@@ -102,8 +102,8 @@ public partial class GloMeshBuilder
             {
                 float azDegs = azimuthMinDegs + ((float)x * azDeltaDegs);
 
-                Vector3 insidePoint  = GloGeoConvOperations.RwToGe(distanceMin, azDegs + azDeltaDegs, elDegs);
-                Vector3 outsidePoint = GloGeoConvOperations.RwToGe(distanceMax, azDegs + azDeltaDegs, elDegs);
+                Vector3 insidePoint  = KoreGeoConvOperations.RwToGe(distanceMin, azDegs + azDeltaDegs, elDegs);
+                Vector3 outsidePoint = KoreGeoConvOperations.RwToGe(distanceMax, azDegs + azDeltaDegs, elDegs);
 
                 // Store points in the edge lists
                 if (y == 0)            topInsideEdge.Add(insidePoint);

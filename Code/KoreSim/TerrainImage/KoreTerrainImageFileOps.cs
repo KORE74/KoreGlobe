@@ -223,7 +223,7 @@ public static class KoreTerrainImageFileOps
     // // --------------------------------------------------------------------------------------------
 
     // // Special case: Takes a new 2:1 aspect ratio world image and divides it into the 12x6 lvl0 tiles
-    // // Usage: GloMapFileOperations.DivideChildTileImages_Lvl0(worldimagePath);
+    // // Usage: KoreMapFileImageOperations.DivideChildTileImages_Lvl0(worldimagePath);
 
     // public static void DivideChildTileImages_Lvl0(string parentTileImagePath)
     // {
@@ -267,7 +267,7 @@ public static class KoreTerrainImageFileOps
     // // --------------------------------------------------------------------------------------------
 
     // // Function to load the image for this tile, and the set of child tiles
-    // // Usage: Image[,] childImages = GloMapFileOperations.DivideIntoChildTileImages(tileCode, parentImage);
+    // // Usage: Image[,] childImages = KoreMapFileImageOperations.DivideIntoChildTileImages(tileCode, parentImage);
 
     // public static Image[,] DivideIntoChildTileImages(GloMapTileCode parentTileCode, Image parentImage)
     // {

@@ -29,7 +29,7 @@ public partial class KoreZeroNode : Node3D
         Name = "ZeroNode";
 
         // Setup the Zero Node.
-        //GloZeroOffset.ZeroNode = this;
+        //KoreZeroOffset.ZeroNode = this;
 
         // Add the EntityRootNode to the ZeroNode,
         //AddChild(EntityRootNode);
@@ -91,11 +91,11 @@ public partial class KoreZeroNode : Node3D
     private void SetZeroNodePositionDeferred()
     {
         // Set the position of the ZeroNode.
-        GloZeroOffset.SetLLA(ZeroPosToApply);
+        KoreZeroOffset.SetLLA(ZeroPosToApply);
 
         // Update the cnsequent positions of the ZeroNode and EarthCoreNode.
-        GloGodotFactory.Instance.ZeroNode.Position      = GloZeroOffset.GeZeroPoint();
-        //GloGodotFactory.Instance.EarthCoreNode.Position = GloZeroOffset.GeCorePoint();
+        KoreGodotFactory.Instance.ZeroNode.Position      = KoreZeroOffset.GeZeroPoint();
+        //KoreGodotFactory.Instance.EarthCoreNode.Position = KoreZeroOffset.GeCorePoint();
 
         ZeroNodeUpdateCycle = true;
     }

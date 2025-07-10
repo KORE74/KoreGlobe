@@ -231,7 +231,7 @@ public partial class GloUICliWindow : Window
         sb.AppendLine();
         sb.AppendLine("3D Model Report");
         sb.AppendLine("---------------");
-        sb.Append(GloGodotFactory.Instance.ModelLibrary.ReportContent());
+        sb.Append(KoreGodotFactory.Instance.ModelLibrary.ReportContent());
 
         // Texture report
         sb.AppendLine();
@@ -243,7 +243,7 @@ public partial class GloUICliWindow : Window
         // sb.AppendLine();
         // sb.AppendLine("Tile Manager Report");
         // sb.AppendLine("-------------------");
-        // sb.Append(GloGodotFactory.Instance.EarthCoreNode.Report());
+        // sb.Append(KoreGodotFactory.Instance.EarthCoreNode.Report());
 
         ReportEdit.Text = sb.ToString();
     }
@@ -269,7 +269,7 @@ public partial class GloUICliWindow : Window
         //sb.AppendLine();
         //sb.AppendLine("Godot Entity Report");
         //sb.AppendLine("-------------------");
-        //sb.Append(GloGodotFactory.Instance.GodotEntityManager.FullReport());
+        //sb.Append(KoreGodotFactory.Instance.GodotEntityManager.FullReport());
 
         ReportEdit.Text = sb.ToString();
     }

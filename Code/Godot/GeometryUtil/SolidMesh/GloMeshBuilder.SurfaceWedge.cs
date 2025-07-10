@@ -14,10 +14,10 @@ public partial class GloMeshBuilder
     UVs are defined as follows:
 
     (0,0)   (1,0)
-    +--------+
-    |        |
-    |        |
-    +--------+
+    +-------+
+    |       |
+    |       |
+    +-------+
     (0,1)   (1,1)
 */
 
@@ -56,7 +56,7 @@ public partial class GloMeshBuilder
                     LonDegs = currAzDegs,
                     RadiusM = currRadius
                 };
-                points[x, y] = GloGeoConvOperations.RwToGe(llap);
+                points[x, y] = KoreGeoConvOperations.RwToGe(llap);
             }
         }
 
@@ -145,8 +145,8 @@ public partial class GloMeshBuilder
                 float currAzDegs   = azMinDegs + (float)x * azInc;
                 float topEdgeDelta = topEdge[x];
 
-                topIds.Add( AddVertex(GloGeoConvOperations.RwToGe(surfaceRadius + topEdgeDelta, elMaxDegs, currAzDegs)) );
-                bottomIds.Add( AddVertex(GloGeoConvOperations.RwToGe(innerRadius, elMaxDegs, currAzDegs)) );
+                topIds.Add( AddVertex(KoreGeoConvOperations.RwToGe(surfaceRadius + topEdgeDelta, elMaxDegs, currAzDegs)) );
+                bottomIds.Add( AddVertex(KoreGeoConvOperations.RwToGe(innerRadius, elMaxDegs, currAzDegs)) );
 
                 AddUV(new Vector2(uvX, uvY1));
                 AddUV(new Vector2(uvX, uvY2));
@@ -193,8 +193,8 @@ public partial class GloMeshBuilder
                 float currAzDegs      = azMinDegs + (float)x * azInc;
                 float bottomEdgeDelta = bottomEdge[x];
 
-                topIds.Add( AddVertex(GloGeoConvOperations.RwToGe(surfaceRadius + bottomEdgeDelta, elMinDegs, currAzDegs)) );
-                bottomIds.Add( AddVertex(GloGeoConvOperations.RwToGe(innerRadius,                  elMinDegs, currAzDegs)) );
+                topIds.Add( AddVertex(KoreGeoConvOperations.RwToGe(surfaceRadius + bottomEdgeDelta, elMinDegs, currAzDegs)) );
+                bottomIds.Add( AddVertex(KoreGeoConvOperations.RwToGe(innerRadius,                  elMinDegs, currAzDegs)) );
 
                 AddUV(new Vector2(uvX, uvY1));
                 AddUV(new Vector2(uvX, uvY2));
@@ -240,8 +240,8 @@ public partial class GloMeshBuilder
                 float currElDegs = elMaxDegs - (float)y * elInc; // El max to min, to match UV min to max
                 float edgeDelta  = leftEdge[y];
 
-                topIds.Add( AddVertex(GloGeoConvOperations.RwToGe(surfaceRadius + edgeDelta, currElDegs, azMinDegs)) );
-                bottomIds.Add( AddVertex(GloGeoConvOperations.RwToGe(innerRadius,            currElDegs, azMinDegs)) );
+                topIds.Add( AddVertex(KoreGeoConvOperations.RwToGe(surfaceRadius + edgeDelta, currElDegs, azMinDegs)) );
+                bottomIds.Add( AddVertex(KoreGeoConvOperations.RwToGe(innerRadius,            currElDegs, azMinDegs)) );
 
                 AddUV(new Vector2(uvX1, uvY));
                 AddUV(new Vector2(uvX2, uvY));
@@ -287,8 +287,8 @@ public partial class GloMeshBuilder
                 float currElDegs = elMaxDegs - (float)y * elInc; // El max to min, to match UV min to max
                 float edgeDelta  = rightEdge[y];
 
-                topIds.Add( AddVertex(GloGeoConvOperations.RwToGe(surfaceRadius + edgeDelta, currElDegs, azMaxDegs)) );
-                bottomIds.Add( AddVertex(GloGeoConvOperations.RwToGe(innerRadius,            currElDegs, azMaxDegs)) );
+                topIds.Add( AddVertex(KoreGeoConvOperations.RwToGe(surfaceRadius + edgeDelta, currElDegs, azMaxDegs)) );
+                bottomIds.Add( AddVertex(KoreGeoConvOperations.RwToGe(innerRadius,            currElDegs, azMaxDegs)) );
 
                 AddUV(new Vector2(uvX1, uvY));
                 AddUV(new Vector2(uvX2, uvY));
@@ -386,7 +386,7 @@ public partial class GloMeshBuilder
                     LonDegs = currAzDegs,
                     RadiusM = currRadius
                 };
-                points[x, y] = GloGeoConvOperations.RwToGe(llap);
+                points[x, y] = KoreGeoConvOperations.RwToGe(llap);
             }
         }
 
@@ -500,8 +500,8 @@ public partial class GloMeshBuilder
                 float currAzDegs       = Mathf.Lerp(azMinDegs, azMaxDegs, (float)x / resolutionAz);
                 float outsidePointDelta = outerSurfaceDelta[x, y];
 
-                Vector3 insidePoint  = GloGeoConvOperations.RwToGe(radiusMin, currAzDegs, currElDegs);
-                Vector3 outsidePoint = GloGeoConvOperations.RwToGe(radiusMax + outsidePointDelta, currAzDegs, currElDegs);
+                Vector3 insidePoint  = KoreGeoConvOperations.RwToGe(radiusMin, currAzDegs, currElDegs);
+                Vector3 outsidePoint = KoreGeoConvOperations.RwToGe(radiusMax + outsidePointDelta, currAzDegs, currElDegs);
 
                 insideSurfacePoints.Add(insidePoint);
                 outsideSurfacePoints.Add(outsidePoint);

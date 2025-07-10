@@ -11,29 +11,29 @@ namespace KoreCommon;
 // MARK: Derived Types
 // ------------------------------------------------------------------------------------------------
 
-public class KoreInt1DArray : KoreNumeric1DArray<int>
-{
-    public KoreInt1DArray(int newSize) : base(newSize) { }
-    public KoreInt1DArray(int[] initialData) : base(initialData) { }
-    public KoreInt1DArray(KoreNumericRange<int> valueRange, int listSize, ListDirection direction = ListDirection.Forward)
-        : base(valueRange, listSize, direction) { }
-}
+// public class KoreInt1DArray : KoreNumeric1DArray<int>
+// {
+//     public KoreInt1DArray(int newSize) : base(newSize) { }
+//     public KoreInt1DArray(int[] initialData) : base(initialData) { }
+//     public KoreInt1DArray(KoreNumericRange<int> valueRange, int listSize, ListDirection direction = ListDirection.Forward)
+//         : base(valueRange, listSize, direction) { }
+// }
 
-public class KoreFloat1DArray : KoreNumeric1DArray<float>
-{
-    public KoreFloat1DArray(int newSize) : base(newSize) { }
-    public KoreFloat1DArray(float[] initialData) : base(initialData) { }
-    public KoreFloat1DArray(KoreNumericRange<float> valueRange, int listSize, ListDirection direction = ListDirection.Forward)
-        : base(valueRange, listSize, direction) { }
-}
+// public class KoreFloat1DArray : KoreNumeric1DArray<float>
+// {
+//     public KoreFloat1DArray(int newSize) : base(newSize) { }
+//     public KoreFloat1DArray(float[] initialData) : base(initialData) { }
+//     public KoreFloat1DArray(KoreNumericRange<float> valueRange, int listSize, ListDirection direction = ListDirection.Forward)
+//         : base(valueRange, listSize, direction) { }
+// }
 
-public class KoreDouble1DArray : KoreNumeric1DArray<double>
-{
-    public KoreDouble1DArray(int newSize) : base(newSize) { }
-    public KoreDouble1DArray(double[] initialData) : base(initialData) { }
-    public KoreDouble1DArray(KoreNumericRange<double> valueRange, int listSize, ListDirection direction = ListDirection.Forward)
-        : base(valueRange, listSize, direction) { }
-}
+// public class KoreDouble1DArray : KoreNumeric1DArray<double>
+// {
+//     public KoreDouble1DArray(int newSize) : base(newSize) { }
+//     public KoreDouble1DArray(double[] initialData) : base(initialData) { }
+//     public KoreDouble1DArray(KoreNumericRange<double> valueRange, int listSize, ListDirection direction = ListDirection.Forward)
+//         : base(valueRange, listSize, direction) { }
+// }
 
 // ------------------------------------------------------------------------------------------------
 
@@ -52,9 +52,15 @@ public class KoreNumeric1DArray<T> : IEnumerable<T> where T : struct, INumber<T>
 
     public enum ListDirection { Forward, Reverse };
 
+    public const int MaxArrayLength = 1_000_000;
+
+    // --------------------------------------------------------------------------------------------
+    // MARK: Constructors
+    // --------------------------------------------------------------------------------------------
+
     public KoreNumeric1DArray(int newSize)
     {
-        if (newSize < 1 || newSize > 100000)
+        if (newSize < 1 || newSize > MaxArrayLength)
             throw new ArgumentException($"Unexpected Create Size: {newSize}");
 
         _data = new T[newSize];
@@ -85,6 +91,26 @@ public class KoreNumeric1DArray<T> : IEnumerable<T> where T : struct, INumber<T>
         }
     }
 
+    // --------------------------------------------------------------------------------------------
+    // MARK: Set Get
+    // --------------------------------------------------------------------------------------------
+
+    public void SetValue(int index, T value)
+    {
+        if (index < 0 || index >= Length)
+            throw new ArgumentOutOfRangeException(nameof(index), "Index is out of range.");
+
+        _data[index] = value;
+    }
+
+    public T GetValue(int index)
+    {
+        if (index < 0 || index >= Length)
+            throw new ArgumentOutOfRangeException(nameof(index), "Index is out of range.");
+
+        return _data[index];
+    }
+
     public T this[int index]
     {
         get => _data[index];
@@ -95,10 +121,15 @@ public class KoreNumeric1DArray<T> : IEnumerable<T> where T : struct, INumber<T>
     // MARK: List Size Management
     // --------------------------------------------------------------------------------------------
 
-    public void Add(T value)
+    public void Append(T value)
     {
+        // If there is currently nothing, initialize the array and add the new value
         if (Length == 0)
-            throw new InvalidOperationException("Cannot add to an empty array. Use constructor with initial size.");
+        {
+            _data = new T[1];
+            _data[0] = value;
+            return;
+        }
 
         Array.Resize(ref _data, Length + 1);
         _data[Length - 1] = value;
@@ -121,7 +152,7 @@ public class KoreNumeric1DArray<T> : IEnumerable<T> where T : struct, INumber<T>
     // will truncate existing data if newsize shorter, or leave new data uninitialised if newsize longer
     public void SetSize(int newSize)
     {
-        if (newSize < 1 || newSize > 100000)
+        if (newSize < 1 || newSize > MaxArrayLength)
             throw new ArgumentException($"Unexpected Resize Size: {newSize}");
 
         if (newSize == Length) return;
@@ -185,7 +216,7 @@ public class KoreNumeric1DArray<T> : IEnumerable<T> where T : struct, INumber<T>
 
     public KoreNumeric1DArray<T> InterpolatedResize(int newSize)
     {
-        if (newSize < 1 || newSize > 100000)
+        if (newSize < 1 || newSize > MaxArrayLength)
             throw new ArgumentException($"Unexpected Resize Size: {newSize}");
 
         T[] newData = new T[newSize];

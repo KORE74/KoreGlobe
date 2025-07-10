@@ -123,8 +123,8 @@
 //         List<string> noLongerInModel       = GloStringListOperations.ListOmittedInSecond(godotEntityNames, platNames);
 //         List<string> maintainedEnitites    = GloStringListOperations.ListIntersection(platNames, godotEntityNames);
 
-//         bool  addInfographicScale = GloGodotFactory.Instance.UIState.IsRwScale;
-//         float scaleModifier       = GloValueUtils.Clamp(GloGodotFactory.Instance.UIState.InfographicScale, 1f, 10f);
+//         bool  addInfographicScale = KoreGodotFactory.Instance.UIState.IsRwScale;
+//         float scaleModifier       = GloValueUtils.Clamp(KoreGodotFactory.Instance.UIState.InfographicScale, 1f, 10f);
 
 //         // Loop through the list of platform names, and the EntityList, match them up.
 //         foreach (string currModelName in omittedInPresentation)
@@ -239,7 +239,7 @@
 //             newRoute.SetRoutePoints(route!.RoutePoints);
 
 //             // Update visibility based on the UI state
-//             newRoute.SetVisibility(GloGodotFactory.Instance.UIState.ShowRoutes);
+//             newRoute.SetVisibility(KoreGodotFactory.Instance.UIState.ShowRoutes);
 
 //             // Add the route to the entity and scene tree
 //             AddUnlinkedElement(platName, newRoute);
@@ -259,7 +259,7 @@
 //         if ((route != null) && (routeNode != null))
 //         {
 //             // Update visibility based on the UI state
-//             routeNode!.SetVisibility(GloGodotFactory.Instance.UIState.ShowRoutes);
+//             routeNode!.SetVisibility(KoreGodotFactory.Instance.UIState.ShowRoutes);
 //             routeNode!.SetRoutePoints(route.RoutePoints);
 //         }
 //     }
@@ -364,26 +364,26 @@
 //                     beamNode.AzElBox = azElBox;
 
 //                     beamNode.SetVisibility(
-//                         GloGodotFactory.Instance.UIState.ShowEmitters && beam.Enabled,
-//                         GloGodotFactory.Instance.UIState.ShowRx,
-//                         GloGodotFactory.Instance.UIState.ShowTx);
+//                         KoreGodotFactory.Instance.UIState.ShowEmitters && beam.Enabled,
+//                         KoreGodotFactory.Instance.UIState.ShowRx,
+//                         KoreGodotFactory.Instance.UIState.ShowTx);
 //                 }
 //             }
 //             if (beam.ScanShape == GloPlatformElementBeam.ScanPatternShape.Dome)
 //             {
 //                 GloGodotPlatformElementDome? beamNode = GetLinkedElement(platName, currElemName) as GloGodotPlatformElementDome;
 //                 beamNode?.SetVisibility(
-//                     GloGodotFactory.Instance.UIState.ShowEmitters && beam.Enabled,
-//                     GloGodotFactory.Instance.UIState.ShowRx,
-//                     GloGodotFactory.Instance.UIState.ShowTx);
+//                     KoreGodotFactory.Instance.UIState.ShowEmitters && beam.Enabled,
+//                     KoreGodotFactory.Instance.UIState.ShowRx,
+//                     KoreGodotFactory.Instance.UIState.ShowTx);
 //             }
 //             if (beam.ScanShape == GloPlatformElementBeam.ScanPatternShape.Cone)
 //             {
 //                 GloGodotPlatformElementCone? beamNode = GetLinkedElement(platName, currElemName) as GloGodotPlatformElementCone;
 //                 beamNode?.SetVisibility(
-//                     GloGodotFactory.Instance.UIState.ShowEmitters && beam.Enabled,
-//                     GloGodotFactory.Instance.UIState.ShowRx,
-//                     GloGodotFactory.Instance.UIState.ShowTx);
+//                     KoreGodotFactory.Instance.UIState.ShowEmitters && beam.Enabled,
+//                     KoreGodotFactory.Instance.UIState.ShowRx,
+//                     KoreGodotFactory.Instance.UIState.ShowTx);
 //             }
 //         }
 //     }
@@ -413,7 +413,7 @@
 //             {
 //                 // Get the size and distance to the AP to fit with the platform.
 //                 double rwLongestAABBOffset = entNode.ModelInfo.RwAABB.LongestOffset();
-//                 double geApOffsetDist      = GloZeroOffset.RwToGeDistanceMultiplier * (rwLongestAABBOffset * 2);
+//                 double geApOffsetDist      = KoreZeroOffset.RwToGeDistanceMultiplier * (rwLongestAABBOffset * 2);
 //                 double geApMaxAmplitude    = geApOffsetDist * 0.5;
 
 //                 antPatNode = new GloGodotPlatformElementAntennaPatterns();
@@ -452,8 +452,8 @@
 //             UpdatePlatformElementAntennaPatterns(platName, currElemName);
 
 //             // Update the scale
-//             float scaleModifier = GloValueUtils.Clamp(GloGodotFactory.Instance.UIState.InfographicScale, 1f, 10f);
-//             if (GloGodotFactory.Instance.UIState.IsRwScale)
+//             float scaleModifier = GloValueUtils.Clamp(KoreGodotFactory.Instance.UIState.InfographicScale, 1f, 10f);
+//             if (KoreGodotFactory.Instance.UIState.IsRwScale)
 //                 scaleModifier = 1f;
 //             SetAPScale(platName, currElemName, scaleModifier);
 //         }
@@ -473,7 +473,7 @@
 //         if ((ent != null) && (antPat != null) && (antPatNode != null))
 //         {
 //             // Update the visibility of the APs based on the UI state
-//             antPatNode.SetVisibility(GloGodotFactory.Instance.UIState.ShowAntennaPatterns);
+//             antPatNode.SetVisibility(KoreGodotFactory.Instance.UIState.ShowAntennaPatterns);
 //         }
 //     }
 

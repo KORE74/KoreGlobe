@@ -52,7 +52,7 @@
 //             pos.AltMslM = 1.25f;
 
 //             // Create the Vector3 positions
-//             GloEntityV3 platformV3 = GloGeoConvOperations.RwToGeStruct(pos, course);
+//             KoreEntityV3 platformV3 = KoreGeoConvOperations.RwToGeStruct(pos, course);
 //             ModelNode.Position     = platformV3.Pos; //ModelNode.Position.Lerp(platformV3.Position, (float)(lerpSpeed * delta));
 
 //             // Find where we are currently looking, determine where we need to be looking, and lerp to that orientation

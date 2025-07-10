@@ -29,10 +29,10 @@ public static class KoreZeroOffset
     // --------------------------------------------------------------------------------------------
 
     // Report the constants for debugging.
-    // Usage: GloZeroOffset.ReportConsts();
+    // Usage: KoreZeroOffset.ReportConsts();
     public static void ReportConsts()
     {
-        string constReport = $"GloZeroOffset.ReportConsts:\n- GeEarthRadius:{GeEarthRadius}\n- RwToGeDistanceMultiplier:{RwToGeDistanceMultiplier}\n- GeToRwDistanceMultiplier:{GeToRwDistanceMultiplier}\n- AheadDistGeM:{AheadDistGeM}\n- UpDistRwM:{UpDistRwM}";
+        string constReport = $"KoreZeroOffset.ReportConsts:\n- GeEarthRadius:{GeEarthRadius}\n- RwToGeDistanceMultiplier:{RwToGeDistanceMultiplier}\n- GeToRwDistanceMultiplier:{GeToRwDistanceMultiplier}\n- AheadDistGeM:{AheadDistGeM}\n- UpDistRwM:{UpDistRwM}";
 
         GD.Print(constReport);
 
@@ -101,7 +101,7 @@ public static class KoreZeroOffset
 
     // ---------------------------------------------------------------------------------------------
 
-    // Usage: GloZeroOffset.GeZeroPoint()
+    // Usage: KoreZeroOffset.GeZeroPoint()
     public static Vector3 GeZeroPoint()
     {
         // return new Vector3((float)RwZeroPointXYZ.X, (float)RwZeroPointXYZ.Y, (float)RwZeroPointXYZ.Z);
@@ -111,7 +111,7 @@ public static class KoreZeroOffset
     // RwZeroPointXYZ is the offset from the real-world core to the zero point, so we need to apply the invese of this
     // to get the now-offset core point.
     // Note that we always need to be inverting the Z axis to match the Godot engine orientation, so the -- = + here.
-    // Usage: Vector3 GeCorePos = GloZeroOffset.GeCorePoint();
+    // Usage: Vector3 GeCorePos = KoreZeroOffset.GeCorePoint();
     public static Vector3 GeCorePoint()
     {
         // The Z axis is inverted in the Godot engine, but as we're creating an iverted vector, the inverse of this pplies (ie to X and Y)

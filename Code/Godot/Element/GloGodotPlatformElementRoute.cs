@@ -16,7 +16,7 @@ public partial class GloGodotPlatformElementRoute : GloGodotPlatformElement
     private Color LineColor2;
     private Color LineVertColor;
 
-    private static float BaseNodeSize = (float)(150 * GloZeroOffset.RwToGeDistanceMultiplier);
+    private static float BaseNodeSize = (float)(150 * KoreZeroOffset.RwToGeDistanceMultiplier);
 
     // --------------------------------------------------------------------------------------------
     // MARK: Node3D Routines
@@ -42,8 +42,8 @@ public partial class GloGodotPlatformElementRoute : GloGodotPlatformElement
     {
         if (!Visible) return;
 
-        if (GloZeroNode.ZeroNodeUpdateCycle)
-            UpdateRoute();
+        // if (GloZeroNode.ZeroNodeUpdateCycle)
+        //     UpdateRoute();
     }
 
     // --------------------------------------------------------------------------------------------
@@ -80,67 +80,67 @@ public partial class GloGodotPlatformElementRoute : GloGodotPlatformElement
 
         // Loop over the index values of each of point, and consider a +1 point for the end of the line
         int numNodes = RoutePoints.Count;
-        for (int i = 0; i <= numNodes-2; i++)
-        {
-            GloLLAPoint startLLA = RoutePoints[i];
-            GloLLAPoint endLLA   = RoutePoints[i+1];
+        // for (int i = 0; i <= numNodes-2; i++)
+        // {
+        //     GloLLAPoint startLLA = RoutePoints[i];
+        //     GloLLAPoint endLLA   = RoutePoints[i+1];
 
-            // Loop through the points manually, as we need that +1 for the next point.
-            // List<GloLLAPoint> gcPoints = GloGCPathOperations.PointsOnGCPath2(startLLA, endLLA, 10);
-            // for (int gcIndex = 0; gcIndex < gcPoints.Count - 1; gcIndex++)
-            // {
-            //     Vector3 gcPos     = GloGeoConvOperations.RwToOffsetGe(gcPoints[gcIndex]);
-            //     Vector3 gcNextPos = GloGeoConvOperations.RwToOffsetGe(gcPoints[gcIndex+1]);
-            //     GCLineMesh.AddLine(gcPos, gcNextPos, GloColorUtil.Colors["Red"]);
-            // }
+        //     // Loop through the points manually, as we need that +1 for the next point.
+        //     // List<GloLLAPoint> gcPoints = GloGCPathOperations.PointsOnGCPath2(startLLA, endLLA, 10);
+        //     // for (int gcIndex = 0; gcIndex < gcPoints.Count - 1; gcIndex++)
+        //     // {
+        //     //     Vector3 gcPos     = KoreGeoConvOperations.RwToOffsetGe(gcPoints[gcIndex]);
+        //     //     Vector3 gcNextPos = KoreGeoConvOperations.RwToOffsetGe(gcPoints[gcIndex+1]);
+        //     //     GCLineMesh.AddLine(gcPos, gcNextPos, GloColorUtil.Colors["Red"]);
+        //     // }
 
-            // lift any point off the zero point, so it doesn't clash with terrain
-            if (GloValueUtils.EqualsWithinTolerance(startLLA.AltMslM, -0.5, 0.5)) startLLA.AltMslM = 2;
-            if (GloValueUtils.EqualsWithinTolerance(  endLLA.AltMslM, -0.5, 0.5))   endLLA.AltMslM = 2;
+        //     // lift any point off the zero point, so it doesn't clash with terrain
+        //     if (GloValueUtils.EqualsWithinTolerance(startLLA.AltMslM, -0.5, 0.5)) startLLA.AltMslM = 2;
+        //     if (GloValueUtils.EqualsWithinTolerance(  endLLA.AltMslM, -0.5, 0.5))   endLLA.AltMslM = 2;
 
-            // get the route positions in GE units, offset from ZeroPoint
-            Vector3 startPos = GloGeoConvOperations.RwToOffsetGe(startLLA);
-            Vector3 endPos   = GloGeoConvOperations.RwToOffsetGe(endLLA);
+        //     // get the route positions in GE units, offset from ZeroPoint
+        //     Vector3 startPos = KoreGeoConvOperations.RwToOffsetGe(startLLA);
+        //     Vector3 endPos   = KoreGeoConvOperations.RwToOffsetGe(endLLA);
 
-            // Drop the start point line - so we see in anchored to a point in th ground.
-            GloLLAPoint botLLA = RoutePoints[i];
-            botLLA.AltMslM = -1000;
-            Vector3 topPos = startPos;
-            Vector3 botPos = GloGeoConvOperations.RwToOffsetGe(botLLA);
-            LineMesh.AddLine(topPos, botPos, LineVertColor);
+        //     // Drop the start point line - so we see in anchored to a point in th ground.
+        //     GloLLAPoint botLLA = RoutePoints[i];
+        //     botLLA.AltMslM = -1000;
+        //     Vector3 topPos = startPos;
+        //     Vector3 botPos = KoreGeoConvOperations.RwToOffsetGe(botLLA);
+        //     LineMesh.AddLine(topPos, botPos, LineVertColor);
 
-            // Anything over a distance threshold, divide up into sublines to interpolate along
-            // (otherwise long routes don't respect Earth curvature, a sea-routes will cut through ground)
-            double legDistM = startLLA.StraightLineDistanceToM(endLLA);
-            if (legDistM > distLimitM)
-            {
-                int numSubLines = (int)(legDistM / distLimitM);
-                if (numSubLines < 4) numSubLines = 4;
+        //     // Anything over a distance threshold, divide up into sublines to interpolate along
+        //     // (otherwise long routes don't respect Earth curvature, a sea-routes will cut through ground)
+        //     double legDistM = startLLA.StraightLineDistanceToM(endLLA);
+        //     if (legDistM > distLimitM)
+        //     {
+        //         int numSubLines = (int)(legDistM / distLimitM);
+        //         if (numSubLines < 4) numSubLines = 4;
 
-                List<GloLLAPoint> pointList = GloLLAPointOperations.DividedGCLine(startLLA, endLLA, numSubLines);
+        //         List<GloLLAPoint> pointList = GloLLAPointOperations.DividedGCLine(startLLA, endLLA, numSubLines);
 
-                for (int subLegCount=0; subLegCount < pointList.Count-1; subLegCount++)
-                {
-                    Vector3 subStartPos = GloGeoConvOperations.RwToOffsetGe(pointList[subLegCount]);
-                    Vector3 subEndPos   = GloGeoConvOperations.RwToOffsetGe(pointList[subLegCount+1]);
-                    LineMesh.AddLine(subStartPos, subEndPos, LineColor, LineColor2);
-                }
-            }
-            else // else draw the straight line to the end point, when the distance is short
-            {
-                LineMesh.AddLine(startPos, endPos, LineColor, LineColor2);
-            }
+        //         for (int subLegCount=0; subLegCount < pointList.Count-1; subLegCount++)
+        //         {
+        //             Vector3 subStartPos = KoreGeoConvOperations.RwToOffsetGe(pointList[subLegCount]);
+        //             Vector3 subEndPos   = KoreGeoConvOperations.RwToOffsetGe(pointList[subLegCount+1]);
+        //             LineMesh.AddLine(subStartPos, subEndPos, LineColor, LineColor2);
+        //         }
+        //     }
+        //     else // else draw the straight line to the end point, when the distance is short
+        //     {
+        //         LineMesh.AddLine(startPos, endPos, LineColor, LineColor2);
+        //     }
 
-            // if last point, add the dropdown line to the end point
-            if (i == numNodes-2)
-            {
-                botLLA = RoutePoints[i+1];
-                botLLA.AltMslM = -1000;
-                topPos = endPos;
-                botPos = GloGeoConvOperations.RwToOffsetGe(botLLA);
-                LineMesh.AddLine(topPos, botPos, LineVertColor);
-            }
-        }
+        //     // if last point, add the dropdown line to the end point
+        //     if (i == numNodes-2)
+        //     {
+        //         botLLA = RoutePoints[i+1];
+        //         botLLA.AltMslM = -1000;
+        //         topPos = endPos;
+        //         botPos = KoreGeoConvOperations.RwToOffsetGe(botLLA);
+        //         LineMesh.AddLine(topPos, botPos, LineVertColor);
+        //     }
+        // }
     }
 
     // --------------------------------------------------------------------------------------------

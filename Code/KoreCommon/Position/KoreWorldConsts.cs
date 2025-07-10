@@ -33,11 +33,11 @@ public static class KoreWorldConsts
     public const float  EarthRadiusInnerM  = (float)(EarthRadiusM - TileEdgeDepthM);
 
     // WGS84 Values
-    public const double EarthRadiusPolarM   = 6356752; // KoreWorldConsts.EarthRadiusPolarM
-    public const double EarthRadiusEquatorM = 6378137; // KoreWorldConsts.EarthRadiusEquatorM
+    public const double EarthRadiusPolarM   = 6_356_752; // KoreWorldConsts.EarthRadiusPolarM
+    public const double EarthRadiusEquatorM = 6_378_137; // KoreWorldConsts.EarthRadiusEquatorM
     public const double EccentricitySquared = (EarthRadiusEquatorM * EarthRadiusEquatorM - EarthRadiusPolarM * EarthRadiusPolarM) / (EarthRadiusEquatorM * EarthRadiusEquatorM);
 
-    public const double MinCalculationRadiusM = 100000; // 100km minimum radius for calculations // KoreWorldConsts.MinCalculationRadiusM
+    public const double MinCalculationRadiusM = 100_000; // 100km minimum radius for calculations // KoreWorldConsts.MinCalculationRadiusM
 
     // --------------------------------------------------------------------------------------------
     // MARK: Elevation

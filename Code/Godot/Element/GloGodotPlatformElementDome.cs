@@ -87,8 +87,8 @@ public partial class GloGodotPlatformElementDome : GloGodotPlatformElement
             if (rxDistLimited) rxDrawStyle = GloLineMesh3D.LineStyle.Dashed;
             if (txDistLimited) txDrawStyle = GloLineMesh3D.LineStyle.Dashed;
 
-            float rxDist = (float)(RxDistanceM * GloZeroOffset.RwToGeDistanceMultiplier);
-            float txDist = (float)(TxDistanceM * GloZeroOffset.RwToGeDistanceMultiplier);
+            float rxDist = (float)(RxDistanceM * KoreZeroOffset.RwToGeDistanceMultiplier);
+            float txDist = (float)(TxDistanceM * KoreZeroOffset.RwToGeDistanceMultiplier);
 
             rxMeshBuilder.AddHemisphere(Vector3.Zero, rxDist, numSegments);
             txMeshBuilder.AddHemisphere(Vector3.Zero, txDist, numSegments);
@@ -126,8 +126,8 @@ public partial class GloGodotPlatformElementDome : GloGodotPlatformElement
         float azMax =  5f;
         float elMin =  5f;
         float elMax = 80f;
-        float distMin = (float)(200         * GloZeroOffset.RwToGeDistanceMultiplier);
-        float distMax = (float)(RxDistanceM * GloZeroOffset.RwToGeDistanceMultiplier) * 0.95f;
+        float distMin = (float)(200         * KoreZeroOffset.RwToGeDistanceMultiplier);
+        float distMax = (float)(RxDistanceM * KoreZeroOffset.RwToGeDistanceMultiplier) * 0.95f;
 
         int resAz = 5;
         int resEl = 50;

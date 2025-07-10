@@ -72,8 +72,8 @@ public partial class GloGodotPlatformElementWedge : GloGodotPlatformElement
         if (TxDistanceM > truncateDistM) txTruncated = true;
 
         // Convert diatance to GameEngine units
-        float rxDist = (float)(RxDistanceMToUse * GloZeroOffset.RwToGeDistanceMultiplier);
-        float txDist = (float)(TxDistanceMToUse * GloZeroOffset.RwToGeDistanceMultiplier);
+        float rxDist = (float)(RxDistanceMToUse * KoreZeroOffset.RwToGeDistanceMultiplier);
+        float txDist = (float)(TxDistanceMToUse * KoreZeroOffset.RwToGeDistanceMultiplier);
 
         // Create the pyramid shapes in the mesh builder
         rxMeshBuilder.AddPyramidByAzElDist(AzElBox, rxDist);

@@ -4,7 +4,7 @@ using System;
 public partial class GloCameraMover : Camera3D
 {
     [Export]
-    public float MoveSpeed   = (float)(GloZeroOffset.GeEarthRadius / 0.75); // Tunable speed parameters
+    public float MoveSpeed   = (float)(KoreZeroOffset.GeEarthRadius / 0.75); // Tunable speed parameters
 
     public float RotateSpeed = 1.0f;
     Vector3 CamDirection = new Vector3();
@@ -40,23 +40,23 @@ public partial class GloCameraMover : Camera3D
             Rotation += CamRotation * RotateSpeed * (float)(delta);
         }
 
-        // If the node is a camera, update the GloZeroNodeMapManager.LoadRefLLA
+        // If the node is a camera, update the KoreZeroNodeMapManager.LoadRefLLA
         if (this is Camera3D)
         {
             Camera3D camNode = (Camera3D)this;
             if (camNode.IsCurrent())
             {
-                GloZeroNodeMapManager.SetLoadRefLLA(GloGeoConvOperations.GeToRw(Position));
+                KoreZeroNodeMapManager.SetLoadRefLLA(KoreGeoConvOperations.GeToRw(Position));
             }
         }
 
-        MoveSpeed = (float)(GloValueUtils.LimitToRange(GloZeroNodeMapManager.LoadRefLLA.AltMslKm / 80, 0.02, 5000));
+        MoveSpeed = (float)(GloValueUtils.LimitToRange(KoreZeroNodeMapManager.LoadRefLLA.AltMslKm / 80, 0.02, 5000));
 
         if (TimerReport < GloCentralTime.RuntimeSecs)
         {
             TimerReport = GloCentralTime.RuntimeSecs + 1f;
 
-            // GD.Print($"LoadRefLLA: {GloZeroNodeMapManager.LoadRefLLA} // MoveSpeed: {MoveSpeed}");
+            // GD.Print($"LoadRefLLA: {KoreZeroNodeMapManager.LoadRefLLA} // MoveSpeed: {MoveSpeed}");
         }
     }
 

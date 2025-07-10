@@ -36,7 +36,7 @@
 //         // ElementContrail = new GloElementContrail();
 //         // ElementContrail.InitElement(EntityName);
 //         // ElementContrail.SetModel(EntityName);
-//         // GloGodotFactory.Instance.GodotEntityManager.ElementRootNode.AddChild(ElementContrail);
+//         // KoreGodotFactory.Instance.GodotEntityManager.ElementRootNode.AddChild(ElementContrail);
 //     }
 
 //     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -63,7 +63,7 @@
 
 //                 GloLLAPoint chaseCamLLA  = CurrentPosition.PlusPolarOffset(camPO);
 
-//                 GloZeroNodeMapManager.SetLoadRefLLA(chaseCamLLA);
+//                 KoreZeroNodeMapManager.SetLoadRefLLA(chaseCamLLA);
 
 //                 string strCamLLA = chaseCamLLA.ToString();
 //                 GD.Print($"Camera LLA: Lat:{chaseCamLLA.LatDegs:F6} Lon:{chaseCamLLA.LonDegs:F6} Alt:{chaseCamLLA.AltMslM:F2}");
@@ -138,7 +138,7 @@
 //             return;
 //         }
 
-//         GloEntityV3 entityVecs = GloGeoConvOperations.RwToGeStruct((GloLLAPoint)pos, (GloCourse)course);
+//         KoreEntityV3 entityVecs = KoreGeoConvOperations.RwToGeStruct((GloLLAPoint)pos, (GloCourse)course);
 
 //         //GD.Print($"Name: {EntityName} PosLLA:{pos} Ahead:{entityVecs.PosAhead} up:{entityVecs.VecUp}");
 
@@ -155,7 +155,7 @@
 //         if (!String.IsNullOrEmpty(platCat) && (platCat == "GroundClamped"))
 //         {
 //             GloLLPoint llPos = new GloLLPoint() { LatDegs = pos?.LatDegs ?? 0.0, LonDegs = pos?.LonDegs ?? 0.0 };
-//             float mapEle = GloGodotFactory.Instance.ZeroNodeMapManager.GetElevation(llPos);
+//             float mapEle = KoreGodotFactory.Instance.ZeroNodeMapManager.GetElevation(llPos);
 
 //             GloLLAPoint platLLA = new GloLLAPoint() { LatDegs = llPos.LatDegs, LonDegs = llPos.LonDegs, AltMslM = mapEle };
 //             GloAppFactory.Instance.EventDriver.SetPlatformPosition(EntityName, platLLA);

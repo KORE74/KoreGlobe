@@ -106,12 +106,12 @@ public partial class KoreRootNode : Node3D
         //     }
 
         //     string invJson2 = GloDlcOperations.InventoryJsonForDLCTitle("PlaceholderModels");
-        //     GloGodotFactory.Instance.ModelLibrary.LoadJSONConfigFile(invJson2);
+        //     KoreGodotFactory.Instance.ModelLibrary.LoadJSONConfigFile(invJson2);
 
         //     string invJson3 = GloDlcOperations.InventoryJsonForDLCTitle("MilitaryVehicles");
-        //     GloGodotFactory.Instance.ModelLibrary.LoadJSONConfigFile(invJson3);
+        //     KoreGodotFactory.Instance.ModelLibrary.LoadJSONConfigFile(invJson3);
 
-        //     GloCentralLog.AddEntry( GloGodotFactory.Instance.ModelLibrary.ReportContent() );
+        //     GloCentralLog.AddEntry( KoreGodotFactory.Instance.ModelLibrary.ReportContent() );
         // }
     }
 
@@ -135,7 +135,7 @@ public partial class KoreRootNode : Node3D
                 GloCentralLog.AddEntry("OneShot_5Seconds: _Process");
                 GD.Print("OneShot_5Seconds: _Process");
 
-                // GloGodotFactory.Instance.ModelLibrary.CheckModelLoad();
+                // KoreGodotFactory.Instance.ModelLibrary.CheckModelLoad();
                 //var packedScene = GD.Load<PackedScene>("res://Scenes/TreeView.tscn");
                 var packedScene = GD.Load<PackedScene>("res://Scenes/ui_top.tscn");
 
@@ -159,7 +159,7 @@ public partial class KoreRootNode : Node3D
 
             // GloZeroNode.SetZeroNodePosition(randomLat, randomLon);
 
-            // GloGodotFactory.Instance.ModelLibrary.CheckModelLoad();
+            // KoreGodotFactory.Instance.ModelLibrary.CheckModelLoad();
 
 
         }

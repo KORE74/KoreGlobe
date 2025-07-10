@@ -190,11 +190,11 @@
 
 
 //             //     // get the current position to assign to the sphere
-//             //     Vector3 vecPos   = GloGeoConvOperations.RealWorldToGodot(pos);
+//             //     Vector3 vecPos   = KoreGeoConvOperations.RealWorldToGodot(pos);
 //             //     childSphere.Position = vecPos;
 
 //             //     // Create a new cylinder at the current position, and the ID
-//             //     Vector3 vecPrevPos   = GloGeoConvOperations.RealWorldToGodot(PrevPos);
+//             //     Vector3 vecPrevPos   = KoreGeoConvOperations.RealWorldToGodot(PrevPos);
 //             //     Vector3 vecDiff = vecPrevPos - vecPos;
 
 //             //     GloMeshBuilder meshBuilder = new GloMeshBuilder();
@@ -266,12 +266,12 @@
 //         // // --- Define vectors -----------------------
 
 //         // // Define the Vector3 Offsets
-//         // Vector3 vecPos   = GloGeoConvOperations.RealWorldToGodot(pos);
-//         // Vector3 vecAbove = GloGeoConvOperations.RealWorldToGodot(posAbove);
-//         // Vector3 vecAhead = GloGeoConvOperations.RealWorldToGodot(posAhead);
+//         // Vector3 vecPos   = KoreGeoConvOperations.RealWorldToGodot(pos);
+//         // Vector3 vecAbove = KoreGeoConvOperations.RealWorldToGodot(posAbove);
+//         // Vector3 vecAhead = KoreGeoConvOperations.RealWorldToGodot(posAhead);
 
 
-//         // GloEntityV3 platVecs = GloGeoConvOperations.RealWorldToStruct(pos, Course);
+//         // KoreEntityV3 platVecs = KoreGeoConvOperations.RealWorldToStruct(pos, Course);
 
 
 //         // // Update node position and orientation

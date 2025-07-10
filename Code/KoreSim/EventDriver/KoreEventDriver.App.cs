@@ -31,8 +31,8 @@ public static partial class KoreEventDriver
     // public void SidebarSetBeamVisibility(bool rxVisible, bool txVisible)
     // {
     //     // Set the UI State values
-    //     GloGodotFactory.Instance.UIState.ShowRx = rxVisible;
-    //     GloGodotFactory.Instance.UIState.ShowTx = txVisible;
+    //     KoreGodotFactory.Instance.UIState.ShowRx = rxVisible;
+    //     KoreGodotFactory.Instance.UIState.ShowTx = txVisible;
     // }
 
     // ---------------------------------------------------------------------------------------------
@@ -41,13 +41,13 @@ public static partial class KoreEventDriver
     //        KoreEventDriver.SidebarSetEmitterVisibility(true);
     //        KoreEventDriver.SidebarSetAntennaPatternVisibility(true);
 
-    // public void SidebarSetRouteVisibility(bool routeVisible)                   => GloGodotFactory.Instance.UIState.ShowRoutes          = routeVisible;
-    // public void SidebarSetEmitterVisibility(bool emitterVisible)               => GloGodotFactory.Instance.UIState.ShowEmitters        = emitterVisible;
-    // public void SidebarSetAntennaPatternVisibility(bool antennaPatternVisible) => GloGodotFactory.Instance.UIState.ShowAntennaPatterns = antennaPatternVisible;
+    // public void SidebarSetRouteVisibility(bool routeVisible)                   => KoreGodotFactory.Instance.UIState.ShowRoutes          = routeVisible;
+    // public void SidebarSetEmitterVisibility(bool emitterVisible)               => KoreGodotFactory.Instance.UIState.ShowEmitters        = emitterVisible;
+    // public void SidebarSetAntennaPatternVisibility(bool antennaPatternVisible) => KoreGodotFactory.Instance.UIState.ShowAntennaPatterns = antennaPatternVisible;
 
-    // public void SetCameraModeWorld()    => GloGodotFactory.Instance.UIState.SetCameraModeWorld();
-    // public void SetCameraModeChaseCam() => GloGodotFactory.Instance.UIState.SetCameraModeChaseCam();
-    // public void SetCameraModeAlignCam() => GloGodotFactory.Instance.UIState.SetCameraModeAlignCam();
+    // public void SetCameraModeWorld()    => KoreGodotFactory.Instance.UIState.SetCameraModeWorld();
+    // public void SetCameraModeChaseCam() => KoreGodotFactory.Instance.UIState.SetCameraModeChaseCam();
+    // public void SetCameraModeAlignCam() => KoreGodotFactory.Instance.UIState.SetCameraModeAlignCam();
 
 
     // ---------------------------------------------------------------------------------------------

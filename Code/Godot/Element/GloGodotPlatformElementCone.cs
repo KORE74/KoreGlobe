@@ -128,8 +128,8 @@ public partial class GloGodotPlatformElementCone : GloGodotPlatformElement
         bool rxCropped = false;
         if ((TxConeLengthM < minConeM) || (maxConeM < TxConeLengthM)) txCropped = true;
         if ((RxConeLengthM < minConeM) || (maxConeM < RxConeLengthM)) rxCropped = true;
-        float txConeLen   = (float)(GloValueUtils.LimitToRange(TxConeLengthM, 100, 500000) * GloZeroOffset.RwToGeDistanceMultiplier);
-        float rxConeLen   = (float)(GloValueUtils.LimitToRange(RxConeLengthM, 100, 500000) * GloZeroOffset.RwToGeDistanceMultiplier);
+        float txConeLen   = (float)(GloValueUtils.LimitToRange(TxConeLengthM, 100, 500000) * KoreZeroOffset.RwToGeDistanceMultiplier);
+        float rxConeLen   = (float)(GloValueUtils.LimitToRange(RxConeLengthM, 100, 500000) * KoreZeroOffset.RwToGeDistanceMultiplier);
 
         GloLineMesh3D.ConeStyle rxDrawStyle = GloLineMesh3D.ConeStyle.Cone;
         GloLineMesh3D.ConeStyle txDrawStyle = GloLineMesh3D.ConeStyle.Cone;

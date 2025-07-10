@@ -22,8 +22,8 @@ public static partial class KoreMeshDataPrimitives
         axis = axis.Normalize();
 
         // Find a vector not parallel to axis for basis
-        KoreXYZVector up = Math.Abs(KoreXYZVector.DotProduct(axis, KoreXYZVector.Up)) < 0.99f ? KoreXYZVector.Up : KoreXYZVector.Right;
-        KoreXYZVector side = KoreXYZVector.CrossProduct(axis, up).Normalize();
+        KoreXYZVector up      = Math.Abs(KoreXYZVector.DotProduct(axis, KoreXYZVector.Up)) < 0.99f ? KoreXYZVector.Up : KoreXYZVector.Right;
+        KoreXYZVector side    = KoreXYZVector.CrossProduct(axis, up).Normalize();
         KoreXYZVector forward = KoreXYZVector.CrossProduct(axis, side).Normalize();
 
         // Generate circle points for both ends

@@ -29,7 +29,7 @@ public partial class GloUIMessageManager : Node
     private void ProcessMessages()
     {
         JSONMessage newMsg;
-        bool gotMsg = GloGodotFactory.Instance.UIMsgQueue.TryDequeueMessage(out newMsg);
+        bool gotMsg = KoreGodotFactory.Instance.UIMsgQueue.TryDequeueMessage(out newMsg);
 
         if (gotMsg)
         {
@@ -44,7 +44,7 @@ public partial class GloUIMessageManager : Node
         GloCentralLog.AddEntry($"GloMessageManager.ProcessMessage_PlatFocus: {msg.PlatName}");
 
         // Check if the entity (the godot object) exists
-        if (GloGodotFactory.Instance.GodotEntityManager.EntityExists(msg.PlatName))
+        if (KoreGodotFactory.Instance.GodotEntityManager.EntityExists(msg.PlatName))
         {
             GloCentralLog.AddEntry($"GloUIMessageManager.ProcessMessage_PlatFocus: GOT ENTITY: {msg.PlatName}");
             GloAppFactory.Instance.EventDriver.SetCameraModeChaseCam();
@@ -62,7 +62,7 @@ public partial class GloUIMessageManager : Node
                 }
             }
 
-            GloGodotFactory.Instance.UIState.UpdateDisplayedChaseCam();
+            KoreGodotFactory.Instance.UIState.UpdateDisplayedChaseCam();
         }
     }
 }

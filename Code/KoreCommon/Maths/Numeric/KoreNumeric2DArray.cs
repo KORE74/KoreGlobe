@@ -59,6 +59,14 @@ public partial class KoreNumeric2DArray<T> where T : struct, INumber<T>
     // MARK: Constructors
     // --------------------------------------------------------------------------------------------
 
+    public KoreNumeric2DArray()
+    {
+        Width = 1;
+        Height = 1;
+        Data = new T[1, 1];
+        Populated = false;
+    }
+
     public KoreNumeric2DArray(int width, int height)
     {
         if (width < 1 || height < 1)

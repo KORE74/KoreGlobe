@@ -112,7 +112,7 @@ public partial class GloUICameraControl : Control
                 float fraction = EaseArray[StepCurrent];
 
                 GloWorldCamPos camPos = GloWorldCamPos.Lerp(CamP1Pos, CamP2Pos, fraction);
-                GloGodotFactory.Instance.WorldCamNode.SetWorldCamPos(camPos);
+                KoreGodotFactory.Instance.WorldCamNode.SetWorldCamPos(camPos);
 
                 if (StepCurrent >= StepTotal)
                 {
@@ -226,8 +226,8 @@ public partial class GloUICameraControl : Control
 
         //if (!string.IsNullOrEmpty(camPosString))
         //{
-            GloGodotFactory.Instance.UIState.CameraMemory = camPosString;
-            GloGodotFactory.Instance.WorldCamNode.CamPosFromString(camPosString);
+            KoreGodotFactory.Instance.UIState.CameraMemory = camPosString;
+            KoreGodotFactory.Instance.WorldCamNode.CamPosFromString(camPosString);
         //}
     }
 
@@ -235,18 +235,18 @@ public partial class GloUICameraControl : Control
     {
         var config = GloCentralConfig.Instance;
 
-        if (!string.IsNullOrEmpty(GloGodotFactory.Instance.UIState.CameraMemory))
+        if (!string.IsNullOrEmpty(KoreGodotFactory.Instance.UIState.CameraMemory))
         {
-            config.SetParam("WorldCamPos", GloGodotFactory.Instance.UIState.CameraMemory);
+            config.SetParam("WorldCamPos", KoreGodotFactory.Instance.UIState.CameraMemory);
             GloCentralConfig.Instance.WriteToFile();
         }
     }
 
     private void StoreCamPos()
     {
-        if (GloGodotFactory.Instance.UIState.CameraMode == GloCamMode.WorldCam)
+        if (KoreGodotFactory.Instance.UIState.CameraMode == GloCamMode.WorldCam)
         {
-            string camPosString = GloGodotFactory.Instance.WorldCamNode.CamPosToString();
+            string camPosString = KoreGodotFactory.Instance.WorldCamNode.CamPosToString();
 
             if (!string.IsNullOrEmpty(camPosString))
             {
@@ -259,15 +259,15 @@ public partial class GloUICameraControl : Control
 
     private void RecallCamPos()
     {
-        if (GloGodotFactory.Instance.UIState.CameraMode == GloCamMode.WorldCam)
+        if (KoreGodotFactory.Instance.UIState.CameraMode == GloCamMode.WorldCam)
         {
             var config = GloCentralConfig.Instance;
             string camPosString = config.GetParam<string>("WorldCamPos-Live");
 
             if (!string.IsNullOrEmpty(camPosString))
             {
-                //GloGodotFactory.Instance.UIState.CameraMemory = camPosString;
-                GloGodotFactory.Instance.WorldCamNode.CamPosFromString(camPosString);
+                //KoreGodotFactory.Instance.UIState.CameraMemory = camPosString;
+                KoreGodotFactory.Instance.WorldCamNode.CamPosFromString(camPosString);
             }
         }
     }
@@ -305,18 +305,18 @@ public partial class GloUICameraControl : Control
         CameraMemoryStoreButton.Disabled  = !worldEnabled;
         CameraMemoryRecallButton.Disabled = !worldEnabled;
 
-        CameraModeWorldButton.SetPressedNoSignal(GloGodotFactory.Instance.UIState.IsCamModeWorld());
-        CameraModeChaseCamButton.SetPressedNoSignal(GloGodotFactory.Instance.UIState.IsCamModeChaseCam());
-        CameraModeAlignCamButton.SetPressedNoSignal(GloGodotFactory.Instance.UIState.IsCamModeAlignCam());
+        CameraModeWorldButton.SetPressedNoSignal(KoreGodotFactory.Instance.UIState.IsCamModeWorld());
+        CameraModeChaseCamButton.SetPressedNoSignal(KoreGodotFactory.Instance.UIState.IsCamModeChaseCam());
+        CameraModeAlignCamButton.SetPressedNoSignal(KoreGodotFactory.Instance.UIState.IsCamModeAlignCam());
 
-        SpinChaseCamButton.SetPressedNoSignal(GloGodotFactory.Instance.UIState.SpinChaseCam);
+        SpinChaseCamButton.SetPressedNoSignal(KoreGodotFactory.Instance.UIState.SpinChaseCam);
     }
 
     private void UpdateCameraPanelVisibility()
     {
-        bool worldVisible = GloGodotFactory.Instance.UIState.IsCamModeWorld();
-        bool chaseVisible = GloGodotFactory.Instance.UIState.IsCamModeChaseCam();
-        bool alignVisible = GloGodotFactory.Instance.UIState.IsCamModeAlignCam();
+        bool worldVisible = KoreGodotFactory.Instance.UIState.IsCamModeWorld();
+        bool chaseVisible = KoreGodotFactory.Instance.UIState.IsCamModeChaseCam();
+        bool alignVisible = KoreGodotFactory.Instance.UIState.IsCamModeAlignCam();
 
         CamModePanel.Visible          = true;
         CameraMemoryPanel.Visible     = worldVisible;
@@ -332,9 +332,9 @@ public partial class GloUICameraControl : Control
     {
         GD.Print("OnCameraModeWorldButtonPressed");
 
-        GloGodotFactory.Instance.UIState.CameraMode = GloCamMode.WorldCam;
+        KoreGodotFactory.Instance.UIState.CameraMode = GloCamMode.WorldCam;
 
-        GloGodotFactory.Instance.WorldCamNode.CamNode.Current = true;
+        KoreGodotFactory.Instance.WorldCamNode.CamNode.Current = true;
 
         UpdateCameraPanelVisibility();
     }
@@ -343,8 +343,8 @@ public partial class GloUICameraControl : Control
     {
         GD.Print("OnCameraModeChaseCamButtonPressed");
 
-        GloGodotFactory.Instance.UIState.CameraMode = GloCamMode.ChaseCam;
-        GloGodotFactory.Instance.UIState.UpdateDisplayedChaseCam();
+        KoreGodotFactory.Instance.UIState.CameraMode = GloCamMode.ChaseCam;
+        KoreGodotFactory.Instance.UIState.UpdateDisplayedChaseCam();
 
         UpdateCameraPanelVisibility();
     }
@@ -353,7 +353,7 @@ public partial class GloUICameraControl : Control
     {
         GD.Print("OnCameraModeAlignCamButtonPressed");
 
-        GloGodotFactory.Instance.UIState.CameraMode = GloCamMode.AlignCam;
+        KoreGodotFactory.Instance.UIState.CameraMode = GloCamMode.AlignCam;
 
         UpdateCameraPanelVisibility();
     }
@@ -366,19 +366,19 @@ public partial class GloUICameraControl : Control
     {
         GD.Print("OnCameraMemoryStoreButtonPressed");
 
-        string camPosString = GloGodotFactory.Instance.WorldCamNode.CamPosToString();
+        string camPosString = KoreGodotFactory.Instance.WorldCamNode.CamPosToString();
         GD.Print($"OnCameraMemoryStoreButtonPressed: {camPosString}");
 
-        GloGodotFactory.Instance.UIState.CameraMemory = camPosString;
+        KoreGodotFactory.Instance.UIState.CameraMemory = camPosString;
         WriteConfig();
     }
 
     private void OnCameraMemoryRecallButtonPressed()
     {
-        if (!string.IsNullOrEmpty(GloGodotFactory.Instance.UIState.CameraMemory))
+        if (!string.IsNullOrEmpty(KoreGodotFactory.Instance.UIState.CameraMemory))
         {
-            GloGodotFactory.Instance.WorldCamNode.CamPosFromString(GloGodotFactory.Instance.UIState.CameraMemory);
-            GD.Print($"OnCameraMemoryRecallButtonPressed: {GloGodotFactory.Instance.UIState.CameraMemory}");
+            KoreGodotFactory.Instance.WorldCamNode.CamPosFromString(KoreGodotFactory.Instance.UIState.CameraMemory);
+            GD.Print($"OnCameraMemoryRecallButtonPressed: {KoreGodotFactory.Instance.UIState.CameraMemory}");
         }
         else
         {
@@ -393,13 +393,13 @@ public partial class GloUICameraControl : Control
     private void OnCameraSlideStoreP1ButtonPressed()
     {
         GD.Print("OnCameraSlideStoreP1ButtonPressed");
-        CamP1Pos = GloGodotFactory.Instance.WorldCamNode.GetWorldCamPos();
+        CamP1Pos = KoreGodotFactory.Instance.WorldCamNode.GetWorldCamPos();
     }
 
     private void OnCameraSlideStoreP2ButtonPressed()
     {
         GD.Print("OnCameraSlideStoreP2ButtonPressed");
-        CamP2Pos = GloGodotFactory.Instance.WorldCamNode.GetWorldCamPos();
+        CamP2Pos = KoreGodotFactory.Instance.WorldCamNode.GetWorldCamPos();
     }
 
     private void OnCameraSlideGoButtonPressed()
@@ -423,7 +423,7 @@ public partial class GloUICameraControl : Control
         GD.Print("OnNearTargetNextButtonPressed");
 
         GloAppFactory.Instance.EventDriver.NearPlatformNext();
-        GloGodotFactory.Instance.UIState.UpdateDisplayedChaseCam();
+        KoreGodotFactory.Instance.UIState.UpdateDisplayedChaseCam();
         UpdatePlatformLabels();
     }
 
@@ -432,7 +432,7 @@ public partial class GloUICameraControl : Control
         GD.Print("OnNearTargetPrevButtonPressed");
 
         GloAppFactory.Instance.EventDriver.NearPlatformPrev();
-        GloGodotFactory.Instance.UIState.UpdateDisplayedChaseCam();
+        KoreGodotFactory.Instance.UIState.UpdateDisplayedChaseCam();
         UpdatePlatformLabels();
     }
 
@@ -458,9 +458,9 @@ public partial class GloUICameraControl : Control
 
     private void OnSpinChaseCamButtonPressed()
     {
-        GloGodotFactory.Instance.UIState.SpinChaseCam = !GloGodotFactory.Instance.UIState.SpinChaseCam;
+        KoreGodotFactory.Instance.UIState.SpinChaseCam = !KoreGodotFactory.Instance.UIState.SpinChaseCam;
 
-        GD.Print($"OnSpinChaseCamButtonPressed - Value now {GloGodotFactory.Instance.UIState.SpinChaseCam}");
+        GD.Print($"OnSpinChaseCamButtonPressed - Value now {KoreGodotFactory.Instance.UIState.SpinChaseCam}");
 
     }
 

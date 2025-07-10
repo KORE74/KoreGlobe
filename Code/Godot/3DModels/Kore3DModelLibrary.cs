@@ -130,7 +130,7 @@ public class Kore3DModelLibrary
     //     GloCentralLog.AddEntry($"======> 0.5 // modelResPath:{modelResPath}");
 
     //     // Flip for the Godot negative z-axis
-    //     modelScale *= (float)GloZeroOffset.RwToGeDistanceMultiplier;
+    //     modelScale *= (float)KoreZeroOffset.RwToGeDistanceMultiplier;
     //     modelRotate.Y += 180;
 
     //     // Access the model resource

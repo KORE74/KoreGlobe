@@ -27,7 +27,7 @@ public class GloUIState
     public string     CameraMemory        { get; set; } = "";
     public bool       SpinChaseCam        { get; set; } = false;
 
-    // Usage: GloGodotFactory.Instance.UIState.ShowTileInfo
+    // Usage: KoreGodotFactory.Instance.UIState.ShowTileInfo
     public bool       ShowTileInfo        { get; set; } = false;
     public bool       ShowTileMesh        { get; set; } = false;
 
@@ -51,7 +51,7 @@ public class GloUIState
     public void SetCameraModeChaseCam() => CameraMode = GloCamMode.ChaseCam;
 
 
-    // Usage: GloGodotFactory.Instance.UIState.UpdateDisplayedChaseCam()
+    // Usage: KoreGodotFactory.Instance.UIState.UpdateDisplayedChaseCam()
 
     // public void UpdateDisplayedChaseCam()
     // {
@@ -60,7 +60,7 @@ public class GloUIState
     //         if (!IsCamModeChaseCam())
     //             SetCameraModeChaseCam();
 
-    //         GloGodotFactory.Instance.GodotEntityManager.EnableChaseCam(GloAppFactory.Instance.EventDriver.NearPlatformName());
+    //         KoreGodotFactory.Instance.GodotEntityManager.EnableChaseCam(GloAppFactory.Instance.EventDriver.NearPlatformName());
     //     }
     // }
 
@@ -71,7 +71,7 @@ public class GloUIState
         config.SetParam("ShowDebug", infoVisible);
         ShowTileInfo = infoVisible;
 
-        // GloGodotFactory.Instance.ZeroNodeMapManager.UpdateInfoVisibility(infoVisible);
+        // KoreGodotFactory.Instance.ZeroNodeMapManager.UpdateInfoVisibility(infoVisible);
     }
 
 }

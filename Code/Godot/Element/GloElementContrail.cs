@@ -98,7 +98,7 @@ public partial class GloElementContrail : Node3D
         for (int i = 0; i < numPoints; i++)
         {
             // Update the node position
-            TrailNodes[i].Position = GloZeroOffset.GeZeroPointOffset(TrailPoints[i].ToXYZ());
+            TrailNodes[i].Position = KoreZeroOffset.GeZeroPointOffset(TrailPoints[i].ToXYZ());
         }
     }
 

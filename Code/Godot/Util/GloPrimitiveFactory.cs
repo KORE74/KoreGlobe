@@ -115,7 +115,7 @@ public static class GloPrimitiveFactory
 
     // function to place an existingCylinder between the two points and orient it towards the toPoint
     // GloPrimitiveFactory.OrientGodotCylinder(cylinder, fromPoint, toPoint);
-    public static void OrientGodotCylinder(MeshInstance3D cylinder, GloEntityV3 platformV3)
+    public static void OrientGodotCylinder(MeshInstance3D cylinder, KoreEntityV3 platformV3)
     {
         cylinder.Position = (platformV3.Pos + platformV3.PosAhead) / 2.0f;
         cylinder.LookAt(platformV3.PosAhead, platformV3.VecUp);

@@ -54,7 +54,7 @@ public partial class GloCameraPolarOffset : Node3D
 
 
 
-        // CamOffsetDist    = (float)(100 * GloZeroOffset.RwToGeDistanceMultiplier); // set to 100m
+        // CamOffsetDist    = (float)(100 * KoreZeroOffset.RwToGeDistanceMultiplier); // set to 100m
         // CamRotation      = new Vector3(0, 0, 0);
         // // Apply position and rotation
         // CamNode.Position = new Vector3(0, 0, CamOffsetDist);
@@ -83,7 +83,7 @@ public partial class GloCameraPolarOffset : Node3D
         ApplyCamPosToNode();
 
 
-        if (GloGodotFactory.Instance.UIState.SpinChaseCam)
+        if (KoreGodotFactory.Instance.UIState.SpinChaseCam)
         {
             camAzAngleDegs += 1 * GeDeltaTime;
             SetCameraPosition((float)RwCamOffset.RangeM, camAzAngleDegs, (float)RwCamOffset.ElDegs);
@@ -112,7 +112,7 @@ public partial class GloCameraPolarOffset : Node3D
         if (CamNode == null) return;
         if (!CamNode.Current) return;
 
-        //float distanceDelta = (float)(600 * GloZeroOffset.RwToGeDistanceMultiplier) * GeDeltaTime;
+        //float distanceDelta = (float)(600 * KoreZeroOffset.RwToGeDistanceMultiplier) * GeDeltaTime;
 
         float distanceDelta           = (float)RwCamOffset.RangeM * GeDeltaTime * 0.8f;
         float distanceDeltaMouseWheel = distanceDelta * 2.5f;
@@ -203,7 +203,7 @@ public partial class GloCameraPolarOffset : Node3D
 
     public void SetCameraPosition(float rwCamDist, float rwCamAzDegs, float rwCamElDegs)
     {
-        // CamOffsetDist      = (float)(rwCamDist * GloZeroOffset.RwToGeDistanceMultiplier);
+        // CamOffsetDist      = (float)(rwCamDist * KoreZeroOffset.RwToGeDistanceMultiplier);
         camAzAngleDegs     = rwCamAzDegs;
         camElAngleDegs     = rwCamElDegs;
 
@@ -218,7 +218,7 @@ public partial class GloCameraPolarOffset : Node3D
     public void ApplyCamPosToNode()
     {
         // Extract the RW values and apply any conversions for GE usage.
-        float geCamDist      = (float)(RwCamOffset.RangeM * GloZeroOffset.RwToGeDistanceMultiplier);
+        float geCamDist      = (float)(RwCamOffset.RangeM * KoreZeroOffset.RwToGeDistanceMultiplier);
         float geCamAzDegs    = (float)(RwCamOffset.AzDegs + 180) * -1f;
         float geCamElDegs    = (float)RwCamOffset.ElDegs;
 
@@ -243,7 +243,7 @@ public partial class GloCameraPolarOffset : Node3D
     // {
     //     GloAzElRange retOffset = new GloAzElRange();
 
-    //     retOffset.RangeM = CamOffsetDist * GloZeroOffset.GeToRwDistanceMultiplier;
+    //     retOffset.RangeM = CamOffsetDist * KoreZeroOffset.GeToRwDistanceMultiplier;
     //     retOffset.AzDegs = camAzAngleDegs;// + 180; // Flip the polar offset azimuth, to backup to the camera position.
     //     retOffset.ElDegs = camElAngleDegs;
 
